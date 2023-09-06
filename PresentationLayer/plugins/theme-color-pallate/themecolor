@@ -1,0 +1,67 @@
+
+        $(document).ready(function () {
+            $(".theme-btn").click(function () {
+                $(".color-box").fadeToggle();
+            });
+
+            $(".one, .two, .three, .four").click(function () {
+                $(".color-box").fadeOut();
+            });
+
+            $(".click-btn").click(function () {
+              
+                $(".big-logo").toggleClass("no-display");
+                $(".hidden-logo").toggleClass("display");
+
+            });
+
+            $(".one").click(function () {
+
+                $(".nav_title, .sidebar-footer, .step_no, .wizard_verticle ul.wizard_steps li a.selected:before").css({ "background-color": "#06a3b7", "color": "#fff" });
+                $(".sidebar-footer a").css({ "background-color": "#06a3b7", "color": "#efefef" });
+                $(".nav.side-menu li a").addClass("red-c");
+                $(".nav.side-menu li a").removeClass("blue-c");
+                $(".nav.side-menu li a").removeClass("green-c");
+                $(".nav.side-menu li a").removeClass("default-c");
+                $(".nav_menu").css({ "background-color": "#00bcd4" });
+                //$(".nav.side-menu li.active").addClass("color-one");
+            });
+
+            $(".two").click(function () {
+
+                $(".nav_title, .sidebar-footer, .step_no, .wizard_verticle ul.wizard_steps li a.selected:before").css({ "background-color": "#118f0a", "color": "#fff" });
+                $(".sidebar-footer a").css({ "background-color": "#118f0a", "color": "#efefef" });
+
+                $(".nav.side-menu li a").addClass("blue-c");
+                $(".nav.side-menu li a").removeClass("red-c");
+                $(".nav.side-menu li a").removeClass("green-c");
+                $(".nav.side-menu li a").removeClass("default-c");
+                $(".nav_menu").css({ "background-color": "#14b10c" });
+
+            });
+
+            $(".three").click(function () {
+
+                $(".nav_title, .sidebar-footer, .step_no, .wizard_verticle ul.wizard_steps li a.selected:before").css({ "background-color": "#f74408", "color": "#fff" });
+                $(".sidebar-footer a").css({ "background-color": "#f74408", "color": "#efefef" });
+                $(".nav.side-menu li a").addClass("green-c");
+                $(".nav.side-menu li a").removeClass("red-c");
+                $(".nav.side-menu li a").removeClass("blue-c");
+                $(".nav.side-menu li a").removeClass("default-c");
+                $(".nav_menu").css({ "background-color": "#f96332" });
+                
+            });
+
+            $(".four").click(function () {
+
+                $(".nav_title, .sidebar-footer, .step_no, .wizard_verticle ul.wizard_steps li a.selected:before").css({ "background-color": "#f21c0d", "color": "#fff" });
+                $(".sidebar-footer a").css({ "background-color": "#f21c0d", "color": "#efefef" });
+                $(".nav.side-menu li a").addClass("default-c");
+                $(".nav.side-menu li a").removeClass("red-c");
+                $(".nav.side-menu li a").removeClass("blue-c");
+                $(".nav.side-menu li a").removeClass("green-c");
+                $(".nav_menu").css({ "background-color": "#f44336" });
+            });
+
+        });
+ 

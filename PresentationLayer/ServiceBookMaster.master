@@ -1,0 +1,255 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="ServiceBookMaster.master.cs" Inherits="ServiceBookMaster" MasterPageFile="~/SiteMasterPage.master" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <asp:ContentPlaceHolder ID="sbhead" runat="server">
+    </asp:ContentPlaceHolder>
+    <%--<style type="text/css">
+        #ctl00_ctl00_mainMenu .dropdown-menu > li > a {
+            background-color: #6b7e99;
+            color: #fff;
+            border-bottom: 1px solid #76989c;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background-color: #76989c !important;
+            color: #fff;
+        }
+
+        #ctl00_ctl00_mainMenu ul.level1.nav > li:hover > a, ul.level1.nav > li:active > a {
+            color: #fff;
+            background-color: #6b7e99;
+        }
+
+        #ctl00_ctl00_mainMenu .level1.nav > li > a {
+            color: #fff;
+        }
+
+        .style1 {
+            height: 9px;
+        }
+    </style>--%>
+
+    <style>
+        #ctl00_ctl00_mainMenu .level1.nav > li > a, #ctl00_ctl00_mainMenu .level1.nav > li > a {
+            color: #5b5b5b !important;
+        }
+    </style>
+
+    <style>
+        #ctl00_ctl00_ContentPlaceHolder1_Menu1 li.dynamic {
+            width: 200px;
+            background-color: #fff!important;
+        }
+
+        .Menu_Link_tabs .main_menu, .main_menu:hover {
+            width: 100px;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .level_menu, .level_menu:hover {
+            width: 200px;
+            /*background-color: #fff;*/
+            color: #333;
+            text-align: left;
+            height: 25px;
+            margin-top: 5px;
+        }
+
+        .Menu_Link_tabs .panel-heading {
+            padding: 10px;
+            background: #eee;
+        }
+
+        #ctl00_ctl00_ContentPlaceHolder1_Menu1 li.dynamic .fa {
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            -webkit-align-items: center;
+            font-size: 13px;
+            color: #000;
+            z-index: 999;
+        }
+    </style>
+    <asp:PlaceHolder ID="PlaceHolder1" runat="server">
+        <link href="<%=Page.ResolveClientUrl("~/bootstrap/css/menu.css")%>" rel="stylesheet" />
+    </asp:PlaceHolder>
+    <%--   <script>
+        $.noConflict();
+    </script>--%>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
+        <ContentTemplate>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-12">
+                    <div class="box box-primary">
+                        <div id="div1" runat="server"></div>
+                        <div class="box-header with-border">
+                            <h3 class="box-title">SERVICEBOOK ENTRY</h3>
+                        </div>
+
+                        <div class="box-body">
+                            <asp:Panel ID="pnlSelection" runat="server">
+                                <asp:UpdatePanel ID="upEmployee" runat="server">
+                                    <ContentTemplate>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Order By</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlorderby" AppendDataBoundItems="true" AutoPostBack="true" ToolTip="Select Order By"
+                                                        runat="server" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlorderby_SelectedIndexChanged">
+                                                        <asp:ListItem Value="1" Selected="True">IdNo</asp:ListItem>
+                                                        <asp:ListItem Value="2">Name</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>*</sup>
+                                                        <label>Employee Name</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlEmployee" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                        AutoPostBack="true" ToolTip="Select Employee Name" OnSelectedIndexChanged="ddlEmployee_SelectedIndexChanged">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <%-- --%>
+                                                    <asp:RequiredFieldValidator ID="rfvddlEmployee" runat="server" ControlToValidate="ddlEmployee"
+                                                        Display="None" SetFocusOnError="true" ErrorMessage="Please Select Employee Name"
+                                                        ValidationGroup="ServiceBook" InitialValue="0"></asp:RequiredFieldValidator>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                            </asp:Panel>
+
+
+                            <div class="col-12 mt-3 Menu_Link_tabs">
+                                <%--#151d2b--%>
+                                <div class="panel-heading mb-4">
+                                    <asp:UpdatePanel ID="updSelection1" runat="server">
+                                        <ContentTemplate>
+
+                                            <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal">
+                                                <LevelMenuItemStyles>
+                                                    <asp:MenuItemStyle CssClass="main_menu" />
+                                                    <asp:MenuItemStyle CssClass="level_menu" />
+                                                </LevelMenuItemStyles>
+                                                <StaticSelectedStyle CssClass="selected" />
+                                            </asp:Menu>
+
+                                            <asp:Menu ID="mainMenu" runat="server" Orientation="Horizontal" EnableViewState="false" CssClass="menu dropdown-menu-righ"
+                                                RenderingMode="Table" StaticDisplayLevels="1" StaticHoverStyle-CssClass="MenuItemHover" Style="z-index: 1" Visible="false">
+                                                <StaticMenuItemStyle CssClass="MenuItem"></StaticMenuItemStyle>
+                                                <DynamicMenuItemStyle CssClass="DynamicMenuItem" />
+                                                <StaticHoverStyle CssClass="MenuItemHover"></StaticHoverStyle>
+
+                                                <Items>
+
+                                                    <asp:MenuItem Text="Personal" Value="Personal" Selected="true">
+                                                        <asp:MenuItem Text="Personal Memoranda" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_PersonalMemoranda.aspx" />
+                                                        <asp:MenuItem Text="Employee Photo & Sign" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Empphotosign.aspx" />
+                                                        <asp:MenuItem Text="Family Particulars" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_FamilyParticulars.aspx" />
+                                                        <asp:MenuItem Text="Nomination" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Nomination.aspx" />
+                                                        <asp:MenuItem Text="Image Upload" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_ImageUpload.aspx" />
+
+                                                    </asp:MenuItem>
+
+                                                    <asp:MenuItem Text="Academic" Value="Academic">
+                                                        <asp:MenuItem Text="Qualification" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Qualification.aspx" />
+                                                        <asp:MenuItem Text="Departemt Examination" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_DepartmentalExamNew.aspx" />
+                                                        <%--<asp:MenuItem Text="Department Examination" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_DepartmentalExam.aspx" />
+                                        <asp:MenuItem Text="Extra Curriculum" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/PaySbExtraCurriculum.aspx" />
+                                        <asp:MenuItem Text="Lab Participation" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_LabParicipate.aspx" />
+                                        <asp:MenuItem Text="Project Guidance" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Project_Guidance.aspx" />
+                                        <asp:MenuItem Text="Honor/Awards" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Achievement.aspx" />--%>
+                                                    </asp:MenuItem>
+
+                                                    <asp:MenuItem Text="Professional" Value="Professional">
+                                                        <asp:MenuItem Text="Previous Experience" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_PreviousService.aspx" />
+                                                        <asp:MenuItem Text="Administrative Responsibilities" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Admin_Responsibilities.aspx" />
+                                                        <asp:MenuItem Text="Publication Details" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_publication_Details.aspx" />
+                                                        <asp:MenuItem Text="Invited Talks" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Invited_Talks.aspx" />
+                                                        <asp:MenuItem Text="Training Attended" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Training.aspx" />
+                                                        <asp:MenuItem Text="Training Conducted" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Training_Conducted.aspx" />
+
+
+                                                        <%--<asp:MenuItem Text="Mentoring" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/PaySbMentoring.aspx" />
+                                        <asp:MenuItem Text="Membership In Professional Societies" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Membership.aspx" />
+                                        <asp:MenuItem Text="Responsibilities" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Responsibilities.aspx" />
+                                        <asp:MenuItem Text="IPR" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_IPR.aspx" />
+                                        <asp:MenuItem Text="Achievements" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Achievement.aspx" />
+                                        <asp:MenuItem Text="Work Load" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_WorkLoad.aspx" />
+                                        <asp:MenuItem Text="Research & Consultancy" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_ResearchConsultancy.aspx" />
+                                        <asp:MenuItem Text="Indian Patent " NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_IndianPatentSite.aspx" />--%>
+                                                        <%--   <asp:MenuItem Text="Award Details" NavigateUrl="~/PAYROLL/SERVICEBOOK/Pay_Sb_Award.aspx" />
+                                        <asp:MenuItem Text="Patent Details" NavigateUrl="~/PAYROLL/SERVICEBOOK/Pay_Sb_Patent.aspx" />
+                                        <asp:MenuItem Text="R & D Details" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_RnD_Info.aspx" />--%>                                       
+                                                    </asp:MenuItem>
+
+                                                    <asp:MenuItem Text="Financial" Value="Financial">
+                                                        <asp:MenuItem Text="Loan & Advance" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_LoansAndAdvance.aspx" />
+                                                        <%--<asp:MenuItem Text="LTC" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Ltc.aspx" />--%>
+                                                        <asp:MenuItem Text="Leave" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Leave.aspx" />
+                                                        <asp:MenuItem Text="Pay Revision" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_PayRevision.aspx" />
+                                                        <%--<asp:MenuItem Text="Increment / Termination" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Increment_Termination.aspx" />
+                                        <asp:MenuItem Text="Ratification" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Ratification.aspx" />
+                                        <asp:MenuItem Text="Promotion" NavigateUrl="~/ESTABLISHMENT/SERVICEBOOK/Pay_Sb_Promotion.aspx" />--%>
+                                                    </asp:MenuItem>
+                                                    <asp:MenuItem Text="Other" Value="Other">
+                                                        <asp:MenuItem Text="Matter" NavigateUrl="~/ESTABLISHMENT/ServiceBook/Pay_Sb_Matters.aspx" />
+
+
+                                                    </asp:MenuItem>
+                                                </Items>
+                                                <StaticItemTemplate>
+                                                    <%# Eval("Text") %>
+                                                </StaticItemTemplate>
+                                            </asp:Menu>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <%-- <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Payroll>ServiceBook>Employee ServiceBook
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-4">
+                                        Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>--%>
+
+                                <div class="row">
+                                    <div class="col-md-12" style="padding: 0px; min-height: 550px; background-color: #FFFFFF">
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-12">
+                                            <asp:ContentPlaceHolder ID="sbctp" runat="server">
+                                            </asp:ContentPlaceHolder>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+</asp:Content>

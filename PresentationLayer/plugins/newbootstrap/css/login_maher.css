@@ -1,0 +1,777 @@
+/*======================================
+    Design And Develop By - Gaurav K
+=======================================*/
+
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanssemibold';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sansbold';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+
+
+body {
+    font-family: 'open_sansregular';
+    /*background: url(../../../Images/Login/bg_daiict.png);
+    background-repeat: no-repeat;*/
+}
+/*======= Background video =======*/
+.bg-video-wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    background: url(../../../Images/Login/bg_img.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    /*  background: url(https://designsupply-web.com/samplecontent/vender/codepen/20181014.png) no-repeat center center/cover;*/
+}
+
+video {
+    min-width: 100%;
+    min-height: 100vh;
+    z-index: 1;
+}
+
+.overlay {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,47,102,0.33);
+    background-size: 1px 1px;
+    z-index: 2;
+}
+
+.sign-in-video {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 3;
+    width: 100%;
+    /*  transform: translate(0%, 6%);*/
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.side-background {
+    margin-top: 25%;
+    padding-left: 20%;
+    /*padding: 30px 0;
+    background-image: linear-gradient(to bottom, rgba(229,75,55,.3) 40%, rgba(244,142,42,0.3) 80%);
+    color: #fff;
+    -webkit-clip-path: polygon(50% 0,100% 0,100% 75%,50% 100%,0 75%,0 0);
+    clip-path: polygon(50% 0,100% 0,100% 75%,50% 100%,0 75%,0 0);*/
+}
+
+:focus {
+    outline: 0;
+}
+
+.college-name::after {
+    /*content: '';
+    display: block;
+    height: 1px;
+    border-radius: 2px;
+    background-color: #fff;
+    width: 50%;
+    margin: 15px auto;
+    opacity: .5;*/
+}
+
+.college-name h2 {
+    font-family: 'open_sansbold';
+    /*text-shadow: 0px 5px 8px #000;*/
+    color: #5264ed;
+    font-size: 1.55rem;
+}
+
+.clg-address p {
+    font-size: 0.8rem;
+}
+
+.signin-text p {
+    font-family: 'open_sanssemibold';
+    font-size: 18px;
+}
+
+/*====== Sign In Form ======*/
+.form-control:focus {
+    box-shadow: none;
+}
+
+.sign-heading {
+    border-bottom: 2px solid #CED4DA;
+}
+
+    .sign-heading h4 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-family: 'open_sansbold';
+        /*color: #ff7300;*/
+        color: #212529;
+    }
+
+.login-different {
+    font-size: 0.9rem;
+    color: #6777EF;
+    padding: 15px;
+    background: rgba(255,255, 255, 1);
+    box-shadow: 0px 4px 8px #0000001c;
+    border-radius: 13px;
+}
+
+.login-form {
+    padding: 40px 35px;
+    border-radius: 13px;
+    color: #fff;
+    position: relative;
+    background: rgba(255,255, 255, 0.6);
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.8);
+    border-top: 3px solid #6777EE;
+    /*background-image: linear-gradient(to bottom, rgba(229,75,55,.3) 40%, rgba(244,142,42,0.3) 80%);*/
+}
+
+    .login-form .form-group {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+        .login-form .form-group .form-control {
+            font-size: 14px;
+            border: 1px solid #CED4DA;
+            background: #FFF !important;
+            padding-left: 35px;
+        }
+
+        .login-form .form-group label {
+            color: #34395E;
+            font-family: 'open_sanssemibold';
+            font-size: 0.8rem;
+        }
+
+        .login-form .form-group .form-check-label {
+            font-family: 'open_sansregular';
+            color: #212529;
+        }
+
+.login-heading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-form .form-group .fas {
+    position: absolute;
+    top: 62%;
+    left: 8px;
+    color: #333;
+}
+
+#UpdatePanel1 > div {
+    background: transparent !important;
+    margin-top: 5px;
+}
+
+.btn {
+    font-size: 14px;
+    display: initial;
+}
+
+    .btn:hover {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+.btn-outline-info {
+    /*width: 100%;*/
+}
+
+.btn-outline-info {
+    color: #fff;
+    background-color: #6777EF;
+    border-color: #6777EF;
+}
+
+    .btn-outline-info:hover {
+        background-color: #255282;
+        border-color: #255282;
+    }
+
+#show_hide_password {
+    position: relative;
+}
+
+    #show_hide_password .fa-lock {
+        color: #495057;
+        position: absolute;
+        top: 30%;
+        left: 8px;
+    }
+
+    #show_hide_password a, #show_hide_password a {
+        color: #495057;
+        position: absolute;
+        top: 22%;
+        right: 4%;
+    }
+
+.input-group-addon {
+    background: #fff;
+    border: 1px solid #fff;
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    padding: 5px 10px;
+}
+
+    .input-group-addon i {
+        color: #495057;
+    }
+
+.timer {
+    font-size: 24px;
+}
+
+.forget-pass a, .tp-signup a {
+    /*color: #6777EF !important;*/
+    color: #053769!important;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.virtual-key a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.compatiblity {
+    position: fixed;
+    bottom: 0px;
+    margin: auto;
+    /*width:39%;
+    background-color: #6777ef;*/
+}
+
+    .compatiblity .list-inline {
+        margin-bottom: 0;
+        padding: 5px 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .compatiblity .list-inline > li {
+            color: #555;
+            text-shadow: 1px 4px 6px rgba(0,0,0,0.2);
+            font-size: 12px;
+            display: inline-block;
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+            .compatiblity .list-inline > li > i {
+                color: #e6e6e6;
+            }
+
+.modal .form-group {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+    .modal .form-group .form-control {
+        font-size: 14px;
+    }
+
+.modal-content {
+    border: none;
+    box-shadow: 0px 5px 15px #0000001c;
+}
+
+.modal-footer {
+    border: none;
+}
+
+@media (min-width:1400px) {
+    .login-form {
+        margin-top: 35%;
+    }
+
+    .side-background {
+        margin-top: 43%;
+        padding-left: 2%;
+    }
+}
+
+@media (min-width:1024px) and (max-width:1399px) {
+    .side-background {
+        margin-top: 40%;
+        padding-left: 0%;
+    }
+
+    .login-form {
+        margin-top: 30%;
+    }
+
+    .compatiblity {
+        position: fixed;
+        bottom: 0px;
+        margin: auto;
+        width: 44%;
+    }
+}
+
+@media (max-width:767px) {
+    .login-form {
+        margin-top: 0px;
+        padding: 20px 20px;
+    }
+
+    .compatiblity {
+        display: none;
+    }
+
+    .virtual-key {
+        display: none;
+    }
+
+    .bg-video-wrap {
+        background: #fff;
+    }
+
+    .side-background {
+        margin-top: 0%;
+        padding-left: 0%;
+    }
+}
+
+@media (min-width:768px) and (max-width:991px) {
+    .login-form {
+        margin-top: 5px;
+    }
+
+    .side-background {
+        padding-left: 0%;
+    }
+
+    .virtual-key {
+        display: none;
+    }
+
+    .bg-video-wrap {
+        background-size: 175% 100%;
+    }
+
+    .side-background {
+        margin-top: 0%;
+    }
+
+    .compatiblity {
+        position: fixed;
+        bottom: 0px;
+        margin: auto;
+        width: 100%;
+        display: none;
+    }
+}
+
+@media (max-width:540px) {
+    .scrollbar {
+        float: left;
+        overflow-y: scroll;
+        margin-bottom: 0px;
+    }
+
+    .force-overflow {
+        min-height: 100vh;
+    }
+
+    #style-1::-webkit-scrollbar {
+        width: 12px;
+        background-color: transparent;
+    }
+
+    #style-1::-webkit-scrollbar-thumb {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0, 0.1);
+    }
+
+    .college-name h3 {
+        font-size: 1.5rem;
+    }
+
+    .clg-address p {
+        font-size: 0.8rem;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 0.8rem;
+    }
+
+    .bg-video-wrap {
+        background: #fff;
+    }
+
+    .college-name h2 {
+        font-size: 1.5rem;
+    }
+}
+
+
+@media (max-width:360px) {
+    .sign-in-video {
+        top: 0%;
+        transform: none;
+    }
+
+    .login-form .form-group label {
+        margin-bottom: 0px;
+    }
+
+    .login-form .form-group {
+        margin-bottom: 5px;
+    }
+
+    .sign-in-video .login-form {
+        padding: 20px 20px;
+    }
+
+    .btn-outline-info {
+        margin-top: 5px;
+    }
+
+    .btn {
+        font-size: 10px;
+        padding: .375rem .3rem;
+    }
+
+    .college-name h3 {
+        font-size: 1.4rem;
+    }
+}
+
+
+.video-back iframe {
+    min-width: 1366px;
+    min-height: 768px;
+}
+
+@media (min-width:1680px) {
+    .bg-video-wrap {
+        background-size: contain;
+    }
+
+    .video-back iframe {
+        width: 1920px;
+        height: 1080px;
+    }
+
+    .login-form {
+        margin-top: 42%;
+    }
+    
+    .login-form .form-group {
+        margin-bottom: 1.3rem;
+    }
+}
+
+/*============== Amination effect for div added by gaurav 15072022 =============*/
+/**++++ fadeInDown ++++**/
+@-webkit-keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translatey(-25px);
+        -moz-transform: translatey(-25px);
+        -o-transform: translatey(-25px);
+        transform: translatey(-25px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatey(0);
+        -moz-transform: translatey(0);
+        -o-transform: translatey(0);
+        transform: translatey(0);
+    }
+}
+
+@-moz-keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translatey(-25px);
+        -moz-transform: translatey(-25px);
+        -o-transform: translatey(-25px);
+        transform: translatey(-25px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatey(0);
+        -moz-transform: translatey(0);
+        -o-transform: translatey(0);
+        transform: translatey(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translatey(-25px);
+        -moz-transform: translatey(-25px);
+        -o-transform: translatey(-25px);
+        transform: translatey(-25px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatey(0);
+        -moz-transform: translatey(0);
+        -o-transform: translatey(0);
+        transform: translatey(0);
+    }
+}
+
+.in-down {
+    -webkit-animation-name: fadeInDown;
+    -moz-animation-name: fadeInDown;
+    -o-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    animation-duration: 1s;
+}
+
+
+/**++++ fadeInLeft ++++**/
+@-webkit-keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(-10px);
+        -moz-transform: translatex(-10px);
+        -o-transform: translatex(-10px);
+        transform: translatex(-10px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+@-moz-keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(-10px);
+        -moz-transform: translatex(-10px);
+        -o-transform: translatex(-10px);
+        transform: translatex(-10px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(-100px);
+        -moz-transform: translatex(-100px);
+        -o-transform: translatex(-100px);
+        transform: translatex(-100px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+.in-left {
+    -webkit-animation-name: fadeInLeft;
+    -moz-animation-name: fadeInLeft;
+    -o-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -o-animation-duration: 1s;
+    animation-delay: 1s;
+}
+
+/**++++ fadeInRight ++++**/
+@-webkit-keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(-10px);
+        -moz-transform: translatex(-10px);
+        -o-transform: translatex(-10px);
+        transform: translatex(-10px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+@-moz-keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(-10px);
+        -moz-transform: translatex(-10px);
+        -o-transform: translatex(-10px);
+        transform: translatex(-10px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translatex(100px);
+        -moz-transform: translatex(100px);
+        -o-transform: translatex(100px);
+        transform: translatex(100px);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: translatex(0);
+        -moz-transform: translatex(0);
+        -o-transform: translatex(0);
+        transform: translatex(0);
+    }
+}
+
+.in-right {
+    -webkit-animation-name: fadeInRight;
+    -moz-animation-name: fadeInRight;
+    -o-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    -o-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -o-animation-duration: 1s;
+    animation-delay: 1s;
+}
+
+.a0 {
+    -webkit-animation-delay: .1s;
+    animation-delay: .1s;
+}
+
+.a1 {
+    -webkit-animation-delay: .4s;
+    animation-delay: .4s;
+}
+
+.a2 {
+    -webkit-animation-delay: .5s;
+    animation-delay: .5s;
+}
+
+.a3 {
+    -webkit-animation-delay: .6s;
+    animation-delay: .6s;
+}
+
+.a4 {
+    -webkit-animation-delay: .7s;
+    animation-delay: .7s;
+}
+
+.a5 {
+    -webkit-animation-delay: .8s;
+    animation-delay: .8s;
+}
+
+.a6 {
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+/*============== Amination effect for div added by gaurav 15072022 End =============*/
+
+
+
+
+
+
+

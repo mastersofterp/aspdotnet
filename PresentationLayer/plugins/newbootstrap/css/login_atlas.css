@@ -1,0 +1,717 @@
+﻿/*======================================
+    Design And Develop By - Ashwini T.
+=======================================*/
+
+@font-face {
+    font-family: 'open_sansregular';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/light/opensans-light-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sanssemibold';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'open_sansbold';
+    src: url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.eot');
+    src: url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.woff2') format('woff2'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.woff') format('woff'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.ttf') format('truetype'), url('../../../plugins/newbootstrap/webfont/opensans/bold/opensans-bold-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    /*font-family: 'open_sansregular';*/
+    font-size: 14px;
+    overflow-x: hidden;
+}
+
+.login_atlas-inner {
+    position: relative;
+    min-height: 100vh;
+    /*text-align: center;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 30px 0;
+    /*filter:drop-shadow(-26px 11px 1px #ddd)*/
+    filter: drop-shadow(-6px 0px 13px rgba(0,0,0,0.5));
+}
+
+    .login_atlas-inner:before {
+        content: "";
+        /*width: 40%;*/
+        width: 50%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: -16px;
+        background: url(../../../Images/Login/bgimg.PNG);
+        z-index: 10;
+        background-position: center;
+        -webkit-clip-path: polygon(51% 49%, 100% 0%, 98% 100%, 0 100%);
+        clip-path: polygon(51% 49%, 100% 0%, 98% 100%, 0 100%);
+        background-size: cover;
+    }
+
+.login_atlas h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    /*font-family: 'open_sanssemibold';*/
+}
+
+
+.login_atlas .logo img {
+    position: relative;
+    top: 130px;
+    z-index: 1080;
+    left: 20px;
+    /*height: 30px;*/
+}
+
+.login_atlas .form-info {
+    background: rgba(255,255,255,0.75);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 470px;
+    margin: 0 auto;
+}
+
+.login_atlas .form-section {
+    padding: 40px 40px 30px;
+    /*padding: 50px 50px 30px;*/
+    border-radius: 10px 0 0 10px;
+    text-align: left;
+    position: relative;
+}
+
+.login_atlas label {
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 7px;
+}
+
+.login_atlas .form-section p {
+    font-size: 16px;
+    color: #535353;
+}
+
+.login_atlas .form-section a {
+    color: #3a2e7d;
+    text-decoration: none;
+    font-size: 16px;
+    /*font-family: 'open_sanssemibold';*/
+}
+
+.login_atlas .form-section p {
+    margin-bottom: 40px;
+}
+
+.login_atlas .form-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+}
+
+.login_atlas .form-section .social-list li {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.login_atlas .form-section .thembo {
+    margin-left: 4px;
+}
+
+.login_atlas .form-section h1 {
+    font-size: 27px;
+    font-weight: 600;
+    color: #7878ff;
+}
+
+.login_atlas .form-section h3 {
+    /*margin: 0 0 35px;*/
+    font-size: 27px;
+    font-weight: 600;
+    color: #402e7d;
+}
+
+.login_atlas .form-section .form-group {
+    margin-bottom: 10px;
+}
+
+.login_atlas .form-section .form-control {
+    padding: 10px 11px;
+    font-size: 16px;
+    outline: none;
+    height: 50px;
+    color: #222;
+    border-radius: 5px;
+    font-weight: 400;
+    border: 1px solid #402e7d;
+    background: #7878ff00;
+    /*box-shadow: inset 6px 6px 6px #e6ebef, inset -6px -6px 6px #fff;*/
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 0%) !important;
+}
+
+.login_atlas .form-section .checkbox .terms {
+    margin-left: 3px;
+}
+
+.login_atlas .form-section .terms {
+    margin-left: 3px;
+}
+
+.login_atlas .btn-section {
+    border-radius: 50px;
+    margin-bottom: 0;
+    display: inline-block;
+    top: 80px;
+    position: absolute;
+    right: 90px;
+}
+
+    .login_atlas .btn-section .link-btn {
+        font-size: 14px;
+        float: left;
+        text-align: center;
+        width: 100px;
+        padding: 6px 5px;
+        margin-left: 5px;
+        color: #535353;
+        border-radius: 3px;
+        background: #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .login_atlas .btn-section .active-bg {
+        color: #fff;
+        background: #7878ff;
+    }
+
+    .login_atlas .btn-section .link-btn:hover {
+        color: #fff;
+        background: #7878ff;
+    }
+
+.login_atlas .form-check-input:focus {
+    box-shadow: none;
+}
+
+.login_atlas .form-section .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+    border: 1px solid #fff5f5;
+    border-radius: 3px;
+    position: absolute;
+    background-color: #fff5f5;
+}
+
+.login_atlas .form-check-input:checked {
+    background-color: #7878ff;
+}
+
+.login_atlas .form-section .form-check-label {
+    padding-left: 5px;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #535353;
+}
+
+.login_atlas .btn-theme {
+    color: #fff;
+    text-align: center;
+    border: 2px solid transparent;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    transition: all .7s ease;
+    border-radius: 3px;
+    font-size: 17px;
+    font-weight: 400;
+    font-family: 'Jost', sans-serif;
+}
+
+    .login_atlas .btn-theme:before {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: all .7s ease;
+        z-index: -1;
+        border-radius: 3px;
+    }
+
+    .login_atlas .btn-theme:after {
+        position: absolute;
+        content: "";
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: all .7s ease;
+        z-index: -1;
+    }
+
+    .login_atlas .btn-theme:hover {
+        background: transparent;
+    }
+
+        .login_atlas .btn-theme:hover:before {
+            width: 0;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login_atlas .btn-theme:hover:after {
+            width: 0;
+            opacity: 1;
+            visibility: visible;
+        }
+
+.login_atlas .btn-lg {
+    padding: 0 50px;
+    line-height: 46px;
+}
+
+.login_atlas .btn {
+    box-shadow: none!important;
+}
+
+.login_atlas .btn-md {
+    padding: 0 45px;
+    line-height: 41px;
+}
+
+.login_atlas .btn-primary {
+    background: #3a2e7d!important;
+    color: #fff!important;
+}
+
+    .login_atlas .btn-primary:before {
+        background: #7878ff;
+    }
+
+    .login_atlas .btn-primary:after {
+        background: #7878ff;
+    }
+
+    .login_atlas .btn-primary:hover {
+        color: #7878ff;
+        border: 2px solid #7878ff;
+    }
+
+.login_atlas .social-list a {
+    font-size: 18px;
+    margin-right: 20px;
+    color: #535353;
+}
+
+    .login_atlas .social-list a:hover {
+        color: #7878ff;
+    }
+
+.login_atlas .login_atlas-bodycolor {
+    background: #fff;
+}
+
+
+
+@media (max-width: 992px) {
+
+    .login_atlas-inner:before {
+        /*background: none;*/
+    }
+
+    .login_atlas .form-section {
+        /*padding: 120px 34px 40px;*/
+        border-radius: 10px 0 0 10px;
+    }
+
+    .login_atlas .logo {
+        top: 40px;
+        left: 40px;
+    }
+
+    .login_atlas .btn-section {
+        top: 40px;
+        right: 40px;
+    }
+
+    .login_atlas-bodycolor .ripple-background {
+        display: none;
+    }
+}
+
+.bg-layer {
+    background-image: radial-gradient(at 50% -20%,hsl(249deg 46% 34% / 40%),#240a3a);
+    min-height: 100vh;
+}
+
+.float-lable {
+    position: relative;
+    top: 20px;
+    left: 13px;
+    background: #fff;
+}
+
+label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #101010;
+    margin-bottom: 9px;
+}
+
+.college-name {
+    font-family: 'open_sansbold';
+    text-shadow: 0px 5px 8px #343a40;
+}
+
+forget-pass text-white a {
+    color: #fff!important;
+}
+
+/*.text-blue {
+    color: #3a2e7d!important;
+}*/
+
+.college-name::after {
+    content: '';
+    display: block;
+    height: 1px;
+    border-radius: 2px;
+    background-color: #fff;
+    width: 60%;
+    margin: 20px auto;
+    opacity: .5;
+}
+
+.form-section .input-group-text {
+    background-color: transparent;
+    border: 0px solid #ced4da;
+}
+
+.bg-text {
+    text-align: center;
+    /*position:relative;
+    left:12%;*/
+}
+
+.compatiblity {
+    position: fixed;
+    bottom: 0px;
+    margin: auto;
+    width: 40%;
+    z-index: 1090;
+    /*background-color: #3a2e7d;*/
+}
+
+    .compatiblity .list-inline {
+        margin-bottom: 0;
+        padding: 5px 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .compatiblity .list-inline > li {
+            color: #fff;
+            text-shadow: 1px 4px 6px rgba(0,0,0,0.2);
+            font-size: 12px;
+            display: inline-block;
+            padding-right: 5px;
+            padding-left: 5px;
+        }
+
+            .compatiblity .list-inline > li > i {
+                color: #e6e6e6;
+            }
+
+.login_atlas .form-group #show_hide_password a {
+    position: absolute;
+    top: 47%;
+    right: 65px;
+    color: #212529;
+}
+
+
+
+/************floating labels *****************/
+
+.floating-label {
+    position: relative;
+    margin-bottom: 25px;
+    margin-top: 15px;
+}
+
+.floating-input {
+    font-size: 16px;
+    padding: .375rem .75rem;
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: 1px solid #402e7d;
+    background: #7878ff00;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: #222;
+}
+
+    .floating-input:focus {
+        outline: none;
+        border: 1px solid #039aaa;
+    }
+
+        .floating-input:focus > .fa-user {
+            color: #039aaa;
+        }
+
+.floating-label:focus > .far {
+    color: #039aaa;
+}
+
+.floating-form label {
+    color: #212529;
+    font-size: 16px;
+    /*font-weight: normal;*/
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+.floating-input:focus ~ label, .floating-input:not(:placeholder-shown) ~ label {
+    top: -10px;
+    left: 12px;
+    font-size: 16px;
+    color: #212529;
+    background: #e9e7e7;
+    padding: 0px 8px;
+    border-radius: 4px;
+}
+
+.floating-select:focus ~ label, .floating-select:not([value=""]):valid ~ label {
+    top: -18px;
+    font-size: 14px;
+    color: #5264AE;
+}
+
+/* active state */
+.floating-input:focus ~ .bar:before, .floating-input:focus ~ .bar:after, .floating-select:focus ~ .bar:before, .floating-select:focus ~ .bar:after {
+    width: 50%;
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+/* highlighter */
+.highlight {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* active state */
+.floating-input:focus ~ .highlight, .floating-select:focus ~ .highlight {
+    -webkit-animation: inputHighlighter 0.3s ease;
+    -moz-animation: inputHighlighter 0.3s ease;
+    animation: inputHighlighter 0.3s ease;
+}
+
+/* animation */
+@-webkit-keyframes inputHighlighter {
+    from {
+        background: #312976;
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+@-moz-keyframes inputHighlighter {
+    from {
+        background: #312976;
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+@keyframes inputHighlighter {
+    from {
+        background: #312976;
+    }
+
+    to {
+        width: 0;
+        background: transparent;
+    }
+}
+
+
+.floating-label i {
+    position: absolute;
+    top: 30%;
+    right: 15px;
+    color: #212529;
+    font-size: 18px;
+}
+
+.floating-label .i:focus {
+    color: #db0625!important;
+}
+
+
+/*************mobile view***************/
+@media (min-width:320px) and (max-width:765px) {
+    .overlay {
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(to top right,rgba(49, 41, 118, 0.55) 0,rgba(49, 41, 118, 0.55) 100%);
+        background-size: 1px 1px;
+    }
+
+    .login_atlas .form-info {
+        background: rgba(255,255,255,0.6);
+    }
+    .login_atlas-inner {
+        padding: 0px 0;
+    }
+}
+
+@media (max-width:767px) {
+    .compatiblity {
+        display: none;
+    }
+
+    .login_atlas-inner:before {
+        display: none;
+    }
+
+    .login_atlas .form-group #show_hide_password a {
+        position: absolute;
+        top: 49%;
+        right: 34px;
+        color: #c3bcbc;
+    }
+
+    .login_atlas .form-group .fas {
+        position: absolute;
+        top: 32%!important;
+        right: 36px!important;
+        color: #ced4da!important;
+    }
+
+    .login_atlas {
+        background-position: 51% 100%!important;
+    }
+}
+
+@media (min-width:767px) and (max-width:992px) {
+    .compatiblity {
+        width: 160%;
+        background-color: #3a2e7d;
+    }
+
+    .login_atlas .logo img {
+        width: 198px;
+        height: auto;
+        /*left: 20%;*/
+    }
+
+    .login_atlas {
+        background-size: cover!important;
+        background-position: center!important;
+    }
+
+    .login_atlas-inner:before {
+        clip-path: polygon(62% 14%, 100% -40%, 100% 100%, 0 100%);
+    }
+}
+
+@media (min-width:992px) and (max-width:1230px) {
+    .compatiblity {
+        width: 57%;
+        /*background-color: #3a2e7d;*/
+    }
+
+    .login_atlas .logo img {
+        width: 160px;
+        height: auto;
+        left: 10%;
+    }
+}
+
+@media (max-width: 767px) {
+    .login_atlas .form-section {
+        padding: 40px 10px 40px;
+    }
+
+    #txt_view {
+        order: 1;
+    }
+
+    .login_atlas .logo img {
+        position: initial;
+    }
+
+    .virtual-key {
+        display: none;
+    }
+    /*#bg_view {
+        order:2;
+    }*/
+}
+
+.login_atlas {
+    background: url(../../../Images/Login/atlasbg1.png);
+    /*background-position:inherit;*/
+    background-position: top center;
+    background-size: cover;
+}
+
+    .login_atlas .form-group .fas {
+        position: absolute;
+        top: 30%;
+        right: 66px;
+        color: #212529;
+    }

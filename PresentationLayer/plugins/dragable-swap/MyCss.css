@@ -1,0 +1,98 @@
+	
+	.sortableX.grid {
+		overflow: hidden;
+	}
+	
+	.grid div:hover {
+		cursor: move;
+	}
+    
+	.over {
+		-webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+		box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+
+		-webkit-transform: scale(1.1);
+		-moz-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		transform: scale(1.1);
+	}
+
+	.moving {
+		-webkit-transform: scale(0.9);
+		-moz-transform: scale(0.9);
+		-o-transform: scale(0.9);
+		-ms-transform: scale(0.9);
+		transform: scale(0.9);
+		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+		filter: alpha(opacity=30);
+		opacity: 0.3;
+	}
+
+	.drop {
+		-webkit-animation: drop 1s ease;
+		-moz-animation: drop 1s ease;
+		-ms-animation: drop 1s ease;
+		-o-animation: drop 1s ease;
+		animation: drop 1s ease;
+	}
+
+	@keyframes "drop" {
+		0%, 100% {
+			background: #FF9933;
+			color: #fff;
+		}
+		50% {
+			color: #FF9933;
+			background: #fff;
+		}
+
+	}
+
+	@-moz-keyframes drop {
+		0%, 100% {
+			background: #FF9933;
+			color: #fff;
+		}
+		50% {
+			color: #FF9933;
+			background: #fff;
+		}
+
+	}
+
+	@-webkit-keyframes "drop" {
+		0%, 100% {
+			background: #FF9933;
+			color: #fff;
+		}
+		50% {
+			color: #FF9933;
+			background: #fff;
+		}
+
+	}
+
+	@-ms-keyframes "drop" {
+		0%, 100% {
+			background: #FF9933;
+			color: #fff;
+		}
+		50% {
+			color: #FF9933;
+			background: #fff;
+		}
+
+	}
+
+	@-o-keyframes "drop" {
+		0%, 100% {
+			background: #FF9933;
+			color: #fff;
+		}
+		50% {
+			color: #FF9933;
+			background: #fff;
+		}
+
+	}

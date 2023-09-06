@@ -1,0 +1,983 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="homeFaculty.aspx.cs" Inherits="homeFaculty" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <%-- <link href="<%=Page.ResolveClientUrl("~/bootstrap/css/Dashboard.css")%>" rel="stylesheet" />--%>
+    <link href="<%=Page.ResolveClientUrl("~/plugins/newbootstrap/css/Dashboard.css")%>" rel="stylesheet" />
+    <%--   <script src="<%=Page.ResolveClientUrl("https://www.google.com/jsapi")%>" type="text/javascript"></script>--%>
+
+    <%-- <script src="plugins/Chart.js/dist/Chart.min.js"></script>
+    <script src="plugins/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>--%>
+
+    <script src="<%=Page.ResolveClientUrl("~/plugins/Chart.js/dist/Chart.min.js")%>" type="text/javascript"></script>
+    <script src="<%=Page.ResolveClientUrl("~/plugins/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js")%>" type="text/javascript"></script>
+
+    <style>
+        .new-parent {
+            height: 240px;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+            .new-parent .x_panel {
+                box-shadow: none;
+            }
+
+        .txt-head{
+            position: sticky;
+            top: -1px;
+            background: #fff;
+            z-index: 1080;
+        }
+
+        #header-fixed {
+            position: fixed;
+            top: 0px;
+            display: none;
+            background-color: white;
+        }
+
+        .box-tools.pull-right {
+            display: none;
+        }
+
+        .chiller-theme .sidebar-wrapper {
+            display: none;
+        }
+
+        .page-wrapper.toggled .page-content {
+            padding: 0;
+            margin-top: 15px;
+            padding-top: 40px !important;
+        }
+
+        .page-wrapper .page-content {
+            height: auto;
+        }
+
+        .content {
+            padding-bottom: 10px;
+        }
+
+        .scrollbar ul.fav-list li:hover {
+            color: #212529;
+            background-color: rgba(0,0,0,.075);
+        }
+
+        @media (min-width: 576px) and (max-width: 991px) {
+            .content {
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+        }
+
+        .table-bordered > tbody > tr > td {
+            text-align: left !important;
+        }
+
+        #tblAcdActivity.table-bordered > thead > tr > th {
+            border-top: 0px solid #e6e9ed;
+        }
+    </style>
+    <style>
+        /* Customize website's scrollbar like Mac OS
+        Not supports in Firefox and IE */
+        /* total width */
+        .scrollbar::-webkit-scrollbar {
+            background-color: #fff;
+            width: 5px;
+            scrollbar-width: thin;
+        }
+
+        /* background of the scrollbar except button or resizer */
+        .scrollbar::-webkit-scrollbar-track {
+            background-color: #fff;
+        }
+
+            .scrollbar::-webkit-scrollbar-track:hover {
+                background-color: #f4f4f4;
+            }
+
+        /* scrollbar itself */
+        .scrollbar::-webkit-scrollbar-thumb {
+            background-color: #babac0;
+            border-radius: 2px;
+            border: 2px solid #fff;
+        }
+
+            .scrollbar::-webkit-scrollbar-thumb:hover {
+                background-color: #a0a0a5;
+                border: 2px solid #f4f4f4;
+            }
+
+        /* set button(top and bottom of the scrollbar) */
+        .scrollbar::-webkit-scrollbar-button {
+            display: none;
+        }
+        /*::-webkit-scrollbar {
+            width: 4px;
+            height: 5px;
+            background: #e5e5e5;
+        }*/
+    </style>
+
+
+    <!-- SCRIPT FOR GRAPH -->
+
+    <script>
+        $(document).ready(function () {
+
+            $('.news-jq').find('.media-body p, .media-body font').css({ 'font-size': '12px', 'line-height': '1.1', 'font-family': 'opensans' });
+            $('.news-jq').find('.media-body font').attr('size', '0');
+
+            //   Added on 30-03-2020
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowAttPer",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowAttPer")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessAttPer,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessAttPer(response) {
+                //console.log("Label :",response['d']);
+                var AttnPer = response['d'] + '%';
+                $('#lblAttPer').html(AttnPer);
+            };
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/BindTodaysTimeTbl",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/BindTodaysTimeTbl")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessTT,
+                failure: function (response) {
+                    var html = '';
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display.. </td></tr>';
+                    $('#ttbody').html(html);
+                }
+            });
+            function OnSuccessTT(response) {
+                loadTable(response['d']);
+            };
+            //function loadTable(data) {debugger
+            //    var html = '';
+            //    if (data != null) {
+            //        if (data.length > 0) {
+            //            $.each(data, function (i, d) {
+            //                if (d.SlotIme != '-') {
+            //                    html += '<tr>';
+            //                    html += '<td class="text-center">' + d.SlotIme + '</td>';
+            //                    html += '<td class="text-center"> <a id="llnkbutton" href="Academic/AttendenceByFaculty.aspx?pageno=112"' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>';
+            //                        //'</td>  data-container="body"  data-original-title="' + d.CourseCode + ' - ' + d.Subject + ' (BRANCH-' + d.BranchShortName + ', SEM-' + d.Semester + ', SEC-' + d.Section + ') " data-toggle="tooltip" >' + d.CourseCode + '</td>'
+            //                    html += '</tr>';
+            //                } else {
+            //                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+            //                }
+            //                // html += '<td class="text-center"  data-container="body" data-original-title="' + d.CourseCode + ' - ' + d.Subject + '" data-toggle="tooltip" >' + d.CourseCode + '</td>';
+            //                //html += '<td class="text-center"  data-container="body"  data-original-title="' + d.BranchShortName + ' - ' + d.Branch + '" data-toggle="tooltip">' + d.BranchShortName + '</td>';
+            //                //html += '<td class="text-center">' + d.Semester + '</td>';
+            //                //html += '<td class="text-center">' + d.Section + '</td>';
+
+            //            });
+            //        } else {
+            //            html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+            //        }
+            //    } else {
+            //        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="2">No Records To Display..</td></tr>';
+            //    }
+            //    $('#ttbody').html(html);
+
+            //    $('[data-toggle="tooltip"]').tooltip({
+            //        placement: "top"
+            //    });
+            //};
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowInOutTime",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowInOutTime")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessInOut,
+                failure: function (response) {
+                    var html = '';
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No Records To Display..</td></tr>';
+                    $('#inOutBody').html(html);
+                }
+            });
+            function OnSuccessInOut(response) {
+                loadInOutTbl(response['d']);
+            };
+            function loadInOutTbl(data) {
+                var html = '';
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (i, d) {
+                            html += '<tr>';
+                            html += '<td >' + d.Day + '</td>';
+                            html += '<td >' + d.InTime + '</td>';
+                            html += '<td >' + d.OutTime + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No Records To Display..</td></tr>';
+                    }
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="3">No Records To Display..</td></tr>';
+                }
+                $('#inOutBody').html(html);
+            };
+            // -------------------comment notice---------------------
+            //  $.ajax({
+            //      type: "POST",
+            //      url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowNewsData")%>',
+            //      data: '{}',
+            //      contentType: "application/json; charset=utf-8",
+            //      dataType: "json",
+            //      success: OnSuccessNews,
+            //      failure: function (response) {
+            //          var html = '';
+            //          var html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No Records To Display..</div>';
+            //          $('#divNews').html(html);
+            //      }
+            //  });
+            //  function OnSuccessNews(response) {
+            //      loadNewsData(response['d']);
+            //  };
+            //  function loadNewsData(data) {
+            //    var html = '';
+            //    if (data != null) {
+            //        if (data.length > 0) {
+            //            $.each(data, function (i, d) {
+            //                if (d.NewsLink != '') {
+            //                    html += '<article class="media event"><a class="pull-left date"><p class="month">' + d.Month + '</p><p class="day">' + d.Day + '</p></a>';
+            //                    html += '<div class="media-body"><a class="title" target="_blank" href=' + d.NewsLink + '>' + d.Title + '</a><p>' + d.NewsDescription + '</p></div></article>';
+            //                }
+            //                else {
+            //                    html += '<article class="media event"><a class="pull-left date"><p class="month">' + d.Month + '</p><p class="day">' + d.Day + '</p></a>';
+            //                    html += '<div class="media-body"><a class="title" href="#">' + d.Title + '</a><p>' + d.NewsDescription + '</p></div></article>';
+            //                }
+            //            });
+            //        } else {
+            //            html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No Records To Display..</div>';
+            //        }
+            //
+            //    } else {
+            //        html = '<div style="text-align:center; font-size:15px; font-weigth:bold" class="info">No Records To Display..</div>';
+            //    }
+            //    $('#divNews').html(html);
+            //};
+            //--------------------------end notice ---------------------------------------------
+
+
+            //-----------------------------------------------------------------------
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowEmpTasks",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowEmpTasks")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessEmpTask,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessEmpTask(response) {
+                loadETaskData(response['d']);
+            };
+            function loadETaskData(data) {
+                var html = '';
+                var LinkCount = 1;
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            /**************************************************************************************************************
+                               Do not give the space in href
+                               Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
+                               Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
+                              ************************************************************************************************************* */
+                            html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                            LinkCount += 1;
+                        });
+                    } else {
+                        html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No Records To Display..</li>';
+                    }
+                } else {
+                    html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No Records To Display..</li>';
+                }
+                $('#ulEmpTask').append(html);
+            }
+            //function loadETaskData(data) {
+            //    var html = '';
+            //    if (data != null) {
+            //        if (data.length > 0) {
+            //            $.each(data, function (row, item) {
+            //                html += '<li class="list-group-item"><a href=' + item.AL_URL + ' target="_blank">' + item.ACTIVITY_NAME + ' <span id="span1" runat="server" class="ncount">' + item.STAT + '</span></a></li>';
+            //            });
+            //        } else {
+            //            html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;" >No Records To Display..</li>';
+            //        }
+            //    } else {
+            //        html += '<li class="list-group-item text-center info" style="text-align:center; font-size:15px; font-weigth:bold; background-color: #d9edf7;">No Records To Display..</li>';
+            //    }
+            //    $('#ulEmpTask').html(html);
+            //}
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowCasualBalLeaves",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowCasualBalLeaves")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessCBLeave,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessCBLeave(response) {
+                var CBLeave = response['d'];
+                $('#lblLeaveBal').html(CBLeave);
+            };
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowUpcommingHolidays",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowUpcommingHolidays")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessUpcommingHolidays,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessUpcommingHolidays(response) {
+                var holidays = response['d'];
+                $('#lblHolidays').html(holidays.Holiday);
+                $('#lblMonth').html(holidays.Month);
+            };
+
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowTimeTable",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowTimeTable")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessTimeTable,
+                failure: function (response) {
+                    var html = '';
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><th class="text-center" >No Records To Display..</th></tr>';
+                    $('#tblTimeTable').html(html);
+                }
+            });
+            function OnSuccessTimeTable(response) {
+                loadTimeTable(response['d']);
+            };
+            function loadTimeTable(data) {
+                debugger;
+                if (data != null) {
+                    var html = '';
+                    html += '<thead class="bg-light-blue" style="position: sticky; z-index:1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">';
+                    // html += '<tr class="bg-success">';
+                    html += '<tr>';
+                    html += '<th class="text-center">Slot</th>';
+                    html += '<th class="text-center">Monday</th>';
+                    html += '<th class="text-center">Tuesday</th>';
+                    html += '<th class="text-center">Wednesday</th>';
+                    html += '<th class="text-center">Thursday</th>';
+                    html += '<th class="text-center">Friday</th>';
+                    html += '<th class="text-center">Saturday</th>';
+                    html += '<th class="text-center">Sunday</th>';
+                    html += '</tr></thead>';
+                    html += '<tbody>';
+                    if (data.objTTList != null) {
+                        if (data.objTTList.length > 0) {
+                            $.each(data.objTTList, function (row, item) {
+                                html += '<tr>';
+                                html += '<td class="text-center">' + item.Slot + '</td>';
+                                if (item.Monday != '-') {
+                                    var arrLec1 = item.Monday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec1 + '" data-toggle="tooltip">' + arrLec1 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Monday + '</td>';
+                                }
+                                if (item.Tuesday != '-') {
+                                    var arrLec2 = item.Tuesday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec2 + '" data-toggle="tooltip">' + arrLec2 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Tuesday + '</td>';
+                                }
+                                if (item.Wednesday != '-') {
+                                    var arrLec3 = item.Wednesday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec3 + '" data-toggle="tooltip">' + arrLec3 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Wednesday + '</td>';
+                                }
+                                if (item.Thursday != '-') {
+                                    var arrLec4 = item.Thursday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec4 + '" data-toggle="tooltip">' + arrLec4 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Thursday + '</td>';
+                                }
+                                if (item.Friday != '-') {
+                                    var arrLec5 = item.Friday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec5 + '" data-toggle="tooltip">' + arrLec5 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Friday + '</td>';
+                                }
+                                if (item.Saturday != '-') {
+                                    var arrLec6 = item.Saturday.split('-');
+                                    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec6 + '" data-toggle="tooltip">' + arrLec6 + '' + '</td>';
+                                } else {
+                                    html += '<td class="text-center" >' + item.Saturday + '</td>';
+                                }
+                                //if (item.Sunday != '-') {
+                                //    var arrLec7 = item.Sunday.split('-');
+                                //    html += '<td class="text-center" data-container="body"  data-original-title="' + arrLec7[1] + ' - ' + arrLec7[0] + ' (' + arrLec7[2] + ') ' + '" data-toggle="tooltip">' + arrLec7[1] + '</td>';
+                                //} else {
+                                //    html += '<td class="text-center" >' + item.Sunday + '</td>';
+                                //}
+                                html += '</tr>';
+                            });
+                        } else {
+                            html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="8">No Records To Display..</td></tr>';
+                        }
+                    } else {
+                        html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><td colspan="8">No Records To Display..</td></tr>';
+                    }
+                    html += '</tbody>';
+                } else {
+                    html += '<tr style="text-align:center; font-size:15px; font-weigth:bold" class="info"><th class="text-center" >No Records To Display..</th></tr>';
+                }
+                $('#tblTimeTable').html(html);
+                //alert(html)
+                $('[data-toggle="tooltip"]').tooltip({
+                    placement: "top"
+                });
+            };
+
+            /************************ Quick Access ************************/
+            $.ajax({
+                type: "POST",
+                //url: "homeFaculty.aspx/ShowQuickAccessData",
+                url: '<%=Page.ResolveUrl("~/homeFaculty.aspx/ShowQuickAccessData")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: OnSuccessQL,
+                failure: function (response) {
+                }
+            });
+            function OnSuccessQL(response) {
+                loadQLData(response['d']);
+            };
+            function loadQLData(data) {
+                var html = '';
+                var LinkCount = 1;
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (row, item) {
+                            /* *************************************************************************************************************
+                                Do not give the space in href
+                                Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
+                                Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
+                               ************************************************************************************************************* */
+                            html += '<li class="list-group-item"><a href="' + item.Link + '?pageno=' + item.PageNo + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                            LinkCount += 1;
+                        });
+                    } else {
+                        html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No Records To Display..</li>';
+                    }
+                } else {
+                    html += '<li class="list-group-item text-center" style="font-size:15px; font-weigth:bold; background-color: #d9edf7; ">No Records To Display..</li>';
+                }
+                $('#ulQuickAccess').append(html);
+            }
+            /************************ Quick Access ************************/
+            GetAttendancePerCourseWise();
+        });
+
+
+    </script>
+
+    <div class="container-fluid">
+        <section class="statistics">
+            <div class="gutters-sm">
+                <div class="mybox-main row">
+                    <div class="col-lg-3 col-md-6 col-6 pad-box">
+                        <div class="tile-box in-down a1">
+                            <i class="fa fa-percent fa-fw icon-sm" style="background-color: #c23531"></i>
+                            <div class="info">
+                                <h3>
+                                    <label id="lblAttPer">0.00</label>
+                                </h3>
+                                <span>Biometric Attendance</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-6 pad-box">
+                        <div class="tile-box in-down a2">
+                            <i class="fa fa-tags fa-fw danger icon-sm" style="background-color: #2f4554"></i>
+                            <div class="info">
+                                <h3>
+                                    <label id="lblLeaveBal"></label>
+                                </h3>
+                                <span>Casual Leave Balance</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-6 pad-box">
+                        <div class="tile-box in-down a3">
+                            <i class="fa fa-calendar fa-fw icon-sm" aria-hidden="true" style="background-color: #61a0a8"></i>
+                            <div class="info">
+                                <h3>
+                                    <label id="lblHolidays"></label>
+                                </h3>
+                                <span>Upcoming Holidays &nbsp;
+                                <label id="lblMonth"></label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-6 pad-box">
+                        <div class="tile-box in-down a4">
+                            <i class="fa fa-user fa-fw icon-sm" style="background-color: #d48265"></i>
+                            <div class="info">
+
+                                <h3>
+                                    <asp:Label ID="lblLastLoginTime" runat="server"></asp:Label>
+                                    <small>
+                                        <asp:Label ID="lblLastLoginForm" runat="server"></asp:Label></small></h3>
+
+                                <span>Last Login</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="row equalHMRWrap flex gutters-sm">
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="x_panel in-left a1">
+                    <div class="x_title">
+                        <h2>Today's Time Table</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar">
+                        <asp:ListView ID="lvTodaysTT" runat="server">
+                            <LayoutTemplate>
+                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTimeTable">
+                                    <thead class="bg-primary">
+                                        <tr>
+                                            <th class="text-center">Slot</th>
+                                            <th class="text-center">Subject</th>
+                                            <%--<th class="text-center">Branch</th>
+                                    <th class="text-center">Semester</th>
+                                    <th class="text-center">Section</th>--%>
+                                        </tr>
+                                        <%-- <tr>
+                                            <td>
+                                                <asp:LinkButton ID="lnk" runat="server" Text="2"></asp:LinkButton>
+                                            </td>
+                                        </tr>--%>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="itemPlaceholder" runat="server" />
+                                    </tbody>
+
+                                </table>
+                            </LayoutTemplate>
+                            <ItemTemplate>
+                                <tr>
+                                    <td style="text-align: left">
+                                        <%#Eval("SLOTNAME") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("CCODE") %>
+                                        <asp:LinkButton ID="lnkCourse" runat="server" Text='<%#Eval("CCODE") %>' CommandArgument='<%# Eval("COURSENO")%>' OnClick="lnkCourse_Click" Visible="false"></asp:LinkButton>
+                                    </td>
+                                    <asp:HiddenField ID="hdnSchemename" runat="server" Value='<%# Eval("SCHEMENAME")%>' />
+                                    <asp:HiddenField ID="hdnCoursename" runat="server" Value='<%# Eval("COURSENAME")%>' />
+                                    <asp:HiddenField ID="hdnBatch" runat="server" Value='<%# Eval("BATCHNAME")%>' />
+                                    <asp:HiddenField ID="hdnSectionname" runat="server" Value='<%# Eval("SECTION")%>' />
+                                    <asp:HiddenField ID="hdnSubjecttype" runat="server" Value='<%# Eval("SUBJECTTYPE")%>' />
+                                    <asp:HiddenField ID="hdnCourseno" runat="server" Value='<%# Eval("COURSENO")%>' />
+                                    <asp:HiddenField ID="hdnSectionno" runat="server" Value='<%# Eval("SECTIONNO")%>' />
+                                    <asp:HiddenField ID="hdnBatchno" runat="server" Value='<%# Eval("BATCH")%>' />
+                                    <asp:HiddenField ID="hdnSubId" runat="server" Value='<%# Eval("SUBID")%>' />
+                                </tr>
+                            </ItemTemplate>
+                        </asp:ListView>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="x_panel in-left a2">
+                    <div class="x_title">
+                        <h2>Attendance (%)</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar small">
+                        <canvas id="AttendanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12 new-parent">
+                <div class="x_panel in-right a2  scrollbar">
+                    <div class="x_title txt-head">
+                        <h2>Active Notice/News</h2>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content  scrollbar small">
+                        <asp:ListView ID="lvActiveNotice" runat="server">
+                            <LayoutTemplate>
+                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblNotice">
+                                    <tbody>
+                                        <tr id="itemPlaceholder" runat="server" />
+                                    </tbody>
+
+                                </table>
+                            </LayoutTemplate>
+                            <ItemTemplate>
+                                <tr>
+                                    <article class="media event">
+                                        <a class="pull-left date">
+                                            <p class="month"><%#Eval("MM")%></p>
+                                            <p class="day"><%#Eval("DD")%></p>
+                                        </a>
+                                        <div class="media-body">
+                                            <p><%#Eval("NEWSDESC") %></p>
+                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                        </div>
+                                    </article>
+                                </tr>
+                            </ItemTemplate>
+                        </asp:ListView>
+                        <div class="x_title">
+                            <h2>Expired Notice/News</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content height-250 scrollbar small news-jq">
+                            <asp:ListView ID="lvExpNotice" runat="server">
+                                <LayoutTemplate>
+                                    <table class="table table-hover small table-striped table-bordered nowrap" id="tblExpNotice">
+                                        <tbody>
+                                            <tr id="itemPlaceholder" runat="server" />
+                                        </tbody>
+
+                                    </table>
+                                </LayoutTemplate>
+                                <ItemTemplate>
+                                    <tr>
+                                        <article class="media event">
+                                            <a class="pull-left date">
+                                                <p class="month"><%#Eval("MM")%></p>
+                                                <p class="day"><%#Eval("DD")%></p>
+                                            </a>
+                                            <div class="media-body">
+                                                <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                <p><%#Eval("NEWSDESC") %></p>
+                                            </div>
+                                        </article>
+                                    </tr>
+
+                                </ItemTemplate>
+                            </asp:ListView>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row equalHMRWrap flex gutters-sm">
+            <div class="col-lg-5 col-md-6 col-12">
+                <div class="x_panel in-left a2">
+                    <div class="x_title">
+                        <h2>Class Time Table</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar">
+                        <div class="table-responsive" style="height: 178px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                            <table class="table table-hover small table-striped table-bordered nowrap" style="width: 100%;" id="tblTimeTable">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-6 col-12">
+                <div class="x_panel in-right a2">
+                    <div class="x_title">
+                        <h2>Invigilation Schedule</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-12">
+                <div class="x_panel in-right a2">
+                    <div class="x_title">
+                        <h2>In / Out Time</h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar">
+
+                        <asp:Panel ID="pnlAttachmentList" runat="server">
+                            <table class="table table-hover small table-striped table-bordered nowrap" id="tblTodaysTimeTable">
+                                <thead class="bg-primary">
+                                    <tr>
+                                        <th>Day</th>
+                                        <th class="text-center">In-Time</th>
+                                        <th class="text-center">Out-Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inOutBody">
+                                </tbody>
+                            </table>
+                        </asp:Panel>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-6 col-12 d-none">
+                <div class="x_panel in-right a2">
+                    <div class="x_title">
+                        <h2>Exam Time Table</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar">
+                        <asp:ListView ID="lvExamTT" runat="server">
+                            <LayoutTemplate>
+                                <table class="table table-hover small table-striped table-bordered nowrap" id="tblExamTimeTable">
+                                    <thead class="bg-primary">
+                                        <tr>
+                                            <th style="width: 14%" class="text-center">EXAMDATE</th>
+                                            <th class="text-center">SLOTNAME</th>
+                                            <th class="text-center">CCODE</th>
+                                            <th class="text-center">COURSENAME</th>
+                                            <th class="text-center">SEMESTERNAME</th>
+                                            <th class="text-center">REGULAR_BACKLOG</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="itemPlaceholder" runat="server" />
+                                    </tbody>
+                                </table>
+                            </LayoutTemplate>
+                            <ItemTemplate>
+                                <tr>
+                                    <td class="text-center">
+                                        <%#Eval("EXAMDATE") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("SLOTNAME") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("CCODE") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("COURSENAME") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("SEMESTERNAME") %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%#Eval("REGULAR_BACKLOG") %>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                        </asp:ListView>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-12 d-none">
+                <div class="x_panel in-right a2">
+                    <div class="x_title">
+                        <h2>Quick Access</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar small">
+                        <ul class="list-group with-border-bottom fav-list" id="ulQuickAccess">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-lg-2 col-md-6 col-12 d-none">
+                <div class="x_panel in-right a1">
+                    <div class="x_title">
+                        <h2>Tasks</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content height-250 scrollbar small">
+                        <asp:HiddenField ID="HiddenField1" runat="server" />
+                        <ul class="list-group with-border-bottom fav-list" id="ulEmpTask">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function openWindowReload(link) {
+            var href = link.href;
+            window.open(href, '_blank');
+            document.location.reload(true)
+        }
+    </script>
+
+    <script type="text/javascript">
+        function RefreshParent() {
+            if (window.opener != null && !window.opener.closed) {
+                window.opener.location.reload();
+            }
+        }
+    </script>
+
+
+    <script>
+        function BindChart(ccode,percentage)
+        {
+            var ctx1 = document.getElementById('AttendanceChart');
+            var myChart1 = new Chart(ctx1, {
+                plugins: [ChartDataLabels],//, legendMargin],
+                type: 'bar',
+                data: {
+                    //labels: ['Code 1', 'Code 2', 'Code 3'],
+                    labels: ccode,
+                    datasets: [{
+                        //label: "Continuous Assessment-1",
+                        //data: [85, 45, 60],
+                        data: percentage,
+                        backgroundColor: [
+                            '#fff5dc', '#dcf2f2', '#d6ecfa', '#ebe0ff', '#f5f5f5',
+
+                        ],
+                        borderWidth: 1,
+                        borderColor: '#ffff',
+                    }]
+                },
+                options: {
+                    layout: {
+                        padding: 14
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+
+                        },
+                        //title:{
+                        //    display:true,
+                        //    text:"Research Publications",
+                        //},
+                        datalabels: {
+                            anchor: 'end', // remove this line to get label in middle of the bar
+                            align: 'end',
+                            display: 'auto',
+                            formatter: (val) => (`${val}`),
+                labels: {
+                value: {
+
+                            font: { family: 'open_sansregular',
+                            size: '11px' },
+                        },
+
+                    }
+        }
+        },
+
+
+        scales: {
+                x:{
+                    ticks:{
+                            font:{
+                                family: 'open_sansregular',
+                                size:11
+                            }
+                    }
+                },
+            y:{                ticks:{
+                        font:{
+                        family: 'open_sansregular',
+                        size:11
+                        }
+            }}
+        }
+
+        }
+        });
+        
+        }
+    </script>
+
+    <script type="text/javascript">
+        function GetAttendancePerCourseWise() {
+
+            var ccode = [];var percenatge = [];
+            //alert('inside')
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("homeFaculty.aspx/ShowAttendancePerCourseWise")%>',
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                
+                dataType: "json",
+
+                success: function (response) {
+                    //alert(data)
+                    var data = JSON.parse(response.d);
+                    var rw1 = "";
+                    console.log(data)
+                    for(var i = 0;i < data.length;i++)
+                    {
+                        ccode.push(data[i]["CCODE"]);
+                        percenatge.push(data[i]["PERCENTAGECOUNT"]);
+                    }
+                    
+                    BindChart(ccode,percenatge);
+                    
+                },
+                failure: function (response) {
+                    alert("failure");
+                },
+                error: function (response) {
+                    console.log(response);
+                    //debugger
+                    alert("error");
+                    alert(response.responseText);
+                }
+
+            });
+
+
+        }
+
+    </script>
+
+
+</asp:Content>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://iitms.co.in/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://iitms.co.in/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://iitms.co.in/">
+      <s:element name="HelloWorld">
+        <s:complexType />
+      </s:element>
+      <s:element name="HelloWorldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="HelloWorldResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsWS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MsgCode" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="userno" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="v1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v3" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v4" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v5" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v6" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v7" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v8" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v9" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="v10" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobilno" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSmsWSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSmsWSResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendBulkSmsWS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MsgCode" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="userno" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Sms" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mobilno" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendBulkSmsWSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendBulkSmsWSResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HelloWorldSoapIn">
+    <wsdl:part name="parameters" element="tns:HelloWorld" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldSoapOut">
+    <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsWSSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSmsWS" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsWSSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSmsWSResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendBulkSmsWSSoapIn">
+    <wsdl:part name="parameters" element="tns:SendBulkSmsWS" />
+  </wsdl:message>
+  <wsdl:message name="SendBulkSmsWSSoapOut">
+    <wsdl:part name="parameters" element="tns:SendBulkSmsWSResponse" />
+  </wsdl:message>
+  <wsdl:message name="HelloWorldHttpGetIn" />
+  <wsdl:message name="HelloWorldHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsWSHttpGetIn">
+    <wsdl:part name="MsgCode" type="s:string" />
+    <wsdl:part name="userno" type="s:string" />
+    <wsdl:part name="v1" type="s:string" />
+    <wsdl:part name="v2" type="s:string" />
+    <wsdl:part name="v3" type="s:string" />
+    <wsdl:part name="v4" type="s:string" />
+    <wsdl:part name="v5" type="s:string" />
+    <wsdl:part name="v6" type="s:string" />
+    <wsdl:part name="v7" type="s:string" />
+    <wsdl:part name="v8" type="s:string" />
+    <wsdl:part name="v9" type="s:string" />
+    <wsdl:part name="v10" type="s:string" />
+    <wsdl:part name="mobilno" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSmsWSHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SendBulkSmsWSHttpGetIn">
+    <wsdl:part name="MsgCode" type="s:string" />
+    <wsdl:part name="userno" type="s:string" />
+    <wsdl:part name="Sms" type="s:string" />
+    <wsdl:part name="mobilno" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendBulkSmsWSHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="Service1Soap">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldSoapIn" />
+      <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsWS">
+      <wsdl:input message="tns:SendSmsWSSoapIn" />
+      <wsdl:output message="tns:SendSmsWSSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendBulkSmsWS">
+      <wsdl:input message="tns:SendBulkSmsWSSoapIn" />
+      <wsdl:output message="tns:SendBulkSmsWSSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="Service1HttpGet">
+    <wsdl:operation name="HelloWorld">
+      <wsdl:input message="tns:HelloWorldHttpGetIn" />
+      <wsdl:output message="tns:HelloWorldHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsWS">
+      <wsdl:input message="tns:SendSmsWSHttpGetIn" />
+      <wsdl:output message="tns:SendSmsWSHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendBulkSmsWS">
+      <wsdl:input message="tns:SendBulkSmsWSHttpGetIn" />
+      <wsdl:output message="tns:SendBulkSmsWSHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap:operation soapAction="http://iitms.co.in/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsWS">
+      <soap:operation soapAction="http://iitms.co.in/SendSmsWS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendBulkSmsWS">
+      <soap:operation soapAction="http://iitms.co.in/SendBulkSmsWS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HelloWorld">
+      <soap12:operation soapAction="http://iitms.co.in/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsWS">
+      <soap12:operation soapAction="http://iitms.co.in/SendSmsWS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendBulkSmsWS">
+      <soap12:operation soapAction="http://iitms.co.in/SendBulkSmsWS" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Service1HttpGet" type="tns:Service1HttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="HelloWorld">
+      <http:operation location="/HelloWorld" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSmsWS">
+      <http:operation location="/SendSmsWS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendBulkSmsWS">
+      <http:operation location="/SendBulkSmsWS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service1">
+    <wsdl:port name="Service1Soap" binding="tns:Service1Soap">
+      <soap:address location="http://172.16.200.10/SmsServer/service1.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Service1Soap12" binding="tns:Service1Soap12">
+      <soap12:address location="http://172.16.200.10/SmsServer/service1.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Service1HttpGet" binding="tns:Service1HttpGet">
+      <http:address location="http://172.16.200.10/SmsServer/service1.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

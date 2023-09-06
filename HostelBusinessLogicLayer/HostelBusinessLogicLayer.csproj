@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F05027A3-1E65-40CC-9547-2428FBDDEACA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HostelBusinessLogicLayer</RootNamespace>
+    <AssemblyName>HostelBusinessLogicLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\PresentationLayer\Bin\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.TemplateEngine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.VSDesigner, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DropDownCheckBoxes">
+      <HintPath>C:\Users\Administrator\Desktop\DropDownCheckBoxes.dll</HintPath>
+    </Reference>
+    <Reference Include="mastersofterp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PresentationLayer\Bin\mastersofterp.dll</HintPath>
+    </Reference>
+    <Reference Include="MasterSoftErp_SVNIT_Surat">
+      <HintPath>..\PresentationLayer\Bin\MasterSoftErp_SVNIT_Surat.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions.Design" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessEntities\Hostel\AssetAllotment.cs" />
+    <Compile Include="BusinessEntities\Hostel\Block.cs" />
+    <Compile Include="BusinessEntities\Hostel\Bonafide.cs" />
+    <Compile Include="BusinessEntities\Hostel\GuestInfo.cs" />
+    <Compile Include="BusinessEntities\Hostel\HostelRoomCharge.cs" />
+    <Compile Include="BusinessEntities\Hostel\HostelStdFee.cs" />
+    <Compile Include="BusinessEntities\Hostel\MessAdvance.cs" />
+    <Compile Include="BusinessEntities\Hostel\MessBillMaster.cs" />
+    <Compile Include="BusinessEntities\Hostel\MessExpenditureMaster.cs" />
+    <Compile Include="BusinessEntities\Hostel\MessMaster.cs" />
+    <Compile Include="BusinessEntities\Hostel\Room.cs" />
+    <Compile Include="BusinessEntities\Hostel\RoomAllotment.cs" />
+    <Compile Include="BusinessEntities\Hostel\RoomAsset.cs" />
+    <Compile Include="BusinessEntities\Hostel\SeatQuota.cs" />
+    <Compile Include="BusinessLogic\FeeCollection\HostelFeeCollectionController.cs" />
+    <Compile Include="BusinessLogic\Hostel\AssetAllotmentController.cs" />
+    <Compile Include="BusinessLogic\Hostel\AssetController.cs" />
+    <Compile Include="BusinessLogic\Hostel\BlockController.cs" />
+    <Compile Include="BusinessLogic\Hostel\BonafideController.cs" />
+    <Compile Include="BusinessLogic\Hostel\GuestInfoController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelAttendanceController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelConfigurationController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelSessionController.cs" />
+    <Compile Include="BusinessLogic\Hostel\MessAdvanceController.cs" />
+    <Compile Include="BusinessLogic\Hostel\MessBillController.cs" />
+    <Compile Include="BusinessLogic\Hostel\MessExpenditureController.cs" />
+    <Compile Include="BusinessLogic\Hostel\MessMasterController.cs" />
+    <Compile Include="BusinessLogic\Hostel\ResidentTypeController.cs" />
+    <Compile Include="BusinessLogic\Hostel\RoomAllotmentController.cs" />
+    <Compile Include="BusinessLogic\Hostel\RoomAssetController.cs" />
+    <Compile Include="BusinessLogic\Hostel\RoomController.cs" />
+    <Compile Include="BusinessLogic\Hostel\SeatQuotaController.cs" />
+    <Compile Include="Class2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="bin\Debug\HostelBusinessLogicLayer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
+      <Project>{5ce46bff-aa63-4278-ab6e-5037116040fd}</Project>
+      <Name>BusinessLogicLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DATAACCESSLAYER\DataAccessLayer.csproj">
+      <Project>{73aaea5f-7112-42f7-9809-a2a6c0a93ead}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

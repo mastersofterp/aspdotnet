@@ -1,0 +1,35 @@
+	.asbMenu 
+	{
+		border: 1px solid lightblue;
+		background:#ffccff;
+		position: absolute;
+		padding: 5;
+		white-space: nowrap;
+	}
+	
+	.asbMenuBase
+	{
+		position: absolute;
+	}
+	
+					
+	.asbMenuItem
+	{			
+		font-family: 'Courier New', Courier, monospace; 
+		font-size: small;
+		color: blue;
+		background: #ffffff;
+		cursor: hand;
+		cursor: pointer;
+	}
+	
+	.asbSelMenuItem
+	{			
+		font-family: 'Courier New', Courier, monospace; 
+		font-size: small;
+		color: blue;
+		background: lightblue;
+		cursor: hand;
+		cursor: pointer;
+		white-space: nowrap;
+	}

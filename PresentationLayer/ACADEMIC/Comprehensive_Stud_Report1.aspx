@@ -1,0 +1,1884 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
+    CodeFile="Comprehensive_Stud_Report1.aspx.cs" Inherits="ACADEMIC_Comprehensive_Stud_Report"
+    Title="" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        #ctl00_ContentPlaceHolder1_lvStudent_Panel2 .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+
+        #ctl00_ContentPlaceHolder1_rdolistSemester_0 {
+            margin-right: 5px;
+        }
+
+        .bg-light-blue {
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+    <%--  <script>
+        $.noconflict();
+    </script>--%>
+    <%--<script type="text/javascript" charset="utf-8">
+        $(document).ready(function () {
+            $.noConflict();
+            $(".display").dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers"
+            });
+
+        });
+    </script>--%>
+
+    <script>
+        function SetUniqueRadioButton(current) {
+            var tbl = document.getElementById('tblSearchResults');
+            if (tbl != null && tbl.rows && tbl.rows.length > 0) {
+                for (i = 0; i < tbl.rows.length - 1; i++) {
+                    var elm = document.getElementById('ctl00_ContentPlaceHolder1_rdolistsession_ctrl' + i + '_rdolistsession');
+                    if (elm.type == 'radio') {
+                        elm.checked = false;
+                    }
+                }
+            }
+            current.checked = true;
+        }
+
+    </script>
+
+    <style>
+        .accordion-button {
+            background: #eee;
+            padding-top: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .sub-heading {
+            padding-bottom: 0px;
+        }
+
+            .sub-heading h5 {
+                margin-bottom: 5px;
+            }
+
+        .more-less {
+            float: right;
+            color: #053769;
+            display: inline-block;
+            margin-top: 3px;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <%-- <h3 class="box-title">COMPREHENSIVE STUDENT INFORMATION</h3>--%>
+                    <h3 class="box-title">
+                        <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
+                </div>
+
+                <div class="box-body">
+                    <asp:Label ID="lblMsg" runat="server" SkinID="Msglbl"></asp:Label>
+                    <%--Search Pannel Start by Swapnil --%>
+                    <div id="myModal2" role="dialog" runat="server">
+                        <div>
+                            <asp:UpdateProgress ID="UpdateProgress3" runat="server" AssociatedUpdatePanelID="updEdit"
+                                DynamicLayout="true" DisplayAfter="0">
+                                <ProgressTemplate>
+                                    <div id="preloader">
+                                        <div id="loader-img">
+                                            <div id="loader">
+                                            </div>
+                                            <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                                        </div>
+                                    </div>
+                                </ProgressTemplate>
+                            </asp:UpdateProgress>
+                        </div>
+
+                        <asp:UpdatePanel ID="updEdit" runat="server">
+                            <ContentTemplate>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Search Criteria</label>
+                                            </div>
+
+                                            <%--onchange=" return ddlSearch_change();"--%>
+                                            <asp:DropDownList runat="server" class="form-control" ID="ddlSearch" AutoPostBack="true" AppendDataBoundItems="true" data-select2-enable="true" OnSelectedIndexChanged="ddlSearch_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <%-- <asp:ListItem>Please Select</asp:ListItem>
+                                                        <asp:ListItem>BRANCH</asp:ListItem>
+                                                        <asp:ListItem>ENROLLMENT NUMBER</asp:ListItem>
+                                                        <asp:ListItem>REGISTRATION NUMBER</asp:ListItem>
+                                                        <asp:ListItem>FatherName</asp:ListItem>
+                                                        <asp:ListItem>IDNO</asp:ListItem>
+                                                        <asp:ListItem>MOBILE NUMBER</asp:ListItem>
+                                                        <asp:ListItem>MotherName</asp:ListItem>
+                                                        <asp:ListItem>NAME</asp:ListItem>
+                                                        <asp:ListItem>ROLLNO</asp:ListItem>
+                                                        <asp:ListItem>SEMESTER</asp:ListItem>--%>
+                                            </asp:DropDownList>
+
+                                        </div>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divpanel">
+
+
+                                            <asp:Panel ID="pnltextbox" runat="server">
+                                                <div id="divtxt" runat="server" style="display: block">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Search String</label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" onkeypress="return Validate()"></asp:TextBox>
+                                                </div>
+                                            </asp:Panel>
+
+                                            <asp:Panel ID="pnlDropdown" runat="server">
+                                                <div id="divDropDown" runat="server" style="display: block">
+                                                    <div class="label-dynamic">
+                                                        <%-- <label id="lblDropdown"></label>--%>
+                                                        <asp:Label ID="lblDropdown" Style="font-weight: bold" runat="server"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList runat="server" class="form-control" ID="ddlDropdown" AppendDataBoundItems="true" data-select2-enable="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+
+                                                    </asp:DropDownList>
+
+                                                </div>
+                                            </asp:Panel>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 btn-footer">
+                                    <%-- OnClientClick="return submitPopup(this.name);"--%>
+                                    <asp:Button ID="Button1" runat="server" Text="Search" OnClick="btnSearch_Click" OnClientClick="return submitPopup(this.name);" CssClass="btn btn-primary" />
+                                    <asp:Button ID="btnClose" runat="server" Text="Close" CssClass="btn btn-warning" OnClick="btnClose_Click" OnClientClick="return CloseSearchBox(this.name)" data-dismiss="modal" />
+                                </div>
+                                <div class="col-12 btn-footer">
+                                    <asp:Label ID="lblNoRecords" runat="server" SkinID="lblmsg" />
+                                </div>
+
+                                <div class="col-12">
+                                    <asp:Panel ID="pnlLV" runat="server">
+                                        <asp:ListView ID="lvStudent" runat="server">
+                                            <LayoutTemplate>
+                                                <div>
+                                                    <div class="sub-heading">
+                                                        <h5>Student List</h5>
+                                                    </div>
+                                                    <asp:Panel ID="Panel2" runat="server">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Sr. No.
+                                                                        </th>
+                                                                        <th>Name
+                                                                        </th>
+                                                                        <th>Adm. Status
+                                                                        </th>
+                                                                        <th style="display: none">IdNo
+                                                                        </th>
+                                                                        <th>
+                                                                            <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
+                                                                        </th>
+                                                                        <th>
+                                                                            <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
+                                                                        </th>
+                                                                        <th>
+                                                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
+                                                                        </th>
+                                                                        <th>Father Name
+                                                                        </th>
+                                                                        <th>Mother Name
+                                                                        </th>
+                                                                        <th>Mobile No.
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </asp:Panel>
+                                                </div>
+
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <%# Container.DataItemIndex + 1%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:LinkButton ID="lnkId" runat="server" Text='<%# Eval("Name") %>' CommandArgument='<%# Eval("IDNo") %>'
+                                                            OnClick="lnkId_Click"></asp:LinkButton>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblAdmcan" Font-Bold="true" runat="server" ForeColor='<%# Eval("ADMCANCEL").ToString().Equals("ADMITTED")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("ADMCANCEL")%>'></asp:Label>
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <%# Eval("idno")%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblstuenrollno" runat="server" Text='<%# Eval("EnrollmentNo")%>' ToolTip='<%# Eval("IDNO")%>'></asp:Label>
+
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblstudentfullname" runat="server" Text='<%# Eval("longname")%>' ToolTip='<%# Eval("IDNO")%>'></asp:Label>
+
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("SEMESTERNO")%>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("FATHERNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("MOTHERNAME") %>
+                                                    </td>
+                                                    <td>
+                                                        <%#Eval("STUDENTMOBILE") %>
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </asp:Panel>
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                    <%--Search Pannel End--%>
+
+                    <asp:UpdatePanel ID="updStudentInfo" runat="server">
+                        <ContentTemplate>
+                            <div id="divStudent" runat="server" visible="false">
+                                <div class="colapse-panel" id="accordion">
+
+                                    <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divStudentInfo" aria-expanded="true" aria-controls="collapseOne">
+                                                    <i class="more-less fas fa-minus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Student Information
+                                                        </h5>
+                                                        <%--<asp:Image ID="ImageSearch" runat="server" ImageUrl="~/images/collapse_blue.jpg" alt=""
+                                                            onclick="javascript:toggleExpansion(this,'divEmployeeSearchModify')" /></span></h5>--%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="divStudentInfo" class="collapse show" data-parent="#accordion">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>Student Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Gender :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblGender" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Father's Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Mother's Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMotherName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <%-- <li class="list-group-item"><b>Admission Status :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="Label3" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>--%>
+                                                            <li class="list-group-item"><b>
+                                                                <asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label>
+                                                                :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblRegNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Enrollment No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblEnrollNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Application ID :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblApplicationId" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Admission Batch :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblAdmBatch" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Admission Date :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblAdmDate" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Admission Status :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblAdmStatus" Font-Bold="true" runat="server" ForeColor='<%# Eval("ADMCAN_1").ToString().Equals("CANCELLED")?System.Drawing.Color.Red:System.Drawing.Color.Green %>' Text='<%# Eval("ADMCAN_1")%>'></asp:Label>
+                                                                    <%--<asp:Label ID="lblAdmStatus" runat="server" Font-Bold="True"></asp:Label>--%>
+
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Current Year :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblCurrentYear" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Taluka :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblPTaluka" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>District :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblPDistrict" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>City :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblPCity" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Local Address :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblLAdd" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Permanent Address :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblPAdd" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Physical Handicapped :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblHandicap" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Bank Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblBankName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Bank Account Number :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblBankAccountNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>IFSC Code :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblIfscCode" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Bank Address :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblBankAddress" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>School/Institute Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblSchool" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Degree :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblDegree" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Branch :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblBranch" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Semester :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblSemester" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Scheme :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblScheme" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Division :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblSection" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Roll No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblRollNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Mobile No :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMobNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Alternate Mobile No :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblAlternateMobile" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Aadhar Number :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblAadharNumber" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Email ID :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblEmailID" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Date of Birth :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblDOB" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Caste :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblCaste" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Payment Type :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblPaymentType" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Category :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblCategory" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Nationality :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblNationality" runat="server" Text='<%# Eval("") %>' Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Religion :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblReligion" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Father Alive :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblFatherAlive" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Father Occupation :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblFatherOccupation" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Father Income :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblFatherIncome" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Mother Occupation :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMotherOccupation" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Guardian name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblGuardianName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-6 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>Photo :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Image ID="imgPhoto" runat="server" Height="120px" Width="128px" /></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 offset-lg-2 col-md-6 col-12 mt-3">
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>Session</label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div id="divRegistrationStatus" visible="false">
+                                                <asp:ListView ID="lvRegStatus" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Registration Status</h5>
+                                                        </div>
+                                                        <div class="sub-heading">
+                                                            <h5>Current Semester Registration Details</h5>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Session
+                                                                        </th>
+                                                                        <th>Semester
+                                                                        </th>
+                                                                        <th>CCode
+                                                                        </th>
+                                                                        <th>Course Name
+                                                                        </th>
+                                                                        <th>Subject Type
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <%# Eval("SESSION") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("SEMESTER") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CCODE") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("COURSENAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("SUBJECTTYPE") %>
+                                                            </td>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div id="divAttendance" style="display: block" runat="server" visible="false">
+                                                <div class="sub-heading">
+                                                    <h5>Student Attendance</h5>
+                                                </div>
+                                                <asp:ListView ID="lvAttendance" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Attendance Details</h5>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Course Name
+                                                                        </th>
+                                                                        <th>Faculty Name
+                                                                        </th>
+                                                                        <th>Total Classes
+                                                                        </th>
+                                                                        <th>Present
+                                                                        </th>
+                                                                        <th>Absent
+                                                                        </th>
+                                                                        <th>Percentage
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <%# Eval("COURSENAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("UA_NAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("TOTAL_CLASSES") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("PRESENT") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("ABSENT") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("ATT_PERCENTAGE") %>
+                                                            </td>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-12 table table-responsive" style="display: none">
+                                            <asp:GridView runat="server" Width="100%" OnRowDataBound="gvTestMark_RowDataBound"
+                                                OnRowCreated="gvTestMark_RowCreated" GridLines="None" CssClass="table table-hover table-bordered"
+                                                ID="gvTestMark">
+                                                <RowStyle HorizontalAlign="Center" ForeColor="Black"></RowStyle>
+                                                <HeaderStyle HorizontalAlign="left" CssClass="bg-light-blue" Font-Bold="true" ForeColor="White" />
+                                            </asp:GridView>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divFees" aria-expanded="false" aria-controls="collapseEight">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Fees Details   
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="divFees" class="collapse mb-4" data-parent="#accordion">
+                                            <div class="col-12">
+                                                <asp:ListView ID="lvFees" runat="server" Style="display: block;">
+                                                    <LayoutTemplate>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Semester       <%--style="width:6%"--%>
+                                                                        </th>
+                                                                        <th>Receipt Type   <%--style="width:15%"--%>
+                                                                        </th>
+                                                                        <th>Receipt No.   <%--style="width:15%"--%>
+                                                                        </th>
+                                                                        <th>Receipt Date   <%--style="width:15%"--%>
+                                                                        </th>
+                                                                        <th>Applied Amount <%--style="width:10%"--%>
+                                                                        </th>
+                                                                        <th>Amount paid    <%--style="width: 10%"--%>
+                                                                        </th>
+                                                                        <th>Excess Amount    <%--style="width: 10%"--%>
+                                                                        </th>
+                                                                        <th>Outstanding Amount <%--style="width:10%"--%>
+                                                                        </th>
+                                                                        <%--<th>View Receipt Details
+                                                                    </th>--%>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+                                                    <EmptyDataTemplate>
+                                                        <div style="text-align: center; font-size: medium">
+                                                            No Record Found
+                                                        </div>
+                                                    </EmptyDataTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td><%--style="width:6%"--%>
+                                                                <%# Eval("SEMESTER") %>
+                                                            </td>
+                                                            <td><%--style="width:15%"--%>
+                                                                <%# Eval("RECIEPT") %>
+                                                            </td>
+                                                            <td><%--style="width:15%"--%>
+                                                                <asp:LinkButton runat="server" ID="lnkRecieptNo" Text='<%# Eval("REC_NO") %>' CommandArgument='<%# Eval("DCR_NO") %>' OnClick="lnkRecieptNo_Click"></asp:LinkButton>
+                                                            </td>
+                                                            <td><%--style="width:15%"--%>
+                                                                <%# Eval("REC_DT") %>
+                                                            </td>
+                                                            <td><%--style="width:10%"--%>
+                                                                <%# Eval("APPLIED_AMOUNT") %>
+                                                            </td>
+                                                            <td><%--style="width: 10%"--%>
+                                                                <%# Eval("PAID_AMOUNT") %>
+                                                            </td>
+                                                            <td><%--style="width:10%"--%>
+                                                                <%# Eval("EXCESS_AMOUNT") %>
+                                                            </td>
+                                                            <td><%--style="width:10%"--%>
+                                                                <%# Eval("OUTSTANDING_AMOUNT") %>
+                                                            </td>
+                                                            <%--<td>--%>
+                                                            <%-- <%# Eval("REMARK") %>--%>
+                                                            <%--<asp:Button ID="btnView" runat="server" Text="View Receipt" Enabled='<%# (Convert.ToDecimal(Eval("PAID_AMOUNT"))>0) ? true: false %>' CommandArgument='<%# Eval("RECIEPT_CODE") %>' OnClick="btnView_Click" CssClass="btn btn-primary" />
+                                                                <asp:HiddenField ID="hdfSemester" runat="server" Value='<%# Eval("SEMESTERNO") %>' />--%>
+                                                            <%--   </td>--%>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 d-none colapse-heading">
+                                        <div class="row">
+                                            <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divCertificate" aria-expanded="false" aria-controls="collapseTwo">
+                                                <i class="more-less fas fa-plus"></i>
+                                                <div class="sub-heading">
+                                                    <h5>Personal Details</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="divCertificate" class="collapse" data-parent="#accordion">
+                                            <asp:ListView ID="lvCertificate" runat="server" class="mb-4">
+                                                <LayoutTemplate>
+                                                    <div class="sub-heading">
+                                                        <h5>Certificates Issued Details</h5>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Certificate Name
+                                                                    </th>
+                                                                    <th>Certificate No
+                                                                    </th>
+                                                                    <th>Issued Date
+                                                                    </th>
+                                                                    <th>Issued By
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <EmptyDataTemplate>
+                                                    <div align="center">
+                                                        No Certificates Issued
+                                                    </div>
+                                                </EmptyDataTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <%# Eval("CERTIFICATENAME") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("CERTNO") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("ISSUE_DATE", "{0:dd-MMM-yyyy}")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("ISSUEDBY") %>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <%--<legend>Student Remark
+                                            <div class="box-tools pull-right">
+                                                <img id="img7" style="cursor: pointer;" src="../IMAGES/collapse_blue.jpg" alt=""
+                                                    onclick="javascript:toggleExpansion(this,'divRemark')" />
+                                            </div>
+                                            </legend>--%>
+                                            <div id="divRemark" class="mb-4" runat="server" visible="false">
+                                                <asp:ListView ID="lvRemark" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Remarks Details</h5>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Remarks
+                                                                        </th>
+                                                                        <th>Given By Faculty
+                                                                        </th>
+                                                                        <th>Date
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+                                                    <EmptyDataTemplate>
+                                                        <div align="center">
+                                                            No Remarks Given
+                                                        </div>
+                                                    </EmptyDataTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td id="remak" runat="server">
+                                                                <asp:Label ID="lblRemark" runat="server" Text='<%# Eval("REMARK")%>'></asp:Label>
+                                                            </td>
+                                                            <td id="UANO" runat="server">
+                                                                <asp:Label ID="lblUaNo" runat="server" Text='<%# Eval("UA_NO") %>' Visible="false"></asp:Label>
+                                                                <asp:Label ID="lbluaName" runat="server" Text='<%# Eval("UA_FULLNAME") %>'></asp:Label>
+                                                            </td>
+                                                            <td id="remarkDate" runat="server">
+                                                                <asp:Label ID="lblRemarkDate" runat="server" Text='<%# Eval("REMARK_DATE","{0:dd-MMM-yyyy}") %>'></asp:Label>
+                                                            </td>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 d-none">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divRefund" aria-expanded="false" aria-controls="collapseThree">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Student Refund
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divRefund" class="d-none collapse" data-parent="#accordion">
+                                            <asp:ListView ID="lvRefund" runat="server" class="mb-4">
+                                                <LayoutTemplate>
+                                                    <div class="sub-heading">
+                                                        <h5>Fees Details</h5>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Branch
+                                                                    </th>
+                                                                    <th>Sem.
+                                                                    </th>
+                                                                    <th>Payment Cat.
+                                                                    </th>
+                                                                    <th>Rec. Type
+                                                                    </th>
+                                                                    <th>Rec. No.
+                                                                    </th>
+                                                                    <th>Rec. Amt.
+                                                                    </th>
+                                                                    <th>Refunded Amt.
+                                                                    </th>
+                                                                    <th>Refundable Amt.
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <%# Eval("BRANCHSNAME")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("SEMESTER")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("PTYPENAME")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("RECIEPT_TITLE")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("REC_NO")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("DCR_AMT")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("REFUND_AMT")%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("REFUNDABLE_AMT")%>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divcourse" aria-expanded="false" aria-controls="collapseFour">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Course Registered
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="divcourse" class="collapse mb-4" data-parent="#accordion">
+                                            <asp:ListView ID="lvCourseReg" runat="server">
+                                                <LayoutTemplate>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Sr No.
+                                                                    </th>
+                                                                    <th>Semester
+                                                                    </th>
+                                                                    <th>CCode
+                                                                    </th>
+                                                                    <th>Course Name
+                                                                    </th>
+                                                                    <th>Subject Type
+                                                                    </th>
+                                                                    <th>Credits</th>
+                                                                    <th>Course Registration Status</th>
+                                                                    <th>Exam Registration Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <EmptyDataTemplate>
+                                                    <div style="text-align: center; font-family: Arial; font-size: medium" class="info">
+                                                        No Record Found
+                                                    </div>
+                                                </EmptyDataTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <%# Container.DataItemIndex +1 %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("SEMESTER") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("CCODE") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("COURSENAME") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("SUBJECTTYPE") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("CREDITS") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("REGISTERED") %>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("EXAM_REGISTERED") %> 
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divAttendanceDetails" aria-expanded="false" aria-controls="collapseFive">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Attendance Details 
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divAttendanceDetails" class="collapse mb-4" data-parent="#accordion">
+                                            <div class="col-12">
+                                                <asp:ListView ID="lvAttendanceDetails" class="" runat="server" Style="display: block;">
+                                                    <LayoutTemplate>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Course Code
+                                                                        </th>
+                                                                        <th>Course Name
+                                                                        </th>
+                                                                        <th>Subject Type
+                                                                        </th>
+                                                                        <th>Total Classes
+                                                                        </th>
+                                                                        <th>Total Present
+                                                                        </th>
+                                                                        <th>Total Attendance(%)
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+                                                    <EmptyDataTemplate>
+                                                        <div style="text-align: center; font-size: medium">
+                                                            No Record Found
+                                                        </div>
+                                                    </EmptyDataTemplate>
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <%# Eval("COURSE CODE") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("COURSENAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("SUBJECT TYPE") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("TOTAL CLASSES") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("TOTAL PRESENT") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("ATTENDANCE%") %>
+                                                            </td>
+                                                        </tr>
+
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="" hidden>
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divIntern" aria-expanded="false" aria-controls="collapseSix">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Internal Marks
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divIntern" class="collapse mb-4" data-parent="#accordion">
+                                            <div class="col-12">
+                                                <asp:ListView ID="lvInternalMarks" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="my-table">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Course Code
+                                                                        </th>
+                                                                        <th>Course Name
+                                                                        </th>
+                                                                        <th>Subject Type
+                                                                        </th>
+                                                                        <th>CA-I</th>
+                                                                        <th>CA-II</th>
+                                                                        <th>CA-III</th>
+                                                                        <th>CA-IV</th>
+                                                                        <th>Attendance</th>
+                                                                        <th>PCA-I</th>
+                                                                        <th>PCA-II</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td>
+                                                                <%# Eval("CCODE") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("COURSE_NAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("SUBNAME") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CA-I") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CA-II") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CA-III") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("CA-IV") %>
+                                                            </td>
+                                                            <td>
+                                                                <%#Eval ("ATTENDANCE") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("PCA-I") %>
+                                                            </td>
+                                                            <td>
+                                                                <%# Eval("PCA-II") %>
+                                                            </td>
+                                                        </tr>
+                                                    </ItemTemplate>
+
+                                                </asp:ListView>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divPreviousResult" aria-expanded="false" aria-controls="collapseSeven">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Result Details
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divPreviousResult" class="collapse-show" data-parent="#accordion">
+                                            <div class="col-12">
+                                                <asp:RadioButtonList ID="rdolistSemester" runat="server" GroupName="Exam" Style="cursor: default; margin-right: 50px;font-weight:bold;font-size:x-large" RepeatDirection="Horizontal"
+                                                    OnClientClick="SetUniqueRadioButton(this)" OnSelectedIndexChanged="rdolistSemester_SelectedIndexChanged"
+                                                    AutoPostBack="True">
+                                                </asp:RadioButtonList>
+                                            </div>
+
+                                            <asp:Panel ID="pnlCollege" runat="server" Visible="true">
+                                                <div id="Table3" runat="server" class="col-12">
+
+                                                    <asp:ListView ID="lvSession" runat="server" OnItemDataBound="lvSession_ItemDataBound">
+                                                        <LayoutTemplate>
+                                                            <div class="sub-heading">
+                                                                <h5>Student Semesterwise History Details
+                                                                </h5>
+                                                            </div>
+
+
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-bordered">
+                                                                    <thead>
+
+                                                                        <tr class="header bg-light-blue">
+                                                                            <th style="width: 10%;">Show
+                                                                            </th>
+                                                                            <th style="width: 20%;">Session
+                                                                            </th>
+                                                                            <th style="width: 10%;">Section
+                                                                            </th>
+                                                                            <th style="width: 5%;">TotSub
+                                                                            </th>
+                                                                            <th style="width: 5%;">RegCr.
+                                                                            </th>
+                                                                            <th style="width: 5%;">EarnCr.
+                                                                            </th>
+                                                                            <%--<th style="width:5%;">CumCr.
+                                                                        </th>
+                                                                        <th style="width:10%;">Result
+                                                                        </th>--%>
+                                                                            <th style="width: 10%;">SGPA
+                                                                            </th>
+
+                                                                            <%--<th style="width:10%;">Cum.EGP
+                                                                        </th>--%>
+                                                                            <th style="width: 10%;">CGPA
+                                                                            </th>
+                                                                            <th style="width: 10%;">Result Dt.
+                                                                            </th>
+                                                                            <th style="width: 10%;">Print.
+                                                                            </th>
+
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <%--<tr id="Tr7" runat="server" />--%>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </LayoutTemplate>
+                                                        <ItemTemplate>
+
+                                                            <table class="table table-hover table-bordered">
+                                                                <tr id="MAIN" runat="server" class="col-md-12">
+                                                                    <td>
+                                                                        <tr>
+                                                                            <td style="width: 10%;">
+                                                                                <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
+                                                                                    <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
+                                                                                </asp:Panel>
+                                                                                &nbsp;&nbsp;<asp:Label ID="lbIoNo" runat="server" Text='<%# Eval("SEMESTERNO") %>'
+                                                                                    ToolTip='<%# Eval ("IDNO") %>' Visible="false"></asp:Label>
+                                                                            </td>
+                                                                            <td style="width: 20%;">
+                                                                                <asp:Label ID="lblSession" runat="server" Text='<%# Eval("SESSION_NAME")%>' ToolTip='<%# Eval("SESSIONNO") %>'></asp:Label>
+                                                                            </td>
+
+                                                                            <td style="width: 10%;">
+                                                                                <asp:Label ID="lblsectionname" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
+                                                                            </td>
+                                                                            <td style="width: 5%;">
+                                                                                <asp:Label ID="lbltotsubreg" runat="server" Text='<%# Eval("TOTAL_SUBJ_REGD")%>'></asp:Label>
+                                                                            </td>
+                                                                            <td style="width: 5%;">
+                                                                                <asp:Label ID="lblRegCredits" runat="server" Text=' <%# Eval("REGD_CREDITS")%>'></asp:Label>
+                                                                            </td>
+                                                                            <td style="width: 5%;">
+                                                                                <asp:Label ID="lblEarncredits" runat="server" Text=' <%# Eval("EARN_CREDITS")%>'></asp:Label>
+                                                                            </td>
+                                                                            <%-- <td style="width:5%;">
+                                                                                <asp:Label ID="lblCumCredits" runat="server" Text='<%# Eval("CUMMULATIVE_CREDITS") %>'></asp:Label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <asp:Label ID="lblResult" runat="server" Text='<%# Eval("PASSFAIL") %>'></asp:Label>
+                                                                            </td>--%>
+                                                                            <td style="width: 10%;">
+                                                                                <asp:Label ID="lblSgpa" runat="server" Text='<%# Eval("SGPA") %>'></asp:Label>
+                                                                            </td>
+
+                                                                            <%--<td style="width:10%;">
+                                                                                <asp:Label ID="lblCummegp" runat="server" Text='<%# Eval("CUMMULATIVE_CREDITS") %>'></asp:Label>
+                                                                            </td>--%>
+                                                                            <td style="width: 10%;">
+                                                                                <asp:Label ID="lblCummegp" runat="server" Text='<%# Eval("CGPA") %>'></asp:Label>
+                                                                            </td>
+                                                                            <td style="width: 10%;">
+                                                                                <%# Eval("RESULTDATE")%>
+                                                                            </td>
+                                                                            <td style="width: 10%;">
+                                                                                <asp:ImageButton runat="server" ImageUrl="~/Images/print.png" ID="imgbtnpreview" OnClick="imgbtnpreview_Click" />
+                                                                            </td>
+
+                                                                            <ajaxToolKit:CollapsiblePanelExtender ID="cpeCourt2" runat="server" CollapseControlID="pnlDetails"
+                                                                                Collapsed="true" CollapsedImage="~/Images/action_down.png" ExpandControlID="pnlDetails"
+                                                                                ExpandedImage="~/Images/action_up.png" ImageControlID="imgExp" TargetControlID="pnlShowCDetails">
+                                                                            </ajaxToolKit:CollapsiblePanelExtender>
+
+                                                                        </tr>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
+                                                            <div class="col-12">
+                                                                <asp:Panel ID="pnlShowCDetails" runat="server" CssClass="collapsePanel">
+                                                                    <div class="sub-heading">
+                                                                        <h5>Students Session wise Details 
+                                                                        </h5>
+                                                                    </div>
+
+                                                                    <asp:ListView ID="lvDetails" runat="server">
+                                                                        <LayoutTemplate>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-hover table-bordered">
+                                                                                    <thead class="header bg-light-blue">
+                                                                                        <tr>
+                                                                                            <th>Course Name
+                                                                                            </th>
+                                                                                            <th>Exam Type
+                                                                                            </th>
+                                                                                            <th>Course Type
+                                                                                            </th>
+                                                                                            <th>Credits
+                                                                                            </th>
+                                                                                            <%--<th>SeatNo
+                                                                                                                                                                </th>--%>
+                                                                                            <%--<th>IA
+                                                                                        </th>--%>
+                                                                                            <%--<th>MSE-I
+                                                                                                                                                                </th>
+                                                                                                                                                                <th>MSE-II
+                                                                                                                                                                </th>--%>
+                                                                                            <%--<th>ESE
+                                                                                        </th>
+                                                                                        <th>MarkTot
+                                                                                        </th>--%>
+                                                                                            <th>GDPoint
+                                                                                            </th>
+                                                                                            <th>Grade
+                                                                                            </th>
+                                                                                            <th>Result
+                                                                                            </th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr id="itemPlaceholder" runat="server">
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </LayoutTemplate>
+                                                                        <EmptyDataTemplate>
+                                                                            <div style="text-align: center; font-family: Arial; font-size: medium">
+                                                                                No Record Found
+                                                                            </div>
+                                                                        </EmptyDataTemplate>
+                                                                        <ItemTemplate>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblcoursename" runat="server" Text='<%# Eval ("COURSENAME") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblstatus" runat="server" Text='<%# Eval("PREVSTATUS") %>' ToolTip='<%# Eval("PREV_STATUS") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lbltheory" runat="server" Text='<%# Eval("SUBTYPE") %>' ToolTip='<%# Eval("SUBID") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblcredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>'></asp:Label>
+                                                                                </td>
+                                                                                <%--<td style="width: 5%;">
+                                                                                                                                                        <asp:Label ID="lblSeatNo" runat="server" Text='<%# Eval("SEATNO") %>' ToolTip='<%# Eval("SEATNO") %>'></asp:Label>
+                                                                                                                                                    </td>--%>
+                                                                                <%--<td>
+                                                                                    <asp:Label ID="lblIA" runat="server" Text='<%# Eval("IA") %>' ToolTip='<%# Eval("IA") %>'></asp:Label>
+                                                                                </td>--%>
+                                                                                <%--<td style="width: 5%;">
+                                                                                                                                                        <asp:Label ID="lblMse1" runat="server" Text='<%# Eval("MSE1") %>' ToolTip='<%# Eval("MSE1") %>'></asp:Label>
+                                                                                                                                                    </td>
+                                                                                                                                                    <td style="width: 5%;">
+                                                                                                                                                        <asp:Label ID="lblMse2" runat="server" Text='<%# Eval("MSE2") %>' ToolTip='<%# Eval("MSE2") %>'></asp:Label>
+                                                                                                                                                    </td>--%>
+                                                                                <%--<td>
+                                                                                    <asp:Label ID="lblextermark" runat="server" Text='<%# Eval("EXTERMARK") %>' ToolTip='<%# Eval("EXTERMARK") %>'></asp:Label>
+                                                                                </td>--%>
+                                                                                <%--<td>
+                                                                                    <asp:Label ID="lblmarkTot" runat="server" Text='<%# Eval("MARKTOT") %>' ToolTip='<%# Eval("MARKTOT") %>'></asp:Label>
+                                                                                </td>--%>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblgdpoint" runat="server" Text='<%# Eval("GDPOINT") %>' ToolTip='<%# Eval("GDPOINT") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblGrade" runat="server" Text='<%# Eval("GRADE") %>' ToolTip='<%# Eval("GRADE") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="Label1" runat="server" Text='<%# Eval("RESULT") %>' ToolTip='<%# Eval("RESULT") %>'></asp:Label>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </ItemTemplate>
+                                                                    </asp:ListView>
+
+                                                                </asp:Panel>
+                                                            </div>
+
+                                                        </ItemTemplate>
+                                                    </asp:ListView>
+                                                    <div class="col-12">
+                                                        <asp:Label ID="lblCopycase" runat="server" Text="" Visible="false"></asp:Label>
+                                                        <span style="color: red; font-style: italic">
+                                                            <asp:Label ID="lblCopycaseRemark" runat="server" Text=""></asp:Label></span>
+                                                        <asp:Label ID="lblGrievance" runat="server" Text="" Visible="false"></asp:Label>
+                                                    </div>
+
+                                                </div>
+                                            </asp:Panel>
+                                        </div>
+                                    </div>
+
+
+
+                                      <div class="">
+                                        <div class="col-12 colapse-heading">
+                                            <div class="row">
+                                                <div class="col-12 collapsed accordion-button" data-toggle="collapse" data-target="#divrevalresult" aria-expanded="false" aria-controls="collapseNine">
+                                                    <i class="more-less fas fa-plus"></i>
+                                                    <div class="sub-heading">
+                                                        <h5>Revaluation Result Details
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                     <div id="divrevalresult" class="collapse-show" data-parent="#accordion">
+                                           
+                                            <asp:Panel ID="pnlrevalresult" runat="server" Visible="false">
+                                                <div id="divreval" runat="server" class="col-12">
+
+                                                        <div class="col-12">
+                                                                   <asp:ListView ID="lvRevalDetails" runat="server">
+                                                                        <LayoutTemplate>
+                                                                              <div class="sub-heading">
+                                                                                 <h5>Student Semesterwise History Details(Revaluation)
+                                                                                   </h5>
+                                                                                 </div>
+
+                                                                            <div class="table-responsive">
+                                                                                <table class="table table-hover table-bordered">
+                                                                                    <thead class="header bg-light-blue">
+                                                                                        <tr>
+                                                                                            <th>Course Name
+                                                                                            </th>
+                                                                                            <th>Exam Type
+                                                                                            </th>
+                                                                                            <th>Course Type
+                                                                                            </th>
+                                                                                            <th>Credits
+                                                                                            </th>
+                                                                                          <%--  <th>Original Mark
+                                                                                            </th>                                                                                      
+                                                                                            <th>Revaluation Mark
+                                                                                            </th>  --%>
+                                                                                            <th>GDPoint
+                                                                                            </th>
+                                                                                          <%--  <th>Old_Grade
+                                                                                            </th>--%>
+                                                                                            <th>Grade
+                                                                                            </th>
+                                                                                                                                                                                  
+                                                                                            <th>Result
+                                                                                            </th>
+
+                                                                                             <th>Revaluation Status
+                                                                                            </th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <tr id="itemPlaceholder" runat="server">
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </LayoutTemplate>
+                                                                        <EmptyDataTemplate>
+                                                                            <%--<div style="text-align: center; font-family: Arial; font-size: medium">
+                                                                                No Record Found
+                                                                            </div>--%>
+                                                                        </EmptyDataTemplate>
+                                                                        <ItemTemplate>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblcoursename" runat="server" Text='<%# Eval ("COURSENAME") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lblstatus" runat="server" Text='<%# Eval("PREVSTATUS") %>' ToolTip='<%# Eval("PREV_STATUS") %>'></asp:Label>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <asp:Label ID="lbltheory" runat="server" Text='<%# Eval("SUBTYPE") %>' ToolTip='<%# Eval("SUBID") %>'></asp:Label>
+                                                                                </td>
+
+                                                                                 <td>
+                                                                                    <asp:Label ID="lblcredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>'></asp:Label>
+                                                                                </td>
+                                                                       <%--         <td>
+                                                                                    <asp:Label ID="lbloriginalmark" runat="server" Text='<%# Eval("ORIGINAL_MARK") %>' ToolTip='<%# Eval("ORIGINAL_MARK") %>'></asp:Label>
+                                                                                </td>
+                                                                              
+                                                                                <td>
+                                                                                    <asp:Label ID="lblrevalmarks" runat="server" Text='<%# Eval("REVAL_MARK") %>' ToolTip='<%# Eval("REVAL_MARK") %>'></asp:Label>
+                                                                                </td>--%>
+
+                                                                                 <td>
+                                                                                    <asp:Label ID="lblgdpoint" runat="server" Text='<%# Eval("GDPOINT") %>' ToolTip='<%# Eval("GDPOINT") %>'></asp:Label>
+                                                                                </td>
+
+                                                                                 <%--<td>
+                                                                                    <asp:Label ID="lbloldgrade" runat="server" Text='<%# Eval("OLD_GRADE") %>' ToolTip='<%# Eval("OLD_GRADE") %>'></asp:Label>
+                                                                                </td>--%>
+
+                                                                                 <td>
+                                                                                    <asp:Label ID="lblnewgrade" runat="server" Text='<%# Eval("NEW_GRADE") %>' ToolTip='<%# Eval("NEW_GRADE") %>'></asp:Label>
+                                                                                </td>
+                                                                               
+                                                                                <td>
+                                                                                    <asp:Label ID="lblresult" runat="server" Text='<%# Eval("RESULT") %>' ToolTip='<%# Eval("RESULT") %>'></asp:Label>
+                                                                                </td>
+
+                                                                                 <td>
+                                                                                    <asp:Label ID="lblrevalstatus" runat="server" Text='<%# Eval("STATUS") %>' ToolTip='<%# Eval("STATUS") %>'></asp:Label>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </ItemTemplate>
+                                                                    </asp:ListView>
+
+                                                             
+                                                            </div>
+
+                                                     
+                                                 
+                                                    <div class="col-12">
+                                                        <asp:Label ID="Label2" runat="server" Text="" Visible="false"></asp:Label>
+                                                        <span style="color: red; font-style: italic">
+                                                            <asp:Label ID="Label3" runat="server" Text=""></asp:Label></span>
+                                                        <asp:Label ID="Label4" runat="server" Text="" Visible="false"></asp:Label>
+                                                    </div>
+
+                                                </div>
+                                            </asp:Panel>
+                                        </div>
+                                          </div>
+
+
+                                    <%--<div class="col-md-12">
+                                        <fieldset>
+                                            <div id="divTimeTable" class="table table-responsive">
+                                            <LayoutTemplate>
+                                                <div>
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="5">Time Table
+                                                                    </th>
+                                                                </tr>
+                                                           
+                                                                <tr class="bg-light-blue">
+                                                                    <th>Session
+                                                                    </th>
+                                                                    <th>Semester
+                                                                    </th>
+                                                                    <th>Course Code
+                                                                    </th>
+                                                                    <th>Course Name
+                                                                    </th>
+                                                                    <th>Subject Type
+                                                                    </th>
+                                                                    <th>CA-I</th>
+                                                                    <th>CA-II</th>
+                                                                    <th>CA-III</th>
+                                                                    <th>CA-IV</th>
+                                                                    <th>Attendance</th>
+                                                                    <th>PCA-I</th>
+                                                                    <th>PCA-II</th>                                                                
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                    </div>
+                                            </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                        <td>
+                                                    
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </div>
+                                        </fieldset>
+                                    </div>--%>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="rdolistSemester" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal1" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Receipt Info <i class="fa fa-info-circle"></i></h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;</button>
+                </div>
+                <div>
+                    <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updPopUP"
+                        DynamicLayout="true" DisplayAfter="0">
+                        <ProgressTemplate>
+                            <div id="preloader">
+                                <div id="loader-img">
+                                    <div id="loader">
+                                    </div>
+                                    <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                                </div>
+                            </div>
+                        </ProgressTemplate>
+                    </asp:UpdateProgress>
+                </div>
+                <asp:UpdatePanel ID="updPopUP" runat="server">
+                    <ContentTemplate>
+                        <div class="col-12">
+                            <asp:Panel ID="pnlPopUp" runat="server">
+                                <%--Height="300px" Width="720px" Style="overflow-x: hidden;" ScrollBars="Vertical"--%>
+                                <%--   <div class="row">--%>
+                                <asp:ListView ID="lvReceipt" runat="server" align="Center">
+                                    <LayoutTemplate>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblHead">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>Semester
+                                                        </th>
+                                                        <th>Receipt No.
+                                                        </th>
+                                                        <th>Receipt Date
+                                                        </th>
+                                                        <th>Applied Amount
+                                                        </th>
+                                                        <th>Paid Amount
+                                                        </th>
+                                                        <th>Outstanding Amount
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <%#Eval("Semster") %>
+                                            </td>
+                                            <td>
+                                                <%#Eval("REC_NO") %>
+                                            </td>
+                                            <td>
+                                                <%#Eval("REC_DATE") %><%--<asp:Label ID="lblReceiptDate" runat="server" Text='<%# (Eval("REC_DT").ToString() != string.Empty) ? ((DateTime)Eval("REC_DT")).ToShortDateString() : Eval("REC_DT") %>'></asp:Label>--%>
+                                                    
+                                            </td>
+                                            <td>
+                                                <%#Eval("APPLIED_AMT") %>
+                                                <%--<asp:Label ID="lblAppliedAmount" runat="server" Text='<%#Eval("APPLIED_AMOUNT") %>'></asp:Label>--%>
+                                            </td>
+                                            <td>
+                                                <%#Eval("PAID_AMT") %>
+                                            </td>
+                                            <td>
+                                                <%#Eval("BAL_AMT") %>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:ListView>
+                                <%-- </div>--%>
+                            </asp:Panel>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleIcon(e) {
+            $(e.target)
+                .prev('.colapse-heading')
+                .find(".more-less")
+                .toggleClass('fa-minus fa-plus');
+        }
+        $('.colapse-panel').on('hide.bs.collapse', toggleIcon);
+        $('.colapse-panel').on('show.bs.collapse', toggleIcon);
+    </script>
+
+    <script type="text/javascript">
+        function showModal() {
+            $("#myModal1").modal('show');
+        }
+    </script>
+    <script type="text/javascript" language="javascript">
+
+        /* To collapse and expand page sections */
+        function toggleExpansion(imageCtl, divId) {
+            if (document.getElementById(divId).style.display == "block") {
+                document.getElementById(divId).style.display = "none";
+                imageCtl.src = "../IMAGES/expand_blue.jpg";
+            }
+            else if (document.getElementById(divId).style.display == "none") {
+                document.getElementById(divId).style.display = "block";
+                imageCtl.src = "../IMAGES/collapse_blue.jpg";
+            }
+        }
+
+        function toggleExpansion1(imageCtl, divId) {
+            if (document.getElementById(divId).style.display == "block") {
+                document.getElementById(divId).style.display = "none";
+                imageCtl.src = "../IMAGES/expand_blue.jpg";
+            }
+            else if (document.getElementById(divId).style.display == "none") {
+                document.getElementById(divId).style.display = "block";
+                imageCtl.src = "../IMAGES/collapse_blue.jpg";
+            }
+        }
+
+    </script>
+    <script language="javascript" type="text/javascript">
+        function divexpandcollapse(divname) {
+            var div = document.getElementById(divname);
+            var img = document.getElementById('img' + divname);
+            if (div.style.display == "none") {
+                div.style.display = "inline";
+                img.src = "../IMAGES/minus.png";
+            }
+            else {
+                div.style.display = "none";
+                img.src = "../IMAGES/plus.gif";
+            }
+        }
+    </script>
+    <div id="divMsg" runat="server">
+    </div>
+
+    <!--===<!--==== Table 100% width script ====-->
+    <script>
+        $('#accordion').on('shown.bs.collapse', function () {
+            $($.fn.dataTable.tables(true)).DataTable()
+               .columns.adjust();
+        });
+    </script>
+
+    <%--Search Box Script Start--%>
+    <script type="text/javascript" lang="javascript">
+
+        $(document).ready(function () {
+            debugger
+           // $("#<%= pnltextbox.ClientID %>").hide();
+
+            $("#<%= pnlDropdown.ClientID %>").hide();
+        });
+        function submitPopup(btnsearch) {
+
+            debugger
+            var rbText;
+            var searchtxt;
+
+            var e = document.getElementById("<%=ddlSearch.ClientID%>");
+            var rbText = e.options[e.selectedIndex].text;
+            var ddlname = e.options[e.selectedIndex].text;
+            if (rbText == "Please Select") {
+                alert('Please Select Search Criteria.')
+                $(e).focus();
+                return false;
+            }
+
+            else {
+
+
+                if (rbText == "ddl") {
+                    var skillsSelect = document.getElementById("<%=ddlDropdown.ClientID%>").value;
+
+                    var searchtxt = skillsSelect;
+                    if (searchtxt == "0") {
+                        alert('Please Select ' + ddlname + '..!');
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+                        return true;
+                        //$("#<%= divpanel.ClientID %>").hide();
+                        $("#<%= pnltextbox.ClientID %>").hide();
+
+                    }
+                }
+                else if (rbText == "BRANCH") {
+
+                    if (searchtxt == "Please Select") {
+                        alert('Please Select Branch..!');
+
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+
+                        return true;
+                    }
+
+                }
+                else {
+                    searchtxt = document.getElementById('<%=txtSearch.ClientID %>').value;
+                    if (searchtxt == "" || searchtxt == null) {
+                        alert('Please Enter Data to Search.');
+                        //$(searchtxt).focus();
+                        document.getElementById('<%=txtSearch.ClientID %>').focus();
+                        return false;
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+                        //$("#<%= divpanel.ClientID %>").hide();
+                        //$("#<%= pnltextbox.ClientID %>").show();
+
+                        return true;
+                    }
+                }
+        }
+    }
+
+    function ClearSearchBox(btncancelmodal) {
+        document.getElementById('<%=txtSearch.ClientID %>').value = '';
+        __doPostBack(btncancelmodal, '');
+        return true;
+    }
+    function CloseSearchBox(btnClose) {
+        document.getElementById('<%=txtSearch.ClientID %>').value = '';
+        __doPostBack(btnClose, '');
+        return true;
+    }
+
+
+
+
+    function Validate() {
+
+        debugger
+
+        var rbText;
+
+        var e = document.getElementById("<%=ddlSearch.ClientID%>");
+        var rbText = e.options[e.selectedIndex].text;
+
+        if (rbText == "IDNO" || rbText == "Mobile") {
+
+            var char = (event.which) ? event.which : event.keyCode;
+            if (char >= 48 && char <= 57) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else if (rbText == "NAME") {
+
+            var char = (event.which) ? event.which : event.keyCode;
+
+            if ((char >= 65 && char <= 90) || (char >= 97 && char <= 122)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    }
+    </script>
+    <%--Search Box Script End--%>
+</asp:Content>

@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5CE46BFF-AA63-4278-AB6E-5037116040FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessLogicLayer</RootNamespace>
+    <AssemblyName>BusinessLogicLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=3.0.20229.20843, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.VSDesigner, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetIntegrationKit">
+      <HintPath>..\..\Abdul Sir Patch\SPCE_ONLINE_PAY_PATCH\DotNetIntegrationKit.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicAL v2.0">
+      <HintPath>..\PresentationLayer\Bin\DynamicAL v2.0.dll</HintPath>
+    </Reference>
+    <Reference Include="mastersofterp_MAKAUAT">
+      <HintPath>..\PresentationLayer\Bin\mastersofterp_MAKAUAT.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Net4">
+      <HintPath>..\PresentationLayer\Bin\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessEntities\Academic\AcademicDashboardEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\AcdAttendanceModel.cs" />
+    <Compile Include="BusinessEntities\Academic\ACPC.cs" />
+    <Compile Include="BusinessEntities\Academic\Affiliated.cs" />
+    <Compile Include="BusinessEntities\Academic\AllotmentMaster.cs" />
+    <Compile Include="BusinessEntities\Academic\AnswerSheet.cs" />
+    <Compile Include="BusinessEntities\Academic\Attendance.cs" />
+    <Compile Include="BusinessEntities\Academic\AuthorityApproval.cs" />
+    <Compile Include="BusinessEntities\Academic\Batch.cs" />
+    <Compile Include="BusinessEntities\Academic\Branch.cs" />
+    <Compile Include="BusinessEntities\Academic\CertificateMaster.cs" />
+    <Compile Include="BusinessEntities\Academic\College.cs" />
+    <Compile Include="BusinessEntities\Academic\Config.cs" />
+    <Compile Include="BusinessEntities\Academic\Course.cs" />
+    <Compile Include="BusinessEntities\Academic\CourseLink.cs" />
+    <Compile Include="BusinessEntities\Academic\CourseRegistrationApproveByAdvisorEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\CoursesLockUnlock.cs" />
+    <Compile Include="BusinessEntities\Academic\DefineCreditLimit.cs" />
+    <Compile Include="BusinessEntities\Academic\Document.cs" />
+    <Compile Include="BusinessEntities\Academic\DocumentAcad.cs" />
+    <Compile Include="BusinessEntities\Academic\EntranceScoreMapping.cs" />
+    <Compile Include="BusinessEntities\Academic\EventCreation.cs" />
+    <Compile Include="BusinessEntities\Academic\GECGOA\ExamFeesStudent.cs" />
+    <Compile Include="BusinessEntities\Academic\GECGOA\GEC_QualifiedExam.cs" />
+    <Compile Include="BusinessEntities\Academic\GECGOA\GEC_Student.cs" />
+    <Compile Include="BusinessEntities\Academic\GECGOA\GEC_StudentQualExm.cs" />
+    <Compile Include="BusinessEntities\Academic\GlobalOfferedCourse.cs" />
+    <Compile Include="BusinessEntities\Academic\Grade.cs" />
+    <Compile Include="BusinessEntities\Academic\GradeEntry.cs" />
+    <Compile Include="BusinessEntities\Academic\Installment.cs" />
+    <Compile Include="BusinessEntities\Academic\IOBPAYClient.cs" />
+    <Compile Include="BusinessEntities\Academic\LeavingCertificate.cs" />
+    <Compile Include="BusinessEntities\Academic\MarkEntry.cs" />
+    <Compile Include="BusinessEntities\Academic\MarkEntryDashboardWireFrameEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\MentorMentee\MeetingScheduleMaster.cs" />
+    <Compile Include="BusinessEntities\Academic\ModuleConfig.cs" />
+    <Compile Include="BusinessEntities\Academic\NewUser.cs" />
+    <Compile Include="BusinessEntities\Academic\Notification.cs" />
+    <Compile Include="BusinessEntities\Academic\NotificationAndroid.cs" />
+    <Compile Include="BusinessEntities\Academic\NotificationEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\ODTracker.cs" />
+    <Compile Include="BusinessEntities\Academic\OnlineAdmission.cs" />
+    <Compile Include="BusinessEntities\Academic\PBIConfigurationEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\Phd.cs" />
+    <Compile Include="BusinessEntities\Academic\ProvisionalCertificateEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\PStaff.cs" />
+    <Compile Include="BusinessEntities\Academic\QualifiedExam.cs" />
+    <Compile Include="BusinessEntities\Academic\QUERYMGT\ManageTickets.cs" />
+    <Compile Include="BusinessEntities\Academic\QUERYMGT\Merchant.cs" />
+    <Compile Include="BusinessEntities\Academic\QUERYMGT\QueryManager.cs" />
+    <Compile Include="BusinessEntities\Academic\QUERYMGT\RaiseTicket.cs" />
+    <Compile Include="BusinessEntities\Academic\RoomConfig.cs" />
+    <Compile Include="BusinessEntities\Academic\RulesCreation.cs" />
+    <Compile Include="BusinessEntities\Academic\Scheme.cs" />
+    <Compile Include="BusinessEntities\Academic\Seating.cs" />
+    <Compile Include="BusinessEntities\Academic\SemesterRegistration.cs" />
+    <Compile Include="BusinessEntities\Academic\Session.cs" />
+    <Compile Include="BusinessEntities\Academic\SlotMaster.cs" />
+    <Compile Include="BusinessEntities\Academic\SmsTemplateType.cs" />
+    <Compile Include="BusinessEntities\Academic\Student.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAchievement\AchievementBasicDetailsEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAchievement\CreateEventEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAchievement\EventParticipationEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAchievement\MoocsCertificationEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAchievement\OrganisedActivityEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAddress.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentAttendance.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentFeedBack.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentModuleConfig.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentPhoto.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentQualExm.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentRegist.cs" />
+    <Compile Include="BusinessEntities\Academic\StudentSearch.cs" />
+    <Compile Include="BusinessEntities\Academic\Student_Acd.cs" />
+    <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_CompanyConfig.cs" />
+    <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_GetRecordsForTallyTransfer.cs" />
+    <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_TallyConfig.cs" />
+    <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_TallyFeeHeads.cs" />
+    <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_TransferRecordsToTally.cs" />
+    <Compile Include="BusinessEntities\Academic\TemplateType.cs" />
+    <Compile Include="BusinessEntities\Academic\TestPrepThroughtMISEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\User.cs" />
+    <Compile Include="BusinessEntities\Common\Access_Link.cs" />
+    <Compile Include="BusinessEntities\Common\Acc_Section.cs" />
+    <Compile Include="BusinessEntities\Common\Activity.cs" />
+    <Compile Include="BusinessEntities\Common\Exam.cs" />
+    <Compile Include="BusinessEntities\Common\Faq.cs" />
+    <Compile Include="BusinessEntities\Common\Help.cs" />
+    <Compile Include="BusinessEntities\Common\ImportDataMaster.cs" />
+    <Compile Include="BusinessEntities\Common\LogFile.cs" />
+    <Compile Include="BusinessEntities\Common\News.cs" />
+    <Compile Include="BusinessEntities\Common\Operator.cs" />
+    <Compile Include="BusinessEntities\Common\Reference.cs" />
+    <Compile Include="BusinessEntities\Common\SessionActivity.cs" />
+    <Compile Include="BusinessEntities\Common\UserRights.cs" />
+    <Compile Include="BusinessEntities\Common\User_Acc.cs" />
+    <Compile Include="BusinessEntities\DigitalLocker\Token.cs" />
+    <Compile Include="BusinessEntities\Disciplinary\Disciplinary_Action.cs" />
+    <Compile Include="BusinessEntities\Disciplinary\Event_Category.cs" />
+    <Compile Include="BusinessEntities\Fees\Counter.cs" />
+    <Compile Include="BusinessEntities\Fees\DailyCollectionRegister.cs" />
+    <Compile Include="BusinessEntities\Fees\DailyFeeCollectionRpt.cs" />
+    <Compile Include="BusinessEntities\Fees\DemandDraft.cs" />
+    <Compile Include="BusinessEntities\Fees\FeeDemand.cs" />
+    <Compile Include="BusinessEntities\Fees\FeeHeadAmounts.cs" />
+    <Compile Include="BusinessEntities\Fees\FeeReceiptLedgerRpt.cs" />
+    <Compile Include="BusinessEntities\Fees\FeesHead.cs" />
+    <Compile Include="BusinessEntities\Fees\MiscFees.cs" />
+    <Compile Include="BusinessEntities\Fees\RecieptType.cs" />
+    <Compile Include="BusinessEntities\Fees\Refund.cs" />
+    <Compile Include="BusinessEntities\Fees\StandardFee.cs" />
+    <Compile Include="BusinessEntities\Fees\StudentFees.cs" />
+    <Compile Include="BusinessEntities\LEADMANAGEMENT\LeadManage.cs" />
+    <Compile Include="BusinessEntities\LEADMANAGEMENT\LevelConfigurationEntity.cs" />
+    <Compile Include="BusinessEntities\OBE\CommonModel.cs" />
+    <Compile Include="BusinessEntities\OBE\ExamQuestionPaperModel.cs" />
+    <Compile Include="BusinessEntities\OBE\ExamTypeModel.cs" />
+    <Compile Include="BusinessEntities\OBE\QuestionPatternMasterModel.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\ADMPFeePaymentConfigEntity.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\ADMPUnlockStudentDetails.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\ApplicationProcess.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\CallLetterGenration.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\DocumentVerification.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\LetterTemplate.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\LetterTemplateFieldData.cs" />
+    <Compile Include="BusinessEntities\PostAdmission\PanelCreation.cs" />
+    <Compile Include="BusinessEntities\RazorPay\Ent_Payment.cs" />
+    <Compile Include="BusinessEntities\RazorPay\Ent_Pay_Response.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\ConfigAffilationType.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\ConfigRefDetails.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\Degree.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\Department.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\InstituteType.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\Mapping.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\Organization.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\OwnershipStatus.cs" />
+    <Compile Include="BusinessEntities\RFC_CONFIG\University.cs" />
+    <Compile Include="BusinessEntities\Scholarship\MonthlyStipendTransaction.cs" />
+    <Compile Include="BusinessEntities\Scholarship\ScolarshipFund.cs" />
+    <Compile Include="BusinessEntities\Scholarship\Stipend_Master.cs" />
+    <Compile Include="BusinessEntities\Scholarship\StudentScholarship.cs" />
+    <Compile Include="BusinessEntities\Scholarship\StudentScholarshipEntry.cs" />
+    <Compile Include="BusinessEntities\Sms\AcdSms.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TPDocHistory.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TPLASTQUAL.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TPStudent.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TPStudRegistration.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TPTraining.cs" />
+    <Compile Include="BusinessEntities\TRAININGANDPLACEMENT\TrainingPlacement.cs" />
+    <Compile Include="BusinessLogic\Academic\AcademicReportsController.cs" />
+    <Compile Include="BusinessLogic\Academic\AcademinDashboardController.cs" />
+    <Compile Include="BusinessLogic\Academic\AcdAttendanceController.cs" />
+    <Compile Include="BusinessLogic\Academic\AdmissionCancellationController.cs" />
+    <Compile Include="BusinessLogic\Academic\Admission\ADMPInterviewTestConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\AffiliatedController.cs" />
+    <Compile Include="BusinessLogic\Academic\AnswerSheetController.cs" />
+    <Compile Include="BusinessLogic\Academic\applicationReceivedController.cs" />
+    <Compile Include="BusinessLogic\Academic\AuthorityApprovalcontroller.cs" />
+    <Compile Include="BusinessLogic\Academic\BatchController.cs" />
+    <Compile Include="BusinessLogic\Academic\BranchController.cs" />
+    <Compile Include="BusinessLogic\Academic\CertificateMasterController.cs" />
+    <Compile Include="BusinessLogic\Academic\ClubStudentMappingController.cs" />
+    <Compile Include="BusinessLogic\Academic\CollegeController.cs" />
+    <Compile Include="BusinessLogic\Academic\ConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\CourseController.cs" />
+    <Compile Include="BusinessLogic\Academic\CourseLinkController.cs" />
+    <Compile Include="BusinessLogic\Academic\CourseRegistrationApprovebyAdvisorController.cs" />
+    <Compile Include="BusinessLogic\Academic\CourseTeacherAllotController.cs" />
+    <Compile Include="BusinessLogic\Academic\DefineTotalCreditController.cs" />
+    <Compile Include="BusinessLogic\Academic\DocumentController.cs" />
+    <Compile Include="BusinessLogic\Academic\DocumentControllerAcad.cs" />
+    <Compile Include="BusinessLogic\Academic\EazyPaySettmentController.cs" />
+    <Compile Include="BusinessLogic\Academic\EventCreationController.cs" />
+    <Compile Include="BusinessLogic\Academic\ExamComponentConroller.cs" />
+    <Compile Include="BusinessLogic\Academic\FetchDataController.cs" />
+    <Compile Include="BusinessLogic\Academic\GradeController.cs" />
+    <Compile Include="BusinessLogic\Academic\GradeEntryController.cs" />
+    <Compile Include="BusinessLogic\Academic\IndexScoreConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\InstallmentController.cs" />
+    <Compile Include="BusinessLogic\Academic\LeavingCertificateController.cs" />
+    <Compile Include="BusinessLogic\Academic\ManagePageControlsModule.cs" />
+    <Compile Include="BusinessLogic\Academic\MarkEntryDashboardWireFrameController.cs" />
+    <Compile Include="BusinessLogic\Academic\MarksEntryController.cs" />
+    <Compile Include="BusinessLogic\Academic\MarksEntryDetailReportController.cs" />
+    <Compile Include="BusinessLogic\Academic\MarksheetInventoryRptController.cs" />
+    <Compile Include="BusinessLogic\Academic\MentorMentee\AcdAttendanceController_MM.cs" />
+    <Compile Include="BusinessLogic\Academic\MentorMentee\FeeCollectionController_MM.cs" />
+    <Compile Include="BusinessLogic\Academic\MentorMentee\Schedule_MeetingController.cs" />
+    <Compile Include="BusinessLogic\Academic\MentorMentee\StudentControllerDetails_MM.cs" />
+    <Compile Include="BusinessLogic\Academic\MentorMentee\TabularChartController_MM.cs" />
+    <Compile Include="BusinessLogic\Academic\ModuleConfigController.cs" />
+    <Compile Include="BusinessLogic\Academic\NotificationController.cs" />
+    <Compile Include="BusinessLogic\Academic\ODTrackerController.cs" />
+    <Compile Include="BusinessLogic\Academic\OnlineAdmissionController.cs" />
+    <Compile Include="BusinessLogic\Academic\OnlineAdmissionGroupwiseController.cs" />
+    <Compile Include="BusinessLogic\Academic\PBIConfigurationController.cs" />
+    <Compile Include="BusinessLogic\Academic\PhdController.cs" />
+    <Compile Include="BusinessLogic\Academic\PStaffController.cs" />
+    <Compile Include="BusinessLogic\Academic\QrCodeController.cs" />
+    <Compile Include="BusinessLogic\Academic\QualifyController.cs" />
+    <Compile Include="BusinessLogic\Academic\QueryController.cs" />
+    <Compile Include="BusinessLogic\Academic\QUERYMGT\ManageTicketsController.cs" />
+    <Compile Include="BusinessLogic\Academic\QUERYMGT\QueryManagerController.cs" />
+    <Compile Include="BusinessLogic\Academic\QUERYMGT\RaiseTicketController.cs" />
+    <Compile Include="BusinessLogic\Academic\RulesCreationController.cs" />
+    <Compile Include="BusinessLogic\Academic\SchemeController.cs" />
+    <Compile Include="BusinessLogic\Academic\ScoreMappingController.cs" />
+    <Compile Include="BusinessLogic\Academic\SessionController.cs" />
+    <Compile Include="BusinessLogic\Academic\SlotController.cs" />
+    <Compile Include="BusinessLogic\Academic\SmsTemplateTypeController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\AchievementBasicDetailsController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\Activity_RegistrationController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\ClubController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\ClubFacultyStudentEventMarkingController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\Club_ActivityController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\CreateEventController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\EventParticipationController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\MoocsCertificationController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAchievement\OrganisedActivityController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentAttendanceController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentDetend.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentDetentionController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentFeedBackController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentOnlineAdmissionMasterController.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentRegistration.cs" />
+    <Compile Include="BusinessLogic\Academic\StudentSelectFieldController.cs" />
+    <Compile Include="BusinessLogic\Academic\Tally\Con_Acd_CompanyConfig.cs" />
+    <Compile Include="BusinessLogic\Academic\Tally\Con_Acd_GetRecordsForTallyTransfer.cs" />
+    <Compile Include="BusinessLogic\Academic\Tally\Con_Acd_TallyConfig.cs" />
+    <Compile Include="BusinessLogic\Academic\Tally\Con_Acd_TallyFeeHeads.cs" />
+    <Compile Include="BusinessLogic\Academic\Tally\Con_Acd_TransferRecordsToTally.cs" />
+    <Compile Include="BusinessLogic\Academic\TeachingPlanController.cs" />
+    <Compile Include="BusinessLogic\Academic\TemplateTypeController.cs" />
+    <Compile Include="BusinessLogic\Academic\VaccinationController.cs" />
+    <Compile Include="BusinessLogic\Common\AcademicCalender.cs" />
+    <Compile Include="BusinessLogic\Common\Access_LinkController.cs" />
+    <Compile Include="BusinessLogic\Common\Acc_SectionController.cs" />
+    <Compile Include="BusinessLogic\Common\ActivityController.cs" />
+    <Compile Include="BusinessLogic\Common\BundleController.cs" />
+    <Compile Include="BusinessLogic\Common\Common.cs" />
+    <Compile Include="BusinessLogic\Common\Crc32.cs" />
+    <Compile Include="BusinessLogic\Common\CustomStatus.cs" />
+    <Compile Include="BusinessLogic\Common\ExamController.cs" />
+    <Compile Include="BusinessLogic\Common\FaqController.cs" />
+    <Compile Include="BusinessLogic\Common\HelpController.cs" />
+    <Compile Include="BusinessLogic\Common\ImportDataController.cs" />
+    <Compile Include="BusinessLogic\Common\LogTableController.cs" />
+    <Compile Include="BusinessLogic\Common\MappingController.cs" />
+    <Compile Include="BusinessLogic\Common\Masters.cs" />
+    <Compile Include="BusinessLogic\Common\NewsController.cs" />
+    <Compile Include="BusinessLogic\Common\OperatorController.cs" />
+    <Compile Include="BusinessLogic\Common\PageControlValidator.cs" />
+    <Compile Include="BusinessLogic\Common\PasswordController.cs" />
+    <Compile Include="BusinessLogic\Common\ReferenceController.cs" />
+    <Compile Include="BusinessLogic\Common\SessionActivityController.cs" />
+    <Compile Include="BusinessLogic\Common\UserRightsController.cs" />
+    <Compile Include="BusinessLogic\Common\User_AccController.cs" />
+    <Compile Include="BusinessLogic\Disciplinary\Disciplinary_ActionController.cs" />
+    <Compile Include="BusinessLogic\Disciplinary\Event_CategoryController.cs" />
+    <Compile Include="BusinessLogic\Examination\BacklogRegistration.cs" />
+    <Compile Include="BusinessLogic\Examination\ExamTypeController.cs" />
+    <Compile Include="BusinessLogic\Examination\ProvisionalCertificateController.cs" />
+    <Compile Include="BusinessLogic\Examination\ResultProcessing.cs" />
+    <Compile Include="BusinessLogic\Examination\RoomConfigController.cs" />
+    <Compile Include="BusinessLogic\Examination\SeatingArrangementController.cs" />
+    <Compile Include="BusinessLogic\Examination\SeatingController.cs" />
+    <Compile Include="BusinessLogic\FaceBook\AccessUser.cs" />
+    <Compile Include="BusinessLogic\Fees\ChalanReconciliationController.cs" />
+    <Compile Include="BusinessLogic\Fees\CounterController.cs" />
+    <Compile Include="BusinessLogic\Fees\DailyFeeCollectionController.cs" />
+    <Compile Include="BusinessLogic\Fees\DemandModificationController.cs" />
+    <Compile Include="BusinessLogic\Fees\FeeCollectionController.cs" />
+    <Compile Include="BusinessLogic\Fees\FeesHeadController.cs" />
+    <Compile Include="BusinessLogic\Fees\LateFeeController.cs" />
+    <Compile Include="BusinessLogic\Fees\RecieptTypeController.cs" />
+    <Compile Include="BusinessLogic\Fees\RefundController.cs" />
+    <Compile Include="BusinessLogic\Fees\StandardFeeController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\EquiryFollowUpController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\LeadDashboardController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\LeadEnquiryAllotmentController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\LeadReportController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\LevelconfigurationController.cs" />
+    <Compile Include="BusinessLogic\LEADMANAGEMENT\LMController.cs" />
+    <Compile Include="BusinessLogic\OBE\CommanController.cs" />
+    <Compile Include="BusinessLogic\OBE\ExamQuestionPaperController.cs" />
+    <Compile Include="BusinessLogic\OBE\ExamQuestionPatternController.cs" />
+    <Compile Include="BusinessLogic\OBE\ExamTypeModel.cs" />
+    <Compile Include="BusinessLogic\OBE\OBEMarkEntryController.cs" />
+    <Compile Include="BusinessLogic\OBE\QuestionPatternFacultyMasterController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ACDAnalyticsDashboardConfigController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ACDStateMasterController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPAdhocReportConfigController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPAdmissionOrderNoteController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPApplicationStagesConfigController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPDocumentUploadController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPDocumentVerificationController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPExamHallTicketController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPExamMarkUploadController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPExamRescheduleController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPExamScheduleController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPExamStudentAttendaceController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPFeePaymentConfigController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPFeesController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPGenerateCallLetter.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPGenerateOfferLetterController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPMeritListController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPProvisionalAdmissionAprovalController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPRemainingPaymentController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPStudentController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPStudentTransferController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPTestDetails_Score_Assign_VerifyController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ADMPUnlockStudentDetailsController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ApplicationProcessController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ApplicationStagesController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\EmailTemplateController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ExamHallTicketController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ExamScheduleController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\IndexScoreConfigController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\IndexScoreGenerateController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\LetterTemplateController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\PanelCreationController.cs" />
+    <Compile Include="BusinessLogic\PostAdmission\ReportController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\BranchNameController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\ColgContoller.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\ConfigAffilationTypeController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\ConfigRefController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\DegreeController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\DepartmentController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\InstituteTypeController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\MappingCreationController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\OrganizationController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\OwnershipStatusController.cs" />
+    <Compile Include="BusinessLogic\RFC_CONFIG\UniversityController.cs" />
+    <Compile Include="BusinessLogic\Scholarship\MonthlyStipendTransactionController.cs" />
+    <Compile Include="BusinessLogic\Scholarship\ScholarshipController.cs" />
+    <Compile Include="BusinessLogic\Scholarship\ScholarshipFundController.cs" />
+    <Compile Include="BusinessLogic\Scholarship\StipendController.cs" />
+    <Compile Include="BusinessLogic\Sms\AcdSmsController.cs" />
+    <Compile Include="BusinessLogic\TRAININGANDPLACEMENT\TPController.cs" />
+    <Compile Include="BusinessLogic\TRAININGANDPLACEMENT\TPScheNewController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BusinessEntities\Disciplinary\vssver2.scc" />
+    <None Include="BusinessEntities\TRAININGANDPLACEMENT\vssver2.scc" />
+    <None Include="BusinessLogic\Disciplinary\vssver2.scc" />
+    <None Include="BusinessLogic\TRAININGANDPLACEMENT\vssver2.scc" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\BusinessLogicLayer.dll" />
+    <Content Include="bin\Debug\BusinessLogicLayer.pdb" />
+    <Content Include="bin\Debug\DataAccessLayer.dll" />
+    <Content Include="bin\Debug\mastersofterp_MAKAUAT.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

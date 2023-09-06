@@ -1,0 +1,154 @@
+<ToolbarList>
+  <Toolbar ID="File" NewLine="false">
+    <ToolbarItem ButtonType="Button" ID="Save" Visible="False" Title="Save" CommandType="Save" ImageFileName="images/save.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" Visible="False" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Print" Visible="False" Title="Print" CommandType="Print" ImageFileName="images/print.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="PrintPreview" Visible="False" Title="PrintPreview" CommandType="PrintPreview" ImageFileName="images/printpreview.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" Visible="False" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="InsertPageBreak" Title="InsertPageBreak" CommandType="InsertPageBreak" ImageFileName="images/InsertPageBreak.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertHorizontalRule" Title="InsertHorizontalRule" CommandType="InsertHorizontalRule" ImageFileName="images/InsertHorizontalRule.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar> 
+  <Toolbar ID="Edit" NewLine="false">
+    <ToolbarItem ButtonType="Button" ID="Cut" Title="Cut" CommandType="Cut" ImageFileName="images/cut.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Copy" Title="Copy" CommandType="Copy" ImageFileName="images/copy.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Paste" Title="Paste" CommandType="Paste" ImageFileName="images/paste.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Undo" Title="Undo" CommandType="Undo" ImageFileName="images/undo.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Redo" Title="Redo" CommandType="Redo" ImageFileName="images/redo.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="SelectAll" Title="SelectAll" CommandType="SelectAll" ImageFileName="images/SelectAll.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="RemoveFormat" Title="RemoveFormat" CommandType="RemoveFormat" ImageFileName="images/RemoveFormat.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="Insert" NewLine="false">
+    <ToolbarItem ButtonType="Button" ID="InsertImage" Visible="True" Title="InsertImage" CommandType="InsertImage" ImageFileName="images/InsertImage.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" Visible="True" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="InsertLink" Title="InsertLink" CommandType="InsertLink" ImageFileName="images/InsertLink.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="RemoveLink" Title="RemoveLink" CommandType="RemoveLink" ImageFileName="images/RemoveLink.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="InsertFlash" Visible="False" Title="InsertFlash" CommandType="InsertFlash" ImageFileName="images/InsertFlash.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertMedia" Visible="False" Title="InsertMedia" CommandType="InsertMedia" ImageFileName="images/InsertMedia.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" Visible="False" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="InsertEmotion" Visible="False" Title="InsertEmotion" CommandType="InsertEmotion" ImageFileName="images/InsertEmotion.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertSymbol" Visible="False" Title="InsertSymbol" CommandType="InsertSymbol" ImageFileName="images/InsertSymbol.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" Visible="False" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="InsertTime" Title="InsertTime" CommandType="InsertTime" ImageFileName="images/InsertTime.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertDate" Title="InsertDate" CommandType="InsertDate" ImageFileName="images/InsertDate.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Help" Visible="False" Title="Help" CommandType="Help" ImageFileName="images/Help.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="FormatPara1" NewLine="true">
+    <ToolbarItem ButtonType="Button" ID="JustifyLeft" Title="JustifyLeft" CommandType="JustifyLeft" ImageFileName="images/JustifyLeft.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="JustifyCenter" Title="JustifyCenter" CommandType="JustifyCenter" ImageFileName="images/JustifyCenter.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="JustifyRight" Title="JustifyRight" CommandType="JustifyRight" ImageFileName="images/JustifyRight.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="JustifyFull" Title="JustifyFull" CommandType="JustifyFull" ImageFileName="images/JustifyFull.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="FormatPara2" NewLine="false">
+    <ToolbarItem ButtonType="Button" ID="NumberedList" Title="NumberedList" CommandType="NumberedList" ImageFileName="images/NumberedList.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Bullets" Title="Bullets" CommandType="Bullets" ImageFileName="images/Bullets.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Outdent" Title="Outdent" CommandType="Outdent" ImageFileName="images/Outdent.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Indent" Title="Indent" CommandType="Indent" ImageFileName="images/Indent.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="Table" NewLine="false">
+    <ToolbarItem ButtonType="Button" ID="InsertTable" Title="InsertTable" CommandType="InsertTable" ImageFileName="images/InsertTable.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertColumnLeft" Title="InsertColumnLeft" CommandType="InsertColumnLeft" ImageFileName="images/InsertColumnLeft.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertColumnRight" Title="InsertColumnRight" CommandType="InsertColumnRight" ImageFileName="images/InsertColumnRight.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="DeleteColumn" Title="DeleteColumn" CommandType="DeleteColumn" ImageFileName="images/DeleteColumn.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertRowAbove" Title="InsertRowAbove" CommandType="InsertRowAbove" ImageFileName="images/InsertRowAbove.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="InsertRowBelow" Title="InsertRowBelow" CommandType="InsertRowBelow" ImageFileName="images/InsertRowBelow.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="DeleteRow" Title="DeleteRow" CommandType="DeleteRow" ImageFileName="images/DeleteRow.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="MergeCells" Title="MergeCells" CommandType="MergeCells" ImageFileName="images/MergeCells.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="SplitCell" Title="SplitCell" CommandType="SplitCell" ImageFileName="images/SplitCell.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="Misc1" NewLine="false">
+    <ToolbarItem ButtonType="DropDown" ID="Zoom" Title="Zoom" CommandType="Zoom" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" Target="">
+      <ToolDropDown Text="Zoom" Value="" />
+      <ToolDropDown Text="10%" Value="10%" />
+      <ToolDropDown Text="25%" Value="25%" />
+      <ToolDropDown Text="50%" Value="50%" />
+      <ToolDropDown Text="75%" Value="75%" />
+      <ToolDropDown Text="100%" Value="100%" />
+      <ToolDropDown Text="150%" Value="150%" />
+      <ToolDropDown Text="200%" Value="200%" />
+      <ToolDropDown Text="500%" Value="500%" />
+    </ToolbarItem>
+    <ToolbarItem ButtonType="Button" ID="FullScreen" Title="FullScreen" CommandType="FullScreen" ImageFileName="images/FullScreen.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Find" Title="Find" CommandType="Find" ImageFileName="images/Find.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="SpellCheck" Title="SpellCheck" CommandType="SpellCheck" ImageFileName="images/SpellCheck.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+  <Toolbar ID="FormatText" NewLine="true">
+    <ToolbarItem ButtonType="DropDown" ID="FormatBlock" Title="FormatBlock" CommandType="FormatBlock" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" Target="">
+      <ToolDropDown Text="Paragraph" Value="" />
+      <ToolDropDown Text="Normal" Value="normal" />
+      <ToolDropDown Text="Formatted" Value="pre" />
+      <ToolDropDown Text="Address" Value="address" />
+      <ToolDropDown Text="Heading 1" Value="h1" />
+      <ToolDropDown Text="Heading 2" Value="h2" />
+      <ToolDropDown Text="Heading 3" Value="h3" />
+      <ToolDropDown Text="Heading 4" Value="h4" />
+      <ToolDropDown Text="Heading 5" Value="h5" />
+      <ToolDropDown Text="Heading 6" Value="h6" />
+      <ToolDropDown Text="Numbered List" Value="Numbered List" />
+      <ToolDropDown Text="Bulleted List" Value="Bulleted List" />
+      <ToolDropDown Text="Directory List" Value="dir" />
+      <ToolDropDown Text="Menu List" Value="menu" />
+      <ToolDropDown Text="Definition Term" Value="Definition Term" />
+      <ToolDropDown Text="Definition" Value="Definition" />
+    </ToolbarItem>
+    <ToolbarItem ButtonType="DropDown" ID="FontName" Title="FontName" CommandType="FontName" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" Target="">
+      <ToolDropDown Text="Font" Value="" />
+      <ToolDropDown Text="Arial" Value="Arial" />
+      <ToolDropDown Text="Arial Black" Value="Arial Black" />
+      <ToolDropDown Text="Comic Sans MS" Value="Comic Sans MS" />
+      <ToolDropDown Text="Courier" Value="Courier" />
+      <ToolDropDown Text="Courier New" Value="Courier New" />
+      <ToolDropDown Text="Fixedsys" Value="Fixedsys" />
+      <ToolDropDown Text="Georgia" Value="Georgia" />
+      <ToolDropDown Text="Impact" Value="Impact" />
+      <ToolDropDown Text="Lucida Console" Value="Lucida Console" />
+      <ToolDropDown Text="Lucida Sans Unicode" Value="Lucida Sans Unicode" />
+      <ToolDropDown Text="MS Sans Serif" Value="MS Sans Serif" />
+      <ToolDropDown Text="MS Serif" Value="MS Serif" />
+      <ToolDropDown Text="Marlett" Value="Marlett" />
+      <ToolDropDown Text="Modern" Value="Modern" />
+      <ToolDropDown Text="Palatino Linotype" Value="Palatino Linotype" />
+      <ToolDropDown Text="Roman" Value="Roman" />
+      <ToolDropDown Text="Script" Value="Script" />
+      <ToolDropDown Text="Small Fonts" Value="Small Fonts" />
+      <ToolDropDown Text="Symbol" Value="Symbol" />
+      <ToolDropDown Text="System" Value="System" />
+      <ToolDropDown Text="Tahoma" Value="Tahoma" />
+      <ToolDropDown Text="Terminal" Value="Terminal" />
+      <ToolDropDown Text="Times New Roman" Value="Times New Roman" />
+      <ToolDropDown Text="Trebuchet MS" Value="Trebuchet MS" />
+      <ToolDropDown Text="Verdana" Value="Verdana" />
+      <ToolDropDown Text="Webdings" Value="Webdings" />
+      <ToolDropDown Text="Wingdings" Value="Wingdings" />
+    </ToolbarItem>
+    <ToolbarItem ButtonType="DropDown" ID="FontSize" Title="FontSize" CommandType="FontSize" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" Target="">
+      <ToolDropDown Text="Size" Value="" />
+      <ToolDropDown Text="1 (8 pt)" Value="1" />
+      <ToolDropDown Text="2 (10 pt)" Value="2" />
+      <ToolDropDown Text="3 (12 pt)" Value="3" />
+      <ToolDropDown Text="4 (14 pt)" Value="4" />
+      <ToolDropDown Text="5 (18 pt)" Value="5" />
+      <ToolDropDown Text="6 (24 pt)" Value="6" />
+      <ToolDropDown Text="7 (36 pt)" Value="7" />
+    </ToolbarItem>
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Bold" Title="Bold" CommandType="Bold" ImageFileName="images/Bold.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Italic" Title="Italic" CommandType="Italic" ImageFileName="images/Italic.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Underline" Title="Underline" CommandType="Underline" ImageFileName="images/Underline.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="BackColor" Title="Outdent" CommandType="BackColor" ImageFileName="images/BackColor.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="BackColorPicker" Title="BackColorPicker" CommandType="BackColorPicker" ImageFileName="images/ArrowDown.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="ForeColor" Title="ForeColor" CommandType="ForeColor" ImageFileName="images/ForeColor.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="ForeColorPicker" Title="ForeColorPicker" CommandType="ForeColorPicker" ImageFileName="images/ArrowDown.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Seperator" ImageFileName="images/separator.gif"/>
+    <ToolbarItem ButtonType="Button" ID="Strikethrough" Title="Strikethrough" CommandType="Strikethrough" ImageFileName="images/Strikethrough.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Subscript" Title="Subscript" CommandType="Subscript" ImageFileName="images/Subscript.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+    <ToolbarItem ButtonType="Button" ID="Superscript" Title="Superscript" CommandType="Superscript" ImageFileName="images/Superscript.gif" OnAfterClick="" OnBeforeClick="" PostBack="false" PostbackArgs="" />
+  </Toolbar>
+
+</ToolbarList>

@@ -1,0 +1,115 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="LedgerMasterPage.master.cs"
+    Inherits="LedgerMasterPage" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register Src="~/UC/feed_back.ascx" TagName="feedback" TagPrefix="uc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <%--<link rel="shortcut icon" href="images/favicon.ico"  type="image/x-icon"/>--%>
+    <link rel="shortcut icon" href="images/favicon.ico"  type="image/x-icon"/>
+    <link href="Css/master.css" rel="stylesheet" type="text/css" />
+    <link href="Css/Theme1.css" rel="stylesheet" type="text/css" />
+    <link href="Css/linkedin/tabs.css" rel="stylesheet" type="text/css" />
+    <link href="Css/linkedin/blue/linkedin-blue.css" rel="stylesheet" type="text/css" />
+    <link href="includes/modalbox.css" rel="stylesheet" type="text/css" />
+    <%--<script language="javascript" type="text/javascript" src="IITMSTextBox.js" />--%>
+     
+</head>
+<body class="body">
+    <form id="frmMaster" runat="server">
+    <ajaxToolkit:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
+    </ajaxToolkit:ToolkitScriptManager>
+   
+    <div id="master_container">
+        <div id="page_content">
+            <%--PAGE CONTENT--%>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </div>
+    <%--TO SHOW THE ERROR--%>
+    <asp:UpdatePanel ID="updpnlError" runat="server">
+        <ContentTemplate>
+            <asp:Button runat="server" ID="hiddenTargetControlForModalPopup" Style="display: none" />
+            <ajaxToolkit:ModalPopupExtender runat="server" ID="programmaticModalPopup" BehaviorID="programmaticModalPopupBehavior"
+                TargetControlID="hiddenTargetControlForModalPopup" PopupControlID="programmaticPopup"
+                BackgroundCssClass="modalBackground" DropShadow="True" PopupDragHandleControlID="programmaticPopupDragHandle"
+                RepositionMode="RepositionOnWindowScroll" CancelControlID="btnNo" OnCancelScript="cancelClickErr();">
+            </ajaxToolkit:ModalPopupExtender>
+            <asp:Panel runat="server" CssClass="modalPopup" ID="programmaticPopup" Style="display: none;
+                width: 350px; padding: 10px; text-align: center">
+                <asp:Panel runat="Server" ID="programmaticPopupDragHandle" CssClass="errModalPopupHandle">
+                    Error</asp:Panel>
+                <asp:Panel runat="Server" ID="pnlErr" ScrollBars="Both" CssClass="errModalPopupData"
+                    Height="450px">
+                    <asp:Label ID="lblError" runat="server" ForeColor="Red" /><br />
+                    <br />
+                </asp:Panel>
+                <asp:Button runat="server" ID="btnNo" Text="Close" />
+                <br />
+            </asp:Panel>
+        </ContentTemplate>
+    </asp:UpdatePanel>
+
+    <script type="text/javascript">
+    function cancelClickErr()
+    {
+//        var _popup;
+//        //  find the confirm ModalPopup and hide it 
+//        this._popup = $find('programmaticModalPopupBehavior');            
+//        this._popup.hide();
+//        this._popup = null;
+    }
+    </script>
+
+    <%--END: TO SHOW THE ERROR--%>
+    <%--BELOW CODE IS TO SHOW THE MODAL POPUP EXTENDER FOR FEEDBACK --%>
+    <%--DONT CHANGE THE CODE BELOW. USE AS IT IS--%>
+    <ajaxToolkit:ModalPopupExtender ID="modalFeedBack" BehaviorID="mdlPopupFB" runat="server"
+        TargetControlID="div" PopupControlID="div" OkControlID="ctl00$fb$btnOk" OnOkScript="okClick();"
+        CancelControlID="ctl00$fb$btnCancel" OnCancelScript="cancelClick();" BackgroundCssClass="modalBackground" />
+    <asp:Panel ID="div" runat="server" Style="display: none" CssClass="modalPopup">
+        <div style="text-align: center">
+            <uc1:feedback ID="fb" runat="server" />
+        </div>
+    </asp:Panel>
+
+    <script type="text/javascript">
+    //  keeps track of the delete button for the row
+    //  that is going to be removed
+    var _source;
+    // keep track of the popup div
+    var _popup;
+    
+    function showConfirm(source){    
+        this._source = source;
+        this._popup = $find('mdlPopupFB');
+        
+        //  find the confirm ModalPopup and show it
+        this._popup.show();
+    }
+    
+    function okClick(){
+        //  find the confirm ModalPopup and hide it
+        //this._popup.hide();
+        //  use the cached button as the postback source
+        
+       var btnsrc = document.getElementById('ctl00$fb$btnOk');
+        __doPostBack(btnsrc.name, '');
+    }
+    
+    function cancelClick(){
+        //  find the confirm ModalPopup and hide it 
+        this._popup.hide();
+        //  clear the event source
+        this._source = null;
+        this._popup = null;
+    }
+    </script>
+
+    <%--END : FEEDBACK--%>
+    </form>
+</body>
+</html>

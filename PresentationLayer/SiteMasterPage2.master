@@ -1,0 +1,149 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SiteMasterPage2.master.cs" Inherits="SiteMasterPage2" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register Src="~/UC/feed_back.ascx" TagName="feedback" TagPrefix="uc1" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Sarala Birla University, Ranchi</title>
+    <link rel="shortcut icon" href="imgnew1/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="imgnew1/favicon.ico" type="image/x-icon"/>     
+    <link href="Css/master.css" rel="stylesheet" type="text/css" />
+    <link href="Css/Theme2.css" rel="stylesheet" type="text/css" />
+    <link href="Css/linkedin/tabs.css" rel="stylesheet" type="text/css" />
+    <link href="Css/linkedin/gray/linkedin-gray.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="body">
+<form id="frmMaster" runat="server">
+<ajaxToolkit:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server"></ajaxToolkit:ToolkitScriptManager>
+
+<%--MASTER HEADER--%>
+<div  id="master_head">
+    <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td style="text-align:left;vertical-align:middle;padding-left:10px; width:80%">
+                <asp:Label ID="lblColName" runat="server" SkinID="lblTopHead"/>
+            </td>
+            <td style="text-align:right;vertical-align:middle;padding-right:15px;width:20%">
+                <asp:LinkButton ID="lnkHome" runat="server" onclick="lnkHome_Click">Home</asp:LinkButton>&nbsp;&nbsp;
+                <asp:LinkButton ID="lnkFeedBack" runat="server" OnClientClick="showConfirm(this); return false;">FeedBack</asp:LinkButton>&nbsp;&nbsp;
+                <asp:LinkButton ID="lnkTheme1" runat="server" OnClick="lnkTheme1_Click" Font-Size="7pt">T1</asp:LinkButton>&nbsp;|&nbsp;
+                <asp:LinkButton ID="lnkTheme2" runat="server" OnClick="lnkTheme2_Click" Font-Size="7pt">T2</asp:LinkButton>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="master_container">
+	<asp:Panel ID="master_left1" runat="server" CssClass="master_left">
+	    <asp:Label ID="lblLink" runat="server" Font-Bold="true" /><br /><br />
+        <%-- MENU--%>
+        <asp:Menu ID="myMenu" runat="server" 
+          DynamicHorizontalOffset="2" Font-Names="Verdana" 
+          ForeColor="#990000" StaticSubMenuIndent="10px" StaticDisplayLevels="1" 
+            Orientation="Vertical" onmenuitemclick="myMenu_MenuItemClick">
+          <StaticSelectedStyle BackColor="#FFCC66" />
+          <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+          <DynamicMenuStyle BorderColor="#969696" BorderStyle="Solid" BorderWidth="1px" />
+          <DynamicMenuItemStyle HorizontalPadding="5px" VerticalPadding="2px" />
+          <DynamicHoverStyle BackColor="#990000" Font-Bold="False" ForeColor="White"/>
+          <StaticHoverStyle BackColor="#990000" Font-Bold="False" ForeColor="White" />
+       </asp:Menu>
+    </asp:Panel>
+	<div id="page_content">
+	    <%--PAGE CONTENT--%>
+	    <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+	</div>
+</div>
+
+
+
+<%--TO SHOW THE ERROR--%>
+<asp:UpdatePanel ID="updpnlError" runat="server">
+<ContentTemplate>
+<asp:Button runat="server" ID="hiddenTargetControlForModalPopup" style="display:none"/>
+<ajaxToolkit:ModalPopupExtender runat="server" ID="programmaticModalPopup"
+    BehaviorID="programmaticModalPopupBehavior"
+    TargetControlID="hiddenTargetControlForModalPopup"
+    PopupControlID="programmaticPopup" 
+    BackgroundCssClass="modalBackground"
+    DropShadow="True"
+    PopupDragHandleControlID="programmaticPopupDragHandle"
+    RepositionMode="RepositionOnWindowScroll"
+    CancelControlID="btnNo" OnCancelScript="cancelClickErr();">
+</ajaxToolkit:ModalPopupExtender>
+
+<asp:Panel runat="server" CssClass="modalPopup" ID="programmaticPopup" style="display:none;width:350px;padding:10px;text-align:center">
+    <asp:Panel runat="Server" ID="programmaticPopupDragHandle" CssClass="errModalPopupHandle">
+        Error</asp:Panel>
+    <asp:Panel runat="Server" ID="pnlErr" ScrollBars="Both" CssClass="errModalPopupData" Height="450px">
+        <asp:Label ID="lblError" runat="server" ForeColor="Red" /><br /><br />
+    </asp:Panel>
+    <asp:Button runat="server" ID="btnNo" Text="Close" />
+    <br />
+</asp:Panel>
+
+</ContentTemplate>
+</asp:UpdatePanel>
+<script type="text/javascript">
+    function cancelClickErr()
+    {
+//        var _popup;
+//        //  find the confirm ModalPopup and hide it 
+//        this._popup = $find('programmaticModalPopupBehavior');            
+//        this._popup.hide();
+//        this._popup = null;
+    }
+</script>
+<%--END: TO SHOW THE ERROR--%>
+
+
+
+<%--BELOW CODE IS TO SHOW THE MODAL POPUP EXTENDER FOR FEEDBACK --%>
+<%--DONT CHANGE THE CODE BELOW. USE AS IT IS--%>
+<ajaxToolKit:ModalPopupExtender ID="modalFeedBack" BehaviorID="mdlPopupFB" runat="server" 
+    TargetControlID="div" PopupControlID="div"  OkControlID="ctl00$fb$btnOk" OnOkScript="okClick();" 
+    CancelControlID="ctl00$fb$btnCancel" OnCancelScript="cancelClick();" BackgroundCssClass="modalBackground" />   
+<asp:Panel ID="div" runat="server" Style="display: none" CssClass="modalPopup">
+    <div style="text-align:center">
+        <uc1:feedback ID="fb" runat="server" />        
+    </div>
+</asp:Panel>
+
+<script type="text/javascript">
+    //  keeps track of the delete button for the row
+    //  that is going to be removed
+    var _source;
+    // keep track of the popup div
+    var _popup;
+    
+    function showConfirm(source){    
+        this._source = source;
+        this._popup = $find('mdlPopupFB');
+        
+        //  find the confirm ModalPopup and show it
+        this._popup.show();
+    }
+    
+    function okClick(){
+        //  find the confirm ModalPopup and hide it
+        //this._popup.hide();
+        //  use the cached button as the postback source
+        
+       var btnsrc = document.getElementById('ctl00$fb$btnOk');
+        __doPostBack(btnsrc.name, '');
+    }
+    
+    function cancelClick(){
+        //  find the confirm ModalPopup and hide it 
+        this._popup.hide();
+        //  clear the event source
+        this._source = null;
+        this._popup = null;
+    }
+</script>
+<%--END : FEEDBACK--%>
+</form>
+</body>
+</html>

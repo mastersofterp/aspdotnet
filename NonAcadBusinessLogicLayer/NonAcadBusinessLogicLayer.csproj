@@ -1,0 +1,490 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{234DA982-1952-4383-9C8C-63D13160C637}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NonAcadBusinessLogicLayer</RootNamespace>
+    <AssemblyName>NonAcadBusinessLogicLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\PresentationLayer\Bin\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Enterprise.Viewing.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportAppServer.ClientDoc, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.VSDesigner, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PresentationLayer\Bin\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessEntities\Account\AccountConfiguration.cs" />
+    <Compile Include="BusinessEntities\Account\AccountMaster.cs" />
+    <Compile Include="BusinessEntities\Account\AccountPassingAuthority.cs" />
+    <Compile Include="BusinessEntities\Account\AccountPaymentType.cs" />
+    <Compile Include="BusinessEntities\Account\AccountTransaction.cs" />
+    <Compile Include="BusinessEntities\Account\Account_Master.cs" />
+    <Compile Include="BusinessEntities\Account\Acc_BudgetDetailsEnrty_Entity.cs" />
+    <Compile Include="BusinessEntities\Account\Acc_BudgetDetails_Entry.cs" />
+    <Compile Include="BusinessEntities\Account\BackupStorageClass.cs" />
+    <Compile Include="BusinessEntities\Account\BankMaster.cs" />
+    <Compile Include="BusinessEntities\Account\BillDetails.cs" />
+    <Compile Include="BusinessEntities\Account\budgetHead.cs" />
+    <Compile Include="BusinessEntities\Account\BudgetHeadEntity.cs" />
+    <Compile Include="BusinessEntities\Account\CashBook.cs" />
+    <Compile Include="BusinessEntities\Account\ChequePrintMaster.cs" />
+    <Compile Include="BusinessEntities\Account\CombinedCashBankBook.cs" />
+    <Compile Include="BusinessEntities\Account\CostCenter.cs" />
+    <Compile Include="BusinessEntities\Account\Depreciation.cs" />
+    <Compile Include="BusinessEntities\Account\FeeLedgerHeadMaping.cs" />
+    <Compile Include="BusinessEntities\Account\FinCashBook.cs" />
+    <Compile Include="BusinessEntities\Account\FixedDepositeClass.cs" />
+    <Compile Include="BusinessEntities\Account\Grid_Entity.cs" />
+    <Compile Include="BusinessEntities\Account\IncomeExpenBalanceSheet.cs" />
+    <Compile Include="BusinessEntities\Account\MainGroup.cs" />
+    <Compile Include="BusinessEntities\Account\Party.cs" />
+    <Compile Include="BusinessEntities\Account\PayeeMaster.cs" />
+    <Compile Include="BusinessEntities\Account\RaisingPaymentBill.cs" />
+    <Compile Include="BusinessEntities\Account\ReceiptPayment.cs" />
+    <Compile Include="BusinessEntities\Account\SectionHead.cs" />
+    <Compile Include="BusinessEntities\Account\SponserProject.cs" />
+    <Compile Include="BusinessEntities\Account\storeIntegration.cs" />
+    <Compile Include="BusinessEntities\Account\TrailBalanceReport.cs" />
+    <Compile Include="BusinessEntities\Account\Trans.cs" />
+    <Compile Include="BusinessEntities\Account\VoucherPhoto.cs" />
+    <Compile Include="BusinessEntities\BioMetrics\BioMetrics.cs" />
+    <Compile Include="BusinessEntities\Complaints\Complaint.cs" />
+    <Compile Include="BusinessEntities\DCMNTSCN\Documentation.cs" />
+    <Compile Include="BusinessEntities\DISPATCH\CarrierMaster.cs" />
+    <Compile Include="BusinessEntities\DISPATCH\DispatchPostType.cs" />
+    <Compile Include="BusinessEntities\DISPATCH\IOTRAN.cs" />
+    <Compile Include="BusinessEntities\DISPATCH\IOTranRec.cs" />
+    <Compile Include="BusinessEntities\DISPATCH\weight.cs" />
+    <Compile Include="BusinessEntities\EMP_APPRAISAL\AppraisalPassingAuthorityEnt.cs" />
+    <Compile Include="BusinessEntities\EMP_APPRAISAL\EmpApprEnt.cs" />
+    <Compile Include="BusinessEntities\EMP_APPRAISAL\EmpSessionEnt.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\EMP_Attandance.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\Leaves.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\OD.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\PostAssignmentMaster.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\PostMaster.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\QuotaMaster.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\LEAVES\SchoolMaster.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\ShiftInchargeEntity.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\ShiftManagement.cs" />
+    <Compile Include="BusinessEntities\ESTABLISHMENT\Shifts.cs" />
+    <Compile Include="BusinessEntities\ESTATE\BillPayment.cs" />
+    <Compile Include="BusinessEntities\ESTATE\BlockMaster.cs" />
+    <Compile Include="BusinessEntities\ESTATE\ConsumerMasterEntity.cs" />
+    <Compile Include="BusinessEntities\ESTATE\ConsumerTypeMaster.cs" />
+    <Compile Include="BusinessEntities\ESTATE\EnergyMeterReading.cs" />
+    <Compile Include="BusinessEntities\ESTATE\Masterial_Master.cs" />
+    <Compile Include="BusinessEntities\ESTATE\MeterChange.cs" />
+    <Compile Include="BusinessEntities\ESTATE\MeterNumber_Master.cs" />
+    <Compile Include="BusinessEntities\ESTATE\MeterTarrif.cs" />
+    <Compile Include="BusinessEntities\ESTATE\MeterTypeCharges_Master.cs" />
+    <Compile Include="BusinessEntities\ESTATE\MeterTypeName.cs" />
+    <Compile Include="BusinessEntities\ESTATE\OnlineApp.cs" />
+    <Compile Include="BusinessEntities\ESTATE\QuarterAllotment.cs" />
+    <Compile Include="BusinessEntities\ESTATE\QuarterVacant.cs" />
+    <Compile Include="BusinessEntities\ESTATE\Quarter_Occupant.cs" />
+    <Compile Include="BusinessEntities\ESTATE\QuaterType_Master.cs" />
+    <Compile Include="BusinessEntities\ESTATE\Quater_Master.cs" />
+    <Compile Include="BusinessEntities\ESTATE\Temp_Employee.cs" />
+    <Compile Include="BusinessEntities\ESTATE\WaterMeterReading.cs" />
+    <Compile Include="BusinessEntities\FileMovement\FileMovement.cs" />
+    <Compile Include="BusinessEntities\GrievanceRedressal\GrievanceEntity.cs" />
+    <Compile Include="BusinessEntities\GuestHouse\GuestHouse.cs" />
+    <Compile Include="BusinessEntities\HEALTH\DirectMIssue.cs" />
+    <Compile Include="BusinessEntities\HEALTH\DisposableItemIssue_Ent.cs" />
+    <Compile Include="BusinessEntities\HEALTH\Health.cs" />
+    <Compile Include="BusinessEntities\HEALTH\HealthTransactions.cs" />
+    <Compile Include="BusinessEntities\HEALTH\Health_Invoice_Item.cs" />
+    <Compile Include="BusinessEntities\HEALTH\LabMaster.cs" />
+    <Compile Include="BusinessEntities\HEALTH\StockMaster.cs" />
+    <Compile Include="BusinessEntities\ITLE\Assignment.cs" />
+    <Compile Include="BusinessEntities\ITLE\CopyQuestionToNextSessionEnt.cs" />
+    <Compile Include="BusinessEntities\ITLE\ExecutedTPlan.cs" />
+    <Compile Include="BusinessEntities\ITLE\IAnnouncement.cs" />
+    <Compile Include="BusinessEntities\ITLE\IFAQMaster.cs" />
+    <Compile Include="BusinessEntities\ITLE\IFileSizeConfiguration.cs" />
+    <Compile Include="BusinessEntities\ITLE\IForumMaster.cs" />
+    <Compile Include="BusinessEntities\ITLE\ILecture.cs" />
+    <Compile Include="BusinessEntities\ITLE\ILibrary.cs" />
+    <Compile Include="BusinessEntities\ITLE\IMail.cs" />
+    <Compile Include="BusinessEntities\ITLE\IPersonal_Calendar.cs" />
+    <Compile Include="BusinessEntities\ITLE\IQuestionbank.cs" />
+    <Compile Include="BusinessEntities\ITLE\ISyllabus.cs" />
+    <Compile Include="BusinessEntities\ITLE\ITeachingPlan.cs" />
+    <Compile Include="BusinessEntities\ITLE\ITestMaster.cs" />
+    <Compile Include="BusinessEntities\ITLE\ITLETestMaster.cs" />
+    <Compile Include="BusinessEntities\ITLE\ITLE_Chat.cs" />
+    <Compile Include="BusinessEntities\ITLE\ITLE_RequestAllowrestest.cs" />
+    <Compile Include="BusinessEntities\ITLE\Mail.cs" />
+    <Compile Include="BusinessEntities\ITLE\Request_AllowingRetest.cs" />
+    <Compile Include="BusinessEntities\ITLE\TestResult.cs" />
+    <Compile Include="BusinessEntities\ITLE\Video.cs" />
+    <Compile Include="BusinessEntities\MEETING_MANAGEMENT\MeetingEntity.cs" />
+    <Compile Include="BusinessEntities\MEETING_MANAGEMENT\MeetingMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\AdvancePassingAuthority.cs" />
+    <Compile Include="BusinessEntities\Payroll\EmpMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\FieldMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITChalanTranEntry.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITChallanEntry.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITConfiguration.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITDeclaration.cs" />
+    <Compile Include="BusinessEntities\Payroll\ItemMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITHRACALCULATE.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\ITRule.cs" />
+    <Compile Include="BusinessEntities\Payroll\PayArrearsEntity.cs" />
+    <Compile Include="BusinessEntities\Payroll\PayConfiguration.cs" />
+    <Compile Include="BusinessEntities\Payroll\PayDesignationMas.cs" />
+    <Compile Include="BusinessEntities\Payroll\PayMaster.cs" />
+    <Compile Include="BusinessEntities\Payroll\Payroll.cs" />
+    <Compile Include="BusinessEntities\Payroll\Pay_FinancialYear.cs" />
+    <Compile Include="BusinessEntities\Payroll\Pay_Supplimentary_Bill.cs" />
+    <Compile Include="BusinessEntities\Payroll\Pay_Supplimentary_Bill_Guest.cs" />
+    <Compile Include="BusinessEntities\Payroll\PF\GPF.cs" />
+    <Compile Include="BusinessEntities\Payroll\PF\PF.cs" />
+    <Compile Include="BusinessEntities\Payroll\ServiceBook.cs" />
+    <Compile Include="BusinessEntities\Payroll\Str_Budget.cs" />
+    <Compile Include="BusinessEntities\Payroll\Str_DeptRequest.cs" />
+    <Compile Include="BusinessEntities\Payroll\Vendor.cs" />
+    <Compile Include="BusinessEntities\Payroll\WithheldWithDrawn.cs" />
+    <Compile Include="BusinessEntities\Sms\Sms.cs" />
+    <Compile Include="BusinessEntities\Sports\EventApprovalEnt.cs" />
+    <Compile Include="BusinessEntities\Sports\EventKitEnt.cs" />
+    <Compile Include="BusinessEntities\Sports\PassingAuthorityEnt.cs" />
+    <Compile Include="BusinessEntities\Sports\PlanSchedule.cs" />
+    <Compile Include="BusinessEntities\Sports\Sport.cs" />
+    <Compile Include="BusinessEntities\Sports\Sports_Invoice_Item.cs" />
+    <Compile Include="BusinessEntities\STORES\DSRITEM.cs" />
+    <Compile Include="BusinessEntities\STORES\DSRTax.cs" />
+    <Compile Include="BusinessEntities\STORES\FieldMaster.cs" />
+    <Compile Include="BusinessEntities\STORES\ItemMaster.cs" />
+    <Compile Include="BusinessEntities\STORES\StoreMaster.cs" />
+    <Compile Include="BusinessEntities\STORES\StrGRNEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\StrSecurityPassEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_AMC_ENT.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Budget.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_CalibartionEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_ConfigurationEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_DeptRequest.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_DSR.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Entry_Goods.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_INDENT.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Invoice.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Invoice_Item.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Invoice_Tax.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_ISSUE_ITEM.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_ItemService.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_ITEM_ACCEPTANCE.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_JvStockEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_PARTY_FIELD_ENTRY.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_PARTY_ITEM_ENTRY.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Purchase_Order.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_Quotation_Tender.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_SerialNumber.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_TENDER_FIELD_ENTRY.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_TENDER_ITEM_ENTRY.cs" />
+    <Compile Include="BusinessEntities\STORES\STR_TENDER_VENDOR.cs" />
+    <Compile Include="BusinessEntities\STORES\Str_VendorPaymentEnt.cs" />
+    <Compile Include="BusinessEntities\STORES\Vendor.cs" />
+    <Compile Include="BusinessEntities\Tally_Control\Ent_CompanyConfig.cs" />
+    <Compile Include="BusinessEntities\Tally_Control\Ent_GetRecordsForTallyTransfer.cs" />
+    <Compile Include="BusinessEntities\Tally_Control\Ent_TallyConfig.cs" />
+    <Compile Include="BusinessEntities\Tally_Control\Ent_TallyFeeHeads.cs" />
+    <Compile Include="BusinessEntities\Tally_Control\Ent_TransferRecordsToTally.cs" />
+    <Compile Include="BusinessEntities\VEHICLE_MANAGEMENT\VM.cs" />
+    <Compile Include="BusinessLogic\Account\AccountConfigurationController.cs" />
+    <Compile Include="BusinessLogic\Account\AccountingVouchersController.cs" />
+    <Compile Include="BusinessLogic\Account\AccountPassingAuthorityController.cs" />
+    <Compile Include="BusinessLogic\Account\AccountPaymentTypeController.cs" />
+    <Compile Include="BusinessLogic\Account\AccountTransactionController.cs" />
+    <Compile Include="BusinessLogic\Account\Acc_BudgetDetailsEnrty_Controller.cs" />
+    <Compile Include="BusinessLogic\Account\Acc_BudgetHead_newController.cs" />
+    <Compile Include="BusinessLogic\Account\AutoCompleteController.cs" />
+    <Compile Include="BusinessLogic\Account\budgetHeadController.cs" />
+    <Compile Include="BusinessLogic\Account\CashBankGroupController.cs" />
+    <Compile Include="BusinessLogic\Account\CashBookController.cs" />
+    <Compile Include="BusinessLogic\Account\CombinedCashBankBookController.cs" />
+    <Compile Include="BusinessLogic\Account\CostCenterController.cs" />
+    <Compile Include="BusinessLogic\Account\DeleteStoreInvoiceJournalController.cs" />
+    <Compile Include="BusinessLogic\Account\DepreciationController.cs" />
+    <Compile Include="BusinessLogic\Account\ExportExcelController.cs" />
+    <Compile Include="BusinessLogic\Account\FeesRefundController.cs" />
+    <Compile Include="BusinessLogic\Account\FeesTransferStudentwiseController.cs" />
+    <Compile Include="BusinessLogic\Account\FinanceCashBookController.cs" />
+    <Compile Include="BusinessLogic\Account\FinCashBookController.cs" />
+    <Compile Include="BusinessLogic\Account\Grid_Controller.cs" />
+    <Compile Include="BusinessLogic\Account\IncomeExpenBalanceSheetController.cs" />
+    <Compile Include="BusinessLogic\Account\MainGroupController.cs" />
+    <Compile Include="BusinessLogic\Account\PartyController.cs" />
+    <Compile Include="BusinessLogic\Account\RaisingPaymentBillController.cs" />
+    <Compile Include="BusinessLogic\Account\ReceiptPaymentController.cs" />
+    <Compile Include="BusinessLogic\Account\ScheduleDefineController.cs" />
+    <Compile Include="BusinessLogic\Account\SectionHeadController.cs" />
+    <Compile Include="BusinessLogic\Account\SponsorProjectController.cs" />
+    <Compile Include="BusinessLogic\Account\storeIntegrationController.cs" />
+    <Compile Include="BusinessLogic\Account\TallyDataTransfer.cs" />
+    <Compile Include="BusinessLogic\Account\TrialBalanceReportController.cs" />
+    <Compile Include="BusinessLogic\BioMetrics\BioMetricsController.cs" />
+    <Compile Include="BusinessLogic\BlobStorage\BlobController.cs" />
+    <Compile Include="BusinessLogic\Complaints\ComplaintController.cs" />
+    <Compile Include="BusinessLogic\Complaints\MailSender.cs" />
+    <Compile Include="BusinessLogic\DCMNTSCN\DocumentController.cs" />
+    <Compile Include="BusinessLogic\DISPATCH\CarrierController.cs" />
+    <Compile Include="BusinessLogic\DISPATCH\DispatchPostTypeController.cs" />
+    <Compile Include="BusinessLogic\DISPATCH\IOTranController.cs" />
+    <Compile Include="BusinessLogic\DISPATCH\WeightController.cs" />
+    <Compile Include="BusinessLogic\EMP_APPRAISAL\AppraisalPassingAuthorityCon.cs" />
+    <Compile Include="BusinessLogic\EMP_APPRAISAL\EmployeeAppraisal_Controller.cs" />
+    <Compile Include="BusinessLogic\EMP_APPRAISAL\EmpSessionCon.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\DAC.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\EMP_Attandance_Controller.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LeaveAttendanceProcessController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\AppointmentHeadController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\EnCashmentControllar.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\LeavesController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\PostAssignmentController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\PostController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\QuotaController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\LEAVES\SchoolController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\lockUlockAttendanceController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\ShiftInchargeController.cs" />
+    <Compile Include="BusinessLogic\ESTABLISHMENT\ShiftManagementController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\BillPaymentController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\ConsumerMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\ConsumerTypeMasterCont.cs" />
+    <Compile Include="BusinessLogic\ESTATE\EnergyMeterReadingCont.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MaterialMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MeterChangeCont.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MeterNumberMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MeterTeriffController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MeterTypeChargesMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\MeterTypeNamecontroller.cs" />
+    <Compile Include="BusinessLogic\ESTATE\Monthlybilllock_controller.cs" />
+    <Compile Include="BusinessLogic\ESTATE\NABlockController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\OnlineAppController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\QuarterAllotmentController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\QuarterOccupantController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\QuarterVacantCont.cs" />
+    <Compile Include="BusinessLogic\ESTATE\QuaterMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\QuaterTypeMasterController.cs" />
+    <Compile Include="BusinessLogic\ESTATE\Temp_Employee_Controller.cs" />
+    <Compile Include="BusinessLogic\ESTATE\WaterMeterReadingCont.cs" />
+    <Compile Include="BusinessLogic\FileMovement\FileMovementController.cs" />
+    <Compile Include="BusinessLogic\GrievanceRedressal\GrievanceController.cs" />
+    <Compile Include="BusinessLogic\GuestHouse\GuestHouseController.cs" />
+    <Compile Include="BusinessLogic\HEALTH\DirectMIssueController.cs" />
+    <Compile Include="BusinessLogic\HEALTH\DisposableItemIssueCon.cs" />
+    <Compile Include="BusinessLogic\HEALTH\HealthAutoComplete.cs" />
+    <Compile Include="BusinessLogic\HEALTH\HealthTransactionController.cs" />
+    <Compile Include="BusinessLogic\HEALTH\HelMasterController.cs" />
+    <Compile Include="BusinessLogic\HEALTH\LabController.cs" />
+    <Compile Include="BusinessLogic\HEALTH\StockMaintnance.cs" />
+    <Compile Include="BusinessLogic\Itle\AssignmentController.cs" />
+    <Compile Include="BusinessLogic\Itle\CopyQuestionToNextSession.cs" />
+    <Compile Include="BusinessLogic\Itle\CourseController.cs" />
+    <Compile Include="BusinessLogic\Itle\CourseControlleritle.cs" />
+    <Compile Include="BusinessLogic\Itle\IAnnouncementController.cs" />
+    <Compile Include="BusinessLogic\Itle\IFAQController.cs" />
+    <Compile Include="BusinessLogic\Itle\IFileSizeConfigurationController.cs" />
+    <Compile Include="BusinessLogic\Itle\IForumMasterController.cs" />
+    <Compile Include="BusinessLogic\Itle\ILectureNotesController.cs" />
+    <Compile Include="BusinessLogic\Itle\ILibraryController.cs" />
+    <Compile Include="BusinessLogic\Itle\IMailController.cs" />
+    <Compile Include="BusinessLogic\Itle\IPersonal_CalendarController.cs" />
+    <Compile Include="BusinessLogic\Itle\IQuestionbankController.cs" />
+    <Compile Include="BusinessLogic\Itle\ISyllabusController.cs" />
+    <Compile Include="BusinessLogic\Itle\ITeachingPlanController.cs" />
+    <Compile Include="BusinessLogic\Itle\ITestMasterController.cs" />
+    <Compile Include="BusinessLogic\Itle\ITestResultController.cs" />
+    <Compile Include="BusinessLogic\Itle\ItleAutoComplete.cs" />
+    <Compile Include="BusinessLogic\Itle\ITLETestController.cs" />
+    <Compile Include="BusinessLogic\Itle\ITLE_ChatController.cs" />
+    <Compile Include="BusinessLogic\Itle\Request_Allow_Retest.cs" />
+    <Compile Include="BusinessLogic\Itle\VideoController.cs" />
+    <Compile Include="BusinessLogic\MEETING_MANAGEMENT\MeetingController.cs" />
+    <Compile Include="BusinessLogic\MEETING_MANAGEMENT\MM_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\Payroll\AdvancePassingAuthorityController.cs" />
+    <Compile Include="BusinessLogic\Payroll\AttendanceController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ChangeInMasterFileController.cs" />
+    <Compile Include="BusinessLogic\Payroll\DepartmentController.cs" />
+    <Compile Include="BusinessLogic\Payroll\DepartmentPreviliageController.cs" />
+    <Compile Include="BusinessLogic\Payroll\DeptDesigMaster.cs" />
+    <Compile Include="BusinessLogic\Payroll\EmpCreateController.cs" />
+    <Compile Include="BusinessLogic\Payroll\EmployeeLockUnlockController.cs" />
+    <Compile Include="BusinessLogic\Payroll\EmpMasController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ExcelPayHeadImportController.cs" />
+    <Compile Include="BusinessLogic\Payroll\FieldController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ITCollegeConfiguration.cs" />
+    <Compile Include="BusinessLogic\Payroll\ITDeclarationController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ItemMasterController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ITHraCalculateController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ITMasController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ITProcessController.cs" />
+    <Compile Include="BusinessLogic\Payroll\lockUlockSalaryController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ModifySalaryController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayArrearsController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayConfigurationController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayDaysalController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayDesignationController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayHeadPrivilegesController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayITAutoComplete.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayIT_TransferController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayMasController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayOverRuleController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PayRefLinkController.cs" />
+    <Compile Include="BusinessLogic\Payroll\Payroll_Report_Controller.cs" />
+    <Compile Include="BusinessLogic\Payroll\Pay_FinancialYearController.cs" />
+    <Compile Include="BusinessLogic\Payroll\Pay_ModifyPaySlipController.cs" />
+    <Compile Include="BusinessLogic\Payroll\Pay_SupplimentaryBill_Controller.cs" />
+    <Compile Include="BusinessLogic\Payroll\Pay_Supplimentary_Bill_Guest_Controller.cs" />
+    <Compile Include="BusinessLogic\Payroll\Pay_UpdatePayHeadEmpWiseController.cs" />
+    <Compile Include="BusinessLogic\Payroll\PF\CPF_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\Payroll\PF\GPF_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\Payroll\PF\PFCONTROLLER.cs" />
+    <Compile Include="BusinessLogic\Payroll\SalaryProcessController.cs" />
+    <Compile Include="BusinessLogic\Payroll\ServiceBookController.cs" />
+    <Compile Include="BusinessLogic\Payroll\WithheldWithdrawnController.cs" />
+    <Compile Include="BusinessLogic\Sms\SmsController.cs" />
+    <Compile Include="BusinessLogic\Sports\EventApprovalCon.cs" />
+    <Compile Include="BusinessLogic\Sports\KitController.cs" />
+    <Compile Include="BusinessLogic\Sports\PassingAuthorityController.cs" />
+    <Compile Include="BusinessLogic\Sports\PlanScheduleCon.cs" />
+    <Compile Include="BusinessLogic\Sports\SportController.cs" />
+    <Compile Include="BusinessLogic\STORES\DepartmentController.cs" />
+    <Compile Include="BusinessLogic\STORES\DepartmentRegisterController.cs" />
+    <Compile Include="BusinessLogic\STORES\FieldController.cs" />
+    <Compile Include="BusinessLogic\STORES\ItemMasterController.cs" />
+    <Compile Include="BusinessLogic\STORES\NewsPaperController.cs" />
+    <Compile Include="BusinessLogic\STORES\PurchaseComiteeController.cs" />
+    <Compile Include="BusinessLogic\STORES\StoreMasterController.cs" />
+    <Compile Include="BusinessLogic\STORES\StrGRNCon.cs" />
+    <Compile Include="BusinessLogic\STORES\StrSecurityPassCon.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_AMC_Con.cs" />
+    <Compile Include="BusinessLogic\STORES\STR_BudgetController.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Calibration.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_ConfigurationCon.cs" />
+    <Compile Include="BusinessLogic\STORES\STR_DEPT_REQ_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_DSR_Entry_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Invoice_Entry_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\STR_ISSUE_ITEM_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\STORES\STR_ISSUE_ITEM_DEPARTMENT_CONTROLLER.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_ItemServiceController.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_JvStockCon.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Purchase_Order_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Quotationa_PO_Approval_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Quotation_Tender_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Recommandaion_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_SerialNumberGenController.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Tender_Recommandation_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_VendorPaymentCon.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Vendor_Quotation_Entry_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\Str_Vendor_Tender_Entry_Controller.cs" />
+    <Compile Include="BusinessLogic\STORES\VendorController.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_CompanyConfig.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_GetRecordsForTallyTransfer.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_PayrollTallyConfig.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_TallyConfig.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_TallyFeeHeads.cs" />
+    <Compile Include="BusinessLogic\Tally\Con_TransferRecordsToTally.cs" />
+    <Compile Include="BusinessLogic\VEHICLE_MANAGEMENT\VehicleRequisitionController.cs" />
+    <Compile Include="BusinessLogic\VEHICLE_MANAGEMENT\VMController.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessEntities\Payroll\GPFCPF\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
+      <Project>{5ce46bff-aa63-4278-ab6e-5037116040fd}</Project>
+      <Name>BusinessLogicLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DATAACCESSLAYER\DataAccessLayer.csproj">
+      <Project>{73aaea5f-7112-42f7-9809-a2a6c0a93ead}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BusinessEntities\Account\vssver2.scc" />
+    <None Include="BusinessEntities\ITLE\vssver2.scc" />
+    <None Include="BusinessEntities\Payroll\PF\vssver2.scc" />
+    <None Include="BusinessEntities\Payroll\vssver2.scc" />
+    <None Include="BusinessEntities\Sports\vssver2.scc" />
+    <None Include="BusinessLogic\Account\vssver2.scc" />
+    <None Include="BusinessLogic\ESTABLISHMENT\Documentation\vssver.scc" />
+    <None Include="BusinessLogic\Itle\vssver2.scc" />
+    <None Include="BusinessLogic\Payroll\PF\vssver2.scc" />
+    <None Include="BusinessLogic\Payroll\vssver2.scc" />
+    <None Include="BusinessLogic\Sports\vssver2.scc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\BusinessLogicLayer.dll" />
+    <Content Include="bin\Debug\NonAcadBusinessLogicLayer.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

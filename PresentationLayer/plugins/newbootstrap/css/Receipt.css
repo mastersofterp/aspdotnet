@@ -1,0 +1,142 @@
+
+@charset "utf-8";
+
+@font-face {
+    font-family: 'opensans';
+    src: url('../plugins/newbootstrap/webfont/opensans/regular/opensans-regular-webfont.eot');
+    src: url('../../newbootstrap/webfont/OpenSans-Regular-webfont.eot?iefix') format('eot'), url('../../newbootstrap/webfont/OpenSans-Regular-webfont.woff') format('woff'), url('../../newbootstrap/webfont/OpenSans-Regular-webfont.ttf') format('truetype'), url('../../newbootstrap/webfont/OpenSans-Regular-webfont.svg') format('svg');
+}
+
+@font-face {
+    font-family: 'opensans-bold';
+    src: url('../../newbootstrap/webfont/opensans-semibold-webfont.eot');
+    src: url('../../newbootstrap/webfont/OpenSans-Bold-webfont.eot?iefix') format('eot'), url('../../newbootstrap/webfont/OpenSans-Bold-webfont.woff') format('woff'), url('../../newbootstrap/webfont/OpenSans-Bold-webfont.ttf') format('truetype'), url('../../newbootstrap/webfont/OpenSans-Bold-webfont.svg') format('svg');
+}
+
+
+@font-face {
+    font-family: 'opensans-semibold';
+    src: url('../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot');
+    src: url('../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.eot?iefix') format('eot'), url('../../newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.woff') format('woff'), url('../../newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.ttf') format('truetype'), url('../plugins/newbootstrap/webfont/opensans/semibold/opensans-semibold-webfont.svg') format('svg');
+}
+
+body {
+    font-size: 10px;
+    font-family: 'opensans', sans-serif;
+}
+
+.receipt-format {
+    margin-top: 15px;
+}
+
+.receipt-bor {
+    /*border-left: 2px dashed #212529;
+    border-right: 2px dashed #212529;*/
+    border: 1px solid #212529;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.col-md-6.pr-1 {
+    border-right: 2px dashed #212529;
+}
+
+.receipt-head, .receipt-detail {
+    border: 1px solid #212529;
+    padding: 5px;
+}
+
+    .receipt-head img {
+        width: 40px;
+        height: 50px;
+    }
+
+    .receipt-head h5 {
+        font-size: 10px;
+    }
+
+    .receipt-head h3 {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .receipt-head h6 {
+        font-size: 10px;
+    }
+.receipt-copy {
+    width: 105px;
+}
+.receipt-copy span {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.receipt-body h5 {
+    font-size: 11px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0;
+    width: 72px;
+}
+
+.receipt-date label {
+    width: auto;
+}
+
+i {
+    font-size: 9px;
+}
+
+.rec-num {
+    color: #ff0000;
+}
+
+.table thead tr {
+    border: 1px solid #212529;
+}
+
+.table thead th {
+    border: 0;
+}
+
+.table td, .table th {
+    padding: .1rem 0.25rem;
+    vertical-align: top;
+    border-top: 0;
+    /*border-bottom: 1px dashed #212529;*/
+}
+
+.tbl-cheque tbody {
+    border: 1px solid #000 !important;
+}
+
+.total-amount td {
+    border-top: 1px solid #212529;
+    border-bottom: 1px solid #212529;
+}
+
+.remark label {
+    width: 115px;
+}
+
+.receipt-amount label {
+    width: auto;
+}
+
+.signature label {
+    width: auto;
+}
+
+.receipt-footer {
+    border-top: 1px dashed #212529;
+}
+
+@media (max-width: 576px) {
+    .receipt-bor {
+        border-left: 0;
+        border-right: 0;
+    }
+}

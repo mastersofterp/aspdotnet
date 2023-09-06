@@ -1,0 +1,40 @@
+﻿<asp:TextBox runat="server" CssClass="form-control"/>
+
+<asp:Label runat="server" ></asp:Label>
+<asp:Label runat="server" SkinID="lblHead"></asp:Label>
+<asp:Label runat="server" SkinID="lblTopHead"></asp:Label>
+<asp:Label SkinID="Errorlbl" runat="server"></asp:Label>
+<asp:Label SkinID="Msglbl" runat="server"></asp:Label>
+
+<asp:DropDownList runat="server" CssClass="form-control"/>
+
+<asp:Button runat="server" />
+
+<asp:RequiredFieldValidator runat="server" ></asp:RequiredFieldValidator>
+
+<asp:ValidationSummary runat="server"/>
+
+<asp:TreeView runat="server" ImageSet="Simple">
+    <HoverNodeStyle ForeColor="Red"  />
+    <SelectedNodeStyle Font-Underline="True" ForeColor="Red"  />
+    <NodeStyle HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+</asp:TreeView>   
+
+<asp:LinkButton runat="server"/>
+
+<asp:LinkButton SkinID="LinkAddNew" runat="server" />
+
+<asp:Calendar SkinID="AcademicCal" runat="server" Height="180px" Width="100%"
+        FirstDayOfWeek="Monday" NextMonthText="" PrevMonthText="" 
+        ShowGridLines="True" Font-Bold="False">
+    <TodayDayStyle BackColor="#A0A0F5" ForeColor="White" />
+    <OtherMonthDayStyle ForeColor="White" />
+    <DayStyle BackColor="White" />
+    <DayHeaderStyle BackColor="#6699FF" BorderColor="White" BorderWidth="1px" 
+        ForeColor="White" />
+    <TitleStyle BackColor="#8CC6FF" BorderColor="Black" BorderWidth="1px" 
+        Font-Bold="True" />
+</asp:Calendar>
+
+
+<asp:Label SkinID="lblmsg" runat="server"></asp:Label>

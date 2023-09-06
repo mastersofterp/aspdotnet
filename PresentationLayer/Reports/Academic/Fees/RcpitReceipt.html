@@ -1,0 +1,590 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Receipt Format</title>
+    <link rel="icon" type="image/png" href="img/fevicon.png">
+    <link href="../../../plugins/newbootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link href="../../../plugins/newbootstrap/css/style.css" rel="stylesheet" />
+
+</head>
+<style>
+    .receipt-head img {
+        width: 54px;
+        height: 50px;
+    }
+</style>
+<body>
+    <div class="receipt-format">
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-md-6 pr-md-0 pt-2 pb-2">
+                    <div class="receipt-bor pl-md-2 pr-md-2 mr-1">
+                        <div class="receipt-head">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex alighn-items-center">
+                                    <img id="O_ClgLogo" alt="logo" />
+                                    <div class="pt-1 pl-2">
+                                        <h3 class="mb-1" id="O_CollegeName"></h3>
+                                        <h6 class="mb-0" id="O_CollegeAddr"></h6>
+                                    </div>
+                                </div>
+                                <div class="receipt-copy">
+                                    <span class="text-secondary">OFFICE COPY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="receipt-body">
+                            <div class="receipt-detail mt-2">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>Receipt No. </label>
+                                        : <span class="rec-num" id="O_Rec_No"></span>
+                                        <br />
+                                        <label>Enroll. No. </label>
+                                        : <span id="O_Enroll_No"></span>
+                                        <br />
+                                        <label>Category </label>
+                                        : <span id="O_Category"></span>
+                                        <br />
+                                        <label>Degree </label>
+                                        : <span id="O_Degree"></span>
+                                        <br />
+                                        <label>Branch </label>
+                                        : <span id="O_Branch"></span>
+                                        <br />
+                                        <label>Student Name</label>
+                                        : <span id="O_StudName"></span>
+                                        <br />
+                                        <label>Father Name</label>
+                                        : <span id="O_fatherName"></span>
+                                        <br />
+                                        <label>Mode of Payment </label>
+                                        : <span id="O_ModeOfPay"></span>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>Date </label>
+                                        : <span id="O_RecDate"></span>
+                                        <br />
+                                        <label>Year/Semester </label>
+                                        : <span id="O_YrSem"></span>
+                                        <br />
+                                        <label>Fee Type </label>
+                                        : <span id="O_FeeType"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table mb-0 mt-2">
+                                <thead>
+                                    <tr class="border-left-0 border-right-0">
+                                        <th>Received the following</th>
+                                        <th class="text-right">( <i class="fas fa-rupee-sign"></i>)Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="O_FeeItems">
+                                    <!-- <tr id="O_FeeItems">
+                                      <td id="O_FeeHead"></td>
+                                        <td class="text-right" id="O_Fee"></td>                             
+                                    </tr>   -->
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-amount">
+                                        <td class="font-weight-bold">Total :</td>
+                                        <td class="text-right" id="O_TotalAmt"><i class="fas fa-rupee-sign"></i></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <div class="receipt-amount p-1 pt-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>In words </label>
+                                        : <span id="O_TotalAmtInWord"></span>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <label>Amount </label>
+                                                : <span id="O_OnlineFee"></span>
+                                            </div>
+                                            <div>
+                                                <label>D.D.Amount </label>
+                                                : <span id="O_DDAmt"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table tbl-cheque mb-0 mt-1">
+                                <thead>
+                                    <tr>
+                                        <th>DD/Cheque No.</th>
+                                        <th>Date</th>
+                                        <th>Issuing Bank</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border" id="O_DDTable">
+                                    <!-- <tr>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>-->
+                                </tbody>
+                            </table>
+
+                            <div class="remark p-1 pt-2">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Remark </label>
+                                        : <span id="O_Remark"></span>
+                                        <br />
+                                        <label>Transaction Id/Reff. No. </label>
+                                        : <span id="O_TransReffNo"></span>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="signature float-right pt-3 mt-5">
+                                            <label>RECEIVER'S SIGNATURE</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="receipt-footer">
+                            <div class=" p-1">
+                                <div>
+                                    <label>Created By</label>
+                                    : <span id="O_CreatedBy"></span>
+                                </div>
+                                <div>
+                                    <label class="pl-1">Printed By </label>
+                                    : <span id="O_PrintedBy"></span>
+                                </div>
+                                <div>
+                                    <label>Date of printing </label>
+                                    : <span id="O_PrintDate"></span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pl-md-0 pt-2 pb-2">
+                    <div class="receipt-bor pl-md-2 pr-md-2 ml-1">
+                        <div class="receipt-head">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex alighn-items-center">
+                                    <img id="S_ClgLogo" alt="logo" />
+                                    <div class="pt-1 pl-2">
+                                        <h3 class="mb-1" id="S_CollegeName"></h3>
+                                        <h6 class="mb-0" id="S_CollegeAddr"></h6>
+                                    </div>
+                                </div>
+                                <div class="receipt-copy">
+                                    <span class="text-secondary">STUDENT COPY</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="receipt-body">
+                            <div class="receipt-detail mt-2">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>Receipt No. </label>
+                                        : <span class="rec-num" id="S_Rec_No"></span>
+                                        <br />
+                                        <label>Enroll. No. </label>
+                                        : <span id="S_Enroll_No"></span>
+                                        <br />
+                                        <label>Category </label>
+                                        : <span id="S_Category"></span>
+                                        <br />
+                                        <label>Degree </label>
+                                        : <span id="S_Degree"></span>
+                                        <br />
+                                        <label>Branch </label>
+                                        : <span id="S_Branch"></span>
+                                        <br />
+                                        <label>Student Name</label>
+                                        <span id="S_StudName"></span>
+                                        <br />
+                                        <label>Father Name</label>
+                                        : <span id="S_fatherName"></span>
+                                        <br />
+                                        <label>Mode of Payment </label>
+                                        : <span id="S_ModeOfPay"></span>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>Date </label>
+                                        : <span id="S_RecDate"></span>
+                                        <br />
+                                        <label>Year/Semester </label>
+                                        : <span id="S_YrSem"></span>
+                                        <br />
+                                        <label>Fee Type </label>
+                                        : <span id="S_FeeType"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table mb-0 mt-2">
+                                <thead>
+                                    <tr class="border-left-0 border-right-0">
+                                        <th>Received the following</th>
+                                        <th class="text-right">( <i class="fas fa-rupee-sign"></i>)Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="S_FeeItems">
+                                    <!--<tr  id="S_FeeItems">
+                                        <td>Tution Fee</td>
+                                        <td class="text-right">4,000.00</td>
+                                    </tr>-->
+                                    <!-- <tr>
+                                        <td>Lab Fee</td>
+                                        <td class="text-right">1,000.00</td>
+                                    </tr>-->
+                                </tbody>
+                                <tfoot>
+                                    <tr class="total-amount">
+                                        <td class="font-weight-bold">Total :</td>
+                                        <td class="text-right" id="S_TotalAmt"><i class="fas fa-rupee-sign"></i></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                            <div class="receipt-amount p-1 pt-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>In words </label>
+                                        : <span id="S_TotalAmtInWord"></span>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <label>Amount </label>
+                                                : <span id="S_OnlineFee"></span>
+                                            </div>
+                                            <div>
+                                                <label>D.D.Amount </label>
+                                                : <span id="S_DDAmt"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="table tbl-cheque mb-0 mt-1">
+                                <thead>
+                                    <tr>
+                                        <th>DD/Cheque No.</th>
+                                        <th>Date</th>
+                                        <th>Issuing Bank</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border" id="S_DDTable">
+                                    <!-- <tr>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>-->
+                                </tbody>
+                            </table>
+
+                            <div class="remark p-1 pt-2">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Remark </label>
+                                        : <span id="S_Remark"></span>
+                                        <br />
+                                        <label>Transaction Id/Reff. No. </label>
+                                        : <span id="S_TransReffNo"></span>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="signature float-right pt-3 mt-5">
+                                            <label>RECEIVER'S SIGNATURE</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="receipt-footer">
+                            <div class=" p-1">
+                                <div>
+                                    <label>Created By </label>
+                                    : <span id="S_CreatedBy"></span>
+                                </div>
+                                <div>
+                                    <label class="pl-1">Printed By </label>
+                                    : <span id="S_PrintedBy"></span>
+                                </div>
+                                <div>
+                                    <label>Date of printing </label>
+                                    : <span id="S_PrintDate"></span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+    <script type="text/javascript">
+        window.onload = Loadreceipt();
+        function Loadreceipt() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Idno = urlParams.get('Idno');
+            var DcrNo = urlParams.get('DcrNo');
+            var Cancel = urlParams.get('Cancel');
+            var UA_NAME = urlParams.get('UA_NAME');
+
+            $.ajax({
+                type: "GET",
+                // url: 'FeeReceiptReport.asmx/GetReceiptDetailsToPrint',
+                url: 'FeeReceiptReport.asmx/GetFeeReceiptDetailsRcpit?Idno=' + Idno + '&DcrNo=' + DcrNo + '&Cancel=' + Cancel,
+                // url: 'FeeReceiptReport.asmx/GetReceiptDetails',
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data) {
+                    // alert('success');
+                    var r = JSON.parse(data);
+                    var x = JSON.parse(r.d);
+
+                    $('#O_Rec_No').html(x[0]["REC_NO"]);
+                    $('#O_Enroll_No').html(x[0]["ENROLLNMENTNO"]);
+                    $('#O_Degree').html(x[0]["DEGREE"]);
+                    $('#O_Branch').html(x[0]["BRANCH"]);
+                    $('#O_YrSem').html(x[0]["YEARNAME"] + ' / ' + x[0]["SEMESTERNAME"]);
+                    $('#O_StudName').html(x[0]["NAME"]);
+                    $('#O_fatherName').html(x[0]["FATHERNAME"]);
+                    $('#O_FeeType').html(x[0]["PAYTYPENAME"]);
+                    $('#O_ModeOfPay').html(x[0]["PAYMENT_MODE"]);
+                    var recDT = $.date(x[0]["REC_DT"])
+                    $('#O_RecDate').html(recDT);
+                    $('#O_Remark').html(x[0]["REMARK"]);
+                    $('#O_TotalAmt').html(x[0]["TOTAL_AMT"]);
+                    $('#O_TotalAmtInWord').html(x[0]["TOTAL_AMT_IN_WORDS"]);
+                    $('#O_TransReffNo').html(x[0]["TRANS_REFNO"]);
+                    $('#O_PrintedBy').html(UA_NAME);
+                    $('#O_CreatedBy').html(x[0]["UA_FULLNAME"]);
+                    var d = new Date();
+                    var strDate = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();                   // var printDT = $.date(x[0]["REC_DT"])
+                    $('#O_PrintDate').html(strDate);
+                    $('#O_Category').html(x[0]["CASTE_CATEGORY"]);
+                    $('#O_OnlineFee').html(x[0]["TOTAL_AMT"]);
+
+                    $('#S_Rec_No').html(x[0]["REC_NO"]);
+                    $('#S_Enroll_No').html(x[0]["ENROLLNMENTNO"]);
+                    $('#S_Degree').html(x[0]["DEGREE"]);
+                    $('#S_Branch').html(x[0]["BRANCH"]);
+                    $('#S_YrSem').html(x[0]["YEARNAME"] + ' / ' + x[0]["SEMESTERNAME"]);
+                    $('#S_StudName').html(x[0]["NAME"]);
+                    $('#S_fatherName').html(x[0]["FATHERNAME"]);
+                    $('#S_FeeType').html(x[0]["PAYTYPENAME"]);
+                    $('#S_ModeOfPay').html(x[0]["PAYMENT_MODE"]);
+                    $('#S_RecDate').html(recDT);
+                    $('#S_Remark').html(x[0]["REMARK"]);
+                    $('#S_TotalAmt').html(x[0]["TOTAL_AMT"]);
+                    $('#S_TotalAmtInWord').html(x[0]["TOTAL_AMT_IN_WORDS"]);
+                    $('#S_TransReffNo').html(x[0]["TRANS_REFNO"]);
+                    $('#S_PrintedBy').html(UA_NAME);
+                    $('#S_CreatedBy').html(x[0]["UA_FULLNAME"]);
+                    $('#S_PrintDate').html(strDate);
+                    $('#S_Category').html(x[0]["CASTE_CATEGORY"]);
+                    $('#O_OnlineFee').html(x[0]["TOTAL_AMT"]);
+                    $('#S_OnlineFee').html(x[0]["TOTAL_AMT"]);
+
+                    var td = null; var td_DD = null;
+                    for (var i = 0; i < x.length ; i++) {
+                        if (x[i]["AMOUNT"] > 0) {
+                            td += '<tr><td id="O_FeeHead">' + x[i]["FEE_LONGNAME"] + '</td>';
+                            td += '<td class="text-right" id="O_Fee">' + x[i]["AMOUNT"] + '</td></tr>';
+                            $('#O_FeeItems').html(td);
+                            $('#S_FeeItems').html(td);
+                        }
+                    }
+
+                    if (x[0]["DD_AMT"] > 0) {
+                        $('#S_DDAmt').html(x[0]["DD_AMT"]);
+                        $('#O_DDAmt').html(x[0]["DD_AMT"]);
+                        $('#O_OnlineFee').html(0);
+                        $('#S_OnlineFee').html(0);
+                    }
+                    LoadDDDetails();
+                    //  LoadCollegeBanner();
+                    LoadCollegeLogo();
+                },
+                failure: function (response) {
+                    alert(response.d);
+                }
+            });
+        }
+
+        function LoadDDDetails() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var Idno = urlParams.get('Idno');
+            var DcrNo = urlParams.get('DcrNo');
+
+            $.ajax({
+                type: "GET",
+                url: 'FeeReceiptReport.asmx/GetFeeReceiptDDDetailsRcpit?Idno=' + Idno + '&DcrNo=' + DcrNo,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data) {
+                    // alert('success DD Details.');
+                    var r = JSON.parse(data);
+                    var x = JSON.parse(r.d);
+                    var td_DD = null;
+                    for (var i = 0; i < x.length ; i++) {
+                        if (x[i]["DD_AMOUNT"] > 0) {
+                            var DD_DT = $.date(x[0]["DD_DT"])
+                            td_DD += ' <tr><td>' + x[i]["DD_NO"] + '</td>';
+                            td_DD += '<td>' + DD_DT + '</td>';
+                            td_DD += '<td>' + x[i]["DD_BANK"] + '</td>';
+                            td_DD += '<td>' + x[i]["DD_AMOUNT"] + '</td></tr>';
+                            $('#O_DDTable').html(td_DD);
+                            $('#S_DDTable').html(td_DD);
+                        }
+                    }
+                },
+                failure: function (response) {
+                    alert(response.d);
+                }
+            });
+        }
+
+        function LoadCollegeBanner() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var CollegeID = urlParams.get('ClgID');
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: 'FeeReceiptReport.asmx/GetCollegeBanner?CollegeID=' + CollegeID,
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (data) {
+                    alert('success College Banner');
+                    var r = JSON.parse(data);
+                    //var x = JSON.parse(r.d);
+
+                    $('#O_CollegeName').html(r.d.Name);
+                    $('#S_CollegeName').html(r.d.Name);
+                    $('#O_CollegeAddr').html(r.d.Address);
+                    $('#S_CollegeAddr').html(r.d.Address);
+
+                    //$('#O_ClgLogo').html(r.d.COLLEGE_LOGO);
+                    //$('#S_ClgLogo').html(r.d.COLLEGE_LOGO);
+                },
+                failure: function (response) {
+                    alert(response.d);
+                }
+            });
+        }
+
+        $.date = function (dateObject) {
+            var d = new Date(dateObject);
+            var day = d.getDate();
+            var month = d.getMonth() + 1;
+            var year = d.getFullYear();
+            if (day < 10) {
+                day = "0" + day;
+            }
+            if (month < 10) {
+                month = "0" + month;
+            }
+            var date = day + "/" + month + "/" + year;
+
+            return date;
+        };
+
+        function LoadCollegeLogo() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var CollegeID = urlParams.get('ClgID');
+            $.ajax({
+                type: "GET",
+                url: 'FeeReceiptReport.asmx/GetCollegeLogo?CollegeID=' + CollegeID,
+                beforeSend: function (xhr) {
+                    xhr.overrideMimeType('text/plain; charset=x-user-defined');
+                },
+                success: function (result, textStatus, jqXHR) {
+                    if (result.length < 1) {
+                        alert("The thumbnail doesn't exist");
+                        $("#S_ClgLogo").attr("src", "data:image/png;base64,");
+                        return
+                    }
+
+                    var binary = "";
+                    var responseText = jqXHR.responseText;
+                    var xmlDoc = $.parseXML(responseText),
+                    $xml = $(responseText);
+                    var a = $($xml).find("CollegeLogo").text();
+                    var responseTextLen = a.length;
+
+                    for (i = 0; i < responseTextLen; i++) {
+                        binary += String.fromCharCode(a.charCodeAt(i) & 255)
+                    }
+                    $("#S_ClgLogo").attr("src", "data:image/png;base64," + binary);
+                    $("#O_ClgLogo").attr("src", "data:image/png;base64," + binary);
+
+                    $('#O_CollegeName').html($($xml).find("Name").text());
+                    $('#S_CollegeName').html($($xml).find("Name").text());
+                    $('#O_CollegeAddr').html($($xml).find("Address").text());
+                    $('#S_CollegeAddr').html($($xml).find("Address").text());
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert("Error in getting document " + textStatus);
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function createPDF() {
+            var element = document.getElementById('element-to-print');
+            html2pdf(element, {
+                margin: 0,
+                padding: 0,
+                filename: 'FeesReceipt.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 3, logging: true },
+                jsPDF: { unit: 'in', format: 'A4', orientation: 'L', margin: [0, 40, 0, 40], },
+                //  setDefaultFont('Arial');
+                class: createPDF
+            });
+        };
+        function printPDF() {
+            var element = document.getElementById('element-to-print');
+            //element.style.display = 'block'
+
+            var opt = {
+                margin: 1,
+                filename: 'FeesReceiptRcpit.pdf',
+                //  pagebreak: { mode: 'avoid-all', before: '.piecharrt' }
+            }
+            html2pdf(element, opt);
+            //element.style.display = 'none'
+            //   console.log('printPDF()');
+        }
+    </script>
+
+
+</body>
+</html>

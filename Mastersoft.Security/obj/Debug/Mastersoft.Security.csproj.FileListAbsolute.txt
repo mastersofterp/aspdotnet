@@ -1,0 +1,4 @@
+D:\09082023\09082023\rfc-cc-1\Mastersoft.Security\bin\Debug\Mastersoft.Security.dll
+D:\09082023\09082023\rfc-cc-1\Mastersoft.Security\bin\Debug\Mastersoft.Security.pdb
+D:\09082023\09082023\rfc-cc-1\Mastersoft.Security\obj\Debug\Mastersoft.Security.dll
+D:\09082023\09082023\rfc-cc-1\Mastersoft.Security\obj\Debug\Mastersoft.Security.pdb

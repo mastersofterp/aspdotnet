@@ -1,0 +1,581 @@
+﻿using IITMS;
+using IITMS.UAIMS;
+using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
+{
+
+    Common objCommon = new Common();
+    UAIMS_Common objUCommon = new UAIMS_Common();
+    ExamController objExamController = new ExamController();
+
+    #region "Page Event"
+    protected void Page_PreInit(object sender, EventArgs e)
+    {
+        //To Set the MasterPage
+        if (Session["masterpage"] != null)
+            objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
+        else
+            objCommon.SetMasterPage(Page, "");
+    }
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        try
+        {
+            //if (Page.IsPostBack)
+            //{
+            //    if (rbExStudent.Checked)
+            //    {
+            //        txtSeatFrom.Text = "0";
+            //        txtSeatTo.Text = "0";
+            //        txtNoOfAnswersheet.Text = "0";
+            //        txtSeatFrom.Enabled = false;
+            //        txtSeatTo.Enabled = false;
+            //    }
+            //}
+            if (!this.Page.IsPostBack)
+            {
+                //Check Session
+                if (Session["userno"] == null || Session["username"] == null ||
+                    Session["usertype"] == null || Session["userfullname"] == null)
+                {
+                    Response.Redirect("~/default.aspx");
+                }
+                else
+                {
+                    //Page Authorization
+                    this.CheckPageAuthorization();
+                    //this.BindListView();
+                    //Set the Page Title
+                    Page.Title = Session["coll_name"].ToString();
+
+                    //Load Page Help
+                    if (Request.QueryString["pageno"] != null)
+                        //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
+
+                        //ddlSession.Items.Add(new ListItem(Session["sessionname"].ToString(), Session["currentsession"].ToString()));                  
+                        ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                    //this.BindListView();
+                    ViewState["bundleno"] = null;
+                }
+                PopulateDropDown();
+                FillDropdown();
+                
+            }
+            divMsg.InnerHtml = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_AutoAssignValuer.Page_Load() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    private void CheckPageAuthorization()
+    {
+        if (Request.QueryString["pageno"] != null)
+        {
+            //Check for Authorization of Page
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString()) == false)
+            {
+                Response.Redirect("~/notauthorized.aspx?page=CreateBundle.aspx");
+            }
+        }
+        else
+        {
+            //Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=CreateBundle.aspx");
+        }
+    }
+    #endregion "Page Event"
+
+    #region "General"
+    private void FillDropdown()
+    {
+        try
+        {
+            // To Fill Dropdown of Session
+
+           // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "FLOCK = 1", "SESSIONNO DESC");
+            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 1", "SESSIONNO DESC");
+            //objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID"); 
+            int userno = Convert.ToInt32(Session["userno"]);//int onlyrtm = Convert.ToInt32(objCommon.LookUp("USER_ACC", "ISNULL(ONLY_RTM,0) ONLY_RTM", "UA_NO=" + userno));
+            int usertype = Convert.ToInt32(Session["usertype"]);
+            //String deptno = Session["userdeptno"].ToString();
+            string usename = Session["username"].ToString();
+            //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT", "SLOTNO AS SLOT", "SLOTNAME", "SLOTNO>0", "SLOTNO");
+            
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_PREEXAMINATION_CreateBundle.FillDropdown --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    #endregion "General"
+
+    #region "SelectedIndexChanged"
+
+   
+    // Slot Selection Change
+    protected void ddlSlot_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlSlot.SelectedIndex > 0)
+        {
+            //objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.CCODE = C.CCODE AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO)", "A.CCODE", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME)COURSE_NAME", "SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND EXAMDATE = CONVERT(DATETIME,'" + txtDtOfPaper.Text + "',103)", "COURSE_NAME");
+            objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.COURSENO = C.COURSENO AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO) INNER JOIN ACD_SESSION_MASTER SM ON (A.SESSIONNO = SM.SESSIONNO) INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO = S.SEMESTERNO)", " DISTINCT C.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME + ' - ' + S.SEMESTERNAME)COURSE_NAME", "C.SUBID = 1 AND SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + " AND A.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "COURSE_NAME");
+            lvBundleList.DataSource = null;
+            lvBundleList.DataBind();
+            lvBundleList.Visible = false;
+        }
+        else
+        {
+            ddlCourse.SelectedIndex = 0;
+            lvBundleList.DataSource = null;
+            lvBundleList.DataBind();
+            lvBundleList.Visible = false;
+        }
+    }
+    // Course Code Selection Change
+    protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (!(txtStudPerBundle.Text).Equals(string.Empty))
+        {
+            BindBundleList();
+        }
+        else
+        {
+            objCommon.DisplayMessage(updExam, "Please enter No. of Students Per Bundle.", this.Page);
+            //ddlSlot.SelectedIndex = -1;
+            //ddlCourse.SelectedIndex = -1;
+        }
+    }
+
+    private void BindBundleList()
+    {
+        string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
+        //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), ddlCourse.SelectedValue, Convert.ToDateTime(txtDtOfPaper.Text), Convert.ToInt32(ddlBranch.SelectedValue));
+        DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+        if (ds != null && ds.Tables.Count > 0)
+        {
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                lvBundleList.DataSource = ds.Tables[0];
+                lvBundleList.DataBind();
+                lvBundleList.Visible = true;
+            }
+            else
+            {
+                lvBundleList.DataSource = null;
+                lvBundleList.DataBind();
+                lvBundleList.Visible = false;
+            }
+
+            //pnlValuer.Visible = true;
+        }
+        else
+        {
+            lvBundleList.DataSource = null;
+            lvBundleList.DataBind();
+            lvBundleList.Visible = false;
+        }
+    }
+
+    #endregion "SelectedIndexChanged"
+
+    #region "Button Event"
+    // Submit Click Event
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddlDate.SelectedIndex > 0)
+            {
+                CustomStatus cs = CustomStatus.Error;
+
+
+                foreach (ListViewDataItem item in lvBundleList.Items)
+                {
+                    Label lblBundle = item.FindControl("lblBundleNo") as Label;
+                    Label lblCourseNo = item.FindControl("lblCoursrNo") as Label;
+                    Label lblRegFrom = item.FindControl("lblRegNoFrom") as Label;
+                    Label lblRegTo = item.FindControl("lblRegNoTo") as Label;
+                    Label lblBranchno = item.FindControl("lblBranch") as Label;
+                    Label lblBundleCount = item.FindControl("lblBundleCount") as Label;
+
+                    cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), Convert.ToInt32(lblCourseNo.ToolTip), (lblRegFrom.ToolTip).ToString(), (lblRegTo.ToolTip).ToString(), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblBranchno.ToolTip), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(lblBundleCount.ToolTip));
+                    // cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), ddlCourse.SelectedValue, Convert.ToInt32(lblSeatFrom.ToolTip), Convert.ToInt32(lblSeatTo.ToolTip), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue));
+
+                }
+                if (cs.Equals(CustomStatus.RecordSaved))
+                {
+                    objCommon.DisplayMessage(updExam, "Bundle Creation Done Successfuly..!!", this.Page);
+
+                }
+                else if (cs.Equals(CustomStatus.RecordNotFound))
+                {
+                    objCommon.DisplayMessage(updExam, "Bundle Already Created..!!", this.Page);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updExam, "Error in Bundle Creation ..", this.Page);
+                }
+                BindBundleList();
+
+            }
+            else
+            {
+                objCommon.DisplayMessage(updExam, "Please select Date of Paper", this.Page);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_PREEXAMINATION_CreateBundle.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    // Cancel Click Event
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
+    // Report Click Event
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        if (ddlDate.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Plesse Select Date of Exam..!!", this.Page);
+        }
+        else
+        {
+            ShowReport("Assigning rough Bundle Sheet", "rptRoughBundleReport.rpt");
+        }
+    }
+    protected void btnStickerReport_Click(object sender, EventArgs e)
+    {
+        if (ddlDate.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Plesse Select Date of Exam..!!", this.Page);
+        }
+        else
+        {
+            ShowReport1("Assigning rough Bundle Sheet", "BundleReport.rpt");
+        }
+
+    }
+    protected void btnDateWiseReport_Click(object sender, EventArgs e)
+    {
+        if (ddlDate.SelectedIndex == 0)
+        {
+            objCommon.DisplayMessage("Plesse Select Date of Exam..!!", this.Page);
+        }
+        else
+        {
+            ShowReport2("Date_Wise Bundle List", "rptDateWiseBundleReport.rpt");
+        }
+
+    }
+    #endregion "Button Event"
+
+    #region "Show Report"
+    // Show Report Method
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            //url += "exporttype=" + exporttype;
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            if (Convert.ToInt32(Session["OrgId"]) == 9)// Added by Shubham on 01022023
+            {
+
+                int clg_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER SM INNER JOIN ACD_EXAM_DATE A ON (A.SESSIONNO = SM.SESSIONNO)", "SM.COLLEGE_ID", "SM.SESSIONID>0 AND SM.IS_ACTIVE = 1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)" + " AND A.COURSENO =" + Convert.ToInt32(ddlCourse.SelectedValue)));
+                url += "&param=@P_COLLEGE_CODE=" + clg_id + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue);
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
+            }
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this, this.updExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_StudentRoolist.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    private void ShowReport1(string reportTitle, string rptFileName)
+    {
+        try
+        {
+
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            //url += "exporttype=" + exporttype;
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            if (Convert.ToInt32(Session["OrgId"]) == 9)// Added by Shubham on 07/02/2023
+            {
+                int clg_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER SM INNER JOIN ACD_EXAM_DATE A ON (A.SESSIONNO = SM.SESSIONNO)", "SM.COLLEGE_ID", "SM.SESSIONID>0 AND SM.IS_ACTIVE = 1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)" + " AND A.COURSENO =" + Convert.ToInt32(ddlCourse.SelectedValue)));
+                url += "&param=@P_COLLEGE_CODE=" + clg_id + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
+            }
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this, this.updExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_StudentRoolist.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    private void ShowReport2(string reportTitle, string rptFileName)
+    {
+        try
+        {
+
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            //url += "exporttype=" + exporttype;
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            if (Convert.ToInt32(Session["OrgId"]) == 9)// Added by Shubham On 01022023
+            {
+
+                int clg_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER SM INNER JOIN ACD_EXAM_DATE A ON (A.SESSIONNO = SM.SESSIONNO)", "SM.COLLEGE_ID", "SM.SESSIONID>0 AND SM.IS_ACTIVE = 1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)" + " AND A.COURSENO =" + Convert.ToInt32(ddlCourse.SelectedValue)));
+                url += "&param=@P_COLLEGE_CODE=" + clg_id + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue);
+
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue);
+            }
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+            //To open new window from Updatepanel
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this, this.updExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_StudentRoolist.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+    protected void btnExcelReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Online_Evaluation_Report();
+
+            //Response.Clear();
+            //string fileName = "Online_Evaluation";
+            //Response.AddHeader("content-disposition", "attachment; filename=" + fileName + ".xls");
+
+            //Response.Charset = "";
+            //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            //Response.ContentType = "application/vnd.xls";
+
+            //System.IO.StringWriter stringWrite = new System.IO.StringWriter();
+
+            //System.Web.UI.HtmlTextWriter htmlWrite = new HtmlTextWriter(stringWrite);
+            //DataSet ds = null;
+            //ds = objExamController.GetOnlineEvalutionReport(Convert.ToInt32(ddlSession.SelectedValue));
+            ////lvBundleList.Visible = true;
+            //lvOnlineEvaluation.DataSource = ds;
+            //lvOnlineEvaluation.DataBind();
+
+            //lvOnlineEvaluation.RenderControl(htmlWrite);
+
+            //Response.Write(stringWrite.ToString());
+
+            //Response.End();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_ShowReport.btnExcelReport_Click -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+
+        }
+    }
+
+    private void Online_Evaluation_Report()
+    {
+
+        string attachment = "attachment; filename=" + "Online_Evaluation.xls";
+        Response.ClearContent();
+        Response.AddHeader("content-disposition", attachment);
+        Response.ContentType = "application/" + "ms-excel";
+        StringWriter sw = new StringWriter();
+        HtmlTextWriter htw = new HtmlTextWriter(sw);
+        // int sessionNo = 0;
+        // sessionNo = Convert.ToInt32(ddlAdmbatch.SelectedValue);
+        DataSet ds = null;
+        ds = objExamController.GetOnlineEvalutionReport(Convert.ToInt32(ddlSession.SelectedValue));
+        DataGrid dg = new DataGrid();
+        if (ds.Tables.Count > 0)
+        {
+            dg.DataSource = ds.Tables[0];
+            dg.DataBind();
+        }
+        dg.HeaderStyle.Font.Bold = true;
+        dg.RenderControl(htw);
+        Response.Write(sw.ToString());
+        Response.End();
+    }
+    protected void btnStickerOnScreenReport_Click(object sender, EventArgs e)
+    {
+        //if (txtDtOfPaper.Text == string.Empty)
+        //{
+        //    objCommon.DisplayMessage("Plesse Select Date of Exam..!!", this.Page);
+        //}
+        //else
+        //{
+        //    ShowReport1("Assigning_rough_Bundle_Sheet_On_Screen", "BundleOnScreenReport.rpt");
+        //}
+    }
+    #endregion "Show Report"
+
+
+
+    protected void txtStudPerBundle_TextChanged(object sender, EventArgs e)
+    {
+        if (!(txtStudPerBundle.Text).Equals(string.Empty))
+        {
+            BindBundleList();
+        }
+        else
+        {
+            objCommon.DisplayMessage(updExam, "Please enter No. of Students Per Bundle.", this.Page);
+        }
+    }
+    protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlCollege.SelectedIndex > 0)
+        {
+
+            //Common objCommon = new Common();
+            DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlCollege.SelectedValue));
+            //ViewState["degreeno"]
+
+            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S WITH (NOLOCK) INNER JOIN RESULT_PUBLISH_DATA TR WITH (NOLOCK) ON (S.SESSIONNO=TR.SESSIONNO)", "DISTINCT S.SESSIONNO", "S.SESSION_PNAME", "TR.SESSIONNO > 0 and isnull(is_active,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString(), "S.SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONID = S.SESSIONID)", "S.SESSIONID", "S.SESSION_NAME", "S.SESSIONID > 0 and isnull(SM.IS_ACTIVE,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString(), "S.SESSIONID DESC");
+            }
+
+            ddlSession.SelectedIndex = 0;
+            //ddlSem.SelectedIndex = 0;
+            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO desc");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONID = S.SESSIONID) ", "S.SESSIONID", "S.SESSION_NAME", "S.SESSIONID > 0 and isnull(SM.IS_ACTIVE,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString(), "S.SESSIONID DESC");
+        }
+        else
+        {
+            ddlCollege.SelectedIndex = 0;
+        }
+    }
+
+    private void PopulateDropDown()
+    {
+        try
+        {
+            Common objCommon = new Common();
+            string deptno = string.Empty;
+            if (Session["userdeptno"].ToString() == null || Session["userdeptno"].ToString() == string.Empty)
+                deptno = "0";
+            else
+                deptno = Session["userdeptno"].ToString();
+            objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE '" + deptno + "' WHEN '0' THEN 0 ELSE CAST(DB.DEPTNO AS VARCHAR) END) IN (" + deptno + ")", "");
+            //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 ", "S.SEMESTERNO");
+            ddlSession.Focus();
+
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "CourseWise_Registration.PopulateDropDown-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlSession.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlDate, "ACD_EXAM_DATE E INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT CONVERT(NVARCHAR,E.EXAMDATE,103)DATE", "CONVERT(NVARCHAR,E.EXAMDATE,103)EXAMDATE", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "DATE");
+        }
+        else 
+        {
+            ddlSession.SelectedIndex = 0;
+        }
+    }
+    protected void ddlDate_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlDate.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT ES INNER JOIN ACD_EXAM_DATE E ON (E.SLOTNO = ES.SLOTNO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT ES.SLOTNO", "ES.SLOTNAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND E.EXAMDATE =CONVERT (DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "ES.SLOTNO");
+        }
+        else
+        {
+            ddlDate.SelectedIndex = 0;
+        }
+    }
+}

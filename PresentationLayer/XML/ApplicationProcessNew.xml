@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<controls>
+  <control>
+    <name>chkSMS</name>
+    <visible>0</visible>
+    <enable>0</enable>
+  </control>
+  <control>
+    <name>chkWhatsApp</name>
+    <visible>0</visible>
+    <enable>0</enable>
+  </control>
+</controls>
