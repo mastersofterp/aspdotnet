@@ -1,0 +1,72 @@
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+G:\Shubham Barke\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+D:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\CRESCENT_09062022\SVN_CRESCENT_030622\CRESCENT03062022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+E:\Sonali_Bhor\SVN HOSTEL\CRESCENT\RFC_COMMON_CODE04082022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\HostelBusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.csprojResolveAssemblyReference.cache
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\HostelBusinessLogicLayer\obj\Debug\HostelBusinessLogicLayer.pdb

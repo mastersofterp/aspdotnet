@@ -1,0 +1,71 @@
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\gaurav\work\rf-campus\RFC B4 Common Code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\gaurav\work\rf-campus\RFC B4 Common Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\gaurav\work\rf-campus\RFC B4 Common Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC_Code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC_Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+E:\Swapnil\SVN_CODE\RFC-CC_Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\SVN_CODE\RFC-CC\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+E:\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\SVN_CODE\RFC-CC\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_NEW\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_NEW\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_NEW\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_NEW\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
