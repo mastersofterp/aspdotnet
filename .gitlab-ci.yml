@@ -1,0 +1,65 @@
+# Always check the powershell script for double quotes
+
+stages:
+  - run_script
+
+.deploy_template: &deploy_template
+    variables:
+        liveBranchName: "main"
+        uatBranchName: "UAT"
+        developmentBranchName: "Development"
+        testBranchName: "Test"
+        publishProfilesPath: "$CI_PROJECT_DIR/PresentationLayer/App_Data/PublishProfiles"
+        deploymentOutput: ""
+        gitCompareCommand: "git diff --name-only origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" # can add --ignore-all-space to ignore all whitespace
+    script:
+        - powershell -executionpolicy bypass -File "C:\GitLabRunner\CICD-Scripts\powershell-deployment.ps1"
+            -projectName "$CI_PROJECT_NAME"
+            -branchName "$CI_COMMIT_REF_NAME"
+            -projectPath "$CI_PROJECT_DIR"
+            -csprojFile "$CI_PROJECT_DIR/RFC_CODE.sln"
+            -apiURL "$CI_API_V4_URL" 
+            -projectID "$CI_PROJECT_ID" 
+            -liveBranchName $liveBranchName 
+            -livePublishProfile "$publishProfilesPath/FolderProfile_SID.pubxml" 
+            -liveMachineName "IITMSPC125"
+            -uatBranchName $uatBranchName 
+            -uatPublishProfile "$publishProfilesPath/FolderProfile.pubxml,$publishProfilesPath/FolderProfile2.pubxml"
+            -uatMachineName "IITMSPC125,RFC-DEVAPP"
+            -developmentBranchName $developmentBranchName 
+            -devPublishProfile "$publishProfilesPath/FolderProfile.pubxml"
+            -devMachineName "IITMSPC125" 
+            -testBranchName $testBranchName
+            -testPublishProfile "$publishProfilesPath/FolderProfile.pubxml"
+            -testMachineName "IITMSPC125"
+            -restorePreviousWebConfig "true" 
+            -minutesForDeployment 50
+            -msbuildPath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+            -applicationType "ASP"
+            -aspCSPROJFile "$CI_PROJECT_DIR/BusinessLogicLayer/BusinessLogicLayer.csproj,$CI_PROJECT_DIR/HostelBusinessLogicLayer/HostelBusinessLogicLayer.csproj,$CI_PROJECT_DIR/NonAcadBusinessLogicLayer/NonAcadBusinessLogicLayer.csproj"
+            -aspDLLCopyToFilePath "$CI_PROJECT_DIR/PresentationLayer/Bin"
+            -restoreFromBackupFiles "/image" 
+            -deleteAfterPublishFiles "/APP_CODE,/website.publishproj" 
+            -publishPrecompilePath "$CI_PROJECT_DIR\PrecompiledWeb\PresentationLayer\"   
+        
+    rules:
+        - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
+
+
+job_SidDesktop: # for test purposes only
+    stage: run_script
+    tags: 
+        - SidDesktop    
+    <<: *deploy_template    
+
+# job_RFC-DEVAPP: # change this
+#   stage: run_script
+#   tags: 
+#     - RFC-DEVAPP
+#   <<: *deploy_template
+
+# job_mserp-app-rfc-shared: # change this
+#   stage: run_script
+#   tags: 
+#     - mserp-app-rfc-shared
+#   <<: *deploy_template
