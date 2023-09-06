@@ -1,0 +1,76 @@
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+D:\LAPTOP BACKUP\Prashant PC Backup\Common Code Latates\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+E:\SVN_CODE\RFC-CC\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\Microsoft.WindowsAzure.Storage.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\Newtonsoft.Json.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\NonAcadBusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\Microsoft.WindowsAzure.Storage.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\Newtonsoft.Json.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\DataAccessLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\bin\Debug\AjaxControlToolkit.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.csprojResolveAssemblyReference.cache
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\NonAcadBusinessLogicLayer\obj\Debug\NonAcadBusinessLogicLayer.pdb

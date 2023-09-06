@@ -1,0 +1,141 @@
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\SVN_DATA\All Client Code_Data\RFC Common Code_23082021\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\gaurav\work\rf-campus\RFC B4 Common Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+C:\Users\Admin\Desktop\SVN_RF_common_code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\Nikhil_Work\Working_Code\RFC-CommonCode-12-11-2021\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\mastersofterp_MAKAUAT.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC_Code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC_SVN\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\Dileep\SVN_CODE\Common Code\RFC_CC_29012022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\SVN_CODE\RFC-CC\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\Swapnil\SVN_CODE\RFC-CC-Latest\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_SVN_Latest\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+E:\Rahul\SVN_CODE\RFC_CC_NEW\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\Publish And Deployment\RFC-CODE\RFC-CODE_23092022\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+F:\MAYUR\RF COMMAN CODE PUBLISH\04-09-2023\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
