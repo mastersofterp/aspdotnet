@@ -21,16 +21,16 @@ stages:
             -apiURL "$CI_API_V4_URL" 
             -projectID "$CI_PROJECT_ID" 
             -liveBranchName $liveBranchName 
-            -livePublishProfile "FolderProfile_LIVE_DAIICT.pubxml,FolderProfile_LIVE_DCH.pubxml,FolderProfile_LIVE_HITS.pubxml,FolderProfile_LIVE_IPER.pubxml,FolderProfile_LIVE_IPR.pubxml,FolderProfile_LIVE_MAHER.pubxml,FolderProfile_LIVE_PCEN.pubxml,FolderProfile_LIVE_PRMCEM.pubxml,FolderProfile_LIVE_PRMITR.pubxml,FolderProfile_LIVE_SIMS.pubxml" 
+            -livePublishProfile "$publishProfilesPath/FolderProfile_LIVE_DAIICT.pubxml,$publishProfilesPath/FolderProfile_LIVE_DCH.pubxml,$publishProfilesPath/FolderProfile_LIVE_HITS.pubxml,$publishProfilesPath/FolderProfile_LIVE_IPER.pubxml,$publishProfilesPath/FolderProfile_LIVE_IPR.pubxml,$publishProfilesPath/FolderProfile_LIVE_MAHER.pubxml,$publishProfilesPath/FolderProfile_LIVE_PCEN.pubxml,$publishProfilesPath/FolderProfile_LIVE_PRMCEM.pubxml,$publishProfilesPath/FolderProfile_LIVE_PRMITR.pubxml,$publishProfilesPath/FolderProfile_LIVE_SIMS.pubxml" 
             -liveMachineName "daiict-app,prmitr-app,hits-app,prmitr-app,prmitr-app,mserprfc-app,mserprfc-app,prmitr-app,prmitr-app,MSERPDEMOSERVER"
             -uatBranchName $uatBranchName 
-            -uatPublishProfile "FolderProfile_UAT_DAIICT.pubxml,FolderProfile_UAT_DCH.pubxml,FolderProfile_UAT_HITS.pubxml,FolderProfile_UAT_IPER.pubxml,FolderProfile_UAT_IPR.pubxml,FolderProfile_UAT_MAHER.pubxml,FolderProfile_UAT_PCEN.pubxml,FolderProfile_UAT_PRMCEM.pubxml,FolderProfile_UAT_PRMITR.pubxml"
+            -uatPublishProfile "$publishProfilesPath/FolderProfile_UAT_DAIICT.pubxml,$publishProfilesPath/FolderProfile_UAT_DCH.pubxml,$publishProfilesPath/FolderProfile_UAT_HITS.pubxml,$publishProfilesPath/FolderProfile_UAT_IPER.pubxml,$publishProfilesPath/FolderProfile_UAT_IPR.pubxml,$publishProfilesPath/FolderProfile_UAT_MAHER.pubxml,$publishProfilesPath/FolderProfile_UAT_PCEN.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMCEM.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMITR.pubxml"
             -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,mserprfc-app,mserprfc-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP"
             -developmentBranchName $developmentBranchName 
-            -devPublishProfile "FolderProfile_DEV_RFCDEV"
+            -devPublishProfile "$publishProfilesPath/FolderProfile_DEV_RFCDEV"
             -devMachineName "RFC-DEVAPP" 
             -testBranchName $testBranchName
-            -testPublishProfile "FolderProfile_TEST_RFCTEST"
+            -testPublishProfile "$publishProfilesPath/FolderProfile_TEST_RFCTEST"
             -testMachineName "RFC-DEVAPP"
             -restorePreviousWebConfig "true" 
             -minutesForDeployment 50
