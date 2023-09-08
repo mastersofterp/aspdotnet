@@ -5,9 +5,9 @@ stages:
 
 .deploy_template: &deploy_template
     variables:
-        liveBranchName: "Development"
+        liveBranchName: "main"
         uatBranchName: "UAT"
-        developmentBranchName: "main"
+        developmentBranchName: "Development"
         testBranchName: "Test"
         publishProfilesPath: "$CI_PROJECT_DIR/PresentationLayer/App_Data/PublishProfiles"
         deploymentOutput: ""
