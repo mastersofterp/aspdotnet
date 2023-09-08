@@ -61,7 +61,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <label>Prerequisites Subjects</label>
+                                            <label>Core Courses</label>
                                         </div>
                                         <asp:ListBox ID="ddlpreSubjects" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="0"></asp:ListBox>
                                         <asp:RequiredFieldValidator ID="rfcprereq" runat="server" ControlToValidate="ddlpreSubjects" SetFocusOnError="true" Display="None" ErrorMessage="Please Select Prerequisites Subjects." ValidationGroup="submit"></asp:RequiredFieldValidator>
