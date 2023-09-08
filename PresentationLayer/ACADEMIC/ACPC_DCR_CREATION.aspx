@@ -52,7 +52,6 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please Select Degree" ControlToValidate="ddlDegree" Display="None" SetFocusOnError="True" InitialValue="0" ValidationGroup="showstud"></asp:RequiredFieldValidator>
-                                    
                                 </div>
                                 <div class="form-group col-md-3" style="display: none">
                                     <label> <span style="color:red;">*</span> Batch Year</label>
