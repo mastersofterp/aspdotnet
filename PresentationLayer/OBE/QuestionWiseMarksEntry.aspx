@@ -7,6 +7,10 @@
         #tblStudentMarksEntry .form-control {
             padding: 0.375rem 0.15rem;
         }
+         .dataTables_scrollHeadInner
+         {
+            width: max-content!important;
+        }
     </style>
     <script>
         $(function () {

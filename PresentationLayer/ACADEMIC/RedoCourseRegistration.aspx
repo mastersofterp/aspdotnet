@@ -311,24 +311,25 @@
                                         <li class="list-group-item"><b>Degree / Branch :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblBranch" runat="server" Font-Bold="true" /></a>
+                                             <asp:HiddenField ID="hdfDegreeno" runat="server" />
                                         </li>
                                         <li class="list-group-item"><b>Scheme :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                         </li>
-                                        <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
+                                       <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
                                             <%--<a class="sub-label">
                                                 <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                </asp:DropDownList></a>--%>
+                                                </asp:DropDownList></a>
                                             <asp:DropDownList ID="ddlBackLogSem" runat="server" CssClass="form-control" AppendDataBoundItems="True"
                                                 ValidationGroup="backsem" AutoPostBack="True" OnSelectedIndexChanged="ddlBackLogSem_SelectedIndexChanged" data-select2-enable="true" TabIndex="5">
-                                                <%-- <asp:ListItem Value="0">Please Select</asp:ListItem>--%>
+                                                <%-- <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                        </li>
+                                        </li>--%>
                                     </ul>
                                 </div>
-                                <div class="col-12 mt-3">
+                               <%-- <div class="col-12 mt-3">
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                             <div class="label-dynamic">
@@ -338,7 +339,7 @@
                                                 ValidationGroup="backsem" AutoPostBack="True" OnSelectedIndexChanged="ddlBackLogSem_SelectedIndexChanged" data-select2-enable="true" TabIndex="5" Visible="false">
                                             </asp:DropDownList>
                                             <%--       <asp:RequiredFieldValidator ID="rfvddlBackLogSem" runat="server" ControlToValidate="ddlBackLogSem"
-                                                Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="backsem"></asp:RequiredFieldValidator>--%>
+                                                Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="backsem"></asp:RequiredFieldValidator>
                                             <asp:HiddenField ID="hdfCategory" runat="server" />
                                             <asp:HiddenField ID="hdfDegreeno" runat="server" />
                                         </div>
@@ -414,7 +415,7 @@
                                         ValidationGroup="backsem" CssClass="btn btn-primary" Visible="false" Style="display: none;" />
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="backsem"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                </div>
+                                </div>--%>
 
                                 <div class="col-12">
                                     <asp:Panel ID="pnlFailCourse" runat="server">
@@ -445,7 +446,8 @@
                                             <ItemTemplate>
                                                 <tr id="trCurRow" class="item">
                                                     <td>
-                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? true : false)%>' Enabled='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? false : true)%>' onclick="backlogLvChk(this);" />
+                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? true : false)%>' onclick="backlogLvChk(this);" />
+                                                        <%-- Enabled='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? false : true)%>'--%>
                                                     </td>
                                                     <td>
                                                         <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
@@ -497,19 +499,13 @@
                                                             <th>Course Code
                                                             </th>
                                                             <th>Course Name
-                                                            </th>
-                                                            <%--<th style="text-align: center">Credits
-                                                            </th>
-                                                            <th style="text-align: center">Theory/Prac
-                                                            </th>--%>
-
+                                                            </th> 
                                                             <th style="text-align: center">Semester
                                                             </th>
                                                             <th style="text-align: center">Course Type
                                                                  
                                                             </th>
-                                                            <th style="text-align: center">Grade
-                                                                
+                                                            <th style="text-align: center">Grade                                                                
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -521,18 +517,6 @@
                                             </LayoutTemplate>
                                             <ItemTemplate>
                                                 <tr id="trCurRow" class="item">
-                                                   <%-- <td>
-                                                        <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
-                                                    </td>
-                                                    <td align="center">
-                                                        <%# Eval("CREDITS") %>
-                                                    </td>
-                                                    <td align="center">
-                                                        <%# Eval("SUBNAME") %>
-                                                    </td>--%>
                                                     <td>
                                                         <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
                                                     </td>
@@ -540,7 +524,6 @@
                                                         <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' />
                                                     </td>
                                                     <td style="text-align: center">
-                                                       <%-- <asp:Label ID="lblsemester" runat="server" Text=' <%# Eval("SEMESTER") %>' ToolTip='<%# Eval("SEMESTERNO")%>' />--%>
                                                          <%# Eval("SEMESTER") %>
                                                     </td>
                                                     <td align="center">                                                       
@@ -563,17 +546,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    <%-- </ContentTemplate>
-          <Triggers>
-            <asp:PostBackTrigger ControlID="btnPrintRegSlip" />
-        </Triggers>
-     </asp:UpdatePanel>--%>
+    </div>  
     <script type="text/javascript">
-        //        //To change the colour of a row on click of check box inside the row..
-        //        $("tr :checkbox").live("click", function() {
-        //        $(this).closest("tr").css("background-color", this.checked ? "#FFFFD2" : "#FFFFFF");
-        //        });
+       
         function SelectAll(headchk) {
             var frm = document.forms[0]
             for (i = 0; i < document.forms[0].elements.length; i++) {
