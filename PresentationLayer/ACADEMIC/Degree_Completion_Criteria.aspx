@@ -103,6 +103,21 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvddlstudenttype" runat="server" ErrorMessage="Please Select Student Type" ControlToValidate="ddlStudentType" Display="None" SetFocusOnError="True" InitialValue="-1" ValidationGroup="Show"></asp:RequiredFieldValidator>
                                     </div>
+
+                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                        <div class=" note-div">
+                                            <h5 class="heading"><i class="fa fa-star" aria-hidden="true"></i>Note</h5>
+                                            <p>
+                                                <span>1) Select Student To Get Eligibility Status Of the Student.</span><br />
+                                                <span>2)
+                                                    <h7 style="color: green">Green :-</h7>
+                                                    Active Links For Course Category Wise Eligibility</span><br />
+                                                <span>3)
+                                                    <h7 style="color: red">Red :-</h7>
+                                                    DeActive Links</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class=" col-12 btn-footer">
@@ -154,15 +169,14 @@
                                                 <td>
                                                     <asp:Label ID="lblstudentname" runat="server" Text='<%# Eval("STUDNAME")%>' ToolTip='<%# Eval("IDNO")%>'></asp:Label></td>
                                                 <td>
-                                                    <asp:LinkButton runat="server" OnClick="lnkbtncoursecategory_Click" ID="lnkbtncoursecategory" Text="View Course Category Wise Eligibity" CommandArgument='<%# Eval("IDNO")%>' class="newAddNew Tab" CausesValidation="false" TabIndex="0" />
+                                                    <asp:LinkButton runat="server" OnClick="lnkbtncoursecategory_Click" ID="lnkbtncoursecategory" Text="View Course Category Wise Eligibity" CommandArgument='<%# Eval("IDNO")%>' class="newAddNew" CausesValidation="false" TabIndex="0" Enabled='<%# Eval("ELIGIBILITY_STATUS").ToString() == "-" ? false : true %>' ForeColor='<%# Eval("ELIGIBILITY_STATUS").ToString() == "-" ? System.Drawing.Color.Red : System.Drawing.Color.Green %>' />
                                                 </td>
                                                 <td>
                                                     <asp:Label ID="lbleligibilty" runat="server" Text='<%# Eval("ELIGIBILITY_STATUS")%>' ToolTip='<%# Eval("ELIGIBILITY")%>'></asp:Label></td>
                                                 <td>
                                                     <asp:Label ID="lbllockstatus" runat="server" Text='<%# Eval("LOCK")%>' ToolTip='<%# Eval("LOCK_STATUS")%>'></asp:Label></td>
                                                 <td>
-                                                    <asp:Label ID="lbldate" runat="server" Text='<%# Eval("LOCK_DATE")%>'></asp:Label></td>
-
+                                                    <asp:Label ID="lbldate" runat="server" Text='<%# (Eval("LOCK_DATE").ToString() != string.Empty) ? Eval("LOCK_DATE","{0:dd-MMM-yyyy}") : "-".ToString()%>'></asp:Label></td>
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
@@ -175,68 +189,95 @@
                     <div class="modal fade" id="CouserCategorymodel" role="dialog">
                         <asp:UpdatePanel ID="updPopUp" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-lg">
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
 
-                                            <h4 class="modal-title" style="color: #3c8dbc;"><i class="fa fa-gg" aria-hidden="true"></i>Course Category Wise Criteria</h4>
+                                            <h4 class="modal-title" style="font-weight: 600;">Course Category Wise Criteria</h4>
                                             <button type="button" class="close" data-dismiss="modal" style="color: red; font-weight: bolder">&times;</button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-12 col-md-offset-2">
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                                        <asp:Label ID="lblmincreadit" runat="server" Text='Min Credit Rquired:'></asp:Label>
-                                                        <asp:Label ID="lblobtaincredit" runat="server" Text=''></asp:Label>
-
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>Min Credit Required :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblcredit" runat="server" Text='' Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Credit Obtained :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblobtaincredit" runat="server" Text='' Font-Bold="true"></asp:Label></a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                                        <asp:Label ID="lblgrade" runat="server" Text='Min Grade Rquired:'></asp:Label>
-                                                        <asp:Label ID="lblobtaingarde" runat="server" Text=''></asp:Label>
+                                                    <div class="col-lg-6 col-md-6 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>Min Grade Required:</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblgrade" runat="server" Text='' Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Grade Obtained :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblobtaingarde" runat="server" Text='' Font-Bold="true"></asp:Label></a>
+                                                            </li>
+                                                        </ul>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-12 col-md-offset-2">
-                                                    <asp:Panel ID="Panel1" runat="server">
-                                                        <asp:ListView ID="lvcoursecatelist" runat="server">
-                                                            <LayoutTemplate>
-                                                                <div class="sub-heading">
-                                                                    <h5>Course Category List</h5>
-                                                                </div>
-                                                                <table class="table table-striped table-bordered nowrap" id="">
-                                                                    <thead class="bg-light-blue">
-                                                                        <tr>
-                                                                            <th>Sr.No.</th>
-                                                                            <th>Course Category</th>
-                                                                            <th>Min. Credit</th>
-                                                                            <th>Obtain Credit</th>
-                                                                        </tr>
-                                                                    </thead>
-
-                                                                    <tbody>
-                                                                        <tr id="itemPlaceholder" runat="server" />
-                                                                    </tbody>
-                                                                </table>
-                                                            </LayoutTemplate>
-                                                            <ItemTemplate>
-                                                                <tr>
-                                                                    <td>
-                                                                        <%# Container.DataItemIndex+1 %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <asp:Label ID="lblcoursecategory" runat="server" Text=''></asp:Label></td>
-                                                                    <td>
-                                                                        <asp:Label ID="lblcoursemincredit" runat="server" Text=''></asp:Label></td>
-
-                                                                    <td>
-                                                                        <asp:Label ID="lblobtaincredit" runat="server" Text=''></asp:Label></td>
-                                                                </tr>
-                                                            </ItemTemplate>
-                                                        </asp:ListView>
-                                                    </asp:Panel>
+                                                    <div class="col-lg-12 col-md-12 col-12" id="divcoursenotregisted" runat="server">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>Course Required To Completed Degree :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblcoursename" runat="server" Text='' Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-12 mt-3">
+                                                <asp:Panel ID="Panel1" runat="server">
+                                                    <asp:ListView ID="lvcoursecatelist" runat="server">
+                                                        <LayoutTemplate>
+                                                            <div class="sub-heading">
+                                                                <h5>Course Category List</h5>
+                                                            </div>
+                                                            <table class="table table-striped table-bordered nowrap" id="">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Sr.No.</th>
+                                                                        <th>Course Category</th>
+                                                                        <th>Min. Credit</th>
+                                                                        <th>Obtain Credit</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </LayoutTemplate>
+                                                        <ItemTemplate>
+                                                            <tr>
+                                                                <td>
+                                                                    <%# Container.DataItemIndex+1 %>
+                                                                </td>
+                                                                <td>
+                                                                    <asp:Label ID="lblcoursecategory" runat="server" Text='<%# Eval("CATEGORYNAME")%>'></asp:Label></td>
+                                                                <td>
+                                                                    <asp:Label ID="lblcoursemincredit" runat="server" Text='<%# Eval("MIN_CREDITS")%>'></asp:Label></td>
+
+                                                                <td>
+                                                                    <asp:Label ID="lblobtaincredit" runat="server" Text='<%# Eval("CREDITS")%>'></asp:Label></td>
+                                                            </tr>
+                                                        </ItemTemplate>
+                                                    </asp:ListView>
+                                                </asp:Panel>
+                                            </div>
                                         </div>
+
                                         <div class="modal-footer"></div>
                                     </div>
                                 </div>
@@ -249,8 +290,8 @@
         </div>
     </div>
 
-    <script type="text/javascript">
 
+    <script language="javascript" type="text/javascript">
         function SelectAll(headchk) {
             var frm = document.forms[0]
             for (i = 0; i < document.forms[0].elements.length; i++) {
@@ -264,7 +305,6 @@
             }
         }
     </script>
-
 
 
 </asp:Content>

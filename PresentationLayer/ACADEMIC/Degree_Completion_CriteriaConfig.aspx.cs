@@ -1,4 +1,14 @@
-﻿
+﻿//======================================================================================
+// PROJECT NAME  : UAIMS                                                                
+// MODULE NAME   : Examination                                                             
+// PAGE NAME     : Degree Completion Criteria Configuration
+// CREATION DATE : 31-AUGUST-2023
+// CREATED BY    : Injamam Ansari
+// DISCRIPTION   : Degree Completion Configuration Master Page
+// MODIFIED BY   : 
+// MODIFIED DATE : 
+// MODIFIED DESC : 
+//======================================================================================
 
 using System;
 using System.Web.UI;
