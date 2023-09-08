@@ -1383,6 +1383,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
             dtLoad.Clear();
             ViewState["IsRequiredLoad"] = null;
             ViewState["IsLeaveValid"] = null;
+            trhalfDay.Visible = false;
+            trhalfjoinDay.Visible = false;
         }
         catch (Exception ex)
         {
