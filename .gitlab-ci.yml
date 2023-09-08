@@ -21,20 +21,19 @@ stages:
             -apiURL "$CI_API_V4_URL" 
             -projectID "$CI_PROJECT_ID" 
             -liveBranchName $liveBranchName 
-            -livePublishProfile "$publishProfilesPath/FolderProfile_SID.pubxml" 
-            -liveMachineName "IITMSPC125"
+            -livePublishProfile "FolderProfile_LIVE_DAIICT.pubxml,FolderProfile_LIVE_DCH.pubxml,FolderProfile_LIVE_HITS.pubxml,FolderProfile_LIVE_IPER.pubxml,FolderProfile_LIVE_IPR.pubxml,FolderProfile_LIVE_MAHER.pubxml,FolderProfile_LIVE_PCEN.pubxml,FolderProfile_LIVE_PRMCEM.pubxml,FolderProfile_LIVE_PRMITR.pubxml,FolderProfile_LIVE_SIMS.pubxml" 
+            -liveMachineName "daiict-app,prmitr-app,hits-app,prmitr-app,prmitr-app,mserprfc-app,mserprfc-app,prmitr-app,prmitr-app,MSERPDEMOSERVER"
             -uatBranchName $uatBranchName 
-            -uatPublishProfile "$publishProfilesPath/FolderProfile.pubxml,$publishProfilesPath/FolderProfile2.pubxml"
-            -uatMachineName "IITMSPC125,RFC-DEVAPP"
+            -uatPublishProfile "FolderProfile_UAT_DAIICT.pubxml,FolderProfile_UAT_DCH.pubxml,FolderProfile_UAT_HITS.pubxml,FolderProfile_UAT_IPER.pubxml,FolderProfile_UAT_IPR.pubxml,FolderProfile_UAT_MAHER.pubxml,FolderProfile_UAT_PCEN.pubxml,FolderProfile_UAT_PRMCEM.pubxml,FolderProfile_UAT_PRMITR.pubxml"
+            -uatMachineName "daiict-app,RFCDEV-APP,hits-app,RFCDEV-APP,RFCDEV-APP,mserprfc-app,mserprfc-app,RFCDEV-APP,RFCDEV-APP,RFCDEV-APP"
             -developmentBranchName $developmentBranchName 
-            -devPublishProfile "$publishProfilesPath/FolderProfile.pubxml"
-            -devMachineName "IITMSPC125" 
+            -devPublishProfile "FolderProfile_DEV_RFCTEST"
+            -devMachineName "RFCDEV-APP" 
             -testBranchName $testBranchName
-            -testPublishProfile "$publishProfilesPath/FolderProfile.pubxml"
-            -testMachineName "IITMSPC125"
+            -testPublishProfile "FolderProfile_TEST_RFCTEST"
+            -testMachineName "RFCDEV-APP"
             -restorePreviousWebConfig "true" 
             -minutesForDeployment 50
-            -msbuildPath "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
             -applicationType "ASP"
             -aspCSPROJFile "$CI_PROJECT_DIR/BusinessLogicLayer/BusinessLogicLayer.csproj,$CI_PROJECT_DIR/HostelBusinessLogicLayer/HostelBusinessLogicLayer.csproj,$CI_PROJECT_DIR/NonAcadBusinessLogicLayer/NonAcadBusinessLogicLayer.csproj"
             -aspDLLCopyToFilePath "$CI_PROJECT_DIR/PresentationLayer/Bin"
@@ -47,20 +46,47 @@ stages:
         - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
 
 
-job_SidDesktop: # for test purposes only
-    stage: run_script
-    tags: 
-        - SidDesktop    
-    <<: *deploy_template    
+# job_SidDesktop: # for test purposes only
+#     stage: run_script
+#     tags: 
+#         - SidDesktop    
+#     <<: *deploy_template    
 
-# job_RFC-DEVAPP: # change this
-#   stage: run_script
-#   tags: 
-#     - RFC-DEVAPP
-#   <<: *deploy_template
+job_RFC-DEVAPP:
+  stage: run_script
+  tags: 
+    - RFC-DEVAPP
+  <<: *deploy_template
 
-# job_mserp-app-rfc-shared: # change this
-#   stage: run_script
-#   tags: 
-#     - mserp-app-rfc-shared
-#   <<: *deploy_template
+job_simsdemo-app:
+  stage: run_script
+  tags: 
+    - simsdemo-app
+  <<: *deploy_template
+
+job_hits-app:
+  stage: run_script
+  tags: 
+    - hits-app
+  <<: *deploy_template
+
+job_daiict-app:
+  stage: run_script
+  tags: 
+    - daiict-app
+  <<: *deploy_template
+
+job_mserprfc-app:
+  stage: run_script
+  tags: 
+    - mserprfc-app
+  <<: *deploy_template
+
+job_prmitra-app:
+  stage: run_script
+  tags: 
+    - prmitra-app
+  <<: *deploy_template
+
+
+
