@@ -179,8 +179,6 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             ddlExamName.SelectedIndex = 0;
 
 
-
-
         }
         else
         {   
@@ -236,62 +234,86 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
         try
         {
-            //******************added on 21112022************************
+            //******************added on 21112022****************************************
             int SCHEMENO = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SCHEMEID", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
             int COURSENO = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SUBJECTID", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
             hdfSchemeTest.Value = SCHEMENO.ToString();
             int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
 
-            //*******************RULE validation added DT 04072023**************************
+            //*******************RULE validation added DT 04072023***********************
 
             int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId",""));
             int Global = Convert.ToInt32(objCommon.LookUp("ACD_course", "CAST (ISNULL(GLOBALELE,0) AS INT) AS GLOBALELE", "Courseno=" + COURSENO));
             int SUBEXAMNO = Convert.ToInt32(objCommon.LookUp("tblExamQuestionPaper  QP INNER JOIN TBLEXAMPATTERNMAPPING EP ON QP.ExamPatternMappingId=EP.ExamPatternMappingId INNER JOIN TBLEXAMNAMEMASTER EMN ON EP.EXAMNAMEID=EMN.EXAMNAMEID INNER JOIN ACD_SUBEXAM_NAME SN ON EMN.FLDNAME=SN.FLDNAME and EMN.Patternno=SN.PAtternno and EMN.SUBID=SN.SUBEXAM_SUBID", "DISTINCT isnull(SUBEXAMNO,0)SUBEXAMNO", " ISNULL(SN.ACTIVESTATUS,0)=1 AND QuestionPaperId=" + ddlExamName.SelectedValue));
 
-
-            //int ExamNameId = Convert.ToInt32(objCommon.LookUp("tblExamQuestionPaper  QP INNER JOIN TBLEXAMPATTERNMAPPING EP ON QP.ExamPatternMappingId=EP.ExamPatternMappingId INNER JOIN TBLEXAMNAMEMASTER EMN ON EP.EXAMNAMEID=EMN.EXAMNAMEID INNER JOIN ACD_SUBEXAM_NAME SN ON EMN.EXAMNO=SN.SUBEXAMNO", "DISTINCT isnull(EMN.ExamNameId,0)", "QuestionPaperId=" + ddlExamName.SelectedValue));
-
             int SUBJECTTYPE = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SubjectTypeId", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
 
-            //string Semesterno = Convert.ToString(objCommon.LookUp("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and (UA_NO=" + Session[userno] + "or UA_NO_PRAC=" + Session[userno] + ") and isnull(cancel,0)=0 and isnull(exam_registered,0)=1"));
             int USER_TYPE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Session["userno"]));
+            string CCODE = Convert.ToString(objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + COURSENO));
             
-                if ((Global != 1) && (Org==5))
+                if ((Global != 1))
                 {
                     if (SUBJECTTYPE != 2)//Practical -Subject Type
                     {
                         if (SUBJECTTYPE != 6)//Project -Subject Type
                         {
-                            
-                          //  DataSet ds4 = objCommon.FillDropDown("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "Sessionno", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and (UA_NO=" + Session["userno"] + "or UA_NO_PRAC=" + Session["userno"] + ") and isnull(cancel,0)=0 and isnull(exam_registered,0)=1", "semesterno");
 
                             DataSet ds4 = objCommon.FillDropDown("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "Sessionno", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and isnull(cancel,0)=0 and isnull(exam_registered,0)=1", "semesterno");
 
                             if ((objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])))) != 1)
                             {
-
-                                DataSet ds7 = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + SUBEXAMNO + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + COURSENO + ") AND COURSENO=" + COURSENO + " AND SEMESTERNO in (" + Convert.ToString(ds4.Tables[0].Rows[0]["SEMESTERNO"]) + ")", "");
-
-
-                                if (ds7 != null && ds7.Tables[0].Rows.Count > 0)
+                                #region For Crescent allowed only CCODE wise Mark entry rule.
+                                if (Org == 2)
                                 {
-                                    if (Convert.ToInt32(ds7.Tables[0].Rows[0][0]) < 0)
+                                    DataSet ds7 = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + SUBEXAMNO + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND CCODE='" + CCODE + "' AND SEMESTERNO in (" + Convert.ToString(ds4.Tables[0].Rows[0]["SEMESTERNO"]) + ")", "");
+
+                                    if (ds7 != null && ds7.Tables[0].Rows.Count > 0)
                                     {
-                                        objCommon.DisplayMessage(this.Page, "STOP !!! Rule 1 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                        if (Convert.ToInt32(ds7.Tables[0].Rows[0][0]) < 0)
+                                        {
+                                            objCommon.DisplayMessage(this.Page, "STOP !!! Rule 1 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                            return;
+                                        }
+                                        else if (Convert.ToInt32(ds7.Tables[0].Rows[0][1]) < 0)
+                                        {
+                                            objCommon.DisplayMessage(this.Page, "STOP !!! Rule 2 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        objCommon.DisplayMessage(this.Page, "STOP !!! Exam Rule is not Defined", this.Page);
                                         return;
                                     }
-                                    else if (Convert.ToInt32(ds7.Tables[0].Rows[0][1]) < 0)
-                                    {
-                                        objCommon.DisplayMessage(this.Page, "STOP !!! Rule 2 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
-                                        return;
-                                    }
+
                                 }
+                                #endregion
                                 else
                                 {
-                                    objCommon.DisplayMessage(this.Page, "STOP !!! Exam Rule is not Defined", this.Page);
-                                    return;
-                                }
 
+                                    DataSet ds7 = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + SUBEXAMNO + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + COURSENO + ") AND COURSENO=" + COURSENO + " AND SEMESTERNO in (" + Convert.ToString(ds4.Tables[0].Rows[0]["SEMESTERNO"]) + ")", "");
+
+
+                                    if (ds7 != null && ds7.Tables[0].Rows.Count > 0)
+                                    {
+                                        if (Convert.ToInt32(ds7.Tables[0].Rows[0][0]) < 0)
+                                        {
+                                            objCommon.DisplayMessage(this.Page, "STOP !!! Rule 1 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                            return;
+                                        }
+                                        else if (Convert.ToInt32(ds7.Tables[0].Rows[0][1]) < 0)
+                                        {
+                                            objCommon.DisplayMessage(this.Page, "STOP !!! Rule 2 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        objCommon.DisplayMessage(this.Page, "STOP !!! Exam Rule is not Defined", this.Page);
+                                        return;
+                                    }
+
+                                }
                             }
                         }
                 }
@@ -299,15 +321,11 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             }
             //***********************END***************************
 
-           // DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno);
-          //  DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]));//added on 30032023
-          //DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]),Sessionno);//added on 26062023
             string Examname = objCommon.LookUp("TBLEXAMPATTERNMAPPING M LEFT JOIN TBLEXAMQUESTIONPAPER Q ON(Q.EXAMPATTERNMAPPINGID=M.EXAMPATTERNMAPPINGID) INNER JOIN TBLEXAMNAMEMASTER E ON(M.EXAMNAMEID=E.EXAMNAMEID) INNER JOIN ACD_SUBEXAM_NAME SN ON E.EXAMNO = SN.EXAMNO AND SN.SUBEXAMNAME = EXAMNAME ", "distinct substring(SN.FLDNAME,1,1)FLDNAME", "Q.QUESTIONPAPERID=" + ddlExamName.SelectedValue);
             
             if (Examname == "E" && USER_TYPE==3)
             {
                 DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["SectionId"]), Sessionno);//added on 26062023
-                //if (checklock.Tables[0].Rows.Count > 0)
                 if (Convert.ToInt32(checklock.Tables[0].Rows[0]["LOCK"]) == 0)
                 {
 
