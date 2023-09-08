@@ -212,7 +212,7 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                 {
                     ClearCommitteeData();
                     BindListViewCommittee();
-                    objCommon.DisplayMessage(this, "Record Updated sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Updated successfully", this.Page);
                     ViewState["action"] = null;
                 }
             }
@@ -226,7 +226,7 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                     ClearCommitteeData();
                     BindListViewCommittee();
 
-                    objCommon.DisplayMessage(this, "Record Saved sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Saved successfully", this.Page);
                 }
 
                 else
@@ -322,8 +322,13 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                 {
                     ClearDesignationData();
                     BindListViewDesignation();
-                    objCommon.DisplayMessage(this, "Record Updated sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Updated successfully", this.Page);
                     ViewState["action"] = null;
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this, "Record Already Exist", this.Page);
+                    ClearDesignationData();
                 }
             }
             else
@@ -334,7 +339,7 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     ClearDesignationData();
-                    objCommon.DisplayMessage(this, "Record Saved sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Saved successfully", this.Page);
                     BindListViewDesignation();
                 }
 
@@ -429,7 +434,7 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                 CustomStatus cs = (CustomStatus)objPhdC.UpdateCommitteeMappingData(id, committe, Designation, status, mode);
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
-                    objCommon.DisplayMessage(this, "Record Updated sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Updated successfully", this.Page);
                     ViewState["action"] = null;
                     BindListViewMapping();
                     ClearMappingData();
@@ -441,7 +446,7 @@ public partial class ACADEMIC_PHD_PHDCommitteeDesignation : System.Web.UI.Page
                 CustomStatus cs = (CustomStatus)objPhdC.InsertCommitteeMappingData(0, committe, Designation, status, mode);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
-                    objCommon.DisplayMessage(this, "Record Saved sucessfully", this.Page);
+                    objCommon.DisplayMessage(this, "Record Saved successfully", this.Page);
                     BindListViewMapping();
                     ClearMappingData();
                 }
