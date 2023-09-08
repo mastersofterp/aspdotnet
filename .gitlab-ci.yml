@@ -27,10 +27,10 @@ stages:
             -uatPublishProfile "$publishProfilesPath/FolderProfile_UAT_DAIICT.pubxml,$publishProfilesPath/FolderProfile_UAT_DCH.pubxml,$publishProfilesPath/FolderProfile_UAT_HITS.pubxml,$publishProfilesPath/FolderProfile_UAT_IPER.pubxml,$publishProfilesPath/FolderProfile_UAT_IPR.pubxml,$publishProfilesPath/FolderProfile_UAT_MAHER.pubxml,$publishProfilesPath/FolderProfile_UAT_PCEN.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMCEM.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMITR.pubxml"
             -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,mserprfc-app,mserprfc-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP"
             -developmentBranchName $developmentBranchName 
-            -devPublishProfile "$publishProfilesPath/FolderProfile_SID"
-            -devMachineName "IITMSPC125" 
+            -devPublishProfile "$publishProfilesPath/FolderProfile_DEV_RFCDEV.pubxml"
+            -devMachineName "RFC-DEVAPP" 
             -testBranchName $testBranchName
-            -testPublishProfile "$publishProfilesPath/FolderProfile_TEST_RFCTEST"
+            -testPublishProfile "$publishProfilesPath/FolderProfile_TEST_RFCTEST.pubxml"
             -testMachineName "RFC-DEVAPP"
             -restorePreviousWebConfig "true" 
             -minutesForDeployment 50
@@ -46,11 +46,11 @@ stages:
         - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
 
 
-job_SidDesktop: # for test purposes only
-    stage: run_script
-    tags: 
-        - SidDesktop    
-    <<: *deploy_template    
+# job_SidDesktop: # for test purposes only
+#     stage: run_script
+#     tags: 
+#         - SidDesktop    
+#     <<: *deploy_template    
 
 job_RFC-DEVAPP:
   stage: run_script
