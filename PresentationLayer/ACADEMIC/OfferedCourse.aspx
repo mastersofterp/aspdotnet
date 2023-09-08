@@ -134,7 +134,7 @@
 
                                                             <asp:ListBox ID="ddlSemester" runat="server" SelectionMode="Multiple"
                                                                 CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
-
+                                                           
 
                                                         </div>
                                                     </div>
@@ -169,7 +169,10 @@
                                                                 <table class="table table-striped table-bordered nowrap " style="width: 100%" id="tblCourseLst">
                                                                     <thead class="bg-light-blue">
                                                                         <tr>
-                                                                            <th>Offered</th>
+                                                                            <%--<th>Offered</th>--%>
+                                                                            <th>
+                                                                                <asp:CheckBox ID="cbHead" Text="Select All" runat="server" onclick="return SelectAll(this)" ToolTip="Select/Select all" />
+                                                                            </th>
                                                                             <th>
                                                                                 <asp:Label ID="lblDYtxtCourseCode" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th>
@@ -194,7 +197,7 @@
                                                                 <tr>
                                                                     <td>
                                                                         <%--Enabled='<%# (Convert.ToInt32(Eval("REGISTERED") ) == 1 ?  false : true )%>'--%>
-                                                                        <asp:CheckBox ID="chkoffered" runat="server" ToolTip='<%# Eval("COURSENO") %>' />
+                                                                        <asp:CheckBox ID="chkoffered" runat="server" ToolTip='<%# Eval("COURSENO") %>' onClick="totStudents(this);"/>
                                                                     </td>
                                                                     <td><%# Eval("CCODE")%></td>
                                                                     <td><%# Eval("COURSE_NAME")%></td>
@@ -350,6 +353,7 @@
 
                                                         </div>
                                                         <asp:HiddenField ID="hftot" runat="server" />
+                                                        <asp:HiddenField ID="hftotN" runat="server"/>
                                                     </div>
 
                                                     <div class="col-12 btn-footer">
@@ -492,7 +496,7 @@
                                                             <asp:DropDownList ID="ddlSessionCopyCrsTo" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
-                                                              <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
                                                                 ControlToValidate="ddlSessionCopyCrsTo" Display="None" InitialValue="0"
                                                                 ErrorMessage="Please Select To Session" ValidationGroup="CopyOfferedTo"></asp:RequiredFieldValidator>
                                                         </div>
@@ -510,7 +514,7 @@
                                                         CssClass="btn btn-warning" />
                                                     <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List"
                                                         ShowMessageBox="true" ShowSummary="false" ValidationGroup="CopyOffered" />
-                                                     <asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List"
+                                                    <asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List"
                                                         ShowMessageBox="true" ShowSummary="false" ValidationGroup="CopyOfferedTo" />
                                                 </div>
 
@@ -566,7 +570,7 @@
                                                                             CssClass="form-control multi-select-demo" SelectionMode="multiple"></asp:ListBox>
                                                                     </td>
                                                                     <td>
-                                                                         <asp:TextBox ID="txtSeqNoCopyOffrCrs" runat="server" Text='<% #Eval("SRNO")%>' CssClass="form-control"> </asp:TextBox>
+                                                                        <asp:TextBox ID="txtSeqNoCopyOffrCrs" runat="server" Text='<% #Eval("SRNO")%>' CssClass="form-control"> </asp:TextBox>
                                                                     </td>
                                                                 </tr>
                                                             </ItemTemplate>
@@ -677,7 +681,7 @@
             }
         }
 
-       
+
 
     </script>
     <script type="text/javascript">
@@ -1090,6 +1094,53 @@
                 });
             });
         });
+
+    </script>
+   <script type="text/javascript" language="javascript">
+
+       function SelectAll(headchk) {
+           
+           debugger;
+           var i = 0;
+           var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
+           
+           var hftotN = document.getElementById('<%= hftotN.ClientID %>').value;
+          // alert(hftotN);
+            var count = 0;
+            for (i = 0; i < Number(hftotN) ; i++) {
+               
+                //ctl00_ContentPlaceHolder1_lvCourse_ctrl0_chkoffered
+                var lst = document.getElementById('ctl00_ContentPlaceHolder1_lvCourse_ctrl' + i + '_chkoffered');
+                //alert(lst.typechk);
+                if (lst.type == 'checkbox') {
+                    if (headchk.checked == true) {
+                        if (lst.disabled == false) {
+                            lst.checked = true;
+                            count = count + 1;
+                        }
+                    }
+                    else {
+                        lst.checked = false;
+                    }
+                }
+            }
+
+            if (headchk.checked == true) {
+                document.getElementById('<%= txtTotStud.ClientID %>').value = count;
+            }
+            else {
+                document.getElementById('<%= txtTotStud.ClientID %>').value = 0;
+            }
+        }
+
+        function totStudents(chk) {
+            var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
+
+            if (chk.checked == true)
+                txtTot.value = Number(txtTot.value) + 1;
+            else
+                txtTot.value = Number(txtTot.value) - 1;
+        }
 
     </script>
 
