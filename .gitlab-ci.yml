@@ -27,7 +27,7 @@ stages:
             -uatPublishProfile "FolderProfile_UAT_DAIICT.pubxml,FolderProfile_UAT_DCH.pubxml,FolderProfile_UAT_HITS.pubxml,FolderProfile_UAT_IPER.pubxml,FolderProfile_UAT_IPR.pubxml,FolderProfile_UAT_MAHER.pubxml,FolderProfile_UAT_PCEN.pubxml,FolderProfile_UAT_PRMCEM.pubxml,FolderProfile_UAT_PRMITR.pubxml"
             -uatMachineName "daiict-app,RFCDEV-APP,hits-app,RFCDEV-APP,RFCDEV-APP,mserprfc-app,mserprfc-app,RFCDEV-APP,RFCDEV-APP,RFCDEV-APP"
             -developmentBranchName $developmentBranchName 
-            -devPublishProfile "FolderProfile_DEV_RFCTEST"
+            -devPublishProfile "FolderProfile_DEV_RFCDEV"
             -devMachineName "RFCDEV-APP" 
             -testBranchName $testBranchName
             -testPublishProfile "FolderProfile_TEST_RFCTEST"
