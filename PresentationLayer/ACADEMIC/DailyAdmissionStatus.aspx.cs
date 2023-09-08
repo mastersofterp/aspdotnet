@@ -257,7 +257,23 @@ public partial class ACADEMIC_DailyAdmissionStatus : System.Web.UI.Page
     }
     protected void ddladmbatch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        BindListView();
+        if (rblSelection.SelectedValue == "2")
+        {
+            lvsendemail.DataSource = null;
+            lvsendemail.DataBind();
+
+            if (ddladmbatch.SelectedIndex == 0)
+            {
+                lvsendemail.DataSource = null;
+                lvsendemail.DataBind();
+            }
+            else
+            {
+                BindListView();
+            }
+            
+        }
+       
     }
     protected void rblSelection_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -265,9 +281,12 @@ public partial class ACADEMIC_DailyAdmissionStatus : System.Web.UI.Page
        {
            if (rblSelection.SelectedValue == "1")
            {
+               lvsendemail.DataSource = null;
+               lvsendemail.DataBind();
                DivadmBatch.Visible = false;
                btnSendmailDailyStatus.Visible = true;
                btnsendemail.Visible = false;
+               ddladmbatch.SelectedIndex = 0;
                BindListViewDaily();
            }
            else if (rblSelection.SelectedValue == "2")
