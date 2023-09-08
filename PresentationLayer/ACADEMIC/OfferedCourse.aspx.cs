@@ -269,6 +269,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourse);//Set label - 
                 pnlCourse.Visible = true;
                 divCourseDetail.Visible = true;
+                hftotN.Value = dsfaculty.Tables[0].Rows.Count.ToString();
             }
             else
             {
