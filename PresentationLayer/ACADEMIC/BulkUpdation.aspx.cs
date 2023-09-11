@@ -867,8 +867,8 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtUSN.Visible = false;
                 txtLAdd.Visible = true;
-               // ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT  JOIN ACD_STU_ADDRESS A ON (S.IDNO = A.IDNO)", "S.IDNO", "S.REGNO,S.STUDNAME,A.LADDRESS AS COLUMNNAME ,A.PADDRESS AS PCOLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
-
+                //ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT  JOIN ACD_STU_ADDRESS A ON (S.IDNO = A.IDNO)", "S.IDNO", "S.REGNO,S.STUDNAME,A.LADDRESS AS COLUMNNAME ,A.PADDRESS AS PCOLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+                //txtLAdd.Attributes.Add("onkeypress", "return checkAddress(txt)");
                 // txtPAdd.Visible = true;
                 //   lblStudent.Visible = true;
             }
@@ -924,7 +924,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtLAdd.Visible = false;
 
                 }
-                else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19")
+                else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17") //|| rdbCat.SelectedValue == "19") - Modified By Vinay Mishra to Apply Validation for Aadhar Card Number - Bug Id 166611
                 {
                     txtemail.Visible = false;
                     txtUSN.Visible = true;
@@ -934,6 +934,17 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtLAdd.Visible = false;
 
                  //   lblStudent.Visible = true;
+                }
+                else if (rdbCat.SelectedValue == "19")  //Added By Vinay Mishra to Apply Validation for Aadhar Card Number - Bug Id 166611
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+                    txtUSN.MaxLength = 12;
+                    txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
                 }
                 else if (rdbCat.SelectedValue == "21")
                 {
