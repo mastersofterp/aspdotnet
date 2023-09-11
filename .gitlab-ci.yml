@@ -40,10 +40,9 @@ stages:
             -restoreFromBackupFiles "/image" 
             -deleteAfterPublishFiles "/APP_CODE,/website.publishproj" 
             -publishPrecompilePath "$CI_PROJECT_DIR\PrecompiledWeb\PresentationLayer\"   
-            -restoreDefaultFile "true"
-        
-    rules:
-        - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
+            -restoreDefaultFile "true"        
+    # rules:
+    #     - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
 
 
 # job_SidDesktop: # for test purposes only
