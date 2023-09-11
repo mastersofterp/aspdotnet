@@ -34,11 +34,11 @@ public partial class ACADEMIC_POC_Email_SMS_WhatsApp : System.Web.UI.Page
             string bccMails = string.Empty;
             DataSet ds = new DataSet();
             string attachmentFilename = string.Empty;
-            //string folderPath = Server.MapPath("~/POC_EMAIL/");
             string path = Server.MapPath("~/TempDocument/");
             string filename = "";                    
-            ccMails="nikhillambe97@gmail.com";
             Byte[] Imgbytes = null;
+            ccMails = txtCC.Text.ToString();
+            bccMails = txtBCC.Text.ToString();
             if (fuAttach.HasFile)
             {
                 if (!Directory.Exists(path))
@@ -57,8 +57,16 @@ public partial class ACADEMIC_POC_Email_SMS_WhatsApp : System.Web.UI.Page
                     Imgbytes = File.ReadAllBytes(LogoPath);
                     Imgfile = Convert.ToBase64String(Imgbytes);
                 }
+                result = objSendEmail.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, ds, filename, Imgbytes, "image/png/pdf");
             }
-            result = objSendEmail.EmailSMSWhatsApp_New(pageNo, email, message, subject, ccMails, bccMails, ds, filename, Imgbytes, "image/png/pdf");
+            else if (fuAttach.HasFile == false && ccMails == "" && bccMails=="")
+            {
+                result = objSendEmail.SendEmail_New(pageNo, email, message, subject); 
+            }
+            else if (fuAttach.HasFile == false && ccMails != "" || bccMails != "")
+            {
+                result = objSendEmail.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails);
+            }
             if (result == 1)
             {
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage()", "alert(`Email sent successfully.`)", true);
@@ -150,21 +158,6 @@ public partial class ACADEMIC_POC_Email_SMS_WhatsApp : System.Web.UI.Page
                         bodys = bodys.Replace("{#department#}", Dept);
                     }
                 }
-                //bodys = objCommon.LookUp("ACD_WHATSAPP_TEMPLATE", "TEMPLATE", "TEMPLATE_NAME='"+templateName+"' AND ACTIVE_STATUS=1");
-
-                //bodys = bodys.Replace("{#var#}", API_KEY);
-                //bodys = bodys.Replace("{#var1#}", mobile);
-                //bodys = bodys.Replace("{#var2#}", UserName);
-                //bodys = bodys.Replace("{#var3#}", Name);
-                //bodys = bodys.Replace("{#var4#}", att);
-                //bodys = bodys.Replace("{#var5#}", course);
-                //bodys = bodys.Replace("{#var6#}", Dept);
-                
-                //bodys = @"{""apiKey"":" + '"' + API_KEY.ToString() + '"' + "," + "\n" +
-                //@"""campaignName"":""erpattendance_rcpit""," + "\n" +
-                //@"""destination"":" + '"' + mobile.ToString() + '"' + "," + "\n" +
-                //@"""userName"":" + '"' + UserName.ToString() + '"' + "," + "\n" +
-                //@"""templateParams"":[" + '"' + Name.ToString() + '"' + "," + '"' + att.ToString() + '"' + "," + '"' + course.ToString() + '"' + "," + '"' + Dept.ToString() + '"' + "]}";
             }
             objSendEmail.SendWhatsApp_New(mobile, Request.QueryString["pageno"].ToString(), bodys, dsCheck);
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage()", "alert(`WhatsApp message sent successfully.`)", true);
@@ -187,5 +180,8 @@ public partial class ACADEMIC_POC_Email_SMS_WhatsApp : System.Web.UI.Page
         txtMessage.Text = "";
         txtSub.Text = "";
         txtMobile.Text = "";
+        txtCC.Text = "";
+        txtBCC.Text = "";
+        
     }
 }
