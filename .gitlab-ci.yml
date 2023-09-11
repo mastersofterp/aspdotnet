@@ -13,6 +13,8 @@ stages:
         deploymentOutput: ""
         gitCompareCommand: "git diff --name-only origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" # can add --ignore-all-space to ignore all whitespace
     script:
+        - echo "$CI_COMMIT_REF_NAME"
+        - echo "$publishProfilesPath/FolderProfile_TEST_RFCTEST.pubxml"
         - powershell -executionpolicy bypass -File "C:\GitLabRunner\CICD-Scripts\powershell-deployment.ps1"
             -projectName "$CI_PROJECT_NAME"
             -branchName "$CI_COMMIT_REF_NAME"
