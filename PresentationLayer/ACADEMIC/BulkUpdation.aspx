@@ -30,6 +30,18 @@
             }
         }
 
+        function checkAddress(txt) {
+            //var address = document.getElementById('txtusn');
+            
+            var specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|<>?]+/;
+
+            if (specialChars.test(txt.value)) {
+                alert('Special Symbols Are Not Allowed!!!');
+                txt.value = txt.value.replace(specialChars, '');
+                return false;
+            }
+        }
+
         //function isSpecialKey(evt) {
         //    var charCode = (evt.which) ? evt.which : event.keyCode
         //    if ((charCode >= 65 && charCode <= 91) || (charCode >= 97 && charCode <= 123) || (charCode >= 48 || charCode <= 57))
@@ -677,7 +689,7 @@
                                                             <%-- <asp:RequiredFieldValidator ID ="rfvEmail" runat="server" ControlToValidate="txtemail" InitialValue="0" SetFocusOnError="true" ValidationGroup="teacherallot" ErrorMessage="Please Enter valid Email Address" Display="None"> </asp:RequiredFieldValidator>--%>
                                                             <asp:TextBox ID="txtAdmDate" runat="server" Style="text-align: right" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
                                                             <asp:Image ID="imgFrmDt" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />
-                                                            <asp:TextBox ID="txtLAdd" runat="server" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
+                                                            <asp:TextBox ID="txtLAdd" runat="server" Text='<%#Eval("COLUMNNAME")%>' onkeyup="return checkAddress(this)"></asp:TextBox>
                                                              <%--<asp:Textbox id="txtpadd" runat="server" text='<%#Eval("PCOLUMNNAME")%>'></asp:Textbox>--%>
                                                             <ajaxToolKit:CalendarExtender ID="ceFrmDt" runat="server" Enabled="true" CssClass="Calendar"
                                                                 EnableViewState="true" Format="dd/MM/yyyy" PopupButtonID="imgFrmDt" TargetControlID="txtAdmDate" />
@@ -691,7 +703,7 @@
                                                                 SetFocusOnError="true" />
                                                         </td>
                                                         <td id="tdDivPAddress" runat="server">
-                                                            <asp:Textbox id="txtpadd" runat="server" Text='<%#Eval("PCOLUMNNAME")%>'></asp:Textbox>
+                                                            <asp:Textbox id="txtpadd" runat="server" Text='<%#Eval("PCOLUMNNAME")%>' onkeyup="return checkAddress(this)"></asp:Textbox>
                                                         </td>
                                                     </tr>
                                                 </ItemTemplate>
