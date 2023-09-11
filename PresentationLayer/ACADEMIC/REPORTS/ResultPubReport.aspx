@@ -33,18 +33,21 @@
                                 <div class="row">
 
 
-                                     <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                             <label>College & Scheme</label>
+                                            <label>College & Scheme</label>
                                             <%--<asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>--%>
                                         </div>
-                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
-                                            ValidationGroup="save" data-select2-enable="true" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged"   >
+                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control" TabIndex="1"
+                                            data-select2-enable="true" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="report">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ResultPublishSummaryReport">
                                         </asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -55,15 +58,17 @@
                                         <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="True" AutoPostBack="True" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
+                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="ResultPublishSummaryReport"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>School/Institute Name</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlColg" runat="server" AppendDataBoundItems="True" AutoPostBack="True" ToolTip="Please Select School/Institute Name" OnSelectedIndexChanged="ddlColg_SelectedIndexChanged" data-select2-enable="true" TabIndex="2">
+                                        <asp:DropDownList ID="ddlColg" runat="server" AppendDataBoundItems="True" AutoPostBack="True" ToolTip="Please Select School/Institute Name" OnSelectedIndexChanged="ddlColg_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvcolg" runat="server" ControlToValidate="ddlColg"
@@ -74,7 +79,7 @@
                                             <sup>* </sup>
                                             <label>Department</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlDept" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlDept_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="3">
+                                        <asp:DropDownList ID="ddlDept" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlDept_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDept" runat="server" ControlToValidate="ddlDept"
@@ -85,7 +90,7 @@
                                             <sup>* </sup>
                                             <label>Degree</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="4">
+                                        <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
@@ -96,7 +101,7 @@
                                             <sup>* </sup>
                                             <label>Branch</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlBranch" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="5">
+                                        <asp:DropDownList ID="ddlBranch" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" ToolTip="Please Select Department" ValidationGroup="hod" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlBranch"
@@ -109,7 +114,7 @@
                                             <label>Scheme</label>
                                         </div>
                                         <asp:DropDownList ID="ddlScheme" runat="server" AppendDataBoundItems="true"
-                                            AutoPostBack="True" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" data-select2-enable="true" TabIndex="6">
+                                            AutoPostBack="True" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <%-- <asp:RequiredFieldValidator ID="rfvScheme" runat="server" ControlToValidate="ddlScheme"
@@ -120,7 +125,7 @@
                                             <sup>* </sup>
                                             <label>Semester</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="7">
+                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <%--<asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem"
@@ -130,18 +135,23 @@
                                 </div>
                             </div>
                             <div class="col-12 btn-footer">
-                                <asp:Button ID="btnPrint" runat="server" OnClick="btnPrint_OnClick" Text="Report" ValidationGroup="report" TabIndex="8"
+                                <asp:Button ID="btnPrint" runat="server" OnClick="btnPrint_OnClick" Text="Report" ValidationGroup="report" TabIndex="1"
                                     CssClass="btn btn-info" />
-                                <asp:Button ID="btnExcelReport" runat="server" OnClick="btnExcelReport_OnClick" Text="Excel" ValidationGroup="report" TabIndex="9"
+                                <asp:Button ID="btnExcelReport" runat="server" OnClick="btnExcelReport_OnClick" Text="Excel" ValidationGroup="report" TabIndex="1"
                                     CssClass="btn btn-primary" />
-                                <asp:Button ID="btnDeclartionPending" runat="server" OnClick="btnDeclartionPending_Click" Text="Result Declaration Pending(Excel)" TabIndex="10"
-                                    CssClass="btn btn-primary" CausesValidation="false"/>
-                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_OnClick" Text="Cancel" TabIndex="11"
+                                <asp:Button ID="btnDeclartionPending" runat="server" OnClick="btnDeclartionPending_Click" Text="Result Declaration Pending(Excel)" TabIndex="1"
+                                    CssClass="btn btn-primary" CausesValidation="false" />
+                                <asp:Button ID="btnResultPublishSummaryReport" runat="server" OnClick="btnResultPublishSummaryReport_Click" Text="Result Publish Summary Report" ValidationGroup="ResultPublishSummaryReport" TabIndex="1"
+                                    CssClass="btn btn-primary" />
+                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_OnClick" Text="Cancel" TabIndex="1"
                                     CssClass="btn btn-warning" CausesValidation="false" />
+
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List"
                                     ShowMessageBox="true" ShowSummary="false" ValidationGroup="report" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
                                     ShowMessageBox="true" ShowSummary="false" ValidationGroup="hod" />
+                                <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List"
+                                    ShowMessageBox="true" ShowSummary="false" ValidationGroup="ResultPublishSummaryReport" />
                             </div>
                         </div>
                     </div>
@@ -151,6 +161,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExcelReport" />
             <asp:PostBackTrigger ControlID="btnDeclartionPending" />
+            <asp:PostBackTrigger ControlID="btnResultPublishSummaryReport" />
         </Triggers>
     </asp:UpdatePanel>
 
