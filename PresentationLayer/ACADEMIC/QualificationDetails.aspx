@@ -2145,7 +2145,7 @@
          var vocMarksObtained =  Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
          var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
          var orgid = $("#<%=hdnOrgId.ClientID %>").val();  
-         if (orgid != "5") {     //Added by Bhagyashree on 12062023 
+         if (orgid != "5" && orgid != "6") {                              //Added by Bhagyashree on 12062023 //// Added by orgid Sachin Lohakare 11092023
              if (numVal1 <= 0) {
                  alert('Enter Valid Marks for Physics');
                  document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();

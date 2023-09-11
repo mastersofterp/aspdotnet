@@ -118,8 +118,12 @@
                             </div>
                             <div class="col-12 btn-footer">
 
-                                <asp:Button ID="btnTranscriptWithHeader" runat="server" Text="Transcript Report" ValidationGroup="SubmitTranscript"
+                                <asp:Button ID="btnTranscriptWithHeader" runat="server" Text="Transcript Report Format 1" ValidationGroup="SubmitTranscript"
                                     OnClick="btnTranscriptWithHeader_Click" Visible="false" CssClass="btn btn-info" />
+                                
+                                <asp:Button ID="btnTranscriptWithFormat" runat="server" Text="Transcript Report Format 2" ValidationGroup="SubmitTranscript"
+                                     OnClick="btnTranscriptWithFormat_Click" Visible="false" CssClass="btn btn-info" />
+
                                 <asp:Button ID="btntranscripwithoutheader" Visible="false" runat="server" Text="Transcript Report without Header" ValidationGroup="submit" OnClick="btntranscripwithoutheader_Click"
                                     CssClass="btn btn-info" />
                                 <asp:Button ID="btnReport" runat="server" Text="All Result" Visible="false" CssClass="btn btn-info" ValidationGroup="submit" OnClick="btnReport_Click" />

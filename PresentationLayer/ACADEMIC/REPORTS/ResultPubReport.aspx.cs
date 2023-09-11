@@ -62,6 +62,8 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
                 //    rfvDept.Enabled = false;
                 //    rfvDegree.Enabled = false;
                 //}
+
+                ddlClgname.Focus();
             }
         }
     }
@@ -99,13 +101,13 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE '" + deptno + "' WHEN '0' THEN 0 ELSE CAST(DB.DEPTNO AS VARCHAR) END) IN (" + deptno + ")", "");
 
 
-         //added comment 290622   objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S WITH (NOLOCK) INNER JOIN RESULT_PUBLISH_DATA TR WITH (NOLOCK) ON (S.SESSIONNO=TR.SESSIONNO)", "DISTINCT S.SESSIONNO", "S.SESSION_PNAME", "TR.SESSIONNO > 0", "S.SESSIONNO DESC");
+            //added comment 290622   objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S WITH (NOLOCK) INNER JOIN RESULT_PUBLISH_DATA TR WITH (NOLOCK) ON (S.SESSIONNO=TR.SESSIONNO)", "DISTINCT S.SESSIONNO", "S.SESSION_PNAME", "TR.SESSIONNO > 0", "S.SESSIONNO DESC");
 
 
             //objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER C WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT (C.COLLEGE_ID)", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "C.COLLEGE_ID IN(" + Session["college_nos"] + ") AND C.COLLEGE_ID > 0", "C.COLLEGE_ID");
-           
+
             ddlSession.Focus();
-           
+
         }
         catch (Exception ex)
         {
@@ -118,7 +120,6 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         if (ddlSession.SelectedIndex > 0)
         {
             ddlSem.Items.Clear();
@@ -127,7 +128,6 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
             ddlSem.Focus();
             //ddlStudent.Items.Clear();
             //ddlStudent.Items.Add(new ListItem("Please Select", "0"));
-
         }
         else
         {
@@ -135,8 +135,9 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
             //ddlStudent.Items.Clear();
             //ddlStudent.Items.Add(new ListItem("Please Select", "0"));
-
+            ddlSession.Focus();
         }
+
         //comment on 290622
         //ddlScheme.Items.Clear();
         //ddlScheme.Items.Add(new ListItem("Please Select", "0"));
@@ -372,7 +373,7 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH B INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON CDB.BRANCHNO = B.BRANCHNO", "DISTINCT B.BRANCHNO", "B.LONGNAME", "COLLEGE_ID=" + ddlColg.SelectedValue + " AND CDB.DEPTNO=" + ddlDept.SelectedValue + " AND CDB.DEGREENO =" + ddlDegree.SelectedValue, "B.BRANCHNO");
             }
-           
+
         }
     }
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
@@ -392,7 +393,7 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
 
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
-         Common objCommon = new Common();
+        Common objCommon = new Common();
 
         if (ddlClgname.SelectedIndex > 0)
         {
@@ -408,19 +409,68 @@ public partial class ACADEMIC_REPORTS_ResultPubReport : System.Web.UI.Page
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
+                ddlSession.Focus();
 
                 //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S WITH (NOLOCK) INNER JOIN RESULT_PUBLISH_DATA TR WITH (NOLOCK) ON (S.SESSIONNO=TR.SESSIONNO)", "DISTINCT S.SESSIONNO", "S.SESSION_PNAME", "TR.SESSIONNO > 0 and isnull(is_active,0)=1 and COLLEGE_ID=" + ViewState["college_id"].ToString(), "S.SESSIONNO DESC");
-
             }
         }
-        ddlSession.SelectedIndex = 0;
-        ddlSem.SelectedIndex = 0;
-       
-
+        else
+        {
+            ddlSession.SelectedIndex = 0;
+            ddlSession.Items.Clear();
+            ddlSession.Items.Add(new ListItem("Please Select", "0"));
+            ddlSem.SelectedIndex = 0;
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add(new ListItem("Please Select", "0"));
+            ddlClgname.Focus();
+        }
     }
 
+    protected void btnResultPublishSummaryReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
+            GridView GV = new GridView();
+            DataSet ds = null;
 
+            string proc_name = "PKG_GET_RESULT_PUBLICATION_SUMMARY_REPORT";
+            string param = "@P_SESSIONNO,@P_SCHEMENO";
+            string call_values = "" + ddlSession.SelectedValue + ", " + Convert.ToInt32(ViewState["schemeno"]) + "";
+            ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
+            //ds = objMEC.GetResultPublicationDetailInExcel(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue));
 
-    
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                //ds.Tables[0].Columns.RemoveAt(3);
+                GV.DataSource = ds;
+                GV.DataBind();
+
+                string attachment = "attachment; filename=" + "Result_Publication_Summary_Report.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/vnd.MS-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                GV.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(updResultpublicationreport, "No Data Found for current selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_REPORTS_ResultPubReport.btnExcelReport_OnClick() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }

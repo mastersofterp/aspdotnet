@@ -40,7 +40,7 @@
                                     <sup>* </sup>
                                     <label>Email</label>
                                 </div>
-                                <asp:TextBox ID="txtMail" runat="server" ToolTip="Please enter email." TabIndex="4" MaxLength="64" onkeypress="return (event.charCode>96 && event.charCode<123 || event.charCode==64  || event.charCode==46)" AutoComplete="off"></asp:TextBox>
+                                <asp:TextBox ID="txtMail" runat="server" ToolTip="Please enter email." TabIndex="4" MaxLength="64" onkeypress="return (event.charCode>96 && event.charCode<123 || event.charCode==64  || event.charCode==46 || event.charCode>47 && event.charCode<58)" AutoComplete="off"></asp:TextBox>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
@@ -57,6 +57,20 @@
                                     <label>Attachment</label>
                                 </div>
                                 <asp:FileUpload ID="fuAttach" runat="server" ToolTip="Please select file." TabIndex="6" />
+                            </div>
+                             <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <%--<sup>* </sup>--%>
+                                    <label>CC Mail</label>
+                                </div>
+                                <asp:TextBox ID="txtCC" runat="server" ToolTip="Please enter CC Mail." TabIndex="1" MaxLength="32" onkeypress="return (event.charCode>96 && event.charCode<123 || event.charCode==64  || event.charCode==46 || event.charCode>47 && event.charCode<58)" AutoComplete="off"></asp:TextBox>
+                            </div>
+                               <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <%--<sup>* </sup>--%>
+                                    <label>BCC Mail</label>
+                                </div>
+                                <asp:TextBox ID="txtBCC" runat="server" ToolTip="Please enter BCC Mail." TabIndex="1" MaxLength="32" onkeypress="return (event.charCode>96 && event.charCode<123 || event.charCode==64  || event.charCode==46 || event.charCode>47 && event.charCode<58)" AutoComplete="off"></asp:TextBox>
                             </div>
                         </div>
                     </div>
@@ -87,7 +101,7 @@
                     var length;
                     length = attach.files.length;
                     var alertMsg = "";
-                    if (name == "" || email == "" || message == "" || subject == "" || length==0) {
+                    if (name == "" || email == "" || message == "" || subject == "") {
                         if (name == "") {
                             alertMsg += "Please enter name.\n";
                         }

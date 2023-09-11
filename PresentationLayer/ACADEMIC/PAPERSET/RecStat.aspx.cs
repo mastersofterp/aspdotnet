@@ -126,7 +126,8 @@ public partial class ACADEMIC_PAPERSET_RecStat : System.Web.UI.Page
             lvCourse4.DataSource = null;
             lvCourse4.DataBind();
             pnlList4.Visible = false;
-            btnSubmit5.Visible = false;
+            btnSubmit5.Enabled = false;
+            objCommon.DisplayMessage(this.updRcvSatus, "Data not found please Complete the privous process!", this.Page);
         }
 
     }
@@ -176,6 +177,7 @@ public partial class ACADEMIC_PAPERSET_RecStat : System.Web.UI.Page
                 lvCourse4.DataSource = null;
                 lvCourse4.DataBind();
                 pnlList4.Visible = false;
+                
             }
 
         }
