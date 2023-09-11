@@ -11,6 +11,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="erp, admission, exam, academic, erp portal, hostel, erp software, training and placement, administration, payroll, finance, establishment, store, software">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"> 
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <%--<title>MasterSoft ERP Sloution RPVT LTD</title>--%>
     <link rel="shortcut icon" href="Images/nophoto.jpg" type="image/x-icon" id="lnklogo">
 
@@ -81,8 +84,8 @@
     <script src="<%#Page.ResolveClientUrl("~/plugins/theme-color-pallate/themecolor.js")%>"></script>
     <script src="<%#Page.ResolveClientUrl("~/plugins/theme-color-pallate/modernizr.min.js")%>"></script>
 
-      <%--  added by GAURAV SONPAROTE  17082023 --%>
-      <script src="<%#Page.ResolveClientUrl("~/JAVASCRIPTS/Inspect.js")%>"></script>
+    <%--  added by GAURAV SONPAROTE  17082023 --%>
+    <script src="<%#Page.ResolveClientUrl("~/JAVASCRIPTS/Inspect.js")%>"></script>
 
 
     <style>
@@ -138,9 +141,9 @@
         }*/
         /*--------------google sign in google sign in 29/09/2020 Added by Dileep--------------------------------*/
 
-         /*-------------ashwini thakre-----------------------------*/
+        /*-------------ashwini thakre-----------------------------*/
         .user-header #ctl00_lblLink {
-            font-size:14px;
+            font-size: 14px;
         }
     </style>
 
@@ -290,16 +293,16 @@
 
                                         <li class="column" draggable="true">
                                             <div class="option">
-                                                <div class="icon">      
+                                                <div class="icon">
                                                     <%--<asp:LinkButton OnClientClick="return btnHome();" ID="btndashbord" runat="server">      <%--Added by Sachin Lohakare on 29-07-2023--%>
 
-                                                       <%-- <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />--%>
-                                                   <%-- </asp:LinkButton>--%>
+                                                    <%-- <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />--%>
+                                                    <%-- </asp:LinkButton>--%>
 
-                                                       <asp:LinkButton ID="btnDash" OnClick="btnHome_Click" runat="server">
-                                                 <%--   <asp:LinkButton ID="btnDash" runat="server">--%>
-                                                 <%--    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>--%>
-                                                       <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />
+                                                    <asp:LinkButton ID="btnDash" OnClick="btnHome_Click" runat="server">
+                                                        <%--   <asp:LinkButton ID="btnDash" runat="server">--%>
+                                                        <%--    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>--%>
+                                                        <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />
                                                     </asp:LinkButton>
                                                 </div>
                                                 <span class="text">Dashboard</span>
@@ -3201,7 +3204,7 @@
 
         <!-- ============  Added by sachin Lohakare on 29-07-2023 for Dashboard Refresh on Parent login  Start =================== -->
 
-    <%--    <script type="text/javascript">                        
+        <%--    <script type="text/javascript">                        
             $( document ).ready(function() {
                 //debugger;
                 var temp=<%=Session["usertype"] %>
@@ -3234,100 +3237,100 @@
                
         </script>--%>
         <!-- ============  Added by sachin Lohakare on 29-07-2023 End =================== -->
-         <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 START =================== -->
+        <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 START =================== -->
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                var getSystemOS = getMobileOperatingSystem();
+                if (getSystemOS !== "iOS") {
+                    console.log('Is DevTools open:', window.devtools.isOpen);
+                    console.log('DevTools orientation:', window.devtools.orientation);
+                    if (window.devtools.isOpen == true && window.devtools.orientation != undefined) {
+                        alert("Please Close The Inspector Window.");
+                        location.reload();
+                    }
+                    // Get notified when it's opened/closed or orientation changes
+                    window.addEventListener('devtoolschange', function (event) {
+                        // window.addEventListener('devtoolschange', event => {
+                        console.log('Is DevTools open:', event.detail.isOpen);
+                        console.log('DevTools orientation:', event.detail.orientation);
+                        console.log(event);
+                        if (event.detail.isOpen == true && event.detail.orientation != undefined) {
+                            alert("Please Close The Inspector Window.");
+                            location.reload();
+                        }
+                    });
+                }
+                function getMobileOperatingSystem() {
+                    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+                    // Windows Phone must come first because its UA also contains "Android"
+                    if (/windows phone/i.test(userAgent)) {
+                        return "Windows Phone";
+                    }
+
+                    if (/android/i.test(userAgent)) {
+                        return "Android";
+                    }
+
+                    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+                    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                        return "iOS";
+                    }
+
+                    return "unknown";
+                }
+            });
+
+            $(document).ready(function () {
+
+                $(document)[0].oncontextmenu = function () { return true; }
+
+                $(document).mousedown(function (e) {
+                    if (e.button == 2) {
+                        return true;
+                    } else {
+                        return true;
+                    }
+                });
+                // FOR right click off ---------------START  
+                //$(document).ready(function () {
+
+                //    $(document)[0].oncontextmenu = function () { return false; }
+
+                //    $(document).mousedown(function (e) {
+                //        if (e.button == 2) {
+                //            return false;
+                //        } else {
+                //            return true;
+                //        }
+                //    });
+
+                // --------------------------------------END 
+                document.onkeydown = function (e) {
+                    if (event.keyCode == 123) {
+                        return false;
+                    }
+                    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                        return false;
+                    }
+                    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                        return false;
+                    }
+                    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                        return false;
+                    }
+                    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                        return false;
+                    }
+                }
+            });
     
- <script type="text/javascript">
 
-     $(document).ready(function () {
-         var getSystemOS = getMobileOperatingSystem();
-         if (getSystemOS !== "iOS") {
-             console.log('Is DevTools open:', window.devtools.isOpen);
-             console.log('DevTools orientation:', window.devtools.orientation);
-             if (window.devtools.isOpen == true && window.devtools.orientation != undefined) {
-                 alert("Please Close The Inspector Window.");
-                 location.reload();
-             }
-             // Get notified when it's opened/closed or orientation changes
-             window.addEventListener('devtoolschange', function (event) {
-                 // window.addEventListener('devtoolschange', event => {
-                 console.log('Is DevTools open:', event.detail.isOpen);
-                 console.log('DevTools orientation:', event.detail.orientation);
-                 console.log(event);
-                 if (event.detail.isOpen == true && event.detail.orientation != undefined) {
-                     alert("Please Close The Inspector Window.");
-                     location.reload();
-                 }
-             });
-         }
-         function getMobileOperatingSystem() {
-             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        </script>
 
-             // Windows Phone must come first because its UA also contains "Android"
-             if (/windows phone/i.test(userAgent)) {
-                 return "Windows Phone";
-             }
-
-             if (/android/i.test(userAgent)) {
-                 return "Android";
-             }
-
-             // iOS detection from: http://stackoverflow.com/a/9039885/177710
-             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                 return "iOS";
-             }
-
-             return "unknown";
-         }
-     });
-
-     $(document).ready(function () {
-
-         $(document)[0].oncontextmenu = function () { return true; }
-
-         $(document).mousedown(function (e) {
-             if (e.button == 2) {
-                 return true;
-             } else {
-                 return true;
-             }
-         });
-         // FOR right click off ---------------START  
-         //$(document).ready(function () {
-
-         //    $(document)[0].oncontextmenu = function () { return false; }
-
-         //    $(document).mousedown(function (e) {
-         //        if (e.button == 2) {
-         //            return false;
-         //        } else {
-         //            return true;
-         //        }
-         //    });
-
-         // --------------------------------------END 
-         document.onkeydown = function (e) {
-             if (event.keyCode == 123) {
-                 return false;
-             }
-             if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                 return false;
-             }
-             if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-                 return false;
-             }
-             if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                 return false;
-             }
-             if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                 return false;
-             }
-         }
-     });
-    
-
-       </script>
-
-          <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 END =================== -->
+        <!-- ============ Drag script added by GAURAV SONPAROTE 17082023 END =================== -->
 
 
     </form>
