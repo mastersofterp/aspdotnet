@@ -24,6 +24,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
+using BusinessLogicLayer.BusinessLogic;
 
 public partial class PAYROLL_TRANSACTIONS_Pay_Salary_Remark : System.Web.UI.Page
 {
@@ -32,6 +33,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Salary_Remark : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
 
     PayController objPayroll = new PayController();
+    string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -137,7 +139,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Salary_Remark : System.Web.UI.Page
         try
         {
             //CustomStatus cs = (CustomStatus)objPayroll.UpdateMonthRemark(txtMonthRemark.Text, ddlMonthYear.SelectedItem.Text,ddlCollege.SelectedValue);
-            CustomStatus cs = (CustomStatus)objPayroll.UpdateMonthRemark(txtMonthRemark.Text, ddlMonthYear.SelectedItem.Text, Convert.ToInt32(ddlCollege.SelectedValue));
+            CustomStatus cs = (CustomStatus)UpdateMonthRemarkNew(txtMonthRemark.Text, ddlMonthYear.SelectedItem.Text, Convert.ToInt32(ddlCollege.SelectedValue));
 
             objCommon.DisplayMessage(UpdatePanel1,"Record Updated Successfully", this);
         }
@@ -150,6 +152,33 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Salary_Remark : System.Web.UI.Page
         }
     }
 
+    public int UpdateMonthRemarkNew(string monRemark, string monYear, int collegeNo)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            //UpdateDaysal
+            SqlParameter[] sqlParams = new SqlParameter[]
+                        {    
+                             new SqlParameter("@P_MONYEAR",monYear),                            
+                             new SqlParameter("@P_MONTHREMARK",monRemark),
+                             new SqlParameter("@P_COLLEGENO",collegeNo)
+                          
+                        };
+            if (objSQLHelper.ExecuteNonQuerySP("PKG_PAYROLL_MONTH_REMARK", sqlParams, false) != null)
+                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.PayController.UpdateMonthRemarkNew()-> " + ex.ToString());
+        }
+        return retStatus;
+    }
+
+   
     protected void butSubmit_Click(object sender, EventArgs e)
     {
         try
