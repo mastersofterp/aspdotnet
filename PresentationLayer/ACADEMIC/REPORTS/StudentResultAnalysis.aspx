@@ -397,6 +397,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="CourseWiseFailStudList">
                                         </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
+                                        </asp:RequiredFieldValidator>
                                     </div>
 
 
@@ -429,6 +432,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="CourseWiseFailStudList">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -547,6 +553,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="CourseWiseFailStudList">
                                         </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
+                                        </asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divSection" runat="server">
 
@@ -634,7 +643,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="CourseWiseFailStudList">
-                                            
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -814,10 +825,12 @@
                                 <asp:Button ID="btnGetGpaReport" runat="server" TabIndex="1" Text="Gpa Cgpa Report" CssClass="btn btn-info" OnClick="btnGetGpaReport_Click" CausesValidation="false" />
                                 <asp:Button ID="btnCGPAReport" runat="server" TabIndex="1" Text="CGPA Excel Report" CssClass="btn btn-info" Visible="false" OnClick="btnCGPAReport_Click" CausesValidation="false" />
                                 <asp:Button ID="btnBranchWiseResultAnalysis" runat="server" TabIndex="1" Text="Branch Wise Result Analysis" CssClass="btn btn-info" ValidationGroup="Branch" OnClick="btnBranchWiseResultAnalysis_Click" />
+                                <asp:Button ID="btnCourseWiseExamRegistartion" Text="Course Wise Exam Registartion" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourseWiseExamRegistartion_Click" ValidationGroup="CourseWiseExamRegistartion" />
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
 
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Branch" CausesValidation="false" />
                                 <asp:ValidationSummary ID="ValidationSummary8" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseFailStudList" CausesValidation="false" />
+                                <asp:ValidationSummary ID="ValidationSummary9" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseExamRegistartion" CausesValidation="false" />
 
                             </div>
 

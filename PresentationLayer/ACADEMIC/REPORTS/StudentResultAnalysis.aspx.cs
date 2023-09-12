@@ -2888,5 +2888,46 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSem.Focus();
         }
     }
+    protected void btnCourseWiseExamRegistartion_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            GridView GVDayWiseAtt = new GridView();
+            string ContentType = string.Empty;
+            //int COLLEGE = Convert.ToInt32(ddlSchoolInstitite.SelectedValue);
+            //int COLLEGEID = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "COLLEGE_ID", "COSCHNO= '" + COLLEGE + "'"));
+            DataSet ds = null;
+            string proc_name = "PKG_GET_COURSE_WISE_EXAM_REGISTARTION_DETAILS";
+            string para_name = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO";
+            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlcourse.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "";
+            ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+            //if (ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables.Count > 0)
+            {
+                GVDayWiseAtt.DataSource = ds;
+                GVDayWiseAtt.DataBind();
+                string attachment = "attachment; filename=CourseWiseExamRegistartion.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/vnd.MS-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                GVDayWiseAtt.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Found for current selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Reports_Stud_BranchwiseReport.ShowReportExcel -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
 }
 
