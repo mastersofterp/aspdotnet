@@ -152,6 +152,7 @@ public partial class PAYROLL_MASTERS_PF_loantype : System.Web.UI.Page
                     {
                         BindListViewPFLoanType();
                         ViewState["action"] = "add";
+                        objCommon.DisplayMessage(updMain, "Record Saved Successfully", this);
                         ClearText();
                     }
                 }
@@ -167,7 +168,7 @@ public partial class PAYROLL_MASTERS_PF_loantype : System.Web.UI.Page
                         {
                             BindListViewPFLoanType();
                             ViewState["action"] = "add";
-                            objCommon.DisplayMessage(updMain, "Record updated successfully", this);
+                            objCommon.DisplayMessage(updMain, "Record Updated Successfully", this);
                             ClearText();
                         }
                     }
