@@ -17,6 +17,9 @@ using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using IITMS.SQLServer.SQLDAL;
+using System.Data.SqlClient;
+using BusinessLogicLayer.BusinessLogic;
 
 public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
 {
@@ -24,6 +27,8 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     ITDeclarationController ObjCon = new ITDeclarationController();
     ITDeclaration objITDE = new ITDeclaration();
+    //ConnectionStrings
+    string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -65,6 +70,7 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
                 FillCollege();
                 FillStaff();
                 FillFinacialYear();
+                FillITRules();
 
             }
         }
@@ -76,7 +82,10 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
 
     }
 
-
+    protected void FillITRules()
+    {
+        objCommon.FillDropDownList(ddlITRule, "PAYROLL_ITRULE", "IT_RULE_ID", "IT_RULE_NAME", "IT_RULE_ID > 0  and IsActive =1", "IT_RULE_ID");
+    }
 
     private void FillFinacialYear()
     {
@@ -181,15 +190,19 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
                             int rowValue;
                             if (int.TryParse(drRow[i].ToString(), out rowValue))
                             {
-                                status = ObjCon.ITBulkDeclaration(fDate, tDate,Convert.ToInt32(drRow["IDNO"]));
+                                //status = ObjCon.ITBulkDeclaration(fDate, tDate,Convert.ToInt32(drRow["IDNO"]),Convert.ToInt32(ddlITRule.SelectedValue));
+                                status = ITBulkDeclaration(fDate, tDate,Convert.ToInt32(drRow["IDNO"]),Convert.ToInt32(ddlITRule.SelectedValue));
+                              
                             }
                         }
                     }
                     if (status != 0)
                     {
                         string msg = string.Empty;
-                        msg = status == 1 ? "IT DECLARATION DONE SUCCESSFULLY!!!" : "IT DECLARATION FAILED!!!";
-                        ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
+                        objCommon.DisplayMessage(UpdatePanel1, "IT DECLARATION DONE SUCCESSFULLY!!!", this);
+                        return;
+                        //msg = status == 1 ? "IT DECLARATION DONE SUCCESSFULLY!!!" : "IT DECLARATION FAILED!!!";
+                        //ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
                     }
                 }                      
             }
@@ -202,6 +215,31 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+    public int ITBulkDeclaration(string fromDate, string toDate, int idNo,int ITRuleId)
+    {
+        int retStatus = 0;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = null;
+            objParams = new SqlParameter[5];
+            objParams[0] = new SqlParameter("@P_FROMDATE", fromDate);
+            objParams[1] = new SqlParameter("@P_TODATE", toDate);
+            objParams[2] = new SqlParameter("@P_IDNO", idNo);
+            objParams[3] = new SqlParameter("@P_ITRULEID", ITRuleId);
+            objParams[4] = new SqlParameter("@P_STATUS", SqlDbType.Int);
+            objParams[4].Direction = ParameterDirection.Output;
+            retStatus = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_PAY_IT_BULK_DECLARATION", objParams, true));
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.CCMS.BusinessLogicLayer.BusinessLogic.ITDeclarationController.ITBulkDeclaration-> " + ex.ToString());
+        }
+        return retStatus;
+    }
+
   
 
 }
