@@ -173,6 +173,7 @@ public partial class Academic_Masters_Staff : System.Web.UI.Page
                 deptno = Session["userdeptno"].ToString();
             if (Session["usertype"].ToString() != "1")
                 objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE '" + deptno + "' WHEN '0' THEN 0 ELSE CAST(DB.DEPTNO AS VARCHAR) END) IN (" + deptno + ")", "");
+                
             //AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
             else
 
@@ -253,7 +254,9 @@ public partial class Academic_Masters_Staff : System.Web.UI.Page
 
         if (ddlSession.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S INNER JOIN ACD_COURSE C ON (S.SEMESTERNO = C.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO >0 AND C.SUBID =1  AND C.MAXMARKS_E > 0  AND C.BOS_DEPTNO =" + Convert.ToInt32(ViewState["DeptNo"]) + "AND C.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), " S.SEMESTERNO");
+           // objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S INNER JOIN ACD_COURSE C ON (S.SEMESTERNO = C.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO >0 AND C.SUBID =1  AND C.MAXMARKS_E > 0  AND C.BOS_DEPTNO =" + Convert.ToInt32(ViewState["DeptNo"]) + "AND C.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), " S.SEMESTERNO");
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S INNER JOIN ACD_COURSE C ON (S.SEMESTERNO = C.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO >0 AND C.SUBID =1  AND C.MAXMARKS_E > 0  AND C.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), " S.SEMESTERNO");
+            ddlSemester.Focus();
             int Session = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND IS_ACTIVE = 1"));
             DataSet ds = objCommon.FillDropDown("ACD_PS_MOD_PREFERENCE P INNER JOIN ACD_COURSE C ON C.CCODE = P.CCODE INNER JOIN ACD_SCHEME S ON(S.SCHEMENO = C.SCHEMENO)", "DISTINCT P.CCODE", "C.CCODE,C.COURSE_NAME + '-' + C.CCODE AS COURSE_NAME, DBO.FN_DESC('DEGREENAME',S.DEGREENO)DEGREENAME,DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTERNAME", "PS_MOD = 1 AND STAFFNO= " + Convert.ToInt32(ViewState["pstaffno"]) + " AND SESSIONNO= " + Session + " AND C.SEMESTERNO  > 0 ", "P.CCODE");
             // Session["ps"] = null;
@@ -338,7 +341,7 @@ public partial class Academic_Masters_Staff : System.Web.UI.Page
                     ViewState["pstaffno"] = staffno.ToString();
                     this.LoadStaff();
                     this.LoadStaffExternaltab();
-                    //Clear();
+                    ClearE();
 
                     txtStaff.Enabled = true;
                     PnlDetailForStaff.Visible = true;
@@ -351,7 +354,8 @@ public partial class Academic_Masters_Staff : System.Web.UI.Page
                     objCommon.DisplayMessage(updatePanel3, "Staff Updated Successfully!", this.Page);
                     // div_preference.Visible = false; //***************
                     this.LoadStaff();
-                    Response.Redirect(Request.Url.ToString());
+                    ClearE();
+                    //Response.Redirect(Request.Url.ToString());
 
                     // ViewState["pstaffno"] = staffno.ToString();
                 }

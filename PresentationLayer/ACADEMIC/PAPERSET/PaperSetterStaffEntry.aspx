@@ -1224,7 +1224,7 @@
                                                             <span style="color: red;">*</span>
                                                             <asp:Label ID="lblDYMobilenumber" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
-                                                        <asp:TextBox ID="txtMobile" runat="server" ToolTip="Please Enter Mobile Number" CssClass="form-control" TabIndex="1" MaxLength="12" />
+                                                        <asp:TextBox ID="txtMobile" runat="server" ToolTip="Please Enter Mobile Number" CssClass="form-control" TabIndex="1" MaxLength="10" />
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
                                                             TargetControlID="txtMobile">
                                                         </ajaxToolKit:FilteredTextBoxExtender>
@@ -1443,7 +1443,7 @@
                                                             <sup></sup>
                                                             <label>Mobile No.</label>
                                                         </div>
-                                                        <asp:TextBox ID="txtContactNo" runat="server" ToolTip="Please Enter Contact no." CssClass="form-control" TabIndex="1" MaxLength="12" />
+                                                        <asp:TextBox ID="txtContactNo" runat="server" ToolTip="Please Enter Contact no." CssClass="form-control" TabIndex="1" MaxLength="10" />
                                                         <%-- <asp:RequiredFieldValidator ID="rfvContactNo" runat="server" ControlToValidate="txtContactNo"
                                                 ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Contact Nos."
                                                 SetFocusOnError="true" />--%>
