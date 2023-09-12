@@ -681,6 +681,11 @@ public partial class ACADEMIC_BulkBilldeskDoubleVerification : System.Web.UI.Pag
             // ViewState["DegreeNo"] = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
             bind_listviewOnline();
             }
+        else
+            {
+            objCommon.DisplayMessage(this.Page, "No student found for selected criteria.", this.Page);
+            showonline.Visible = false;
+            }
         }
     protected void btncancelonline_Click(object sender, EventArgs e)
         {
