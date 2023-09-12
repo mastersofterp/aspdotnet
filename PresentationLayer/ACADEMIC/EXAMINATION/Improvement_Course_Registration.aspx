@@ -461,7 +461,8 @@
                                                     <td>
                                                         <%--<asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("EXAM_REGISTERED").ToString() == "1" ? true : false %>' Enabled='<%# Eval("ACCEPTED").ToString() == "0" ? true : false %>' />--%>
                                                         <%--<asp:CheckBox ID="CheckBox1" runat="server" ToolTip="Click to select this subject for registration" onclick="backlogLvChk(this);" />--%>
-                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("IMPROVEMENT"))==1 ? true : false)%>' Enabled='<%#(Convert.ToInt32(Eval("IMPROVEMENT"))==1 ? false : true)%>' onclick="backlogLvChk(this);" />
+                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("IMPROVEMENT"))==1 ? true : false)%>' onclick="backlogLvChk(this);" />
+                                                        <%--Enabled='<%#(Convert.ToInt32(Eval("IMPROVEMENT"))==1 ? false : true)%>'--%>
                                                     </td>
                                                     <td>
                                                         <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />

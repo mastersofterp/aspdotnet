@@ -1035,11 +1035,16 @@ public partial class ACADEMIC_EXAMINATION_Improvement_Course_Registration : Syst
 
                 int a = lvFailCourse.Items.Count;
                 int b = 0;
-                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+
+                if (Session["usertype"].ToString() == "2")
                 {
-                    CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                    if (chk.Enabled == false)
+                    foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                    {
+                        CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                        //if (chk.Enabled == false)
+                        chk.Enabled = chk.Checked ? false : true;
                         b++;
+                    }
                 }
 
                 if (ViewState["usertype"].ToString() == "2")
@@ -1581,7 +1586,8 @@ public partial class ACADEMIC_EXAMINATION_Improvement_Course_Registration : Syst
             foreach (ListViewDataItem dataitem in lvFailCourse.Items)
             {
                 CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                if (chk.Checked == true && chk.Enabled == true)
+                //if (chk.Checked == true && chk.Enabled == true)
+                if (chk.Checked == true)
                 {
                     objSR.COURSENOS += ((dataitem.FindControl("lblCCode")) as Label).ToolTip + ",";
                     objSR.SEMESTERNOS += ((dataitem.FindControl("lblsemester")) as Label).ToolTip + ",";
@@ -1606,18 +1612,20 @@ public partial class ACADEMIC_EXAMINATION_Improvement_Course_Registration : Syst
             if (ret == 1)
             {
                 objCommon.DisplayMessage("Improvement Course Registration Done Successfully!!!", this.Page);
-                int b = 0;
-                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                {
-                    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
-                    if (chkacc.Checked)
-                    {
-                        chkacc.Enabled = false;
-                        b++;
-                    }
-                }
+                //int b = 0;
+                //foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //{
+                //    CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
+                //    if (chkacc.Checked)
+                //    {
+                //        chkacc.Enabled = false;
+                //        b++;
+                //    }
+                //}
 
                 //btnSubmit.Enabled = (lvFailCourse.Items.Count == b) ? false : true;
+
+                bindcourses();
             }
         }
         else
