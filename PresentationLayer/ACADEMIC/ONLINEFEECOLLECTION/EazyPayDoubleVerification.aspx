@@ -256,19 +256,19 @@
                                                         <asp:TextBox ID="TextBox1" runat="server" MaxLength="500" TabIndex="1" CssClass="form-control" ToolTip="Please Enter Transaction Id"></asp:TextBox>
                                                         <%--<asp:RequiredFieldValidator ID="rfvNotice" runat="server" ControlToValidate="txtTransactionId" ErrorMessage="Please Enter Transaction Id" Display="None" ValidationGroup="Submit"></asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label>Degree</label>
-                                                            <asp:DropDownList ID="ddldegree" runat="server" CssClass="form-control" ToolTip="Please Select Activity Name." AppendDataBoundItems="true" data-select2-enable="true" AutoPostBack="true">
+                                                            <asp:DropDownList ID="ddldegree" runat="server" CssClass="form-control" ToolTip="Please Select Degree." AppendDataBoundItems="true" data-select2-enable="true" AutoPostBack="true">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <%-- <asp:ListItem Value="1">B.Tech Admission</asp:ListItem>--%>
                                                                 <%-- <asp:ListItem Value="2" >PHD Admission</asp:ListItem>
                                                 <asp:ListItem Value="3" >NRI Admission</asp:ListItem>
                                                 <asp:ListItem Value="4" >UG/PG Admission</asp:ListItem>--%>
                                                             </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlActivityName" ValidationGroup="SubmitOnline" Display="None"
-                                                                InitialValue="0" ErrorMessage="Please Select Activity Name." SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtRegno" ValidationGroup="SubmitOnline" Display="None"
+                                                                InitialValue="0" ErrorMessage="Please Select Degree." SetFocusOnError="true"></asp:RequiredFieldValidator>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12 " style="display: none">
@@ -288,7 +288,7 @@
                                                             <label>Registration No.</label>
                                                         </div>
                                                         <asp:TextBox CssClass="form-control" ID="txtRegno" runat="server" TabIndex="2" ToolTip="Please Enter Registration No"></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtprnno"
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtRegno"
                                                             Display="None" ErrorMessage="Please Enter Registration No" InitialValue="" SetFocusOnError="true"
                                                             ValidationGroup="SubmitOnline">
                                                         </asp:RequiredFieldValidator>
@@ -300,7 +300,7 @@
                                                         <asp:Button ID="btnshowonline" runat="server" CssClass="btn btn-info" Text="Show" ValidationGroup="SubmitOnline" OnClick="btnshowonline_Click" />
                                                         <asp:Button ID="btncancelonline" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btncancelonline_Click" />
 
-                                                        <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true" ValidationGroup="SubmitOnline" ShowSummary="false" />
+                                                        <asp:ValidationSummary ID="rfvsubmit" runat="server" DisplayMode="List" ShowMessageBox="true" ValidationGroup="SubmitOnline" ShowSummary="false" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -435,6 +435,7 @@
         </ContentTemplate>
         <Triggers>
               <asp:PostBackTrigger ControlID="rdbOnline" />
+            <asp:PostBackTrigger ControlID="rdbMIS" />
             <asp:PostBackTrigger ControlID="rdbMIS" />
         </Triggers>
     </asp:UpdatePanel>
