@@ -221,6 +221,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     protected void btnCancelReport_Click(object sender, EventArgs e)
     {
         AllClear();
+        Response.Redirect(Request.Url.ToString());
     }
 
     //to get faculty feedback report
@@ -358,7 +359,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     {
         ddlCollege.SelectedIndex = -1;
         ddlFeedbackType.SelectedIndex = 0;
-
+        Response.Redirect(Request.Url.ToString());
     }
 
     protected void btnreport_Click(object sender, EventArgs e)
