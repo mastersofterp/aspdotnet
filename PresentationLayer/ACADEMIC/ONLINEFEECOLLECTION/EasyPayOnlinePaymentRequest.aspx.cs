@@ -321,7 +321,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
         Semester =Convert.ToString(Session["paysemester"]);
         StudentType = "Regular";//"xy";
         paymode = "9";
-        //string dummy = " ";
+        string dummy = " ";
         string Regno = string.Empty;
         Regno = Session["regno"].ToString();
         Session["idno"] = Session["stuinfoidno"].ToString();
@@ -333,7 +333,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
        // dummy = "XY";
         redirecturl += RequestUrl;
         redirecturl += "merchantid=" + merchantid;
-        redirecturl += "&mandatory fields=" + Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Userno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + Installno + "|";//+ "|" + Semester + "|" + StudentType Mobile_No + "|456";
+        redirecturl += "&mandatory fields=" + Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Installno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + dummy + "|";//+ "|" + Semester + "|" + StudentType Mobile_No + "|456";
         redirecturl += "&optional fields=" ;// +city + "|" + name;
         redirecturl += "&returnurl=" + ResponseUrl;
         redirecturl += "&Reference No=" + Reference_No;
@@ -348,7 +348,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
         redirecturl += "&paymode=" + paymode;
         encryptredirecturl += RequestUrl;
         encryptredirecturl += "merchantid=" + merchantid;
-        encryptredirecturl += "&mandatory fields=" + encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Userno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + Installno + "|", ASEKEY);//+ 
+        encryptredirecturl += "&mandatory fields=" + encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Installno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + dummy + "|", ASEKEY);//+ 
 
         //encryptredirecturl += "&mandatory fields=" + encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + Semester + "|" + Userno + "|" + Installno + "|" + Mobile_No + "|" + EmailID + "|" + dummy + "|" + dummy, ASEKEY);//+ "|" + Semester + "|" + StudentType   (Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Mobile_No + "|456", ASEKEY);
         encryptredirecturl += "&optional fields=";// +encryptFile(city + "|" + name, ASEKEY);
