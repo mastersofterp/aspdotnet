@@ -179,6 +179,87 @@ public partial class PAYROLL_REPORT_Pay_SupplementaryWise_Report : System.Web.UI
     }
     protected void btnexporttoexcel_Click(object sender, EventArgs e)
     {
+        string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
+        string ContentType = string.Empty;
+        string monyear = ddlMonthYear.SelectedItem.ToString();
+        int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
+        int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        int IDNO = 0;
+        DataSet ds = EmployeeSupplementaryReport_exporttoexcel(monyear, StaffNo, CollegeNo, IDNO);
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
+            string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+            string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
+            string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
+            GridView GVEmpChallan = new GridView();
+            //ds.Tables[0].Columns.RemoveAt(3);
+            GVEmpChallan.DataSource = ds;
+            GVEmpChallan.DataBind();
 
+
+            // Header Row 1
+            GridViewRow HeaderGridRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Insert);
+            TableCell HeaderCell = new TableCell();
+            HeaderCell = new TableCell();
+            HeaderCell.Text = collename;
+            HeaderCell.ColumnSpan = 68;
+            HeaderCell.BackColor = System.Drawing.Color.Yellow;
+            HeaderCell.ForeColor = System.Drawing.Color.Red;
+            HeaderCell.Font.Bold = true;
+            HeaderCell.Font.Size = 16;
+            HeaderCell.Attributes.Add("style", "text-align:center !important;");
+            HeaderGridRow.Cells.Add(HeaderCell);
+            GVEmpChallan.Controls[0].Controls.AddAt(0, HeaderGridRow);
+
+
+            // Header Row 2
+            GridViewRow HeaderGridRow1 = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Insert);
+            TableCell HeaderCell1 = new TableCell();
+            HeaderCell1.Text = StaffName + "  SUPPLEMENTARY BILL FOR THE  " + Month + "    " + Year + "    ";
+            HeaderCell1.ColumnSpan = 68;
+            HeaderCell1.BackColor = System.Drawing.Color.Yellow;
+            HeaderCell1.ForeColor = System.Drawing.Color.Red;
+            HeaderCell1.Font.Bold = true;
+            HeaderCell1.Font.Size = 14;
+            HeaderCell1.Attributes.Add("style", "text-align:center !important;");
+            HeaderGridRow1.Cells.Add(HeaderCell1);
+            GVEmpChallan.Controls[0].Controls.AddAt(1, HeaderGridRow1);
+
+            string attachment = "attachment; filename=SupplementaryBillReport.xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/vnd.MS-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            GVEmpChallan.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "key", "alert('No Record Found for Selected Options')", true);
+        }
+    }
+    public DataSet EmployeeSupplementaryReport_exporttoexcel(string monyear, int StaffNo, int CollegeNo, int IDNO)
+    {
+        DataSet ds = null;
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            SqlParameter[] objParams = new SqlParameter[4];
+            objParams[0] = new SqlParameter("@P_MON_YEAR", monyear);
+            objParams[1] = new SqlParameter("@P_STAFF_NO", StaffNo);
+            //objParams[2] = new SqlParameter("@P_EMPTYPENO", EmpTypeNo);
+            objParams[2] = new SqlParameter("@P_IDNO ", IDNO);
+            objParams[3] = new SqlParameter("@P_COLLEGENO", CollegeNo);
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_PAYROLL_SUPPLEMENTARY_REPORT_EXPORTTOEXCEL", objParams);
+        }
+        catch (Exception ex)
+        {
+            return ds;
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ChangeInMasterFileController.GetEmployeesForDisplayReport-> " + ex.ToString());
+        }
+        return ds;
     }
 }
