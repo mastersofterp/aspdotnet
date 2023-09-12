@@ -81,20 +81,21 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
               string BRANCHNO = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + Convert.ToInt32(Idno)));
               string BranchName = objCommon.LookUp("ACD_BRANCH", "LONGNAME", "BRANCHNO=" + BRANCHNO );
               string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Convert.ToInt32(Idno));
-              string SEMSTERNO = mandatoryFieldsArray[4];
+              string SEMSTERNO = mandatoryFieldsArray[6];
               string RECIPT_CODE = objCommon.LookUp("ACD_DEMAND", "RECIEPT_CODE", "IDNO=" + Convert.ToInt32(Idno) + " AND ISNULL(CAN,0)=0 AND SEMESTERNO=" + Convert.ToInt32(SEMSTERNO));
 
              // lbl1.Text = Idno;
             //  lbl2.Text = Studname;
              // lbl3.Text = BranchName;
               lblRegNo.Text = Regno;
-              ViewState["userno"] = mandatoryFieldsArray[5];
+            
               Session["ReceiptType"] = RECIPT_CODE;
               ViewState["IDNO"] = Idno;
+              ViewState["userno"] = objCommon.LookUp("USER_ACC", "ISNULL(UA_NO,0) UA_NO", " UA_TYPE=2 AND UA_IDNO=" + Convert.ToInt32(Idno)); //mandatoryFieldsArray[5];
               lblstudentname.Text = Studname;
               lblBranch.Text = BranchName;
               lblSemester.Text = SEMSTERNO;
-              int installmentno = Convert.ToInt32(mandatoryFieldsArray[6]);
+              int installmentno = Convert.ToInt32(mandatoryFieldsArray[5]);
               string UniqueRefNumber = string.Empty;//Transaction ID              
               string PaymentMode = string.Empty;             
               string TotalAmount = string.Empty;            

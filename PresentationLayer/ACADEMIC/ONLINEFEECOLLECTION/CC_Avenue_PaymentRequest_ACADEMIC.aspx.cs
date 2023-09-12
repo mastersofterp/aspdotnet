@@ -16,6 +16,7 @@ using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
+using IITMS.SQLServer.SQLDAL;
 
 public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
     {
@@ -27,7 +28,7 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
     //public string strAccessCode="";
     public string strAccessCode;// put the access key in the quotes provided here.
     public string bckbutton;
-
+    string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     #region class
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
@@ -265,11 +266,11 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
         objFees.InsertOnlinePaymentlog(Convert.ToString(Session["idno"]), Session["ReceiptType"].ToString(), Convert.ToString(Session["PaymentMode"]), Convert.ToString(Session["studAmt"]), "Not Continued", txnid1);
         if (Convert.ToInt32(Session["Installmentno"]) > 0)
             {
-            result = objFees.InsertInstallmentOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), txnid1, Convert.ToDouble(Session["studAmt"]), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), "-");
+            result = InsertInstallmentOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), txnid1, Convert.ToDouble(Session["studAmt"]), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), "-", Convert.ToInt32(Session["Installmentno"]));
             }
         else
             {
-            result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), txnid1, 1, Convert.ToString(Session["ReceiptType"]), "-");
+            result = InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), txnid1, 1, Convert.ToString(Session["ReceiptType"]), "-", Convert.ToInt32(Session["Installmentno"]));
             }
 
         //result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), txnid1, 1, Convert.ToString(Session["ReceiptType"]), "-");
@@ -397,7 +398,7 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
             //additional Info.
             data.Add("merchant_param1", Session["userno"]);    //payment for which course
             data.Add("merchant_param2", Session["Branchname"]);	//paramets for payment indentification
-            data.Add("merchant_param3", "FEES COLLECTION");
+            data.Add("merchant_param3", installno);
             data.Add("merchant_param4", studPhone);
             data.Add("merchant_param5", Session["idno"]);
             data.Add("merchant_param6", installno);
@@ -438,5 +439,75 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
             {
             Response.Write("Session is NULL");
             }
+        }
+
+
+
+    public int InsertInstallmentOnlinePayment_TempDCR(int IDNO, int Dmno, int SEMESTERNO, string ORDER_ID, double amount, string RECEIPTCODE, int uano, string data, int Intstallno)
+        {
+        int retStatus = 0;
+        try
+            {
+            SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+            SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_DM_NO", Dmno),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_AMOUNT", amount),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_UANO", uano),
+                            new SqlParameter("@P_INSTALLNO", Intstallno),
+                            new SqlParameter("@P_MESSAGE", data),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+            param[param.Length - 1].Direction = ParameterDirection.Output;
+            object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSTALLMENT_INSERT_ONLINE_PAYMENT_DCR_MAHER", param, true);
+
+            if (ret != null && ret.ToString() != "-99")
+                retStatus = Convert.ToInt32(ret);
+            else
+                retStatus = -99;
+            }
+        catch (Exception ex)
+            {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertInstallmentOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+        return retStatus;
+        }
+
+
+    public int InsertOnlinePayment_TempDCR(int IDNO, int SESSIONNO, int SEMESTERNO, string ORDER_ID, int PAYSERVICETYPE, string RECEIPTCODE, string msg,int Installno)
+        {
+        int retStatus = 0;
+        try
+            {
+            SQLHelper objSqlHelper = new SQLHelper(_connectionString);
+            SqlParameter[] param = new SqlParameter[]
+                        {                         
+                            new SqlParameter("@P_IDNO", IDNO),
+                            new SqlParameter("@P_SESSIONNO", SESSIONNO),
+                            new SqlParameter("@P_SEMESTERNO", SEMESTERNO),
+                            new SqlParameter("@P_ORDER_ID", ORDER_ID),                           
+                            new SqlParameter("@P_PAYSERVICETYPE", PAYSERVICETYPE),
+                            new SqlParameter("@P_RECIEPT_CODE", RECEIPTCODE),
+                            new SqlParameter("@P_INSTALLNO", Installno),
+                            new SqlParameter("@P_MESSAGE",msg),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)          
+                        };
+            param[param.Length - 1].Direction = ParameterDirection.Output;
+            object ret = objSqlHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ONLINE_PAYMENT_DCR_MAHER", param, true);
+
+            if (ret != null && ret.ToString() != "-99")
+                retStatus = Convert.ToInt32(ret);
+            else
+                retStatus = -99;
+            }
+        catch (Exception ex)
+            {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.FeeCollectionController.InsertOnlinePayment_TempDCR-> " + ex.ToString());
+            }
+        return retStatus;
         }
     }
