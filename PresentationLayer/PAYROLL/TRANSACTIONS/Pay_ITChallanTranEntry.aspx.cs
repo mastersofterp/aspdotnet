@@ -399,8 +399,6 @@ public partial class Pay_ITChallanTranEntry : System.Web.UI.Page
         colMonth = string.Empty;
         colmonValues = string.Empty;
         //pnlList.Visible = true;
-
-
         //if (TwoCharReport == "YR")
         //{
 
@@ -500,9 +498,6 @@ public partial class Pay_ITChallanTranEntry : System.Web.UI.Page
                 //if (!txtCharges.Text.Trim().Equals(string.Empty)) objChalanTran.CHSCHARGE = Convert.ToDecimal(txtCharges.Text.Trim());
                 //if (!txtEduCess.Text.Trim().Equals(string.Empty)) objChalanTran.CHEDUCESS = Convert.ToDecimal(txtEduCess.Text.Trim());
                 //objChalanTran.COLLEGECODE = Session["colcode"].ToString();
-
-
-
 
                 if (ViewState["action"] != null)
                 {
@@ -889,6 +884,12 @@ public partial class Pay_ITChallanTranEntry : System.Web.UI.Page
             //sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             //ScriptManager.RegisterClientScriptBlock(this.updpanel, this.updpanel.GetType(), "controlJSScript", sb.ToString(), true);
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updpanel, this.updpanel.GetType(), "controlJSScript", sb.ToString(), true);
         }
         catch (Exception ex)
         {
