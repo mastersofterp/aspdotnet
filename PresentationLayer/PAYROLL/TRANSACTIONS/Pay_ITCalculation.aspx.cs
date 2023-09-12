@@ -132,7 +132,31 @@ public partial class Pay_ITCalculation : System.Web.UI.Page
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Pay_ITCalculation.aspx");
+        //Response.Redirect("Pay_ITCalculation.aspx");
+        if (ddlCollege.SelectedIndex > 0)
+        {
+            ddlCollege.SelectedIndex = 0;
+        }
+        else
+        {
+            ddlCollege.SelectedIndex = 0;
+        }
+        if (ddlStaff.SelectedIndex > 0)
+        {
+            ddlStaff.SelectedIndex = 0;
+        }
+        else
+        {
+            ddlStaff.SelectedIndex = 0;
+        }
+        if (ddlCalculationBy.SelectedIndex > 0)
+        { 
+           ddlCalculationBy.SelectedIndex =0;
+        }
+        else
+        {
+           ddlCalculationBy.SelectedIndex = 0;
+        }
     }
     protected void chkStaffWise_CheckedChanged(object sender, EventArgs e)
     {

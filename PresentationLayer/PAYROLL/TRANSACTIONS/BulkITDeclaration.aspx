@@ -45,6 +45,7 @@
                                         <div class="row">
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
+                                                    <sup>* </sup>
                                                     <label>From</label>
                                                 </div>
                                                 <div class="input-group date">
@@ -64,6 +65,7 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
+                                                    <sup>* </sup>
                                                     <label>To</label>
                                                 </div>
                                                 <div class="input-group date">
@@ -83,6 +85,7 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
+                                                    <sup>* </sup>
                                                     <label>College</label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlCollege" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3"
@@ -95,6 +98,7 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
+                                                    <sup>* </sup>
                                                    <%-- <label>Staff</label>--%>
                                                     <label>Scheme/Staff</label>
                                                 </div>
@@ -103,6 +107,23 @@
                                                 </asp:DropDownList>
                                                 <asp:RequiredFieldValidator ID="rfvddlStaff" runat="server" ControlToValidate="ddlStaff"
                                                     Display="None" ErrorMessage="Please Select Scheme/Staff" ValidationGroup="payroll" InitialValue="0"
+                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                <%--  <asp:Button ID="btnShow" runat="server" Text="Show"  Width="80px"
+                                                OnClick="btnShow_Click" />
+                                            <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="payroll"
+                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />--%>
+                                            </div>
+                                              <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                   <%-- <label>Staff</label>--%>
+                                                    <label>IT Scheme/Rule</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlITRule" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="4"
+                                                    AutoPostBack="true">
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlITRule"
+                                                    Display="None" ErrorMessage="Please Select IT Rule" ValidationGroup="payroll" InitialValue="0"
                                                     SetFocusOnError="True"></asp:RequiredFieldValidator>
                                                 <%--  <asp:Button ID="btnShow" runat="server" Text="Show"  Width="80px"
                                                 OnClick="btnShow_Click" />
@@ -173,5 +194,8 @@
                 </div>
             </div>
         </ContentTemplate>
+       
     </asp:UpdatePanel>
+      <div id="divMsg" runat="server">
+        </div>
 </asp:Content>
