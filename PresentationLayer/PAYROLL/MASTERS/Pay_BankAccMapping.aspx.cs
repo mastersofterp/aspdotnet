@@ -162,9 +162,9 @@ public partial class PAYROLL_MASTERS_Pay_BankAccMapping : System.Web.UI.Page
                 {
                     ViewState["BankAccMappingId"] = null;
                     //Showmessage("Record saved successfully");
-                    MessageBox("Record saved successfully");
+                    MessageBox("Record Saved successfully");
                    // objCommon.DisplayMessage(this.updPanel, "Record saved successfully", this.Page);
-                   // BindBankAccMapping();
+                    BindBankAccMapping(); // Updation done in  12092023
                   //  Clear();
                 }
             }
@@ -179,9 +179,9 @@ public partial class PAYROLL_MASTERS_Pay_BankAccMapping : System.Web.UI.Page
                     {
                         //updPanel
                         //Showmessage("Record updated successfully");
-                        MessageBox("Record updated successfully");
+                        MessageBox("Record Updated successfully");
                       //  objCommon.DisplayMessage(this.updPanel, "Record updated successfully", this.Page);
-                      //  BindBankAccMapping();
+                        BindBankAccMapping();
                         //Clear();
 
                     }
