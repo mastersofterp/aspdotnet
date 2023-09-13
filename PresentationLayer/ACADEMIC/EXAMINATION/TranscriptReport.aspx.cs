@@ -664,18 +664,12 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
             url += "&path=~,Reports,Academic," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() +  ",@P_IDNO=" + ViewState["idno"].ToString()+",@P_SEMESTERNO="+0+"";
 
-            if (Convert.ToInt32(Session["OrgId"]) == 9)// Atlas Added by gaurav 27_10_2022
-            {
+           
 
-                int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
-                // url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + ViewState["idno"].ToString() + ",@P_RESULT=" + txtresult.Text + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0;
-                url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + ViewState["idno"].ToString();
-
-            }
-            else
-            {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ViewState["idno"].ToString();
-            }
+            
+             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
+             url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + ViewState["idno"].ToString();
+           
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
