@@ -87,7 +87,15 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 trEmp.Visible = true;
                 //lblEmployee.Visible = true;
                 //ddlEmployee.Visible = true;
+                //if (ua_type == 4 || ua_type == 8)
+                //{
+                //  tr1.Visible = trcollege.Visible = false;
+                //  trdept.Visible = true;
+                //}
+                //else
+                //{
                 trdept.Visible = tr1.Visible = trcollege.Visible = false;
+                //}
                 trsearchtype.Visible = false;
                 rblSelect.SelectedValue = "1";
                 this.FillEmployeeIdno();
@@ -152,7 +160,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
         }
     }
     private void FillCollege()
-    {       
+    {
         objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "CODE");
 
         //if (Session["username"].ToString() != "admin")
@@ -270,9 +278,6 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
     }
 
 
-
-    // Sachin 25 May 2017
-
     protected void FillEmployeeIdno()
     {
         int IDNO = 0; Boolean IsBioAuthorityPerson = false;
@@ -314,18 +319,63 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             //trEmp.Visible = false;
             //trsearchtype.Visible = true;
             // objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO=" + deptno, "SUBDEPT");
-            objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
-            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
 
-            if (rblEmpType.SelectedValue == "0")
+            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
+            //objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
+
+            //Added by Sonal Banode on 12-09-2023 
+            DataSet ds = null;
+            // int i;
+            ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+            //int rowCount = ds.Tables[0].Rows.Count;
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]),Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+
+                    }
+                }
+                else
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
             }
             else
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ") AND PS.PSTATUS='Y'", "FNAME");
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ") AND PS.PSTATUS='Y'", "FNAME");
+                }
             }
-            ddldept.SelectedValue = deptno.ToString();
+            //ddldept.SelectedValue = deptno.ToString();
         }
         // Added By Shrikant B on 31/0/2023 for Department wise Bio metric Authority.
         else if (IsBioAuthorityPerson == true)
@@ -340,27 +390,71 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             //trEmp.Visible = false;
             //trsearchtype.Visible = true;
             // objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO=" + deptno, "SUBDEPT");
-            objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
-            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
 
-            if (rblEmpType.SelectedValue == "0")
+            //FillDepartmentForHOD();
+            //objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
+            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
+            //Added by Sonal Banode on 12-09-2023 
+            DataSet ds = null;
+            // int i;
+            ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+            //int rowCount = ds.Tables[0].Rows.Count;
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
+                else
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
             }
             else
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")  AND PS.PSTATUS='Y'", "FNAME");
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")  AND PS.PSTATUS='Y'", "FNAME");
+                }
             }
-            ddldept.SelectedValue = deptno.ToString();
+            // ddldept.SelectedValue = deptno.ToString();
         }
         else
         {
             IDNO = Convert.ToInt32(Session["idno"]);
 
-            if (IDNO == 0 || IDNO==null)
+            if (IDNO == 0 || IDNO == null)
             {
                 MessageBox("Sorry! User is not Authorised");
-                
+
                 return;
             }
             trShiftCategory.Visible = false;
@@ -1055,7 +1149,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 return;
             }
 
-           
+
         }
         catch (Exception ex)
         {
@@ -1156,7 +1250,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             IDNO = Convert.ToInt32(Session["idno"]);
         }
 
-        
+
 
         if (Convert.ToDateTime(txtDate.Text) <= System.DateTime.Now)
         {
@@ -1223,8 +1317,8 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             IDNO = Convert.ToInt32(Session["idno"]);
         }
 
-       // int IDNO = Convert.ToInt32(Session["idno"]);
-        
+        // int IDNO = Convert.ToInt32(Session["idno"]);
+
 
         //Check whether entered date must not greater than todays date
         if (Convert.ToDateTime(txtDate.Text) <= System.DateTime.Now)
@@ -1348,4 +1442,14 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
 
         System.Threading.Thread.Sleep(5000);
     }
+
+    //private void FillDepartmentForHOD()
+    //{
+    //    DataSet ds = null;
+    //    ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+    //    if (ds.Tables[0].Rows.Count > 0)
+    //    {
+    //        int paydeptno = Convert.ToInt32(ds.Tables[0].Rows[0]["PAYROLL_DEPTNO"].ToString());
+    //    }
+    //}
 }
