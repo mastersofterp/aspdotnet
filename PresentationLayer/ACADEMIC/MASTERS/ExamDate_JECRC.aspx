@@ -415,7 +415,7 @@
                                                         <label>Sub Exam Name </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSubexamname1" runat="server" AppendDataBoundItems="true"
-                                                        TabIndex="1" data-select2-enable="true" OnSelectedIndexChanged="ddlSubexamname1_SelectedIndexChanged" style="height: 22px" AutoPostBack="true">
+                                                        TabIndex="1" data-select2-enable="true" OnSelectedIndexChanged="ddlSubexamname1_SelectedIndexChanged" Style="height: 22px" AutoPostBack="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
 
                                                     </asp:DropDownList>
@@ -435,8 +435,8 @@
                                         </div>
                                         <div class="col-12 btn-footer" id="div2" runat="server">
                                             <asp:Button ID="btnShow1" runat="server" Text="Show Courses" OnClick="btnShow1_Click" CssClass="btn btn-info" ValidationGroup="Show2" TabIndex="1" />
-                                            <asp:Button ID="btnSubmit1" runat="server" Text="Submit" OnClick="btnSubmit1_Click" CssClass="btn btn-info" TabIndex="1" ValidationGroup="submit1" Enabled="false"/>
-                                             <asp:Button ID="btnViewLogin1" runat="server" Text="View On Student Login" CssClass="btn btn-info" OnClick="btnViewLogin1_Click" ValidationGroup="submit1" TabIndex="1" Visible="false" />
+                                            <asp:Button ID="btnSubmit1" runat="server" Text="Submit" OnClick="btnSubmit1_Click" CssClass="btn btn-info" TabIndex="1" ValidationGroup="submit1" Enabled="false" />
+                                            <asp:Button ID="btnViewLogin1" runat="server" Text="View On Student Login" CssClass="btn btn-info" OnClick="btnViewLogin1_Click" ValidationGroup="submit1" TabIndex="1" Visible="false" />
                                             <asp:Button ID="btnCancel1" runat="server" Text="Cancel" OnClick="btnCancel1_Click" CssClass="btn btn-warning" TabIndex="1" />
                                             <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false"
                                                 ValidationGroup="Show2" />
@@ -473,7 +473,7 @@
                                                             <asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("STATUS").ToString() == "True" ? true : false %>' TabIndex="1" />
                                                         </td>
                                                         <td>
-                                                            <asp:Label ID="lblCourseno" runat="server" Text='<%# Eval("SUBJECT_NAME")%>' ToolTip='<%# Eval("CCODE")%>' ></asp:Label>
+                                                            <asp:Label ID="lblCourseno" runat="server" Text='<%# Eval("SUBJECT_NAME")%>' ToolTip='<%# Eval("CCODE")%>'></asp:Label>
                                                         </td>
                                                         <td style="display: none"><%# Eval("STUDENTCOUNT")%></td>
                                                         <td>
@@ -482,7 +482,8 @@
                                                                     <i class="fa fa-calendar"></i>
                                                                 </div>
 
-                                                                <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onKeyPress="javascript:checkDate();" AutoPostBack="true" OnTextChanged="txtExamDate1_TextChanged" />
+                                                                <%-- <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onKeyPress="javascript:checkDate();" AutoPostBack="true" OnTextChanged="txtExamDate1_TextChanged" />--%>
+                                                                <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onKeyPress="javascript:checkDate();" />
                                                                 <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate" TargetControlID="txtExamDate" Enabled="true" OnClientDateSelectionChanged="checkDate" />
                                                                 <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate" />
                                                                 <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
@@ -491,7 +492,8 @@
 
                                                         </td>
                                                         <td>
-                                                            <asp:DropDownList ID="ddlSlot" runat="server" AppendDataBoundItems="true" CausesValidation="true" TabIndex="1" OnSelectedIndexChanged="ddlSlot1_SelectedIndexChanged" AutoPostBack="true">
+                                                            <%--  <asp:DropDownList ID="ddlSlot" runat="server" AppendDataBoundItems="true" CausesValidation="true" TabIndex="1" OnSelectedIndexChanged="ddlSlot1_SelectedIndexChanged" AutoPostBack="true">--%>
+                                                            <asp:DropDownList ID="ddlSlot" runat="server" AppendDataBoundItems="true" CausesValidation="true" TabIndex="1">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
                                                             <asp:HiddenField ID="hdf_slotno" runat="server" Value='<%# Eval("SLOTNO")%>' />
@@ -504,11 +506,11 @@
                                                             </asp:DropDownList>
                                                             <asp:HiddenField ID="hdf_modeexam" runat="server" Value='<%# Eval("ModeOfEXAMNO")%>' />
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <asp:ImageButton ID="ibtnEvalDelete1" runat="server"
                                                                 ImageUrl="~/images/delete.gif" AlternateText="CANCEL RECORD" ToolTip='<%# Eval("CCODE")%>'
                                                                 OnClick="ibtnEvalDelete1_Click" OnClientClick="return showConfirm();" CommandArgument='<%# Eval("CCODE")%>' TabIndex="13" />
-                                                       
+
                                                         </td>
                                                     </tr>
 
@@ -680,7 +682,7 @@
             }
         }
     </script>
-    <script>
+    <%--<script>
         function checkDate1(sender, args) {
             if (sender._selectedDate < new Date()) {
                 sender._textbox.set_Value(sender._selectedDate.format(sender._format))
@@ -690,7 +692,7 @@
                 return true;
             }
         }
-    </script>
+    </script>--%>
 </asp:Content>
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">
     <style type="text/css">
