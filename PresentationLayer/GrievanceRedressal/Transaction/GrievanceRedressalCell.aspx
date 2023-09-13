@@ -26,14 +26,13 @@
                             <h3 class="box-title">GRIEVANCE REDRESSAL CELL</h3>
                         </div>
                         <div class="box-body">
-
+                            
                             <div class="col-12" id="divButtons" runat="server">
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-md-12 col-12">
                                         <asp:RadioButtonList ID="rdbGriv" runat="server" AutoPostBack="true" RepeatDirection="Horizontal" RepeatColumns="2" OnSelectedIndexChanged="rdbGriv_SelectedIndexChanged">
                                             <asp:ListItem Value="0" Selected="True">Committee Type Member &nbsp;&nbsp;</asp:ListItem>
                                             <asp:ListItem Value="1">Grievance Type Member &nbsp;&nbsp;</asp:ListItem>
-
                                         </asp:RadioButtonList>
                                     </div>
                                 </div>
@@ -45,7 +44,7 @@
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup>*</sup>
-                                                    <label>Committee type</label>
+                                                    <label>Committee Type</label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlCommitteeType" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlCommitteeType_SelectedIndexChanged"
                                                     ValidationGroup="show" AutoPostBack="true" TabIndex="1">
@@ -128,7 +127,7 @@
                                             </div>
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnAdd" runat="server" Text="Add" ValidationGroup="Add"
-                                                    CssClass="btn btn-primary" ToolTip="Click here to Submit" OnClick="btnAdd_Click" CausesValidation="true" TabIndex="1" />
+                                                    CssClass="btn btn-primary" ToolTip="Click here to Add" OnClick="btnAdd_Click" CausesValidation="true" TabIndex="1" />
                                                 <asp:ValidationSummary ID="VSAdd" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Add" />
 
                                             </div>

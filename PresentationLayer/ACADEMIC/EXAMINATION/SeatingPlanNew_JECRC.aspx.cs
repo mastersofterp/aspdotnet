@@ -1048,9 +1048,12 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
                 //pnlExamCourse.Visible = true;
                 //pnlRoomDetails.Visible = true;
                 //pnldetails.Visible = false;
-
+                pnlRoomDetails.Visible = true;
+                pnlExamCourse.Visible = true;
                 lvRoomDetails.Visible = true;
                 lvExamCoursesOnDate.Visible = true;
+                pnldetails.Visible = false;
+                lvdetails.Visible = false;
             }
             else
             {
@@ -1065,8 +1068,10 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
                 //  lvExamCoursesOnDate.Visible = false;
                 // pnldetails.Visible = true;
 
-                // pnlRoomDetails.Visible = false;
-                // pnlExamCourse.Visible = false;
+                pnlRoomDetails.Visible = false;
+                pnlExamCourse.Visible = false;
+                lvRoomDetails.Visible = false;
+                lvExamCoursesOnDate.Visible = false;
                 lvdetails.Visible = true;
             }
         }
@@ -1167,8 +1172,8 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
             examno = examno.TrimEnd(',');
         }
         string dates = DateTime.Now.ToString("yyyy-MM-dd");
-        if (Convert.ToInt32(Session["OrgId"]) == 5)
-        {
+        //if (Convert.ToInt32(Session["OrgId"]) == 5)
+        //{
 
             DataSet ds = objsc.GetStudentsExamDateNEW(dates, examno);
             if (ds.Tables[0].Rows.Count > 0)
@@ -1180,13 +1185,13 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
             }
             ddlslot.Focus();
         
-        }
-        else
-        {
+        //}
+        //else
+        //{
 
-            objCommon.FillDropDownList(ddlExamdate,"ACD_EXAM_DATE ED INNER JOIN ACD_SESSION_MASTER SM ON ED.SESSIONNO=SM.SESSIONNO ", "Distinct ED.SESSIONNO", " CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", " EXAMDATE IS NOT NULL AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE in( " + examno + ")", "ED.SESSIONNO");  // AND EXAM_TT_TYPE = 11" 
+        //    objCommon.FillDropDownList(ddlExamdate,"ACD_EXAM_DATE ED INNER JOIN ACD_SESSION_MASTER SM ON ED.SESSIONNO=SM.SESSIONNO ", "Distinct ED.SESSIONNO", " CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", " EXAMDATE IS NOT NULL AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE in( " + examno + ")", "ED.SESSIONNO");  // AND EXAM_TT_TYPE = 11" 
 
-        }
+        //}
         //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
         //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE ED inner join acd_session_master SM on (ED.SESSIONNO=SM.SESSIONNO) ", "EXDTNO", "  CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO");  // AND EXAM_TT_TYPE = 11" 
 

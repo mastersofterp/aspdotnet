@@ -73,7 +73,7 @@
                                                     <sup>*</sup>
                                                     <label>Phone Number</label>
                                                 </div>
-                                                <asp:TextBox ID="txtPhoneNo" runat="server" MaxLength="15" CssClass="form-control"
+                                                <asp:TextBox ID="txtPhoneNo" runat="server" MaxLength="10" CssClass="form-control"
                                                     TabIndex="4" ToolTip="Enter Phone Number"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="rfvPhone" runat="server" ControlToValidate="txtPhoneNo"
                                                     Display="None" ErrorMessage="Please Enter Phone Number" SetFocusOnError="true" ValidationGroup="Doctor" />

@@ -57,7 +57,7 @@
                                                         <div class="label-dynamic">
                                                             <label><span style="color: #FF0000">*</span>  Role : </label>
                                                         </div>
-                                                        <asp:DropDownList ID="ddlrole" runat="server" AppendDataBoundItems="true" data-select2-enable="true" 
+                                                        <asp:DropDownList ID="ddlrole" runat="server" AppendDataBoundItems="true" data-select2-enable="true"
                                                             CssClass="form-control" ToolTip="Select Role" TabIndex="3">
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             <asp:ListItem Value="1">Inventor</asp:ListItem>
@@ -223,7 +223,12 @@
                                                     MaxLength="300" TextMode="MultiLine" TabIndex="13"
                                                     onkeyDown="checkTextAreaMaxLength(this,event,'400');" onkeyup="textCounter(this, this.form.remLen, 400);"></asp:TextBox>
                                             </div>
-
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                                <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                                <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                                <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                                <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                            </div>
                                         </div>
                                     </div>
 
@@ -255,10 +260,10 @@
                                                                         <asp:TextBox ID="txtName" runat="server" TabIndex="14" ToolTip="Please Enter Name " class="form-control"
                                                                             autocomplete="off" MaxLength="200"></asp:TextBox>
                                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="txtName" Display="None"
-                                                                            ErrorMessage="Please Enter  Name" SetFocusOnError="true" ValidationGroup="Info" >
+                                                                            ErrorMessage="Please Enter  Name" SetFocusOnError="true" ValidationGroup="Info">
                                                                         </asp:RequiredFieldValidator>
 
-                                                  
+
 
                                                                     </div>
                                                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -299,22 +304,23 @@
                                                                 <asp:Panel ID="pnlEnclosure" runat="server" Visible="false">
                                                                     <asp:ListView ID="lvEnclosures" runat="server">
                                                                         <LayoutTemplate>
-                                                                            <div id="lgv1">
-                                                                                <h4>Details of Members</h4>
-                                                                                <table class="table table-bordered table-hover">
-                                                                                    <thead>
-                                                                                        <tr class="bg-light-blue">
-                                                                                            <th>Remove</th>
-                                                                                            <th>Name</th>
-                                                                                            <th>Address</th>
-                                                                                            <th>Role</th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        <tr id="itemPlaceholder" runat="server" />
-                                                                                    </tbody>
-                                                                                </table>
+                                                                            <div class="sub-heading">
+                                                                                <h5>Details of Members</h5>
                                                                             </div>
+                                                                            <table class="table table-bordered table-hover">
+                                                                                <thead>
+                                                                                    <tr class="bg-light-blue">
+                                                                                        <th>Remove</th>
+                                                                                        <th>Name</th>
+                                                                                        <th>Address</th>
+                                                                                        <th>Role</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                                </tbody>
+                                                                            </table>
+                                                                            <%--</div>--%>
                                                                         </LayoutTemplate>
                                                                         <ItemTemplate>
                                                                             <tr>
@@ -381,40 +387,80 @@
                                                                     <asp:Button ID="btnUploadDoc" runat="server" Text="Add" TabIndex="19" class="btn btn-primary"
                                                                         OnClick="btnUploadDoc_Click" ToolTip="Click here to uplaod multiple files" />
                                                                 </div>
-                                                                <div class="col-md-12">
-                                                                    <asp:Panel ID="pnlfiles" runat="server">
-                                                                        <asp:ListView ID="LVFiles" runat="server">
-                                                                            <LayoutTemplate>
-                                                                                <div id="lgv1">
-                                                                                    <h4>Attached Files</h4>
+                                                                <div id="divAttch" runat="server" style="display: none">
+                                                                    <div class="col-md-12">
+                                                                        <asp:Panel ID="pnlfiles" runat="server">
+                                                                            <asp:ListView ID="LVFiles" runat="server">
+                                                                                <LayoutTemplate>
+                                                                                    <div class="sub-heading">
+                                                                                        <h5>Attached Files</h5>
+                                                                                    </div>
                                                                                     <table class="table table-bordered table-hover">
                                                                                         <thead>
                                                                                             <tr class="bg-light-blue">
                                                                                                 <th>Delete</th>
-                                                                                                <th>File Name</th>
+                                                                                                <th id="divattach" runat="server">Attachments  
+                                                                                                </th>
+                                                                                                <th id="divattachblob" runat="server" visible="false">Attachments
+                                                                                                </th>
+                                                                                                <th id="divDownload" runat="server" visible="false">Download
+                                                                                                </th>
+                                                                                                <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                                                </th>
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
                                                                                             <tr id="itemPlaceholder" runat="server" />
                                                                                         </tbody>
                                                                                     </table>
-                                                                                </div>
-                                                                            </LayoutTemplate>
-                                                                            <ItemTemplate>
-                                                                                <tr>
-                                                                                    <%-- Modified by Saahil Trivedi 22/01/2022--%>
-                                                                                    <td>
-                                                                                        <asp:ImageButton ID="btnDelFile" runat="server" ImageUrl="~/Images/delete.png"
-                                                                                            CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
-                                                                                            OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDelFile_Click" />
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("GETFILE"),Eval("FUID"),Eval("IDNO"),Eval("FOLDER"),Eval("APPID"))%>'><%# Eval("DisplayFileName")%></asp:HyperLink>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </ItemTemplate>
-                                                                        </asp:ListView>
-                                                                    </asp:Panel>
+                                                                                    <%--</div>--%>
+                                                                                </LayoutTemplate>
+                                                                                <ItemTemplate>
+                                                                                    <tr>
+                                                                                        <%--<td>
+                                                                                            <asp:ImageButton ID="btnDelFile" runat="server" ImageUrl="~/Images/delete.png"
+                                                                                                CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
+                                                                                                OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDelFile_Click" />
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("GETFILE"),Eval("FUID"),Eval("IDNO"),Eval("FOLDER"),Eval("APPID"))%>'><%# Eval("DisplayFileName")%></asp:HyperLink>
+                                                                                        </td>--%>
+                                                                                        <td>
+                                                                                            <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/delete.png"
+                                                                                                CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
+                                                                                                OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDelFile_Click" />
+                                                                                        </td>
+                                                                                        <td id="attachfile" runat="server">
+                                                                                            <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("DisplayFileName") %>&filename=<%# Eval("DisplayFileName")%>">
+                                                                                                <%# Eval("DisplayFileName")%></a>
+                                                                                        </td>
+                                                                                        <td id="attachblob" runat="server" visible="false">
+                                                                                            <%# Eval("DisplayFileName")%></a>
+                                                                                        </td>
+
+                                                                                        <td id="tdDownloadLink" runat="server" visible="false">
+                                                                                            <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                                            <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                                                            --%>      <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;
+                                                            
+                                                                                        </td>
+                                                                                        <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                                                            <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                                                <ContentTemplate>
+                                                                                                    <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                                        data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                                                </ContentTemplate>
+                                                                                                <Triggers>
+                                                                                                    <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                                                </Triggers>
+                                                                                            </asp:UpdatePanel>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </ItemTemplate>
+                                                                            </asp:ListView>
+                                                                        </asp:Panel>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -449,39 +495,39 @@
                                             </p>
                                         </EmptyDataTemplate>
                                         <LayoutTemplate>
-                                            <div id="lgv1">
-                                                <h4 class="box-title">Patent Details
-                                                </h4>
-                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-
-                                                    <%--   <table class="table table-bordered table-hover">--%>
-                                                    <thead>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Action
-                                                            </th>
-                                                            <th>Title of the Patent
-                                                            </th>
-                                                            <th>Applicant /Assignee Name
-                                                            </th>
-                                                            <th>Role
-                                                            </th>
-                                                            <th>Category
-                                                            </th>
-                                                            <th>Status
-                                                            </th>
-                                                            <th>Withdrawn
-                                                            </th>
-                                                            <th>Date
-                                                            </th>
-                                                            <%-- <th>ATTACHMENT
-                                                                    </th>--%>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
+                                            <div class="sub-heading">
+                                                <h5>Patent Details</h5>
                                             </div>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+
+                                                <%--   <table class="table table-bordered table-hover">--%>
+                                                <thead>
+                                                    <tr class="bg-light-blue">
+                                                        <th>Action
+                                                        </th>
+                                                        <th>Title of the Patent
+                                                        </th>
+                                                        <th>Applicant /Assignee Name
+                                                        </th>
+                                                        <th>Role
+                                                        </th>
+                                                        <th>Category
+                                                        </th>
+                                                        <th>Status
+                                                        </th>
+                                                        <th>Withdrawn
+                                                        </th>
+                                                        <th>Date
+                                                        </th>
+                                                        <%-- <th>ATTACHMENT
+                                                                    </th>--%>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                            <%--</div>--%>
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr>

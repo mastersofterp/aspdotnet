@@ -126,15 +126,34 @@ namespace IITMS
                 /// Added by SP
                 /// </summary>
                 /// <returns></returns>
-                public DataSet GetStudentConfigData()
+                //public DataSet GetStudentConfigData()
+                //{
+                //    DataSet ds = null;
+                //    try
+                //    {
+                //        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                //        SqlParameter[] objParams = new SqlParameter[2];
+                //        objParams[0] = new SqlParameter("@ORGID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                //        objParams[1] = new SqlParameter("@PAGENO", "73");
+                //        ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigAffilationTypeController.GetModuleConfigData() --> " + ex.Message + " " + ex.StackTrace);
+                //    }
+                //    return ds;
+                //}
+
+                public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                        SqlParameter[] objParams = new SqlParameter[2];
-                        objParams[0] = new SqlParameter("@ORGID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
-                        objParams[1] = new SqlParameter("@PAGENO", "73");
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@ORGID", OrgID);
+                        objParams[1] = new SqlParameter("@PAGENO", PageNo);
+                        objParams[2] = new SqlParameter("@P_PAGENAME", PageName);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
                     }
                     catch (Exception ex)

@@ -68,22 +68,31 @@ public partial class GrievanceRedressal_Transaction_GrievReceiveReply : System.W
                         // lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                     ViewState["action"] = "add";
-                    BindlistView();
-                    string committeetype = objCommon.LookUp("GRIV_GRIEVANCE_APPLICATION", "ISCOMMITTEETYPE", "");
-                    if (committeetype == "1")
+
+                    DataSet ds = objCommon.FillDropDown("GRIV_GRIEVANCE_CONFIG", "ISCOMMITEETYPE", "", "", "");
+                    if (ds.Tables[0].Rows.Count > 0)
                     {
-                        pnlRply.Visible = true;
-                        pnlGrivTypeRply.Visible = false;
+                        char committeetype = Convert.ToChar(ds.Tables[0].Rows[0]["ISCOMMITEETYPE"].ToString());
+                        if (committeetype == 'Y')
+                        {
+                            pnlRply.Visible = true;
+                            pnlGrivTypeRply.Visible = false;
+                            BindlistView();
+                        }
+                        else
+                        {
+                            pnlGrivTypeRply.Visible = true;
+                            pnlRply.Visible = false;
+                            BindliSubGrivListView();
+
+                        }
                     }
                     else
                     {
-                        pnlGrivTypeRply.Visible = true;
-                        pnlRply.Visible = false;
-                        BindliSubGrivListView();
-
+                        pnlRply.Visible = true;
+                        pnlGrivTypeRply.Visible = false;
+                        BindlistView();
                     }
-
-
                 }
             }
         }

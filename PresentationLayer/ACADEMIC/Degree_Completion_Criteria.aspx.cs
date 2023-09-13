@@ -425,6 +425,7 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
         return idnos;
     }
 
+    //Set Colour To text As per requirement
     protected void formatedData()
     {
 

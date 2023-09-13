@@ -640,7 +640,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                         allexdtno += ds.Tables[0].Rows[i]["EXDTNO"].ToString() + ",";
                     }
                     allexdtno = allexdtno.TrimEnd(',');
-                    
+
                     int retStatus = objExamController.DeleteTimeTable_JECRC(allexdtno);
 
                     if ((retStatus == 1) && (chkBox.Checked))
@@ -1015,11 +1015,11 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 objCommon.DisplayMessage(this.UpdatePanel2, "Invalid Date Format/Selected Date is previous Date than Today", this.Page);
                 return;
             }
-            if (Validate1() == false)
-            {
-                objCommon.DisplayMessage(this.UpdatePanel2, "Same Date And Slot Already Exists", this.Page);
-                return;
-            }
+            //if (Validate1() == false)
+            //{
+            //    objCommon.DisplayMessage(this.UpdatePanel2, "Same Date And Slot Already Exists", this.Page);
+            //    return;
+            //}
             foreach (ListViewDataItem dataitem in lvCourse1.Items)
             {
 
@@ -1036,7 +1036,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                         int sessionid = Convert.ToInt32(ddlSession1.SelectedValue);
                         objExam.Examdate = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
                         //return;   //Injamam Break point for testing
-                        CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid,subexamno);
+                        CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
                             objCommon.DisplayMessage(UpdatePanel2, "Exam Day(s) Saved Successfully!", this.Page);
@@ -1362,9 +1362,9 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 if (chkBox.Checked)
                 {
 
-                   ImageButton ibtnEvalDelete1 = sender as ImageButton;
-                   string ccode = (ibtnEvalDelete1.CommandArgument).ToString();
-                    int retStatus = Convert.ToInt32(objExamController.DeleteTimeTableElectiv(ccode,sessionid,subexamno));
+                    ImageButton ibtnEvalDelete1 = sender as ImageButton;
+                    string ccode = (ibtnEvalDelete1.CommandArgument).ToString();
+                    int retStatus = Convert.ToInt32(objExamController.DeleteTimeTableElectiv(ccode, sessionid, subexamno));
                     if ((retStatus == 1) && (chkBox.Checked))
                     {
                         objCommon.DisplayMessage(this.UpdatePanel2, "Time Table Cancelled Successfully", this.Page);
@@ -1397,9 +1397,9 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         try
         {
             ExamController objExamController = new ExamController();
-            int sessionid=Convert.ToInt32(ddlSession1.SelectedValue);
+            int sessionid = Convert.ToInt32(ddlSession1.SelectedValue);
             int subexamno = Convert.ToInt32(ddlSubexamname1.SelectedValue);
-            CustomStatus cs = (CustomStatus)objExamController.GetViewOnStudentLock(sessionid,subexamno);
+            CustomStatus cs = (CustomStatus)objExamController.GetViewOnStudentLock(sessionid, subexamno);
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 objCommon.DisplayMessage(UpdatePanel2, "Record Update Successfully!", this.Page);

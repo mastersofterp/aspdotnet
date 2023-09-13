@@ -29,7 +29,8 @@ public partial class ACADEMIC_FetchDetailRegistration_JECRC : System.Web.UI.Page
     Document objdocument = new Document();
     User objus = new User();
     NewUser objnu = new NewUser();
-    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+    //SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+    SendEmailCommonV2 objSendEmail = new SendEmailCommonV2(); //Object Creation
     string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
     string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName"].ToString();
 
@@ -2530,7 +2531,9 @@ public partial class ACADEMIC_FetchDetailRegistration_JECRC : System.Web.UI.Page
                     //    OutLook_Email(message, objS.EmailID, subject);
                     //}
 
-                    status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
+                   // status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
+                    string pageNo = Request.QueryString["pageno"].ToString();
+                    status = objSendEmail.SendEmail_New(pageNo, objS.EmailID, message, subject); //Calling Method  
                 }
             }
 

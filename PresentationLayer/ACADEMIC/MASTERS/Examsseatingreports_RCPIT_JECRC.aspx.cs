@@ -62,7 +62,7 @@ public partial class examseatingreports : System.Web.UI.Page
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -
             PopulateDropDownList();
             getExamdate();
-            //  getcollegeid();
+             getcollegeid();
 
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));//Header
         }
@@ -327,6 +327,26 @@ public partial class examseatingreports : System.Web.UI.Page
                 ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
 
             }
+            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            {
+                // int prevstatus = 0;
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                //  url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@EXAM_DATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") + ",@SLOTNO=" + ddlslot.SelectedValue + ",@PREV_STATUS=" + ddlExamType.SelectedValue;
+                //Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd")
+                // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@EXAM_DATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@SLOTNO=" + ddlslot.SelectedValue + ",@PREV_STATUS=" + prevstatus;                            //ddlExamType.SelectedValue;     //",@PREV_STATUS=" + ddlExamType.SelectedValue;
+                //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@EXAM_DATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("dd/MM/yyyy") + ",@SLOTNO=" + ddlslot.SelectedValue + ",@PREV_STATUS=" + ddlExamType.SelectedValue;     //",@PREV_STATUS=" + ddlExamType.SelectedValue;
+                url += "&param=@P_COLLEGE_CODE=" + 1 + ",@EXAM_DATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@SLOTNO=" + Convert.ToInt32(ddlslot.SelectedValue) + ",@PREV_STATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);     //",@PREV_STATUS=" + ddlExamType.SelectedValue;
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
+
+            }
             else
             {
 
@@ -494,6 +514,24 @@ public partial class examseatingreports : System.Web.UI.Page
                 ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
 
             }
+            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;                           //",@EXAM_DATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") +
+                // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") + ",@P_SLOTNO=" + ddlslot.SelectedValue + ",@P_PREV_STATUS=" + ddlExamType.SelectedValue;
+
+                url += "&param=@P_COLLEGE_CODE=" + 1 + ",@P_DATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_SLOTNO=" + ddlslot.SelectedValue + ",@P_PREV_STATUS=" + ddlExamType.SelectedValue;
+
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbtxtblockarrrangement_Clickars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
+
+            }
             else
             {
 
@@ -540,7 +578,7 @@ public partial class examseatingreports : System.Web.UI.Page
             else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 ViewState["college_id"] = "11";
-                ShowReportMaster("Master_Seating_Plan", "rptMasterSeatingPlan_ForExam_Crescent.rpt");
+                ShowReportMaster("Master_Seating_Plan", "rptMasterSeatingPlan_ForExam_crescent_new.rpt");
             }
             else
             {
@@ -661,6 +699,24 @@ public partial class examseatingreports : System.Web.UI.Page
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
 
                 ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true); 
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_EXAMDATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + ddlslot.SelectedValue + ",@P_PREV_STATUS=" + ddlExamType.SelectedValue;
+
+                url += "&param=@P_COLLEGE_CODE='" + 1 + "',@P_EXAMDATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + Convert.ToInt32(ddlslot.SelectedValue) + ",@P_PREV_STATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);
+
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
+
             }
             else
             {
@@ -1417,6 +1473,24 @@ public partial class examseatingreports : System.Web.UI.Page
 
                 ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
 
+
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_EXAMDATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + ddlslot.SelectedValue + ",@P_PREV_STATUS=" + ddlExamType.SelectedValue;
+
+                url += "&param=@P_COLLEGE_CODE=" + 1 + ",@P_EXAMDATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + Convert.ToInt32(ddlslot.SelectedValue) + ",@P_PREV_STATUS=" + Convert.ToInt32(ddlExamType.SelectedValue) + ",@P_SEAT_STATUS=" + Convert.ToInt32(ViewState["DoubleSeating"]);
+
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updBarcode, this.updBarcode.GetType(), "controlJSScript", sb.ToString(), true);
 
             }
             else
