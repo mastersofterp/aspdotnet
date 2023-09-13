@@ -258,8 +258,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = txtNameOfExam.Text.Replace(" ", "");
-                    filename = IdNo + "_deptexam_" + name + ext;
+                    //string name = txtNameOfExam.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_deptexam_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -272,13 +273,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_deptexam_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_deptexam_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -337,7 +349,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_DepartmentalExamNew : Syst
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateDeptExam(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("DEPARTMENT_EXAMINATION", objSevBook.DENO, ViewState["attachment"].ToString(), _idnoEmp, "DEX_", flupld);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("DEPARTMENT_EXAMINATION", objSevBook.DENO, ViewState["attachment"].ToString(), _idnoEmp, "DEX_", flupld);
+                            }
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewDeptExam();

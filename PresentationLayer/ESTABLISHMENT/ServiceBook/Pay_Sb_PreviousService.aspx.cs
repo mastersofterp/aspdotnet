@@ -198,7 +198,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
     {
         try
         {
-          //  Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
+            //  Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
 
 
             if (txtPostName.Text == string.Empty || txtFromDate.Text == string.Empty || txtToDate.Text == string.Empty || txtExperience.Text == string.Empty || txtInstitute.Text == string.Empty || txtReasonForTerminationOfService.Text == string.Empty)
@@ -238,7 +238,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 objSevBook.EXPERIENCE = txtExperience.Text;
                 objSevBook.TERMINATION = txtReasonForTerminationOfService.Text;
                 objSevBook.OFFICER = txtDesignationOfAttestingOfficer.Text;
-               
+
                 // ADD ON 21-01-2021
                 objSevBook.EXPERIENCETYPE = ddlexptype.SelectedValue;
 
@@ -328,7 +328,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 {
                     objSevBook.MOBNO = string.Empty;
                 }
-               
+
                 objSevBook.COLLEGE_CODE = Session["colcode"].ToString();
 
                 //Changes done for Blob
@@ -351,8 +351,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                         string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                         //HttpPostedFile file = flupld.PostedFile;
                         //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                        string name = txtPostName.Text.Replace(" ", "");
-                        filename = IdNo + "_preservice_" + name + ext;
+                        // string name = txtPostName.Text.Replace(" ", "");
+                        string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                        filename = IdNo + "_preservice_" + time + ext;
                         objSevBook.ATTACHMENTS = filename;
                         objSevBook.FILEPATH = "Blob Storage";
 
@@ -365,13 +366,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                             if (result == true)
                             {
 
-                                int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preservice_" + name, flupld);
+                                int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preservice_" + time, flupld);
                                 if (retval == 0)
                                 {
                                     ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                     return;
                                 }
                             }
+                        }
+                    }
+                    else
+                    {
+                        if (ViewState["attachment"] != null)
+                        {
+                            objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                        }
+                        else
+                        {
+                            objSevBook.ATTACHMENTS = string.Empty;
                         }
                     }
                 }
@@ -413,8 +425,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                             string ext = System.IO.Path.GetExtension(flupuniv.PostedFile.FileName);
                             //HttpPostedFile file = flupld.PostedFile;
                             //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                            string name = txtPostName.Text.Replace(" ", "");
-                            filename = IdNo + "_preserviceuni_" + name + ext;
+                            //string name = txtPostName.Text.Replace(" ", "");
+                            string timeuni = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            filename = IdNo + "_preserviceuni_" + timeuni + ext;
                             objSevBook.UNIVERSITYATACHMENT = filename;
                             objSevBook.FILEPATH = "Blob Storage";
 
@@ -427,13 +440,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                                 if (result == true)
                                 {
 
-                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preserviceuni_" + name, flupuniv);
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preserviceuni_" + timeuni, flupuniv);
                                     if (retval == 0)
                                     {
                                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                         return;
                                     }
                                 }
+                            }
+                        }
+                        else
+                        {
+                            if (ViewState["universityattachment"] != null)
+                            {
+                                objSevBook.UNIVERSITYATACHMENT = ViewState["universityattachment"].ToString();
+                            }
+                            else
+                            {
+                                objSevBook.UNIVERSITYATACHMENT = string.Empty;
                             }
                         }
                     }
@@ -464,7 +488,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                     objSevBook.UNIVERSITYATACHMENT = string.Empty;
                     objSevBook.UNIAPPSTATUS = "NO";
                 }
-                
+
 
                 //
                 if (rdbTeacher.SelectedValue == "0")
@@ -484,8 +508,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                             string ext = System.IO.Path.GetExtension(flupteach.PostedFile.FileName);
                             //HttpPostedFile file = flupld.PostedFile;
                             //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                            string name = txtPostName.Text.Replace(" ", "");
-                            filename = IdNo + "_preserviceteach_" + name + ext;
+                            // string name = txtPostName.Text.Replace(" ", "");
+                            string timenew = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            filename = IdNo + "_preserviceteach_" + timenew + ext;
                             objSevBook.PGTATTACHMENT = filename;
                             objSevBook.FILEPATH = "Blob Storage";
 
@@ -498,13 +523,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                                 if (result == true)
                                 {
 
-                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preserviceteach_" + name, flupteach);
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_preserviceteach_" + timenew, flupteach);
                                     if (retval == 0)
                                     {
                                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                         return;
                                     }
                                 }
+                            }
+                        }
+                        else
+                        {
+                            if (ViewState["pgtattachment"] != null)
+                            {
+                                objSevBook.PGTATTACHMENT = ViewState["pgtattachment"].ToString();
+                            }
+                            else
+                            {
+                                objSevBook.PGTATTACHMENT = string.Empty;
                             }
                         }
                     }
@@ -535,7 +571,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                     objSevBook.PGTATTACHMENT = string.Empty;
                     objSevBook.PGTAPPSTATUS = "NO";
                 }
-                
+
                 //Check whether to add or update
                 if (ViewState["action"] != null)
                 {
@@ -561,7 +597,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                                     objServiceBook.upload_new_files("PREVIOUS_SERVICE", _idnoEmp, "PSNO", "PAYROLL_SB_PRESERVICE", "PRE_", flupteach);
                                 }
                             }
-                           this.Clear();
+                            this.Clear();
                             this.BindListViewPreService();
                             //this.objCommon.DisplayMessage(updpersonaldetails, "Record Saved Successfully", this.Page);
                             MessageBox("Record Saved Successfully");
@@ -581,7 +617,22 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                             CustomStatus cs = (CustomStatus)objServiceBook.UpdatePreService(objSevBook);
                             if (cs.Equals(CustomStatus.RecordUpdated))
                             {
-                                objServiceBook.update_upload("PREVIOUS_SERVICE", objSevBook.PSNO, ViewState["attachment"].ToString(), _idnoEmp, "PRE_", flupld);
+                                if (objSevBook.ISBLOB == 0)
+                                {
+                                    if (flupld.HasFile)
+                                    {
+                                        objServiceBook.update_upload("PREVIOUS_SERVICE", objSevBook.PSNO, ViewState["attachment"].ToString(), _idnoEmp, "PRE_", flupld);
+                                    }
+                                    if (flupuniv.HasFile)
+                                    {
+                                        objServiceBook.update_upload("PREVIOUS_SERVICE", objSevBook.PSNO, ViewState["universityattachment"].ToString(), _idnoEmp, "PRE_", flupuniv);
+                                    }
+                                    if (flupteach.HasFile)
+                                    {
+                                        objServiceBook.update_upload("PREVIOUS_SERVICE", objSevBook.PSNO, ViewState["pgtattachment"].ToString(), _idnoEmp, "PRE_", flupteach);
+                                    }
+                                }
+                                //objServiceBook.update_upload("PREVIOUS_SERVICE", objSevBook.PSNO, ViewState["attachment"].ToString(), _idnoEmp, "PRE_", flupld);
                                 ViewState["action"] = "add";
                                 this.Clear();
                                 this.BindListViewPreService();
@@ -757,7 +808,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 else
                 {
                     rdbStatus.SelectedValue = "1";
-                   // appstatus.Visible = false;
+                    // appstatus.Visible = false;
                     divapp.Visible = false;
                     divdate.Visible = false;
                     divdoc.Visible = false;
@@ -767,7 +818,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
                 if (pgappstatus == "YES")
                 {
                     rdbTeacher.SelectedValue = "0";
-                   // divpgteacher.Visible = true;
+                    // divpgteacher.Visible = true;
                     divpg.Visible = true;
                     divpgdt.Visible = true;
                     divpgdoc.Visible = true;
@@ -820,8 +871,8 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
         {
             ImageButton btnDel = sender as ImageButton;
             int psNo = int.Parse(btnDel.CommandArgument);
-             DataSet ds = new DataSet();
-             ds = objCommon.FillDropDown("PAYROLL_SB_PRESERVICE", "*", "", "PSNO=" + psNo, "");
+            DataSet ds = new DataSet();
+            ds = objCommon.FillDropDown("PAYROLL_SB_PRESERVICE", "*", "", "PSNO=" + psNo, "");
             string STATUS = ds.Tables[0].Rows[0]["APPROVE_STATUS"].ToString();
             if (STATUS == "A")
             {
@@ -857,7 +908,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
     private void Clear()
     {
         txtReMarks.Text = string.Empty;
-        txtToDate.Text = string.Empty;  
+        txtToDate.Text = string.Empty;
         txtFromDate.Text = string.Empty;
         txtExperience.Text = string.Empty;
         txtPostName.Text = string.Empty;
@@ -905,7 +956,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
     {
         if (rdbStatus.SelectedValue == "0")
         {
-           // appstatus.Visible = true;
+            // appstatus.Visible = true;
             divapp.Visible = true;
             divdate.Visible = true;
             divdoc.Visible = true;
@@ -918,19 +969,19 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
             divdoc.Visible = false;
         }
     }
-   
+
     protected void rdbTeacher_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (rdbTeacher.SelectedValue == "0")
         {
-           // divpgteacher.Visible = true;
+            // divpgteacher.Visible = true;
             divpg.Visible = true;
             divpgdt.Visible = true;
             divpgdoc.Visible = true;
         }
         else
         {
-           // divpgteacher.Visible = false;
+            // divpgteacher.Visible = false;
             divpg.Visible = false;
             divpgdt.Visible = false;
             divpgdoc.Visible = false;
@@ -1099,6 +1150,6 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PreviousService : System.W
             throw;
         }
     }
-  
+
     #endregion
 }

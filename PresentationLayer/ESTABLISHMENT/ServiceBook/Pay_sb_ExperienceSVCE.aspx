@@ -17,170 +17,171 @@
                             <div class="col-md-12">
                                 <div class="col-md-12">
                                     <asp:Panel ID="pnlAdd" runat="server">
-                                         <div class="col-12">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="sub-heading">
-                                                    <h5>Institute Experiences</h5>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="sub-heading">
+                                                        <h5>Institute Experiences</h5>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                         <div class="panel panel-info">
-                                           <%-- <div class="panel panel-heading">Experiences</div>--%>
+                                            <%-- <div class="panel panel-heading">Experiences</div>--%>
                                             <div class="panel panel-body">
-                                               <%-- Modified by Saahil Trivedi 24/01/2022--%>
+                                                <%-- Modified by Saahil Trivedi 24/01/2022--%>
                                                 <div class="col-12">
                                                     <div class="row">
-                                                       <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label><span style="color: red;">*</span>Department :</label>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label><span style="color: red;">*</span>Department :</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlDepartment" runat="server"
+                                                                CssClass="form-control"
+                                                                TabIndex="1" data-select2-enable="true"
+                                                                AppendDataBoundItems="true" ToolTip="Select Department">
+                                                                <%--<asp:ListItem Value="0">--Please Select--</asp:ListItem>--%>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvDepartment" runat="server"
+                                                                ControlToValidate="ddlDepartment"
+                                                                Display="None"
+                                                                ErrorMessage="Please Select Department"
+                                                                ValidationGroup="ServiceBook"
+                                                                InitialValue="0">
+                                                            </asp:RequiredFieldValidator>
                                                         </div>
-                                                    <asp:DropDownList ID="ddlDepartment" runat="server"
-                                                        CssClass="form-control"
-                                                        TabIndex="1" data-select2-enable="true"
-                                                        AppendDataBoundItems="true" ToolTip="Select Department">
-                                                        <%--<asp:ListItem Value="0">--Please Select--</asp:ListItem>--%>
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvDepartment" runat="server"
-                                                        ControlToValidate="ddlDepartment"
-                                                        Display="None"
-                                                        ErrorMessage="Please Select Department"
-                                                        ValidationGroup="ServiceBook"
-                                                        InitialValue="0">
-                                                    </asp:RequiredFieldValidator>
-                                                </div>
-                                                 <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label><span style="color: red;">*</span>Designation :</label>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label><span style="color: red;">*</span>Designation :</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlDesignation" runat="server" CssClass="form-control" TabIndex="2"
+                                                                AppendDataBoundItems="true" ToolTip="Select Designation" data-select2-enable="true">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvDesignation" runat="server"
+                                                                ControlToValidate="ddlDesignation"
+                                                                Display="None"
+                                                                ErrorMessage="Please Select Designation"
+                                                                ValidationGroup="ServiceBook"
+                                                                InitialValue="0"
+                                                                SetFocusOnError="True">
+                                                            </asp:RequiredFieldValidator>
                                                         </div>
-                                                    <asp:DropDownList ID="ddlDesignation" runat="server" CssClass="form-control" TabIndex="2"
-                                                        AppendDataBoundItems="true" ToolTip="Select Designation" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvDesignation" runat="server"
-                                                        ControlToValidate="ddlDesignation"
-                                                        Display="None"
-                                                        ErrorMessage="Please Select Designation"
-                                                        ValidationGroup="ServiceBook"
-                                                        InitialValue="0"
-                                                        SetFocusOnError="True">
-                                                    </asp:RequiredFieldValidator>
-                                                </div>
 
-                                                 <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label>Nature of Appointment :</label>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>Nature of Appointment :</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlNatOfAppointment" runat="server" CssClass="form-control" TabIndex="3"
+                                                                ToolTip="Select Nature Of  Appointment" data-select2-enable="true">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Permanent</asp:ListItem>
+                                                                <asp:ListItem Value="2">On-Contract</asp:ListItem>
+                                                                <asp:ListItem Value="3">Adhoc</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <%--<asp:TextBox ID="txtNatOfApp" runat="server" CssClass="form-control" ToolTip="Enter nature of Appointment" TabIndex="9"></asp:TextBox>--%>
                                                         </div>
-                                                    <asp:DropDownList ID="ddlNatOfAppointment" runat="server" CssClass="form-control" TabIndex="3"
-                                                         ToolTip="Select Nature Of  Appointment" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                        <asp:ListItem Value="1">Permanent</asp:ListItem>
-                                                        <asp:ListItem Value="2">On-Contract</asp:ListItem>
-                                                        <asp:ListItem Value="3">Adhoc</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <%--<asp:TextBox ID="txtNatOfApp" runat="server" CssClass="form-control" ToolTip="Enter nature of Appointment" TabIndex="9"></asp:TextBox>--%>
-                                                </div>
-                                               
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label>Is Current :</label>
-                                                        </div>
-                                                    <asp:CheckBox ID="chkIsCurrent" CssClass="form-control" Text=" Yes" runat="server" TabIndex="4"
-                                                        ToolTip="Check for Is Current" OnCheckedChanged="chkIsCurrent_CheckedChanged" AutoPostBack="true"/>
-                                                    <%-- --%>
-                                                    <%--<asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ToolTip="Enter Duration" TabIndex="6"></asp:TextBox>--%>
-                                                </div>
-                                                </div>
-                                                  </div>
-                                                 <div class="col-12">
-                                                    <div class="row">
-                                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label><span style="color: red;">*</span>Start Date :</label>
-                                                        </div>
-                                                    <div class="input-group date">
-                                                        <div class="input-group-addon">
-                                                            <asp:Image ID="Image1" runat="server" class="fa fa-calendar text-blue" />
-                                                        </div>
-                                                        <asp:TextBox ID="txtStartDate" runat="server" CssClass="form-control" ToolTip="Enter Start Date" TabIndex="5"
-                                                            Style="z-index: 0;" onBlur="CalDuration();" onChange="CalDuration();"></asp:TextBox>
-                                                            <%--OnTextChanged="txtStartDate_TextChanged" AutoPostBack="true"--%>
-                                                        <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtStartDate"
-                                                            PopupButtonID="Image1" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
-                                                        </ajaxToolKit:CalendarExtender>
 
-                                                        <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" TargetControlID="txtStartDate"
-                                                            Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
-                                                            AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
-                                                        </ajaxToolKit:MaskedEditExtender>
-                                                        <ajaxToolKit:MaskedEditValidator ID="mevToDate" runat="server" ControlExtender="meToDate"
-                                                            ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Start Date"
-                                                            InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
-                                                            TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                            ValidationGroup="ServiceBook" SetFocusOnError="True" />
-                                                        <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
-                                                            Display="None" ErrorMessage="Please Select Start Date in (dd/MM/yyyy Format)"
-                                                            ValidationGroup="ServiceBook" SetFocusOnError="True">
-                                                        </asp:RequiredFieldValidator>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>Is Current :</label>
+                                                            </div>
+                                                            <asp:CheckBox ID="chkIsCurrent" CssClass="form-control" Text=" Yes" runat="server" TabIndex="4"
+                                                                ToolTip="Check for Is Current" OnCheckedChanged="chkIsCurrent_CheckedChanged" AutoPostBack="true" />
+                                                            <%-- --%>
+                                                            <%--<asp:TextBox ID="TextBox1" runat="server" CssClass="form-control" ToolTip="Enter Duration" TabIndex="6"></asp:TextBox>--%>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                 <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label>End Date :</label> <%--<span style="color: red;">*</span>--%>
-                                                        </div>
-                                                    <div class="input-group date">
-                                                        <div class="input-group-addon">
-                                                            <asp:Image ID="Image2" runat="server" class="fa fa-calendar text-blue" />
-                                                        </div>
-                                                        <asp:TextBox ID="txtEndDate" runat="server" CssClass="form-control" ToolTip="Enter End Date"
-                                                            TabIndex="6" Style="z-index: 0;" onBlur="CalDuration();" onChange="CalDuration();" OnTextChanged="txtEndDate_TextChanged1"></asp:TextBox>
-                                                        <%-- AutoPostBack="true" OnTextChanged="txtEndDate_TextChanged"--%>
-                                                        <ajaxToolKit:CalendarExtender ID="ceEndDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtEndDate"
-                                                            PopupButtonID="Image2" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
-                                                        </ajaxToolKit:CalendarExtender>
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label><span style="color: red;">*</span>Start Date :</label>
+                                                            </div>
+                                                            <div class="input-group date">
+                                                                <div class="input-group-addon">
+                                                                    <asp:Image ID="Image1" runat="server" class="fa fa-calendar text-blue" />
+                                                                </div>
+                                                                <asp:TextBox ID="txtStartDate" runat="server" CssClass="form-control" ToolTip="Enter Start Date" TabIndex="5"
+                                                                    Style="z-index: 0;" onBlur="CalDuration();" onChange="CalDuration();"></asp:TextBox>
+                                                                <%--OnTextChanged="txtStartDate_TextChanged" AutoPostBack="true"--%>
+                                                                <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtStartDate"
+                                                                    PopupButtonID="Image1" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
+                                                                </ajaxToolKit:CalendarExtender>
 
-                                                        <ajaxToolKit:MaskedEditExtender ID="meEdate" runat="server" TargetControlID="txtEndDate"
-                                                            Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
-                                                            AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
-                                                        </ajaxToolKit:MaskedEditExtender>
-                                                        <ajaxToolKit:MaskedEditValidator ID="mevEDate" runat="server" ControlExtender="meEdate"
-                                                            ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter End Date"
-                                                            InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
-                                                            TooltipMessage="Please Enter End Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                            ValidationGroup="ServiceBook" SetFocusOnError="True" />
-                                                        <%--<asp:RequiredFieldValidator ID="rfvEndDate" runat="server" ControlToValidate="txtEndDate"
+                                                                <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" TargetControlID="txtStartDate"
+                                                                    Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
+                                                                    AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
+                                                                </ajaxToolKit:MaskedEditExtender>
+                                                                <ajaxToolKit:MaskedEditValidator ID="mevToDate" runat="server" ControlExtender="meToDate"
+                                                                    ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Start Date"
+                                                                    InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                                    TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                    ValidationGroup="ServiceBook" SetFocusOnError="True" />
+                                                                <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
+                                                                    Display="None" ErrorMessage="Please Select Start Date in (dd/MM/yyyy Format)"
+                                                                    ValidationGroup="ServiceBook" SetFocusOnError="True">
+                                                                </asp:RequiredFieldValidator>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>End Date :</label>
+                                                                <%--<span style="color: red;">*</span>--%>
+                                                            </div>
+                                                            <div class="input-group date">
+                                                                <div class="input-group-addon">
+                                                                    <asp:Image ID="Image2" runat="server" class="fa fa-calendar text-blue" />
+                                                                </div>
+                                                                <asp:TextBox ID="txtEndDate" runat="server" CssClass="form-control" ToolTip="Enter End Date"
+                                                                    TabIndex="6" Style="z-index: 0;" onBlur="CalDuration();" onChange="CalDuration();" OnTextChanged="txtEndDate_TextChanged1"></asp:TextBox>
+                                                                <%-- AutoPostBack="true" OnTextChanged="txtEndDate_TextChanged"--%>
+                                                                <ajaxToolKit:CalendarExtender ID="ceEndDate" runat="server" Format="dd/MM/yyyy" TargetControlID="txtEndDate"
+                                                                    PopupButtonID="Image2" Enabled="true" EnableViewState="true" PopupPosition="BottomLeft">
+                                                                </ajaxToolKit:CalendarExtender>
+
+                                                                <ajaxToolKit:MaskedEditExtender ID="meEdate" runat="server" TargetControlID="txtEndDate"
+                                                                    Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
+                                                                    AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
+                                                                </ajaxToolKit:MaskedEditExtender>
+                                                                <ajaxToolKit:MaskedEditValidator ID="mevEDate" runat="server" ControlExtender="meEdate"
+                                                                    ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter End Date"
+                                                                    InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                                    TooltipMessage="Please Enter End Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                                    ValidationGroup="ServiceBook" SetFocusOnError="True" />
+                                                                <%--<asp:RequiredFieldValidator ID="rfvEndDate" runat="server" ControlToValidate="txtEndDate"
                                                             Display="None" ErrorMessage="Please Select End Date in (dd/MM/yyyy Format)"
                                                             ValidationGroup="ServiceBook" SetFocusOnError="True">
                                                         </asp:RequiredFieldValidator>--%>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+
+                                                                <label>Duration : </label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtDuration" AutoCompleteType="None" runat="server" AutoComplete="off" CssClass="form-control"
+                                                                ToolTip="Enter Duration" MaxLength="50"
+                                                                onkeydown="return EditControl(event,this);" onkeypress="return EditControl(event,this);"
+                                                                onclick="return EditControl(event,this);" TabIndex="7"></asp:TextBox>
+                                                        </div>
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>Promotion/Dept-Transfer Order :</label>
+                                                            </div>
+                                                            <asp:FileUpload ID="flupld" runat="server" ToolTip="Enter Promotion/Dept-Transfer Order" TabIndex="8" />
+                                                            <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .pdf,.jpg,.doc) upto 5MB" ForeColor="Red"></asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                   <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-
-                                                    <label>Duration : </label>
-                                                        </div>
-                                                    <asp:TextBox ID="txtDuration" AutoCompleteType="None" runat="server" AutoComplete="off" CssClass="form-control" 
-                                                        ToolTip="Enter Duration" MaxLength="50"
-                                                        onkeydown="return EditControl(event,this);" onkeypress="return EditControl(event,this);" 
-                                                        onclick="return EditControl(event,this);" TabIndex="7"></asp:TextBox>
-                                                </div>
-
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                    <label>Promotion/Dept-Transfer Order :</label>
-                                                        </div>
-                                                    <asp:FileUpload ID="flupld" runat="server" ToolTip="Enter Promotion/Dept-Transfer Order" TabIndex="8" />
-                                                    <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .pdf,.jpg,.doc) upto 5MB" ForeColor="Red"></asp:Label>
-                                                </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                                        </div>
-                                                        </div>
-                                                     </div>
                                                 <div class="form-group col-md-12">
                                                     <p class="text-center">
 
@@ -206,12 +207,12 @@
                                                 </p>
                                             </EmptyDataTemplate>
                                             <LayoutTemplate>
-                                                <div id="lgv1">
-                                                    <h4 class="box-title">Experience Details
-                                                    </h4>
-                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">  
+                                                <div class="sub-heading">
+                                                    <h5>Experience Details
+                                                    </h5>
+                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
 
-                                                   <%-- <table class="table table-bordered table-hover">--%>
+                                                        <%-- <table class="table table-bordered table-hover">--%>
                                                         <thead>
                                                             <tr class="bg-light-blue">
                                                                 <th>Action
@@ -234,13 +235,13 @@
                                                                 </th>
                                                                 <th id="divBlob" runat="server">Attachment
                                                                 </th>
-                                                             </tr>
+                                                            </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr id="itemPlaceholder" runat="server" />
                                                         </tbody>
                                                     </table>
-                                                </div>
+                                                    <%--</div>--%>
                                             </LayoutTemplate>
                                             <ItemTemplate>
                                                 <tr>
@@ -277,17 +278,17 @@
                                                         <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("ATTACHMENT"),Eval("SVCNO"),Eval("IDNO"))%>'><%# Eval("ATTACHMENT")%></asp:HyperLink>
                                                     </td>
                                                     <td style="text-align: center" id="tdBlob" runat="server" visible="false">
-                                                    <asp:UpdatePanel ID="updPreview" runat="server">
-                                                        <ContentTemplate>
-                                                            <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ATTACHMENT") %>'
-                                                                data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("ATTACHMENT") %>' Visible='<%# Convert.ToString(Eval("ATTACHMENT"))==string.Empty?false:true %>'></asp:ImageButton>
-                                                        </ContentTemplate>
-                                                        <Triggers>
-                                                            <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                        </Triggers>
-                                                    </asp:UpdatePanel>
+                                                        <asp:UpdatePanel ID="updPreview" runat="server">
+                                                            <ContentTemplate>
+                                                                <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ATTACHMENT") %>'
+                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("ATTACHMENT") %>' Visible='<%# Convert.ToString(Eval("ATTACHMENT"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
 
-                                                </td>
+                                                    </td>
                                                 </tr>
                                             </ItemTemplate>
                                         </asp:ListView>
@@ -398,9 +399,9 @@
 
             document.getElementById('<%=txtDuration.ClientID%>').contentEditable.replace = false;
             document.getElementById('<%=txtDuration.ClientID%>').contentEditable = false;
-        //alert("Not Editable");
-        return false;
-    }
+            //alert("Not Editable");
+            return false;
+        }
     </script>
     <script type="text/javascript">
 
@@ -418,47 +419,47 @@
                 var date1 = new Date(outputDateString);
                 var date2 = new Date(outputDateStringnew);
 
-                if (Object.prototype.toString.call(date2) === "[object Date]") {                 
-                    if (isNaN(date2.getTime())) {  
+                if (Object.prototype.toString.call(date2) === "[object Date]") {
+                    if (isNaN(date2.getTime())) {
                         document.getElementById('<%=txtDuration.ClientID%>').value = '';
                     } else {
-                        
+
                     }
-                } else {                   
+                } else {
                 }
                 if (Object.prototype.toString.call(date1) === "[object Date]") {
-                   
-                    if (isNaN(date1.getTime())) {  
+
+                    if (isNaN(date1.getTime())) {
                         document.getElementById('<%=txtDuration.ClientID%>').value = '';
-                          return;
-                      } else {
-                          
-                      }
-                  } else {
-                      
+                        return;
+                    } else {
+
+                    }
+                } else {
+
+                }
+
+                if (date1 > date2) {
+                    alert("To date should be greater than equal to from date.");
+                    document.getElementById('<%=txtDuration.ClientID%>').value = '';
+                      document.getElementById('<%=txtEndDate.ClientID%>').value = '';
+                      document.getElementById('<%=chkIsCurrent.ClientID%>').checked = false;
+                      return;
                   }
 
-                  if (date1 > date2) {
-                      alert("To date should be greater than equal to from date.");
+                  else if (date1 > new Date() || date2 > new Date()) {
+                      alert("Future date should not be accepted.");
                       document.getElementById('<%=txtDuration.ClientID%>').value = '';
                     document.getElementById('<%=txtEndDate.ClientID%>').value = '';
-                    document.getElementById('<%=chkIsCurrent.ClientID%>').checked = false;
-                    return;
-                }
-
-                  else if (date1 > new Date() || date2 > new Date()) {
-                    alert("Future date should not be accepted.");
-                    document.getElementById('<%=txtDuration.ClientID%>').value = '';
-                    document.getElementById('<%=txtEndDate.ClientID%>').value = '';
-                    document.getElementById('<%=chkIsCurrent.ClientID%>').checked = false;
-                    return;
-                }
-                  //else if ((date1 < new Date() || date2 < new Date()) && date1 >= date2) {
-                    dateDiff(date1, date2);
-               // }
-            }
-            else
-                document.getElementById('<%=txtDuration.ClientID%>').value = '';
+                      document.getElementById('<%=chkIsCurrent.ClientID%>').checked = false;
+                      return;
+                  }
+                //else if ((date1 < new Date() || date2 < new Date()) && date1 >= date2) {
+              dateDiff(date1, date2);
+                // }
+          }
+          else
+              document.getElementById('<%=txtDuration.ClientID%>').value = '';
         }
 
 
@@ -497,10 +498,10 @@
             return yearDiff + 'Y ' + monthDiff + 'M ' + dayDiff + 'D';
         }
 
-  
 
 
-        
+
+
 
     </script>
 

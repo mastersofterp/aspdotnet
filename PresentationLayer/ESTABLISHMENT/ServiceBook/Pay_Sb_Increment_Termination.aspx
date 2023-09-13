@@ -285,10 +285,10 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-12">
@@ -315,12 +315,12 @@
                                                 </p>
                                             </EmptyDataTemplate>
                                             <LayoutTemplate>
-                                                <div id="lgv1">
-                                                    <h4 class="box-title">
-                                                    Increment / Termination
+                                                <div class="sub-heading">
+                                                    <h5>Increment / Termination
+                                                    </h5>
                                                 </div>
-                                                </h4>
-                                      <%--  <table class="table table-bordered table-hover">--%>
+
+                                                <%--  <table class="table table-bordered table-hover">--%>
                                                 <table class="table table-striped table-bordered nowrap display" style="width: 100%">
                                                     <thead>
                                                         <tr class="bg-light-blue">
@@ -336,10 +336,10 @@
                                                             </th>
                                                             <th>Ord.Date
                                                             </th>
-                                                             <th id="divFolder" runat="server">Attachment
+                                                            <th id="divFolder" runat="server">Attachment
                                                             </th>
-                                                             <th id="divBlob" runat="server">Attachment
-                                                        </th>
+                                                            <th id="divBlob" runat="server">Attachment
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -376,18 +376,18 @@
                                                     <td id="tdFolder" runat="server">
                                                         <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("ATTACHMENT"),Eval("TRNO"),Eval("IDNO"))%>'><%# Eval("ATTACHMENT")%></asp:HyperLink>
                                                     </td>
-                                                     <td style="text-align: center" id="tdBlob" runat="server" visible="false">
-                                                    <asp:UpdatePanel ID="updPreview" runat="server">
-                                                        <ContentTemplate>
-                                                            <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ATTACHMENT") %>'
-                                                                data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("ATTACHMENT") %>' Visible='<%# Convert.ToString(Eval("ATTACHMENT"))==string.Empty?false:true %>'></asp:ImageButton>
-                                                        </ContentTemplate>
-                                                        <Triggers>
-                                                            <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                        </Triggers>
-                                                    </asp:UpdatePanel>
+                                                    <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                        <asp:UpdatePanel ID="updPreview" runat="server">
+                                                            <ContentTemplate>
+                                                                <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ATTACHMENT") %>'
+                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("ATTACHMENT") %>' Visible='<%# Convert.ToString(Eval("ATTACHMENT"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
 
-                                                </td>
+                                                    </td>
                                                 </tr>
                                             </ItemTemplate>
                                         </asp:ListView>
