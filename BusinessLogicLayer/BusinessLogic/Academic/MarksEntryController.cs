@@ -8378,6 +8378,99 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                 }
                 #endregion
 
+
+                public DataSet GetStudentsForMarkEntryadmin_new(int sessiono, int ua_no, string ccode, int sectionno, int subid, string Exam, int schemeno, string SubExam, string SubExamName, int College_ID, int examno, int subexamno, int semesterno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[4] = new SqlParameter("@P_SUBID", subid);
+                        objParams[5] = new SqlParameter("@P_EXAM", Exam);
+                        objParams[6] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        //Added Mahesh on Dated 24/06/2021
+                        objParams[7] = new SqlParameter("@P_SUBEXAM", SubExam);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNAME", SubExamName);
+                        objParams[9] = new SqlParameter("@P_COLLEGE_ID", College_ID);
+                        objParams[10] = new SqlParameter("@P_EXAMNO", examno);
+                        objParams[11] = new SqlParameter("@P_SUBEXAMNO", subexamno);
+                        objParams[12] = new SqlParameter("@P_SEMESTERNO", semesterno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_ADMIN_CC", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetStudentsForMarkEntry-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+                public DataSet GetStudentsForMarkEntryadmin_cc(int sessiono, int ua_no, string ccode, int sectionno, int subid, string Exam, int schemeno, string SubExam, string SubExamName, int College_ID, int semesterno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[11];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[4] = new SqlParameter("@P_SUBID", subid);
+                        objParams[5] = new SqlParameter("@P_EXAM", Exam);
+                        objParams[6] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        //Added Mahesh on Dated 24/06/2021
+                        objParams[7] = new SqlParameter("@P_SUBEXAM", SubExam);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNAME", SubExamName);
+                        objParams[9] = new SqlParameter("@P_COLLEGE_ID", College_ID);
+                        objParams[10] = new SqlParameter("@P_SEMESTERNO", semesterno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STUD_GET_STUD_FOR_MARKENTRY_FOR_ADMIN_INTERNAL_CC", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetStudentsForMarkEntry-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+                // ADDED BY PRAFULL ON DT 26042023  
+
+                public DataSet GetStudentsForPracticalCourseMarkEntry_Admin_IA(int SESSIONO, int UA_NO, string CCODE, int SECTIONNO, int SUBID, int SEMESTERNO, int EXAMNO, int COURSENO, string subexamno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[9];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", SESSIONO);
+                        objParams[1] = new SqlParameter("@P_COURSENO", COURSENO);
+                        objParams[2] = new SqlParameter("@P_CCODE", CCODE);
+                        objParams[3] = new SqlParameter("@P_UA_NO", UA_NO);
+                        objParams[4] = new SqlParameter("@P_SUBID", SUBID);
+                        objParams[5] = new SqlParameter("@P_EXAMNO", EXAMNO);
+                        objParams[6] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+                        objParams[7] = new SqlParameter("@P_SECTIONNO", SECTIONNO);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNO", subexamno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSE_SP_GET_STUD_FOR_PRACTICAL_COURSES_MARKS_ENTRY_FOR_IA_ADMIN_CC", objParams);
+                        //ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSE_SP_GET_STUD_FOR_PRACTICAL_COURSES_MARKS_ENTRY_FOR_IA_TEST", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetStudentsForPracticalCourseMarkEntry-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+
             }
 
         }
