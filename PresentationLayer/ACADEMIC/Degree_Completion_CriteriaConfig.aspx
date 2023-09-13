@@ -98,6 +98,7 @@
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="submit" />
                             </div>
 
+                           <%-- Set Course Catogory Wise Mix Max in ListView--%>
                             <div id="Div2" class="col-12 mt-3" runat="server" visible="false">
                                 <div class="col-12">
                                     <asp:Panel ID="Panel1" runat="server">
