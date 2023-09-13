@@ -44,7 +44,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
     DemandModificationController dmController = new DemandModificationController();
     StudentRegistration objRegistration = new StudentRegistration();
     User_AccController objUC = new User_AccController();
-    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+    SendEmailCommonV2 objSendEmail = new SendEmailCommonV2(); //Object Creation
     string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     string collegeCode = string.Empty;
     protected void Page_PreInit(object sender, EventArgs e)
@@ -3564,7 +3564,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     //    }
 
 
-                    status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
+                   // status = objSendEmail.SendEmail_New(objS.EmailID, message, subject); //Calling Method
+                    string pageNo = Request.QueryString["pageno"].ToString();
+                    status = objSendEmail.SendEmail_New(pageNo, objS.EmailID, message, subject); //Calling Method                 
                     }
                 }
 
