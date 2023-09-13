@@ -366,29 +366,29 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_OD_Apply : System.Web.UI.
 
                 DateTime Aprdate = Convert.ToDateTime(DateTime.Now.Date);
                 string userno = Session["userno"].ToString();
-                DataSet dsAuth = new DataSet();
-                dsAuth = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY", "*", "", "UA_NO=" + userno, "");
+                //DataSet dsAuth = new DataSet();
+                //dsAuth = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY", "*", "", "UA_NO=" + userno, "");
 
-                if (dsAuth.Tables[0].Rows.Count > 0)
-                {
-                    CustomStatus cs = (CustomStatus)objApp.AddAPP_ENTRY_ODauth(objOD, Convert.ToInt32(userno), Aprdate);
-                    if (cs.Equals(CustomStatus.RecordSaved))
-                    {
-                        MessageBox("Record Saved Successfully");
-                        clear();
-                        pnlAdd.Visible = false;
-                        pnllist.Visible = false;
-                        //pnlODStatus.Visible = false;
-                        lnkbut.Visible = true;
-                        lnkNew.Visible = true;
-                        // pnlShowBudg.Visible = false;
-                        // BindListViewODapplStatus();
-                        BindListViewODStatus();
+                //if (dsAuth.Tables[0].Rows.Count > 0)
+                //{
+                //    CustomStatus cs = (CustomStatus)objApp.AddAPP_ENTRY_ODauth(objOD, Convert.ToInt32(userno), Aprdate);
+                //    if (cs.Equals(CustomStatus.RecordSaved))
+                //    {
+                //        MessageBox("Record Saved Successfully");
+                //        clear();
+                //        pnlAdd.Visible = false;
+                //        pnllist.Visible = false;
+                //        //pnlODStatus.Visible = false;
+                //        lnkbut.Visible = true;
+                //        lnkNew.Visible = true;
+                //        // pnlShowBudg.Visible = false;
+                //        // BindListViewODapplStatus();
+                //        BindListViewODStatus();
 
-                    }
-                }
-                else
-                {
+                //    }
+                //}
+                //else
+                //{
                     CustomStatus cs = (CustomStatus)objApp.AddAPP_ENTRY_OD(objOD);
                     if (fuUploadImage.HasFile)
                     {
@@ -411,7 +411,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_OD_Apply : System.Web.UI.
                         BindListViewODStatus();
                         pnlbtn.Visible = false;
                     }
-                }
+               // }
             }
             else if (ViewState["action"].Equals("edit"))
             {
