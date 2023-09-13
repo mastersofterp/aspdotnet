@@ -4,7 +4,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content!important;
+        }
+    </style>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -537,7 +541,8 @@
                                                                     </div>
 
                                                                 </div>
-                                                                <div id="DivBank" runat="server" visible="false"> <%--RFC.Enhancement.Major.2 (01-09-2023)--%>
+                                                                <div id="DivBank" runat="server" visible="false">
+                                                                    <%--RFC.Enhancement.Major.2 (01-09-2023)--%>
                                                                     <div class="row">
                                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                                             <div class="label-dynamic">
