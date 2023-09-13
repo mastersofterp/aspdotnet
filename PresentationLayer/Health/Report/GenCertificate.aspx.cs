@@ -150,7 +150,7 @@ public partial class Health_Report_GenCertificate : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,HEALTH," + rptFileName;
-            url += "&param=@P_CERID=" + Convert.ToInt32(ViewState["CER_ID"]) + ",@P_CERNO=" + Convert.ToInt32(ViewState["CER_NO"]);
+            url += "&param=@P_CERID=" + Convert.ToInt32(ViewState["CER_ID"]) + ",@P_CERNO=" + Convert.ToInt32(ViewState["CER_NO"]) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
             // To open new window from Updatepanel
             System.Text.StringBuilder sb = new System.Text.StringBuilder();

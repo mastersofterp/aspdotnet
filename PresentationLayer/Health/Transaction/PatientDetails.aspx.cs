@@ -35,7 +35,6 @@ using System.Drawing;
 using System.Configuration;
 using IITMS.NITPRM;
 
-
 public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -971,6 +970,19 @@ public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
                 dt.Rows.Remove(this.GetEditableDataRow(dt, btnDelete.CommandArgument));
                 Session["Carta"] = dt;
                 this.BindListView_Details(dt);
+                //if (dt.Rows.Count > 0)
+                //{
+                //    gvPrisc.DataSource = dt;
+                //    gvPrisc.DataBind();
+                //    ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
+                //}
+                //else
+                //{
+                //    gvPrisc.DataSource = null;
+                //    gvPrisc.DataBind();
+                //    //gvPrisc.Visible = false;
+                //}
+                //ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('hide');", true);
             }
         }
         catch (Exception ex)
@@ -1098,7 +1110,14 @@ public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
             gvPrisc.DataSource = dt;
             gvPrisc.DataBind();
             //this.ModalPopupExtender2.Show();
-            ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
+            if (gvPrisc.Rows.Count > 0)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('hide');", true);
+            }
         }
         catch (Exception ex)
         {
@@ -1617,9 +1636,10 @@ public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
         ViewState["opdID"] = int.Parse(btnDetails.CommandArgument);
         ShowDetails(opdID);
         ViewState["action"] = "edit";
-        btnSubmit.Visible = false;
+        btnSubmit.Visible = true;
         //btnPrescription.Visible = false;       
         btnCancelP.Visible = true;
+        btnCancel.Visible = true;
     }
 
     private void ShowDetails(int opdID)
@@ -1780,21 +1800,31 @@ public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
                 chkTest.Visible = false;
                 chkBList.Visible = false;
 
-
                 for (int i = 0; i < lvTest.Items.Count; i++)
                 {
-                    Button btnReport = lvTest.Items[i].FindControl("btnReport") as Button;
-                    ImageButton btnDel = lvTest.Items[i].FindControl("btnDelete") as ImageButton;
-                    btnReport.Enabled = true;
-                    btnDel.Enabled = false;
+                    if (lvTest.Items.Count > 0)
+                    {
+                        Button btnReport = lvTest.Items[i].FindControl("btnReport") as Button;
+                        ImageButton btnDel = lvTest.Items[i].FindControl("btnDelete") as ImageButton;
+                        btnReport.Enabled = true;
+                        btnDel.Enabled = false;
+                    }
+                    else
+                    {
+                        Button btnReport = lvTest.Items[i].FindControl("btnReport") as Button;
+                        ImageButton btnDel = lvTest.Items[i].FindControl("btnDelete") as ImageButton;
+                        btnReport.Enabled = true;
+                        btnDel.Enabled = true;
+                    }
                 }
+               
             }
             else
             {
                 btnSubmit.Visible = true;
                 btnPrescription.Visible = true;
                 pnlSGrid.Enabled = true;
-                Panel1.Enabled = true;
+                Panel1.Enabled = true;                
             }
 
         }
