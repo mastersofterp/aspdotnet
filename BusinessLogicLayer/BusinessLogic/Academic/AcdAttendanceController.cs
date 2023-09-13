@@ -7262,6 +7262,120 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //ADDED BY VINAY MISHRA ON 12/09/2023 - GROUPID BASED RECORD
+        public DataSet GetSingleConfigurationByGroupId(int srno)
+        {
+            DataSet dr = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[1];
+                objParams[0] = new SqlParameter("@P_GROUPID", srno);
+                dr = objSQLHelper.ExecuteDataSetSP("PKG_GET_ACD_ATTENDANCE_CONFIG_ACTIVITY_DETAILS_EDIT", objParams);
+            }
+            catch (Exception ex)
+            {
+                return dr;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.GetSingleConfigurationByGroupId-> " + ex.ToString());
+            }
+            return dr;
+        }
+
+        //Added By Vinay Mishra on 13/09/2023 - Attendance Configuration Work via Group Id
+        public int AddAttendanceConfigGrpID(AcdAttendanceModel objAttE, string Sessionnos, string CollegeIds, string Degreenos, int _schemeType, string Semesternos, int OrgId, string SessionId)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                //Add
+                objParams = new SqlParameter[17];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionnos);
+                objParams[1] = new SqlParameter("@P_DEGREENO", Degreenos);
+                objParams[2] = new SqlParameter("@P_ATT_STARTDATE", objAttE.AttendanceStartDate);
+                objParams[3] = new SqlParameter("@P_ATT_ENDDATE", objAttE.AttendanceEndDate);
+                objParams[4] = new SqlParameter("@P_ATT_LOCKDAY", objAttE.AttendanceLockDay);
+                //objParams[5] = new SqlParameter("@P_ATT_LOCKHRS", objAttE.AttendanceLockHrs);
+                objParams[5] = new SqlParameter("@P_COLLEGE_CODE", objAttE.College_code);
+                objParams[6] = new SqlParameter("@P_SMS_FACILITY", objAttE.SMSFacility);
+                objParams[7] = new SqlParameter("@P_EMAIL_FACILITY", objAttE.EmailFacility);
+                objParams[8] = new SqlParameter("@P_ACTIVE", objAttE.ActiveStatus);   // --  add status 
+                objParams[9] = new SqlParameter("@P_TEACH", objAttE.TeachingPlan);  //-- add teaching plan
+                objParams[10] = new SqlParameter("@P_CRegStatus", objAttE.CRegStatus);//--added for C. Reg before/after
+                objParams[11] = new SqlParameter("@P_SchemeType", _schemeType);//--added for C. Reg before/after
+                objParams[12] = new SqlParameter("@P_SEMESTERNO", Semesternos);
+                objParams[13] = new SqlParameter("@P_COLLEGE_ID", CollegeIds);
+                objParams[14] = new SqlParameter("@P_ORGANIZATIONID", OrgId);
+                objParams[15] = new SqlParameter("@P_SESSIONID", SessionId);
+                objParams[16] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[16].Direction = ParameterDirection.Output;
+
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ATTENDANCE_CONFIGURATION_INSERT_MODIFIED", objParams, true);
+                retStatus = Convert.ToInt32(ret);
+                if (retStatus == 1)
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.DuplicateRecord);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.AddAttendanceConfig-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
+        //Added By Vinay Mishra on 13/09/2023 - Attendance Configuration Work via Group Id
+        public int UpdateAttConfigurationGrpID(AcdAttendanceModel objAttE, int srno, string Sessionnos, string CollegeIds, string Degreenos, int SchemeType, string Semesternos, int OrgId, string SessionId)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+
+                //update
+                objParams = new SqlParameter[18];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionnos);
+                objParams[1] = new SqlParameter("@P_DEGREENO", Degreenos);
+                objParams[2] = new SqlParameter("@P_ATT_STARTDATE", objAttE.AttendanceStartDate);
+                objParams[3] = new SqlParameter("@P_ATT_ENDDATE", objAttE.AttendanceEndDate);
+                objParams[4] = new SqlParameter("@P_ATT_LOCKDAY", objAttE.AttendanceLockDay);
+                //objParams[5] = new SqlParameter("@P_ATT_LOCKHRS", objAttE.AttendanceLockHrs);
+                objParams[5] = new SqlParameter("@P_COLLEGE_CODE", objAttE.College_code);
+                objParams[6] = new SqlParameter("@P_SMS_FACILITY", objAttE.SMSFacility);
+                objParams[7] = new SqlParameter("@P_EMAIL_FACILITY", objAttE.EmailFacility);
+                objParams[8] = new SqlParameter("@P_SRNO", srno);
+                objParams[9] = new SqlParameter("@P_ACTIVE", objAttE.ActiveStatus);
+                objParams[10] = new SqlParameter("@P_TEACH", objAttE.TeachingPlan);
+                objParams[11] = new SqlParameter("@P_CRegStatus", objAttE.CRegStatus);
+                objParams[12] = new SqlParameter("@P_SchemeType", SchemeType);
+                objParams[13] = new SqlParameter("@P_COLLEGE_ID", CollegeIds);
+                objParams[14] = new SqlParameter("@P_Semesterno", Semesternos);
+                objParams[15] = new SqlParameter("@P_ORGANIZATIONID", OrgId);
+                objParams[16] = new SqlParameter("@P_SESSIONID", SessionId);
+                objParams[17] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[17].Direction = ParameterDirection.Output;
+
+                if (objSQLHelper.ExecuteNonQuerySP("PKG_ATTENDANCE_CONFIGURATION_UPDATE_MODIFIED", objParams, true) != null)
+                    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.UpdateAttConfiguration-> " + ex.ToString());
+            }
+
+            return retStatus;
+        }
+
     }
 
 }
