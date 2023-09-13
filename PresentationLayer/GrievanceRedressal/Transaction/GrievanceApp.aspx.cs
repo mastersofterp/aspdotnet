@@ -122,6 +122,7 @@ public partial class GrievanceRedressal_Transaction_GrievanceApp : System.Web.UI
         lvattachment.DataSource = null;
         lvattachment.DataBind();
         pnlAttach.Visible = false;
+        ViewState["DEPTNO"] = null;
     }
 
     private void FillDropDownList()
@@ -139,6 +140,7 @@ public partial class GrievanceRedressal_Transaction_GrievanceApp : System.Web.UI
             txtMobile.Text = ds.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
             txtEmail.Text = ds.Tables[0].Rows[0]["EMAILID"].ToString();
             txtAdmissionNo.Text = ds.Tables[0].Rows[0]["ENROLLNO"].ToString();
+            ViewState["DEPTNO"] = ds.Tables[0].Rows[0]["DEPTNO"].ToString();
         }
     }
 
@@ -211,7 +213,7 @@ public partial class GrievanceRedressal_Transaction_GrievanceApp : System.Web.UI
             objGrivE.GRIEVANCE = txtGrievance.Text == string.Empty ? "" : txtGrievance.Text.Trim();
             objGrivE.GR_APPLICATION_DATE = Convert.ToDateTime(txtDate.Text);
             objGrivE.UANO = Convert.ToInt32(Session["idno"]);
-            objGrivE.STUDEPTID = Convert.ToString(Session["userdeptno"]);
+            objGrivE.STUDEPTID = Convert.ToString(ViewState["DEPTNO"]);  //Convert.ToString(Session["userdeptno"]);
             objGrivE.GRIV_CODE = txtGrAppNo.Text == string.Empty ? "" : txtGrAppNo.Text.Trim();
             objGrivE.GRIV_ID = Convert.ToInt32(ddlGrievanceT.SelectedValue);
 
