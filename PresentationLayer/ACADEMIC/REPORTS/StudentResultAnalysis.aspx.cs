@@ -2929,5 +2929,34 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+    protected void btnSubjectWiseResultanalysisReport_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Analysis Report";
+        string rptFileName = "rptSubject_Wise_Result_Analysis.rpt";
+
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+                ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }
 

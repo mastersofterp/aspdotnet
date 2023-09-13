@@ -308,7 +308,7 @@
                                             </li>
                                             <li class=" nav selectthree list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Faculty Wise Result Ananlysis</a></b>
 
-                                                <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Section </p>
+                                                <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	 </p>
                                             </li>
                                             <li class=" nav selectfour list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Analysis Report</a></b>
 
@@ -400,6 +400,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
                                         </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                        </asp:RequiredFieldValidator>
                                     </div>
 
 
@@ -435,6 +438,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -556,6 +562,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
                                         </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                        </asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divSection" runat="server">
 
@@ -579,6 +588,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlSection"
                                             Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="FormatIIReport">
                                         </asp:RequiredFieldValidator>
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="ddlSection"
+                                            Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                        </asp:RequiredFieldValidator>--%>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divexam" runat="server">
 
@@ -646,6 +658,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="CourseWiseExamRegistartion">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -826,11 +841,13 @@
                                 <asp:Button ID="btnCGPAReport" runat="server" TabIndex="1" Text="CGPA Excel Report" CssClass="btn btn-info" Visible="false" OnClick="btnCGPAReport_Click" CausesValidation="false" />
                                 <asp:Button ID="btnBranchWiseResultAnalysis" runat="server" TabIndex="1" Text="Branch Wise Result Analysis" CssClass="btn btn-info" ValidationGroup="Branch" OnClick="btnBranchWiseResultAnalysis_Click" />
                                 <asp:Button ID="btnCourseWiseExamRegistartion" Text="Course Wise Exam Registartion" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourseWiseExamRegistartion_Click" ValidationGroup="CourseWiseExamRegistartion" />
+                                <asp:Button ID="btnSubjectWiseResultanalysisReport" Text="Subject Wise Result Analysis Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSubjectWiseResultanalysisReport_Click" ValidationGroup="SubjectWiseResultanalysisReport" />
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
 
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Branch" CausesValidation="false" />
                                 <asp:ValidationSummary ID="ValidationSummary8" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseFailStudList" CausesValidation="false" />
                                 <asp:ValidationSummary ID="ValidationSummary9" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseExamRegistartion" CausesValidation="false" />
+                                <asp:ValidationSummary ID="ValidationSummary10" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="SubjectWiseResultanalysisReport" CausesValidation="false" />
 
                             </div>
 
@@ -1112,7 +1129,7 @@
                     $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
-                    $("#ctl00_ContentPlaceHolder1_ddlSection").addClass("red-color");
+                    //$("#ctl00_ContentPlaceHolder1_ddlSection").addClass("red-color");
 
 
                 });
