@@ -46,9 +46,9 @@
                                             </div>
                                             <asp:TextBox ID="txtPatientNo" runat="server" MaxLength="50" Enabled="true" TabIndex="1"
                                                 CssClass="form-control" ToolTip="Enter Search Value"></asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="rfvPatientNo" runat="server" ControlToValidate="txtPatientNo"
+                                            <%--<asp:RequiredFieldValidator ID="rfvPatientNo" runat="server" ControlToValidate="txtPatientNo"
                                                 Display="None" SetFocusOnError="True" ErrorMessage="Patient Number is must to show details."
-                                                ValidationGroup="StockItem"></asp:RequiredFieldValidator>
+                                                ValidationGroup="StockItem"></asp:RequiredFieldValidator>--%>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
@@ -56,7 +56,7 @@
                                                 <label></label>
                                             </div>
                                             <asp:Button ID="btnSerch" runat="server" Text="Click To Search" TabIndex="2" ValidationGroup="StockItem" CssClass="btn btn-outline-primary" OnClick="btnSerch_Click" />
-                                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="SingleParagraph" ShowMessageBox="true" ShowSummary="false" ValidationGroup="StockItem" />
+                                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="StockItem" />
 
                                         </div>
                                     </div>
@@ -272,6 +272,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="lvMedicineissue" />
+            <asp:AsyncPostBackTrigger ControlID="btnSerch" />
         </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">

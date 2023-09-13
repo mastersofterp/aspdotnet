@@ -104,6 +104,12 @@ public partial class Health_Master_DoctorMaster : System.Web.UI.Page
             // objHel.DRNAME = txtDoctorName.Text;
 
             objHel.EMP_CODE = EmpName[0];
+            if (txtPhoneNo.Text.Length < 10)
+            {
+                MessageBox("Please Enter 10 Digit Mobile No.!!!");
+                txtPhoneNo.Text = string.Empty;
+                return;
+            }
             objHel.DRNAME = txtDoctorName.Text; //EmpName[1];
             objHel.EMP_IDNO = 0;// Convert.ToInt32(ddlDoctor.SelectedValue);
             objHel.DEGREE = txtDegree.Text;

@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-   <%-- <div>
+    <%-- <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updActivity"
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
@@ -29,7 +29,7 @@
                         <div class="box-body">
                             <asp:Panel ID="pnlTestObservation" runat="server">
                                 <div class="col-12">
-                                  <%--  <div class="sub-heading">
+                                    <%--  <div class="sub-heading">
                                         <h5>Test Observation</h5>
                                     </div>--%>
                                     <div class="row">
@@ -151,73 +151,79 @@
                                 </div>
                             </asp:Panel>
 
+                            <%-- <div class="col-12">
+                                <div class="row">--%>
                             <asp:Panel ID="pnlTestContentList" runat="server">
-                                <asp:ListView ID="lvContent" runat="server">
-                                    <LayoutTemplate>
-                                        <div id="lgv1">
-                                            <div class="sub-heading">
-                                                <h5>Test Content List</h5>
-                                            </div>
-                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
-                                                <thead class="bg-light-blue">
-                                                    <tr>
-                                                        <th>SR. NO.
-                                                        </th>
-                                                        <%--<th>GROUP NAME
+                                <div class="col-12">
+                                    <asp:ListView ID="lvContent" runat="server">
+                                        <LayoutTemplate>
+                                            <div id="lgv1">
+                                                <div class="sub-heading">
+                                                    <h5>Test Content List</h5>
+                                                </div>
+                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                                    <thead class="bg-light-blue">
+                                                        <tr>
+                                                            <th>SR. NO.
+                                                            </th>
+                                                            <%--<th>GROUP NAME
                                                                     </th>--%>
-                                                        <th>CONTENT NAME
-                                                        </th>
-                                                        <th>NORMAL VALUES
-                                                        </th>
-                                                        <th>UNIT
-                                                        </th>
-                                                        <th>PATIENT VALUES
-                                                        </th>
-                                                        <th>RESULT
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="itemPlaceholder" runat="server" />
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </LayoutTemplate>
-                                    <ItemTemplate>
-                                        <tr>
-                                            <td>
-                                                <asp:Label ID="lblSrNo" runat="server" Text='<%# Eval("SRNO") %>' ToolTip="Serial Number" />
-                                                <asp:HiddenField ID="hdnContentNo" runat="server" Value='<%# Eval("CONTENTNO") %>' />
-                                            </td>
-                                            <%-- <td>
+                                                            <th>CONTENT NAME
+                                                            </th>
+                                                            <th>NORMAL VALUES
+                                                            </th>
+                                                            <th>UNIT
+                                                            </th>
+                                                            <th>PATIENT VALUES
+                                                            </th>
+                                                            <th>RESULT
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td>
+                                                    <asp:Label ID="lblSrNo" runat="server" Text='<%# Eval("SRNO") %>' ToolTip="Serial Number" />
+                                                    <asp:HiddenField ID="hdnContentNo" runat="server" Value='<%# Eval("CONTENTNO") %>' />
+                                                </td>
+                                                <%-- <td>
                                                             <asp:Label ID="lblGrpName" runat="server" Text='<%# Eval("GROUP_NAME") %>' />
                                                         </td>--%>
-                                            <td>
-                                                <asp:Label ID="lblContentName" runat="server" Text='<%# Eval("CONTENT_NAME") %>' ToolTip="Test Content Name" />
-                                            </td>
-                                            <td>
-                                                <asp:Label ID="lblNorValue" runat="server" Text='<%# Eval("NORMAL_RANGE") %>' ToolTip="Test Normal Range" />
-                                            </td>
-                                            <td>
-                                                <asp:Label ID="lblUnit" runat="server" Text='<%# Eval("UNIT") %>' ToolTip="Test Unit" />
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtPatientValue" runat="server" Text='<%# Eval("PATIENT_VALUE") %>' CssClass="form-control"
-                                                    MaxLength="80" TabIndex="6" ToolTip="Enter Patient Value"></asp:TextBox>
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="ftbePValues" runat="server"
-                                                    FilterType="Custom,LowerCaseLetters,UpperCaseLetters, Numbers"
-                                                    TargetControlID="txtPatientValue" ValidChars="%.-/\  ">
-                                                </ajaxToolKit:FilteredTextBoxExtender>
-                                            </td>
-                                            <td>
-                                                <asp:TextBox ID="txtRemark" runat="server" Text='<%# Eval("REMARK") %>' CssClass="form-control"
-                                                    MaxLength="100" TabIndex="7" ToolTip="Enter Remark"></asp:TextBox>
-                                            </td>
-                                        </tr>
-                                    </ItemTemplate>
+                                                <td>
+                                                    <asp:Label ID="lblContentName" runat="server" Text='<%# Eval("CONTENT_NAME") %>' ToolTip="Test Content Name" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblNorValue" runat="server" Text='<%# Eval("NORMAL_RANGE") %>' ToolTip="Test Normal Range" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblUnit" runat="server" Text='<%# Eval("UNIT") %>' ToolTip="Test Unit" />
+                                                </td>
+                                                <td>
+                                                    <asp:TextBox ID="txtPatientValue" runat="server" Text='<%# Eval("PATIENT_VALUE") %>' CssClass="form-control"
+                                                        MaxLength="80" TabIndex="6" ToolTip="Enter Patient Value"></asp:TextBox>
+                                                    <ajaxToolKit:FilteredTextBoxExtender ID="ftbePValues" runat="server"
+                                                        FilterType="Custom,LowerCaseLetters,UpperCaseLetters, Numbers"
+                                                        TargetControlID="txtPatientValue" ValidChars="%.-/\  ">
+                                                    </ajaxToolKit:FilteredTextBoxExtender>
+                                                </td>
+                                                <td>
+                                                    <asp:TextBox ID="txtRemark" runat="server" Text='<%# Eval("REMARK") %>' CssClass="form-control"
+                                                        MaxLength="100" TabIndex="7" ToolTip="Enter Remark"></asp:TextBox>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
 
-                                </asp:ListView>
+                                    </asp:ListView>
+                                </div>
                             </asp:Panel>
+                            <%--</div>
+                            </div>--%>
 
                             <asp:Panel ID="pnlCommonRemark" runat="server">
                                 <div class="col-12">
