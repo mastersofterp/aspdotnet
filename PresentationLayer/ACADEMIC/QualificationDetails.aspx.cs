@@ -1085,7 +1085,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     //    //ddlBoardSsc.SelectedItem.Text = dtr["BOARDSSC"].ToString();
                     //    ddlBoardSsc.SelectedValue = boardno;
                     //}
-
+                    hdnDegree.Value= dtr["DEGREE"].ToString();
                     txtYearOfExamSsc.Text = dtr["YEAR_OF_EXAMSSC"] == null ? string.Empty : dtr["YEAR_OF_EXAMSSC"].ToString();
                     txtSSCMedium.Text = dtr["SSC_MEDIUM"] == null ? string.Empty : dtr["SSC_MEDIUM"].ToString();
                     txtMarksObtainedSsc.Text = dtr["MARKS_OBTAINEDSSC"].ToString() == "0" ? string.Empty : dtr["MARKS_OBTAINEDSSC"].ToString();
