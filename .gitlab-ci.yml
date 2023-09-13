@@ -27,7 +27,7 @@ stages:
             -liveMachineName "daiict-app,prmitr-app,hits-app,prmitr-app,prmitr-app,mserprfc-app,mserprfc-app,prmitr-app,prmitr-app,MSERPDEMOSERVER"
             -uatBranchName $uatBranchName 
             -uatPublishProfile "$publishProfilesPath/FolderProfile_UAT_DAIICT.pubxml,$publishProfilesPath/FolderProfile_UAT_DCH.pubxml,$publishProfilesPath/FolderProfile_UAT_HITS.pubxml,$publishProfilesPath/FolderProfile_UAT_IPER.pubxml,$publishProfilesPath/FolderProfile_UAT_IPR.pubxml,$publishProfilesPath/FolderProfile_UAT_MAHER.pubxml,$publishProfilesPath/FolderProfile_UAT_PCEN.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMCEM.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMITR.pubxml,$publishProfilesPath/FolderProfile_UAT_RCPIT.pubxml,$publishProfilesPath/FolderProfile_UAT_RCPIPER.pubxml,$publishProfilesPath/FolderProfile_UAT_CRESCENT.pubxml,$publishProfilesPath/FolderProfile_UAT_JECRC.pubxml,$publishProfilesPath/FolderProfile_UAT_CPUKOTA.pubxml,$publishProfilesPath/FolderProfile_UAT_CPUH.pubxml,$publishProfilesPath/FolderProfile_UAT_MITAOE.pubxml"
-            -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,mserprfc-app,mserprfc-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP"
+            -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,mserprfc-app,mserprfc-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP"
             -developmentBranchName $developmentBranchName 
             -devPublishProfile "$publishProfilesPath/FolderProfile_DEV_RFCDEV.pubxml"
             -devMachineName "RFC-DEVAPP" 
