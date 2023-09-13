@@ -7,11 +7,14 @@
     <%--<script src="../../JAVASCRIPTS/JScriptAdmin_Module.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>--%>
-
-
+    <style type="text/css">
+        .dataTables_scrollHeadInner {
+            width: 100% !important;
+        }
+    </style>
     <%--<style type="text/css">
     .disable {pointer-events:none}
-    </style>
+   
 
 
     <script>
@@ -1230,7 +1233,7 @@
                                                         <div class="label-dynamic">
                                                             <label></label>
                                                         </div>
-                                                        <asp:RadioButton ID="rbtSatified" runat="server" Checked="false" Text="Closed" TabIndex="3" AutoPostBack="true" />                                                        
+                                                        <asp:RadioButton ID="rbtSatified" runat="server" Checked="false" Text="Closed" TabIndex="3" AutoPostBack="true" />
                                                     </div>
                                                 </div>
                                             </div>

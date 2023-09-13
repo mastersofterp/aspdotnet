@@ -66,7 +66,7 @@ public partial class GrievanceRedressal_Transaction_GrievanceReply : System.Web.
                     string STATUS = objCommon.LookUp("GRIV_GR_REDRESSAL_CELL_TRAN", "[STATUS]", "UA_NO=" + Session["userno"].ToString());
                     if (STATUS == "D")
                     {
-                        objCommon.DisplayMessage(this.upGrievanceReply, "You are not authorized user for GrienvceReply.", this.Page);
+                        objCommon.DisplayMessage(this.upGrievanceReply, "You are not authorized user for Grievance Reply.", this.Page);
                         return;
                     }
                     else
@@ -75,10 +75,10 @@ public partial class GrievanceRedressal_Transaction_GrievanceReply : System.Web.
                         Session["RecTblGrCell"] = null;
                         ViewState["action"] = "add";
                         DisplayMessage();
-                        Reply();
-                        BindlvDept();
-                        BindlvInstituteL();
-                        BindlvCentralL();
+                        //Reply();
+                        //BindlvDept();
+                        //BindlvInstituteL();
+                        //BindlvCentralL();
                         Session["RecTblGrCellI"] = null;
                         Session["RecTblGrCellC"] = null;
                         ViewState["REPLY_IDI"] = null;
@@ -86,17 +86,35 @@ public partial class GrievanceRedressal_Transaction_GrievanceReply : System.Web.
                         ViewState["GAIDC"] = null;
                         ViewState["REPLY_IDC"] = null;
                         //ViewState["REPLY_IDG"] = null;
-                        string committeetype = objCommon.LookUp("GRIV_GRIEVANCE_APPLICATION", "ISCOMMITTEETYPE", "");
-                        if (committeetype == "1")
+                        //char committeetype = Convert.ToChar(objCommon.LookUp("GRIV_GRIEVANCE_CONFIG", "ISCOMMITEETYPE", ""));
+                        DataSet ds = objCommon.FillDropDown("GRIV_GRIEVANCE_CONFIG", "ISCOMMITEETYPE","", "","");
+                        if (ds.Tables[0].Rows.Count > 0)
                         {
-                            pnlComWise.Visible = true;
-                            pnlSubGrivWise.Visible = false;
+                            char committeetype = Convert.ToChar(ds.Tables[0].Rows[0]["ISCOMMITEETYPE"].ToString());
+                            if (committeetype == 'Y')
+                            {
+                                pnlComWise.Visible = true;
+                                pnlSubGrivWise.Visible = false;
+                                Reply();
+                                BindlvDept();
+                                BindlvInstituteL();
+                                BindlvCentralL();
+                            }
+                            else
+                            {
+                                pnlSubGrivWise.Visible = true;
+                                pnlComWise.Visible = false;
+                                BindSubList();
+                            }
                         }
                         else
                         {
-                            pnlSubGrivWise.Visible = true;
-                            pnlComWise.Visible = false;
-                            BindSubList();
+                            pnlComWise.Visible = true;
+                            pnlSubGrivWise.Visible = false;
+                            Reply();
+                            BindlvDept();
+                            BindlvInstituteL();
+                            BindlvCentralL();
                         }
                     }
                 }
