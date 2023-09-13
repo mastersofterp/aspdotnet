@@ -83,7 +83,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 Response.Redirect("~/default.aspx");
             }
             else
-            {  
+            {
                 ////Page Authorization
                 this.CheckPageAuthorization();
 
@@ -100,6 +100,9 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 //Check for Activity On/Off for Reval registration.
                 //if (CheckActivity() == false)
                 //    return;
+
+
+                //ViewState["sessionno"] = "41";   //Added for test dt on 08092023
 
                 if (Session["usertype"].ToString() == "2")
                 {
@@ -145,7 +148,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         //Set the Page Title
         Page.Title = Session["coll_name"].ToString();
         divMsg.InnerHtml = string.Empty;
-         
+
     }
 
     private void PopulateDropDownList()
@@ -388,7 +391,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT", "IDNO", "DEGREENO,BRANCHNO,SEMESTERNO,COLLEGE_ID", "ISNULL(ADMCAN,0)=0 AND IDNO =" + idno, string.Empty);
             string degreeno = dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString();
             string branchno = dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString();
-           // string semesterno = dsStudent.Tables[0].Rows[0]["SEMESTERNO"].ToString();
+            // string semesterno = dsStudent.Tables[0].Rows[0]["SEMESTERNO"].ToString();
             string collegeid = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
             //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
             string semesterno = objCommon.LookUp("ACD_STUDENT_RESULT_HIST H", "max(semesterno)SEMESTER", "ISNULL(CANCEL,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]) + " GROUP BY SESSIONNO");
@@ -452,15 +455,17 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             bool ret = true;
             //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
-             
+
             string degreeno = objCommon.LookUp("ACD_STUDENT", "DISTINCT DEGREENO", "DEGREENO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
             string branchno = objCommon.LookUp("ACD_STUDENT", "DISTINCT BRANCHNO", "BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
             string collegeid = objCommon.LookUp("ACD_STUDENT", "DISTINCT COLLEGE_ID", "BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
-           // string semesterno = objCommon.LookUp("ACD_STUDENT", "DISTINCT SEMESTERNO", "SEMESTERNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
-           
-            string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS=" + collegeid + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
+            // string semesterno = objCommon.LookUp("ACD_STUDENT", "DISTINCT SEMESTERNO", "SEMESTERNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
 
-           string semesterno = objCommon.LookUp("ACD_STUDENT_RESULT_HIST H", "max(semesterno)SEMESTER", "ISNULL(CANCEL,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]) + " GROUP BY SESSIONNO");
+            // string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS=" + collegeid + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
+
+            string semesterno = objCommon.LookUp("ACD_STUDENT_RESULT_HIST H", "max(semesterno)SEMESTER", "ISNULL(CANCEL,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]) + " GROUP BY SESSIONNO");
+           
+            string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS LIKE '%" + collegeid + "%' AND DEGREENO LIKE '%" + degreeno + "%' AND BRANCH LIKE '%" + branchno + "%' AND SEMESTER LIKE '%" + semesterno + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
 
 
             if (sessionno != "")
@@ -523,7 +528,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
     {
         try
         {
-            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER COLL ON (S.COLLEGE_ID = COLL.COLLEGE_ID) INNER JOIN ACD_SEMESTER SM ON (S.SEMESTERNO = SM.SEMESTERNO) INNER JOIN ACD_ADMBATCH AM ON (S.ADMBATCH = AM.BATCHNO) INNER JOIN ACD_DEGREE DG ON (S.DEGREENO = DG.DEGREENO) LEFT OUTER JOIN ACD_SCHEME SC ON (S.SCHEMENO = SC.SCHEMENO)", "S.IDNO,DG.DEGREENAME", "S.STUDNAME,S.FATHERNAME,S.MOTHERNAME,S.REGNO,S.ENROLLNO,S.SEMESTERNO,ISNULL(S.SCHEMENO,0)SCHEMENO,SM.SEMESTERNAME,B.BRANCHNO,B.LONGNAME,SC.SCHEMENAME,S.PTYPE,S.ADMBATCH,AM.BATCHNAME,S.DEGREENO,(CASE S.PHYSICALLY_HANDICAPPED WHEN '0' THEN 'NO' WHEN '1' THEN 'YES' END) AS PH, COLL.COLLEGE_NAME,S.STUDENTMOBILE", "ISNULL(S.ADMCAN,0)=0 AND S.IDNO = " + ViewState["idno"].ToString(), string.Empty);
+            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER COLL ON (S.COLLEGE_ID = COLL.COLLEGE_ID) INNER JOIN ACD_SEMESTER SM ON (S.SEMESTERNO = SM.SEMESTERNO) INNER JOIN ACD_ADMBATCH AM ON (S.ADMBATCH = AM.BATCHNO) INNER JOIN ACD_DEGREE DG ON (S.DEGREENO = DG.DEGREENO) LEFT OUTER JOIN ACD_SCHEME SC ON (S.SCHEMENO = SC.SCHEMENO)", "S.IDNO,DG.DEGREENAME", "S.STUDNAME,S.FATHERNAME,S.MOTHERNAME,S.REGNO,S.ENROLLNO,S.SEMESTERNO,ISNULL(S.SCHEMENO,0)SCHEMENO,SM.SEMESTERNAME,B.BRANCHNO,B.LONGNAME,SC.SCHEMENAME,S.PTYPE,S.ADMBATCH,AM.BATCHNAME,S.DEGREENO,(CASE S.PHYSICALLY_HANDICAPPED WHEN '0' THEN 'NO' WHEN '1' THEN 'YES' END) AS PH, COLL.COLLEGE_NAME,S.STUDENTMOBILE,S.COLLEGE_ID", "ISNULL(S.ADMCAN,0)=0 AND S.IDNO = " + ViewState["idno"].ToString(), string.Empty);
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
                 if (dsStudent.Tables[0].Rows.Count > 0)
@@ -544,6 +549,9 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     lblPH.Text = dsStudent.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
                     lblCollegeName.Text = dsStudent.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
                     hfDegreeNo.Value = dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString();
+
+
+                    ViewState["college_id"] = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
 
                     tblInfo.Visible = true;
                     divSem.Visible = true;
@@ -603,17 +611,17 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                         string TOTALAMOUNT = string.Empty;
                         if (Convert.ToInt32(Session["OrgId"]) == 2)
                         {
-                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE");
+                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND RF.COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE");
                         }
                         else if (Convert.ToInt32(Session["OrgId"]) == 6)
                         {
-                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * isnull(FEE,0)) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY FEE");
+                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND RF.SESSIONNO=R.SESSIONNO", "(COUNT(COURSENO) * isnull(FEE,0)) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + "AND RF.COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY FEE");
                         }
                         else
                         {
                             // string TOTALAMOUNT = objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", "SESSIONNO=" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CAN,0)=0 and RECIEPT_CODE='RF' ");
                             //string TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE");
-                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE");
+                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND RF.SESSIONNO=R.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE");
                         }
                         divTotalCourseAmount.Visible = true;
                         lblTotalAmount.Text = TOTALAMOUNT;
@@ -664,9 +672,9 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     else
                     {
                         btnSubmit.Visible = true;
-                        btnPrintRegSlip.Visible = false; 
+                        btnPrintRegSlip.Visible = false;
                         //divRegisteredCoursesTotalAmt.Visible = false;
-                        divRegCourses.Visible = false; 
+                        divRegCourses.Visible = false;
                         this.ReportStatus();
 
                     }
@@ -956,9 +964,9 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             Session["semesternos"] = objSR.SEMESTERNOS.ToString();
             ViewState["ExtermarkTot"] = EXTERMARKS.ToString();
 
-             
+
             if ((Session["usertype"].ToString() == "2") && (Convert.ToInt32(Session["OrgId"]) == 2))//for student
-            { 
+            {
                 result = objSReg.AddPhotoCopyRegisteration(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
             }
             else if ((Session["usertype"].ToString() == "2") && (Convert.ToInt32(Session["OrgId"]) == 6))
@@ -1035,7 +1043,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 9)   //Added 03112022 for challan report disabled 
                 {
                     btnChallan.Visible = false;
-                } 
+                }
             }
             else
             {
@@ -1071,13 +1079,13 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         }
         else if (Convert.ToInt32(Session["OrgId"]) == 6)
         {
-            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * isnull(FEE,0)) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY FEE"));
+            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND RF.SESSIONNO=R.SESSIONNO", "(COUNT(COURSENO) * isnull(FEE,0)) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND RF.COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY FEE"));
         }
         else
         {
             // RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", " IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "  AND ISNULL(CAN,0)=0 AND RECIEPT_CODE='RF'"));
             //RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE"));
-            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
+            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND RF.SESSIONNO=R.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND RF.COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
         }
         lblTotalAmount.Text = RegTotalAmt.ToString();
         ViewState["Exam_Amout"] = string.Empty;
@@ -1097,14 +1105,13 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-                reval_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(FEE,0) FEE", "ISNULL(CANCEL,0)=0 AND DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 3 + "")); 
+                reval_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(FEE,0) FEE", "ISNULL(CANCEL,0)=0 AND DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 3 + " AND SESSIONNO = " + Convert.ToString(ViewState["sessionno"]) + "AND COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + " AND ISNULL(CANCEL,0)= 0 " + ""));
             }
             else
             {
-                reval_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COURSEFEE", "ISNULL(CANCEL,0)=0 AND DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 3 + ""));   
+                reval_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COURSEFEE", "ISNULL(CANCEL,0)=0 AND DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 3 + " AND SESSIONNO = " + Convert.ToString(ViewState["sessionno"]) + "AND COLLEGE_ID=" + Convert.ToString(ViewState["college_id"]) + " AND ISNULL(CANCEL,0)= 0 " + ""));
             }
         }
-
     }
 
     static decimal CourseAmt = 0;
@@ -1438,7 +1445,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         Response.Write("<script>window.open(" + PaymentURL + ",'_blank');</script>");
         #endregion
     }
-#endregion
+    #endregion
 
     public string GetHMACSHA256(string text, string key)
     {
@@ -1617,7 +1624,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         }
     }
     #endregion
-     
+
     #region Billdesk Payment Gateway
     protected void BillDeskPaymentGateway()
     {
@@ -1640,7 +1647,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             int result = 0;
             CreateCustomerRef();
             GetSessionValues();
-             
+
             ViewState["Final_Amt"] = Convert.ToString(ViewState["Exam_Amout"]);
             //ViewState["Final_Amt"] = "1";
             Session["Order_id"] = Convert.ToString(ViewState["ORDERID"]);
@@ -1999,7 +2006,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             throw;
         }
-        #endregion 
+        #endregion
     }
     #endregion
 
@@ -2114,7 +2121,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
     }
     #endregion
-     
+
     #region ShowReportPaymentPhotoCopy
     protected void btnPaymentReport_Click(object sender, EventArgs e)
     {
@@ -2224,7 +2231,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
     #endregion
 
 
-    #region PayUPaymentGateway 
+    #region PayUPaymentGateway
     protected void PayUPaymentGateway()
     {
         //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2232,7 +2239,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         try
         {
             int ifPaidAlready = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(1) PAY_COUNT", "IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND RECIEPT_CODE = 'RF' AND RECON = 1 AND ISNULL(CAN,0)=0"));
-             
+
             if (ifPaidAlready > 0)
             {
                 objCommon.DisplayMessage(updDetails, "Revaluation Fee has been paid already. Can't proceed with the transaction !", this);
@@ -2246,7 +2253,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             CreateCustomerRef();
             GetSessionValues();
 
-            ViewState["Final_Amt"] = Convert.ToString(ViewState["Exam_Amout"]); 
+            ViewState["Final_Amt"] = Convert.ToString(ViewState["Exam_Amout"]);
             Session["Order_id"] = Convert.ToString(ViewState["ORDERID"]);
 
             if (Convert.ToDouble(ViewState["Final_Amt"]) == 0)
@@ -2270,7 +2277,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 result = 1; //Fees log maintined in other client except crescent 
             }
             if (result > 0)
-            { 
+            {
                 // DataSet d = objCommon.FillDropDown("ACD_STUDENT", "IDNO", "REGNO,STUDNAME,STUDENTMOBILE,EMAILID", "IDNO = '" + ViewState["idno"] + "'", "");
                 DataSet d = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_BRANCH B ON B.BRANCHNO=S.BRANCHNO", "IDNO", "ISNULL(REGNO,'')REGNO,ISNULL(ENROLLNO,'')ENROLLNO,ISNULL(STUDNAME,'')STUDNAME,ISNULL(STUDENTMOBILE,'')STUDENTMOBILE,ISNULL(EMAILID,'')EMAILID,ISNULL(B.SHORTNAME,'')SHORTNAME,ISNULL(YEAR,0)Yearno,ISNULL(DEGREENO,0)DEGREENO,ISNULL(COLLEGE_ID,0)COLLEGE_ID", "IDNO = '" + Convert.ToInt32(ViewState["idno"]) + "'", "");
                 ViewState["STUDNAME"] = (d.Tables[0].Rows[0]["STUDNAME"].ToString());
@@ -2308,7 +2315,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 ViewState["Semester"] = objCommon.LookUp("ACD_DEMAND", "TOP 1 SEMESTERNO", "RECIEPT_CODE='RF' AND SESSIONNO=" + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND IDNO=" + ViewState["IDNO"]); //Added on 24082022
 
                 // PostOnlinePayment();
-                 
+
                 int status1 = 0;
                 int Currency = 1;
                 string amount = string.Empty;
@@ -2322,23 +2329,23 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 Session["studAmt"] = amount;
                 ViewState["studAmt"] = amount;
                 Session["studName"] = ViewState["STUDNAME"].ToString();
-                Session["studPhone"] = ViewState["MOBILENO"].ToString(); 
-                Session["studEmail"] = ViewState["EMAILID"].ToString(); 
+                Session["studPhone"] = ViewState["MOBILENO"].ToString();
+                Session["studEmail"] = ViewState["EMAILID"].ToString();
 
                 Session["ReceiptType"] = "RF";
-                Session["idno"] = Convert.ToInt32(ViewState["IDNO"].ToString()); 
-                Session["paysession"] = ViewState["SESSIONNO"].ToString();            
-                Session["paysemester"] = ViewState["SEM"].ToString(); 
+                Session["idno"] = Convert.ToInt32(ViewState["IDNO"].ToString());
+                Session["paysession"] = ViewState["SESSIONNO"].ToString();
+                Session["paysemester"] = ViewState["SEM"].ToString();
                 Session["homelink"] = "RevaluationRegistration_New.aspx";
-                Session["regno"] = ViewState["REGNO"].ToString(); 
-                Session["payStudName"] = ViewState["STUDNAME"].ToString(); 
-                Session["paymobileno"] = ViewState["MOBILENO"].ToString(); 
-                Session["Installmentno"] = "0";  
-                Session["Branchname"] = ViewState["SHORTNAME"].ToString(); 
+                Session["regno"] = ViewState["REGNO"].ToString();
+                Session["payStudName"] = ViewState["STUDNAME"].ToString();
+                Session["paymobileno"] = ViewState["MOBILENO"].ToString();
+                Session["Installmentno"] = "0";
+                Session["Branchname"] = ViewState["SHORTNAME"].ToString();
 
-                Session["studrefno"] = lblOrderID.Text;                
-                Session["paysemester"] = ViewState["Semester"].ToString();     
-                Session["semesternos"] = ViewState["Semesterno"].ToString();  
+                Session["studrefno"] = lblOrderID.Text;
+                Session["paysemester"] = ViewState["Semester"].ToString();
+                Session["semesternos"] = ViewState["Semesterno"].ToString();
 
                 ViewState["Yearno"] = string.Empty;
                 if (d.Tables[0].Rows[0]["Yearno"].ToString() == "" || d.Tables[0].Rows[0]["Yearno"].ToString() == string.Empty)
@@ -2388,7 +2395,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 {
                     ds1 = ObjFCC.GetOnlinePaymentConfigurationDetails(OrganizationId, Convert.ToInt32(Session["PAYID"]), activityno);
                 }
-                
+
                 if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
                 {
                     if (ds1.Tables[0].Rows.Count > 1)
@@ -2398,9 +2405,12 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     {
                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                        Response.Redirect(RequestUrl, false);
+                        Response.Redirect(RequestUrl, false); 
+
+                        //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
+                        //Response.Redirect(requesturl, false);
                     }
-                } 
+                }
             }
             else
             {
@@ -2426,7 +2436,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             btnSubmit.Visible = false;
             btnChallan.Visible = false;
-        } 
+        }
     }
 }
 
