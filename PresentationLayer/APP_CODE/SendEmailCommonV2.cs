@@ -54,7 +54,7 @@ namespace BusinessLogicLayer.BusinessLogic
         }
         //Added by Nikhil L. on 02/08/2023
         #region Send Dynamically
-        public int EmailSMSWhatsApp_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile,string type)
+        public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails, DataSet ds, string attachmentfilename, byte[] bytefile,string type)
         {
             try
             {
@@ -135,7 +135,168 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
-        
+        public int SendEmail_New(string pageNo, string emailId, string message, string subject, string ccMails, string bccMails)
+        {
+            try
+            {
+                string SP_Name = string.Empty; string SP_Parameters = string.Empty; string SP_Values = string.Empty; int configType = 0;
+                string providerName = string.Empty; int status = 0;
+                DataSet dsCheck = null;
+                SP_Name = "PKG_ACD_CHECK_EMAIL_SMS_WHATSAPP_LINK";
+                SP_Parameters = "@P_AL_NO,@P_CONFIG_TYPE";
+                SP_Values = "" + Convert.ToInt32(pageNo) + "," + configType + "";
+                dsCheck = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+                if (dsCheck.Tables[0].Rows.Count > 0)
+                {
+                    if (dsCheck.Tables[0].Rows[0]["EMAIL"].ToString().Equals("1"))
+                    {
+                        configType = 1;             // For email
+                    }
+
+                    SP_Name = "PKG_ACD_CHECK_EMAIL_SMS_WHATSAPP_LINK";
+                    SP_Parameters = "@P_AL_NO,@P_CONFIG_TYPE";
+                    SP_Values = "" + Convert.ToInt32(pageNo) + "," + configType + "";
+                    dsCheck = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+                }
+                if (configType == 1)        //Email
+                {
+                    for (int i = 0; i < dsCheck.Tables[1].Rows.Count; i++)
+                    {
+                        providerName = dsCheck.Tables[1].Rows[i]["SERVICE_PROVIDER_NAME"].ToString();
+                        DataRow dr = dsCheck.Tables[1].Rows[i];
+                        if (providerName.ToUpper() == "GSUIT" && providerName != "")
+                        {
+                            status = GSuit(emailId, message, subject, dr);
+                        }
+                        else if (providerName.ToUpper() == "SENDGRID_NEW" && providerName != "")
+                        {
+                            Task<int> ret;
+                            //ret = SendGrid(Message, ToEmail, Subject, dsEmailCred);
+                            //if (attachmentfilename != "")
+                            //{
+                            ret = SendGrid(message, emailId, subject, ccMails, bccMails, dr);
+                            //}
+                            //else
+                            //{
+                            //    ret = SendGrid(message, emailId, subject, dr);
+                            //}
+                        }
+                        else if (providerName.ToUpper() == "OUTLOOK" && providerName != "")
+                        {
+                            //if (ccMails != "" || bccMails != "")
+                            //{
+                                status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
+                            //}
+                            //else
+                            //{
+                            //    status = OutLook(message, emailId, subject, dr);
+                            //}
+                        }
+                        else if (providerName.ToUpper() == "AMAZON" && providerName != "")
+                        {
+                            //if (attachmentfilename != "")
+                            //{
+                            //    status = Amazon(emailId, message, subject, ccMails, bccMails, ds, attachmentfilename, bytefile, type, dr);
+                            //}
+                            //else if (ccMails != "" || bccMails != "")
+                            //{
+                                status = Amazon(emailId, message, subject, ccMails, bccMails, dr);
+                            //}
+                            //else
+                            //{
+                            //    status = Amazon(emailId, message, subject, dr);
+                            //}
+                        }
+                    }
+                }
+                return status;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public int SendEmail_New(string pageNo, string emailId, string message, string subject)
+        {
+            try
+            {
+                string SP_Name = string.Empty; string SP_Parameters = string.Empty; string SP_Values = string.Empty; int configType = 0;
+                string providerName = string.Empty; int status = 0;
+                DataSet dsCheck = null;
+                SP_Name = "PKG_ACD_CHECK_EMAIL_SMS_WHATSAPP_LINK";
+                SP_Parameters = "@P_AL_NO,@P_CONFIG_TYPE";
+                SP_Values = "" + Convert.ToInt32(pageNo) + "," + configType + "";
+                dsCheck = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+                if (dsCheck.Tables[0].Rows.Count > 0)
+                {
+                    if (dsCheck.Tables[0].Rows[0]["EMAIL"].ToString().Equals("1"))
+                    {
+                        configType = 1;             // For email
+                    }
+
+                    SP_Name = "PKG_ACD_CHECK_EMAIL_SMS_WHATSAPP_LINK";
+                    SP_Parameters = "@P_AL_NO,@P_CONFIG_TYPE";
+                    SP_Values = "" + Convert.ToInt32(pageNo) + "," + configType + "";
+                    dsCheck = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+                }
+                if (configType == 1)        //Email
+                {
+                    for (int i = 0; i < dsCheck.Tables[1].Rows.Count; i++)
+                    {
+                        providerName = dsCheck.Tables[1].Rows[i]["SERVICE_PROVIDER_NAME"].ToString();
+                        DataRow dr = dsCheck.Tables[1].Rows[i];
+                        if (providerName.ToUpper() == "GSUIT" && providerName != "")
+                        {
+                            status = GSuit(emailId, message, subject, dr);
+                        }
+                        else if (providerName.ToUpper() == "SENDGRID_NEW" && providerName != "")
+                        {
+                            Task<int> ret;
+                            //ret = SendGrid(Message, ToEmail, Subject, dsEmailCred);
+                            //if (attachmentfilename != "")
+                            //{
+                            //    ret = SendGrid(message, emailId, subject, ccMails, bccMails, ds, attachmentfilename, bytefile, type, dr);
+                            //}
+                            //else
+                            //{
+                                ret = SendGrid(message, emailId, subject, dr);
+                            //}
+                        }
+                        else if (providerName.ToUpper() == "OUTLOOK" && providerName != "")
+                        {
+                            //if (ccMails != "" || bccMails != "")
+                            //{
+                            //    status = OutLook(message, emailId, subject, ccMails, bccMails, dr);
+                            //}
+                            //else
+                            //{
+                                status = OutLook(message, emailId, subject, dr);
+                            //}
+                        }
+                        else if (providerName.ToUpper() == "AMAZON" && providerName != "")
+                        {
+                            //if (attachmentfilename != "")
+                            //{
+                            //    status = Amazon(emailId, message, subject, ccMails, bccMails, ds, attachmentfilename, bytefile, type, dr);
+                            //}
+                            //else if (ccMails != "" || bccMails != "")
+                            //{
+                            //    status = Amazon(emailId, message, subject, ccMails, bccMails, dr);
+                            //}
+                            //else
+                            //{
+                                status = Amazon(emailId, message, subject, dr);
+                            //}
+                        }
+                    }
+                }
+                return status;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         static async Task<int> SendGrid(string Message, string toEmailId, string sub, DataRow dsCred)
         {
             int ret = 0;
@@ -355,6 +516,7 @@ namespace BusinessLogicLayer.BusinessLogic
             }
             return ret;
         }
+        
         private int GSuit(string useremail, string message, string subject, DataRow dsCred)
         {
             int ret = 0;
@@ -834,7 +996,12 @@ namespace BusinessLogicLayer.BusinessLogic
                         if (providerName.Equals("Aisensy"))
                         {
                             SendAisensy_New(mobileNo, dsCheck, bodys);
+                            
                         }
+                        if (providerName.Equals("Web WPSSMS"))
+                            {
+                            sendwpsms_New(mobileNo, dsCheck, bodys);
+                            }
                     }
                 }
             }
@@ -878,6 +1045,43 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+
+        private void sendwpsms_New(string mobileNo, DataSet drCred, string bodys)
+            {
+            try
+                {
+                int Mobile_le = mobileNo.Length;
+                if (Mobile_le == 10)
+                    {
+                    mobileNo = "91" + mobileNo.ToString();
+                    }
+                string API_URL = drCred.Tables[0].Rows[0]["WHATSAAP_API_URL"].ToString();
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(API_URL.ToString());
+                httpWebRequest.Method = "POST";                 //httpWebRequest.Headers.Add("aftership-api-key:********fdbfd93980b8c5***");
+                httpWebRequest.ContentType = "application/json";
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                    var body = bodys;
+                    //var bodys = @"{""apiKey"":" + '"' + API_KEY.ToString() + '"' + "," + "\n" +
+                    //   @"""campaignName"":""erpattendance_rcpit""," + "\n" +
+                    //   @"""destination"":" + '"' + mobileNo.ToString() + '"' + "," + "\n" +
+                    //   @"""userName"":" + '"' + UserName.ToString() + '"' + "," + "\n" +
+                    //   @"""templateParams"":[" + '"' + Name.ToString() + '"' + "," + '"' + att.ToString() + '"' + "," + '"' + course.ToString() + '"' + "," + '"' + Dept.ToString() + '"' + "]}";
+                    streamWriter.Write(bodys);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                        {
+                        var result = streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            catch (Exception)
+                {
+                throw;
+                }
+            }
         #endregion
     }
 }

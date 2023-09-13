@@ -3035,7 +3035,7 @@ namespace IITMS
                 }
 
                 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+                // Update BY Jay T. on dated (08092023)
                 public int UpdateCommitteeDesignationData(int id, string Designation, int Externalstatus, int mode)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -3056,9 +3056,17 @@ namespace IITMS
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERTUPDATE_PHDCOMMITTEE_DESIGNATION", sqlParams, true);
 
                         if (Convert.ToInt32(ret) == -99)
+                        {
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        }
+                        else if (Convert.ToInt32(ret) == 2627)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        }
                         else
+                        {
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
                     }
                     catch (Exception ex)
                     {

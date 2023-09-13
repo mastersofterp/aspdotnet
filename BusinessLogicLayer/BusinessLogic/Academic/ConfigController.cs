@@ -965,7 +965,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
                 SqlParameter[] objParams = null;
-                objParams = new SqlParameter[8];
+                objParams = new SqlParameter[7];
                 objParams[0] = new SqlParameter("@P_CONFIGNO", Configno);
                 objParams[1] = new SqlParameter("@P_CONFIGNAME", ConfigName);
                 objParams[2] = new SqlParameter("@P_SERVICEPROVIDERNAME", ServiceProviderName);

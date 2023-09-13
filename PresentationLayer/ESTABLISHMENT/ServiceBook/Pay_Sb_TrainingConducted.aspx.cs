@@ -414,7 +414,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
                 }
                 //lvCompAttach.DataSource = (DataTable)ViewState["FILE1"];
                 //lvCompAttach.DataBind();
-                //pnlAttachmentList.Visible = true;
+                pnlAttachmentList.Visible = true;
                 this.BindListView_Attachments(dtM);
             }
             else
@@ -977,7 +977,7 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_TrainingConducted : System.Web.U
             divAttch.Style["display"] = "block";
             lvCompAttach.DataSource = dt;
             lvCompAttach.DataBind();
-
+            //divAttch.Visible = true;
 
             if (lblBlobConnectiontring.Text != "")
             {

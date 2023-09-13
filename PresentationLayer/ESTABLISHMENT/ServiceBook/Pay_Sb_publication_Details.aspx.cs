@@ -463,8 +463,9 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
                     string ext = System.IO.Path.GetExtension(flPUB.PostedFile.FileName);
                     //HttpPostedFile file = flPUB.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = txtName.Text.Replace(" ", "");
-                    filename = IdNo + "_pubdetails_" + name + ext;
+                    //string name = txtName.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_pubdetails_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -477,13 +478,24 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_pubdetails_" + name, flPUB);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_pubdetails_" + time, flPUB);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -568,7 +580,10 @@ public partial class PAYROLL_SERVICEBOOK_Pay_Sb_publication_Details : System.Web
                         CustomStatus cs = (CustomStatus)objServiceBook.AddUpdPublicationDetails(objSevBook, dt);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
-                            objServiceBook.update_upload("PUBLICATION", Convert.ToInt32(ViewState["PUBTRXNO"].ToString()), ViewState["attachment"].ToString(), _idnoEmp, "PUB_", flPUB);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("PUBLICATION", Convert.ToInt32(ViewState["PUBTRXNO"].ToString()), ViewState["attachment"].ToString(), _idnoEmp, "PUB_", flPUB);
+                            }
                             ViewState["action"] = "add";
 
                             this.Clear();

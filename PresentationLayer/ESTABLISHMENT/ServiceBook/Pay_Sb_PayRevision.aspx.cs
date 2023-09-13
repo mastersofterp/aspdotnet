@@ -169,12 +169,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
             //    }
             //}
             //Panel updpersonaldetails = (Panel)this.Parent.FindControl("upWebUserControl");
-    
-                                                                                                          
-            ServiceBook objSevBook = new ServiceBook();      
-                                             
-            objSevBook.IDNO = _idnoEmp;                                                                    
-            objSevBook.FDT = Convert.ToDateTime(txtFromDate.Text);                                      
+
+
+            ServiceBook objSevBook = new ServiceBook();
+
+            objSevBook.IDNO = _idnoEmp;
+            objSevBook.FDT = Convert.ToDateTime(txtFromDate.Text);
             objSevBook.TDT = Convert.ToDateTime(txtToDate.Text);
 
             if (Convert.ToDateTime(txtFromDate.Text) > Convert.ToDateTime(txtToDate.Text))
@@ -184,12 +184,12 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
                 txtToDate.Focus();
                 return;
             }
-           
+
 
             objSevBook.REMARK = txtRemarks.Text;
             objSevBook.SUBDESIGNO = Convert.ToInt32(ddlDesignation.SelectedValue);
             objSevBook.SCALENO = Convert.ToInt32(ddlScale.SelectedValue);
-            
+
             objSevBook.COLLEGE_CODE = Session["colcode"].ToString();
 
             //if (rdoPromotion.Checked)
@@ -211,7 +211,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
 
             }
 
-            
+
 
             if (txtAmount.Text != string.Empty)
             {
@@ -294,10 +294,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
                 {
                     string contentType = contentType = flupld.PostedFile.ContentType;
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
-                   // HttpPostedFile file = flupld.PostedFile;
+                    // HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = ddlDesignation.SelectedItem.Text.Replace(" ", "");
-                    filename = IdNo + "_payrevision_" + name + ext;
+                    //string name = ddlDesignation.SelectedItem.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_payrevision_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -310,13 +311,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_payrevision_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_payrevision_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -345,7 +357,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
             if (ViewState["action"] != null)
             {
                 if (ViewState["action"].ToString().Equals("add"))
-                {                
+                {
                     int CHK = Convert.ToInt32(objCommon.LookUp("PAYROLL_SB_PAYREV", "ISNULL(COUNT(*),0) as Count", " IDNO=" + Convert.ToString(_idnoEmp) + " AND SUBDESIGNO=" + ddlDesignation.SelectedValue + " AND TYPE='" + objSevBook.TYPE + "' AND SCALENO=" + ddlScale.SelectedValue));
                     if (CHK > 0)
                     {
@@ -383,7 +395,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_PayRevision : System.Web.U
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdatePayRevision(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("PAY_REVISION", objSevBook.PRNO, ViewState["attachment"].ToString(), _idnoEmp, "PAY_", flupld);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("PAY_REVISION", objSevBook.PRNO, ViewState["attachment"].ToString(), _idnoEmp, "PAY_", flupld);
+                            }
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewPayRevision();

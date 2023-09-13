@@ -44,7 +44,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
     DemandModificationController dmController = new DemandModificationController();
     StudentRegistration objRegistration = new StudentRegistration();
     User_AccController objUC = new User_AccController();
-    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+    SendEmailCommonV2 objSendEmail = new SendEmailCommonV2(); //Object Creation
     string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     string collegeCode = string.Empty;
     protected void Page_PreInit(object sender, EventArgs e)
@@ -3445,6 +3445,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             int status = 0;
             string templateText = string.Empty;
             string IDNO = Session["IDNO"].ToString();
+            string pageNo = Request.QueryString["pageno"].ToString();
 
             int IDNOnew = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "APPLICATIONID='" + Convert.ToString(txtREGNo.Text) + "'"));
 
@@ -3564,7 +3565,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     //    }
 
 
-                    status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
+                   // status = objSendEmail.SendEmail_New(objS.EmailID, message, subject); //Calling Method
+                  
+                    status = objSendEmail.SendEmail_New(pageNo, objS.EmailID, message, subject); //Calling Method                 
                     }
                 }
 
@@ -3582,18 +3585,80 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             string Att = string.Empty;
             string Dept = string.Empty;
             string templatename = "Provisonal Admission";
-            //DataSet ds1 = null;
-            // DataSet ds = new DataSet();
-            DataSet ds1 = objUC.GetWhatsappTemplate(0, templatename);
-            if (ds1.Tables[0].Rows.Count > 0)
-                {
-                TEMPLATE = ds1.Tables[0].Rows[0]["TEMPLATE"].ToString();
 
+            string templateName = string.Empty;
+            string mobile = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + IDNOnew);
+                    Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + IDNOnew);
+            string att = Convert.ToString(DateTime.Today.ToString("dd/MM/yyyy"));
+           // string course = "COURSE-13";
+           // string Dept = "Dep 123";
+            string SP_Name = string.Empty;
+            string SP_Parameters = string.Empty;
+            string SP_Values = string.Empty;
+            DataSet dsCheck = null;
+            var bodys = "";
+           // string pageNo = Request.QueryString["pageno"].ToString();
+            SP_Name = "PKG_GET_WHATSAPP_CREDENTIAL";
+            SP_Parameters = "@P_AL_NO";//,@P_CONFIG_TYPE";
+            SP_Values = "" + Convert.ToInt32(pageNo) + "";// + configType + "";
+            dsCheck = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+            if (dsCheck.Tables[0].Rows.Count > 0)
+                {
+                string API_URL = dsCheck.Tables[0].Rows[0]["WHATSAAP_API_URL"].ToString();
+                string API_KEY = dsCheck.Tables[0].Rows[0]["API_KEY"].ToString();
+                string UserName = dsCheck.Tables[0].Rows[0]["WHATSAAP_USER"].ToString();
+                templateName = "Provisonal Admission";
+
+                SP_Name = "PKG_ACD_GET_WHATSAPP_TEMPLATE";
+                SP_Parameters = "@P_PAGE_NO,@P_TEMP_NAME";
+                SP_Values = "" + Convert.ToInt32(pageNo) + "," + templateName;
+                DataSet dsTemplate = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, SP_Values);
+
+                var client = new RestClient("http://cp.sendwpsms.com/api/sendwp");
+                client.Timeout = -1;
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Cookie", "ci_session=ig64ncijtbeakcvklsa79bren5dobnn9");
+                request.AlwaysMultipartFormData = true;
+                //request.AddParameter("username", "jecrc");
+                request.AddParameter("password", "jecrc");
+                //request.AddParameter("message", Message.ToString());
+                //request.AddParameter("registerednumber", "8108221708");
+                //request.AddParameter("to", ToMobileNo.ToString());
+                request.AddParameter("type", "m");
+                request.AddParameter("uuid", "b4bd3cdd-c959-4596-ad92-ce8a1cabd777");
+                IRestResponse response = client.Execute(request);
+                Console.WriteLine(response.Content);
+                if (dsTemplate.Tables[0].Rows.Count > 0)
+                    {
+                    bodys = dsTemplate.Tables[0].Rows[0]["TEMPLATE"].ToString();
+                    if (dsTemplate.Tables[0].Rows[0]["TEMPLATE_NAME"].ToString() == "Provisonal Admission")
+                        {
+                        bodys = bodys.Replace("{#apiKey#}", API_KEY);
+                        bodys = bodys.Replace("{#destination#}", mobile);
+                        bodys = bodys.Replace("{#userName#}", UserName);
+                        bodys = bodys.Replace("{#name#}", Name);
+                       // bodys = bodys.Replace("{#att#}", att);
+                        //bodys = bodys.Replace("{#course#}", course);
+                       // bodys = bodys.Replace("{#department#}", Dept);
+                        }
+                    }
                 }
 
-            string Whatsappmessage = TEMPLATE;
+            objSendEmail.SendWhatsApp_New(mobile, Request.QueryString["pageno"].ToString(), bodys, dsCheck);
 
-            string MOBILENO = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + IDNOnew);
+            //DataSet ds1 = null;
+            // DataSet ds = new DataSet();
+
+            //DataSet ds1 = objUC.GetWhatsappTemplate(Convert.ToInt32(pageNo), templatename);
+            //if (ds1.Tables[0].Rows.Count > 0)
+            //    {
+            //    TEMPLATE = ds1.Tables[0].Rows[0]["TEMPLATE"].ToString();
+
+            //    }
+
+            //string Whatsappmessage = TEMPLATE;
+
+           // string MOBILENO = objCommon.LookUp("ACD_STUDENT", "STUDENTMOBILE", "IDNO=" + IDNOnew);
             // message = message.Replace("{#var#}", Att);
             //message = message.Replace("{#var1#}", Dept);
 
@@ -3604,7 +3669,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             //string template = stringBuilder.ToString();
             //SendSMS_today(lblParMobile.Text.Trim(), template, TemplateID);
             //MailSendStatus += hdnidno1.Value + ',';
-            Whatsaapjecrc(Whatsappmessage, MOBILENO);
+           // Whatsaapjecrc(Whatsappmessage, MOBILENO);
 
             }
         catch (Exception ex)
@@ -3702,15 +3767,19 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             var request = new RestRequest(Method.POST);
             request.AddHeader("Cookie", "ci_session=ig64ncijtbeakcvklsa79bren5dobnn9");
             request.AlwaysMultipartFormData = true;
-            request.AddParameter("username", "jecrc");
-            request.AddParameter("password", "jecrc");
-            request.AddParameter("message", Message.ToString());
-            request.AddParameter("registerednumber", "8108221708");
+            //request.AddParameter("username", "jecrc");
+            //request.AddParameter("password", "jecrc");
+            //request.AddParameter("message", Message.ToString());
+            //request.AddParameter("registerednumber", "8108221708");
             request.AddParameter("to", ToMobileNo.ToString());
             request.AddParameter("type", "m");
             request.AddParameter("uuid", "b4bd3cdd-c959-4596-ad92-ce8a1cabd777");
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
+
+
+
+
             }
         catch (WebException webEx)
             {

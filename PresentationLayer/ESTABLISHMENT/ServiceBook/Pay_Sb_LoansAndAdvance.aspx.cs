@@ -239,8 +239,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = ddlLoanName.SelectedItem.Text.Replace(" ", "");
-                    filename = IdNo + "_loanadvund_" + name + ext;
+                    //string name = ddlLoanName.SelectedItem.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_loanadvund_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -253,13 +254,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_loanadvund_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_loanadvund_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -279,7 +291,6 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                     {
                         objSevBook.ATTACHMENTS = string.Empty;
                     }
-
                 }
             }
             //
@@ -304,8 +315,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                     string ext = System.IO.Path.GetExtension(flupAFF.PostedFile.FileName);
                     //HttpPostedFile file = flupAFF.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = ddlLoanName.SelectedItem.Text.Replace(" ", "");
-                    filename = IdNo + "_loanadvaff_" + name + ext;
+                    //string name = ddlLoanName.SelectedItem.Text.Replace(" ", "");
+                    string timenew = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_loanadvaff_" + timenew + ext;
                     objSevBook.AFFIDAVITATTACH = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -318,13 +330,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_loanadvaff_" + name, flupAFF);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_loanadvaff_" + timenew, flupAFF);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["affidavitattach"] != null)
+                    {
+                        objSevBook.AFFIDAVITATTACH = ViewState["affidavitattach"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.AFFIDAVITATTACH = string.Empty;
                     }
                 }
             }
@@ -390,9 +413,13 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_LoansAndAdvance : System.W
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateLoan(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("LOAN_N_ADVANCE", objSevBook.LNO, ViewState["attachment"].ToString(), _idnoEmp, "LNA_", flupld);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("LOAN_N_ADVANCE", objSevBook.LNO, ViewState["attachment"].ToString(), _idnoEmp, "LNA_", flupld);
 
-                            objServiceBook.update_upload("LOAN_N_ADVANCE", objSevBook.LNO, ViewState["affidavitattach"].ToString(), _idnoEmp, "LNA_", flupAFF);
+                                objServiceBook.update_upload("LOAN_N_ADVANCE", objSevBook.LNO, ViewState["affidavitattach"].ToString(), _idnoEmp, "LNA_", flupAFF);
+                            }
+                           
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewLoansAndAdvance();

@@ -178,8 +178,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Invited_Talks : System.Web
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = txtSubject.Text.Replace(" ", "");
-                    filename = IdNo + "_guestlecture_" + name + ext;
+                    //string name = txtSubject.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_guestlecture_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -192,7 +193,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Invited_Talks : System.Web
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_guestlecture_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_guestlecture_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
@@ -200,6 +201,18 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Invited_Talks : System.Web
                             }
                         }
                     }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
+                    }
+
                 }
             }
             else
@@ -260,8 +273,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Invited_Talks : System.Web
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateInvitedTalk(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("INVITED_TALK", Convert.ToInt32(objSevBook.INVTRXNO), ViewState["attachment"].ToString(), _idnoEmp, "INV_", flupld);
-                            ViewState["action"] = "add";
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("INVITED_TALK", Convert.ToInt32(objSevBook.INVTRXNO), ViewState["attachment"].ToString(), _idnoEmp, "INV_", flupld);
+                            }
+                                ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewInvitedTalks();
                            // this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);

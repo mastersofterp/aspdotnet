@@ -110,7 +110,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT TOP 2 SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND C.COLLEGE_ID IN(" + colgno + ")", "SESSIONNO DESC");
                     // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");     //Commented dt on 28112022
 
-                    objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "");     //SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND
+                    //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "");     //SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND
 
                     if (Session["usertype"].ToString() == "3" || Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "7")//&& Session["dec"].ToString() != "1")
                     {
@@ -146,7 +146,6 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                         string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Request.QueryString["pageno"].ToString() + "," + Session["college_nos"].ToString() + "";
 
                         DataSet ds = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
-
                         if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables != null && ds.Tables[0] != null)
                         {
                             ddlSession.DataSource = ds;
@@ -261,6 +260,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 lvCourse.DataBind();
                 lvCourse.Visible = true;
 
+                //lblCourse.Text = ds.Tables[0].Rows[0]["COURSENAME"].ToString();
+                //ViewState["Course"] = lblCourse.Text;
             }
             else
             {
@@ -333,14 +334,22 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
 
             int branchno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "ISNULL(BRANCHNO,0)", "SCHEMENO=" + SchemeNo + ""));
             int Degreeno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "ISNULL(DEGREENO,0)", "SCHEMENO=" + SchemeNo + ""));
+
             ViewState["Degree"] = Degreeno;
             ViewState["Branch"] = branchno;
 
             // Check Mark Enrty Activitity 
             //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND BRANCH LIKE '%" + branchno + "%' AND DEGREENO LIKE '%" + Degreeno + "%' AND COLLEGE_ID IN (" + College_id + ") AND SEMESTER LIKE '%" + semesterno + "%')", "SESSIONNO DESC");
             //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND BRANCH LIKE '%" + branchno + "%' AND DEGREENO LIKE '%" + Degreeno + "%' AND SEMESTER LIKE '%" + semesterno + "%')", "SESSIONNO DESC");
-              
-            #region Activity
+
+            //if (ds_CheckActivity.Tables[0].Rows.Count == 0)
+            //{
+            //    objCommon.DisplayMessage(this, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
+            //    return;
+            //}
+
+
+            #region CheckActivity
             if (semesterno == "") { semesterno = "0"; }
             string collegename = ddlSession.SelectedItem.Text.Trim() == string.Empty ? "0" : ddlSession.SelectedItem.Text.Trim();  //College fetch from database through
             string sp_proc1 = "PKG_ACD_TO_CHECK_MARK_ENTRY_ACTIVITY";
@@ -353,7 +362,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 return;
             }
             #endregion
-             
+
 
             #region internal mark entry check
 
@@ -429,7 +438,6 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 String CourseName = objCommon.LookUp("ACD_COURSE", "upper(COURSE_NAME)", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + "");
                 //   String subid = objCommon.LookUp("ACD_COURSE", "SUBID", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + "");
                 lblScheme.Text = SchemeName.ToString();
-                //lblCourses.Text = CcodeName + " - " + CourseName;
 
                 hdfSchemeNo.Value = SchemeNo.ToString();
                 hdfExamType.Value = ExamType.ToString();
@@ -441,8 +449,6 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 hdfBatch.Value = sec_batch.Length == 2 ? sec_batch[1].ToString() : "0";
                 lblSession.Text = ddlSession.SelectedItem.Text;
 
-                // lblCourse.Text = Convert.ToString(ViewState["Course"]);               //CourseName;
-                lblCourse.Text = lnk.Text;
 
                 int subId = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SUBID", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + ""));
                 hdfSubid.Value = subId.ToString();
@@ -488,6 +494,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 this.ShowStudents(Convert.ToInt16(lnk.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value), "R.PREV_STATUS,R.REGNO");
                 //        return;
                 int subid = Convert.ToInt16(objCommon.LookUp("ACD_COURSE", "DISTINCT SUBID", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + ""));
+                lblCourse.Text = lnk.Text;
+
 
                 if (Session["usertype"].ToString() == "3")
                 {
@@ -579,7 +587,6 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     btnLastSave.Enabled = false;
 
                 }
-
 
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "alert", "CallButton();", true);
 
@@ -721,7 +728,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 }
                 else
                 {
-                    count = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(1)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SUBID=" + Convert.ToInt32(subId) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ""));
+                    count = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(1)", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + " AND SUBID=" + Convert.ToInt32(subId) + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ""));
                 }
                 if (count < 1)
                 {
@@ -816,6 +823,23 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
     {
         try
         {
+            #region GdpointCalculate
+            string abolish = "";
+            Decimal CourseMax = Convert.ToDecimal(0);
+            Decimal CourseMin = Convert.ToDecimal(0);
+            Decimal Extpassing = Convert.ToDecimal(0);
+            string gdpoint1 = string.Empty;
+            Decimal percent = Convert.ToDecimal(0);
+            string marks1 = string.Empty;
+            Decimal Internalmarks = Convert.ToDecimal(0);
+            Decimal Internalpass = Convert.ToDecimal(0);
+            string gradepoint = string.Empty;
+            string new_gdpoint = string.Empty;
+            string gdpoint2 = string.Empty;
+            #endregion
+
+
+
             string exam = string.Empty; string que_out = string.Empty;
             CustomStatus cs = CustomStatus.Error;
             int courseno = 0;
@@ -826,11 +850,17 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 string[] course = lblCourse.Text.Split('-');
                 //ccode = course[0].Trim();
                 ccode = objCommon.LookUp("ACD_COURSE", "DISTINCT CCODE", "COURSENO=" + Convert.ToInt32(courseno) + "");
+
+                CourseMax = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "ISNULL(MAXMARKS_E,0)", "COURSENO=" + Convert.ToInt32(courseno) + ""));
+                CourseMin = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "ISNULL(MINMARKS,0)", "COURSENO=" + Convert.ToInt32(courseno) + ""));
             }
             else
             {
                 courseno = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "COURSENO", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ""));
                 ccode = objCommon.LookUp("ACD_COURSE", "COURSENO", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "");
+
+                CourseMax = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "ISNULL(MAXMARKS_E,0)", "COURSENO=" + Convert.ToInt32(courseno) + ""));
+                CourseMin = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "ISNULL(MINMARKS,0)", "COURSENO=" + Convert.ToInt32(courseno) + ""));
             }
             //Check for lock and null marks
             if (lock_status == 1)
@@ -893,6 +923,34 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             txtGrade = gvStudent.Rows[i].FindControl("txtGrade") as TextBox;
                             txtGradePoint = gvStudent.Rows[i].FindControl("txtGradePoint") as TextBox;
 
+
+                            #region gdpoint
+                            HiddenField abolishstud = gvStudent.Rows[i].FindControl("hdfAbolish") as HiddenField;
+                            HiddenField hdfMaxCourseMarks = gvStudent.Rows[i].FindControl("hdfMaxCourseMarks") as HiddenField;
+                            HiddenField hdfMinPassMark_I = gvStudent.Rows[i].FindControl("hdfMinPassMark_I") as HiddenField;
+
+
+                            TextBox txtTAMarks = gvStudent.Rows[i].FindControl("txtTAMarks") as TextBox;
+                            abolish = abolishstud.Value;
+                            CourseMax = Convert.ToDecimal(ViewState["hdfMaxCourseMarks"]);
+                            CourseMin = Convert.ToDecimal(ViewState["hdfMinPassMark"]);
+                            //Extpassing = ((Convert.ToDouble(hdfMaxCourseMarks.Value)) * Convert.ToDouble(hdfMinPassMark_I.Value) / 100);
+                            Extpassing = Convert.ToDecimal(Convert.ToDecimal(CourseMax) * Convert.ToDecimal(hdfMinPassMark.Value)) / 100;
+
+
+                            if (txtTAMarks.Text == string.Empty || txtTAMarks.Text == null || txtTAMarks.Text == "")
+                            {
+                                Internalmarks = 0;
+                            }
+                            else
+                            {
+                                Internalmarks = Convert.ToDecimal(txtTAMarks.Text);
+                                Internalpass = Convert.ToDecimal((Internalmarks * 100) / Convert.ToDecimal(hdfMaxCourseMarks_I.Value));
+                            }
+                            //parseFloat((parseFloat(INT) * 100) / parseFloat(hdfMaxCourseMarks_I));
+                            #endregion
+
+
                             //logic for round up TA mark entry
                             if (txtMarks.Text != string.Empty)
                             {
@@ -941,6 +999,11 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             totPer += Convert.ToString(txtTotPer.Text).Trim() == string.Empty ? "-100," : Convert.ToString(txtTotPer.Text).Trim() + ",";
                             FinalConversion += Convert.ToString(hidConversion.Value).Trim() == string.Empty ? "-100," : Convert.ToString(hidConversion.Value).Trim() + ",";
                             //}
+
+
+                            percent = Convert.ToDecimal(txtTotPer.Text);                        //Added dt on 09092023
+                            gdpoint1 = Convert.ToString(hidGradePoint.Value).Trim();             //Added dt on 09092023
+
                         }
 
 
@@ -949,6 +1012,13 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                         string min = string.Empty;
                         string point = string.Empty;
                         string totStud = string.Empty;
+
+                        //Added dt on 09092023
+                        #region gdpoint
+                        int totpercent = Convert.ToInt32(percent);
+                        Decimal totmax = Convert.ToDecimal(0);
+                        Decimal totmin = Convert.ToDecimal(0);
+                        #endregion
 
                         //THIS IS FOR ADDING LV GRADES VALUES 
                         foreach (ListViewDataItem dataRow in lvGrades.Items)
@@ -970,6 +1040,65 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                             max += txtmax.Text.Trim() == string.Empty ? "-100," : txtmax.Text + ",";
                             min += txtmin.Text.Trim() == string.Empty ? "-100," : txtmin.Text + ",";
                             totStud += Convert.ToString(hidTotStud.Value).Trim() == string.Empty ? "-100," : Convert.ToString(hidTotStud.Value).Trim() + ",";
+
+
+                            #region gdpoint //Added dt on 09092023
+                            totmax = Convert.ToDecimal(txtmax.Text);
+                            totmin = Convert.ToDecimal(txtmin.Text);
+
+                            string[] separatingStrings = { "," };
+                            string[] words = point.Split(separatingStrings, System.StringSplitOptions.RemoveEmptyEntries);
+
+                            if (gdpoint1 == "" && studids != "" && marks != "")
+                            {
+                                if (abolish != "1")
+                                {
+                                    if (totpercent < Extpassing || Internalpass < Convert.ToDecimal(hdfMinPassMark_I.Value))
+                                    {
+                                        foreach (var count in words)
+                                        {
+                                            if (count == "0")
+                                            {
+                                                gradepoint = "0";
+                                                new_gdpoint += gradepoint + ",";
+                                            }
+                                        }
+                                    }
+                                    if (totpercent >= Extpassing && Internalpass >= Convert.ToDecimal(hdfMinPassMark_I.Value))
+                                    {
+                                        if (totpercent <= totmax && totpercent >= totmin)
+                                        {
+                                            gradepoint = txtpoint.Text.Trim();
+                                            new_gdpoint += gradepoint + ",";
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if ((totpercent) < Extpassing)
+                                    {
+                                        foreach (var count in words)
+                                        {
+                                            if (count == "0")
+                                            {
+                                                gradepoint = "0";
+                                                new_gdpoint += gradepoint + ",";
+                                            }
+                                        }
+                                    }
+                                    if (totpercent >= Extpassing)
+                                    {
+                                        if (totpercent <= totmax && totpercent >= totmin)
+                                        {
+                                            gradepoint = txtpoint.Text.Trim();
+                                            new_gdpoint += gradepoint + ",";
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
+
+
                         }
 
                         string idnos = studids.TrimEnd(',');
@@ -979,6 +1108,20 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                         string ConversionMarks = FinalConversion.TrimEnd(',');
                         string Scaledn_Percent = totPer.TrimEnd(',');
 
+
+                        #region GradePoint
+                        if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 == "" || gdpoint1 == "-100"))
+                        {
+                            gdpoint2 = new_gdpoint.TrimEnd(',');
+                        }
+                        else if ((!string.IsNullOrEmpty(studids)) && (gdpoint1 != "" && gdpoint1 != "-100"))
+                        {
+                            new_gdpoint += gdpoint1 + ",";
+                            gdpoint2 = new_gdpoint;
+                        }
+                        string gdpoint3 = gdpoint2.TrimEnd(',');
+                        #endregion
+
                         if (!string.IsNullOrEmpty(studids))
                         {
                             //  cs = (CustomStatus)objMarksEntry.UpdateMarkEntryAll(Convert.ToInt32(ddlSession2.SelectedValue), courseno, ccode, studids, marks, totmarks, grade, Gpoint, totPer, lgrade, max, min, point, totStud, lock_status, exam, 0, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), "0", txtTitle.Text, Convert.ToInt16(Session["DEGREENO"].ToString()));
@@ -986,15 +1129,16 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
 
                             if (Session["usertype"].ToString() == "3")
                             {
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                //    cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
                             }
                             else if (Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "7")
                             {
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblCourse.ToolTip), Convert.ToInt32(hdfSchemeNo.Value), Convert.ToInt32(hdfSemester.Value), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["Branch"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
                             }
                             else
                             {
-                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(courseno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["branchno"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, Gdpoint, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
+                                cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntryCrescent(Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(courseno), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["Degree"]), Convert.ToInt32(ViewState["branchno"]), idnos, stud_marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]), grades, gdpoint3, ConversionMarks, Convert.ToInt16(hdfSection.Value), Scaledn_Percent);
                             }
                         }
                     }
@@ -1042,7 +1186,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 //Grade_SectionNo = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "COUNT(*)", "COURSENO=" + lblCourse.ToolTip + "AND SESSIONNO=" + ddlSession.SelectedValue + "AND SECTIONNO=" + Convert.ToInt16(hdfSection.Value)));
                 //if (Grade_SectionNo > 0)
                 //{
-                this.ShowGradesSection(Convert.ToInt16(ddlCourse.SelectedValue), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
+                this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(hdfSection.Value), Convert.ToInt16(hdfSemester.Value));
                 // }
             }
 
@@ -1301,7 +1445,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
             int k = 0;
             foreach (GridViewRow gvRow in gvStudent.Rows)
             {
-                string subid1 = objCommon.LookUp("ACD_COURSE", "SUBID", "COURSENO=" + ddlCourse.SelectedValue);
+                string subid1 = objCommon.LookUp("ACD_COURSE", "SUBID", "COURSENO=" + lblCourse.ToolTip);
                 if (subid1 == "1" || subid1 == "8")
                 {
                     TextBox txtESMarks = gvRow.FindControl("txtESMarks") as TextBox;
@@ -1738,6 +1882,9 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                                 hdfMaxCourseMarks_I.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();   // ADDED ON 11042022 FOR LAW
 
                                 ViewState["islock"] = Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["LOCKE"].ToString()); //        //Commented dt on 31032023
+
+                                ViewState["hdfMaxCourseMarks"] = dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString();
+                                ViewState["hdfMaxCourseMarks_I"] = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();
 
 
                                 //added by prafull on dt 10082022 for issue releted to save button
@@ -2211,73 +2358,68 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             DataSet ds_CheckActivity = null;
-            string collegename = string.Empty;
-            if (ddlSession.SelectedIndex > 0)
+            if (Session["usertype"].ToString() == "3")
             {
-                if (Session["usertype"].ToString() == "3")
-                {
-                    ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE  COLLEGE_IDS IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
-                    //ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%' AND SA.STARTED = 1 AND SESSIONNO=" + ddlSession.SelectedValue + " AND COLLEGE_IDS LIKE '%" + college_id + "%') ", "SESSIONNO DESC");
+                //  ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE  COLLEGE_IDS IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
+                ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
 
-                    if (ds_CheckActivity.Tables[0].Rows.Count == 0)
-                    {
-                        objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
-                        pnlSelection.Visible = false;
-                        pnlMarkEntry.Visible = false;
-                        btnReject.Visible = false;
-                        return;
-                    }
-                    else
-                    {
-                        divCourselist.Visible = true;
-                        this.ShowCourses();
-                        btnFinalLock.Visible = false;
-                        btnFinalLock.Enabled = false;
-                        btnReject.Visible = false;
-                    }
-                }
-                else if (Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "7")
+                if (ds_CheckActivity.Tables[0].Rows.Count == 0)
                 {
-                    ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
-                    // ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%' AND SA.STARTED = 1 AND SESSIONNO=" + ddlSession.SelectedValue + " AND COLLEGE_IDS LIKE '%" + college_id + "%') ", "SESSIONNO DESC");
-
-                    if (ds_CheckActivity.Tables[0].Rows.Count == 0)
-                    {
-                        objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
-                        pnlSelection.Visible = false;
-                        pnlMarkEntry.Visible = false;
-                        return;
-                    }
-                    else
-                    {
-                        divCourselist.Visible = true;
-                        this.ShowCourses();
-                        btnFinalLock.Visible = true;
-                        btnFinalLock.Enabled = true;
-                        btnLastSave.Visible = false;
-                        btnReject.Visible = true;
-                        btnReject.Enabled = true;
-                    }
+                    objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
+                    pnlSelection.Visible = false;
+                    pnlMarkEntry.Visible = false;
+                    btnReject.Visible = false;
+                    return;
                 }
                 else
                 {
-                    ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
-                    // ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%' AND SA.STARTED = 1 AND SESSIONNO=" + ddlSession.SelectedValue + " AND COLLEGE_IDS LIKE '%" + college_id + "%') ", "SESSIONNO DESC");
+                    divCourselist.Visible = true;
+                    this.ShowCourses();
+                    btnFinalLock.Visible = false;
+                    btnFinalLock.Enabled = false;
+                    btnReject.Visible = false;
+                }
+            }
+            else if (Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "7")
+            {
+                //ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVALE%')", "SESSIONNO DESC");
+                ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
 
-                    if (ds_CheckActivity.Tables[0].Rows.Count == 0)
-                    {
-                        objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
-                        pnlSelection.Visible = false;
-                        pnlMarkEntry.Visible = false;
-                        divCourselist.Visible = false;
-                        return;
-                    }
-                    else
-                    {
-                        divCourselist.Visible = false;
-                        objCommon.FillDropDownList(ddlSemester, "ACD_REVAL_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND A.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
-                        // this.ShowCourses();   
-                    }
+                if (ds_CheckActivity.Tables[0].Rows.Count == 0)
+                {
+                    objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
+                    pnlSelection.Visible = false;
+                    pnlMarkEntry.Visible = false;
+                    return;
+                }
+                else
+                {
+                    divCourselist.Visible = true;
+                    this.ShowCourses();
+                    btnFinalLock.Visible = true;
+                    btnFinalLock.Enabled = true;
+                    btnLastSave.Visible = false;
+                    btnReject.Visible = true;
+                    btnReject.Enabled = true;
+                }
+            }
+            else
+            {
+                ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE like '%REVAL%')", "SESSIONNO DESC");
+
+                if (ds_CheckActivity.Tables[0].Rows.Count == 0)
+                {
+                    objCommon.DisplayMessage(this.UpdatePanel1, "This activity may not be Started!!!, Please contact Admin", this.Page);
+                    pnlSelection.Visible = false;
+                    pnlMarkEntry.Visible = false;
+                    divCourselist.Visible = false;
+                    return;
+                }
+                else
+                {
+                    divCourselist.Visible = false;
+                    objCommon.FillDropDownList(ddlSemester, "ACD_REVAL_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND A.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+                    // this.ShowCourses();   
                 }
             }
         }
@@ -2621,6 +2763,9 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     hdfMinPassMark.Value = dsRule.Tables[0].Rows[0]["MIN_PASSING"].ToString();
                     hdfMinPassMark_I.Value = dsRule.Tables[0].Rows[0]["INT_MIN_PASSING"].ToString();   // ADDED ON 11042022 FOR LAW
                     hdfRule.Value = Rule;
+
+                    ViewState["hdfMinPassMark"] = dsRule.Tables[0].Rows[0]["MIN_PASSING"].ToString();
+                    ViewState["hdfMinPassMark_I"] = dsRule.Tables[0].Rows[0]["INT_MIN_PASSING"].ToString();
                 }
                 else
                 {
@@ -2629,7 +2774,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 }
 
                 // CHECKS LOCK CONDIDTION FOR THE PARTICULAR COURSE
-                this.ShowStudents(Convert.ToInt16(ddlCourse.SelectedValue), Convert.ToInt16(ViewState["Section"]), Convert.ToInt16(ddlSemester.SelectedValue), "R.PREV_STATUS,R.REGNO");
+                this.ShowStudents(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(ViewState["Section"]), Convert.ToInt16(ddlSemester.SelectedValue), "R.PREV_STATUS,R.REGNO");
                 //        return;
                 //if (Session["usertype"].ToString() == "3")
                 //{
@@ -2641,7 +2786,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                 //}
                 //if (Grade_SectionNo > 0)
                 //{
-                this.ShowGradesSection(Convert.ToInt16(ddlCourse.SelectedValue), Convert.ToInt16(ViewState["Section"]), Convert.ToInt16(ddlSemester.SelectedValue));
+                this.ShowGradesSection(Convert.ToInt16(lblCourse.ToolTip), Convert.ToInt16(ViewState["Section"]), Convert.ToInt16(ddlSemester.SelectedValue));
                 //}
                 //else
                 //{

@@ -47,7 +47,7 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Bulk_Permanent_Lock : System.Web.U
             else
             {
                 //Page Authorization
-                CheckPageAuthorization();
+               // CheckPageAuthorization();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Load Page Help
@@ -373,27 +373,6 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Bulk_Permanent_Lock : System.Web.U
             btnSave.Visible = false;
         }
     }
-    protected void txtEditFieldDT1_TextChanged(object sender, EventArgs e)
-    {
-        try
-        {
-
-            foreach (ListViewDataItem lvitem in lvLockUnlock.Items)
-            {
-
-                TextBox txtEditFieldDT = lvitem.FindControl("txtEditFieldDT") as TextBox;
-
-                txtEditFieldDT.Text = txtEditFieldDT1.Text;
-
-            }
-        }
-        catch (Exception ex)
-        {
-
-            throw ex;
-        }
-
-    }
     //protected void txtYesNo1_TextChanged(object sender, EventArgs e)
     //{
     //    //string Status = "";
@@ -406,5 +385,25 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Bulk_Permanent_Lock : System.Web.U
     //    //    txtstatus.Text = Status;
     //    //}
 
-    //}
+    //}s
+    protected void txtEditFieldDT_TextChanged(object sender, EventArgs e)
+    {
+        try
+        {
+
+            foreach (ListViewDataItem lvitem in lvLockUnlock.Items)
+            {
+
+                TextBox txtEditFieldDT = lvitem.FindControl("txtEditFieldDT") as TextBox;
+
+                txtEditFieldDT.Text = txtEditFieldDT.Text;
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+    }
 }

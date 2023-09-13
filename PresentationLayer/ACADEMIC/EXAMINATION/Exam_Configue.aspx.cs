@@ -65,10 +65,10 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     private void BindView()
     {
 
-        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,FEE_TYPE,PASS_RULE,MARK_ENTRY,ISNULL(FEES_PAID,0) AS FEES_PAID,Fee_type,PASS_RULE ", "", "");
+        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,ISNULL(GRADE_ADMIN,0) AS GRADE_ADMIN,ISNULL(GRADE_FACULTY,0) AS GRADE_FACULTY,ISNULL(GRAPH,0) AS GRAPH,ISNULL(GRADE_RANGE,0) AS GRADE_RANGE,FEE_TYPE,PASS_RULE,MARK_ENTRY,ISNULL(FEES_PAID,0) AS FEES_PAID,Fee_type,PASS_RULE ", "", "");
         if (ds != null && ds.Tables.Count > 0)
         {
-            string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation", "chk_Decode", "chk_SeatNumber", "chk_MarkEnrtyExcel", "chk_Section", "chk_Batch" };
+            string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation", "chk_Decode", "chk_SeatNumber", "chk_MarkEnrtyExcel", "chk_Section", "chk_Batch", "chk_grade_admin", "chk_grade_faculty", "chkGraph", "chk_chgrange" };
             int arr_val = 0;
             string str = "$(document).ready(function(){";
             string val;
@@ -96,54 +96,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
 
         }
 
-        if (Convert.ToInt32(ds.Tables[0].Rows[0]["Fee_type"]) == 1)
-        {
-            rdlist.SelectedValue = "1";
-        }
-        else if (Convert.ToInt32(ds.Tables[0].Rows[0]["Fee_type"]) == 2)
-        {
-
-            rdlist.SelectedValue = "2";
-
-        }
-        else if (Convert.ToInt32(ds.Tables[0].Rows[0]["Fee_type"]) == 3)
-        {
-
-            rdlist.SelectedValue = "3";
-
-        }
-        else if (Convert.ToInt32(ds.Tables[0].Rows[0]["Fee_type"]) == 4)
-        {
-            rdlist.SelectedValue = "4";
-        }
-        else
-        {
-            rdlist.SelectedValue = null;
-        };
-
-
-        ////if (Convert.ToInt32(ds.Tables[0].Rows[0]["PASS_RULE"]) == 1)
-        ////{
-        ////    rdbyes.Checked = true;
-        ////    if (rdbyes.Checked == true)
-        ////    {
-        ////        rdbSbjecttype.Checked = true;
-        ////        pnlChoice.Visible = true;
-        ////        pnlBind.Visible = true;
-        ////        BindSubjectType();
-        ////    }
-        ////    else
-        ////    {
-        ////        rdbSbjecttype.Checked = false;
-        ////        pnlChoice.Visible = false;
-        ////        pnlBind.Visible = false;
-        ////        rdbyes.Checked = false; ;
-        ////    }
-        ////}
-
-
-
-    }
+      }
 
     private void CheckPageAuthorization()
     {
@@ -180,6 +133,11 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         int decode = 0;
         int seatno = 0;
         int excelmark = 0, sectnowise = 0, batchwise = 0;
+        int Grade_Admin = 0;
+        int Grade_Faculty=0;
+        int graph = 0;
+        int change_range = 0;
+
         //examrule,garcerule,latefee,Improvement,exampattern,revaluation,resultpublish,condonation,feetype
         if (hdfexamregister.Value == "true")
         {
@@ -233,37 +191,16 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
             seatno = 1;
         }
 
-        ////if (rdb_coursewise.Checked == true)
-        ////{
-        ////    feetype = 2;
-        ////}
-        ////else if (rdb_Creditwise.Checked == true)
-        ////{
-        ////    feetype = 3;
-
-        ////}
-        ////else if (rdb_nofee.Checked == true)
-        ////{
-        ////    feetype = 1;
-        ////}
-        ////else if (rdb_subjectwise.Checked == true)
-        ////{
-        ////    feetype = 4;
-        ////}
-        //added 1701
-        if (!string.IsNullOrEmpty(rdlist.SelectedValue))
+        if (hdfadmingrade.Value == "true")
         {
-            feetype = Convert.ToInt32(rdlist.SelectedValue);
+            Grade_Admin = 1;
         }
-        if (rdbyes.Checked == true)
+        if (hdfFacgrade.Value == "true")
         {
-            passrule = 1;
-        }
-        else if (rdbno.Checked == true)
-        {
-            passrule = 0;
+            Grade_Faculty = 1;
         }
 
+      
         if (hdfmarkentryexcel.Value == "true")
         {
             excelmark = 1;
@@ -276,84 +213,35 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         {
             batchwise = 1;
         }
+        if (hdfgraph.Value == "true")
+        {
+            graph = 1;
+        }
+        if (hdfrange.Value == "true")
+        {
+            change_range = 1;
+        }
+
+
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype);
 
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0);
         //added by Injamam For batch and section
-        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise);
+        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range);
         if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
         {
-            objCommon.DisplayMessage("Record Save Successfully.... !", this.Page);
+            objCommon.DisplayMessage("Record Save Sucessfully.... !", this.Page);
             BindView();
         }
         else
         {
             objCommon.DisplayMessage("Something went wrong ..Please try again !", this.Page);
         }
-        if (rdbyes.Checked == true)
-        {
-            foreach (ListViewDataItem lvitem in lvBinddata.Items)
-            {
-                string subid = (lvitem.FindControl("lblsubid") as Label).Text;
-                string subname = (lvitem.FindControl("lblsubname") as Label).Text;
-                string internalmark = (lvitem.FindControl("txtinternal") as TextBox).Text;
-                string externalmark = (lvitem.FindControl("txtexternal") as TextBox).Text;
-
-                CustomStatus cs1 = (CustomStatus)exam.Add_SubjectWisePassingRule(subid, subname, internalmark, externalmark);
-                if (Convert.ToInt32(cs1) == 1 || Convert.ToInt32(cs1) == 2)
-                {
-                    objCommon.DisplayMessage("Save Sucessfully.... !", this.Page);
-                    BindView();
-
-                }
-                else
-                {
-                    objCommon.DisplayMessage("Something went wrong ..Please try again !", this.Page);
-                }
-            }
-        }
-        BindSubjectType();
+      
+        //BindSubjectType();
         clear();
     }
-    protected void rdbyes_CheckedChanged(object sender, EventArgs e)
-    {
-
-        if (rdbyes.Checked == true)
-        {
-            CHECK();
-            pnlChoice.Visible = true;
-            //  pnlBind.Visible = true;
-
-        }
-        else
-        {
-            CHECK();
-            pnlChoice.Visible = false;
-            pnlBind.Visible = false;
-
-        }
-    }
-    protected void rdbno_CheckedChanged(object sender, EventArgs e)
-    {
-        if (rdbno.Checked == true)
-        {
-            CHECK();
-            pnlChoice.Visible = false;
-            pnlBind.Visible = false;
-        }
-        else
-        {
-            CHECK();
-            pnlChoice.Visible = true;
-            pnlBind.Visible = true;
-        }
-    }
-    protected void rdbSbjecttype_CheckedChanged(object sender, EventArgs e)
-    {
-        pnlBind.Visible = true;
-        BindSubjectType();
-        CHECK();
-    }
+    
     private void BindSubjectType()
     {
         DataSet dslist = null;
@@ -382,14 +270,14 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     protected void clear()
     {
         pnlBind.Visible = false;
-        pnlChoice.Visible = false;
+       // pnlChoice.Visible = false;
         //rdb_coursewise.Checked = false;
         //rdb_Creditwise.Checked = false;
         //rdb_nofee.Checked = false;
-        rdbyes.Checked = false;
-        rdbno.Checked = false;
-        rdbSbjecttype.Checked = false;
-        rdbcomman.Checked = false;
+       // rdbyes.Checked = false;
+       // rdbno.Checked = false;
+       // rdbSbjecttype.Checked = false;
+       // rdbcomman.Checked = false;
         hdfcondonation.Value = "";
         hdfexampattern.Value = "";
         hdfexamregister.Value = "";
@@ -410,14 +298,14 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         pnlBind.Visible = false;
-        pnlChoice.Visible = false;
+      //  pnlChoice.Visible = false;
         //rdb_coursewise.Checked = false;
         //rdb_Creditwise.Checked = false;
         //rdb_nofee.Checked = false;
-        rdbyes.Checked = false;
-        rdbno.Checked = false;
-        rdbSbjecttype.Checked = false;
-        rdbcomman.Checked = false;
+       // rdbyes.Checked = false;
+        //rdbno.Checked = false;
+       // rdbSbjecttype.Checked = false;
+       // rdbcomman.Checked = false;
         BindView();
     }
     private void CHECK()

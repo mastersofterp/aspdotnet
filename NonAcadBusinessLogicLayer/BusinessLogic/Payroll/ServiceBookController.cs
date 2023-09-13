@@ -4594,7 +4594,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[18];
+                        objParams = new SqlParameter[19];
                         objParams[0] = new SqlParameter("@P_IDNO", objPatent.IDNO);
                         objParams[1] = new SqlParameter("@P_Title_Patent", objPatent.PatentTitle);
                         objParams[2] = new SqlParameter("@P_Applicant_Name", objPatent.ApplicantName);
@@ -4628,9 +4628,9 @@ namespace IITMS
 
                         //if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PATEGetSinglePatentOfEmployeeNT", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
-
-                        objParams[17] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[17].Direction = ParameterDirection.Output;
+                        objParams[17] = new SqlParameter("@P_ISBLOB", objPatent.ISBLOB);
+                        objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[18].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PATENT", objParams, true);
                         if (Convert.ToInt32(ret) == -1)
@@ -4686,7 +4686,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[19];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_IDNO", objPatent.IDNO);
                         objParams[1] = new SqlParameter("@P_Title_Patent", objPatent.PatentTitle);
                         objParams[2] = new SqlParameter("@P_Applicant_Name", objPatent.ApplicantName);
@@ -4720,9 +4720,9 @@ namespace IITMS
                         //objParams[16] = new SqlParameter("@P_Attachment ", objPatent.ATTACHMENTS);
                         #endregion
                         objParams[17] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
-
-                        objParams[18] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[18].Direction = ParameterDirection.Output;
+                        objParams[18] = new SqlParameter("@P_ISBLOB", objPatent.ISBLOB);
+                        objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[19].Direction = ParameterDirection.Output;
 
                         // if (objSQLHelper.ExecuteNonQuerySP("PAYROLL_INST_SB_INVITED_TALK", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -4815,7 +4815,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[22];
+                        objParams = new SqlParameter[23];
                         objParams[0] = new SqlParameter("@P_IDNO", objStaffFund.IDNO);
                         objParams[1] = new SqlParameter("@P_Project_Title", objStaffFund.Name_org);
                         objParams[2] = new SqlParameter("@P_Funding_Name", objStaffFund.Name_agency);
@@ -4844,9 +4844,9 @@ namespace IITMS
                         #endregion
                         objParams[20] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
 
-
-                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[21].Direction = ParameterDirection.Output;
+                        objParams[21] = new SqlParameter("@P_ISBLOB", objStaffFund.ISBLOB);
+                        objParams[22] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[22].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PAYROLL_INST_SB_StaffFunded", objParams, true);
                         if (Convert.ToInt32(ret) == -1)
@@ -4872,7 +4872,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[21];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_IDNO", objStaffFund.IDNO);
                         objParams[1] = new SqlParameter("@P_Project_Title", objStaffFund.Name_org);
                         objParams[2] = new SqlParameter("@P_Funding_Name", objStaffFund.Name_agency);
@@ -4899,6 +4899,7 @@ namespace IITMS
                         objParams[18] = new SqlParameter("@P_CO_INVESTIGATOR", objStaffFund.COINVESTIGATOR);
                         objParams[19] = new SqlParameter("@P_WEB_LINK", objStaffFund.WEBLINK);
                         objParams[20] = new SqlParameter("@P_PROJECT_STATUS_ID", objStaffFund.PROJECT_STATUS_ID);
+                        objParams[21] = new SqlParameter("@P_ISBLOB", objStaffFund.ISBLOB);
                         #endregion
 
                         if (objSQLHelper.ExecuteNonQuerySP("PAYROLL_UPDATE_SB_STAFF_FUNDED", objParams, false) != null)
@@ -5080,7 +5081,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_IDNO", objMembershipinProfessional.IDNO);
                         objParams[1] = new SqlParameter("@P_Prof_name", objMembershipinProfessional.NameOfProfBody);
 
@@ -5095,9 +5096,9 @@ namespace IITMS
                         //  objParams[7] = new SqlParameter("@P_ATTACHMENT", objAccomplishment.ATTACHMENTS);
                         objParams[7] = new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
                         objParams[8] = new SqlParameter("@P_MEMTYPE", objMembershipinProfessional.MEMTYPE);
-
-                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_ISBLOB", objMembershipinProfessional.ISBLOB);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
 
                         // if (objSQLHelper.ExecuteNonQuerySP("PAYROLL_INST_SB_INVITED_TALK", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -5130,7 +5131,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[8];
+                        objParams = new SqlParameter[9];
                         objParams[0] = new SqlParameter("@P_IDNO", objAccomplishment.IDNO);
                         objParams[1] = new SqlParameter("@P_NAMEPROFBODY", objAccomplishment.NameOfProfBody);
 
@@ -5143,7 +5144,7 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_MPNO", objAccomplishment.MPNO);
                         objParams[6] = new SqlParameter("@P_YEAR", objAccomplishment.YEAR);
                         objParams[7] = new SqlParameter("@P_MEMTYPE", objAccomplishment.MEMTYPE);
-
+                        objParams[8] = new SqlParameter("@P_ISBLOB", objAccomplishment.ISBLOB);
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_MemberinProfessbodyInfo", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
@@ -6311,8 +6312,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
 
-
-                        objParams = new SqlParameter[29];
+                        objParams = new SqlParameter[30];
                         objParams[0] = new SqlParameter("@P_IDNO", objProf.IDNO);
                         objParams[1] = new SqlParameter("@P_COURSE", objProf.COURSE);
                         objParams[2] = new SqlParameter("@P_INST", objProf.INST);
@@ -6355,9 +6355,9 @@ namespace IITMS
                         objParams[25] = new SqlParameter("@P_AcadYear", objProf.YEAR);
                         objParams[26] = new SqlParameter("@P_PARTITION_TYPE", objProf.PARTITION_TYPE);
                         objParams[27] = new SqlParameter("@P_ThemeOfTrainingAttended", objProf.ThemeOfTrainingAttended);
-
-                        objParams[28] = new SqlParameter("@P_PNO", SqlDbType.Int);
-                        objParams[28].Direction = ParameterDirection.Output;
+                        objParams[28] = new SqlParameter("@P_ISBLOB", objProf.ISBLOB);
+                        objParams[29] = new SqlParameter("@P_PNO", SqlDbType.Int);
+                        objParams[29].Direction = ParameterDirection.Output;
 
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_INS_SB_PROFESSIONAL_COURSE", objParams, true);
@@ -6393,7 +6393,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[27];
+                        objParams = new SqlParameter[28];
                         objParams[0] = new SqlParameter("@P_IDNO", objProf.IDNO);
                         objParams[1] = new SqlParameter("@P_COURSE", objProf.COURSE);
                         objParams[2] = new SqlParameter("@P_INST", objProf.INST);
@@ -6431,12 +6431,11 @@ namespace IITMS
                         objParams[23] = new SqlParameter("@P_AcadYear", objProf.YEAR);
                         objParams[24] = new SqlParameter("@P_PARTITION_TYPE", objProf.PARTITION_TYPE);
                         objParams[25] = new SqlParameter("@P_ThemeOfTrainingAttended", objProf.ThemeOfTrainingAttended);
-                        objParams[26] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[26].Direction = ParameterDirection.Output;
-
+                        objParams[26] = new SqlParameter("@P_ISBLOB", objProf.ISBLOB);
+                        objParams[27] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[27].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_PROFESSIONAL_COURSE", objParams, true);
-
                         if (ret != null)
                         {
                             if (Convert.ToInt32(ret) == -1)

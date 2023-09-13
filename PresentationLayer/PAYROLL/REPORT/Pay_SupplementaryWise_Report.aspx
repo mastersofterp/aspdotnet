@@ -7,7 +7,7 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">SUPPLIMENTARY WISE REPORT</h3>
+                    <h3 class="box-title">SUPPLEMENTARY WISE REPORT</h3>
                 </div>
                 <div class="box-body">
                         <div class="panel panel-info">
@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
-                                                <label>Supplimentary Head</label>
+                                                <label>Supplementary Head</label>
                                             </div>
                                             <asp:DropDownList ID="ddlSuppliHead" runat="server" CssClass="form-control" AutoPostBack="true" data-select2-enable="true"
                                                 AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSuppliHead_SelectedIndexChanged" TabIndex="4" ToolTip="Select Supplimentry Head">
@@ -86,7 +86,7 @@
                                    <div class="box-footer">
                             <p class="text-center">
                                 <asp:Button ID="btnSuppWiseRpt" runat="server" Text="Report"
-                                ToolTip="Click to Show Supplimentry wise Report"   CssClass="btn btn-outline-info"
+                                ToolTip="Click to Show Supplementary wise Report"   CssClass="btn btn-outline-info"
                                  ValidationGroup="Payroll" TabIndex="6"  OnClick="btnSuppWiseRpt_Click"/>
                                 <asp:Button ID="btnexporttoexcel" runat="server" Text=" Export To Excel Format "
                                  CssClass="btn btn-outline-info" TabIndex="12"    ValidationGroup="Payroll" OnClick="btnexporttoexcel_Click" />

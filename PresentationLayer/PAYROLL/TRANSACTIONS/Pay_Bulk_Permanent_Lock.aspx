@@ -92,13 +92,13 @@
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup>* </sup>
-                                                    <label>Salary Given/Deposided Date</label>
+                                                    <label>Salary Given/Deposited Date</label>
                                                 </div>
                                                 <div class="input-group date">
                                                     <div class="input-group-addon">
                                                         <i id="imgCal" runat="server" class="fa fa-calendar text-blue"></i>
                                                     </div>
-                                                    <asp:TextBox ID="txtDepDate" runat="server" Style="z-index: 0" TabIndex="4" ToolTip="Enter Salary Given/Deposided Date" CssClass="form-control" />
+                                                    <asp:TextBox ID="txtDepDate" runat="server" Style="z-index: 0" TabIndex="4" ToolTip="Enter Salary Given/Deposited Date" CssClass="form-control" />
 
                                                     <%--   <asp:RequiredFieldValidator ID="rfvtxtDepDate" runat="server" ControlToValidate="txtDepDate"
                                                         Display="None" ErrorMessage="Please Select Salary Given/Deposided Date in (mm/dd/yyyy Format)"
@@ -155,21 +155,28 @@
                                         </div>
                                          <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                     <sup>* </sup>
-                                                    <label>Salary Given/Deposided Date</label>
+                                                    <%-- <sup>* </sup>--%>
+                                                    <label>Salary Given/Deposited Date</label>
                                                 </div>
-                                                <div>
-                                                    <asp:TextBox ID="txtEditFieldDT1" runat="server" MaxLength="100" CssClass="form-control"  OnTextChanged="txtEditFieldDT1_TextChanged" AutoPostBack="true"> </asp:TextBox>
-
-                                                  <%--  onblur="return check(this);"--%>
-                                                    <ajaxToolKit:MaskedEditExtender ID="meeAllotmentDate1" runat="server" TargetControlID="txtEditFieldDT1"
-                                                        Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" ErrorTooltipEnabled="true"
-                                                        OnInvalidCssClass="errordate" />
-                                                    <%--<ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meeAllotmentDate1"
-                                                                ControlToValidate="txtEditFieldDT1" IsValidEmpty="False" EmptyValueMessage="Increment Date is required"
-                                                                InvalidValueMessage="Increment date is invalid" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                                                Display="Dynamic" />--%>
-                                                </div>
+                                                <div class="input-group date">
+                                                        <div class="input-group-addon">
+                                                            <i id="imgCalDateOfBirth" runat="server" class="fa fa-calendar text-blue"></i>
+                                                        </div>
+                                                        <asp:TextBox ID="txtEditFieldDT" runat="server" MaxLength="100" CssClass="form-control" 
+                                                             OnTextChanged="txtEditFieldDT_TextChanged" AutoPostBack="true"> </asp:TextBox>
+                                                        <ajaxToolKit:CalendarExtender ID="ceBirthDate" runat="server" Format="dd/MM/yyyy"
+                                                            TargetControlID="txtEditFieldDT" PopupButtonID="imgCalDateOfBirth" Enabled="true"
+                                                            EnableViewState="true">
+                                                        </ajaxToolKit:CalendarExtender>
+                                                        <ajaxToolKit:MaskedEditExtender ID="meeBirthDate" runat="server" TargetControlID="txtEditFieldDT"
+                                                            Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
+                                                            AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                                        <ajaxToolKit:MaskedEditValidator ID="mevFromDate" runat="server" ControlExtender="meeBirthDate"
+                                                            ControlToValidate="txtEditFieldDT" EmptyValueMessage="Please Enter Birth Date"
+                                                            InvalidValueMessage="BirthDate is Invalid (Enter dd/MM/yyyy Format)" Display="None"
+                                                            TooltipMessage="Please Enter Birth Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                            ValidationGroup="emp" SetFocusOnError="True" />
+                                                    </div>
                                             </div>
                                     </div>
                                 </div>
@@ -214,7 +221,7 @@
                                                         </th>
                                                         <%-- <th>Salary Processed
                                                         </th>--%>
-                                                        <th>Salary Given/Deposided Date
+                                                        <th>Salary Given/Deposited Date
                                                           
                                                  
                                                         </th>
@@ -254,7 +261,7 @@
 
 
 <%--                                                    <asp:RequiredFieldValidator ID="rfvtxtDepDate1" runat="server" ControlToValidate="txtEditFieldDT"
-                                                        Display="None" ErrorMessage="Please Select Salary Given/Deposided Date in (mm/dd/yyyy Format)"
+                                                        Display="None" ErrorMessage="Please Select Salary Given/Deposited Date in (mm/dd/yyyy Format)"
                                                         ValidationGroup="payroll" SetFocusOnError="True">
                                                     </asp:RequiredFieldValidator>--%>
                                                     <ajaxToolKit:CalendarExtender ID="cetxtDepDate1" runat="server" Format="dd/MM/yyyy"
@@ -266,8 +273,8 @@
                                                         AcceptNegative="Left" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate">
                                                     </ajaxToolKit:MaskedEditExtender>
                                                     <ajaxToolKit:MaskedEditValidator ID="mevtxtDepDate1" runat="server" ControlExtender="metxtDepDate1"
-                                                        ControlToValidate="txtEditFieldDT" EmptyValueMessage="Please Enter Inc.Date" InvalidValueMessage="Salary Given/Deposided Date is Invalid (Enter mm/dd/yyyy Format)"
-                                                        Display="None" TooltipMessage="Please Enter Salary Given/Deposided Date" EmptyValueBlurredText="Empty"
+                                                        ControlToValidate="txtEditFieldDT" EmptyValueMessage="Please Enter Inc.Date" InvalidValueMessage="Salary Given/Deposited Date is Invalid (Enter mm/dd/yyyy Format)"
+                                                        Display="None" TooltipMessage="Please Enter Salary Given/Deposited Date" EmptyValueBlurredText="Empty"
                                                         InvalidValueBlurredMessage="Invalid Date" ValidationGroup="payroll" SetFocusOnError="True" />
                                                 </td>
 

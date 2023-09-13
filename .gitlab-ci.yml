@@ -13,6 +13,8 @@ stages:
         deploymentOutput: ""
         gitCompareCommand: "git diff --name-only origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" # can add --ignore-all-space to ignore all whitespace
     script:
+        - echo "$CI_COMMIT_REF_NAME"
+        - echo "$publishProfilesPath/FolderProfile_TEST_RFCTEST.pubxml"
         - powershell -executionpolicy bypass -File "C:\GitLabRunner\CICD-Scripts\powershell-deployment.ps1"
             -projectName "$CI_PROJECT_NAME"
             -branchName "$CI_COMMIT_REF_NAME"
@@ -40,8 +42,7 @@ stages:
             -restoreFromBackupFiles "/image" 
             -deleteAfterPublishFiles "/APP_CODE,/website.publishproj" 
             -publishPrecompilePath "$CI_PROJECT_DIR\PrecompiledWeb\PresentationLayer\"   
-            -restoreDefaultFile "true"
-        
+            -restoreDefaultFile "true"        
     rules:
         - if: '$CI_COMMIT_MESSAGE =~ /See merge request/'
 

@@ -85,6 +85,33 @@
                                                 <asp:ListItem Value="2">Student</asp:ListItem>
                                             </asp:RadioButtonList>
                                         </div>
+
+                                      <%--  //-------start--------%>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divsearchby" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <label>
+                                                    <asp:Label ID="lblStdSelectionBy" runat="server" Text=""></asp:Label></label>
+                                            </div>
+                                          <asp:DropDownList ID="ddlorderby" AppendDataBoundItems="true" runat="server" CssClass="form-control" TabIndex="3" ToolTip="Select Order By"
+                                                AutoPostBack="true" EnableViewState="true" 
+                                                 data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="1">IDNO</asp:ListItem>
+                                                <asp:ListItem Value="2">RRN</asp:ListItem>
+                                                <asp:ListItem Value="3">ROLL NO.</asp:ListItem>
+                                               <asp:ListItem Value="4">ENROLL NO.</asp:ListItem>
+                                              <asp:ListItem Value="5">PFILE NO.</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlorderby"
+                                                Display="None" ErrorMessage="Please Select Student Selection By" ValidationGroup="Submit" InitialValue="0"></asp:RequiredFieldValidator>
+                                        </div>
+
+   
+
+                                      <%--  //-------end---------%>
+
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup></sup>
@@ -98,6 +125,7 @@
 
                                             <ajaxToolKit:AutoCompleteExtender ID="autAgainstAc" runat="server" TargetControlID="txtEmployee"
                                                 MinimumPrefixLength="1" EnableCaching="true" CompletionSetCount="1" CompletionInterval="1000"
+                                                OnClientPopulating="autoComplete1_OnClientPopulating" UseContextKey="true"
                                                 ServiceMethod="GetEmployeeName" OnClientShowing="clientShowing" OnClientItemSelected="GetEmpName">
                                             </ajaxToolKit:AutoCompleteExtender>
                                         </div>
@@ -302,6 +330,10 @@
             document.getElementById('ctl00_ContentPlaceHolder1_ddlEmployee').value = Name[0];
 
 
+        }
+
+        function autoComplete1_OnClientPopulating(sender, args) {
+            sender.set_contextKey(document.getElementById('ctl00_ContentPlaceHolder1_ddlorderby').value);
         }
 
     </script>
