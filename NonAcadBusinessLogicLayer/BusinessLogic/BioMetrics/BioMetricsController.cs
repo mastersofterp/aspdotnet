@@ -668,6 +668,57 @@ namespace IITMS
                 }
                 #endregion
 
+                #region Login Detail
+
+                public DataSet GetDepartmentName(int userno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParam = null;
+                        objParam = new SqlParameter[1];
+                        objParam[0] = new SqlParameter("@P_UANO", userno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_DEPT_NAME_FOR_USERTYPE", objParam);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetSingleLeave->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetEmployeeListForDept(int userno , int shiftmanagement)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParam = null;
+                        objParam = new SqlParameter[2];
+                        objParam[0] = new SqlParameter("@P_UANO", userno);
+                        objParam[1] = new SqlParameter("@P_SHIFTMANAGEMENT", shiftmanagement);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_DEPT_WISE_EMPLOYEE_NAME", objParam);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetSingleLeave->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                #endregion
             }
         }
     }
