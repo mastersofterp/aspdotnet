@@ -25,7 +25,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
     UAIMS_Common objUCommon = new UAIMS_Common();
     VMController objVMC = new VMController();
     VM objVM = new VM();
-
+    int selectedby = 0;
     protected void Page_PreInit(object sender, EventArgs e)
     {
         if (Session["masterpage"] != null)
@@ -141,7 +141,8 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
                 divSem.Visible = false;
                 divStud.Visible = false;
                 divEmp.Visible = true;
-                BindlistView(rdbUserType.SelectedValue); 
+               
+                BindlistView(rdbUserType.SelectedValue);
             }
             else
             {
@@ -149,7 +150,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
                 divSem.Visible = true;
                 divStud.Visible = true;
                 divEmp.Visible = false;
-                BindlistView(rdbUserType.SelectedValue);               
+                BindlistView(rdbUserType.SelectedValue);
             }
 
             ddlEmployee.SelectedIndex = 0;
@@ -212,12 +213,25 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
             {
                 lblSearch.Text = "Search Employee";
                 txtEmployee.ToolTip = "Enter Employee Code To Search";
+                lblStdSelectionBy.Text = "Employee Selection By";
+                ddlorderby.SelectedValue = "0";
+                divsearchby.Visible = true;
+                ddlorderby.Items.FindByValue("2").Enabled = false;
+                ddlorderby.Items.FindByValue("3").Enabled = false;
+                ddlorderby.Items.FindByValue("4").Enabled = false;
                 ds = objVMC.GetRouteAllotmentData(USER_TYPE);
             }
             else
             {
                 lblSearch.Text = "Search Student";
                 txtEmployee.ToolTip = "Enter Enroll No. To Search";
+                lblStdSelectionBy.Text = "Student Selection By";
+                divsearchby.Visible = true;
+                ddlorderby.Items.FindByValue("1").Enabled = true;
+                ddlorderby.Items.FindByValue("2").Enabled = true;
+                ddlorderby.Items.FindByValue("3").Enabled = true;
+                ddlorderby.Items.FindByValue("4").Enabled = true;
+                ddlorderby.Items.FindByValue("5").Enabled = false;
                 ds = objVMC.GetRouteAllotmentData(USER_TYPE);
             }
             if (ds.Tables[0].Rows.Count > 0)
@@ -469,6 +483,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
         txtEmployee.Text = string.Empty;
         divCanRem.Visible = false;
         txtCanRemark.Text = string.Empty;
+        ddlorderby.SelectedValue = "0";
     }
 
     // This method is use to generate the list of Vehicle-Driver-Route allotment.
@@ -622,7 +637,8 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
                 {
                     string year = objCommon.LookUp("ACD_STUDENT", "[YEAR]", "TRANSPORT=1 AND IDNO=" + hfIdNo.Value);
 
-                    dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='TPF' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
+                    //dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='TPF' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
+                    dsCheck = objCommon.FillDropDown("ACD_DCR", "IDNO", "NAME", "IDNO=" + hfIdNo.Value + " AND SEMESTERNO IN (SELECT SEMESTERNO FROM ACD_SEMESTER WHERE YEARNO = " + year + ") AND RECIEPT_CODE='BFR' AND ISNULL(RECON,0)=1 AND ISNULL(CAN,0)=0", "");
                     if (dsCheck.Tables[0].Rows.Count > 0)
                     {
 
@@ -669,14 +685,15 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
 
     [System.Web.Script.Services.ScriptMethod()]
     [System.Web.Services.WebMethod]
-    public static List<string> GetEmployeeName(string prefixText)
+    public static List<string> GetEmployeeName(string prefixText, string contextKey)
   {
         List<string> EmployeeName = new List<string>();
         DataSet ds = new DataSet();
         try
         {
             VMController objVMCon = new VMController();
-            ds = objVMCon.FillEmployeeName(prefixText);
+           // int studSelectionby = Convert.ToInt32(ddlorderby.SelectedValue);
+            ds = objVMCon.FillEmployeeName(prefixText, contextKey);
 
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
@@ -795,4 +812,6 @@ public partial class VEHICLE_MAINTENANCE_Transaction_EmpStudAllotment : System.W
         }
 
     }
+   
+ 
 }
