@@ -91,6 +91,47 @@
         });
 
     </script>--%>
+    <style>
+    .custom-dropdown {
+    /* Reset the form-control class or remove it */
+    padding: 0;
+    /* Other CSS properties as needed */
+}
+
+    </style>
+
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+        #ctl00_ContentPlaceHolder1_DataPager1 a {
+            background-color: #fff;
+            border: 1px solid;
+            padding: 6px 10px;
+            border-radius: 19px;
+            text-decoration: none;
+        }
+
+        #ctl00_ContentPlaceHolder1_NumberDropDown {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            padding-left: 0.5rem;
+            font-size: .845rem;
+            border-radius: 0.25rem;
+            border: 1px solid #ccc;
+        }
+        /*.default-c .paginate_button.page-item.active a {
+        }*/
+
+        #ctl00_ContentPlaceHolder1_DataPager1 span {
+            background-color: #0d70fd;
+            border: 1px solid #fff;
+            padding: 6px 10px;
+            border-radius: 19px;
+            text-decoration: none;
+            color: #fff;
+        }
+    </style>
     <script type="text/javascript" language="javascript">
         $(function () {
             $("[id*=tvLinks] input[type=checkbox]").bind("click", function () {
@@ -933,26 +974,58 @@
                                                             <div class="col-12 btn-footer">
                                                                 <asp:Label ID="lblBtotal" runat="server" Font-Bold="true" Text="0"></asp:Label>
                                                             </div>
-                                                            <asp:ListView ID="lvBulkDetail" runat="server">
-                                                                <LayoutTemplate>
-                                                                    <div class="sub-heading">
-                                                                        <h5>Details</h5>
+
+                                                            <%--Number Dropdown Added By Shrikant W. on 07-09-2023--%>
+                                                            <div class="row">
+                                                                <div class="col-lg-9 col-md-9 col-sm-9 col-12 d-flex mb-0 pb-0 mt-3">
+                                                                    <div class="form-group d-flex mb-0 pb-0">
+                                                                        <label class="mt-1 mr-1">Show</label>
+                                                                        <asp:DropDownList ID="NumberDropDown" runat="server" CssClass="custom-dropdown" AutoPostBack="true" OnSelectedIndexChanged="NumberDropDown_SelectedIndexChanged">
+                                                                            <asp:ListItem Text="25" Value="25"></asp:ListItem>
+                                                                            <asp:ListItem Text="50" Value="50"></asp:ListItem>
+                                                                            <asp:ListItem Text="100" Value="100"></asp:ListItem>
+                                                                            <asp:ListItem Text="200" Value="200"></asp:ListItem>
+                                                                            <asp:ListItem Text="500" Value="500"></asp:ListItem>
+                                                                            <asp:ListItem Text="1000" Value="1000"></asp:ListItem>
+                                                                            <asp:ListItem Text="1500" Value="1500"></asp:ListItem>
+                                                                            <asp:ListItem Text="2000" Value="2000"></asp:ListItem>
+                                                                        </asp:DropDownList>
+                                                                        <label class="mt-1 ml-1">Entries</label>
                                                                     </div>
-                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblHead">
-                                                                        <thead class="bg-light-blue">
-                                                                            <tr id="trRow">
-                                                                                <th id="thHead">
-                                                                                    <asp:CheckBox ID="cbHead" runat="server" Text="Select All" TabIndex="9" OnClick="checkBulkAllCheckbox(this)" />
-                                                                                </th>
-                                                                                <th>User Name </th>
-                                                                                <th>Full Name </th>
-                                                                                <th>Role </th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr id="itemPlaceholder" runat="server" />
-                                                                        </tbody>
-                                                                    </table>
+                                                                </div>
+                                                                <div></div>
+                                                                <div></div>
+                                                                <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                                                                    <div class="form-group" style="text-align: right;">
+                                                                        <label for="FilterData"></label>
+                                                                        <input type="text" id="FilterData" class="form-control sfilter" placeholder="Search" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <asp:ListView ID="lvBulkDetail" runat="server" OnPagePropertiesChanging="lvBulkDetail_PagePropertiesChanging">
+                                                                <LayoutTemplate>
+                                                                    <%--<div class="sub-heading">
+                                                                        <h5>Details</h5>
+                                                                    </div>--%>
+                                                                    <div class="table-responsive" style="height: 400px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                                        <table class="table table-striped table-bordered nowrap stble" id="tbltest">
+                                                                            <thead class="bg-light-blue" style="vertical-align: top">
+                                                                                <tr id="trRow">
+                                                                                    <th id="thHead">
+                                                                                        <asp:CheckBox ID="cbHead" runat="server" Text="Select All" TabIndex="9" OnClick="checkBulkAllCheckbox(this)" />
+                                                                                    </th>
+                                                                                    <th data-sortable="true">User Name <span class="sort-icon">&#8593;</span></th>
+                                                                                    <th data-sortable="true">Full Name <span class="sort-icon">&#8593;</span></th>
+                                                                                    <th data-sortable="true">Role <span class="sort-icon">&#8593;</span></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="stbody">
+                                                                                <tr id="itemPlaceholder" runat="server" />
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </LayoutTemplate>
                                                                 <ItemTemplate>
                                                                     <tr>
@@ -984,10 +1057,39 @@
                                                                     </tr>
                                                                 </ItemTemplate>
                                                             </asp:ListView>
+                                                            
+                                                           <%-- DataPager Added By Shrikant W. on 07-09-2023--%>
+                                                            <div style="text-align: left; margin-top: 0px;">
+                                                                <asp:DataPager ID="DataPager2" runat="server" PagedControlID="lvBulkDetail" PageSize="200">
+                                                                    <Fields>
+                                                                        <asp:TemplatePagerField>
+                                                                            <PagerTemplate>
+                                                                                <b>Showing
+                                                                <asp:Label runat="server" ID="CurrentPageLabel"
+                                                                    Text="<%# Container.StartRowIndex+1 %>" />
+                                                                                    to
+                                                                <asp:Label runat="server" ID="TotalPagesLabel"
+                                                                    Text="<%# Convert.ToInt32(Container.StartRowIndex + Container.PageSize) > Convert.ToInt32(Container.TotalRowCount) ? Convert.ToInt32(Container.TotalRowCount):Convert.ToInt32(Container.StartRowIndex+ Container.PageSize) %>" />
+                                                                                    ( of
+                                                                <asp:Label runat="server" ID="TotalItemsLabel"
+                                                                    Text="<%# Container.TotalRowCount%>" />
+                                                                                    records)
+                                                                <br />
+                                                                                </b>
+                                                                            </PagerTemplate>
+                                                                        </asp:TemplatePagerField>
+                                                                    </Fields>
+                                                                </asp:DataPager>
+                                                            </div>
+                                                            <div style="text-align: right; margin-top: 0px;">
+                                                                <asp:DataPager ID="DataPager1" runat="server" PagedControlID="lvBulkDetail" PageSize="1000">
+                                                                    <Fields>
+                                                                        <asp:NumericPagerField />
+                                                                    </Fields>
+                                                                </asp:DataPager>
+                                                            </div>
                                                         </asp:Panel>
                                                     </div>
-
-
                                                 </div>
                                             </ContentTemplate>
                                         </asp:UpdatePanel>
@@ -1407,5 +1509,72 @@
             }
         }
     </script>
+
+   <%-- Added By Shrikant W. on 08-09-2023 for Searching and Sorting the Items in the ListView of Bulk Link Assign Department Wise Tab --%>
+    <script>
+        var currentSortColumn = null;
+        var isAscending = true;
+
+        function sortListView() {
+            var $table = $('.stbody');
+            var rows = $table.find('tr').get();
+            var columnIndex = $(this).index();
+
+            if (currentSortColumn === columnIndex) {
+                isAscending = !isAscending;
+            } else {
+                isAscending = true;
+            }
+
+            currentSortColumn = columnIndex;
+
+            rows.sort(function (a, b) {
+                var keyA = $(a).find('td').eq(columnIndex).text().toLowerCase();
+                var keyB = $(b).find('td').eq(columnIndex).text().toLowerCase();
+
+                if (isAscending) {
+                    return keyA.localeCompare(keyB);
+                } else {
+                    return keyB.localeCompare(keyA);
+                }
+            });
+
+            $.each(rows, function (index, row) {
+                $table.append(row);
+            });
+        }
+
+        function filterListView() {
+            var searchText = $('#FilterData').val().toLowerCase();
+            $('.stbody tr').each(function () {
+                var rowText = $(this).text().toLowerCase();
+                if (rowText.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        $(document).on('keyup', '#FilterData', function () {
+            filterListView();
+            sortListView();
+        });
+
+        $(document).on('click', 'th[data-sortable="true"]', function () {
+            sortListView();
+            filterListView();
+        });
+
+
+        $(document).ready(function () {
+            sortListView();
+            filterListView();
+        });
+    </script>
+
+
+
+
 </asp:Content>
 
