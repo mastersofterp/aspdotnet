@@ -262,8 +262,9 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = ddlQualification.SelectedItem.Text.Replace(" ", "");
-                    filename = IdNo + "_qualification_" + name + ext;
+                    //string name = ddlQualification.SelectedItem.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_qualification_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -276,7 +277,7 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_qualification_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_qualification_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
@@ -284,6 +285,18 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
                             }
                         }
                     }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
+                    }
+
                 }
             }
             else
@@ -364,7 +377,10 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateQualification(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("QUALIFICATION", qno, ViewState["attachment"].ToString(), _idnoEmp, "QUA_", flupld);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("QUALIFICATION", qno, ViewState["attachment"].ToString(), _idnoEmp, "QUA_", flupld);
+                            }
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewQualification();

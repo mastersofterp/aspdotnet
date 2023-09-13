@@ -219,7 +219,7 @@
                                         <LayoutTemplate>
                                             <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                 <thead>
-                                                    <tr>
+                                                    <tr class="bg-light-blue">
                                                         <th>Delete</th>
                                                         <th id="divattach" runat="server">Attachments  
                                                         </th>

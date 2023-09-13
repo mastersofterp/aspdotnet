@@ -219,8 +219,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = txtSqNo.Text.Replace(" ", "");
-                    filename = IdNo + "_increment_" + name + ext;
+                   // string name = txtSqNo.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_increment_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -233,13 +234,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_increment_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_increment_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -311,7 +323,10 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Increment_Termination : Sy
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateServiceBk(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            objServiceBook.update_upload("INCREMENT_N_TERMINATION", Convert.ToInt32(objSevBook.TRNO), ViewState["attachment"].ToString(), _idnoEmp, "INT_", flupld);
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("INCREMENT_N_TERMINATION", Convert.ToInt32(objSevBook.TRNO), ViewState["attachment"].ToString(), _idnoEmp, "INT_", flupld);
+                            }
                             ViewState["action"] = "add";
                             this.Clear();
                             this.BindListViewServiceBook();

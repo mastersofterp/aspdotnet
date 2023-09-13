@@ -201,8 +201,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = txtResponsibility.Text.Replace(" ", "");
-                    filename = IdNo + "_adminresp_" + name + ext;
+                    //string name = txtResponsibility.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_adminresp_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -215,7 +216,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_adminresp_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_adminresp_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
@@ -223,6 +224,18 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
                             }
                         }
                     }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
+                    }
+
                 }
             }
             else
@@ -284,10 +297,13 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_Sb_Admin_Responsibilities : S
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateAdminResponsibilities(objSevBook);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
+                            if (objSevBook.ISBLOB == 0)
+                            {
+                                objServiceBook.update_upload("ADMIN_RESPONSIBLITY", Convert.ToInt32(objSevBook.ADMINTRXNO), ViewState["attachment"].ToString(), _idnoEmp, "ADM_", flupld);
+                            }
                             MessageBox("Record Updated Successfully");
                             this.Clear();
-                            this.BindListViewAdminResponsiblities();
-                            objServiceBook.update_upload("ADMIN_RESPONSIBLITY", Convert.ToInt32(objSevBook.ADMINTRXNO), ViewState["attachment"].ToString(), _idnoEmp, "ADM_", flupld);
+                            this.BindListViewAdminResponsiblities();                           
                             ViewState["action"] = "add";
                       
                             //this.objCommon.DisplayMessage(updpersonaldetails, "Record Updated Successfully", this.Page);

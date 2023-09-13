@@ -35,24 +35,24 @@
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <sup>*</sup>
-                                                   
-                                                     <label>Exam :</label>
-                                                        
-                                                         <asp:DropDownList ID="ddlexam" AppendDataBoundItems="true" runat="server" AutoPostBack="true" TabIndex="1" data-select2-enable="true"
-                                                CssClass="form-control" ToolTip="Select Exam">
-                                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
-                                                              <asp:ListItem Value="NET"></asp:ListItem>
-                                                             <asp:ListItem Value="GATE"></asp:ListItem>
-                                                             <asp:ListItem Value="SET"></asp:ListItem>
-                                                             <asp:ListItem Value="OTHER"></asp:ListItem>
-                                            </asp:DropDownList>
 
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlexam" InitialValue="0"
-                                                Display="None" ErrorMessage="Please Select Exam" ValidationGroup="ServiceBook"
-                                                SetFocusOnError="True">
+                                                        <label>Exam :</label>
+
+                                                        <asp:DropDownList ID="ddlexam" AppendDataBoundItems="true" runat="server" AutoPostBack="true" TabIndex="1" data-select2-enable="true"
+                                                            CssClass="form-control" ToolTip="Select Exam">
+                                                            <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                                            <asp:ListItem Value="NET"></asp:ListItem>
+                                                            <asp:ListItem Value="GATE"></asp:ListItem>
+                                                            <asp:ListItem Value="SET"></asp:ListItem>
+                                                            <asp:ListItem Value="OTHER"></asp:ListItem>
+                                                        </asp:DropDownList>
+
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlexam" InitialValue="0"
+                                                            Display="None" ErrorMessage="Please Select Exam" ValidationGroup="ServiceBook"
+                                                            SetFocusOnError="True">
                                                
-                                            </asp:RequiredFieldValidator>
-                                                        </div>
+                                                        </asp:RequiredFieldValidator>
+                                                    </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <sup>*</sup>
                                                         <label>Name Of Examination :</label>
@@ -87,30 +87,31 @@
                                                         <asp:TextBox ID="txtAttestOfficer" runat="server" CssClass="form-control" TabIndex="4"
                                                             ToolTip="Enter Attesting Officer :"></asp:TextBox>
                                                     </div>
-                                                     <div class="col-12">
-                                                <div class="row">
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                                        <label>Upload Document :</label>
-                                                        <asp:FileUpload ID="flupld" runat="server" TabIndex="5" ToolTip="Click here to Upload Document" />
-                                                         <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .jpg,.png,.doc,.txt) upto 10MB" ForeColor="Red"></asp:Label>
-                                                    </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                                         <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                                         <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                                         <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                                         <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <p class="text-center">
-                                                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="6"
-                                                                OnClick="btnSubmit_Click" CssClass="btn btn-primary" ToolTip="Click here to Submit" />&nbsp;
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <label>Upload Document :</label>
+                                                                <asp:FileUpload ID="flupld" runat="server" TabIndex="5" ToolTip="Click here to Upload Document" />
+                                                                <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .jpg,.png,.doc,.txt) upto 10MB" ForeColor="Red"></asp:Label>
+                                                            </div>
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                                                <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                                                <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                                                <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                                                <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <p class="text-center">
+                                                                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="6"
+                                                                        OnClick="btnSubmit_Click" CssClass="btn btn-primary" ToolTip="Click here to Submit" />&nbsp;
                                                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="7"
                                                                OnClick="btnCancel_Click" CssClass="btn btn-warning" ToolTip="Click here to Reset" />
-                                                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
-                                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                                        </p>
+                                                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="ServiceBook"
+                                                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    </div></div>
                                                 </div>
                                             </div>
                                 </asp:Panel>
@@ -125,37 +126,37 @@
                                             </p>
                                         </EmptyDataTemplate>
                                         <LayoutTemplate>
-                                            <div id="lgv1">
-
-                                                <h4 class="box-title">Dept Examination Details
-                                                </h4>
-                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                                    <%-- <table class="table table-bordered table-hover">--%>
-                                                    <thead>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Action
-                                                            </th>
-                                                            <th>Name Of Exam
-                                                            </th>
-                                                            <th>Reg.No
-                                                            </th>
-                                                            <th>YOP
-                                                            </th>
-                                                             <th>EXAM
-                                                            </th>
-                                                            <%--<th width="10%">Attest.Officer
-                                                    </th>--%>
-                                                            <th id="divFolder" runat="server">Attachment
-                                                            </th>
-                                                            <th id="divBlob" runat="server">Attachment
-                                                            </th>
-                                                            </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
+                                            <div class="sub-heading">
+                                                <h5>Dept Examination Details
+                                                </h5>
                                             </div>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                <%-- <table class="table table-bordered table-hover">--%>
+                                                <thead>
+                                                    <tr class="bg-light-blue">
+                                                        <th>Action
+                                                        </th>
+                                                        <th>Name Of Exam
+                                                        </th>
+                                                        <th>Reg.No
+                                                        </th>
+                                                        <th>YOP
+                                                        </th>
+                                                        <th>EXAM
+                                                        </th>
+                                                        <%--<th width="10%">Attest.Officer
+                                                    </th>--%>
+                                                        <th id="divFolder" runat="server">Attachment
+                                                        </th>
+                                                        <th id="divBlob" runat="server">Attachment
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                            <%--</div>--%>
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr>
@@ -175,7 +176,7 @@
                                                 <td>
                                                     <%# Eval("PASSYEAR")%>
                                                 </td>
-                                                 <td>
+                                                <td>
                                                     <%# Eval("EXAMname")%>
                                                 </td>
                                                 <%-- <td>

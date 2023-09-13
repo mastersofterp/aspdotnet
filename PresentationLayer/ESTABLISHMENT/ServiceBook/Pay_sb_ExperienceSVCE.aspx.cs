@@ -74,7 +74,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
         BlobDetails();
         BindListViewExperiences();
         btnSubmit.Attributes.Add("onclick", " this.disabled = true; " + ClientScript.GetPostBackEventReference(btnSubmit, null) + ";");
-    }  
+    }
 
     private void FillDropDowns()
     {
@@ -108,7 +108,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
         txtEndDate.Text = string.Empty;
         txtDuration.Text = string.Empty;
         txtEndDate.Enabled = true;
-        txtDuration.Enabled = true; 
+        txtDuration.Enabled = true;
         flupld.Dispose();
         ViewState["action"] = "add";
         ViewState["attachment"] = null;
@@ -126,11 +126,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
             DataSet ds = objServiceBook.GetSingleExperienceDetails(SVCNO);
             if (ds.Tables[0].Rows.Count > 0)
             {
-               // ViewState["ID"] = ID;
+                // ViewState["ID"] = ID;
                 ViewState["SVCNO"] = SVCNO.ToString();
                 objCommon.FillDropDownList(ddlDepartment, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO>0", "SUBDEPTNO");
                 ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["Department"].ToString();
-               // ddlDepartment.SelectedItem.Text = ds.Tables[0].Rows[0]["Department"].ToString();
+                // ddlDepartment.SelectedItem.Text = ds.Tables[0].Rows[0]["Department"].ToString();
 
                 objCommon.FillDropDownList(ddlDesignation, "PAYROLL_SUBDESIG", "SUBDESIGNO", "SUBDESIG", "SUBDESIGNO>0", "SUBDESIGNO");
                 ddlDesignation.SelectedValue = ds.Tables[0].Rows[0]["Designation"].ToString();
@@ -150,7 +150,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                     chkIsCurrent.Checked = false;
                     txtEndDate.Text = string.Empty;
                     txtEndDate.Enabled = true;
-                    txtDuration.Enabled = true;                   
+                    txtDuration.Enabled = true;
                 }
                 txtStartDate.Text = ds.Tables[0].Rows[0]["START_DATE"].ToString();
                 txtEndDate.Text = ds.Tables[0].Rows[0]["EndDate"].ToString();
@@ -370,7 +370,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                 objSevBook.EndDate = Convert.ToDateTime(txtEndDate.Text);
             }
             objSevBook.Duration = txtDuration.Text == "" ? "" : txtDuration.Text.ToString();
-           // objSevBook.Attachments = flupld.HasFile == true ? Convert.ToString(flupld.PostedFile.FileName.ToString()) : ViewState["attachmant"].ToString() == "" ? "" : ViewState["attachmant"].ToString();
+            // objSevBook.Attachments = flupld.HasFile == true ? Convert.ToString(flupld.PostedFile.FileName.ToString()) : ViewState["attachmant"].ToString() == "" ? "" : ViewState["attachmant"].ToString();
             objSevBook.CollegeCode = Session["colcode"] == null ? 0 : Convert.ToInt32(Session["colcode"].ToString());
 
             // if (Convert.ToInt32(CheckDuplicate(objExpEntity)) == 1) { return; };
@@ -395,8 +395,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                     string ext = System.IO.Path.GetExtension(flupld.PostedFile.FileName);
                     //HttpPostedFile file = flupld.PostedFile;
                     //filename = objSevBook.IDNO + "_familyinfo" + ext;
-                    string name = ddlDesignation.SelectedItem.Text.Replace(" ", "");
-                    filename = IdNo + "_experience_" + name + ext;
+                    //string name = ddlDesignation.SelectedItem.Text.Replace(" ", "");
+                    string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                    filename = IdNo + "_experience_" + time + ext;
                     objSevBook.ATTACHMENTS = filename;
                     objSevBook.FILEPATH = "Blob Storage";
 
@@ -409,13 +410,24 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                         if (result == true)
                         {
 
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_experience_" + name, flupld);
+                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_experience_" + time, flupld);
                             if (retval == 0)
                             {
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                                 return;
                             }
                         }
+                    }
+                }
+                else
+                {
+                    if (ViewState["attachment"] != null)
+                    {
+                        objSevBook.ATTACHMENTS = ViewState["attachment"].ToString();
+                    }
+                    else
+                    {
+                        objSevBook.ATTACHMENTS = string.Empty;
                     }
                 }
             }
@@ -474,10 +486,11 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                     CustomStatus cs = (CustomStatus)objServiceBook.UpdateSVCEExp(objSevBook);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
-                       
-                       // objServiceBook.update_upload("EXPERIENCE", objSevBook.SVCNO, ViewState["attachment"].ToString(), _idnoEmp, "SCVE_", flupld);
-
-                        objServiceBook.update_upload("EXPERIENCE", objSevBook.SVCNO, ViewState["attachment"].ToString(), _idnoEmp, "SCVE_", flupld);
+                        // objServiceBook.update_upload("EXPERIENCE", objSevBook.SVCNO, ViewState["attachment"].ToString(), _idnoEmp, "SCVE_", flupld);
+                        if (objSevBook.ISBLOB == 0)
+                        {
+                            objServiceBook.update_upload("EXPERIENCE", objSevBook.SVCNO, ViewState["attachment"].ToString(), _idnoEmp, "SCVE_", flupld);
+                        }
                         MessageBox("Record Updated Successfully");
                         ClearControls();
                         BindListViewExperiences();
@@ -619,16 +632,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
     protected void chkIsCurrent_CheckedChanged(object sender, EventArgs e)
     {
         if (!chkIsCurrent.Checked)
-        {           
+        {
             txtEndDate.Text = string.Empty;
             txtEndDate.Enabled = true;
             txtDuration.Enabled = true;
         }
         else
-        {           
+        {
             txtEndDate.Enabled = false;
             txtDuration.Enabled = false;
-        }       
+        }
     }
     protected void txtStartDate_TextChanged(object sender, EventArgs e)
     {
@@ -664,7 +677,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_sb_ExperienceSVCE : System.We
                 }
             }
         }
-      
+
     }
 
     #region Blob
