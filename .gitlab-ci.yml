@@ -77,10 +77,10 @@ job_daiict-app:
     - daiict-app
   <<: *deploy_template
 
-job_mserprfc-app:
+job_mserp-app-rfc-shared:
   stage: run_script
   tags: 
-    - mserprfc-app
+    - mserp-app-rfc-shared
   <<: *deploy_template
 
 job_prmitra-app:
