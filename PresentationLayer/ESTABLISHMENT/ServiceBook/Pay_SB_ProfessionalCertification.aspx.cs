@@ -20,6 +20,10 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage;
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
 
 public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification : System.Web.UI.Page
 {
@@ -32,6 +36,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
     public string path = string.Empty;
     public string Docpath = HttpContext.Current.Server.MapPath("~/ESTABLISHMENT/upload_files/");
     public static string RETPATH = "";
+    BlobController objBlob = new BlobController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -70,6 +75,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             btnSubmit.Enabled = false;
             //return;
         }
+        BlobDetails();
     }
 
      
@@ -245,6 +251,15 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             {
                 objSevBook.ThemeOfTrainingAttended = string.Empty;
             }
+            //Changes done for Blob
+            if (lblBlobConnectiontring.Text == "")
+            {
+                objSevBook.ISBLOB = 0;
+            }
+            else
+            {
+                objSevBook.ISBLOB = 1;
+            }
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
@@ -255,12 +270,14 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
 
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
-                        if (ViewState["DESTINATION_PATH"] != null)
+                        if (objSevBook.ISBLOB == 0)
                         {
-                            string PNO = objCommon.LookUp("PAYROLL_SB_PROFESSIONAL_COURSE", "MAX(PNO)", "");
-                            AddDocuments(Convert.ToInt32(PNO));
+                            if (ViewState["DESTINATION_PATH"] != null)
+                            {
+                                string PNO = objCommon.LookUp("PAYROLL_SB_PROFESSIONAL_COURSE", "MAX(PNO)", "");
+                                AddDocuments(Convert.ToInt32(PNO));
+                            }
                         }
-                        
                         this.Clear();
                         this.BindListViewProfessional();
                         DeletePath();
@@ -282,10 +299,13 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                         CustomStatus cs = (CustomStatus)objServiceBook.UpdateProfessionalCourse(objSevBook, dt);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            if (ViewState["DESTINATION_PATH"] != null)
+                            if (objSevBook.ISBLOB == 0)
                             {
-                                string PNO = objCommon.LookUp("PAYROLL_SB_PROFESSIONAL_COURSE", "MAX(PNO)", "");
-                                AddDocuments(Convert.ToInt32(PNO));
+                                if (ViewState["DESTINATION_PATH"] != null)
+                                {
+                                    string PNO = objCommon.LookUp("PAYROLL_SB_PROFESSIONAL_COURSE", "MAX(PNO)", "");
+                                    AddDocuments(Convert.ToInt32(PNO));
+                                }
                             }
                            
                             ViewState["action"] = "add";
@@ -446,14 +466,16 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                     dr["IDNO"] = ds.Tables[1].Rows[i]["IDNO"].ToString();
                     dr["FOLDER"] = "PROFESSIONAL_COURSE";
                     dr["APPID"] = pNo.ToString();
+                    dr["FILENAME"] = ds.Tables[1].Rows[i]["FILENAME"].ToString();
                     dtM.Rows.Add(dr);
                     dtM.AcceptChanges();
                     ViewState["FILE1"] = dtM;
                     ViewState["FUID"] = ds.Tables[1].Rows[i]["FUID"].ToString();
                 }
-                LVFiles.DataSource = (DataTable)ViewState["FILE1"];
-                LVFiles.DataBind();
+                //LVFiles.DataSource = (DataTable)ViewState["FILE1"];
+                //LVFiles.DataBind();
                 pnlfiles.Visible = true;
+                this.BindListView_Attachments(dtM);
             }
             else
             {
@@ -506,6 +528,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
          try
         {
             int idno = _idnoEmp;
+            ServiceBook objSevBook = new ServiceBook();
             if (FileUpload1.HasFile)
             {
                 if (FileTypeValid(System.IO.Path.GetExtension(FileUpload1.FileName)))
@@ -547,19 +570,68 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                     ViewState["SOURCE_FILE_PATH"] = file;
                     string PATH = Docpath + "PROFESSIONAL_COURSE\\" + idno;
                     ViewState["DESTINATION_PATH"] = PATH;
-
-                    if (!System.IO.Directory.Exists(file))
+                    if (lblBlobConnectiontring.Text == "")
                     {
-                        System.IO.Directory.CreateDirectory(file);
+                        objSevBook.ISBLOB = 0;
                     }
-
-                    if (!System.IO.Directory.Exists(path))
+                    else
                     {
-                        if (!File.Exists(path))
+                        objSevBook.ISBLOB = 1;
+                    }
+                    if (objSevBook.ISBLOB == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        string IdNo = _idnoEmp.ToString();
+                        if (FileUpload1.HasFile)
                         {
-                            int pcno = Addfieldstotbl();
-                            path = file + "\\PC_" + pcno + System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
-                            FileUpload1.PostedFile.SaveAs(path);
+                            string contentType = contentType = FileUpload1.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
+                            //HttpPostedFile file = flupld.PostedFile;
+                            //filename = objSevBook.IDNO + "_familyinfo" + ext;
+                            //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            filename = IdNo + "_professionalcertificate_" + time + ext;
+                            objSevBook.ATTACHMENTS = filename;
+                            objSevBook.FILEPATH = "Blob Storage";
+
+                            if (FileUpload1.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_professionalcertificate_" + time, FileUpload1);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    int stcno = Addfieldstotbl(filename);
+                                    //BindListView_Attachments();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!System.IO.Directory.Exists(file))
+                        {
+                            System.IO.Directory.CreateDirectory(file);
+                        }
+
+                        if (!System.IO.Directory.Exists(path))
+                        {
+                            if (!File.Exists(path))
+                            {
+                                string filename = FileUpload1.FileName;
+                                int pcno = Addfieldstotbl(filename);
+                                path = file + "\\PC_" + pcno + System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
+                                FileUpload1.PostedFile.SaveAs(path);
+                            }
                         }
                     }
                 }
@@ -582,7 +654,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-    private int Addfieldstotbl()
+    private int Addfieldstotbl(string filename)
     {
         if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
         {
@@ -596,11 +668,13 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             dr["IDNO"] = _idnoEmp;
             dr["FOLDER"] = "TEMP_PROFESSIONALCOURSE_FILES";
             dr["APPID"] = 0;
+            dr["FILENAME"] = filename;
             dt.Rows.Add(dr);
             ViewState["FILE1"] = dt;
-            LVFiles.DataSource = ViewState["FILE1"];
-            LVFiles.DataBind();
+            //LVFiles.DataSource = ViewState["FILE1"];
+            //LVFiles.DataBind();
             ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            this.BindListView_Attachments(dt);
         }
         else
         {
@@ -616,11 +690,13 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             dr["FOLDER"] = "TEMP_PROFESSIONALCOURSE_FILES";
             dr["APPID"] = 0;
             ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["FILENAME"] = filename;
             dt.Rows.Add(dr);
             ViewState["FILE1"] = dt;
-            LVFiles.DataSource = (DataTable)ViewState["FILE1"];
-            LVFiles.DataBind();
+            //LVFiles.DataSource = (DataTable)ViewState["FILE1"];
+            //LVFiles.DataBind();
             pnlfiles.Visible = true;
+            this.BindListView_Attachments(dt);
         }
         return Convert.ToInt32(ViewState["FUID"]);
     }
@@ -647,6 +723,9 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
         dt.Columns.Add(dc);
 
         dc = new DataColumn("APPID", typeof(int));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("FILENAME", typeof(string));
         dt.Columns.Add(dc);
 
         ViewState["FILE1"] = dt;
@@ -723,8 +802,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             //Delete a Directory
             Directory.Delete(path);
         }
-    }
-    
+    }   
 
    
     protected void imgbtndelFile_Click(object sender, ImageClickEventArgs e)
@@ -847,5 +925,135 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_SB_ProfessionalCertification 
             }
         }
     }
-    
+
+    #region Blob
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "ContainerNameEmployee";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private void BindListView_Attachments(DataTable dt)
+    {
+        try
+        {
+            divAttch.Style["display"] = "block";
+            LVFiles.DataSource = dt;
+            LVFiles.DataBind();
+
+
+            if (lblBlobConnectiontring.Text != "")
+            {
+                Control ctrHeader = LVFiles.FindControl("divBlobDownload");
+                Control ctrHead1 = LVFiles.FindControl("divattachblob");
+                Control ctrhead2 = LVFiles.FindControl("divattach");
+                ctrHeader.Visible = true;
+                ctrHead1.Visible = true;
+                ctrhead2.Visible = false;
+
+                foreach (ListViewItem lvRow in LVFiles.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                    Control ckattach = (Control)lvRow.FindControl("attachfile");
+                    Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    ckBox.Visible = true;
+                    attachblob.Visible = true;
+                    ckattach.Visible = false;
+
+                }
+            }
+            else
+            {
+
+                Control ctrHeader = LVFiles.FindControl("divDownload");
+                ctrHeader.Visible = false;
+
+                foreach (ListViewItem lvRow in LVFiles.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+                    ckBox.Visible = false;
+
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_FeeCollection.BindListView_DemandDraftDetails() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    #endregion
 }

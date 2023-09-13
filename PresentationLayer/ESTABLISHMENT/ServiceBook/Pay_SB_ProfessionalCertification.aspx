@@ -295,6 +295,12 @@
                                             <asp:TextBox ID="txtThemeOfTrainingAttended" runat="server" CssClass="form-control" TabIndex="25"
                                                 ToolTip="Enter Theme Of Training Attended"></asp:TextBox>
                                         </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                        </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <label>Upload Files</label>
@@ -318,30 +324,38 @@
                                                 <asp:Panel ID="Panel2" runat="server">
                                                     <div class="panel panel-info">
                                                     </div>
-                                                    <div class="col-md-12">
-                                                        <asp:Panel ID="pnlfiles" runat="server">
-                                                            <asp:ListView ID="LVFiles" runat="server">
-                                                                <LayoutTemplate>
-                                                                    <div id="lgv1">
-                                                                        <h4>Attached Files</h4>
+                                                    <div id="divAttch" runat="server" style="display: none">
+                                                        <div class="col-md-12">
+                                                            <asp:Panel ID="pnlfiles" runat="server">
+                                                                <asp:ListView ID="LVFiles" runat="server">
+                                                                    <LayoutTemplate>
+                                                                        <div class="sub-heading">
+                                                                            <h5>Attached Files</h5>
+                                                                        </div>
                                                                         <table class="table table-bordered table-hover">
                                                                             <thead>
                                                                                 <tr class="bg-light-blue">
                                                                                     <th>Delete</th>
-
-                                                                                    <th>File Name</th>
+                                                                                    <th id="divattach" runat="server">Attachments  
+                                                                                    </th>
+                                                                                    <th id="divattachblob" runat="server" visible="false">Attachments
+                                                                                    </th>
+                                                                                    <th id="divDownload" runat="server" visible="false">Download
+                                                                                    </th>
+                                                                                    <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                                    </th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr id="itemPlaceholder" runat="server" />
                                                                             </tbody>
                                                                         </table>
-                                                                    </div>
-                                                                </LayoutTemplate>
-                                                                <ItemTemplate>
-                                                                    <tr>
+                                                                        <%--</div>--%>
+                                                                    </LayoutTemplate>
+                                                                    <ItemTemplate>
+                                                                        <tr>
 
-                                                                        <td>
+                                                                            <%--                                                                        <td>
                                                                             <asp:ImageButton ID="imgbtndelFile" runat="server" ImageUrl="~/Images/delete.png"
                                                                                 CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
                                                                                 OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="imgbtndelFile_Click" />
@@ -351,16 +365,44 @@
                                                                         <td>
 
                                                                             <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("GETFILE"),Eval("FUID"),Eval("IDNO"),Eval("FOLDER"),Eval("APPID"))%>'><%# Eval("DisplayFileName")%></asp:HyperLink>
-                                                                        </td>
-                                                                    </tr>
-                                                                </ItemTemplate>
-                                                            </asp:ListView>
-                                                        </asp:Panel>
+                                                                        </td>--%>
+                                                                            <td>
+                                                                                <asp:ImageButton ID="imgbtndelFile" runat="server" ImageUrl="~/Images/delete.png"
+                                                                                    CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
+                                                                                    OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="imgbtndelFile_Click" />
+                                                                            </td>
+                                                                            <td id="attachfile" runat="server">
+                                                                                <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("DisplayFileName") %>&filename=<%# Eval("DisplayFileName")%>">
+                                                                                    <%# Eval("DisplayFileName")%></a>
+                                                                            </td>
+                                                                            <td id="attachblob" runat="server" visible="false">
+                                                                                <%# Eval("DisplayFileName")%></a>
+                                                                            </td>
+
+                                                                            <td id="tdDownloadLink" runat="server" visible="false">
+                                                                                <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                                <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                                                --%>      <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;
+                                                            
+                                                                            </td>
+                                                                            <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                                                <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                                    <ContentTemplate>
+                                                                                        <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                            data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                                    </ContentTemplate>
+                                                                                    <Triggers>
+                                                                                        <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                                    </Triggers>
+                                                                                </asp:UpdatePanel>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ItemTemplate>
+                                                                </asp:ListView>
+                                                            </asp:Panel>
+                                                        </div>
                                                     </div>
-                                                    </div>
-                                        </div>
-                                    </div>
-                                    
                                                 </asp:Panel>
                                             </ContentTemplate>
                                             <Triggers>
