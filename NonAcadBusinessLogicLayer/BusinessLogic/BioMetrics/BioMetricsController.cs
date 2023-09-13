@@ -668,7 +668,6 @@ namespace IITMS
                 }
                 #endregion
 
-
                 #region Login Detail
 
                 public DataSet GetDepartmentName(int userno)
@@ -798,7 +797,6 @@ namespace IITMS
                     return ds;
                 }
                 #endregion
-
             }
         }
     }
