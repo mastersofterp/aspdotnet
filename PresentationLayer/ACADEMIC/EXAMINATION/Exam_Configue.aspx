@@ -125,7 +125,6 @@
                                                     <asp:HiddenField ID="hdfgarcerule" runat="server" ClientIDMode="Static" />
                                                 </div>
                                             </div>
-
                                             <div class="form-group col-lg-2 col-md-6 col-12">
                                                 <%--<asp:Panel ID="Panel1" runat="server">--%>
 
@@ -202,9 +201,7 @@
 
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <div class="row">
                                             <div class="form-group col-lg-2 col-md-6 col-12">
 
@@ -318,71 +315,64 @@
                                                     <asp:HiddenField ID="hdfbatch" runat="server" ClientIDMode="Static" />
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 mt-3">
-                                <div class="row">
-                                    <div class="form-group col-lg-6 col-md-12 col-12">
-                                        <div class="label-dynamic">
-                                            <label>Fee Type </label>
-                                        </div>
-                                        <asp:RadioButtonList ID="rdlist" runat="server" AutoPostBack="true" RepeatDirection="Horizontal" OnSelectedIndexChanged="rdlist_SelectedIndexChanged">
-                                            <asp:ListItem Value="1">No Fees</asp:ListItem>
-                                            <asp:ListItem Value="2">Course Wise Fees</asp:ListItem>
-                                            <asp:ListItem Value="3">Credit Wise Fees</asp:ListItem>
-                                            <asp:ListItem Value="4">SubjectType Wise Fees</asp:ListItem>
-                                        </asp:RadioButtonList>
-                                    </div>
-
-                                    <div class="form-group col-lg-6 col-md-12 col-12">
-                                        <asp:UpdatePanel ID="updPreview" runat="server">
-                                            <ContentTemplate>
-                                                <div class="row">
-                                                    <div class="form-group col-lg-4 col-md-4 col-12">
-                                                        <div class="label-dynamic">
-                                                            <label>Passing Rule </label>
-                                                        </div>
-                                                        <label class="form-check-label">
-                                                            <asp:RadioButton ID="rdbyes" Font-Size="Small" runat="server" Text="Yes" GroupName="PassRule" AutoPostBack="true" OnCheckedChanged="rdbyes_CheckedChanged" />&nbsp;
-                                                           
-                                                            <asp:RadioButton ID="rdbno" Font-Size="Small" runat="server" Text="No" GroupName="PassRule" AutoPostBack="true" OnCheckedChanged="rdbno_CheckedChanged" />&nbsp;
-
-
-                                                       
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-group col-lg-8 col-md-8 col-12">
-                                                        <asp:Panel ID="pnlChoice" runat="server" Visible="false">
-                                                            <div class="mt-4">
-                                                                <asp:RadioButton runat="server" Font-Size="Small" ID="rdbSbjecttype" Text="Subject Type Wise" GroupName="subjecttype" AutoPostBack="true" OnCheckedChanged="rdbSbjecttype_CheckedChanged" />
-                                                                &nbsp;&nbsp;
-                                                            
-                                                                <asp:RadioButton runat="server" Font-Size="Small" ID="rdbcomman" Text="Comman" GroupName="subjecttype" AutoPostBack="true" OnCheckedChanged="rdbcomman_CheckedChanged" />
-
-                                                            </div>
-                                                        </asp:Panel>
-                                                    </div>
+                                             <div class="form-group col-lg-2 col-md-6 col-12">
+                                              <span class="pr-5">
+                                                  <label for="chk_grade_faculty" style="font-size: small;">Grade Allotment From Faculty End </label>
+                                              </span>
+                                            </div>
+                                            <div class="form-group  col-md-2 ">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="chk_grade_faculty">
+                                                    <label class="custom-control-label" for="chk_grade_faculty"></label>
+                                                    <asp:HiddenField ID="hdfFacgrade" runat="server" ClientIDMode="Static" />
                                                 </div>
+                                            </div>
 
-                                                <%--onclick="ShowHideMe(this)"--%>
-                                            </ContentTemplate>
-                                            <Triggers>
-                                                <asp:AsyncPostBackTrigger ControlID="rdbSbjecttype" />
-                                                <%--<asp:PostBackTrigger ControlID="rdbSbjecttype"  />--%>
-                                                <asp:AsyncPostBackTrigger ControlID="rdbcomman" EventName="CheckedChanged" />
-                                                <asp:AsyncPostBackTrigger ControlID="rdbyes" EventName="CheckedChanged" />
-                                                <asp:AsyncPostBackTrigger ControlID="rdbno" EventName="CheckedChanged" />
-                                            </Triggers>
-                                        </asp:UpdatePanel>
+                                        </div>
+
+                                         <div class="row">
+                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                                <span class="pr-5">
+                                                    <label for="chk_grade_admin" style="font-size: small;">Grade Allotment From Admin End</label>
+                                                </span>
+                                            </div>
+                                            <div class="form-group  col-md-2 ">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="chk_grade_admin">
+                                                    <label class="custom-control-label" for="chk_grade_admin"></label>
+                                                    <asp:HiddenField ID="hdfadmingrade" runat="server" ClientIDMode="Static" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                                <span class="pr-5">
+                                                    <label for="chkGraph" style="font-size: small;">Graph On Relative Grade Page</label>
+                                                </span>
+                                            </div>
+                                            <div class="form-group  col-md-2 ">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="chkGraph">
+                                                    <label class="custom-control-label" for="chkGraph"></label>
+                                                    <asp:HiddenField ID="hdfgraph" runat="server" ClientIDMode="Static" />
+                                                </div>
+                                            </div>
+
+                                             <div class="form-group col-lg-2 col-md-6 col-12">
+                                              <span class="pr-5">
+                                                  <label for="chk_chgrange" style="font-size: small;">Change Grade Range</label>
+                                              </span>
+                                            </div>
+                                            <div class="form-group  col-md-2 ">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="chk_chgrange">
+                                                    <label class="custom-control-label" for="chk_chgrange"></label>
+                                                    <asp:HiddenField ID="hdfrange" runat="server" ClientIDMode="Static" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-12">
                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                     <ContentTemplate>
@@ -403,7 +393,6 @@
                                                                             <th>Subject Name</th>
                                                                             <th>Internal Status</th>
                                                                             <th>External Status</th>
-
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -434,13 +423,11 @@
                                                                 </ajaxToolKit:FilteredTextBoxExtender>
                                                                 <%--<asp:Label ID="lblinternal" runat="server" Text='<%# Eval("INTERSTATUS") %>'></asp:Label>--%>
 
-
                                                             <td>
                                                                 <asp:TextBox ID="txtexternal" runat="server" Text='<%# Eval("EXTERMARKS") %>' CssClass="form-control" Width="100px"></asp:TextBox>
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" ValidChars=".0123456789" TargetControlID="txtexternal"></ajaxToolKit:FilteredTextBoxExtender>
 
                                                                 <%--<asp:Label ID="lblExternal" runat="server" Text='<%# Eval("EXTERSTATUS") %>'></asp:Label>--%>
-
                                                             </td>
 
                                                         </tr>
@@ -510,6 +497,10 @@
             var excel = document.getElementById("chk_MarkEnrtyExcel");
             var section = document.getElementById("chk_Section");
             var batch = document.getElementById("chk_Batch");
+            var gradeadmin = document.getElementById("chk_grade_admin");
+            var gradefaculty = document.getElementById("chk_grade_faculty");
+            var graph = document.getElementById("chkGraph");
+            var GradeRange = document.getElementById("chk_chgrange");
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -561,6 +552,16 @@
             if (decode.checked) {
                 $('#hdfdecodenos').val(true);
             }
+
+            if (gradeadmin.checked) {
+                $('#hdfadmingrade').val(true);
+            }
+
+            if (gradefaculty.checked) {
+                $('#hdfFacgrade').val(true);
+            }
+
+
             if (seatno.checked) {
                 $('#hdfSeatno').val(true);
             }
@@ -573,95 +574,15 @@
             if (batch.checked) {
                 $('#hdfbatch').val(true);
             }
-        }
-
-        function clickRdActive() {
-            if ($('#ctl00_ContentPlaceHolder1_chk_Reg').is(':checked')) {
-                $('#ctl00_ContentPlaceHolder1_chk_Reg').prop('checked', false);
-                //$('#hdfexamregister').val(true);
+            if (graph.checked) {
+                $('#hdfgraph').val(true);
             }
-            else {
-                $('#ctl00_ContentPlaceHolder1_chk_Reg').prop('checked', true);
-                //$('#hdfexamregister').val(false);
+            if (GradeRange.checked) {
+                $('#hdfrange').val(true);
             }
         }
-
-
-
-
-
-
-
-        //$('#chk_ExamRule').prop('checked', val);
-        //$('#chk_GraceRule').prop('checked', val)
-        //$('#chk_LateFee').prop('checked', val)
-        //$('#chk_Improvement').prop('checked', val);
-        //$('#chk_ExamPattern').prop('checked', val)
-        //$('#chk_Revaluation_Process').prop('checked', val)
-        //$('#chk_ResultPublish').prop('checked', val)
-        //$('#chk_Condonation').prop('checked', val)
-
-
-
-        //var summary = "";
-        //$(function ()
-        //{
-
-        //    $('#btnSave').click(function ()
-        //    {
-        //        localStorage.setItem("currentId","#btnSave,Submit");
-        //        debugger
-
-        //        if (summary != "") {
-        //            customAlert(summary);
-        //            summary = "";
-        //            return false
-
-
-        //        }
-        //        $('#hdfexamrule').val($('#chk_ExamRule').prop('checked')).val();
-        //        $('#hdfgarcerule').val($('#chk_GraceRule').prop('checked'));
-        //        $('#hdflatefee').val($('#chk_LateFee').prop('checked'));
-        //        $('#hdfImprovement').val($('#chk_Improvement').prop('checked'));
-
-        //        $('#hdfexampattern').val($('#chk_ExamPattern').prop('checked'));
-        //        $('#hdfrevaluation').val($('#chk_Revaluation_Process').prop('checked'));
-        //        $('#hdfresultpublish').val($('#chk_ResultPublish').prop('checked'));
-        //        $('#hdfcondonation').val($('#chk_Condonation').prop('checked'));
-        //    });
-        //});
-
-        //var prm = Sys.WebForms.PageRequestManager.getInstance();
-        //prm.add_endRequest(function ()
-        //{
-        //    $(function ()
-        //    {
-        //        $('#btnSave').click(function ()
-        //        {
-        //            localStorage.setItem("currentId","#btnSave,Submit");
-
-        //            debugger
-        //            if (summary != "")
-        //            {
-        //                customAlert(summary);
-        //                summary = "";
-        //                return false
-
-
-        //            }
-        //            $('#hdfexamrule').val($('#chk_ExamRule').prop('checked'));
-        //            $('#hdfgarcerule').val($('#chk_GraceRule').prop('checked'));
-        //            $('#hdflatefee').val($('#chk_LateFee').prop('checked'));
-        //            $('#hdfImprovement').val($('#chk_Improvement').prop('checked'));
-
-        //            $('#hdfexampattern').val($('#chk_ExamPattern').prop('checked'));
-        //            $('#hdfrevaluation').val($('#chk_Revaluation_Process').prop('checked'));
-        //            $('#hdfresultpublish').val($('#chk_ResultPublish').prop('checked'));
-        //            $('#hdfcondonation').val($('#chk_Condonation').prop('checked'));
-        //        });
-        //    });
-        //});
-
+        
+     
     </script>
     <script>
         function setrule(val) {
