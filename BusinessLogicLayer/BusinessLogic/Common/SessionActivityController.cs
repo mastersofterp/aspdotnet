@@ -609,5 +609,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //Added By Vinay Mishra on 12/09/2023 - To Get Attendance Configuration Data By Group Id to Edit/Update Selected Record
+        public DataSet GetAttendanceConfigDataDetailsEdit(int groupid)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[1];
+                sqlParams[0] = new SqlParameter("@P_GROUPID", groupid);
+                ds = objDataAccess.ExecuteDataSetSP("PKG_GET_ACD_ATTENDANCE_CONFIG_ACTIVITY_DATA_DETAILS", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.SessionActivityController.GetAttendanceConfigDataDetailsEdit() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+
     }
 }
