@@ -1549,7 +1549,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         {
 
 
-            if ((Convert.ToInt32(Session["OrgId"]) == 1))
+            if ((Convert.ToInt32(Session["OrgId"]) == 6))
             {
                 ShowBranchWiseTimeTable("Branch Wise Time Table Report", "rptTimeTableReportRCPIPER.rpt");
             }
