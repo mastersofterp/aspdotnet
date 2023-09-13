@@ -185,7 +185,7 @@
                         </ContentTemplate>
                     </asp:UpdatePanel>
 
-                    <%--Model Couse Category starts here --%>
+                    <%--Model Couse Category wise starts here --%>
                     <div class="modal fade" id="CouserCategorymodel" role="dialog">
                         <asp:UpdatePanel ID="updPopUp" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
