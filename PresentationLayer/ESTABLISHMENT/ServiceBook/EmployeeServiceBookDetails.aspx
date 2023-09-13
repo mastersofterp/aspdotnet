@@ -14,7 +14,7 @@
     </script>--%>
 
     <script type="text/javascript">
-        //On UpdatePanel Refresh
+        ////On UpdatePanel Refresh
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         if (prm != null) {
             prm.add_endRequest(function (sender, e) {
