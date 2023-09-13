@@ -256,8 +256,11 @@
                                                     <asp:TextBox ID="TextBox2" runat="server" ToolTip="Please Enter Roll No."
                                                         Enabled="false" Visible="false" />
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                                <%--Added IDs to the div(s) and sup(s) by Shrikant W. on 02-09-2023--%>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudFullName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supStudFullName" runat="server">* </sup>
                                                         <label>Student Full Name </label>
                                                     </div>
 
@@ -265,8 +268,9 @@
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server"
                                                         FilterMode="InvalidChars" FilterType="Custom" InvalidChars="~`!@#$%^*()_+=,/:;<>?'{}[]\|-&&quot;'" TargetControlID="txtStudFullname" />
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudentName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supStudentName" runat="server">* </sup>
                                                         <label>Student First Name </label>
                                                     </div>
                                                     <%--                                                    <asp:TextBox ID="txtStudentName" CssClass="form-control" runat="server" MaxLength="150" TabIndex="2" ToolTip="Please Enter Student First name" onblur="conver_uppercase(this);" onkeyup="conver_uppercase(this);" onkeypress="return alphaOnly(event);" placeholder="Enter First Name" />--%>
@@ -277,8 +281,9 @@
                                                     Display="None" ErrorMessage="Please Enter Student First Name" SetFocusOnError="True"
                                                     ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudMiddleName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supStudMiddleName" runat="server">* </sup>
                                                         <label>Student Middle Name</label>
                                                     </div>
 
@@ -290,8 +295,9 @@
                                             Display="None" ErrorMessage="Please Enter Middle Name" SetFocusOnError="True" TabIndex="8"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudLastName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supStudLastName" runat="server">* </sup>
                                                         <label>Student Last Name</label>
                                                     </div>
 
@@ -303,9 +309,9 @@
                                             Display="None" ErrorMessage="Please Enter Student Last Name" SetFocusOnError="True" TabIndex="8"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudMobile" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supStudMobile" runat="server">* </sup>
                                                         <label>Student Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtStudMobile" CssClass="form-control" runat="server" MaxLength="10" TabIndex="5"
@@ -318,9 +324,9 @@
                                                         ValidationExpression="[0-9]{10}"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divAlternateNoStud" runat="server">
                                                     <div class="label-dynamic">
-                                                        <%-- <sup>* </sup>--%>
+                                                         <sup id="supAlternateNoStud" runat="server">* </sup>
                                                         <label>Alternate Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtAlternateNoStud" CssClass="form-control" runat="server" MaxLength="10" TabIndex="5"
@@ -330,9 +336,9 @@
                                                         ValidationExpression="[0-9]{10}"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudentEmail" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supStudentEmail" runat="server">* </sup>
                                                         <label>Student Email ID </label>
                                                     </div>
                                                     <asp:TextBox ID="txtStudentEmail" CssClass="form-control" runat="server" TabIndex="6" ToolTip="Please Enter Student Email Id"></asp:TextBox>
@@ -345,8 +351,9 @@
                                                         TabIndex="20" ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divInstituteEmail" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supInstituteEmail" runat="server">* </sup>
                                                         <label>Alternate Email ID </label>
                                                     </div>
                                                     <asp:TextBox ID="txtInstituteEmail" CssClass="form-control" runat="server" TabIndex="200" ToolTip="Please Enter Alternate Email Id"></asp:TextBox>
@@ -357,10 +364,10 @@
 
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divDateOfBirth" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <label>Date of Birth </label>
+                                                        <sup id="supDateOfBirth" runat="server">* </sup>
+                                                        <label>Date of Birth</label>
                                                     </div>
                                                     <div class="input-group">
                                                         <div class="input-group-addon">
@@ -387,9 +394,9 @@
                                                             ValidationGroup="Academic" SetFocusOnError="True" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divBirthPlace" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supBirthPlace" runat="server">* </sup>
                                                         <label>Birth Place </label>
                                                     </div>
                                                     <asp:TextBox ID="txtBirthPlace" runat="server" ToolTip="Please Enter Birth Place" MaxLength="300"
@@ -397,12 +404,13 @@
                                                     <%--   <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender13" runat="server"
                                                     TargetControlID="txtBirthPlace" FilterType="Custom" FilterMode="InvalidChars"
                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
-                                                    <asp:RequiredFieldValidator ID="rfvbirth" runat="server" ControlToValidate="txtBirthPlace"
+<%--                                                    <asp:RequiredFieldValidator ID="rfvbirth" runat="server" ControlToValidate="txtBirthPlace"
                                                         Display="None" ErrorMessage="Please Enter Birth Place" SetFocusOnError="True"
-                                                        TabIndex="1" ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                        TabIndex="1" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divGender" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supGender" runat="server">* </sup>
                                                         <label>Gender </label>
                                                     </div>
                                                     <asp:RadioButtonList ID="rdobtn_Gender" runat="server" TabIndex="9" RepeatDirection="Horizontal" ToolTip="Please Select Gender">
@@ -415,9 +423,9 @@
                                                     ControlToValidate="rdobtn_Gender" Display="None" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMaritalStatus" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supMaritalStatus" runat="server">* </sup>
                                                         <label>Marital Status </label>
                                                     </div>
                                                     <asp:RadioButtonList ID="rdobtn_marital" runat="server" TabIndex="11" RepeatDirection="Horizontal">
@@ -428,9 +436,9 @@
                                                         ControlToValidate="rdobtn_marital" Display="None" ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divNationality" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supNationality" runat="server">* </sup>
                                                         <label>Nationality </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlNationality" CssClass="form-control" runat="server" TabIndex="9" AppendDataBoundItems="True"
@@ -440,9 +448,9 @@
                                                         ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divBloodGroup" runat="server">
                                                     <div class="label-dynamic">
-                                                        <%-- <sup>* </sup>--%>
+                                                         <sup id="supBloodGroup" runat="server">* </sup>
                                                         <label>Blood Group </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBloodGroupNo" CssClass="form-control" runat="server" AppendDataBoundItems="True"
@@ -453,9 +461,9 @@
                                                     ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divReligion" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supReligion" runat="server">* </sup>
                                                         <label>Religion </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlReligion" CssClass="form-control" runat="server" AppendDataBoundItems="True"
@@ -465,10 +473,10 @@
                                                         ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divCategory" runat="server">
                                                     <%--Added by sachin 26-07-2022 RequiredFieldValidator--%>
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supCategory" runat="server">* </sup>
                                                         <label>Category </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlClaimedcategory" CssClass="form-control" runat="server" AppendDataBoundItems="True"
@@ -501,8 +509,9 @@
                                                     Display="None" ErrorMessage="Please Enter Caste" SetFocusOnError="True"
                                                     ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divSubCaste" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supSubCaste" runat="server">* </sup>
                                                         <label>Sub Caste</label>
                                                     </div>
 
@@ -514,8 +523,9 @@
                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divPD" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supPD" runat="server">* </sup>
                                                         <label>Physically Disabled</label>
                                                     </div>
 
@@ -528,9 +538,9 @@
                                                     ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divAadharNo" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup id="supAadharNo" runat="server">* </sup>
                                                         <label>Aadhar No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtAddharCardNo" CssClass="form-control" runat="server" ToolTip="Please Enter Aadhar Card No."
@@ -544,8 +554,9 @@
                                                         Display="None" ValidationGroup="Academic"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divPassportNo" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supPassportNo" runat="server">* </sup>
                                                         <label>Passport No.</label>
                                                     </div>
 
@@ -591,8 +602,9 @@
                                                 <%-- <asp:DropDownList ID="ddladmthrough" runat="server" AppendDataBoundItems="true"
                                                 CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Admission Type" TabIndex="14">
                                             </asp:DropDownList>--%>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmissionThrough" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supAdmissionThrough" runat="server">* </sup>
                                                         <label>Admission Through </label>
                                                     </div>
                                                     <%--<asp:TextBox ID="txtPaymentType" CssClass="form-control" runat="server" Enabled="false" TabIndex="23" />--%>
@@ -602,17 +614,19 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="form-group col-lg-1 col-md-4 col-6 pr-md-0">
+                                                <div class="form-group col-lg-1 col-md-4 col-6 pr-md-0" id="divHosteller" runat="server">
                                                     <div class="label-dynamic">
-                                                        <label>Hosteller </label>
+                                                        <sup id="supHosteller" runat="server">* </sup>
+                                                        <label>Hosteller</label>
                                                     </div>
                                                     <asp:RadioButtonList ID="rdoHosteler" runat="server" RepeatDirection="Horizontal" TabIndex="19">
                                                         <asp:ListItem Value="1">Yes</asp:ListItem>
                                                         <asp:ListItem Value="0" Selected="True">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                 </div>
-                                                <div class="form-group col-lg-2 col-md-4 col-6">
+                                                <div class="form-group col-lg-2 col-md-4 col-6" id="divTransportation" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supTransportation" runat="server">* </sup>
                                                         <label>Transportation</label>
                                                     </div>
 
@@ -623,8 +637,9 @@
 
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-4 col-12">
+                                                <div class="form-group col-lg-3 col-md-4 col-12" id="divIntStudent" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supIntStudent" runat="server">* </sup>
                                                         <label>NRI/OCI/International Student/ PIO</label>
                                                     </div>
 
@@ -633,8 +648,9 @@
                                                         <asp:ListItem Value="0" Selected="True">No</asp:ListItem>
                                                     </asp:RadioButtonList>
                                                 </div>
-                                                <div class="form-group col-lg-2 col-md-4 col-6">
+                                                <div class="form-group col-lg-2 col-md-4 col-6" id="divSpecifyParent" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supSpecifyParent" runat="server">* </sup>
                                                         <label>Specify Parents Details </label>
                                                     </div>
                                                     <asp:RadioButtonList ID="rdofatheralive" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rdofatheralive_SelectedIndexChanged" RepeatDirection="Horizontal" TabIndex="21">
@@ -645,8 +661,9 @@
                                                 </div>
                                                 <div class="form-group col-md-8 col-lg-4 col-12" id="rdoParents" visible="true" runat="server">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-6 col-md-6 col-6">
+                                                        <div class="form-group col-lg-6 col-md-6 col-6" id="divSpecifyFather" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSpecifyFather" runat="server">* </sup>
                                                                 <label>Specify Father Details </label>
                                                             </div>
 
@@ -656,8 +673,9 @@
                                                             </asp:RadioButtonList>
                                                         </div>
 
-                                                        <div class="form-group col-lg-6 col-md-6 col-6">
+                                                        <div class="form-group col-lg-6 col-md-6 col-6" id="divSpecifyMother" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSpecifyMother" runat="server">* </sup>
                                                                 <label>Specify Mother Details </label>
                                                             </div>
                                                             <asp:RadioButtonList ID="rdoMother" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rfoMother_SelectedIndexChanged" RepeatDirection="Horizontal" TabIndex="21">
@@ -672,9 +690,9 @@
                                             </div>
                                             <asp:Panel ID="pnlApplicationId" runat="server" Visible="false">
                                                 <div class="row">
-                                                    <div class="form-group col-lg-3 col-md-6 col-6">
+                                                    <div class="form-group col-lg-3 col-md-6 col-6" id="divABCCId" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup>* </sup>
+                                                            <sup id="supABCCId" runat="server">* </sup>
                                                             <label id="lblAbccId">ABCC Id</label>
                                                         </div>
                                                         <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABCC Id" MaxLength="20"
@@ -684,9 +702,9 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-6">
+                                                    <div class="form-group col-lg-3 col-md-6 col-6" id="divDTEAppId" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup>* </sup>
+                                                            <sup id="supDTEAppId" runat="server">* </sup>
                                                             <label id="lblDteAppId">DTE Application Id</label>
                                                         </div>
                                                         <asp:TextBox ID="txtDTEAppId" runat="server" CssClass="form-control" ToolTip="Please Enter DTE Application Id" MaxLength="20"
@@ -704,8 +722,9 @@
                                                         <h5>Father Details</h5>
                                                     </div>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherFullName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <%--<sup id="supFatherFullName" runat="server">* </sup>--%>
                                                         <label>Father's Full Name </label>
                                                     </div>
 
@@ -713,8 +732,9 @@
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender9" runat="server"
                                                         FilterMode="InvalidChars" FilterType="Custom" InvalidChars="~`!@#$%^*()_+=,/:;<>?'{}[]\|-&&quot;'" TargetControlID="txtFatherFullName" />
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherFName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherFName" runat="server">* </sup>
                                                         <label>Father's First Name </label>
                                                     </div>
                                                     <asp:TextBox ID="txtFatherName" CssClass="form-control" runat="server" TabIndex="22" ToolTip="Please Enter Father's First Name" onblur="conver_uppercase(this);" onkeyup="conver_uppercase(this);" onkeypress="return alphaOnly(event);" Enabled="true" placeholder="Enter First Name" />
@@ -725,8 +745,9 @@
                                                     ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherMName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherMName" runat="server">* </sup>
                                                         <label>Father Middle Name</label>
                                                     </div>
 
@@ -738,8 +759,9 @@
                                         ValidationGroup="Academic" Visible="False"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherLName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherLName" runat="server">* </sup>
                                                         <label>Father's Last Name</label>
                                                     </div>
 
@@ -752,8 +774,9 @@
                                                     <%--  </div>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherMobile" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherMobile" runat="server">* </sup>
                                                         <label>Father's Mobile No. </label>
                                                     </div>
                                                     <%--<label>Father's Mobile No.</label>--%>
@@ -768,8 +791,9 @@
                                                         ValidationExpression="[0-9]{10}" Display="Dynamic"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherAltMobile" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherAltMobile" runat="server">* </sup>
                                                         <label>Alternate Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtFatherAlterateNo" CssClass="form-control" runat="server" TabIndex="25" ToolTip="Please Enter Father's Alternate Mobile No"
@@ -783,8 +807,9 @@
                                                         ValidationExpression="[0-9]{10}" Display="Dynamic"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherOfficeNo" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherOfficeNo" runat="server">* </sup>
                                                         <label>Father's Office Phone No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtFathersOfficeNo" CssClass="form-control" runat="server" TabIndex="26" MaxLength="10" ToolTip="Please Enter Father's Office Phone No" placeholder="Enter Office Phone No."></asp:TextBox>
@@ -795,8 +820,9 @@
                                                         Display="None" ValidationGroup="Academic"></asp:RegularExpressionValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherQualification" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherQual" runat="server">* </sup>
                                                         <label>Father's Qualification </label>
                                                     </div>
                                                     <asp:TextBox ID="txtFatherDesignation" CssClass="form-control" runat="server" ToolTip="Please Enter Father's Qualification" onkeypress="return alphaOnly(event);" placeholder="Enter Father Qualification"
@@ -806,8 +832,9 @@
                                                         InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFOccupation" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFOccupation" runat="server">* </sup>
                                                         <label>Father's Occupation </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlOccupationNo" CssClass="form-control" runat="server" AppendDataBoundItems="True"
@@ -815,8 +842,9 @@
                                                     </asp:DropDownList>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherMail" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supFatherMail" runat="server">* </sup>
                                                         <label>Father's Email </label>
                                                     </div>
                                                     <asp:TextBox ID="txtfatheremailid" CssClass="form-control" runat="server" TabIndex="29" ToolTip="Please Enter Father's Email"
@@ -830,8 +858,9 @@
                                 </asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divAnnualIncome" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supAnnualIncome" runat="server">* </sup>
                                                         <label>Annual Income </label>
                                                     </div>
                                                     <asp:TextBox ID="txtAnnualIncome" CssClass="form-control" runat="server" TabIndex="30" MaxLength="12" ToolTip="Please Enter Annual Income" placeholder="Enter Annual Income"></asp:TextBox>
@@ -851,8 +880,9 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMotherName" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supMotherName" runat="server">* </sup>
                                                         <label>Mother's Name </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMotherName" CssClass="form-control" runat="server" TabIndex="31" ToolTip="Please Enter Mother's Name" onblur="conver_uppercase(this);" onkeyup="conver_uppercase(this);" Enabled="true" placeholder="Enter Mother's Name" />
@@ -863,8 +893,9 @@
                                             Display="None" ErrorMessage="Please Enter Mother Name" SetFocusOnError="True"
                                             TabIndex="7" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMobileNo" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supMobileNo" runat="server">* </sup>
                                                         <label>Mother's Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMotherMobile" CssClass="form-control" runat="server" TabIndex="32" ToolTip="Please Enter Mother's Mobile No"
@@ -875,8 +906,9 @@
                                                     <asp:RegularExpressionValidator runat="server" ErrorMessage="Mother's Mobile No. is Invalid" ID="RegularExpressionValidator2" ControlToValidate="txtMotherMobile" ValidationExpression=".{10}.*"
                                                         Display="Dynamic" ValidationGroup="Academic"></asp:RegularExpressionValidator>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divAltMobNo" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supAltMob" runat="server">* </sup>
                                                         <label>Alternate Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMotherAlternateNo" CssClass="form-control" runat="server" TabIndex="32" ToolTip="Please Enter Mother's Alternate Mobile No"
@@ -887,8 +919,9 @@
                                                     <asp:RegularExpressionValidator runat="server" ErrorMessage="Mother's Alternate Mobile No. is Invalid" ID="RegularExpressionValidator5" ControlToValidate="txtMotherAlternateNo" ValidationExpression=".{10}.*"
                                                         Display="Dynamic" ValidationGroup="Academic"></asp:RegularExpressionValidator>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMotherEmail" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supMotherEmail" runat="server">* </sup>
                                                         <label>Mother's Email </label>
                                                     </div>
                                                     <asp:TextBox ID="txtmotheremailid" CssClass="form-control" runat="server" TabIndex="33" ToolTip="Please Enter Mother's Email" Enabled="true"
@@ -900,8 +933,9 @@
                                                     <%-- </div>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMQual" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supMQual" runat="server">* </sup>
                                                         <label>Mother's Qualification </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMotherDesignation" runat="server" TabIndex="34" CssClass="form-control" ToolTip="Please Enter Mother's Qualification" onkeypress="return alphaOnly(event);" placeholder="Enter Mother's Qualification"></asp:TextBox>
@@ -909,16 +943,18 @@
                                                         TargetControlID="txtMotherDesignation" FilterType="Custom" FilterMode="InvalidChars"
                                                         InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMOcc" runat="server">                                                   
                                                     <div class="label-dynamic">
+                                                        <sup id="supMOcc" runat="server">* </sup>
                                                         <label>Mother's Occupation </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlMotherOccupation" CssClass="form-control" runat="server" TabIndex="35" AppendDataBoundItems="True"
                                                         ToolTip="Please Select Mother's Occupation" data-select2-enable="true">
                                                     </asp:DropDownList>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMOfficePhone" runat="server">
                                                     <div class="label-dynamic">
+                                                        <sup id="supMOfficePhone" runat="server">* </sup>
                                                         <label>Mother's Office Phone No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMothersOfficeNo" CssClass="form-control" runat="server" TabIndex="36" MaxLength="10" ToolTip="Mother's Office Phone No" placeholder="Enter Office Phone No."></asp:TextBox>
@@ -931,7 +967,7 @@
 
                                             </div>
 
-                                            <div class="row">
+                                            <div class="row" id="divPhotoandSign" runat="server">
                                                 <div class="col-md-12 mt-3">
                                                     <div class="sub-heading">
                                                         <h5><b>Photo & Signature Details</b></h5>
@@ -945,9 +981,9 @@
 
                                                 <div class="col-12">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divPhotograph" runat="server">
                                                             <div class="label-dynamic">
-
+                                                                <%--<sup id="supPhotograph" runat="server">* </sup>--%>
                                                                 <label>Photo</label>
                                                             </div>
                                                             <asp:Image ID="imgPhoto" runat="server" Width="128px" Height="128px" /><br />
@@ -958,9 +994,9 @@
                                                         Display="None" ErrorMessage="Please Upload Photo" SetFocusOnError="True"
                                                         ValidationGroup="Academic" ></asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divSignature" runat="server">
                                                             <div class="label-dynamic">
-
+                                                                <%--<sup id="supSignature" runat="server">* </sup>--%>
                                                                 <label>Signature</label>
                                                             </div>
                                                             <asp:Image ID="ImgSign" runat="server" Width="150px" Height="40px" /><br />
@@ -978,7 +1014,7 @@
 
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnSubmit" runat="server" TabIndex="39" Text="Save & Continue >>" ToolTip="Click to Submit"
-                                                    CssClass="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Academic" />
+                                                    CssClass="btn btn-primary" OnClick="btnSubmit_Click"/>
 
                                                 <button runat="server" id="btnGohome" visible="false" tabindex="40" onserverclick="btnGohome_Click" class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
                                                     Go Back Home
@@ -1088,6 +1124,16 @@
             }
         }
     </script>
+
+<script type="text/javascript">
+    function alertmessage(commaSeperatedString) {
+        var parts = commaSeperatedString.split(',');
+        var errorMessage = parts.join('\n');
+        alert(errorMessage);
+    }
+</script>
+
+
     <script type="text/javascript">
         function pageLoad() {
 
