@@ -99,6 +99,26 @@
             }
         }
     </style>
+
+      <style type="text/css">
+        .modalBackground {
+            background-color: #ccc; 
+            filter: alpha(opacity=60);
+            opacity: 0.9;
+        }
+
+        .modalPopup {
+            background-color: white;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 20px;
+            width: 300px;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+    </style>
 </head>
 <body>
     <form id="frmDefault" runat="server" defaultbutton="btnLogin">
@@ -323,7 +343,7 @@
 
                                             <div class="form-group" runat="server" visible="false" id="divLoginId">
                                                 <asp:Label ID="Label5" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false" MaxLength="25"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtusername"
                                                     Display="None" ErrorMessage="Enter User Name"
                                                     ValidationGroup="changePassword"></asp:RequiredFieldValidator>
@@ -332,7 +352,7 @@
 
                                             <div class="form-group" runat="server" visible="false" id="divnewpass">
                                                 <asp:Label ID="Label1" runat="server" Style="font-weight: 600;">New Password</asp:Label>
-                                                <asp:TextBox ID="txtnewpass" runat="server" placeholder="Enter New Password" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtnewpass" runat="server" placeholder="Enter New Password" CssClass="form-control mt-1" TextMode="Password" MaxLength="20"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="rfvNewPass" runat="server" ControlToValidate="txtnewpass"
                                                     Display="None" ErrorMessage="New Password Required"
                                                     ValidationGroup="changePassword"></asp:RequiredFieldValidator>
@@ -347,7 +367,7 @@
 
                                             <div class="form-group" runat="server" visible="false" id="divconfirmpass">
                                                 <asp:Label ID="Label2" runat="server" Style="font-weight: 600;">Confirm Password</asp:Label>
-                                                <asp:TextBox ID="txtconfirmpass" runat="server" placeholder="Confirm Password" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtconfirmpass" runat="server" placeholder="Confirm Password" CssClass="form-control mt-1" TextMode="Password" MaxLength="20"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="rfvConfirmPass" runat="server" ControlToValidate="txtconfirmpass"
                                                     Display="None" ErrorMessage="Confirm Password Required"
                                                     ValidationGroup="changePassword"></asp:RequiredFieldValidator>
@@ -403,7 +423,7 @@
 
                                             <div class="form-group" runat="server" visible="false" id="divEloginId">
                                                 <asp:Label ID="Label6" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" MaxLength="25" Enabled="false"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="txtEusername"
                                                     Display="None" ErrorMessage="Enter User Name"
                                                     ValidationGroup="EchangePassword"></asp:RequiredFieldValidator>
@@ -411,7 +431,7 @@
                                             </div>
                                             <div class="form-group" runat="server" visible="false" id="divEnewPass">
                                                 <asp:Label ID="Label3" runat="server" Style="font-weight: 600;">New Password</asp:Label>
-                                                <asp:TextBox ID="txtEnewpass" runat="server" placeholder="Enter New Password" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtEnewpass" runat="server" placeholder="Enter New Password" CssClass="form-control mt-1" TextMode="Password" MaxLength="20"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtEnewpass"
                                                     Display="None" ErrorMessage="New Password Required"
                                                     ValidationGroup="EchangePassword"></asp:RequiredFieldValidator>
@@ -425,7 +445,7 @@
 
                                             <div class="form-group" runat="server" visible="false" id="divEconfirmpass">
                                                 <asp:Label ID="Label4" runat="server" Style="font-weight: 600;">Confirm Password</asp:Label>
-                                                <asp:TextBox ID="txtEconfirmPass" runat="server" placeholder="Confirm Password" CssClass="form-control mt-1"></asp:TextBox>
+                                                <asp:TextBox ID="txtEconfirmPass" runat="server" placeholder="Confirm Password" CssClass="form-control mt-1" TextMode="Password" MaxLength="20"></asp:TextBox>
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtEconfirmPass"
                                                     Display="None" ErrorMessage="Confirm Password Required"
                                                     ValidationGroup="EchangePassword"></asp:RequiredFieldValidator>
@@ -549,7 +569,7 @@
 
                     </div>
                     <div>
-                        <asp:Button ID="btnclosepop" runat="server" Text="oK" CssClass="btn btn-primary" OnClick="btnclosepop_Click" />
+                        <asp:Button ID="btnclosepop" runat="server" Text="Ok" CssClass="btn btn-primary" OnClick="btnclosepop_Click" />
 
                     </div>
                 </div>
