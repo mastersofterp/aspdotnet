@@ -89,5 +89,3 @@ job_prmitra-app:
     - prmitra-app
   <<: *deploy_template
 
-
-
