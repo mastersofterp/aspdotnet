@@ -62,12 +62,6 @@
                                                                             <asp:DropDownList ID="ddlAcadYear" runat="server" AppendDataBoundItems="True" AutoPostBack="True" ToolTip="Please Select Admission Year" CssClass="form-control" data-select2-enable="true" TabIndex="1" OnSelectedIndexChanged="ddlAcadYear_SelectedIndexChanged1">
                                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                             </asp:DropDownList>
-                                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlAcadYear"
-                                            Display="None" ErrorMessage="Please Select Academic Year" InitialValue="0"
-                                            SetFocusOnError="True" ValidationGroup="Add"></asp:RequiredFieldValidator>
-                                      <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlAcadYear"
-                                            Display="None" ErrorMessage="Please Select Academic Year" InitialValue="0"
-                                            SetFocusOnError="True" ValidationGroup="Confirm"></asp:RequiredFieldValidator>--%>
                                                                         </div>
 
                                                                         <%--  ADDED BY POOJA ON DATE 11-08-2023--%>
@@ -137,10 +131,7 @@
                                                                                                 </asp:TemplateField>
                                                                                                 <asp:TemplateField HeaderText="Particular">
                                                                                                     <ItemTemplate>
-                                                                                                        <asp:TextBox ID="txtHead" runat="server" Text='<%# Bind("Particular") %>' class="form-control"></asp:TextBox>
-                                                                                                        <%-- <ajaxToolKit:FilteredTextBoxExtender ID="fteValue1year" runat="server"
-                                                                    FilterType="Custom" FilterMode="ValidChars" ValidChars="[a-zA-Z ]*$" TargetControlID="txtHead">
-                                                                </ajaxToolKit:FilteredTextBoxExtender>--%>
+                                                                                                        <asp:TextBox ID="txtHead" runat="server" Text='<%# Bind("Particular") %>' class="form-control"></asp:TextBox>                                 
                                                                                                         <asp:RequiredFieldValidator ID="fteValueH" runat="server" ErrorMessage="Please Enter Particular ."
                                                                                                             ControlToValidate="txtHead" Display="None" SetFocusOnError="True" ValidationGroup="Add"></asp:RequiredFieldValidator>
                                                                                                     </ItemTemplate>
@@ -595,7 +586,7 @@
                                                                 <div class="col-12 btn-footer">
                                                                     <asp:Button ID="btnShowData1" runat="server" Text="Show Students" ValidationGroup="Show1" CssClass="btn btn-primary" TabIndex="9" OnClick="btnShowData1_Click" />
                                                                     <asp:Button ID="btnConfirm" runat="server" Text="Confirm" TabIndex="10" CssClass="btn btn-primary" ValidationGroup="Show1" OnClick="btnConfirm_Click" />
-                                                                    <asp:Button ID="btnPrint" runat="server" TabIndex="11" Text="Print Report" CssClass="btn btn-info" OnClick="btnPrint_Click" Enabled="false" />
+                                                                    <asp:Button ID="btnPrint" runat="server" TabIndex="11" Text="Print Report" CssClass="btn btn-info" ValidationGroup="Show1" OnClick="btnPrint_Click" Enabled="false" />
                                                                     <asp:Button ID="btnCancel_LC" runat="server" TabIndex="12" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_LC_Click" />
                                                                     <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="Show1" />
                                                                 </div>
