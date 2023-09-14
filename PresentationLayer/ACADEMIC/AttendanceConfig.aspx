@@ -334,7 +334,7 @@
                                                     </asp:DropDownList>
                                                         <%--<asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>--%>
                                                     <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">   <%-- style="display:none"--%>
@@ -347,9 +347,9 @@
                                                     </asp:DropDownList>--%>
                                                     <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="lstbxSchool_SelectedIndexChanged"></asp:ListBox>
                                                     <%-- <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true"></asp:ListBox>--%>
-                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSchoolInstitute"
-                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="course">
-                                                    </asp:RequiredFieldValidator>--%>
+                                                    <asp:RequiredFieldValidator ID="rfvlstbxSchool" runat="server" ControlToValidate="lstbxSchool"
+                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="submit">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <%--<div class="form-group col-lg-3 col-md-6 col-12">
