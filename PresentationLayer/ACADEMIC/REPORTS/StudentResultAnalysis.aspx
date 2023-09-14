@@ -863,6 +863,7 @@
             <asp:PostBackTrigger ControlID="btntrexcel" />
             <asp:PostBackTrigger ControlID="btnExamFeesPaid" />
             <asp:PostBackTrigger ControlID="btnCGPAReport" />
+            <asp:PostBackTrigger ControlID="btnCourseWiseExamRegistartion" />
             <%--  <asp:AsyncPostBackTrigger ControlID="btnSubWiseRslt" />--%>
             <%-- <asp:PostBackTrigger ControlID="btnStatistical" />
             <asp:PostBackTrigger ControlID="btnSGPA" />
