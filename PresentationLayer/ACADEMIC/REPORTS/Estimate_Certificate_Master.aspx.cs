@@ -300,7 +300,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                Banckname = ddlBank.SelectedItem.Text;
                TypeofAcc = txttypeofAC.Text;
                AccNo     = txtACNO.Text;
-               Ifsc      = txtIFSC.Text;
+               Ifsc      = txtIFSC.Text.ToUpper();
               }
             string year=objCommon.LookUp("ACD_STUDENT", "YEAR", "IDNO=" + param);
             //int sessionno = Convert.ToInt32(Session["currentsession"]);
