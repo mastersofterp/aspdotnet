@@ -6842,6 +6842,30 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
+        //added by Shailendra K. n on 14.09.2023
+        public DataSet GetStudentCourseRegistrationSubject(int SESSIONNO, int IDNO, int SEMESTERNO, int SCHEMENO, int COMMANDTYPE, int UA_TYPE)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQL = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[6];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", SESSIONNO);
+                objParams[1] = new SqlParameter("@P_IDNO", IDNO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+                objParams[3] = new SqlParameter("@P_SCHEMENO", SCHEMENO);
+                objParams[4] = new SqlParameter("@P_COMMANDTYPE", COMMANDTYPE);
+                objParams[5] = new SqlParameter("@P_UA_TYPE", UA_TYPE);
+
+                ds = objSQL.ExecuteDataSetSP("PKG_COURSEREGISTRATION_SP_GET_OFFERED_SUBJECTS", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetStudentCourseRegistrationSubject-> " + ex.ToString());
+            }
+            return ds;
+        }
 
 
     }
