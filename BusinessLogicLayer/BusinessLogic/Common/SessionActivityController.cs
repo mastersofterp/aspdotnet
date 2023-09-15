@@ -547,13 +547,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         // MODIFY BELOW METHOD BY SHAILENDRA K. ON DATED 21.06.2023 AS PER T-44837 AND 44816 
         public int CourseRegistraionActivityInsert(SessionActivity sessionActivity, string Sessionnos, string CollegeIds, string Degreenos, string Branchnos,
             string Semesternos, string UserRights, string CoursePattern, int choiceFor, bool PAYMENT_APPLICABLE_FOR_SEM_WISE, int gropuid, string StartTime,
-            string EndTime, int sessionid, int eligibilityForCrsReg, int StudIDType)
+            string EndTime, int sessionid, int eligibilityForCrsReg, int StudIDType, int noOfPaperAllowed)
         {
             int status = Convert.ToInt32(CustomStatus.Others);
             try
             {
                 SQLHelper objDataAccess = new SQLHelper(_connectionString);
-                SqlParameter[] sqlParams = new SqlParameter[21];
+                SqlParameter[] sqlParams = new SqlParameter[22];
 
                 sqlParams[0] = new SqlParameter("@P_COURSE_TYPE", CoursePattern);
                 sqlParams[1] = new SqlParameter("@P_SESSION_NO", Sessionnos);
@@ -571,13 +571,14 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 sqlParams[13] = new SqlParameter("@P_GROUPID", gropuid);
                 sqlParams[14] = new SqlParameter("@P_STARTTIME", StartTime);
                 sqlParams[15] = new SqlParameter("@P_ENDTIME ", EndTime);
-                sqlParams[16] = new SqlParameter("@P_ELIGIBILITY_FOR_CRS_REG", eligibilityForCrsReg); // added by Shailendra K. on dated 20.062023 as per T-44816
+                sqlParams[16] = new SqlParameter("@P_ELIGIBILITY_FOR_CRS_REG", eligibilityForCrsReg); // added by Shailendra K. on dated 20.06.2023 as per T-44816
                 sqlParams[17] = new SqlParameter("@P_SESSIONID", sessionid);
-                sqlParams[18] = new SqlParameter("@P_ACTIVITYNO", sessionActivity.ActivityNo);
+                sqlParams[18] = new SqlParameter("@P_ACTIVITYNO", sessionActivity.ActivityNo);               
                 sqlParams[19] = new SqlParameter("@P_STUD_IDTYPE", StudIDType);
+                sqlParams[20] = new SqlParameter("@P_NO_OF_PAPER_ALLOWED", noOfPaperAllowed); // added by Shailendra K. on dated 14.09.2023 as per T-48652
 
-                sqlParams[20] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                sqlParams[20].Direction = ParameterDirection.Output;
+                sqlParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                sqlParams[21].Direction = ParameterDirection.Output;
                 status = (Int32)objDataAccess.ExecuteNonQuerySP("PKG_ACD_UPSERT_COURSE_REGISTRATION_ACTIVITY_MODIFIED", sqlParams, true);
             }
             catch (Exception ex)

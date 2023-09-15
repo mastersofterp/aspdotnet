@@ -283,6 +283,8 @@ public partial class ACTIVITY_CourseRegActivityDefinition : System.Web.UI.Page
         txtTo.Text = string.Empty;
         txtfrom.Text = string.Empty;
         ddlStudentIDType.SelectedIndex = 0;
+        ddlActivityName.SelectedIndex = 0;
+        txtNoOfPprAllowed.Text = string.Empty;
     }
 
     // string regIds = "cPpIdXYCCOw:APA91bHHbHslRvJJv53XPmjE9lHP7DNYNxp8TX5qy_Cb8h2CbYbMbjNmTsupM_765x1W33gDPucf8pE_HCc-wRdL4mng2LEiiN51mUwVIC5sIpI_ntdm0asFzK5MxRd09LLPQToX8b1r";
@@ -426,7 +428,8 @@ public partial class ACTIVITY_CourseRegActivityDefinition : System.Web.UI.Page
             int sessionid = Convert.ToInt32(ddlSessionCollege.SelectedValue);
             int eligibilityForCrsReg = hfdEligibilityForCrsReg.Value == "true" ? 1 : 0; // added eligibilityForCrsReg by Shailendra K. on dated 20.062023 as per T-44816
             sessionActivity.ActivityNo = Convert.ToInt32(ddlActivityName.SelectedValue);
-
+            int noOfPaperAllowed = (Convert.ToInt32(ddlActivityName.SelectedValue) == 4) ? !string.IsNullOrEmpty(txtNoOfPprAllowed.Text) ? Convert.ToInt16(txtNoOfPprAllowed.Text) : 0 : 0;
+           
             // added by Shailendra K. on dated 17.08.2023 as per T-47551
             int studIDType = 1;
             if (ddlStudentIDType.SelectedIndex > 1)
@@ -437,14 +440,14 @@ public partial class ACTIVITY_CourseRegActivityDefinition : System.Web.UI.Page
             {
                 int groupid = 0;
                 cs = (CustomStatus)activityController.CourseRegistraionActivityInsert(sessionActivity, Sessionnos, CollegeIds, Degreenos, Branchnos, Semesternos,
-                    UserRights, CoursePattern, choiceFor, PAYMENT_APPLICABLE_FOR_SEM_WISE, groupid, StartTime, EndTime, sessionid, eligibilityForCrsReg, studIDType); //added on 22/03/23 //Commented on 2022 Aug 30
+                    UserRights, CoursePattern, choiceFor, PAYMENT_APPLICABLE_FOR_SEM_WISE, groupid, StartTime, EndTime, sessionid, eligibilityForCrsReg, studIDType, noOfPaperAllowed); //added on 22/03/23 //Commented on 2022 Aug 30
                 // added eligibilityForCrsReg by Shailendra K. on dated 20.062023 as per T-44816
             }
             else if (ViewState["edit"].ToString() == "edit")
             {
                 cs = (CustomStatus)activityController.CourseRegistraionActivityInsert(sessionActivity, Sessionnos, CollegeIds, Degreenos, Branchnos, Semesternos,
                     UserRights, CoursePattern, choiceFor, PAYMENT_APPLICABLE_FOR_SEM_WISE, Convert.ToInt32(ViewState["sessionactivityno"]), StartTime, EndTime, sessionid,
-                    eligibilityForCrsReg, studIDType);  //Commented on 2022 Aug 30
+                    eligibilityForCrsReg, studIDType, noOfPaperAllowed);  //Commented on 2022 Aug 30
                 // added eligibilityForCrsReg by Shailendra K. on dated 20.062023 as per T-44816
             }
 
@@ -980,6 +983,9 @@ public partial class ACTIVITY_CourseRegActivityDefinition : System.Web.UI.Page
                 ddlSessionCollege.SelectedValue = Convert.ToString(ViewState["SESSIONID"]);
                 ddlActivityName.SelectedValue = Convert.ToString(ds.Tables[0].Rows[0]["CRS_ACTIVITY_NO"]);
                 MultipleCollegeBind();
+
+                dvNoOfPaperAllowed.Visible = ddlActivityName.SelectedValue == "4" ? true : false;
+                txtNoOfPprAllowed.Text = ddlActivityName.SelectedValue == "4" ? Convert.ToString(ds.Tables[0].Rows[0]["NO_OF_PAPER_ALLOWED"]) : string.Empty;
 
                 if (ViewState["COLLEGE_ID"] != null && ViewState["COLLEGE_ID"] != "")
                 {
@@ -1535,5 +1541,15 @@ public partial class ACTIVITY_CourseRegActivityDefinition : System.Web.UI.Page
         }
 
        
+    }
+    protected void ddlActivityName_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlActivityName.SelectedIndex > 0)
+            dvNoOfPaperAllowed.Visible = (ddlActivityName.SelectedValue == "4") ? true : false;
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "Please Select Activity.!!!", this.Page);
+            return;
+        }
     }
 }
