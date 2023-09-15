@@ -124,6 +124,26 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                         btnCGPAReport.Visible = true;
                     }
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 8)
+                {
+                    if (Session["usertype"].ToString() == "3")
+                    {
+                        btnInternalMarkReg.Visible = false;
+                        btnExelrpt.Visible = false;
+                        btntrexcel.Visible = false;
+                        btnGradesheet.Visible = false;
+                        btnExamFeesPaid.Visible = false;
+                        btnCategoryWise.Visible = false;
+                        btnOverAllPercentage.Visible = false;
+                        btnOverAllSubjectPercentage.Visible = false;
+                        btnBranchSemAnalysis.Visible = false;
+                        btnResultAnalysis.Visible = false;
+                        btnFailStudentList.Visible = false;
+                        btnCourceWiseFailStudList.Visible = false;
+                        btnGetGpaReport.Visible = false;
+                        btnSubjectWiseResultanalysisReport.Visible = false;
+                    }
+                }
 
                 if (Convert.ToInt32(Session["OrgId"]) == 1) // R C Patel Institute
                 {
