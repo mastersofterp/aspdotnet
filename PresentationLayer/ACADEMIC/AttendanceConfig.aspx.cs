@@ -732,11 +732,11 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
 
                 if (ds.Tables[0].Rows[0]["ACTIVE"].ToString() == "1")  //.ToUpper()
                 {
-                    ScriptManager.RegisterClientScriptBlock(this, GetType(), "Reg", "SetStatActive(true);", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetStatActive(true);", true);
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this, GetType(), "Reg", "SetStatActive(false);", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Src0", "SetStatActive(false);", true);
                 }
 
                 if (ds.Tables[0].Rows[0]["SMS_FACILITY"].ToString() == "True")
