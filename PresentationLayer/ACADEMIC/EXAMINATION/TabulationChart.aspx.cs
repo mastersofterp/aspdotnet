@@ -160,6 +160,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = true;
                 btnLedger.Visible = true; // ADDED BY SHUBHM ON 18-08-2023
+                btnGradeCardIssueRegister.Visible = true;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
             {
@@ -5588,6 +5589,43 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "ACADEMIC_CourseRegistration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    protected void btnGradeCardIssueRegister_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string proc_name = "PKG_GET_GRADE_CARD_ISSUE_REGISTER_REPORT";
+            string param = "@P_SCHEMENO,@P_SESSIONNO,@P_SEMESTERNO";
+            string call_values = "" + ViewState["schemeno"].ToString() + "," + ddlSession.SelectedValue + "," + ddlSemester.SelectedValue + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);         //DataGrid dg = new DataGrid();
+            GridView dg = new GridView();
+            if (ds.Tables.Count > 0)
+            {
+                dg.DataSource = ds.Tables[0];
+                dg.DataBind();
+                AddReportHeader(dg);
+                string attachment = "attachment; filename=" + "GradeCardIssueRegister.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 }
