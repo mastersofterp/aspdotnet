@@ -268,7 +268,12 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
         ddldept.SelectedIndex = 0;
         ddlLeave.SelectedIndex = 0;
         rdbleavestatus.SelectedValue = "0";
-        
+        chkEmployee.Checked = false;
+        divEmployee.Visible = false;
+        btnEmployeeRpt.Visible = false;
+        btnReport.Enabled = true;
+        btnExport.Enabled = true;
+        ddlEmployee.SelectedValue = "0";
     }
    
     
@@ -517,6 +522,120 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
+        }
+        catch (Exception ex)
+        {
+
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ESTABLISHMENT_LEAVES_Transactions_OD_REPORT.ShowReport->" + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server.UnAvailable");
+        }
+    }
+
+    public void FillEmployee()
+    {                                                                                                                                                                                                            // AND (SUBDEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " OR " + Convert.ToInt32(ddldept.SelectedValue) + "=0)
+        //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' +isnull(MNAME,'') + ' ' +isnull(LNAME,'') + '['+ convert(nvarchar(150),IDNO) + ']'", "IDNO>0 AND (COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " OR " + Convert.ToInt32(ddlCollege.SelectedValue) + " AND (STNO=" + Convert.ToInt32(ddlstafftype.SelectedValue) + " OR " + Convert.ToInt32(ddlstafftype.SelectedValue) + " AND (SUBDEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " OR " + Convert.ToInt32(ddldept.SelectedValue) + "=0)", "FNAME");
+        objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' +isnull(MNAME,'') + ' ' +isnull(LNAME,'') + '['+ convert(nvarchar(150),IDNO) + ']'", "IDNO>0 AND (COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " OR " + Convert.ToInt32(ddlCollege.SelectedValue) + "=0)" + " AND (STNO=" + Convert.ToInt32(ddlstafftype.SelectedValue) + " OR " + Convert.ToInt32(ddlstafftype.SelectedValue) + "=0)" + " AND (SUBDEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + " OR " + Convert.ToInt32(ddldept.SelectedValue) + "=0)", "FNAME");
+    }
+
+    protected void btnEmployeeRpt_Click(object sender, EventArgs e)
+    {
+        ShowEmployeeReport("Leave Application", "EmployeeLeaveReport.rpt");        
+    }
+
+    protected void chkEmployee_CheckedChanged(object sender, EventArgs e)
+    {
+        if (chkEmployee.Checked == true)
+        {
+            divEmployee.Visible = true;
+            FillEmployee();
+            btnEmployeeRpt.Visible = true;
+            btnReport.Enabled = false;
+            btnExport.Enabled = false;
+        }
+        else
+        {
+            divEmployee.Visible = false;
+            btnEmployeeRpt.Visible = false;
+            btnReport.Enabled = true;
+            btnExport.Enabled = true;
+            ddlEmployee.SelectedValue = "0";
+        }
+    }
+
+    private void ShowEmployeeReport(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string Fdate = (String.Format("{0:u}", Convert.ToDateTime(txtFromdt.Text)));
+            //Fdate = Convert.ToDateTime(txtMonthYear.Text).ToString("MMMyyyy");
+            Fdate = Fdate.Substring(0, 10);
+            string Tdate = (String.Format("{0:u}", Convert.ToDateTime(txtTodt.Text)));
+            Tdate = Tdate.Substring(0, 10);
+            int empno = 0;
+            int deptno = 0;
+            int staffno = 0;
+            string status;
+            int leaveno = 0;
+
+            int collegeno = 0;
+
+            if (ddlCollege.SelectedIndex > 0)
+            {
+                collegeno = Convert.ToInt32(ddlCollege.SelectedValue);
+            }
+            else
+            {
+                collegeno = 0;
+            }
+
+            if (ddlstafftype.SelectedIndex > 0)
+            {
+                staffno = Convert.ToInt32(ddlstafftype.SelectedValue);
+            }
+            else
+            {
+                staffno = 0;
+            }
+            if (ddldept.SelectedIndex > 0)
+            {
+                deptno = Convert.ToInt32(ddldept.SelectedValue);
+            }
+            else
+            {
+                deptno = 0;
+            }
+
+            if (ddlLeave.SelectedIndex > 0)
+            {
+                leaveno = Convert.ToInt32(ddlLeave.SelectedValue);
+            }
+            else
+            {
+                leaveno = 0;
+            }
+            if (ddlEmployee.SelectedIndex > 0)
+            {
+                empno = Convert.ToInt32(ddlEmployee.SelectedValue);
+            }
+            else
+            {
+                MessageBox("Please Select Employee Name.");
+                return;
+            }
+            string Script = string.Empty;
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ESTABLISHMENT")));
+            url += "Reports/commonreport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
+            url += "&param=@P_COLLEGE_NO=" + collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_LEAVENO=" + leaveno + ",@P_IDNO=" + empno + "";
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
         }
         catch (Exception ex)
         {

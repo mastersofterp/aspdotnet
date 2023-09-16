@@ -129,7 +129,26 @@
                                                 <asp:ListItem Enabled="true" Text="&nbsp&nbsp Com off Request" Value="2"></asp:ListItem>
                                             </asp:RadioButtonList>
                                         </div>
-
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSingle" runat="server">
+                                            <div class="label-dynamic">
+                                                <label>Employee Wise</label>
+                                            </div>
+                                            <%--<asp:RadioButtonList ID="rbdEmployee" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rbdEmployee_SelectedIndexChanged"
+                                                RepeatDirection="Horizontal" TabIndex="8">
+                                                <asp:ListItem Enabled="true" Text="&nbsp&nbsp Employee Report &nbsp&nbsp&nbsp&nbsp" Value="0"></asp:ListItem>                                               
+                                            </asp:RadioButtonList>--%>
+                                            <asp:CheckBox ID="chkEmployee" runat="server" AutoPostBack="true" OnCheckedChanged="chkEmployee_CheckedChanged"
+                                                RepeatDirection="Horizontal" TabIndex="8" />
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divEmployee" runat="server" visible="false">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Employee Name</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlEmployee" runat="server" AppendDataBoundItems="true" data-select2-enable="true"
+                                                CssClass="form-control" TabIndex="3" AutoPostBack="True" ToolTip="Select Staff">
+                                            </asp:DropDownList>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -139,7 +158,9 @@
                                     CssClass="btn btn-info" OnClick="btnReport_Click" ToolTip="Click here to Show Report" />
                                 <asp:Button ID="btnExport" runat="server" Text="Export To Excel" ValidationGroup="Leaveapp" TabIndex="10"
                                     CssClass="btn btn-info" OnClick="btnExport_Click" ToolTip="Click here to Show Report" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="10"
+                                <asp:Button ID="btnEmployeeRpt" runat="server" Text="Employee Report" ValidationGroup="Leaveapp" TabIndex="12"
+                                    CssClass="btn btn-info" OnClick="btnEmployeeRpt_Click" ToolTip="Click here to Show Employee Report" />
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="11"
                                     CssClass="btn btn-warning" ToolTip="Click here to Reset" OnClick="btnCancel_Click" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Leaveapp"
                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
