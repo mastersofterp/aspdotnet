@@ -790,7 +790,7 @@
         }
 
         function validate() {
-            //var school = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchoolInstitute").value;
+            var school = document.getElementById("ctl00_ContentPlaceHolder1_lstbxSchool").value;
             var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
             var degree = document.getElementById("ctl00_ContentPlaceHolder1_ddlDegree").value;
             var schmType = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchemeType").value;
@@ -798,11 +798,11 @@
             var attLock = document.getElementById("ctl00_ContentPlaceHolder1_txtAttLockDay").value;
             var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
             var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
-            //if (school == "0") {
-            //    alert("Please Select School/Institute Name.");
-            //    return false;
-            //}
-            if (session == "") {
+            if (school == "") {
+                alert("Please Select School/Institute Name.");
+                return false;
+            }
+            if (session == "0") {
                 alert("Please Select Session.");
                 return false;
             }
