@@ -177,8 +177,8 @@
                                                                                 <tr>
 
                                                                                     <td>
-                                                                                        <%--<asp:ImageButton ID="btnEditTr" runat="server" ImageUrl="~/images/edit.gif" CommandArgument='<%#Eval("SRNO")%>'
-                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditTr_Click" />--%>
+                                                                                        <asp:ImageButton ID="btnEditTr" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%#Eval("SRNO")%>'
+                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditTr_Click" />
 
                                                                                         <asp:ImageButton ID="btnIndexDelete" runat="server" CausesValidation="false"
                                                                                             CommandArgument='<%# Eval("SRNO")%>' ImageUrl="~/Images/delete.png" ToolTip="Delete Record"
@@ -351,8 +351,8 @@
                                                                             <tr>
 
                                                                                 <td>
-                                                                                    <%--<asp:ImageButton ID="btnEditBond" runat="server" ImageUrl="~/images/edit.gif" CommandArgument='<%#Eval("SBNO")%>'
-                                                                                                AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditBond_Click" />--%>
+                                                                                    <asp:ImageButton ID="btnEditBond" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%#Eval("SBNO")%>'
+                                                                                                AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditBond_Click" />
 
                                                                                     <asp:ImageButton ID="btnBondDelete" runat="server" CausesValidation="false"
                                                                                         CommandArgument='<%# Eval("SBNO")%>' ImageUrl="~/Images/delete.png" ToolTip='<%# Eval("FILENAME")%>'
@@ -618,8 +618,8 @@
                                                                     <tr>
 
                                                                         <td>
-                                                                            <%--<asp:ImageButton ID="btnEditTr" runat="server" ImageUrl="~/images/edit.gif" CommandArgument='<%#Eval("SRNO")%>'
-                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditTr_Click" />--%>
+                                                                            <asp:ImageButton ID="btnEditPhdDetails" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%#Eval("SPNO")%>'
+                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditPhdDetails_Click" />
 
                                                                             <asp:ImageButton ID="btnPhdDelete" runat="server" CausesValidation="false"
                                                                                 OnClick="btnPhdDelete_Click" CommandArgument='<%# Eval("SPNO")%>' ImageUrl="~/Images/delete.png" ToolTip="Delete Record"
@@ -791,6 +791,9 @@
                                                                         <tr>
 
                                                                             <td>
+                                                                                <asp:ImageButton ID="btnEditIdDetails" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%#Eval("SIDNO")%>'
+                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditIdDetails_Click" />
+
                                                                                 <asp:ImageButton ID="btnIDDelete" runat="server" CausesValidation="false"
                                                                                     OnClick="btnIDDelete_Click" CommandArgument='<%# Eval("SIDNO")%>' ImageUrl="~/Images/delete.png" ToolTip="Delete Record"
                                                                                     EnableViewState="true"
@@ -922,6 +925,9 @@
                                                                         <tr>
 
                                                                             <td>
+                                                                                <asp:ImageButton ID="btnEditThesisDetails" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%#Eval("THIDNO")%>'
+                                                                                            AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEditThesisDetails_Click" />
+
                                                                                 <asp:ImageButton ID="btnThesisDelete" runat="server" CausesValidation="false"
                                                                                     CommandArgument='<%# Eval("THIDNO")%>' ImageUrl="~/Images/delete.png" ToolTip="Delete Record"
                                                                                     EnableViewState="true" OnClick="btnThesisDelete_Click"
