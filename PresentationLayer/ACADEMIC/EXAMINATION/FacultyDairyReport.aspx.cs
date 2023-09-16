@@ -137,7 +137,7 @@ public partial class ACADEMIC_EXAMINATION_FacultyDairyReport : System.Web.UI.Pag
             ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                ShowReport("InternalResultAnalysis", "rptStudentWiseAssessment_RCPIT.rpt");
+                ShowReport("InternalResultAnalysis", "rptInternalResultAnalysis_RCPIT.rpt");
             }
             else 
             {
