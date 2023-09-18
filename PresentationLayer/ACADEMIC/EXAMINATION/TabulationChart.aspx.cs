@@ -2156,7 +2156,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 15) // DAIICT added by Tejas Thakre on 08/04/2023
                 {
-                    url += "&param=@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 18) // HITS added by Tejas Thakre on 04/09/2023
                 {
@@ -4065,6 +4065,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
             {
                 ShowTR("ResultSheet", "rptTabulationPG_MIT.rpt", 2);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 15) //Added by Tejas Thakre as on 18_09_2023
+            {
+                ShowTR("ResultSheet", "rptTabulationPG_DAIICT.rpt", 2);
             }
             else
             {
