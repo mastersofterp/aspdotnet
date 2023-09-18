@@ -1,4 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="SubjectType.aspx.cs" Inherits="ACADEMIC_MASTERS_SubjectType" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" ViewStateEncryptionMode="Always" EnableViewStateMac="true" 
+ AutoEventWireup="true" CodeFile="SubjectType.aspx.cs" Inherits="ACADEMIC_MASTERS_SubjectType" %>
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
