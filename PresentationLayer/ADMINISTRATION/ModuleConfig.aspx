@@ -655,7 +655,7 @@
                                                             <asp:ListBox ID="ddlCourseLock" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
                                                         </div>
                                                     </div>
-                                                      <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Related to Redo / Backlog / Improvement Course Registraion</h5>
                                                         </div>
@@ -703,16 +703,33 @@
                                         Faculty
                                     </div>--%>
                                     <div class="tab-pane" id="tab_3">
-                                        <div class="col-12">
+                                                <div class="col-12">
+                                                    <div id="demo-grid">
+                                                        <div class="sub-heading mt-4">
+                                                            <h5>Student Configuration</h5>
+                                                        </div>
 
-                                            <div id="demo-grid">
-                                                <div class="sub-heading mt-4">
-                                                    <h5>Student Configuration</h5>
-                                                </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>Page Name </label>
+                                                            </div>
+                                                            <asp:UpdatePanel ID="updStudentC" runat="server">
+    <ContentTemplate>
+                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false" onchange="handleDropDownChange();">
+<%--                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlPageName_SelectedIndexChanged">--%>
+                                                                <asp:ListItem Value="0">Add Student</asp:ListItem>
+                                                                <asp:ListItem Value="1">Personal Details</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </ContentTemplate>
+    <Triggers>
+        <asp:AsyncPostBackTrigger ControlID="ddlPageName" EventName="SelectedIndexChanged" />
+    </Triggers>
+</asp:UpdatePanel>
+                                                        </div>
 
-                                                <div id="divStudentConfig" class="mt-3">
-                                                </div>
-                                                <%-- <table class="table table-striped table-bordered nowrap display" id="StudentConfig">
+                                                        <div id="divStudentConfig" class="mt-3">
+                                                        </div>
+                                                        <%-- <table class="table table-striped table-bordered nowrap display" id="StudentConfig">
                                                     <thead>
                                                         <tr>
                                                             <th hidden>STUDCONFIG_ID
@@ -734,12 +751,13 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>--%>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 btn-footer">
-                                            <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" />
-                                            <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
-                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 btn-footer">
+                                                    <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" runat="server"  />
+                                                    <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
+                                                </div>
+
                                     </div>
 
 
@@ -1249,7 +1267,68 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
+        <script type="text/javascript">
+            $("#ctl00_ContentPlaceHolder1_btnStudentSubmit").click(function(){
+                //function submit(){
+                debugger;
+                var arrItems = [];
+                $('#StudentConfig').find('tr').each(function () {
+                    var objArray= {};
+                    var row = $(this);
+                    var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_organization_id,_page_no,_page_name;
 
+                    _studconfig_id = row.find('td').eq(0).text();
+                    _caption_name = row.find('td').eq(1).text();
+                    _field_name = row.find('td').eq(2).text();
+                    _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
+                    _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
+                    _organization_id = row.find('td').eq(4).text();
+                    _page_no = row.find('td').eq(5).text();
+                    _page_name = row.find('td').eq(6).text();
+
+                    if (_studconfig_id != '') {
+                        objArray["studconfig_id"] = _studconfig_id;
+                        objArray["caption_name"] = _caption_name;
+                        objArray["isactive"] = _isactive;
+                        objArray["ismandatory"] = _ismandatory;
+                        objArray["organization_id"] = _organization_id;
+                        objArray["page_no"] = _page_no;
+                        objArray["pagename"] = _page_name;
+                        //var item =  row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
+                        arrItems.push(objArray);
+                    }
+                });
+                SaveUpdateStudentConfig(arrItems);
+                //}
+            });
+
+            function SaveUpdateStudentConfig(_studentConfig)
+            {
+                debugger;
+                var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+                //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+                $.ajax({
+                    type: "POST",
+                    url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
+                    data: JData,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        debugger;
+                        var Jdata = data.d;
+                        alert(Jdata);
+                    },
+                    failure: function (response) {
+                        alert("failure");
+                    },
+                    error: function (response) {
+                        //debugger
+                        alert("error");
+                        alert(response.responseText);
+                    }
+                });
+            }
+    </script>
     <script type="text/javascript">
         $(function () {
 
@@ -1287,7 +1366,7 @@
             //  var hdnchkRegnocreation=$('#hfchkRegnocreation').val();
             //var hdnchknewstudentemail=$('#hfchknewstudentemail').val();
             // var hdnchksendemailonstudentry=$('#hfchksendemailonstudentry').val();
-            //var hdnchkRegnocreation =$('#hfchkRegnocreation').val();s
+            //var hdnchkRegnocreation =$('#hfchkRegnocreation').val();
             var hhdnchkFaculyAdvisorApp=$('#hfchkFaculyAdvisorApp').val();
             var hdnchksendpaymentmailstudentry =$('#hfchksendpaymentmailstudentry').val();
             var hdnchkAllowDocumentVerification =$('#hfchkAllowDocumentVerification').val();
@@ -1919,10 +1998,29 @@
     </script>
     <script>
         $(document).ready(function () {
-            BindStudentconfig();
+            var sessionvalue = "<%=Session["OrgId"]%>";
+            BindStudentconfig(sessionvalue,"73","NULL");
         });
         function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
+            //var OrgID_="";
+            //var PageNo_="";
+            //var PageName_="";
+
+            //if(name=="a")
+            //{
+            //    OrgID_=2;
+            //    PageNo_="73";
+            //    PageName_="NULL";
+            //}
+            //else if(name=="p")
+            //{
+            //    OrgID_=2;
+            //    PageNo_="";
+            //    PageName_="PersonalDetails.aspx";
+            //}
+          
+            debugger;
             $.ajax({
                 type: "POST",
 
@@ -1935,13 +2033,20 @@
                     var Jdata = JSON.parse(data.d);
 
                     var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>" ;
-                    htmlpage += "<thead class='bg-light-blue'><tr><th hidden>STUDCONFIG_ID</th><th>Caption Name</th>";
-                    htmlpage += "<th>Is Active</th><th>Is Mandatory</th>";
-                    htmlpage += "<th hidden>Organization ID</th><th hidden>Page No</th></tr></thead><tbody>";
+                    htmlpage += "<thead class='bg-light-blue'><tr>";
+                    htmlpage += "<th hidden>STUDCONFIG_ID</th>";
+                    htmlpage += "<th>Caption Name</th>";
+                    htmlpage += "<th>Is Active</th>";
+                    htmlpage += "<th>Is Mandatory</th>";
+                    htmlpage += "<th hidden>Organization ID</th>";
+                    htmlpage += "<th hidden>Page No</th>";
+                    htmlpage += "<th hidden>Page Name</th>";
+                    htmlpage += "</tr></thead><tbody>";
                         
-
+                   
                     var output = Jdata.map(i => 
-                    "<tr><td hidden>" + i.STUDCONFIG_ID +  "</td>" +
+                    "<tr>"+
+                    "<td hidden>" + i.STUDCONFIG_ID +  "</td>" +
                     "<td>" + i.CAPTION_NAME + "</td>" + 
                     "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
                     "<input type='checkbox' id='rdISACTIVE"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudent("+ i.STUDCONFIG_ID +");' "+ i.ISACTIVE +"/>" +
@@ -1949,12 +2054,16 @@
                     "<td><div class='switch form-inline'>" +
                     "<input type='checkbox' id='rdISMANDATORY"+ i.STUDCONFIG_ID +"' name='switch' onclick='return SetStudentCheckbox(this);' "+ i.ISMANDATORY +"/>" +
                     "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY"+ i.STUDCONFIG_ID +"' ></label></td>"+
-                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td><td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td></tr>");
+                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>"+
+                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>"+
+                    "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>");
                     debugger;
                      
                     for (var i = 0; i < output.length; i++) {
                         htmlpage =  htmlpage + output[i];
+                       
                     }
+                    debugger;
                     htmlpage = (htmlpage + '</tbody></table>');
 
                     //$("#StudentConfig").html(output);
@@ -1997,68 +2106,11 @@
             
         }
         $('#btnReset').click(function(){
-            BindStudentconfig();
-        });
-        $("#btnStudentSubmit").click(function(){
-            debugger;
-            
-            var arrItems = [];
-            $('#StudentConfig').find('tr').each(function () {
-                var objArray= {};
-                var row = $(this);
-                var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_organization_id,_page_no;
-
-                _studconfig_id = row.find('td').eq(0).text();
-                _caption_name = row.find('td').eq(1).text();
-                _field_name = row.find('td').eq(2).text();
-                _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
-                _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                _organization_id = row.find('td').eq(4).text();
-                _page_no = row.find('td').eq(5).text();
-
-                if (_studconfig_id != '') {
-                    objArray["studconfig_id"] = _studconfig_id;
-                    objArray["caption_name"] = _caption_name;
-                    objArray["isactive"] = _isactive;
-                    objArray["ismandatory"] = _ismandatory;
-                    objArray["organization_id"] = _organization_id;
-                    objArray["page_no"] = _page_no;
-                    //var item =  row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                    arrItems.push(objArray);
-                }
-            });
-            SaveUpdateStudentConfig(arrItems);
-            
+            BindStudentconfig(OrgID_,PageNo_,PageName_);
         });
 
-        function SaveUpdateStudentConfig(_studentConfig)
-        {
-
-            var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
-            //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
-            $.ajax({
-                type: "POST",
-
-                url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
-                data: JData,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    debugger;
-                    var Jdata = data.d;
-                    alert(Jdata);
-                },
-                failure: function (response) {
-                    alert("failure");
-                },
-                error: function (response) {
-                    //debugger
-                    alert("error");
-                    alert(response.responseText);
-                }
-            });
-        }
     </script>
+
     <script>     
         function NewstudEmailSend(val) {
             $('[id*=chknewstudentemail]').prop('checked', val);
@@ -2319,6 +2371,107 @@
     
         }
     </script>
+
+    <script>
+
+        function TabShow(tabName) {
+            //alert('hii')
+            //var tabName = "tab_2";
+            $('#Tabs a[href="#' + tabName + '"]').tab('show');
+            $("#Tabs a").click(function () {
+                $("[id*=TabName]").val($(this).attr("href").replace("#", ""));
+            });
+        }
+    </script>
+
+    <input type="hidden" id="orgId" value="<%= Session["OrgId"] %>" />
+
+<script type="text/javascript">
+    function handleDropDownChange() {
+        debugger;
+        var selectedText = document.getElementById('<%= ddlPageName.ClientID %>').options[document.getElementById('<%= ddlPageName.ClientID %>').selectedIndex].text.trim();
+
+        var orgID = '<%= Session["OrgId"] %>';
+        var pageNo = "";
+        var pageName = "";
+
+        if (selectedText === "Add Student") {
+            pageNo = "73";
+        } else if (selectedText === "Personal Details") {
+            pageName = "PersonalDetails.aspx";
+        }
+
+        // Perform an AJAX request
+        $.ajax({
+            type: "POST",
+            url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',
+            data: JSON.stringify({ OrgID: orgID, PageNo: pageNo, PageName: pageName }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                debugger;
+                var Jdata = JSON.parse(data.d);
+
+                var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>";
+                htmlpage += "<thead class='bg-light-blue'><tr>";
+                htmlpage += "<th hidden>STUDCONFIG_ID</th>";
+                htmlpage += "<th>Caption Name</th>";
+                htmlpage += "<th>Is Active</th>";
+                htmlpage += "<th>Is Mandatory</th>";
+                htmlpage += "<th hidden>Organization ID</th>";
+                htmlpage += "<th hidden>Page No</th>";
+                htmlpage += "<th hidden>Page Name</th>";
+                htmlpage += "</tr></thead><tbody>";
+
+                var output = Jdata.map(function (i) {
+                    return "<tr>" +
+                        "<td hidden>" + i.STUDCONFIG_ID + "</td>" +
+                        "<td>" + i.CAPTION_NAME + "</td>" +
+                        "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
+                        "<input type='checkbox' id='rdISACTIVE" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudent(" + i.STUDCONFIG_ID + ");' " + i.ISACTIVE + "/>" +
+                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE" + i.STUDCONFIG_ID + "' ></label></td>" +
+                        "<td><div class='switch form-inline'>" +
+                        "<input type='checkbox' id='rdISMANDATORY" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudentCheckbox(this);' " + i.ISMANDATORY + "/>" +
+                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY" + i.STUDCONFIG_ID + "' ></label></td>" +
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>" +
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>" +
+                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>";
+                });
+
+                for (var i = 0; i < output.length; i++) {
+                    htmlpage += output[i];
+                }
+
+                htmlpage += '</tbody></table>';
+
+                $('#divStudentConfig').html('');
+                $('#divStudentConfig').append(htmlpage);
+
+                for (var i = 0; i < Jdata.length; i++) {
+                    if (Jdata[i].ISMANDATORY !== 'checked' && Jdata[i].ISACTIVE !== 'checked') {
+                        $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
+                        $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
+                    }
+                }
+            },
+            failure: function (response) {
+                alert("failure");
+            },
+            error: function (response) {
+                alert("error");
+                alert(response.responseText);
+            }
+        });
+
+        $('#Tabs a[href="#' + tabName + '"]').tab('show');
+        $("#Tabs a").click(function () {
+            $("[id*=-]").val($(this).attr("href").replace("#", ""));
+        });
+    }
+</script>
+
+
+
 
     <script>
 

@@ -52,10 +52,9 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             //        CheckPageAuthorization();
             //        }
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
-            
-                //Select AL_Link from ACCESS_LINK where AL_URL='ACADEMIC/ModifyAdmissionInfo.aspx'
+
         }
-     
+
         ViewState["action"] = "add";
     }
 
@@ -281,7 +280,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     {
                         rdID = "hfdchkCreateRegno";
                         hfdchkCreateRegno.Value = "true";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript765852654", "newchkCreateRegno(true);", true);  
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript765852654", "newchkCreateRegno(true);", true);
                     }
                     else
                     {
@@ -595,7 +594,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         hfdRedoImprovementCourseRegFlag.Value = "false";
                         ScriptManager.RegisterStartupScript(this, GetType(), "CurrentSemForRedoImprovementCrsReg", "CheckAllowCurrentSemForRedoImprovementCrsReg(false);", true);
                     }
-                    
+
 
                     char delimiterChars = ',';
 
@@ -681,6 +680,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                                 lboModAdmInfo.Items[i].Selected = true;
                         }
                     }
+
                 }
             }
         }
@@ -745,7 +745,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
-    {        
+    {
         try
         {
             if (hfdregno.Value == "true")
@@ -864,8 +864,8 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             bool TPSlot = false;
             bool DisplayReceiptInHTMLFormat = (hfReceiptDisplayInHTML_Format.Value == "true") ? true : false;
             bool createprnt = false;
-            bool CreateRegno=false;
-            bool AttTeaching=false;
+            bool CreateRegno = false;
+            bool AttTeaching = false;
 
             if (hfchkcreateusernewstudentry.Value == "true")
             {
@@ -952,7 +952,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             if (hfdchkAttTeaching.Value == "true")
             {
-                 AttTeaching= true;
+                AttTeaching = true;
             }
 
             if (hfdchkcreateusernewprntentry.Value == "true")
@@ -1169,9 +1169,10 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     public static string GetStudentConfigData(int OrgID, string PageNo, string PageName)
     {
         ModuleConfigController objMConfig = new ModuleConfigController();
-        DataSet ds = objMConfig.GetStudentConfigData();
+        DataSet ds = objMConfig.GetStudentConfigData(OrgID, PageNo, PageName);
         return JsonConvert.SerializeObject(ds.Tables[0]);
     }
+
 
     [WebMethod]
     public static string SaveUpdateStudentconfig(List<StudentModuleConfig> StudentConfig)
@@ -1195,6 +1196,29 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
         return status;
     }
 
+
+    protected void ddlPageName_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (Convert.ToInt32(ddlPageName.SelectedValue) == 0)
+        {
+            int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+            string pageNo = "73";
+            string pageName = "";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), "BindStudentconfig(" + orgID + ", '" + pageNo + "', '" + pageName + "');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+
+        }
+        else if (Convert.ToInt32(ddlPageName.SelectedValue) == 1)
+        {
+            int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+            string pageNo = "";
+            string pageName = "PersonalDetails.aspx";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), "BindStudentconfig(" + orgID + ", '" + pageNo + "', '" + pageName + "');", true);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+
+        }
+    }
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -1213,7 +1237,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     }
 
     protected void btnCourseExamReg_Click(object sender, EventArgs e)
-    {        
+    {
         try
         {
             if (hfRegSame.Value == "true")
@@ -1368,7 +1392,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             BindCourseExamRegConfig();
             BindAttendanceMailConfig();
             BindListviewPayment();
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "window", "javascript:window.close();", true);         
+            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "window", "javascript:window.close();", true);
         }
         else
             objCommon.DisplayMessage("Password does not match!", this.Page);
@@ -1408,12 +1432,12 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                
+
                 lvPaymentDetails.DataSource = ds;
                 lvPaymentDetails.DataBind();
                 foreach (ListViewDataItem item in lvPaymentDetails.Items)
                 {
-                    
+
                     ImageButton lnkPrintRegReport = item.FindControl("btnPrintReceipt") as ImageButton;
                     if (lnkPrintRegReport.ToolTip == null || lnkPrintRegReport.ToolTip == "")
                     {
@@ -1434,19 +1458,19 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-            
-       
+
+
     }
 
     protected void ClearPaymentType()
     {
-        txtPaymentMode.Text   = string.Empty;
+        txtPaymentMode.Text = string.Empty;
         txtAccHolderName.Text = string.Empty;
-        txtBankName.Text      = string.Empty;
-        txtAccountNo.Text     = string.Empty;
-        txtifsccode.Text      = string.Empty;
-        txtBranchName.Text    = string.Empty;
-        txtBounceCharge.Text  = string.Empty;
+        txtBankName.Text = string.Empty;
+        txtAccountNo.Text = string.Empty;
+        txtifsccode.Text = string.Empty;
+        txtBranchName.Text = string.Empty;
+        txtBounceCharge.Text = string.Empty;
     }
 
     //private void ShowDetail(int feedbackNo)
@@ -1623,7 +1647,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
         ImageButton btnEdit = sender as ImageButton;
-        int  PayModeNo = int.Parse(btnEdit.CommandArgument);
+        int PayModeNo = int.Parse(btnEdit.CommandArgument);
         Session["PayNo"] = PayModeNo;
         //Label1.Text = string.Empty;
         //ViewState["action"] = "Edit";
@@ -1650,7 +1674,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 txtBounceCharge.Text = ds.Tables[0].Rows[0]["CHK_BOUNCE_CHARGE"].ToString();
                 lblC.Text = ds.Tables[0].Rows[0]["CHALLAN_FILE_NAME"].ToString();
 
-                lblC.Visible = (lblC.Text == "" || lblC.Text == null) ? false : true;                
+                lblC.Visible = (lblC.Text == "" || lblC.Text == null) ? false : true;
 
                 if (ds.Tables[0].Rows[0]["ACTIVE_STATUS"].ToString() == "1")
                     ScriptManager.RegisterStartupScript(this, GetType(), "act", "$('[id*=rdActiveStatus]').prop('checked', true);", true);
@@ -1886,5 +1910,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     }
 
     #endregion
-    
+
+
 }
