@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup></sup>
+                                            <sup>*</sup>
                                             <label>Total Registration Limit</label>
                                         </div>
                                         <asp:TextBox ID="txtregno" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="3" TabIndex="3"
@@ -88,9 +88,9 @@
                                             FilterMode="ValidChars"
                                             ValidChars=" ">
                                         </ajaxToolKit:FilteredTextBoxExtender>
-                                        <%--   <asp:RequiredFieldValidator ID="rfvregno" runat="server" ControlToValidate="txtregno" SetFocusOnError="true"
-                                            Display="None" ErrorMessage="Please Enter Registration No"  ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                        --%>
+                                           <asp:RequiredFieldValidator ID="rfvregno" runat="server" ControlToValidate="txtregno" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Enter Total Registration No"  ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                        
                                     </div>
 
                                     <div class="form-group col-lg-6 col-md-6 col-12">
