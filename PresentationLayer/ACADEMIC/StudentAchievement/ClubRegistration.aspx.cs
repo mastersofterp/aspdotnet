@@ -12,8 +12,6 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-
-
 using IITMS;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS;
@@ -95,21 +93,6 @@ public partial class ACADEMIC_StudentAchievement_ClubRegistration : System.Web.U
         int idno = Convert.ToInt32(Session["idno"]);
         DataSet ds = OBJCLUB.GetShowClubRegistration(idno);
 
-        //  DataTable dt = ds.Tables[0];
-
-        //  nextRow = 0;
-        //for (int i = 0; i < dt.Rows.Count ; i++)
-        //{
-
-        //string j = dt.Rows[i]["CLUB_ACTIVITY_NO"].ToString();
-
-        //for (int k = 0; i < ddlclub.Items.Count; i++)
-        //{
-        //    if (j.Trim() == ddlclub.Items[k].Value.Trim())
-        //    {
-        //       ddlclub.Items[k].Selected = true;
-        //    }
-        //}
         string k = string.Empty;
         objCommon.FillListBox(ddlclub, "ACD_CLUB_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0 AND ACTIVESTATUS=1", "CLUB_ACTIVITY_NO");
         DataTable dt = ds.Tables[0];
@@ -125,56 +108,46 @@ public partial class ACADEMIC_StudentAchievement_ClubRegistration : System.Web.U
                 }
             }
         }
-
-
-        //  }
-        //    currentRow++;
-
-        //if (ds != null)
-
-        //{
-
-        //    char Clubs = ',';
-
-        //    string clubb = ds.Tables[0].Rows[0]["CLUB_ACTIVITY_NO"].ToString();
-
-        //    string[] stu = clubb.Split(Clubs);
-        //    for (int j = 0; j < stu.Length; j++)
-        //    {
-        //        for (int i = 0; i < ddlclub.Items.Count; i++)
-        //        {
-        //            if (stu[j].Trim() == ddlclub.Items[i].Value.Trim())
-        //            {
-
-        //                ddlclub.Items[i].Selected = true;
-        //            }
-        //        }
-        //    }
-        //}
-
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-
+        string idnocount = string.Empty;string clubNo = string.Empty; string clubName = string.Empty;
         int idno = Convert.ToInt32(Session["idno"]);
-        int COUNT = Convert.ToInt32(objCommon.LookUp("ACD_CLUB_REGISTRATION", "Count(CLUB_REGISTRATION_NO)", "idno=" + Convert.ToInt32(Session["idno"])));
+        idnocount = objCommon.LookUp("ACD_ACTIVE_STUDENT_ACTIVITY ", "CLUBNO", "idno=" + Convert.ToInt32(Session["idno"]));
+        if (idnocount == "" || idnocount == string.Empty)
+        {
+            idnocount = "0";
+        }
+        int COUNT = Convert.ToInt32(objCommon.LookUp("ACD_CLUB_REGISTRATION", "Count(CLUB_REGISTRATION_NO)", "idno="+ Convert.ToInt32(Session["idno"])));
         if (COUNT >= 0 && COUNT <= 3)
         {
             string club = string.Empty;
             foreach (ListItem items in ddlclub.Items)
             {
+
                 if (items.Selected == true)
-                {
-
+                {  
+                   
                     club += items.Value + ',';
-
 
                 }
             }
+          
             if (!club.Equals(string.Empty))
             {
                 club = club.Substring(0, club.Length - 1);
+            }
+            if (idnocount != "0")
+            {              
+                clubNo = objCommon.LookUp("ACD_ACTIVE_STUDENT_ACTIVITY ", "CLUBNO", "idno=" + Convert.ToInt32(Session["idno"]));
+                clubName = objCommon.LookUp("ACD_CLUB_MASTER", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO="+ clubNo + "");
+
+                if (!club.Contains(clubNo))
+                {
+                    objCommon.DisplayMessage(this.updclub, "Please select club " + clubName + "", this.Page);
+                    return;
+                }
             }
             CustomStatus cs = (CustomStatus)OBJCLUB.AddClubRegistrationDetails(idno, club);
             if (cs.Equals(CustomStatus.RecordSaved))
