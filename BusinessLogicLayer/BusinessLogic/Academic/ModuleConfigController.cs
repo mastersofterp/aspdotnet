@@ -17,7 +17,7 @@ namespace IITMS
             {
                 string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
                 /// <summary>
-                /// Added by SP -- Modified by Saurabh S
+                /// Added by SP -- Modified by Shailendra K, Saurabh S.,Rohit M.
                 /// </summary>
                 /// <param name="objConfig"></param>
                 /// <returns></returns>
@@ -26,17 +26,17 @@ namespace IITMS
                 /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related)
                 public int SaveModuleConfiguration(ModuleConfig objConfig, int UANO, string IPAddress, string Mac_Address, bool trisem, bool chkoutsatnding,
                 bool sempromdemand, bool semadmissionoffbtn, bool semadmbeforesempromotion, bool semadmissionaftersempromotion, bool studReactvationlarefine,
-                bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor, 
-                    bool Seatcapacitynewstud,string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory, 
+                bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
+                    bool Seatcapacitynewstud, string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory,
                     string UserLoginNos, string CourseLocked, bool DisplayStudLoginDashboard, bool DisplayReceiptInHTMLFormat, bool chkValueAddedCTAllotment,
-                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg)
-                    {
+                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos)
+                {
                     int status = 0;
                     try
-                        {
+                    {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[49];
+                        sqlParams = new SqlParameter[50];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -86,19 +86,21 @@ namespace IITMS
                         sqlParams[45] = new SqlParameter("@P_VALUE_ADDED_ON_TEACHINGPLAN_ATT", AttTeaching);
                         sqlParams[46] = new SqlParameter("@P_NEW_PARENT_USER_CREATION", createprnt);
                         sqlParams[47] = new SqlParameter("@P_ALLOW_CURRENT_SEM_FOR_REDO_IMPROVE_CRS_REG", AllowCurrSemForRedoImprovementCrsReg);
-                        sqlParams[48] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[48].Direction = ParameterDirection.Output;
+
+                        sqlParams[48] = new SqlParameter("@P_AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO", ModAdmInfoUserNos);
+                        sqlParams[49] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[49].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);
-                        }
+                    }
                     catch (Exception ex)
-                        {
+                    {
                         status = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ModuleConfigController.SaveModuleConfiguration() --> " + ex.Message + " " + ex.StackTrace);
-                        }
-                    return status;
                     }
+                    return status;
+                }
 
 
                 /// <summary>
