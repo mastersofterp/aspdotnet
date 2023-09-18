@@ -1562,12 +1562,14 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
             if (Convert.ToBoolean(ViewState["IsLeaveWisePassingPath"]) == true)
             {
                 dspath = null;
-                dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND COLLEGE_NO=" + collegeno + " AND Leavevalue=" + ViewState["LEAVENO"] + " ", "");
+                //dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND COLLEGE_NO=" + collegeno + " AND Leavevalue=" + ViewState["LEAVENO"] + " ", "");
+                dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND Leavevalue=" + ViewState["LEAVENO"] + " ", "");
             }
             else
             {
                 dspath = null;
-                dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND COLLEGE_NO=" + collegeno + " AND isnull(Leavevalue,0) =" + 0 + " ", "");
+                //dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND COLLEGE_NO=" + collegeno + " AND isnull(Leavevalue,0) =" + 0 + " ", "");
+                dspath = objCommon.FillDropDown("PAYROLL_LEAVE_PASSING_AUTHORITY_PATH", "*", "", "idno=" + useridno + " AND isnull(Leavevalue,0) =" + 0 + " ", "");
             }
             if (dspath.Tables[0].Rows.Count > 0)
             {
