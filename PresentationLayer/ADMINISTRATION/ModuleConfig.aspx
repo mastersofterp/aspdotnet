@@ -672,6 +672,23 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                     <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Modify Admission Info</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label30" runat="server" Font-Bold="true">Select User Type to View Modify Admission Page.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:ListBox ID="lboModAdmInfo" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                                        </div>
+                                                    </div>
+
+
                                                 </div>
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" OnClientClick="return validate();" TabIndex="6" Text="Submit"
@@ -1984,7 +2001,7 @@
             var sessionvalue = "<%=Session["OrgId"]%>";
             BindStudentconfig(sessionvalue,"73","NULL");
         });
-        function BindStudentconfig(OrgID_,PageNo_,PageName_)    // Modified By Shrikant W. on 06-08-2023
+        function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
             //var OrgID_="";
             //var PageNo_="";
@@ -2007,7 +2024,7 @@
             $.ajax({
                 type: "POST",
 
-                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',                
+                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',               
                 data: JSON.stringify({ OrgID:OrgID_, PageNo:PageNo_, PageName:PageName_}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
