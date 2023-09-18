@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CourseCodeWise_Registration.aspx.cs"  MasterPageFile="~/SiteMasterPage.master"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CourseCodeWise_Registration.aspx.cs" ViewStateEncryptionMode="Always" EnableViewStateMac="true" 
+  MasterPageFile="~/SiteMasterPage.master" ViewStateEncryptionMode="Always" EnableViewStateMac="true"
     Inherits="ACADEMIC_CourseCodeWise_Registration" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>

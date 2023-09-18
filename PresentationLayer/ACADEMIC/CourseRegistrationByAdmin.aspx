@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
+<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" ViewStateEncryptionMode="Always" EnableViewStateMac="true"
     CodeFile="CourseRegistrationByAdmin.aspx.cs" Inherits="ACADEMIC_CourseRegistrationByAdmin"
     MaintainScrollPositionOnPostback="true" %>
 
