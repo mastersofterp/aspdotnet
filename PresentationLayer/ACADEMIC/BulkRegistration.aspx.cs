@@ -432,6 +432,7 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
                 CourseController objCourse = new CourseController();
                 DataSet dsCourse = objCourse.GetOfferedCourseListForBulkCourseRegistration(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue));
 
+                hfdCourseCount.Value = dsCourse.Tables[0].Rows.Count.ToString();
                 if (dsCourse != null && dsCourse.Tables.Count > 0)
                 {
                     if (dsCourse.Tables[0].Rows.Count > 0)

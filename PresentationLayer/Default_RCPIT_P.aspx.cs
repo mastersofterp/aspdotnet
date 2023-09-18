@@ -1664,6 +1664,32 @@ StringComparison.OrdinalIgnoreCase) >= 0))
 
     protected void btnSendUsernamePassword_Click(object sender, EventArgs e)
     {
+
+        string DisplayMessage = string.Empty;
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtEusername.Text, txtEusername.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtEusername.Focus();
+            return;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtEnewpass.Text, txtEnewpass.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtnewpass.Focus();
+            return;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtEconfirmPass.Text, txtEconfirmPass.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtEconfirmPass.Focus();
+            return;
+        }
         string useremailchk = txtEmail.Text.Trim().Replace("'", "");
         string mail = objCommon.LookUp("USER_ACC", "isnull(UA_EMAIL,'')UA_EMAIL", "UA_NAME='" + txtEusername.Text.ToString() + "'  ");
 
@@ -1721,7 +1747,10 @@ StringComparison.OrdinalIgnoreCase) >= 0))
                 return;
             }
             // Regex pass = new Regex("(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{4,8})$");
-            Regex pass = new Regex("^.*(?=.{10,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
+            //Regex pass = new Regex("^.*(?=.{10,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
+
+            Regex pass = new Regex("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{10,}$");
+
 
             if (!pass.IsMatch(txtEconfirmPass.Text))
             {
@@ -1847,6 +1876,32 @@ StringComparison.OrdinalIgnoreCase) >= 0))
 
     protected void btnForgotPasswordMobile_Click(object sender, EventArgs e)
     {
+        string DisplayMessage = string.Empty;
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtusername.Text, txtusername.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtusername.Focus();
+            return;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtnewpass.Text, txtnewpass.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtnewpass.Focus();
+            return;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtconfirmpass.Text, txtconfirmpass.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtconfirmpass.Focus();
+            return;
+        }
+
         string Mobile = txtMobile.Text.Trim().Replace("'", "");
 
         string mobileNumber = objCommon.LookUp("USER_ACC", "isnull(UA_MOBILE,'')UA_MOBILE", "UA_NAME='" + txtusername.Text + "'  ");
@@ -1905,7 +1960,10 @@ StringComparison.OrdinalIgnoreCase) >= 0))
                 return;
             }
             // Regex pass = new Regex("(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{4,8})$");
-            Regex pass = new Regex("^.*(?=.{10,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
+            //Regex pass = new Regex("^.*(?=.{10,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$");
+
+            Regex pass = new Regex("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{10,}$");
+
 
             if (!pass.IsMatch(txtconfirmpass.Text))
             {
@@ -2470,8 +2528,12 @@ StringComparison.OrdinalIgnoreCase) >= 0))
 
     protected void btnEmailotp_Click(object sender, EventArgs e)
     {
+        bool val = ValidateSecurityEmail();
 
-        ValidateSecurityEmail();
+        if (val == false)
+        {
+            return;
+        }
         string useremail = txtEmail.Text.Trim().Replace("'", "");
         string mail = objCommon.LookUp("USER_ACC", "UA_EMAIL", "UA_EMAIL='" + useremail + "' ");
         DataSet dsconfig = null;
@@ -2548,7 +2610,12 @@ StringComparison.OrdinalIgnoreCase) >= 0))
 
     protected void btnMobileotp_Click(object sender, EventArgs e)
     {
-        ValidateSecurityMobile();
+        bool val = ValidateSecurityMobile();
+
+        if (val == false)
+        {
+            return;
+        }
         User_AccController useracc = new User_AccController();
         lblOtp.Visible = true;
         txtOtp.Visible = true;

@@ -341,13 +341,13 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
             //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
-                Response.Redirect("~/notauthorized.aspx?page=ExamRegistration.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=RedoCourseRegistration.aspx");
             }
         }
         else
         {
             //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=ExamRegistration.aspx");
+            Response.Redirect("~/notauthorized.aspx?page=RedoCourseRegistration.aspx");
         }
     }
     private void ShowDetails()

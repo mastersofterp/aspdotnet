@@ -124,6 +124,26 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                         btnCGPAReport.Visible = true;
                     }
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 8)
+                {
+                    if (Session["usertype"].ToString() == "3")
+                    {
+                        btnInternalMarkReg.Visible = false;
+                        btnExelrpt.Visible = false;
+                        btntrexcel.Visible = false;
+                        btnGradesheet.Visible = false;
+                        btnExamFeesPaid.Visible = false;
+                        btnCategoryWise.Visible = false;
+                        btnOverAllPercentage.Visible = false;
+                        btnOverAllSubjectPercentage.Visible = false;
+                        btnBranchSemAnalysis.Visible = false;
+                        btnResultAnalysis.Visible = false;
+                        btnFailStudentList.Visible = false;
+                        btnCourceWiseFailStudList.Visible = false;
+                        btnGetGpaReport.Visible = false;
+                        btnSubjectWiseResultanalysisReport.Visible = false;
+                    }
+                }
 
                 if (Convert.ToInt32(Session["OrgId"]) == 1) // R C Patel Institute
                 {
@@ -2387,20 +2407,20 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void btnGetGpaReport_Click(object sender, EventArgs e)
     {
-        //if (Convert.ToInt32(Session["OrgId"]) == 1)
-        //{
-        //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_RCPIT.rpt");
-        //}
+        if (Convert.ToInt32(Session["OrgId"]) == 1)
+        {
+            ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_RCPIT.rpt");
+        }
         //else if (Convert.ToInt32(Session["OrgId"]) == 2)
         //{
         //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_CRESCENT.rpt");
         //}
-        //else
-        //{
-        //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
-        //}
+        else
+        {
+            ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
+        }
 
-        ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
+        //ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
     }
 
     private void ShowGpaReport(string reportTitle, string rptFileName)

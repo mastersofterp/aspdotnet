@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="RedoCourseregisteredlist_report.aspx.cs" Inherits="ACADEMIC_RedoCourseregisteredlist_report" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" ViewStateEncryptionMode="Always" EnableViewStateMac="true" CodeFile="RedoCourseregisteredlist_report.aspx.cs" Inherits="ACADEMIC_RedoCourseregisteredlist_report" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>

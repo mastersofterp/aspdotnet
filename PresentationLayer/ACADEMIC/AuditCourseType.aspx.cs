@@ -137,6 +137,7 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
         int collegeId = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO = " + Convert.ToInt32(Session["idno"]) + ""));
         ViewState["collegeId"] = collegeId;
         objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT SESSION_NO FROM ACD_COURSE_REG_CONFIG_ACTIVITY WHERE STARTED = 1 AND SHOW_STATUS =1) AND COLLEGE_ID = " + collegeId + "", "SESSIONNO DESC");
+        if(ddlSession.Items.Count > 0)
         ddlSession.SelectedIndex = 1;
         // mrqSession.InnerHtml = "Registration Started for Session : " + (Convert.ToInt32(ddlSession.SelectedValue) > 0 ? ddlSession.SelectedItem.Text : "---");
         ddlSession.Focus();
@@ -244,19 +245,21 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
             objCommon.DisplayMessage(UpdatePanel1, "Only " + semesterconfig + "th Sem on-wards student can apply for Audit Course Type registration..!!", this.Page);
             return;
         }
-
-        int semesterpervalid = Convert.ToInt32(objCommon.LookUp("ACD_REGIST_SUBJECTS_AUDIT_FLAG", "COUNT(IDNO)", "IDNO=" + idno + " AND SEMESTERNO =" + lblSemester.ToolTip + ""));
-        if (semesterpervalid >= 1)
+        if (Session["usertype"].ToString() != "1")
         {
-            objCommon.DisplayMessage(UpdatePanel1, "Only one Courses can take under Audit during one Semester..!!", this.Page);
-            return;
-        }
+            int semesterpervalid = Convert.ToInt32(objCommon.LookUp("ACD_REGIST_SUBJECTS_AUDIT_FLAG", "COUNT(IDNO)", "IDNO=" + idno + " AND SEMESTERNO =" + lblSemester.ToolTip + ""));
+            if (semesterpervalid >= 1)
+            {
+                objCommon.DisplayMessage(UpdatePanel1, "Only one Courses can take under Audit during one Semester..!!", this.Page);
+                return;
+            }
 
-        int semestervalid = Convert.ToInt32(objCommon.LookUp("ACD_REGIST_SUBJECTS_AUDIT_FLAG", "COUNT(IDNO)", "IDNO=" + idno + ""));
-        if (semestervalid >= 2)
-        {
-            objCommon.DisplayMessage(UpdatePanel1, "Only two Courses can take under Audit during entire program..!!", this.Page);
-            return;
+            int semestervalid = Convert.ToInt32(objCommon.LookUp("ACD_REGIST_SUBJECTS_AUDIT_FLAG", "COUNT(IDNO)", "IDNO=" + idno + ""));
+            if (semestervalid >= 2)
+            {
+                objCommon.DisplayMessage(UpdatePanel1, "Only two Courses can take under Audit during entire program..!!", this.Page);
+                return;
+            }
         }
         else
         {
@@ -424,41 +427,41 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                 {
                     if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
                     {
-                        string Code = (dataitem.FindControl("lblCCode") as Label).ToolTip;
-                        string maxSeatsForGLobalSubj = objCommon.LookUp("ACD_GLOBAL_OFFERED_COURSE", "ISNULL(CAPACITY,0)",
-                                                                        " ISNULL(GLOBAL_OFFERED,0)=1 AND COURSENO = " + Convert.ToInt32(Code) +
-                                                                        "AND " + Convert.ToInt32(lblSemester.ToolTip) + "  IN (SELECT VALUE FROM DBO.SPLIT(TO_SEMESTERNO,','))");
+                        //string Code = (dataitem.FindControl("lblCCode") as Label).ToolTip;
+                        //string maxSeatsForGLobalSubj = objCommon.LookUp("ACD_GLOBAL_OFFERED_COURSE", "ISNULL(CAPACITY,0)",
+                        //                                                " ISNULL(GLOBAL_OFFERED,0)=1 AND COURSENO = " + Convert.ToInt32(Code) +
+                        //                                                "AND " + Convert.ToInt32(lblSemester.ToolTip) + "  IN (SELECT VALUE FROM DBO.SPLIT(TO_SEMESTERNO,','))");
 
 
-                        int studcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
-                                                                           "R.COURSENO = " + Convert.ToInt32(Code) +
-                                                                           "AND ISNULL(R.CANCEL,0)= 0 AND R.IDNO = " + Convert.ToInt32(objSR.IDNO) + " AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_GLOBAL_OFFERED_COURSE WHERE R.COURSENO = COURSENO AND ISNULL(GLOBAL_OFFERED,0)=1)"));
+                        //int studcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
+                        //                                                   "R.COURSENO = " + Convert.ToInt32(Code) +
+                        //                                                   "AND ISNULL(R.CANCEL,0)= 0 AND R.IDNO = " + Convert.ToInt32(objSR.IDNO) + " AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_GLOBAL_OFFERED_COURSE WHERE R.COURSENO = COURSENO AND ISNULL(GLOBAL_OFFERED,0)=1)"));
 
-                        if (studcount > 0)
-                        {
+                        //if (studcount > 0)
+                        //{
 
-                        }
-                        else
-                        {
+                        //}
+                        //else
+                        //{
 
-                            if (Convert.ToInt32(maxSeatsForGLobalSubj) > 0)
-                            {
-                                int TotalRegisteredcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
-                                                                              "R.COURSENO = " + Convert.ToInt32(Code) +
-                                                                              "AND ISNULL(R.CANCEL,0)= 0 AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =(SELECT SESSIONID FROM ACD_SESSION_MASTER WHERE SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ")" + ")"));
+                        //    if (Convert.ToInt32(maxSeatsForGLobalSubj) > 0)
+                        //    {
+                        //        int TotalRegisteredcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
+                        //                                                      "R.COURSENO = " + Convert.ToInt32(Code) +
+                        //                                                      "AND ISNULL(R.CANCEL,0)= 0 AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =(SELECT SESSIONID FROM ACD_SESSION_MASTER WHERE SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ")" + ")"));
 
-                                int intakeAvailable = Convert.ToInt32(maxSeatsForGLobalSubj) - TotalRegisteredcount;
+                        //        int intakeAvailable = Convert.ToInt32(maxSeatsForGLobalSubj) - TotalRegisteredcount;
 
-                                if (intakeAvailable <= 0)
-                                {
-                                    string lblCCode = (dataitem.FindControl("lblCCode") as Label).Text;
-                                    string lblCourseName = (dataitem.FindControl("lblCourseName") as Label).Text;
-                                    objCommon.DisplayMessage(UpdatePanel1, "This Global Courses " + lblCCode + " - " + lblCourseName + " seats are Full.. ", this.Page);
-                                    return;
-                                }
+                        //        if (intakeAvailable <= 0)
+                        //        {
+                        //            string lblCCode = (dataitem.FindControl("lblCCode") as Label).Text;
+                        //            string lblCourseName = (dataitem.FindControl("lblCourseName") as Label).Text;
+                        //            objCommon.DisplayMessage(UpdatePanel1, "This Global Courses " + lblCCode + " - " + lblCourseName + " seats are Full.. ", this.Page);
+                        //            return;
+                        //        }
 
-                            }
-                        }
+                        //    }
+                        //}
 
                         string Credits = (dataitem.FindControl("lblCredits") as Label).Text;
                         TotRegCreditsCount += Convert.ToDouble(Credits);
@@ -501,7 +504,15 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                         }
                     }
                 }
-                int ret = objSReg.AddAddlRegisteredSubjectsAuditTypeCourse(objSR);
+                int ret = 0;
+                if (Session["usertype"].ToString() == "1")
+                {
+                    ret = objSReg.AddAddlRegisteredSubjectsAuditTypeCourseAdmin(objSR);
+                }
+                else
+                {
+                    ret = objSReg.AddAddlRegisteredSubjectsAuditTypeCourse(objSR);
+                }
                 if (ret > 0)
                 {
                     int ret1 = 0;
@@ -540,8 +551,15 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                     }
                     else
                     {
-                        btnSubmit.Enabled = false;
-                        //btnPrintRegSlip.Enabled = true;
+                        if (Session["usertype"].ToString() == "1")
+                        {
+                            btnSubmit.Enabled = true;
+                            //btnPrintRegSlip.Enabled = true;
+                        }
+                        else
+                        {
+                            btnSubmit.Enabled = false;
+                        }
                     }
                 }
                 #region commented code
@@ -616,6 +634,8 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                 BindAllCourses();
                 TotalRegisterCreditsCount();
                 CheckActivity();
+                
+                lblTotalRegCredits.Text = objCommon.LookUp("ACD_STUDENT_RESULT", "SUM(CREDITS) AS CREDITS", "IDNO=" + idno + "AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + "AND IS_AUDIT=1");
 
             }
             else if (status == 0)
@@ -741,9 +761,10 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                     //DataSet dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,C.CREDITS AS CREDITS,S.SUBNAME,(CASE WHEN (SELECT EXAM_REGISTERED FROM ACD_STUDENT_RESULT WHERE IDNO=" + Convert.ToInt32(lblName.ToolTip) + " AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND COURSENO=C.COURSENO AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0)=0 AND PREV_STATUS=0)=1 THEN 1 ELSE 0 END)EXAM_REGISTERED", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1 AND C.ELECT=0", "S.SUBNAME");
                     //DataSet dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C LEFT JOIN acd_course_teacher CT ON(C.SCHEMENO=CT.SCHEMENO AND CT.SEMESTERNO=CT.SEMESTERNO AND C.COURSENO=CT.COURSENO) LEFT JOIN USER_ACC U ON (U.UA_NO=CT.UA_NO) LEFT JOIN ACD_SECTION SE ON(SE.SECTIONNO=CT.SECTIONNO) INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,C.CREDITS AS CREDITS,S.SUBNAME,(CASE WHEN (SELECT EXAM_REGISTERED FROM ACD_STUDENT_RESULT WHERE IDNO=" + Convert.ToInt32(lblName.ToolTip) + " AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND COURSENO=C.COURSENO and sectionno=ct.sectionno AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0)=0 AND PREV_STATUS=0)=1 THEN 1 ELSE 0 END)EXAM_REGISTERED,case when CT.INTAKE=isnull then '-' else ISNULL(CT.INTAKE,0)-(select COUNT(ISNULL(COURSENO,0)) from ACD_STUDENT_RESULT where SCHEMENO=CT.SCHEMENO AND SEMESTERNO=CT.SEMESTERNO AND COURSENO=CT.COURSENO AND SESSIONNO=CT.SESSIONNO AND SECTIONNO=CT.SECTIONNO AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ") end AS INTAKE,U.UA_FULLNAME,SE.SECTIONNAME,isnull(SE.SectionNO,0) as SectionNO,U.UA_NO", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1 AND C.ELECT=0", "S.SUBNAME");
                     string sessionos = dsStudent.Tables[1].Rows[0]["SESSIONNO"].ToString();
+                    if (sessionos == string.Empty)
+                        sessionos = "0";
 
-
-                    int countregcourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + idno + "AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND SCHEMENO =" + Convert.ToInt32(lblScheme.ToolTip) + " AND SESSIONNO =" + Convert.ToInt32(sessionos) + " AND REGISTERED = 1 AND IS_AUDIT IS NULL AND CANCEL<>1"));
+                    int countregcourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + idno + " AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND SCHEMENO =" + Convert.ToInt32(lblScheme.ToolTip) + " AND SESSIONNO =" + Convert.ToInt32(sessionos) + " AND REGISTERED = 1 AND (CANCEL <> 1 OR CANCEL IS NULL)"));
 
                     //int countregcourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + idno + "AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND SCHEMENO =" + Convert.ToInt32(lblScheme.ToolTip) + " AND REGISTERED = 1 AND IS_AUDIT IS NULL AND ISNULL(CANCEL,0)=0"));
 
@@ -1828,13 +1849,13 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                 }
             }
 
-            if (count > Convert.ToInt32(lblIntake.ToolTip))
-            {
-                objCommon.DisplayMessage(UpdatePanel1, "You can select only " + lblIntake.ToolTip + " course for same group.!", this.Page);
-                chkAccept.Checked = false;
-                TotalRegisterCreditsCount();
-                return;
-            }
+            //if (count > Convert.ToInt32(lblIntake.ToolTip))
+            //{
+            //    objCommon.DisplayMessage(UpdatePanel1, "You can select only " + lblIntake.ToolTip + " course for same group.!", this.Page);
+            //    chkAccept.Checked = false;
+            //    TotalRegisterCreditsCount();
+            //    return;
+            //}
         }
 
     }
@@ -2123,10 +2144,11 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
         if (count > 0)
         {
             // ShowReport("RegistrationSlip", "rptCourseRegSlip.rpt");
-            if (Convert.ToInt32(Session["OrgId"]) == 2)
-                ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipForCrescentStudentWise.rpt");
-            else
-                ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt");
+            //if (Convert.ToInt32(Session["OrgId"]) == 2)
+            //    ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipForCrescentStudentWise.rpt");
+            //else
+            //    ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt");
+            ShowReport("RegistrationSlip", "rptCourseRegSlip.rpt");
         }
         else
         {
@@ -2362,13 +2384,22 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
             Label lblgroupname = item.FindControl("lblgroupname") as Label;
             CheckBox chkAccept = item.FindControl("chkAccept") as CheckBox;
             Label lblIntake = item.FindControl("lblIntake") as Label;
-            //if (lblIntake.Text != string.Empty && lblIntake.Text != "NA")
-            //{
-            //    if (Convert.ToInt32(lblIntake.Text) <= 0)
-            //    {
-            //        chkAccept.Enabled = false;
-            //    }
-            //}
+            Label lblAudit = item.FindControl("lblAudit") as Label;
+            if (Session["usertype"].ToString() == "1")
+            {
+                if (lblAudit.Text == "1")
+                {
+                    chkAccept.Checked = true;
+                    chkAccept.BackColor = System.Drawing.Color.Blue;
+                }
+            }
+            else
+            {
+                if (lblAudit.Text == "1")
+                {
+                    chkAccept.Enabled = false;
+                }
+            }
         }
         #endregion
 
@@ -2383,13 +2414,12 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
             Label lblgroupname = item.FindControl("lblgroupname") as Label;
             CheckBox chkAccept = item.FindControl("chkAccept") as CheckBox;
             Label lblIntake = item.FindControl("lblIntake") as Label;
-            //if (lblIntake.Text != string.Empty && lblIntake.Text != "NA")
-            //{
-            //    if (Convert.ToInt32(lblIntake.Text) <= 0)
-            //    {
-            //        chkAccept.Enabled = false;
-            //    }
-            //}
+            Label lblAudit = item.FindControl("lblAudit") as Label;
+            
+            if (lblAudit.Text == "1")
+            {
+                chkAccept.Enabled = false;
+            }
         #endregion
 
             #region value Added / Specialization Course

@@ -559,10 +559,11 @@
                                                                     <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" ToolTip='<%#Eval("GROUPNO") %>' OnCheckedChanged="chklvUniCoreSub_OnCheckedChanged" />
                                                                 </td>
                                                                 <td>
+                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false"/>
                                                                     <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
                                                                 </td>
                                                                 <td>
-                                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
+                                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>'/>
                                                                 </td>
                                                                 <td>
                                                                     <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
@@ -635,6 +636,7 @@
                                                                     <asp:CheckBox ID="chkAccept" runat="server" ToolTip='<%#Eval("GROUPNO") %>' OnCheckedChanged="chkGlobalSubjects_OnCheckedChanged" AutoPostBack="true" />
                                                                 </td>
                                                                 <td>
+                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false"/>
                                                                     <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
                                                                 </td>
                                                                 <td>

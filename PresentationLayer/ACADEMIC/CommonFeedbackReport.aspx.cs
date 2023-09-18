@@ -90,6 +90,11 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 {
                     sectiondv.Visible = false;
                 }
+
+                if (Session["OrgId"].ToString() == "1")
+                {
+                    btnEvalutionReport.Visible = true;
+                }
             }
         }
         divMsg.InnerHtml = string.Empty;
@@ -235,7 +240,11 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
             {
-                if (Convert.ToInt32(Session["OrgId"]) == 2)
+                //if (Convert.ToInt32(Session["OrgId"]) == 2)
+                //{
+                //    ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_rcpit.rpt", param);
+                //}
+                 if (Convert.ToInt32(Session["OrgId"]) == 2)
                 {
 
                     if (ddlSection.SelectedValue == "0")
@@ -253,7 +262,6 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                         ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Crescent.rpt", param);
                     }
                 }
-
                 else
                 {
                     ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon.rpt", param);
@@ -481,6 +489,14 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         else
         {
             btnCommentReport.Visible = false;
+        }
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + "";
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+            ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_rcpit.rpt", param);
         }
     }
 }
