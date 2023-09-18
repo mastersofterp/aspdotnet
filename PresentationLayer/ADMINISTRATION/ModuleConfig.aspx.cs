@@ -40,6 +40,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             objCommon.FillListBox(ddlAttendanceuser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14)", "USERTYPEID");
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
+            objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL", "DISPLAYPAGENAME ASC");
             objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
             BindCourseExamRegConfig();
@@ -669,7 +670,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         }
                     }
 
-
                     string ModAdmInfoUserNos = ds.Tables[0].Rows[0]["AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO"] == DBNull.Value ? "0" : ds.Tables[0].Rows[0]["AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO"].ToString();
                     string[] ModAdmInfoUsrtype = ModAdmInfoUserNos.Split(',');
 
@@ -1067,6 +1067,8 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             ModAdmInfoUserNos = ModAdmInfoUserNos.TrimEnd(',');
 
+
+
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
@@ -1164,7 +1166,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static string GetStudentConfigData()
+    public static string GetStudentConfigData(int OrgID, string PageNo, string PageName)
     {
         ModuleConfigController objMConfig = new ModuleConfigController();
         DataSet ds = objMConfig.GetStudentConfigData();

@@ -687,6 +687,8 @@
                                                             <asp:ListBox ID="lboModAdmInfo" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
                                                         </div>
                                                     </div>
+
+
                                                 </div>
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" OnClientClick="return validate();" TabIndex="6" Text="Submit"
@@ -1919,13 +1921,13 @@
         $(document).ready(function () {
             BindStudentconfig();
         });
-        function BindStudentconfig()
+        function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
             $.ajax({
                 type: "POST",
 
-                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',
-                data: '{}',
+                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',               
+                data: JSON.stringify({ OrgID:OrgID_, PageNo:PageNo_, PageName:PageName_}),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
