@@ -40,6 +40,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             objCommon.FillListBox(ddlAttendanceuser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14)", "USERTYPEID");
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
+            objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
             BindCourseExamRegConfig();
             BindAttendanceMailConfig();
@@ -50,7 +51,8 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             //        CheckPageAuthorization();
             //        }
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
-
+            
+                //Select AL_Link from ACCESS_LINK where AL_URL='ACADEMIC/ModifyAdmissionInfo.aspx'
         }
      
         ViewState["action"] = "add";
@@ -666,6 +668,19 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                                 ddlCourseLock.Items[i].Selected = true;
                         }
                     }
+
+
+                    string ModAdmInfoUserNos = ds.Tables[0].Rows[0]["AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO"] == DBNull.Value ? "0" : ds.Tables[0].Rows[0]["AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO"].ToString();
+                    string[] ModAdmInfoUsrtype = ModAdmInfoUserNos.Split(',');
+
+                    for (int j = 0; j < ModAdmInfoUsrtype.Length; j++)
+                    {
+                        for (int i = 0; i < lboModAdmInfo.Items.Count; i++)
+                        {
+                            if (ModAdmInfoUsrtype[j] == lboModAdmInfo.Items[i].Value)
+                                lboModAdmInfo.Items[i].Selected = true;
+                        }
+                    }
                 }
             }
         }
@@ -1042,6 +1057,16 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             usercourselocked = usercourselocked.TrimEnd(',');
             int allowCurrSemForRedoImprovementCrsReg = (hfdRedoImprovementCourseRegFlag.Value == "true") ? 1 : 0;
 
+
+            string ModAdmInfoUserNos = string.Empty;
+            foreach (ListItem items in lboModAdmInfo.Items)
+            {
+                if (items.Selected == true)
+                    ModAdmInfoUserNos += items.Value + ',';
+            }
+
+            ModAdmInfoUserNos = ModAdmInfoUserNos.TrimEnd(',');
+
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
@@ -1055,7 +1080,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
 
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
