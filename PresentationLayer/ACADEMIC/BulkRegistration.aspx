@@ -21,8 +21,182 @@
         <%--AssociatedUpdatePanelID="updBulkReg"--%>
     </div>
 
-     <%--===== Data Table Script added by gaurav =====--%>
-        <script>
+    <%--===== Data Table Script added by gaurav =====--%>
+    <script>
+        $(document).ready(function () {
+            var table = $('#tblHeadstdlist').DataTable({
+                responsive: true,
+                lengthChange: true,
+                scrollY: 320,
+                scrollX: true,
+                scrollCollapse: true,
+                paging: false, // Added by Gaurav for Hide pagination
+
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'colvis',
+                        text: 'Column Visibility',
+                        columns: function (idx, data, node) {
+                            var arr = [0];
+                            if (arr.indexOf(idx) !== -1) {
+                                return false;
+                            } else {
+                                return $('#tblHeadstdlist').DataTable().column(idx).visible();
+                            }
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
+                        buttons: [
+                            {
+                                extend: 'copyHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('#tblHeadstdlist').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("input:submit").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:submit").each(function () {
+                                                    nodereturn += $(this).val();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                exportOptions: {
+                                    columns: function (idx, data, node) {
+                                        var arr = [0];
+                                        if (arr.indexOf(idx) !== -1) {
+                                            return false;
+                                        } else {
+                                            return $('#tblHeadstdlist').DataTable().column(idx).visible();
+                                        }
+                                    },
+                                    format: {
+                                        body: function (data, column, row, node) {
+                                            var nodereturn;
+                                            if ($(node).find("input:text").length > 0) {
+                                                nodereturn = "";
+                                                nodereturn += $(node).find("input:text").eq(0).val();
+                                            }
+                                            else if ($(node).find("input:checkbox").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:checkbox").each(function () {
+                                                    if ($(this).is(':checked')) {
+                                                        nodereturn += "On";
+                                                    } else {
+                                                        nodereturn += "Off";
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("a").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("a").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("input:submit").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("input:submit").each(function () {
+                                                    nodereturn += $(this).val();
+                                                });
+                                            }
+                                            else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                                nodereturn = "";
+                                                $(node).find("span").each(function () {
+                                                    nodereturn += $(this).text();
+                                                });
+                                            }
+                                            else if ($(node).find("select").length > 0) {
+                                                nodereturn = "";
+                                                $(node).find("select").each(function () {
+                                                    var thisOption = $(this).find("option:selected").text();
+                                                    if (thisOption !== "Please Select") {
+                                                        nodereturn += thisOption;
+                                                    }
+                                                });
+                                            }
+                                            else if ($(node).find("img").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else if ($(node).find("input:hidden").length > 0) {
+                                                nodereturn = "";
+                                            }
+                                            else {
+                                                nodereturn = data;
+                                            }
+                                            return nodereturn;
+                                        },
+                                    },
+                                }
+                            },
+
+                        ]
+                    }
+                ],
+                "bDestroy": true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
             $(document).ready(function () {
                 var table = $('#tblHeadstdlist').DataTable({
                     responsive: true,
@@ -195,183 +369,9 @@
                     "bDestroy": true,
                 });
             });
-            var parameter = Sys.WebForms.PageRequestManager.getInstance();
-            parameter.add_endRequest(function () {
-                $(document).ready(function () {
-                    var table = $('#tblHeadstdlist').DataTable({
-                        responsive: true,
-                        lengthChange: true,
-                        scrollY: 320,
-                        scrollX: true,
-                        scrollCollapse: true,
-                        paging: false, // Added by Gaurav for Hide pagination
+        });
 
-                        dom: 'lBfrtip',
-                        buttons: [
-                            {
-                                extend: 'colvis',
-                                text: 'Column Visibility',
-                                columns: function (idx, data, node) {
-                                    var arr = [0];
-                                    if (arr.indexOf(idx) !== -1) {
-                                        return false;
-                                    } else {
-                                        return $('#tblHeadstdlist').DataTable().column(idx).visible();
-                                    }
-                                }
-                            },
-                            {
-                                extend: 'collection',
-                                text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
-                                buttons: [
-                                    {
-                                        extend: 'copyHtml5',
-                                        exportOptions: {
-                                            columns: function (idx, data, node) {
-                                                var arr = [0];
-                                                if (arr.indexOf(idx) !== -1) {
-                                                    return false;
-                                                } else {
-                                                    return $('#tblHeadstdlist').DataTable().column(idx).visible();
-                                                }
-                                            },
-                                            format: {
-                                                body: function (data, column, row, node) {
-                                                    var nodereturn;
-                                                    if ($(node).find("input:text").length > 0) {
-                                                        nodereturn = "";
-                                                        nodereturn += $(node).find("input:text").eq(0).val();
-                                                    }
-                                                    else if ($(node).find("input:checkbox").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("input:checkbox").each(function () {
-                                                            if ($(this).is(':checked')) {
-                                                                nodereturn += "On";
-                                                            } else {
-                                                                nodereturn += "Off";
-                                                            }
-                                                        });
-                                                    }
-                                                    else if ($(node).find("a").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("a").each(function () {
-                                                            nodereturn += $(this).text();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("input:submit").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("input:submit").each(function () {
-                                                            nodereturn += $(this).val();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
-                                                        nodereturn = "";
-                                                        $(node).find("span").each(function () {
-                                                            nodereturn += $(this).text();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("select").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("select").each(function () {
-                                                            var thisOption = $(this).find("option:selected").text();
-                                                            if (thisOption !== "Please Select") {
-                                                                nodereturn += thisOption;
-                                                            }
-                                                        });
-                                                    }
-                                                    else if ($(node).find("img").length > 0) {
-                                                        nodereturn = "";
-                                                    }
-                                                    else if ($(node).find("input:hidden").length > 0) {
-                                                        nodereturn = "";
-                                                    }
-                                                    else {
-                                                        nodereturn = data;
-                                                    }
-                                                    return nodereturn;
-                                                },
-                                            },
-                                        }
-                                    },
-                                    {
-                                        extend: 'excelHtml5',
-                                        exportOptions: {
-                                            columns: function (idx, data, node) {
-                                                var arr = [0];
-                                                if (arr.indexOf(idx) !== -1) {
-                                                    return false;
-                                                } else {
-                                                    return $('#tblHeadstdlist').DataTable().column(idx).visible();
-                                                }
-                                            },
-                                            format: {
-                                                body: function (data, column, row, node) {
-                                                    var nodereturn;
-                                                    if ($(node).find("input:text").length > 0) {
-                                                        nodereturn = "";
-                                                        nodereturn += $(node).find("input:text").eq(0).val();
-                                                    }
-                                                    else if ($(node).find("input:checkbox").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("input:checkbox").each(function () {
-                                                            if ($(this).is(':checked')) {
-                                                                nodereturn += "On";
-                                                            } else {
-                                                                nodereturn += "Off";
-                                                            }
-                                                        });
-                                                    }
-                                                    else if ($(node).find("a").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("a").each(function () {
-                                                            nodereturn += $(this).text();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("input:submit").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("input:submit").each(function () {
-                                                            nodereturn += $(this).val();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
-                                                        nodereturn = "";
-                                                        $(node).find("span").each(function () {
-                                                            nodereturn += $(this).text();
-                                                        });
-                                                    }
-                                                    else if ($(node).find("select").length > 0) {
-                                                        nodereturn = "";
-                                                        $(node).find("select").each(function () {
-                                                            var thisOption = $(this).find("option:selected").text();
-                                                            if (thisOption !== "Please Select") {
-                                                                nodereturn += thisOption;
-                                                            }
-                                                        });
-                                                    }
-                                                    else if ($(node).find("img").length > 0) {
-                                                        nodereturn = "";
-                                                    }
-                                                    else if ($(node).find("input:hidden").length > 0) {
-                                                        nodereturn = "";
-                                                    }
-                                                    else {
-                                                        nodereturn = data;
-                                                    }
-                                                    return nodereturn;
-                                                },
-                                            },
-                                        }
-                                    },
-
-                                ]
-                            }
-                        ],
-                        "bDestroy": true,
-                    });
-                });
-            });
-
-        </script>
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -491,7 +491,7 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <%----%>
-                                       <%-- <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="True" TabIndex="1" onchange="fn();"  CausesValidation="False"
+                                        <%-- <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="True" TabIndex="1" onchange="fn();"  CausesValidation="False"
                                             ToolTip="Please Select College & Scheme" CssClass="form-control" AutoPostBack="True" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged">
                                         </asp:DropDownList>--%>
                                         <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
@@ -647,18 +647,18 @@
                                             <sup>* </sup>
                                             <label>Total Students Selected</label>
                                         </div>
-                                        <asp:TextBox ID="txtTotStud" runat="server" Text="0" Enabled="False" CssClass="form-control" 
+                                        <asp:TextBox ID="txtTotStud" runat="server" Text="0" Enabled="False" CssClass="form-control"
                                             Style="text-align: center;" BackColor="#FFFFCC" Font-Bold="True"
                                             ForeColor="#000066"></asp:TextBox>
                                         <%--meta:resourcekey="txtTotStudResource1"--%>
                                         <%--<ajaxToolKit:TextBoxWatermarkExtender ID="text_water" runat="server" TargetControlID="txtTotStud"
                                             WatermarkText="0" WatermarkCssClass="watermarked" Enabled="True" />--%>
                                     </div>
-                                     <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <label>Total Credit Limit :</label>
                                         </div>
-                                        <asp:TextBox ID="lblTotalCredit" runat="server" Text="0" Enabled="False" CssClass="form-control"  
+                                        <asp:TextBox ID="lblTotalCredit" runat="server" Text="0" Enabled="False" CssClass="form-control"
                                             Style="text-align: center;" BackColor="#FFFFCC" Font-Bold="True"
                                             ForeColor="#000066"></asp:TextBox>
                                         <%--meta:resourcekey="txtTotStudResource1"--%>
@@ -770,7 +770,8 @@
                                                         <table class="table table-striped table-bordered nowrap display" style="width: 100%">
                                                             <thead class="bg-light-blue">
                                                                 <tr>
-                                                                    <th>Select
+                                                                    <th>
+                                                                        <asp:CheckBox ID="cbHead" Text="Select All" runat="server" onclick="return SelectAllCourse(this)" ToolTip="Select/Select all" />
                                                                     </th>
                                                                     <th>
                                                                         <asp:Label ID="lblDYtxtCourseCode" runat="server" Font-Bold="true"></asp:Label>
@@ -797,8 +798,8 @@
                                                             <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' ToolTip='<%# Eval("ELECT") %>' />
                                                         </td>
                                                         <td>
-                                                                <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>' />
-                                                            </td>
+                                                            <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>' />
+                                                        </td>
                                                     </tr>
                                                 </ItemTemplate>
                                                 <AlternatingItemTemplate>
@@ -811,11 +812,12 @@
                                                             <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' ToolTip='<%# Eval("ELECT") %>' />
                                                         </td>
                                                         <td>
-                                                                <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>' />
-                                                            </td>
+                                                            <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>' />
+                                                        </td>
                                                     </tr>
                                                 </AlternatingItemTemplate>
                                             </asp:ListView>
+                                            <asp:HiddenField ID="hfdCourseCount" runat="server" />
                                         </asp:Panel>
                                     </div>
                                     <div class="col-12">
@@ -934,6 +936,19 @@
             //        else {
             //            txtTot.value = 0;
             //        }
+        }
+
+        function SelectAllCourse(headchk) {
+            var i = 0;
+           // var hfdCourseCount = document.getElementById('<%= hfdCourseCount.ClientID %>');
+            var hfdCourseCount = document.getElementById('<%= hfdCourseCount.ClientID %>').value;
+            var count = 0;
+            for (i = 0; i < Number(hfdCourseCount) ; i++) {
+
+                var lst = document.getElementById('ctl00_ContentPlaceHolder1_lvCourse_ctrl' + i + '_cbRow');
+                if (lst.type == 'checkbox')
+                    lst.checked = (headchk.checked == true) ? true : false;
+            }
         }
 
         function validateAssign() {
