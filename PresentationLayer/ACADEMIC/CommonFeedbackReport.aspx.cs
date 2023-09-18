@@ -193,7 +193,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        if (Convert.ToInt32(Session["OrgId"]) == 2 )
         {
             url += "&param=" + param + "";
         }
@@ -243,7 +243,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 //{
                 //    ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_rcpit.rpt", param);
                 //}
-                 if (Convert.ToInt32(Session["OrgId"]) == 2)
+                if (Convert.ToInt32(Session["OrgId"]) == 2)
                 {
 
                     if (ddlSection.SelectedValue == "0")
@@ -492,8 +492,8 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
-        string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + "";
-        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]); //+"";
+        if (Convert.ToInt32(Session["OrgId"]) == 1)
         {
             ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_rcpit.rpt", param);
         }
