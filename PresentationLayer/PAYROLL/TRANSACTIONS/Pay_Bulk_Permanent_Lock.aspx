@@ -91,7 +91,7 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                   <%-- <sup>* </sup>--%>
                                                     <label>Salary Given/Deposited Date</label>
                                                 </div>
                                                 <div class="input-group date">
@@ -155,7 +155,7 @@
                                         </div>
                                          <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <%-- <sup>* </sup>--%>
+                                                     <sup>* </sup>
                                                     <label>Salary Given/Deposited Date</label>
                                                 </div>
                                                 <div class="input-group date">
