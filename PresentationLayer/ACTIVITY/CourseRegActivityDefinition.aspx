@@ -223,7 +223,7 @@
                                                         <label>Activity Name </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlActivityName" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
-                                                        ValidationGroup="submit" ToolTip="Please Select Activity.">
+                                                        ValidationGroup="submit" ToolTip="Please Select Activity." OnSelectedIndexChanged="ddlActivityName_SelectedIndexChanged" AutoPostBack="true">
                                                         <%--AutoPostBack="true" OnSelectedIndexChanged=""--%>
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         <%--  <asp:ListItem Value="1">Course Registration</asp:ListItem>
@@ -485,6 +485,16 @@
                                                         <asp:TextBox ID="txtChoiseFor" runat="server" MaxLength="1" onkeydown="return (!((event.keyCode>=65 && event.keyCode <= 95) || event.keyCode >= 106) && event.keyCode!=32);"></asp:TextBox>
                                                     </div>
                                                 </div>
+
+                                                 <div id="dvNoOfPaperAllowed" runat="server" class="form-group col-lg-3 col-md-3 col-12" visible="false">
+                                                    <div class="label-dynamic">
+                                                       <label>Number of paper allowed</label>
+                                                    </div>
+                                                    <div>                                                      
+                                                        <asp:TextBox ID="txtNoOfPprAllowed" runat="server" MaxLength="2" onkeydown="return (!((event.keyCode>=65 && event.keyCode <= 95) || event.keyCode >= 106) && event.keyCode!=32);"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 

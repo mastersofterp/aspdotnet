@@ -385,12 +385,11 @@
                                             InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="ConsoGradeCard"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator53" runat="server" ControlToValidate="ddlClgname" Display="None"
                                             ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="Consoli"></asp:RequiredFieldValidator>
-
-
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator58" runat="server" ControlToValidate="ddlClgname" Display="None"
+                                            ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="GradeCardIssueRegister"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RFVddlClgname" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ProgressionReport"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
-
                                         <asp:RequiredFieldValidator ID="RFVddlClgnameTRExcel" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="TrExcel"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
@@ -456,6 +455,8 @@
                                             ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Consoli"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator39" runat="server" ControlToValidate="ddlSession" Display="None"
                                             ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True" ValidationGroup="UFMLIST"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator59" runat="server" ControlToValidate="ddlSession" Display="None"
+                                            ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True" ValidationGroup="GradeCardIssueRegister"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
@@ -552,7 +553,7 @@
                                             ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Tabulation"></asp:RequiredFieldValidator>
 
 
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator57" runat="server" ControlToValidate="ddlSemester"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator57" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Ledger"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
 
@@ -833,6 +834,7 @@
 
                                 <asp:Button ID="btnProvisionalDegree" runat="server" Text="Provisional Degree Certificate" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="TRGradeReg" OnClick="btnProvisionalDegree_Click" />
                                 <asp:Button ID="btnLedger" runat="server" Text="Students Ledger Report" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="Ledger" OnClick="btnLedger_Click" />
+                                <asp:Button ID="btnGradeCardIssueRegister" runat="server" Text="Grade Card Issue Register" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCardIssueRegister" OnClick="btnGradeCardIssueRegister_Click" />
 
                                 <asp:ValidationSummary ID="vsSum1" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="ResultExcel" />
@@ -851,6 +853,7 @@
                                 <asp:ValidationSummary ID="ValidationSummary11" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="Consoli" />
                                 <asp:ValidationSummary ID="ValidationSummary13" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="Ledger" />
                                 <asp:ValidationSummary ID="VSProgressionReport" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="ProgressionReport" />
+                                <asp:ValidationSummary ID="ValidationSummary14" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="GradeCardIssueRegister" />
                             </div>
 
                             <div class="col-12">
@@ -972,7 +975,7 @@
             <asp:PostBackTrigger ControlID="btnSRNo" />
             <asp:PostBackTrigger ControlID="btnufm" />
             <asp:PostBackTrigger ControlID="btngraderange" />
-
+            <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
 
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>

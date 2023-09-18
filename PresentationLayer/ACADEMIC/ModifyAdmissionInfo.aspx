@@ -219,7 +219,7 @@
                                             ToolTip="Please Select Batch" TabIndex="5" ValidationGroup="Academic"
                                             CssClass="form-control" data-select2-enable="true" />
 
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlclaim"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlBatch"
                                             Display="None" SetFocusOnError="True" ErrorMessage="Please Select Admission Batch" ValidationGroup="Academic"
                                             InitialValue="0">
                                         </asp:RequiredFieldValidator>
@@ -232,7 +232,7 @@
                                         </div>
                                         <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
                                             ToolTip="Please select Semester" TabIndex="7" ValidationGroup="Academic" CssClass="form-control" />
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlclaim"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" SetFocusOnError="True" ErrorMessage="Please Select Semester" ValidationGroup="Academic"
                                             InitialValue="0">
                                         </asp:RequiredFieldValidator>
@@ -254,7 +254,7 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup></sup>
+                                             <sup>*</sup>
                                             <label>Academic Year </label>
                                         </div>
                                         <asp:DropDownList ID="ddlAcademicYear" runat="server" CssClass="form-control" data-select2-enable="true"
@@ -262,8 +262,8 @@
                                             ValidationGroup="Academic">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlclaim"
-                                            Display="None" SetFocusOnError="True" ErrorMessage="Please Select Admission Year" ValidationGroup="Academic"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlAcademicYear"
+                                            Display="None" SetFocusOnError="True" ErrorMessage="Please Select Academic Year" ValidationGroup="Academic"
                                             InitialValue="0">
                                         </asp:RequiredFieldValidator>
                                     </div>

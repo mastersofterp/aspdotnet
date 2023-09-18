@@ -299,6 +299,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     ListView1.Visible = true;
                     ListView1.DataSource = ds.Tables[0];
                     ListView1.DataBind();
+                    Label lblh1 = ListView1.FindControl("lblEmpCode1") as Label; 
+                    lblh1.Text = ds.Tables[0].Rows[0]["ColHeading"].ToString();
                     //DataTableReader dtr = ds.Tables[0].CreateDataReader();
                     //foreach (ListViewDataItem itm in ListView1.Items)
                     //{
@@ -364,7 +366,8 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
                     message = message + "Greetings of the day!<br /> <br />";
                     message = message + "Your NEW ERP Account has been created successfully! <br /> <br />";
                     message = message + "Please Login using following details <br />";
-                    message = message + "User Name : " + lblreg.Text + "<br />";
+                    message = message + "User Name : " + lbluaname.Text + "<br />";// Updated on 14092023
+                    // message = message + "User Name : " + lblreg.Text + "<br />";  // old
                     //message = message + "Password : " + lblreg.Text + "<br />";
                     message = message + "Password : " + strPwd + "<br /> <br />";
                     message = message + "click  " + loginurl + " here to Login";

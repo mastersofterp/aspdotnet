@@ -361,7 +361,8 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
 
                     #region Core Course
                     //Show Current Semester Courses ..
-                    DataSet dsCurrCourses = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 1);
+                    DataSet dsCurrCourses = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip),
+                        Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 1, Convert.ToInt32(Session["usertype"].ToString()));
 
                     lvCurrentSubjects.DataSource = dsCurrCourses.Tables[0];
                     lvCurrentSubjects.DataBind();
@@ -393,7 +394,8 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
 
                     #region elective Course
                     /************************************************Commented on 21-10-2021 by Dileep Kare Becoz no need get separate course list**************************************************/
-                    DataSet dsUniCodeSub = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 2);
+                    DataSet dsUniCodeSub = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip),
+                        Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 2, Convert.ToInt32(Session["usertype"].ToString()));
 
                     lvUniCoreSub.DataSource = dsUniCodeSub.Tables[0];
                     lvUniCoreSub.DataBind();
@@ -401,7 +403,8 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
 
                     #region Global Course
                     //DataSet dsGlobalCodeSub = objCommon.FillDropDown("ACD_COURSE C LEFT JOIN acd_course_teacher CT ON(C.SCHEMENO=CT.SCHEMENO AND CT.SEMESTERNO=CT.SEMESTERNO AND C.COURSENO=CT.COURSENO) LEFT JOIN USER_ACC U ON (U.UA_NO=CT.UA_NO) LEFT JOIN ACD_SECTION SE ON(SE.SECTIONNO=CT.SECTIONNO) INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID) INNER JOIN ACD_ELECTGROUP P ON (C.GROUPNO=P.GROUPNO)", "DISTINCT C.COURSENO", "C.CCODE,c.GROUPNO,P.GROUPNAME,ISNULL(P.CHOICEFOR,0) AS CHOICEFOR,C.COURSE_NAME,C.SUBID,C.ELECT,C.CREDITS as CREDITS,S.SUBNAME,(CASE WHEN (SELECT EXAM_REGISTERED FROM ACD_STUDENT_RESULT WHERE IDNO=" + Convert.ToInt32(lblName.ToolTip) + " AND SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip) + " AND COURSENO=C.COURSENO AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0)=0 AND PREV_STATUS=0)=1 THEN 1 ELSE 0 END)EXAM_REGISTERED,ISNULL(CT.INTAKE,0)-(select COUNT(ISNULL(COURSENO,0)) from ACD_STUDENT_RESULT where  SEMESTERNO=CT.SEMESTERNO AND CCODE=CT.CCODE AND SESSIONNO=CT.SESSIONNO AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ") AS INTAKE,U.UA_FULLNAME,SE.SECTIONNAME,isnull(SE.SectionNO,0) as SectionNO,U.UA_NO", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1 AND  C.ELECT=1 AND ISNULL(C.GLOBALELE,0)=0", "C.ELECT,C.GROUPNO");
-                    DataSet dsGlobalCodeSub = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 3);
+                    DataSet dsGlobalCodeSub = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip),
+                        Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 3, Convert.ToInt32(Session["usertype"].ToString()));
 
                     lvGlobalSubjects.DataSource = dsGlobalCodeSub.Tables[0];
                     lvGlobalSubjects.DataBind();
@@ -419,7 +422,8 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     //                                               " VC.SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip),
                     //                                               " VC.GROUPID");
 
-                    DataSet dsValueAdded = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 4);
+                    DataSet dsValueAdded = objSReg.GetStudentCourseRegistrationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip),
+                        Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 4, Convert.ToInt32(Session["usertype"].ToString()));
 
                     if (dsValueAdded != null && dsValueAdded.Tables[0].Rows.Count > 0)
                     {
