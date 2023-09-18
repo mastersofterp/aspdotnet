@@ -2282,4 +2282,80 @@ public partial class ESTABLISHMENT_ServiceBook_OtherMiscelnew : System.Web.UI.Pa
     }
 
     #endregion
+    protected void btnEditPhdDetails_Click(object sender, ImageClickEventArgs e)
+    {
+        ViewState["EDIT_SPNO_SHORTDESC"] = string.Empty;
+        ImageButton btnEditShortDesc = sender as ImageButton;
+        DataTable dtShorDesc;
+        if (ViewState["PRecTbl"] != null && ((DataTable)ViewState["PRecTbl"]) != null)
+        {
+            dtShorDesc = ((DataTable)ViewState["PRecTbl"]);
+            ViewState["EDIT_SPNO_SHORTDESC"] = btnEditShortDesc.CommandArgument;
+
+            DataRow dr = this.GetEditableDatarowPhd(dtShorDesc, btnEditShortDesc.CommandArgument);
+            txtphdgui.Text = dr["PHDGUIDED"].ToString();
+            txtphdawd.Text = dr["PHDAWARD"].ToString();
+            txtCandidate.Text = dr["CANDIDATENAME"].ToString();
+            txtDate.Text = dr["REGDATE"].ToString();
+            txtUniversity.Text = dr["UNIVERSITYNAME"].ToString();
+            txtResearch.Text = dr["RESEARCHNAME"].ToString();
+            txtResGuide.Text = dr["GUIDENAME"].ToString();
+            txtNo.Text = dr["PUBLICATIONPHDNO"].ToString();
+            txtGrant.Text = dr["PHDGRANT"].ToString();
+            txtPatent.Text = dr["PHDPATENT"].ToString();
+            txtRegNum.Text = dr["REGISTRATIONNO"].ToString();
+            rdbStatus.Text = dr["PHDSTATUS"].ToString();
+            txtYear.Text = dr["YEAR"].ToString();
+            txtThesis.Text = dr["THESISTITLE"].ToString();
+            dtShorDesc.Rows.Remove(dr);
+            ViewState["PRecTbl"] = dtShorDesc;
+            lvphd.DataSource = dtShorDesc;
+            lvphd.DataBind();
+            ViewState["dtaction"] = "edit";
+        }
+    }
+    protected void btnEditIdDetails_Click(object sender, ImageClickEventArgs e)
+    {
+        ViewState["EDIT_SIDNO_SHORTDESC"] = string.Empty;
+        ImageButton btnEditShortDesc = sender as ImageButton;
+        DataTable dtShorDesc;
+        if (ViewState["IdRecTbl"] != null && ((DataTable)ViewState["IdRecTbl"]) != null)
+        {
+            dtShorDesc = ((DataTable)ViewState["IdRecTbl"]);
+            ViewState["EDIT_SIDNO_SHORTDESC"] = btnEditShortDesc.CommandArgument;
+
+            DataRow dr = this.GetEditableDatarowforIdDetail(dtShorDesc, btnEditShortDesc.CommandArgument);
+            txtWeb.Text = dr["WEB"].ToString();
+            txtScopus.Text = dr["SCOPUS"].ToString();
+            txtOrchid.Text = dr["ORCHID"].ToString();
+            txtSupervisor.Text = dr["RESEARCH"].ToString();
+            dtShorDesc.Rows.Remove(dr);
+            ViewState["IdRecTbl"] = dtShorDesc;
+            lvIDList.DataSource = dtShorDesc;
+            lvIDList.DataBind();
+            ViewState["dtaction"] = "edit";
+        }
+    }
+    protected void btnEditThesisDetails_Click(object sender, ImageClickEventArgs e)
+    {
+        ViewState["EDIT_THIDNO_SHORTDESC"] = string.Empty;
+        ImageButton btnEditShortDesc = sender as ImageButton;
+        DataTable dtShorDesc;
+        if (ViewState["ThRecTbl"] != null && ((DataTable)ViewState["ThRecTbl"]) != null)
+        {
+            dtShorDesc = ((DataTable)ViewState["ThRecTbl"]);
+            ViewState["EDIT_THIDNO_SHORTDESC"] = btnEditShortDesc.CommandArgument;
+
+            DataRow dr = this.GetEditableDatarowforThesis(dtShorDesc, btnEditShortDesc.CommandArgument);
+            txtThesisTitle.Text = dr["THESISTITLE"].ToString();
+            txtThesisUniversity.Text = dr["THESISUNIVERSITY"].ToString();
+            txtMonth.Text = dr["MONTH"].ToString();
+            txtThesisYear.Text = dr["YEAR"].ToString();
+            dtShorDesc.Rows.Remove(dr);
+            ViewState["ThRecTbl"] = dtShorDesc;
+            lvThesis.DataSource = dtShorDesc;
+            lvThesis.DataBind();
+            ViewState["dtaction"] = "edit";
+        }
+    }
 }
