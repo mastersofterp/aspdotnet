@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
+<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" ViewStateEncryptionMode="Always" EnableViewStateMac="true"
     CodeFile="CourseRegistrationForPhd.aspx.cs" Inherits="ACADEMIC_CourseRegistration"
     Title="" MaintainScrollPositionOnPostback="true" %>
 

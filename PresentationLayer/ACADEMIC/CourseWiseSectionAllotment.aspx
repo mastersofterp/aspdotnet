@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CourseWiseSectionAllotment.aspx.cs" MasterPageFile="~/SiteMasterPage.master" Inherits="ACADEMIC_CourseWiseSectionAllotment" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CourseWiseSectionAllotment.aspx.cs" ViewStateEncryptionMode="Always" EnableViewStateMac="true" MasterPageFile="~/SiteMasterPage.master" Inherits="ACADEMIC_CourseWiseSectionAllotment" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
