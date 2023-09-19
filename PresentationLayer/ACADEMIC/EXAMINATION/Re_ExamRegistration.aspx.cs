@@ -264,7 +264,9 @@ public partial class ACADEMIC_EXAMINATION_Re_ExamRegistration : System.Web.UI.Pa
 
             if (Convert.ToInt32(idno) > 0)
             {
-                DataSet dsStudent = objSReg.GetStudentReExamDetails(Convert.ToInt32(idno), Convert.ToInt32(ddlSession.SelectedValue), 0);
+                //DataSet dsStudent = objSReg.GetStudentReExamDetails(Convert.ToInt32(idno), Convert.ToInt32(ddlSession.SelectedValue), 0);
+
+                DataSet dsStudent = objSReg.GetStudentReExamDetails(Convert.ToInt32(idno), Convert.ToInt32(ddlSession.SelectedValue),Convert.ToInt32(Session["semesterre_exam"]));
 
                 if (dsStudent != null && dsStudent.Tables.Count > 0)
                 {
@@ -448,6 +450,11 @@ public partial class ACADEMIC_EXAMINATION_Re_ExamRegistration : System.Web.UI.Pa
 
         DataSet dsCurrCourses = null;
 
+        string sp_procedure = string.Empty;
+        string sp_parameters = string.Empty;
+        string sp_callValues = string.Empty;
+
+
         //Show Courses for Revaluation
         //dsCurrCourses = objSReg.GetStudentDetailsforReExam(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblScheme.ToolTip));
 
@@ -463,17 +470,21 @@ public partial class ACADEMIC_EXAMINATION_Re_ExamRegistration : System.Web.UI.Pa
 
         if (Convert.ToInt32(Session["usertype"].ToString()) == 2)
         {
-            string sp_procedure = "PKG_ACAD_GET_FAIL_COURSE_LIST_FOR_RE_EXAM_TEST";
-            string sp_parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_SCHEMENO,@P_IDNO";
-            string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + Convert.ToInt32(Session["idno"].ToString()) + "";
+             sp_procedure = "PKG_ACAD_GET_FAIL_COURSE_LIST_FOR_RE_EXAM_TEST";
+             sp_parameters = "@P_SESSIONNO,@P_SEMESTERNO,@P_SCHEMENO,@P_IDNO";
+             sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + Convert.ToInt32(Session["idno"].ToString()) + "";
             dsCurrCourses = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
         }
         else
         {
             //
+            sp_procedure = "PKG_ACAD_GET_FAIL_COURSE_LIST_FOR_RE_EXAM_RCPIT";
+            sp_parameters = "@P_IDNO,@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO";
+            sp_callValues = "" + Convert.ToInt32(Session["idno"].ToString()) + "," + Convert.ToInt32(Session["Sessionno"]) + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + Convert.ToInt32(Session["semesterre_exam"]) + "";
+            dsCurrCourses = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
 
-
-            dsCurrCourses = objSReg.GetStudentDetailsforReExam(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblScheme.ToolTip));
+           // int SESSIONNOOOO = Convert.ToInt32(Session["Sessionno"]);
+           //dsCurrCourses = objSReg.GetStudentDetailsforReExam(Convert.ToInt32(Session["idno"].ToString()), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblScheme.ToolTip));
         }
 
 
@@ -490,9 +501,12 @@ public partial class ACADEMIC_EXAMINATION_Re_ExamRegistration : System.Web.UI.Pa
 
             if (Convert.ToInt32(Session["usertype"]) == 1)
             {
-                revalcount = Convert.ToInt32(objCommon.LookUp("ACD_REEXAM_REGISTERED_AND_TRANSACTION_DETAILS", "COUNT(*)", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"])));
+                //revalcount = Convert.ToInt32(objCommon.LookUp("ACD_REEXAM_REGISTERED_AND_TRANSACTION_DETAILS", "COUNT(*)", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"])));
 
-                //Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(*)", "ISNULL(CANCEL,0)=0 AND IDNO=" + ViewState["idno"] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip) + " AND ISNULL(EXAM_REGISTERED,0)=1 AND ISNULL(REGISTERED,0)=1"));
+
+                revalcount = Convert.ToInt32(objCommon.LookUp("ACD_REEXAM_REGISTERED_AND_TRANSACTION_DETAILS", "COUNT(*)", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SEMESTERNO="+Convert.ToInt32(Session["semesterre_exam"])+" AND ORGANIZATIONID=" + Convert.ToInt32(Session["OrgId"])));
+
+              
             }
             else
             {
@@ -919,7 +933,7 @@ public partial class ACADEMIC_EXAMINATION_Re_ExamRegistration : System.Web.UI.Pa
             {
                 if (Convert.ToInt32(Session["usertype"]) == 1)
                 {
-                    dsStudent = objSReg.GetStudentReExamDetails(Convert.ToInt32(idno), Convert.ToInt32(ddlSession.SelectedValue), 0);
+                    dsStudent = objSReg.GetStudentReExamDetails(Convert.ToInt32(idno), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["semesterre_exam"]));
                 }
                 else
                 {
