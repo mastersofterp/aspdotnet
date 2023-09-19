@@ -33,7 +33,7 @@
         function checkAddress(txt) {
             //var address = document.getElementById('txtusn');
             
-            var specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|<>?]+/;
+            var specialChars = /[!@#$%^&*()_+\=\[\]{};':"\\|<>?]+/;
 
             if (specialChars.test(txt.value)) {
                 alert('Special Symbols Are Not Allowed!!!');
@@ -613,14 +613,15 @@
                                                     <asp:ListItem Value="26">Mother Name</asp:ListItem>
                                                     <asp:ListItem Value="27">Part Time/Full Time</asp:ListItem>
                                                     <asp:ListItem Value="28">Address</asp:ListItem>
-                                                    <%--Added by Vinay Mishra on 17/08/2023 & 28/08/2023--%>
+                                                    <%--Added by Vinay Mishra on 17/08/2023 & 28/08/2023 & 14/09/2023--%>
                                                     <asp:ListItem Value="29">Medium Of Instruction</asp:ListItem>
                                                     <asp:ListItem Value="30">Parents Email Id</asp:ListItem>
+                                                    <asp:ListItem Value="31">Merit Number</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>
                                             <div style="margin-top:4px">
-                                                <asp:Label ID="lblAddressNote" runat="server" ForeColor="Red" Font-Bold="true" CssClass="mt-2" Text="Note - Do Not Use Single Quotation(') Mark/Character During Entering the Address/Permanent Address." Visible="false"></asp:Label>
+                                                <asp:Label ID="lblAddressNote" runat="server" ForeColor="Red" Font-Bold="true" CssClass="mt-2" Text="Note - Use only Comma(,), Hyphen(-) and Backslash(/) characters during entering the Address/Permanent Address. Other special character's are not acceptable." Visible="false"></asp:Label>
                                             </div>
                                         </div>
                                     </div>

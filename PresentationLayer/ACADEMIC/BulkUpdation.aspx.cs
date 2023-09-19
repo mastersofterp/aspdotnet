@@ -213,7 +213,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         {
                             categorys += (lvItem.FindControl("txtAdmDate") as TextBox).Text + "$";
                         }
-                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21")
+                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31")
                         {
                             categorys += (lvItem.FindControl("txtusn") as TextBox).Text + "$";
                         }
@@ -407,6 +407,10 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             else if (rdbCat.SelectedValue == "30")  //ADDED BY VINAY MISHRA ON 28/08/2023 TO ADD PARENT EMAIL FIELD FOR UPDATION
             {
                 dsParentEmail = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.FATHER_EMAIL AS COLUMNNAMEFATHEREMAIL,S.MOTHER_EMAIL AS COLUMNNAMEMOTHEREMAIL, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
+            else if (rdbCat.SelectedValue == "31")  //ADDED BY VINAY MISHRA ON 14/09/2023 TO ADD MERIT NUMBER FIELD FOR UPDATION
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.MERITNO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
 
             #region studfather
@@ -910,6 +914,16 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ddlcat.Visible = true;
                 ds = objCommon.FillDropDown("ACD_MEDIUMOFINSTRUCTION_MASTER WITH (NOLOCK)", "MEDIUMID AS COLUMNID", "MEDIUMNAME AS COLUMNNAME", "MEDIUMID > 0", "MEDIUMID");
             }
+            else if (rdbCat.SelectedValue == "31")  //ADDED BY VINAY MISHRA ON 14/09/2023 - ADD FIELD TO UPDATE MERIT NUMBER FOR STUDENTS
+            {
+                txtLAdd.Visible = false;
+                txtUSN.Visible = true;
+                txtemail.Visible = false;
+                txtAdmissionDate.Visible = false;
+                imgCal.Visible = false;
+                ddlcat.Visible = false;
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MERITNO AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1002,6 +1016,19 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
 
                  //   lblStudent.Visible = true;
                 }
+                else if (rdbCat.SelectedValue == "31")  //Added By Vinay Mishra on 14092023 - To Update Merit Number for Students
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+
+                    txtUSN.MaxLength = 7;
+                    txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
+
+                }
                 else
                 {
 
@@ -1031,7 +1058,8 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
         if (rdbCat.SelectedValue == "28")
         {
             lblAddressNote.Visible = true;
-            objCommon.DisplayMessage(this.updStudent, "Note - Do Not Use Single Quotation(') Mark Character During Entering the Address Permanent Address.", this.Page);
+            objCommon.DisplayMessage(this.updStudent, "Note - Use only Comma(,) , Hyphen(-), Backslash(/) characters during entering the Address/Permanent Address. Other special character's are not acceptable.", this.Page);
+            //objCommon.DisplayMessage(this.updStudent, "Note - Do Not Use Single Quotation(') Mark/Character During Entering the Address Permanent Address.", this.Page);
         }
     }
 
