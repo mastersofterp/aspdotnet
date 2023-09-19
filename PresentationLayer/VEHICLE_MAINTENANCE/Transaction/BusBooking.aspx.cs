@@ -139,22 +139,71 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BusBooking : System.Web.UI.
     {
         
         //DataSet ds = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS", "IDNO", "BID", "IDNO= '" + Convert.ToInt32(user_no) + "'", "");
-        DataSet ds = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS", "IDNO", "BID", "IDNO= '" + Convert.ToInt32(user_no) + "' and SESSION=(select ACADEMIC_YEAR_ID from ACD_ACADEMIC_YEAR where ACTIVE_STATUS=1 and IS_CURRENT_FY=1)", "");
+        DataSet ds = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS", "SUM(FEES) FEES,IDNO", "ROUTEID,STOPID", "IDNO= '" + Convert.ToInt32(user_no) + "' and SESSION=(select ACADEMIC_YEAR_ID from ACD_ACADEMIC_YEAR where ACTIVE_STATUS=1 and IS_CURRENT_FY=1) group by IDNO,ROUTEID,STOPID ", "");
       if (ds.Tables[0].Rows.Count > 0)
         {
+            int Routefees = 0;
+            int bookedfees = 0;
+            bookedfees = Convert.ToInt32(ds.Tables[0].Rows[0]["FEES"]);
+            //getroutefees(Convert.ToInt32(ddlStop.SelectedValue), Convert.ToInt32(ddlRoute.SelectedValue));
+           // getroutefees(Convert.ToInt32(ds.Tables[0].Rows[0]["STOPID"].ToString()), Convert.ToInt32(ds.Tables[0].Rows[0]["ROUTEID"].ToString()));
+            DataSet dsbookedfees = objVMC.GetRouteFees(Convert.ToInt32(ds.Tables[0].Rows[0]["STOPID"].ToString()), Convert.ToInt32(ds.Tables[0].Rows[0]["ROUTEID"].ToString()));
+            if (dsbookedfees != null)
+          {
+              if (dsbookedfees.Tables[0].Rows.Count > 0)
+              {
+                  Routefees = Convert.ToInt32(dsbookedfees.Tables[0].Rows[0]["ROUTE_FEES"].ToString());
+              }
+          }
+            if (bookedfees == Routefees)
+          {
             btnSubmit.Enabled = false;
             btnReport.Enabled = true;
-            DataSet dsBookingDetails = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS A Inner Join VEHICLE_ROUTEMASTER B ON (A.ROUTEID=B.ROUTEID) Inner Join VEHICLE_STOPMASTER C ON (A.STOPID=C.STOPID)", "B.ROUTENAME +' '+ROUTE_NUMBER as RouteName,C.STOPNAME", "A.SEAT_NO", "IDNO= '" + Convert.ToInt32(user_no) + "'", "");
+            DataSet dsBookingDetails = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS A Inner Join VEHICLE_ROUTEMASTER B ON (A.ROUTEID=B.ROUTEID) Inner Join VEHICLE_STOPMASTER C ON (A.STOPID=C.STOPID)", "B.ROUTENAME +' '+ROUTE_NUMBER as RouteName,C.STOPNAME", "A.SEAT_NO,A.ROUTEID,A.STOPID,A.FEES", "IDNO= '" + Convert.ToInt32(user_no) + "'", "");
             string RouteName = dsBookingDetails.Tables[0].Rows[0]["RouteName"].ToString();
             string StopName = dsBookingDetails.Tables[0].Rows[0]["STOPNAME"].ToString();
             int SeatNo = Convert.ToInt32(dsBookingDetails.Tables[0].Rows[0]["SEAT_NO"]);
            // objCommon.DisplayMessage(this.Page, "Route='" + RouteName + "' Stope='" + StopName + "' Seat='" + SeatNo + "'", this.Page);
            // string BookingStatus = "Route='" + RouteName + "' Stope='" + StopName + "' Seat='" + SeatNo + "'";
           //  objCommon.DisplayMessage(this.updActivity, BookingStatus , this.Page);
+            int route = Convert.ToInt32(dsBookingDetails.Tables[0].Rows[0]["ROUTEID"].ToString());
+            DateTime StopTime = Convert.ToDateTime(objCommon.LookUp("vehicle_routemaster", "Cast(STARTING_TIME as time) STARTING_TIME", "ROUTEID='" + Convert.ToInt32(route) + "'"));
+            // DateTime sttime = Convert.ToDateTime(StopTime.tostring("hh:mm tt"));
+            txtStopStarttime.Text = StopTime.ToString("hh:mm tt");
 
             string BookingStatus = "Route=" + ' ' + " " + RouteName + " ,Stope=" + ' ' + " " + StopName + " ,Seat=" + ' ' + " " + SeatNo;
             objCommon.DisplayMessage(this.Page, BookingStatus, this.Page);
+          }
+            if (bookedfees < Routefees)
+        {
+
+            DataSet dsBookingDetails = objCommon.FillDropDown("VEHICLE_BUS_BOOKING_DETAILS A Inner Join VEHICLE_ROUTEMASTER B ON (A.ROUTEID=B.ROUTEID) Inner Join VEHICLE_STOPMASTER C ON (A.STOPID=C.STOPID)", "B.ROUTENAME +' '+ROUTE_NUMBER as RouteName,C.STOPNAME", "A.SEAT_NO,A.ROUTEID,A.STOPID,A.FEES", "IDNO= '" + Convert.ToInt32(user_no) + "'", "");
+            string RouteName = dsBookingDetails.Tables[0].Rows[0]["RouteName"].ToString();
+            string StopName = dsBookingDetails.Tables[0].Rows[0]["STOPNAME"].ToString();
+            int SeatNo = Convert.ToInt32(dsBookingDetails.Tables[0].Rows[0]["SEAT_NO"]);
+            // objCommon.DisplayMessage(this.Page, "Route='" + RouteName + "' Stope='" + StopName + "' Seat='" + SeatNo + "'", this.Page);
+            // string BookingStatus = "Route='" + RouteName + "' Stope='" + StopName + "' Seat='" + SeatNo + "'";
+            //  objCommon.DisplayMessage(this.updActivity, BookingStatus , this.Page);
+            int balancefees = Routefees - bookedfees;
+            ddlRoute.SelectedValue = dsBookingDetails.Tables[0].Rows[0]["ROUTEID"].ToString();
+            ddlRoute_SelectedIndexChanged(null, null);
+            ddlStop.SelectedValue = dsBookingDetails.Tables[0].Rows[0]["STOPID"].ToString();
+            lblfees.Text = balancefees.ToString();
+            div1.Visible = true;
+            txtBusSeate.Text = dsBookingDetails.Tables[0].Rows[0]["SEAT_NO"].ToString();
+            lblPfees.Text = dsBookingDetails.Tables[0].Rows[0]["FEES"].ToString();
+            lblTfees.Text = Routefees.ToString();
+            divSeats.Visible = true;
+            int route =Convert.ToInt32( dsBookingDetails.Tables[0].Rows[0]["ROUTEID"].ToString());
+            DateTime StopTime = Convert.ToDateTime(objCommon.LookUp("vehicle_routemaster", "Cast(STARTING_TIME as time) STARTING_TIME", "ROUTEID='" + Convert.ToInt32(route) + "'"));
+            // DateTime sttime = Convert.ToDateTime(StopTime.tostring("hh:mm tt"));
+            txtStopStarttime.Text = StopTime.ToString("hh:mm tt");
+            div5.Visible = true;
+            string BookingStatus = "Route=" + ' ' + " " + RouteName + " ,Stope=" + ' ' + " " + StopName + " ,Seat=" + ' ' + " " + SeatNo + ",                     Balance Amount=" + ' ' + " " + balancefees;
+            objCommon.DisplayMessage(this.Page, BookingStatus , this.Page);
         }
+        }
+       
     }
 
     private void BlobDetails()

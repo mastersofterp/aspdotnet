@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="BusBooking.aspx.cs" Inherits="VEHICLE_MAINTENANCE_Transaction_BusBooking" meta:resourcekey="PageResource1" uiculture="auto" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="BusBooking.aspx.cs" Inherits="VEHICLE_MAINTENANCE_Transaction_BusBooking" meta:resourcekey="PageResource1" UICulture="auto" %>
 
 <%@ Register Assembly="AutoSuggestBox" Namespace="ASB" TagPrefix="cc2" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
@@ -200,11 +200,30 @@
                                                 <asp:TextBox ID="txtBusSeate" runat="server" ReadOnly="True" meta:resourcekey="txtBusSeateResource1"></asp:TextBox>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="div1" visible="False">
-                                                <div class="label-dynamic">
-                                                    <sup>*</sup>
-                                                    <label>Fees</label>
+                                                <div class="row">
+                                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <label>Fees</label>
+                                                        </div>
+                                                        <asp:TextBox ID="lblfees" runat="server" ReadOnly="True" meta:resourcekey="lblfeesResource1"></asp:TextBox>
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <label>Paid Fees</label>
+                                                        </div>
+                                                        <asp:TextBox ID="lblPfees" runat="server" ReadOnly="True" meta:resourcekey="lblfeesResource1"></asp:TextBox>
+                                                    </div>
+                                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <label>Total Fees</label>
+                                                        </div>
+                                                        <asp:TextBox ID="lblTfees" runat="server" ReadOnly="True" meta:resourcekey="lblfeesResource1"></asp:TextBox>
+                                                    </div>
                                                 </div>
-                                                <asp:TextBox ID="lblfees" runat="server" ReadOnly="True" meta:resourcekey="lblfeesResource1"></asp:TextBox>
+
 
                                             </div>
 
@@ -220,7 +239,7 @@
 
 
                                         </div>
-                                    </div>
+            </div>
 
 
                                     <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divimg" visible="False">
