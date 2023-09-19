@@ -123,6 +123,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         ddlSemester.Items.Clear();
         ddlSemester.Items.Add(new ListItem("Please Select", "0"));
         lstMinor.Items.Clear();
+        minorVis.Visible = false;
         //lstMinor.Items.Add(new ListItem("Please Select", "0"));
     }
 
@@ -139,6 +140,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
     protected void BindDropDownSemester()
     {
         objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "DISTINCT(SEMESTERNO)", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
+        //minorVis.Visible = false;
     }
 
     protected void BindDropDownMinor()
@@ -169,26 +171,43 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
     protected void ddlSchool_SelectedIndexChanged(object sender, EventArgs e)
     {
         BindDropDownDegree(ddlSchool.SelectedValue);
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlSemester.SelectedIndex = 0;
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        minorVis.Visible = false;
     }
 
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
         BindDropDownBranch(ddlSchool.SelectedValue, ddlDegree.SelectedValue);
+        ddlBranch.SelectedIndex = 0;
+        ddlSemester.SelectedIndex = 0;
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        minorVis.Visible = false;
     }
 
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
         BindDropDownSemester();
-        BindDropDownMinor();
+        ddlSemester.SelectedIndex = 0;
+        //BindDropDownMinor();
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        minorVis.Visible = false;
+    }
+
+    protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        pnlCourse.Visible = false;
+        pnlMinor.Visible = false;
+        pnlSubject.Visible = false;
+        minorVis.Visible = false;
     }
 
     protected void btnShow_Click(object sender, EventArgs e)
@@ -233,6 +252,20 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
             lvMinor.Visible = true;
             lvMinor.DataSource = dss;
             lvMinor.DataBind();
+
+            minorVis.Visible = true;
+            lstMinor.Items.Clear();
+            BindDropDownMinor();
+            if (lstMinor.Items.Count <= 0)
+            {
+                objCommon.DisplayMessage(this.updMinor, "Minor Not Alloted For The Courses!!!", this.Page);
+                return;
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.updMinor, "No Record Found For Minor Allotment!!!", this.Page);
+            return;
         }
     }
 
@@ -270,6 +303,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         if (count <= 0)
         {
             objCommon.DisplayMessage(this, "Please Select atleast One Student For Minor Allotment!!!", this);
+            //minorVis.Visible = false;
             return;
         }
         else
@@ -320,10 +354,12 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
                 lvMinor.DataBind();
                 pnlMinor.Visible = false;
                 lvMinor.Visible = false;
+                minorVis.Visible = false;
             }
             else
             {
                 objCommon.DisplayMessage(this.updMinor, "No Records Found For Minor Allotment!!!", this.Page);
+                //minorVis.Visible = false;
                 return;
             }
             
@@ -334,6 +370,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Clear();
+        minorVis.Visible = false;
         //ClearAll();
     }
 
@@ -459,6 +496,8 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         ddlCollege.Items.Clear();
         ddlCollege.Items.Add(new ListItem("Please Select", "0"));
         //CollegeDropDownList();
+        ddlScheme.Items.Clear();
+        ddlScheme.Items.Add(new ListItem("Please Select", "0"));
         ddlAdmBatch.Items.Clear();
         ddlAdmBatch.Items.Add(new ListItem("Please Select", "0"));
         //BatchDropDownList();
@@ -469,6 +508,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         txtTotalStd.Text = string.Empty;
         ddlCourseMinor.Items.Clear();
         MinorBind();
+        ddlCourseType.SelectedIndex = 0;
         pnlCourse.Visible = false;
         pnlSubject.Visible = false;
     }
@@ -479,30 +519,48 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        ddlCollege.ClearSelection();
+        ddlScheme.ClearSelection();
+        ddlAdmBatch.ClearSelection();
+        ddlSemesterminor.ClearSelection();
+        ddlSection.ClearSelection();
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.Items.Clear();
+        ddlCourseType.SelectedIndex = 0;
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddlminorSession.SelectedIndex > 0)
-        {
-            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH WITH (NOLOCK)", "DISTINCT(BATCHNO)", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
-            ddlAdmBatch.Focus();
-
-            //ddlSemester.Items.Clear();
-            //ddlSemester.Items.Add(new ListItem("Please Select", "0"));
-        }
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
-        MinorBind();
+
+        if (ddlminorSession.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlScheme, "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_SCHEME ACDS ON (ACDS.DEGREENO = CDB.DEGREENO AND ACDS.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COURSE C ON (C.SCHEMENO = ACDS.SCHEMENO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.COLLEGE_ID = CDB.COLLEGE_ID)", "DISTINCT(ACDS.SCHEMENO)", "SCHEMENAME", "CDB.CDBNO > 0 AND ISNULL(IS_ACTIVE,0) = 1 AND CDB.CDBNO = " + ddlCollege.SelectedValue + " AND SESSIONNO = " + ddlminorSession.SelectedValue, "ACDS.SCHEMENO");
+            ddlScheme.Focus();
+        }
+        
+        ddlAdmBatch.ClearSelection();
+        ddlSemesterminor.ClearSelection();
+        ddlSection.ClearSelection();
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.Items.Clear();
+        ddlCourseType.SelectedIndex = 0;
+        //MinorBind();
     }
 
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlSemesterminor, "ACD_SEMESTER", "DISTINCT(SEMESTERNO)", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
+        //objCommon.FillDropDownList(ddlSemesterminor, "ACD_SEMESTER", "DISTINCT(SEMESTERNO)", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        ddlSemesterminor.ClearSelection();
+        ddlSection.ClearSelection();
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.ClearSelection();
+        ddlCourseType.SelectedIndex = 0;
     }
 
     protected void ddlSemesterminor_SelectedIndexChanged(object sender, EventArgs e)
@@ -511,6 +569,51 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         pnlCourse.Visible = false;
         pnlMinor.Visible = false;
         pnlSubject.Visible = false;
+        ddlSection.ClearSelection();
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.ClearSelection();
+        ddlCourseType.SelectedIndex = 0;
+    }
+
+    protected void ddlCourseType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        pnlCourse.Visible = false;
+        pnlMinor.Visible = false;
+        pnlSubject.Visible = false;
+        txtTotalStd.Text = string.Empty;
+    }
+
+    protected void ddlSection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        pnlCourse.Visible = false;
+        pnlMinor.Visible = false;
+        pnlSubject.Visible = false;
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.ClearSelection();
+        ddlCourseType.SelectedIndex = 0;
+    }
+
+    protected void ddlScheme_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        pnlCourse.Visible = false;
+        pnlMinor.Visible = false;
+        pnlSubject.Visible = false;
+        MinorBind();
+
+        if (ddlminorSession.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH WITH (NOLOCK)", "DISTINCT(BATCHNO)", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
+            ddlAdmBatch.Focus();
+            objCommon.FillDropDownList(ddlSemesterminor, "ACD_SEMESTER", "DISTINCT(SEMESTERNO)", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
+            //ddlSemester.Items.Clear();
+            //ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+        }
+        
+        ddlSemesterminor.ClearSelection();
+        ddlSection.ClearSelection();
+        txtTotalStd.Text = string.Empty;
+        ddlCourseMinor.ClearSelection();
+        ddlCourseType.SelectedIndex = 0;
     }
 
     protected void btnCancel2_Click(object sender, EventArgs e)
@@ -526,6 +629,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         string admBatch = ddlAdmBatch.SelectedValue;
         string semester = ddlSemesterminor.SelectedValue;
         string section = ddlSection.SelectedValue;
+        string scheme = ddlScheme.SelectedValue;
         string minorlst = string.Empty;
         int stdTotal = 0;
         string stdList = string.Empty;
@@ -571,7 +675,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
 
                     if (stdTotal == 1)
                     {
-                        ST = objCommon.MinorCourseRegistration(sessionNo, clgBranch, admBatch, semester, section, minorlst, stdTotal, std.ToolTip, courseList, sessionuid, IpAddress, msessionuid);
+                        ST = objCommon.MinorCourseRegistration(sessionNo, clgBranch, scheme, admBatch, semester, section, minorlst, stdTotal, std.ToolTip, courseList, sessionuid, IpAddress, msessionuid);
                     }
                     else
                     {
@@ -586,6 +690,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
                 }
             }
         }
+
         if (ST != 0)
         {
             objCommon.DisplayMessage(this.updCourse, "Course Registered Successfully!!!", this.Page);
@@ -608,12 +713,29 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
             return;
         }
 
+        if (ddlCollege.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select College & Program!!!", this.Page);
+            return;
+        }
+
+        if (ddlSemesterminor.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Semester!!!", this.Page);
+            return;
+        }
+
+        if (ddlSection.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Section!!!", this.Page);
+            return;
+        }
         int count = 0;
-        //if (ddlCourseMinor.Items.Count <= 0)
-        //{
-        //    objCommon.DisplayMessage(this.updCourse, "Please Select Minor!!!", this.Page);
-        //    return;
-        //}
+        if (ddlCourseMinor.Items.Count <= 0)
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Minor!!!", this.Page);
+            return;
+        }
 
         DataSet ds = new DataSet();
         
@@ -634,7 +756,15 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         if (count != 0)
         {
             dss = objCommon.GetStudentListForCourse(mnrGrp);
-            ds = objCommon.FillDropDown("ACD_MINOR_OFFERED_COURSE A CROSS APPLY (SELECT * FROM DBO.Split (A.COURSENO,',')) B CROSS APPLY (SELECT * FROM DBO.Split (A.CCODE,',')) C CROSS APPLY (SELECT * FROM DBO.Split (A.COURSE_NAME,',')) D", "DISTINCT B.Value AS COURSENO", "C.VALUE AS CCODE, D.Value AS COURSE_NAME", "B.ID = C.Id AND C.ID = D.Id AND MNR_GRP_NO IN (SELECT VALUE FROM dbo.Split('" + mnrGrp + "', ','))", "COURSENO");
+            if (ddlCourseType.SelectedIndex == 2)
+            {
+                ds = objCommon.FillDropDown("ACD_MINOR_OFFERED_COURSE A CROSS APPLY (SELECT * FROM DBO.Split (A.COURSENO,',')) B CROSS APPLY (SELECT * FROM DBO.Split (A.CCODE,',')) C CROSS APPLY (SELECT * FROM DBO.Split (A.COURSE_NAME,',')) D", "DISTINCT B.Value AS COURSENO", "C.VALUE AS CCODE, D.Value AS COURSE_NAME", "B.ID = C.Id AND C.ID = D.Id AND SCHEMENO = " + ddlScheme.SelectedValue +" AND MNR_GRP_NO IN (SELECT VALUE FROM dbo.Split('" + mnrGrp + "', ','))", "COURSENO");
+            }
+            else if (ddlCourseType.SelectedIndex == 1 || ddlCourseType.SelectedIndex == 0)
+            {
+                ds = objCommon.FillDropDown("ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_SCHEME ACDS ON (ACDS.DEGREENO = CDB.DEGREENO AND ACDS.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COURSE C ON (C.SCHEMENO = ACDS.SCHEMENO) INNER JOIN ACD_SESSION_MASTER SM ON (SM.COLLEGE_ID = CDB.COLLEGE_ID)", "DISTINCT C.COURSENO", "C.CCODE + '-' + C.COURSE_NAME AS COURSE_NAME, C.CCODE, ACDS.SCHEMENO, ACDS.SCHEMENAME", "CDB.CDBNO > 0 AND C.SCHEMENO > 0 AND ISNULL(IS_ACTIVE,0) = 1 AND CDB.CDBNO = " + ddlCollege.SelectedValue + " AND SESSIONNO = " + ddlminorSession.SelectedValue + " AND ACDS.SCHEMENO = " + ddlScheme.SelectedValue, "C.COURSENO");
+            }
+            
             //ds = objCommon.FillDropDown("ACD_MINOR_OFFERED_COURSE CROSS APPLY STRING_SPLIT(COURSENO, ',')", "VALUE AS COURSENO", "COURSE_NAME, MNR_OFFERED_COURSE_NO, CDB_NO", "MNR_GRP_NO IN (SELECT VALUE FROM dbo.Split('" + mnrGrp + "', ','))", "COURSENO");
             //, A.MNR_OFFERED_COURSE_NO, A.CDB_NO
 
@@ -683,4 +813,5 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
         lvSubject.Visible = true;
     }
     #endregion Second Tab "Course Registration"
+    
 }
