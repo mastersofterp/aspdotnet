@@ -801,7 +801,7 @@
                                         <asp:TextBox ID="txtGrnNumbers" runat="server" CssClass="form-control" TextMode="MultiLine" Enabled="false"></asp:TextBox>
 
                                     </div>
-
+                                     <%-- //----start----29-08-2023--%>
                                     <%--   <div class="col-lg-6 col-md-6 col-12 template-btn-move-up">
                                                         <div class="form-group">
                                                             <div class="label-dynamic">
@@ -817,7 +817,7 @@
                                                             </label>
                                                         </div>
                                                     </div>--%>
-                                    <%-- //----start----29-08-2023--%>
+                                   
                                   
                                    
                                     <%-- //----end----29-08-2023--%>
