@@ -229,7 +229,9 @@
                                             ValidationGroup="submit" TabIndex="10" CssClass="btn btn-primary" />
                                          <asp:Button ID="btnLock" runat="server" Text="Submit & Lock" ValidationGroup="submit" CssClass="btn btn-primary" TabIndex="11" OnClientClick="return confirm('Do you really want to Submit & Lock Exam Components!')" OnClick="btnLock_Click" Visible="false"  />
                                         <asp:Button ID="btnReport" runat="server" Text="Report" CssClass="btn btn-primary" OnClick="btnReport_Click" Visible="false" TabIndex="11" />
-                                        <asp:Button ID="btncancel" runat="server" Text="Cancel" OnClick="btncancel_Click"
+                                         <asp:Button ID="btnReportExcel" runat="server" Text="Component Not Defined" CssClass="btn btn-primary" OnClick="btnReportExcel_Click" Visible="false" TabIndex="12" />
+
+                                           <asp:Button ID="btncancel" runat="server" Text="Cancel" OnClick="btncancel_Click"
                                             TabIndex="12" CssClass="btn btn-warning" />
                                         <%--  <asp:LinkButton ID="btnCancel2" runat="server" CssClass="btn btn-outline-danger" TabIndex="3" OnClick="btnCancel_Click">Cancel</asp:LinkButton>--%>
 
@@ -308,10 +310,12 @@
                 </div>
             </div>
         </ContentTemplate>
-        <%--<Triggers>
-            <asp:PostBackTrigger ControlID="BtnAddAssesment" />
-            <asp:PostBackTrigger ControlID="btnsubmit" />
-        </Triggers>--%>
+        <Triggers>
+       <%--     <asp:PostBackTrigger ControlID="BtnAddAssesment" />
+            <asp:PostBackTrigger ControlID="btnsubmit" />--%>
+
+               <asp:PostBackTrigger ControlID="btnReportExcel" />
+        </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">
         function IsNumeric(txt) {
