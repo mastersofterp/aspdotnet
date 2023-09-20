@@ -33,41 +33,35 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 ViewState["usertype"] = Session["usertype"];
 
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "OrganizationId", ""));
+
+
                 hdnOrgId.Value = orgID.ToString();
                 if (orgID == 5)
                 { rfvMarksObtainedHssc.Visible = false;}
                 else
                 { rfvMarksObtainedHssc.Visible = true;}
 
-                //string ParamValue = (objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME = 'ALLOW_STUD_INFO_12TH_QUALIFICATION_BIOLOGY'"));
-                //if (ParamValue == "1")
+
+                //if (orgID == 12)
                 //{
                 //    trBiology.Attributes.Add("style", "display:table-row");
-                //}              
-                //if(ParamValue == "0")
+                //}
+                //else
                 //{
                 //    trBiology.Attributes.Add("style", "display:none");
                 //}
 
 
-                if (orgID == 6)
+                if (orgID == 6 || orgID == 12)
                 {
                     trBiology.Attributes.Add("style", "display:table-row");
+                    //trBiology.Attributes.Add("style", "display:block");
+                    
                 }
                 else
                 {
                     trBiology.Attributes.Add("style", "display:none");
                 }
-
-                if (orgID == 12)
-                {
-                    trBiology.Attributes.Add("style", "display:table-row");
-                }
-                else
-                {
-                    trBiology.Attributes.Add("style", "display:none");
-                }
-              
 
                 if (ViewState["usertype"].ToString() == "2")
                 {

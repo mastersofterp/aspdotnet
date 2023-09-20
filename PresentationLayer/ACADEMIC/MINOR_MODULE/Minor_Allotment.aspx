@@ -85,19 +85,19 @@
                                                                     <sup>*</sup>
                                                                     <label>Semester</label>
                                                                 </div>
-                                                                <asp:DropDownList ID="ddlSemester" runat="server" TabIndex="4" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                                                <asp:DropDownList ID="ddlSemester" runat="server" TabIndex="4" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <asp:RequiredFieldValidator ID="rfvddlSemester" runat="server" Display="None" ControlToValidate="ddlSemester" ErrorMessage="Please Select Semester!!!" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
                                                                     <sup>*</sup>
                                                                     <label>Minor</label>
                                                                 </div>
                                                                 <asp:ListBox ID="lstMinor" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"></asp:ListBox>
                                                                 <asp:RequiredFieldValidator ID="lstBoxlstMinor" runat="server" Display="None" ControlToValidate="lstMinor" ErrorMessage="Please Select Minor!!!" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                                            </div>
+                                                            </div>--%>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 btn-footer">
@@ -106,7 +106,17 @@
                                                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
                                                         <asp:ValidationSummary ID="validationMinor" runat="server" ShowMessageBox="true" ShowSummary="false" ShowValidationErrors="true" ValidationGroup="submit" DisplayMode="List" />
                                                     </div>
-                                                    <div class="col-12 mt-3">
+
+                                                    <div id="minorVis" runat="server" class="form-group col-lg-3 col-md-6 col-12" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <label>Minor</label>
+                                                        </div>
+                                                        <asp:ListBox ID="lstMinor" runat="server" SelectionMode="Multiple" AutoPostBack="true" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"></asp:ListBox>
+                                                        <asp:RequiredFieldValidator ID="lstBoxlstMinor" runat="server" Display="None" ControlToValidate="lstMinor" ErrorMessage="Please Select Minor!!!" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                    </div>
+
+                                                    <div class="col-12 mt-5">
                                                         <%--<div class="sub-heading">
                                                             <h5>Student Details</h5>
                                                         </div>--%>
@@ -191,13 +201,24 @@
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
+                                                                    <sup>*</sup>
+                                                                    <label>Scheme</label>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlScheme" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlScheme_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                                <asp:RequiredFieldValidator ID="rfvddlScheme" runat="server" Display="None" ControlToValidate="ddlScheme" ErrorMessage="Please Select Scheme!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>
+
+                                                            </div>
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
                                                                     <sup></sup>
                                                                     <label>Admission Batch</label>
                                                                 </div>
                                                                 <asp:DropDownList ID="ddlAdmBatch" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlAdmBatch_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
-                                                                <asp:RequiredFieldValidator ID="rfvddlAdmBatch" runat="server" Display="None" ControlToValidate="ddlAdmBatch" ErrorMessage="Please Select Admission Batch!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>
+                                                                <%--<asp:RequiredFieldValidator ID="rfvddlAdmBatch" runat="server" Display="None" ControlToValidate="ddlAdmBatch" ErrorMessage="Please Select Admission Batch!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>--%>
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
@@ -214,7 +235,7 @@
                                                                     <sup>*</sup>
                                                                     <label>Section</label>
                                                                 </div>
-                                                                <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
+                                                                <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <asp:RequiredFieldValidator ID="rfvddlSection" runat="server" Display="None" ControlToValidate="ddlSection" ErrorMessage="Please Select Section!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>
@@ -236,6 +257,18 @@
                                                                 </asp:DropDownList>--%>
                                                                 <asp:ListBox ID="ddlCourseMinor" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"></asp:ListBox>
                                                                 <asp:RequiredFieldValidator ID="rfvddlCourseMinor" runat="server" Display="None" ControlToValidate="ddlCourseMinor" ErrorMessage="Please Select Minor!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <sup></sup>
+                                                                    <label>Course Type</label>
+                                                                </div>
+                                                                <asp:DropDownList ID="ddlCourseType" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlCourseType_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                    <asp:ListItem Value="1">All Courses</asp:ListItem>
+                                                                    <asp:ListItem Value="2">Offered Courses</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                                <%--<asp:RequiredFieldValidator ID="rfvddlCourseType" runat="server" Display="None" ControlToValidate="ddlCourseType" ErrorMessage="Please Select Course Type!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>--%>
                                                             </div>
                                                         </div>
                                                     </div>

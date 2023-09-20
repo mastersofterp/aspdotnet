@@ -61,7 +61,7 @@
                                             <asp:DropDownList ID="ddlAcdYear" runat="server" AutoPostBack="true" AppendDataBoundItems="true" TabIndex="2" OnSelectedIndexChanged="ddlAcdYear_SelectedIndexChanged" ValidationGroup="show" CssClass="form-control" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                              <asp:RequiredFieldValidator ID="rfvAcademicYear" runat="server" ControlToValidate="ddlAcdYear"
+                                            <asp:RequiredFieldValidator ID="rfvAcademicYear" runat="server" ControlToValidate="ddlAcdYear"
                                                 Display="None" InitialValue="0" ErrorMessage="Please Select  Academic Year" ValidationGroup="show">
                                             </asp:RequiredFieldValidator>
 
@@ -115,8 +115,8 @@
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <div class="label-dynamic">                                             
-                                                <asp:Label ID="lblYearMandatory" runat="server" style="color:red" Visible="false">*</asp:Label>
+                                            <div class="label-dynamic">
+                                                <asp:Label ID="lblYearMandatory" runat="server" Style="color: red" Visible="false">*</asp:Label>
                                                 <%--lblDYddlYear--%>
                                                 <asp:Label ID="lblDYddlYear" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
@@ -158,7 +158,7 @@
                                                 <sup>*</sup>
                                                 <label>Receipt Type</label>
                                             </div>
-                                            <asp:DropDownList ID="ddlReceipt" runat="server" CssClass="form-control" AppendDataBoundItems="True"  AutoPostBack="true" ToolTip="Please Select Receipt Type" TabIndex="7" OnSelectedIndexChanged="ddlReceipt_SelectedIndexChanged" data-select2-enable="true">
+                                            <asp:DropDownList ID="ddlReceipt" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="true" ToolTip="Please Select Receipt Type" TabIndex="7" OnSelectedIndexChanged="ddlReceipt_SelectedIndexChanged" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvReceipt" runat="server" ControlToValidate="ddlReceipt"
@@ -173,7 +173,7 @@
                                                 <label>Bank Name</label>
                                             </div>
                                             <%--<asp:TextBox ID="txtBankName" runat="server" TabIndex="8" MaxLength="64"></asp:TextBox>--%>
-                                            <asp:DropDownList ID="ddlBankName" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Bank" TabIndex="8"  data-select2-enable="true" >
+                                            <asp:DropDownList ID="ddlBankName" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Bank" TabIndex="8" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
@@ -327,10 +327,7 @@
 
                                                     <td>
                                                         <%# Eval("STUDNAME")%>
-                                                        <asp:HiddenField ID="hdfBranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' />
-                                                        <asp:Label ID="lblname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("ENROLLNO") %>' Visible="false"></asp:Label>
-                                                        <%--<asp:HiddenField ID="hiddenBranch" runat="server" Value='<%#Eval ("BRANCHNO") %>' />--%>
-                                                        <asp:HiddenField ID="hfdyearname" runat="server"  Value='<%# Eval("YEAR") %>'/>
+                                                     
                                                     </td>
 
                                                     <td>
@@ -378,6 +375,11 @@
                                                     </td>
 
                                                 </tr>
+
+                                                <asp:HiddenField ID="hdfBranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' />
+                                                <asp:Label ID="lblname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("ENROLLNO") %>' Visible="false"></asp:Label>
+                                                <%--<asp:HiddenField ID="hiddenBranch" runat="server" Value='<%#Eval ("BRANCHNO") %>' />--%>
+                                                <asp:HiddenField ID="hfdyearname" runat="server" Value='<%# Eval("YEAR") %>' />
                                                 <%--</ContentTemplate>
                                                 <Triggers>
                                                         <asp:PostBackTrigger ControlID="rdoYes" />
@@ -562,16 +564,16 @@
 
     </script>
 
-     <script type="text/javascript">
-         function checkDate(sender, args) {
-             // I change the < operator to >
-             if (sender._selectedDate > new Date()) {
-                 alert("Unable to select future date !!!");
-                 sender._selectedDate = new Date();
-                 // set the date back to the current date
-                 sender._textbox.set_Value('')
-             }
+    <script type="text/javascript">
+        function checkDate(sender, args) {
+            // I change the < operator to >
+            if (sender._selectedDate > new Date()) {
+                alert("Unable to select future date !!!");
+                sender._selectedDate = new Date();
+                // set the date back to the current date
+                sender._textbox.set_Value('')
+            }
 
-         }
-</script>
+        }
+    </script>
 </asp:Content>

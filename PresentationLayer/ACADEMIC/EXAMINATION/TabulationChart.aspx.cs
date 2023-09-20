@@ -174,7 +174,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
                 btnProgrssionrpt.Visible = false;
                 pre_eleven.Visible = false;
-
+                btnConsolidateGradeCard.Visible = true;
                 btnCount.Visible = true;
                 DatePublish.Visible = false;
                 btnSRNo.Visible = false;
@@ -4895,6 +4895,32 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             this.ShowconsolitedGradeCardNew("Consolidate Grade Card", "MarksGrade_C_RCPIPER.rpt", ids);
         }
         #endregion
+
+
+        #region For MIT Grade Card added on 18/09/2023 by Tejas Thakre
+        else if (Convert.ToInt32(Session["OrgId"]) == 8)
+        {
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+            }
+            ids = ids.TrimEnd('.');
+
+            //this.ShowGradeCardNew("Consolidate Grade Card", "MarksGrade_RCPIPER.rpt", ids);
+
+            this.ShowconsolitedGradeCardNew("Consolidate Grade Card", "Consolidated_Grade_Card_MIT.rpt", ids);
+        }
+        #endregion
     }
 
     private void ShowconsolitedGradeCardNew(string reportTitle, string rptFileName, string ids)
@@ -4952,6 +4978,13 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 6)
                 {
                     url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
+                }
+                #endregion
+                #region For MIT Grade Card added on 18/09/2023 by Tejas Thakre
+                else if (Convert.ToInt32(Session["OrgId"]) == 8)
+                {
+                    //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();
                 }
                 #endregion
                 else
