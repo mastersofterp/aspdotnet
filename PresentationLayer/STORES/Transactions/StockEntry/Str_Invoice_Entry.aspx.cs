@@ -1351,6 +1351,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
     {
         try
         {
+            // add for multiple document attachment
           //  int idno = _idnoEmp;
             ServiceBook objSevBook = new ServiceBook();
             if (Uploadinvoice.HasFile)
