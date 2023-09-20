@@ -956,7 +956,7 @@
                                                             <%--<asp:ListItem Selected="True" Value="1">Theory</asp:ListItem>
                                                             <asp:ListItem Value="2">Tutorial</asp:ListItem>--%>
                                                         </asp:DropDownList>
-                                                        
+
                                                     </div>
 
 
@@ -1014,6 +1014,7 @@
                                                 <asp:LinkButton ID="btnSave" TabIndex="8" runat="server" CssClass="btn btn-primary" ValidationGroup="teacherallot" Visible="false"
                                                     OnClientClick="return getVal();" OnClick="btnSave_Click"><%--<i class="fa fa-save margin-r-5"></i>--%> Submit</asp:LinkButton>
                                                 <asp:HiddenField ID="hdnsectionno" runat="server" />
+                                                <asp:HiddenField ID="hdfCourseteach" runat="server" />
 
                                                 <asp:LinkButton ID="btnReport" runat="server" TabIndex="9" Visible="false"
                                                     OnClick="btnReport_Click" ValidationGroup="teacherallotr" CssClass="btn btn-info">
@@ -1038,6 +1039,11 @@
                                                     <LayoutTemplate>
                                                         <div class="sub-heading">
                                                             <h5>LIST OF FACULTIES</h5>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-6">
+                                                            <div class="input-group sea-rch">
+                                                                <input type="text" id="FilterData" onkeyup="SearchFunction()" placeholder="Search" class="Searchfilter" />
+                                                            </div>
                                                         </div>
                                                         <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblCourse">
                                                             <thead class="bg-light-blue">
@@ -1318,7 +1324,6 @@
                                                             AutoPostBack="True" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlTutorialAT_SelectedIndexChanged">
                                                             <%--<asp:ListItem Selected="True" Value="1">Theory</asp:ListItem>
                                                             <asp:ListItem Value="2">Tutorial</asp:ListItem>--%>
-
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" Enabled="false" ControlToValidate="ddlTutorialAT"
                                                             Display="None" InitialValue="0" ErrorMessage="Please Select Course" ValidationGroup="teacherallotAT">
@@ -1670,7 +1675,7 @@
                                                             </td>
                                                             <td>
                                                                 <asp:Label ID="lbltdCourseType" Text='<%# Eval("SUBNAME")%>' runat="server" Font-Bold="true"></asp:Label>
-                                                                                                                     
+
                                                             </td>
                                                             <td>
                                                                 <%# Eval("MAIN_TEACHER")%>
@@ -2236,6 +2241,64 @@
                     document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_chkAccept").checked = false;
             }
         }
+    </script>
+    <script>
+        //New Search function added by Gopal M - 18/08/2023
+        function SearchFunction() {
+            var input, filter, table, tr, td, i, txtValue, td1, td2;
+            var Tcount = 0;
+            var Pcount = 0;
+            var ODcount = 0;
+            var totalcount = 0;
+            var regnoflag = 0;
+            var rollnoflag = 0;
+            var namefalg = 0;
+
+            input = document.getElementById("FilterData");
+            filter = input.value.toLowerCase();
+            table = document.getElementById("tblCourse");
+            trRow = table.getElementsByTagName("tr");
+
+            for (i = 0; i < trRow.length; i++) {
+                // td = trRow[i].getElementsByTagName("td")[3]; // 3- check name column
+                td1 = trRow[i].getElementsByTagName("td")[1]; // 1- check rrn column
+                // td2 = trRow[i].getElementsByTagName("td")[2]; // 2- check roll column
+
+                if (td1) {
+                    //Name search                 
+                    if (namefalg == 0 ) {
+                        txtValue = td1.textContent || td1.innerText;
+
+                        if (txtValue != "") {
+                            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                                regnoflag = 1;
+                                Tcount++;
+                                var e = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_chkAccept");
+                                var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_hdfCourseteach");
+                                //if (e != null) {
+                                //    if (e.checked == true) {
+                                //        Pcount++;
+                                //    }
+                                //    if (e.checked == false && e1.value == 1) {
+                                //        ODcount++;
+                                //    }
+                                //}
+
+                                trRow[i].style.display = "";
+
+                            }
+                            else {
+                                trRow[i].style.display = "none";
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+        //end search filter code
     </script>
 
 </asp:Content>

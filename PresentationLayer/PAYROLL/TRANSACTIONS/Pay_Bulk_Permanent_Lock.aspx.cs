@@ -191,12 +191,9 @@ public partial class PAYROLL_TRANSACTIONS_Pay_Bulk_Permanent_Lock : System.Web.U
             }
             if (count1 > 0)
             {
-                objCommon.DisplayMessage(UpdatePanel1, "Please enter salary deposite date !", this);
+                objCommon.DisplayMessage(UpdatePanel1, "Please Enter Salary Deposited Date !", this);
                 return;
             }
-            
-
-
             int count = 0;
             foreach (ListViewDataItem lvitem in lvLockUnlock.Items)
             {

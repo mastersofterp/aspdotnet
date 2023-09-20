@@ -117,7 +117,7 @@
 
                 var sum = Number(parseFloat(numVal1)) + Number(parseFloat(numVal2)) + Number(parseFloat(numVal3)) + Number(parseFloat(numVal4));
 
-                if (isHidden.style.display === "none") {
+                if (isHidden.style.display == "none") {
                     PCMTotal(this);
                 }
                 else {
@@ -841,8 +841,10 @@
                                                                             </td>
                                                                             <td></td>
                                                                         </tr>
-                                                                        <tr id="trBiology" runat="server" style="display: none">
+<%--                                                                        <div style="clear:b"></div>--%>
+                                                                        <tr id="trBiology" runat="server" style="display:block">
                                                                             <td>Biology</td>
+                                                                           
                                                                             <td>
                                                                                 <asp:TextBox ID="txtbiology" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     onchange="findTotal(this);" onblur="TotPer(this);" TabIndex="153" placeholder="Enter Biology's Marks"

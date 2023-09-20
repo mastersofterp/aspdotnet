@@ -334,7 +334,7 @@
                                                     </asp:DropDownList>
                                                         <%--<asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>--%>
                                                     <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">   <%-- style="display:none"--%>
@@ -347,9 +347,9 @@
                                                     </asp:DropDownList>--%>
                                                     <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="lstbxSchool_SelectedIndexChanged"></asp:ListBox>
                                                     <%-- <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true"></asp:ListBox>--%>
-                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSchoolInstitute"
-                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="course">
-                                                    </asp:RequiredFieldValidator>--%>
+                                                    <asp:RequiredFieldValidator ID="rfvlstbxSchool" runat="server" ControlToValidate="lstbxSchool"
+                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="submit">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <%--<div class="form-group col-lg-3 col-md-6 col-12">
@@ -790,7 +790,7 @@
         }
 
         function validate() {
-            //var school = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchoolInstitute").value;
+            var school = document.getElementById("ctl00_ContentPlaceHolder1_lstbxSchool").value;
             var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
             var degree = document.getElementById("ctl00_ContentPlaceHolder1_ddlDegree").value;
             var schmType = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchemeType").value;
@@ -798,11 +798,11 @@
             var attLock = document.getElementById("ctl00_ContentPlaceHolder1_txtAttLockDay").value;
             var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
             var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
-            //if (school == "0") {
-            //    alert("Please Select School/Institute Name.");
-            //    return false;
-            //}
-            if (session == "") {
+            if (school == "") {
+                alert("Please Select School/Institute Name.");
+                return false;
+            }
+            if (session == "0") {
                 alert("Please Select Session.");
                 return false;
             }

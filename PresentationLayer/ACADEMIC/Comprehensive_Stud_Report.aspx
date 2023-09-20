@@ -47,7 +47,7 @@
         }
 
     </script>
-    
+
 
 
     <style>
@@ -106,7 +106,7 @@
             width: max-content !important;
         }
     </style>
-   
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -356,7 +356,7 @@
                                                             <li class="nav-item" id="divInternalMarks" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_13" onclick="return Checktabid(this)">Internal Marks</a>
                                                             </li>
-                                                             <li class="nav-item" id="divInternalMarks1" runat="server" visible="false">
+                                                            <li class="nav-item" id="divInternalMarks1" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_14" onclick="return Checktabid(this)">Internal Marks</a>
                                                             </li>
                                                         </ul>
@@ -605,6 +605,26 @@
                                                                             <li class="list-group-item"><b>Mother Mobile No :</b>
                                                                                 <a class="sub-label">
                                                                                     <asp:Label ID="lblMotherMobile" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Faculty Advisor Name(Mentor) :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblFacultyAdvname" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Name :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClassAdvisorName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Email Address :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClsAdvEmailAddress" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Mobile No :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClsAdvMobNo" runat="server" Font-Bold="True"></asp:Label></a>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
@@ -1395,10 +1415,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                   
 
-                                                    
-                                                         <div class="tab-pane fade" id="tab_8">
+
+
+                                                    <div class="tab-pane fade" id="tab_8">
                                                         <div id="divPreviousResult">
                                                             <div class="col-12">
                                                                 <div class="sub-heading">
@@ -1624,23 +1644,23 @@
                                                                                                         <tr>
                                                                                                             <td></td>
                                                                                                             <td><strong>Total :</strong></td>
-                                                                                                           
+
                                                                                                             <td>
                                                                                                                 <strong>
                                                                                                                     <asp:Label ID="lblTotalM" runat="server"></asp:Label>
                                                                                                                 </strong>
                                                                                                             </td>
-                                                                                                             <td>
+                                                                                                            <td>
                                                                                                                 <strong>
                                                                                                                     <asp:Label ID="Label20" runat="server"></asp:Label>
                                                                                                                 </strong>
                                                                                                             </td>
-                                                                                                             <td>
+                                                                                                            <td>
                                                                                                                 <strong>
                                                                                                                     <asp:Label ID="Label21" runat="server"></asp:Label>
                                                                                                                 </strong>
                                                                                                             </td>
-                                                                                                             <td>
+                                                                                                            <td>
                                                                                                                 <strong>
                                                                                                                     <asp:Label ID="Label22" runat="server"></asp:Label>
                                                                                                                 </strong>
@@ -1652,7 +1672,7 @@
                                                                                                 </table>
                                                                                             </div>
                                                                                         </LayoutTemplate>
-                                                                                          
+
                                                                                         <ItemTemplate>
                                                                                             <tr>
                                                                                                 <td>
@@ -2000,7 +2020,7 @@
                                                         </div>
                                                     </div>
 
-                                                      <div class="tab-pane fade" id="tab_13">
+                                                    <div class="tab-pane fade" id="tab_13">
                                                         <div>
                                                             <div class="col-12">
                                                                 <div class="sub-heading">
@@ -2128,7 +2148,7 @@
                                                         </div>
                                                     </div>
 
-                                                     <div class="tab-pane fade" id="tab_14">
+                                                    <div class="tab-pane fade" id="tab_14">
                                                         <div>
                                                             <div class="col-12">
                                                                 <div class="sub-heading">
@@ -2179,7 +2199,7 @@
                                                                             </EmptyDataTemplate>
                                                                             <ItemTemplate>
                                                                                 <tr>
-                                                                                   
+
                                                                                     <td id="td0" runat="server" style="display: none;">
                                                                                         <%-- <asp:TextBox ID="txtCat1" runat="server" CssClass="form-control NumVal" Enabled="false" MaxLength="5" ></asp:TextBox>--%>
                                                                                         <asp:Label ID="Label5" runat="server" Enabled="false" MaxLength="5"></asp:Label>
@@ -2257,6 +2277,7 @@
                         </ContentTemplate>
                         <Triggers>
                             <asp:AsyncPostBackTrigger ControlID="rdolistSemester" />
+                             <asp:AsyncPostBackTrigger ControlID="RadioButtonList1" />
                             <asp:PostBackTrigger ControlID="btnInternalMarks" />
 
                         </Triggers>

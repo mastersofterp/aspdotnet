@@ -31,6 +31,10 @@
                             </h3>
                         </div>
                         <div class="box-body">
+                            <div class=" note-div">
+                                    <h5 class="heading">Note</h5>
+                                    <p><i class="fa fa-star" aria-hidden="true"></i><b><span>Record Having End Date Less than Today's Date Is Only Shown In List. </span></b></p>
+                                </div>
                             <div class="col-12">
                                 <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="div">
@@ -38,6 +42,7 @@
                                             <sup>* </sup>
                                             <label>Club Type</label>
                                         </div>
+
                                         <asp:DropDownList ID="ddlclubtype" runat="server" TabIndex="1" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlclubtype_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>

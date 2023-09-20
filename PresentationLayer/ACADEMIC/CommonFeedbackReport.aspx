@@ -131,6 +131,8 @@
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReport_Click" CssClass="btn btn-primary" />
+                                    <asp:Button ID="btnEvalutionReport" runat="server" Text="Student Feedback Evalution Report" TabIndex="6"
+                                        ValidationGroup="FeedbackFaculty" OnClick="Button1_Click" CssClass="btn btn-primary" Visible="false"/>
                                     <asp:Button ID="btnCommentReport" runat="server" Text="Feedback Comments Report" TabIndex="7"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnCommentReport_Click" CssClass="btn btn-primary" Visible="false"  />
                                     <asp:Button ID="btnCancelReport" runat="server" Text="Cancel" TabIndex="8"

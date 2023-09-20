@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CancelCourseReg.aspx.cs" Inherits="ACADEMIC_CancelCourseReg" Title="" MasterPageFile="~/SiteMasterPage.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CancelCourseReg.aspx.cs" Inherits="ACADEMIC_CancelCourseReg" ViewStateEncryptionMode="Always" EnableViewStateMac="true" Title="" MasterPageFile="~/SiteMasterPage.master" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">

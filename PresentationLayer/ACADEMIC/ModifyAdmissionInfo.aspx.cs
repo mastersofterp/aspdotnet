@@ -86,7 +86,11 @@ public partial class ACADEMIC_ModifyAdmissionInfo : System.Web.UI.Page
             value = ddlDropdown.SelectedValue;
         else
             value = txtSearch.Text;
-
+        if (string.IsNullOrEmpty(value))
+        {
+            objCommon.DisplayMessage("Please Select / Enter " + ddlSearch.SelectedItem, this.Page);
+            return;
+        }
         bindlist(ddlSearch.SelectedItem.Text, value, uano);
         txtSearch.Text = string.Empty;
         AdmDetails.Visible = false;
