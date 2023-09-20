@@ -223,6 +223,7 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
                 {
 
+
                     Session["username"] = ds1.Tables[0].Rows[0]["UA_NAME"].ToString();
                     Session["usertype"] = ds1.Tables[0].Rows[0]["UA_TYPE"].ToString();
                     Session["userfullname"] = ds1.Tables[0].Rows[0]["UA_FULLNAME"].ToString();
