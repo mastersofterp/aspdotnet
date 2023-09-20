@@ -142,6 +142,32 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
 
             }
 
+            else if (ddlPayhead.SelectedItem.Text.Equals("DA_HEADID"))
+            {
+                txtEiditfiled.Visible = false;
+                txtEditFieldDT.Visible = false;
+                ddlScale.Visible = false;
+                ddlScale.Visible = false;
+                ddlAppointment.Visible = false;
+                ddleditfield.Visible = true;
+                objCommon.FillDropDownList(ddleditfield, "DA_HEAD", "DA_HEADID", "DA_HEAD_DESCRIPTION", "DA_HEADID > 0", "DA_HEADID");
+                ddleditfield.SelectedValue = hdneditfield.Value;
+
+
+            }
+            else if (ddlPayhead.SelectedItem.Text.Equals("HRA_HEADID"))
+            {
+                txtEiditfiled.Visible = false;
+                txtEditFieldDT.Visible = false;
+                ddlScale.Visible = false;
+                ddlScale.Visible = false;
+                ddlAppointment.Visible = false;
+                ddleditfield.Visible = true;
+                objCommon.FillDropDownList(ddleditfield, "DA_HEAD", "DA_HEADID", "DA_HEAD_DESCRIPTION", "DA_HEADID > 0", "DA_HEADID");
+                ddleditfield.SelectedValue = hdneditfield.Value;
+
+
+            }
                 
             else if (ddlPayhead.SelectedItem.Text.Equals("BLOODGRPNO"))
             {
@@ -527,6 +553,30 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
                     }
                 } // Added on 16-09-2022
                 else if (ddlPayhead.SelectedItem.Text.Equals("EMPTYPENO"))
+                {
+                    TextBox txt = lvitem.FindControl("txtEditFieldDT") as TextBox;
+
+                    DropDownList ddl = lvitem.FindControl("ddleditfield") as DropDownList;
+
+                    CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(ddl.SelectedValue), Convert.ToInt32(txt.ToolTip));
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        count = 1;
+                    }
+                }
+                else if (ddlPayhead.SelectedItem.Text.Equals("DA_HEADID"))
+                {
+                    TextBox txt = lvitem.FindControl("txtEditFieldDT") as TextBox;
+
+                    DropDownList ddl = lvitem.FindControl("ddleditfield") as DropDownList;
+
+                    CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(ddl.SelectedValue), Convert.ToInt32(txt.ToolTip));
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        count = 1;
+                    }
+                }
+                else if (ddlPayhead.SelectedItem.Text.Equals("HRA_HEADID"))
                 {
                     TextBox txt = lvitem.FindControl("txtEditFieldDT") as TextBox;
 
