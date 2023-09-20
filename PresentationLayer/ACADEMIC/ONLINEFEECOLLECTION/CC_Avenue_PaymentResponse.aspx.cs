@@ -203,11 +203,12 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 ViewState["Order_id"] = order_id;
                 Regno = Convert.ToString(objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Idno)); //adde by gaurav
                 // added by gaurav START
-                lblRegNo.Text = Regno;              
+                lblRegNo.Text = Regno;      
+        
                 string tranID = Params["tracking_id"];
                 string orderno = Params["order_id"];//Params["billing_address"]
-                int installmentno = Convert.ToInt32(Params["installno"]);
-                lblBranch.Text = Convert.ToString(Session["branchname"]);
+               // int installmentno = Convert.ToInt32(Params["installno"]);
+                lblBranch.Text = Params["merchant_param2"];
                 string semester = objCommon.LookUp("ACD_DCR_TEMP", "SEMESTERNO", "IDNO=" + Idno.ToString() + "and RECIEPT_CODE='" + Params["billing_address"] + "'");
                 lblSemester.Text = semester;
                 lblOrderId.Text = order_id;
@@ -215,8 +216,8 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 string StatusF = Params["order_status"];
                // string msg = "";
                 string msg = ResJson;
-                userno = Params["billing_notes"];
-              
+                userno = Params["merchant_param1"];
+                //lblmessage.Text = msg;
                Session["userno"] = userno;
                 DataSet ds1 = objCommon.FillDropDown("USER_ACC", "UA_NAME", "UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG", "UA_NO=" + Convert.ToInt32(Session["userno"]), string.Empty);
                 if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
@@ -257,11 +258,11 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 {
                     divSuccess.Visible = true;
 
-                    if (Convert.ToInt32(installmentno) > 0)
-                        {
-                        output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
-                        }
-                    else
+                    //if (Convert.ToInt32(installmentno) > 0)
+                    //    {
+                    //    output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
+                    //    }
+                    //else
                         {
                          output = objFees.InsertOnlinePayment_DCR(Idno, recipt, order_id, tranID, "O", "1", amount, "Success", Regno, msg);
                         }
