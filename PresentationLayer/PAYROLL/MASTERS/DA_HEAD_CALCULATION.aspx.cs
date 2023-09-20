@@ -227,7 +227,7 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             if (cs == 2)
             {
                 objCommon.DisplayMessage(updpanel, "Record Updated Successfully", this);
-                Response.Redirect(Request.Url.ToString());
+               Response.Redirect(Request.Url.ToString());
             }
 
 
@@ -356,7 +356,15 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             ddlDAHRA.SelectedValue = hdnDAHEADiD.Value;
             txtDAper.Text = txtCalPer.Text.Trim();
             txtHRAPer.Text = txtHRAPerr.Text.Trim();
-            chkYrHRACal.Checked = Convert.ToBoolean(hdnDetail.Value);
+            if (hdnDetail.Value == "0")
+            {
+                chkYrHRACal.Checked = false;
+            }
+            else
+            {
+                chkYrHRACal.Checked = true;
+            }
+           
             txtEffectDate.Text = txtHeadCalDate.Text.Trim();
 
 
