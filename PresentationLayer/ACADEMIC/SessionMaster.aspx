@@ -622,7 +622,7 @@
                                                             <LayoutTemplate>
                                                                 <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divsessionlist">
                                                                     <thead class="bg-light-blue">
-                                                                        <tr>
+                                                                        <tr> 
                                                                             <th style="text-align: center;">Edit
                                                                             </th>
                                                                             <%--<th>
