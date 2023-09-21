@@ -32,9 +32,9 @@
                         </div>
                         <div class="box-body">
                             <div class=" note-div">
-                                    <h5 class="heading">Note</h5>
-                                    <p><i class="fa fa-star" aria-hidden="true"></i><b><span>Record Having End Date Less than Today's Date Is Only Shown In List. </span></b></p>
-                                </div>
+                                <h5 class="heading">Note</h5>
+                                <p><i class="fa fa-star" aria-hidden="true"></i><b><span>Record Having End Date Less than Today's Date Is Only Shown In List. </span></b></p>
+                            </div>
                             <div class="col-12">
                                 <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="div">
@@ -68,6 +68,11 @@
                             <div class="col-12 btn-footer">
                                 <asp:LinkButton ID="btnShowActivityDetails" runat="server" CssClass="btn btn-primary" ValidationGroup="submit" OnClick="btnShowActivityDetails_Click">Show</asp:LinkButton>
                                 <asp:LinkButton ID="btnCancelActivityDetails" runat="server" CssClass="btn btn-warning" OnClick="btnCancelActivityDetails_Click"> Cancel</asp:LinkButton>
+                                <asp:LinkButton ID="btnExport" runat="server" CssClass="btn btn-primary" TabIndex="3" OnClick="btnExport_Click"
+                                    Text="Download Excel Sheet" ToolTip="Download Excel Sheet" Enabled="true"> Club Student List Report</asp:LinkButton>
+
+                                <asp:LinkButton ID="btnExportR" runat="server" CssClass="btn btn-primary" TabIndex="4" OnClick="btnExportR_Click"
+                                    Text="Download Excel Sheet" ToolTip="Download Excel Sheet" Enabled="true"> Club Activity Registration Report</asp:LinkButton>
                                 <asp:ValidationSummary ID="ActiveStudentDetails" runat="server" DisplayMode="List" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="submit" />
                             </div>
@@ -118,7 +123,8 @@
                                                     <asp:Label ID="lblDegreeName" runat="server" Text='<%# Eval("DEGREE_NAME") %>'></asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:DropDownList ID="ddlEvent" runat="server" Text='<%# Eval("EVENT_ID") %>' AppendDataBoundItems="true"  CssClass="form-control" data-select2-enable="true">  <%--Text='<%# Eval("EVENT_ID") %>'--%>
+                                                    <asp:DropDownList ID="ddlEvent" runat="server" Text='<%# Eval("EVENT_ID") %>' AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                                        <%--Text='<%# Eval("EVENT_ID") %>'--%>
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         <asp:ListItem Value="1">Participated</asp:ListItem>
                                                         <asp:ListItem Value="2">Not Participated</asp:ListItem>
@@ -138,10 +144,13 @@
                                             <ContentTemplate>
                                                 <asp:LinkButton ID="btnSaveStudentActivitydetails" runat="server" CssClass="btn btn-primary" ValidationGroup="submitfac" OnClick="btnSaveStudentActivitydetails_Click">Save</asp:LinkButton>
                                                 <asp:LinkButton ID="btnReport" runat="server" CssClass="btn btn-info" OnClick="btnReport_Click">Excel Report</asp:LinkButton>
+
                                                 <asp:LinkButton ID="btnCancelStudentActivitydetails" runat="server" CssClass="btn btn-warning" OnClick="btnCancelStudentActivitydetails_Click"> Cancel</asp:LinkButton>
                                             </ContentTemplate>
                                             <Triggers>
                                                 <asp:PostBackTrigger ControlID="btnReport" />
+                                                <asp:PostBackTrigger ControlID="btnExport" />
+                                                <asp:PostBackTrigger ControlID="btnExportR" />
                                             </Triggers>
                                         </asp:UpdatePanel>
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True"
