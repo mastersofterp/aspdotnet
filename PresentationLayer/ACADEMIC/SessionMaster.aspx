@@ -1,5 +1,5 @@
-<%@ Page Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
-    CodeFile="SessionMaster.aspx.cs" Inherits="Academic_SessionCreate" Title="" %>
+<%@ page language="C#" masterpagefile="~/SiteMasterPage.master" autoeventwireup="true" viewstateencryptionmode="Always" enableviewstatemac="true"
+    codefile="SessionMaster.aspx.cs" inherits="Academic_SessionCreate" title="" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -433,7 +433,7 @@
                                                             <asp:TextBox ID="txtSLongName" runat="server" AutoComplete="off" CssClass="form-control" MaxLength="100" TabIndex="3"
                                                                 ToolTip="Please Enter Session Long Name" placeholder="Enter Session Long Name" />
                                                             <asp:RequiredFieldValidator ID="rfvSessionLName" runat="server" SetFocusOnError="True"
-                                                                ErrorMessage="Please Enter Session Long Name" ControlToValidate="txtSLongName"
+                                                                ErrorMessage="Please Enter Session Long Name." ControlToValidate="txtSLongName"
                                                                 Display="None" ValidationGroup="submit" />
                                                         </div>
 
@@ -513,8 +513,8 @@
                                                             </div>
                                                             <asp:TextBox ID="txtSShortName" AutoComplete="off" runat="server" CssClass="form-control" MaxLength="100" TabIndex="5"
                                                                 ToolTip="Please Enter Session Short Name" placeholder="Enter Session Short Name" />
-                                                            <%--<asp:RequiredFieldValidator ID="rfvShortName" runat="server" ErrorMessage="Please Enter Session Short Name"
-                                            ControlToValidate="txtSLongName" Display="None" ValidationGroup="submit" />--%>
+                                                            <asp:RequiredFieldValidator ID="rfvShortName" runat="server" ErrorMessage="Please Enter Session Short Name."
+                                            ControlToValidate="txtSShortName" Display="None" ValidationGroup="submit" />
                                                             <asp:HiddenField ID="hdnDate" runat="server" />
                                                         </div>
 
@@ -559,8 +559,8 @@
                                                                 <label>Academic Year</label>
                                                             </div>
                                                             <asp:TextBox runat="server" AutoComplete="off" ID="txtacadyear" placeholder="Enter Academic Year" ToolTip="Please Enter Academic Year" CssClass="form-control" TabIndex="8" MaxLength="25"></asp:TextBox>
-                                                            <%--<asp:RequiredFieldValidator ID="rfvacadyear" runat="server" ErrorMessage="Please Enter Academic Year"
-                                            ControlToValidate="txtacadyear" Display="None" ValidationGroup="submit" />--%>
+                                                            <asp:RequiredFieldValidator ID="rfvacadyear" runat="server" ErrorMessage="Please Enter Academic Year"
+                                            ControlToValidate="txtacadyear" Display="None" ValidationGroup="submit" />
                                                         </div>
 
                                                         <!--===== Added By Vinay Mishra on Dated 16/06/2023=====-->
@@ -570,8 +570,8 @@
                                                                 <label>Sequence Number</label>
                                                             </div>
                                                             <asp:TextBox runat="server" AutoComplete="off" ID="txtSeqNo" placeholder="Enter Sequence Number" ToolTip="Please Enter Sequence Number" onkeyup="validateNumericAndNotZero(this);" CssClass="form-control" TabIndex="9" MaxLength="2"></asp:TextBox>
-                                                            <%--<asp:RequiredFieldValidator ID="rfvseqno" runat="server" ErrorMessage="Please Enter Sequence Number"
-                                            ControlToValidate="txtSeqNo" Display="None" ValidationGroup="submit" />--%>
+                                                            <asp:RequiredFieldValidator ID="rfvseqno" runat="server" ErrorMessage="Please Enter Sequence Number"
+                                            ControlToValidate="txtSeqNo" Display="None" ValidationGroup="submit" />
                                                         </div>
 
                                                         <!--===== Added By Rishabh on Dated 28/10/2021=====-->
@@ -605,7 +605,8 @@
 
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="submit"
-                                                        OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary" OnClientClick="return validate();" />
+                                                        OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary"  /> 
+                                                   <%-- OnClientClick="return validate();"--%>
                                                     <asp:Button ID="btnReport" runat="server" OnClick="btnReport_Click" Text="Report"
                                                         CssClass="btn btn-info" Style="display: none;" />
                                                     <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click"
@@ -1040,7 +1041,7 @@
         prm.add_endRequest(function () {
             $(function () {
                 $('#btnSubmit').click(function () {
-                    validate();
+                   // validate();
                 });
             });
         });
