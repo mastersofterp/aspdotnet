@@ -1,0 +1,6 @@
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\bin\Release\DataAccessLayer.dll
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\bin\Release\DataAccessLayer.pdb
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Release\DataAccessLayer.csproj.AssemblyReference.cache
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Release\DataAccessLayer.csproj.CoreCompileInputs.cache
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Release\DataAccessLayer.dll
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Release\DataAccessLayer.pdb
