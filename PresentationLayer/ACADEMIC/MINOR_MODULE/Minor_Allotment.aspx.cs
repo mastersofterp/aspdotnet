@@ -200,7 +200,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
          
         if (clgId == "0")
         {
-            objCommon.DisplayMessage(this.updMinor, "Please Select College!!!", this.Page);
+            objCommon.DisplayMessage(this.updMinor, "Please Select School!!!", this.Page);
             return;
         }
         else if (degNo == "0")
@@ -521,6 +521,11 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
 
     protected void btnSubmit2_Click(object sender, EventArgs e)
     {
+        if (pnlCourse.Visible == false && pnlSubject.Visible == false)
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Filter the Records on Above Selection First!!!", this.Page);
+            return;
+        }
         string sessionNo = ddlminorSession.SelectedValue;
         string clgBranch = ddlCollege.SelectedValue;
         string admBatch = ddlAdmBatch.SelectedValue;
@@ -608,6 +613,29 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
             return;
         }
 
+        if (ddlCollege.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select College & Program!!!", this.Page);
+            return;
+        }
+
+        if (ddlScheme.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Scheme!!!", this.Page);
+            return;
+        }
+
+        if (ddlSemesterminor.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Semester!!!", this.Page);
+            return;
+        }
+
+        if (ddlSection.SelectedValue == "0")
+        {
+            objCommon.DisplayMessage(this.updCourse, "Please Select Section!!!", this.Page);
+            return;
+        }
         int count = 0;
         //if (ddlCourseMinor.Items.Count <= 0)
         //{
