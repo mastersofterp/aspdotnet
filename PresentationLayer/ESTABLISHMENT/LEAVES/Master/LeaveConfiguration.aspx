@@ -299,11 +299,17 @@
                                     </div>
                                     <asp:CheckBox ID="ChkValidateLeaveComb" runat="server" TabIndex="20" CssClass="form-control" ToolTip="Check Mark to Validate Leave Combination" />
                                 </div>
+                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <label>Not Allow any Leave in Continution</label>
+                                    </div>
+                                    <asp:CheckBox ID="chkLeaveincont" runat="server" TabIndex="21" CssClass="form-control" ToolTip="Check Mark to Not Allow any Leave in Continution" />
+                                </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
                                         <label>Show LWP/Loss Of Pay Leave on Leave Card</label>
                                     </div>
-                                    <asp:CheckBox ID="ChkshowLwpLeave" runat="server" TabIndex="21" CssClass="form-control" ToolTip="Check Mark to Show LWP leave On Leave Card" />
+                                    <asp:CheckBox ID="ChkshowLwpLeave" runat="server" TabIndex="22" CssClass="form-control" ToolTip="Check Mark to Show LWP leave On Leave Card" />
                                 </div>
                             </div>
                         </div>
@@ -323,14 +329,14 @@
                                     <div class="label-dynamic">
                                         <label>Not Allow to Apply LWP if Balance is Available selected Leaves</label>
                                     </div>
-                                    <asp:CheckBox ID="chkLwpstop" runat="server" TabIndex="22" CssClass="form-control" ToolTip="Check Mark to Not Allow to Apply LWP If other leave Balance available" AutoPostBack="true" OnCheckedChanged="chkLwpstop_CheckedChanged" />
+                                    <asp:CheckBox ID="chkLwpstop" runat="server" TabIndex="23" CssClass="form-control" ToolTip="Check Mark to Not Allow to Apply LWP If other leave Balance available" AutoPostBack="true" OnCheckedChanged="chkLwpstop_CheckedChanged" />
                                 </div>
                                 <div class="form-group col-lg-6 col-md-6 col-12" id="divleavename" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup></sup>
                                         <label>Leave Name</label>
                                     </div>
-                                    <asp:ListBox ID="ddlLeave" runat="server" AppendDataBoundItems="true" TabIndex="23" CssClass="form-control multi-select-demo"
+                                    <asp:ListBox ID="ddlLeave" runat="server" AppendDataBoundItems="true" TabIndex="24" CssClass="form-control multi-select-demo"
                                         SelectionMode="multiple" AutoPostBack="false"></asp:ListBox>
                                 </div>
                             </div>
@@ -340,7 +346,7 @@
 
                     <div class="col-12 btn-footer">
                         <asp:Button ID="Button1" runat="server" Text="Submit" ValidationGroup="Leave" OnClick="btnSave_Click"
-                            CssClass="btn btn-primary" ToolTip="Click here to Save" TabIndex="24" />
+                            CssClass="btn btn-primary" ToolTip="Click here to Save" TabIndex="25" />
                         &nbsp;     
                             <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="Leave"
                                 ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
