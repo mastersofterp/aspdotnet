@@ -14,11 +14,14 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
+using ClosedXML.Excel;
+using System.IO;
 
 
 
 public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
 {
+    string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
    // StudentController objSC = new StudentController();
@@ -293,4 +296,117 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
     //        objCommon.DisplayMessage(this.Page, "Maximum limit of one acitivty registration is 500", this.Page);
     //    }
     //}
+
+
+    public DataSet GetClubStudentListDeatils()
+    {
+        DataSet ds = null;
+
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = new SqlParameter[0];
+
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CLUB_REGISTERED_STUDENT_LIST_REPORT", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetAllSubModuleDetails-> " + ex.ToString());
+        }
+
+        return ds;
+    }
+
+    public DataSet GetClubActivityRegistration()
+    {
+        DataSet ds = null;
+
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = new SqlParameter[0];
+
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CLUB_ACTIVITY_REGISTRATION_REPORT", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetAllSubModuleDetails-> " + ex.ToString());
+        }
+
+        return ds;
+    }
+
+
+    protected void btnExport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+           // DataSet ds = OBJCLUB.GetClubStudentListDeatils();
+            DataSet ds = GetClubStudentListDeatils();
+
+            ds.Tables[0].TableName = "Detailed Reports";
+            ds.Tables[1].TableName = "Summary Reports";
+            
+         
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                foreach (System.Data.DataTable dt in ds.Tables)
+                {
+                    //Add System.Data.DataTable as Worksheet.
+                    wb.Worksheets.Add(dt);
+                }
+
+                //Export the Excel file.
+                Response.Clear();
+                Response.Buffer = true;
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;filename=Club_Registered_Student_List.xlsx");
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(Response.OutputStream);
+                    Response.Flush();
+                    Response.End();
+                }
+               
+            }
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    protected void btnExportR_Click(object sender, EventArgs e)
+    {
+        DataSet ds = GetClubActivityRegistration();
+
+        ds.Tables[0].TableName = "Detailed Reports";
+        ds.Tables[1].TableName = "Summary Reports";
+
+
+        using (XLWorkbook wb = new XLWorkbook())
+        {
+            foreach (System.Data.DataTable dt in ds.Tables)
+            {
+                //Add System.Data.DataTable as Worksheet.
+                wb.Worksheets.Add(dt);
+            }
+
+            //Export the Excel file.
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment;filename=Club_Activity_Registration_Report.xlsx");
+            using (MemoryStream MyMemoryStream = new MemoryStream())
+            {
+                wb.SaveAs(MyMemoryStream);
+                MyMemoryStream.WriteTo(Response.OutputStream);
+                Response.Flush();
+                Response.End();
+            }
+
+        }
+    }
 }
