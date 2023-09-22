@@ -270,7 +270,14 @@ public partial class PayRoll_Pay_Head : System.Web.UI.Page
                 ddlcal.SelectedIndex = 0;
                 formularow.Visible = false;
             }
-            else
+            if(type == "-1") // updation done in 22092023
+            {
+                calrow.Visible = false;
+                txtFormula.Text = string.Empty;
+                ddlcal.SelectedIndex = 0;
+                formularow.Visible = false;
+            }
+            if(type  == "C")
             {
                 calrow.Visible = true;
                 formularow.Visible = true;
