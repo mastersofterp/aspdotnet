@@ -231,7 +231,7 @@ public partial class CC_Avenue_PaymentResponse : System.Web.UI.Page
                 lblRegNo.Text = Regno;
                 string tranID = Params["tracking_id"];
                 string orderno = Params["order_id"];//Params["billing_address"]
-                int installmentno = Convert.ToInt32(Params["installno"]);
+                int installmentno = Convert.ToInt32(Params["merchant_param3"]);
                 lblBranch.Text = Params["merchant_param2"];
                 string semester = objCommon.LookUp("ACD_DCR_TEMP", "SEMESTERNO", "IDNO=" + Idno.ToString() + "and RECIEPT_CODE='" + Params["billing_address"] + "'");
                 lblSemester.Text = semester;

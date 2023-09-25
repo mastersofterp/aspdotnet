@@ -305,16 +305,12 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
         //Sub merchant id coming from merchant is non numeric (Not allowed non-numeric)
         string subMerchantID = (jj).ToString();// +"-" + UserId;
 
-
         //Dynamic fields
         string Reference_No, sub_merchant_id, pgamount, StudentName, Mobile_No, EmailID, REG_NO;
-
         //static|fix fields
         string ReceiptType, Semester, StudentType, paymode;
-
         Reference_No = txnID;//"08";   //Order_ID  
         sub_merchant_id = subMerchantID;//"45";  2-digit
-
         pgamount = PayNowAmount;//"10";
         Mobile_No = Session["studPhone"].ToString();//;"1111111111";
         StudentName = studName;//"xyz";
@@ -333,25 +329,30 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
         string Userno = string.Empty;
         Userno = Session["userno"].ToString();
         string Installno = Session["Installmentno"].ToString();
+        string StudName = objCommon.LookUp("ACD_STUDENT", "CONCAT(STUDNAME,' - ',REGNO) as STUDNAME", "IDNO='" + Session["idno"] + "'");
        // dummy = "XY";
         redirecturl += RequestUrl;
         redirecturl += "merchantid=" + merchantid;
+
         redirecturl += "&mandatory fields=" + Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Installno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + dummy + "|";//+ "|" + Semester + "|" + StudentType Mobile_No + "|456";
+
         redirecturl += "&optional fields=" ;// +city + "|" + name;
         redirecturl += "&returnurl=" + ResponseUrl;
         redirecturl += "&Reference No=" + Reference_No;
         redirecturl += "&submerchantid=" + sub_merchant_id;
         redirecturl += "&transaction amount=" + pgamount;
         redirecturl += "&Idno=" + Idno;
-        redirecturl += "&Semester=" + Semester;
+        redirecturl += "&Studname=" + StudName;
         redirecturl += "&Userno=" + Userno;
+        redirecturl += "&Semester=" + Semester;
+        redirecturl += "&ReceiptType=" + ReceiptType;
         redirecturl += "&Installno=" + Installno;
         redirecturl += "&paymode=" + paymode;
-
-
         encryptredirecturl += RequestUrl;
         encryptredirecturl += "merchantid=" + merchantid;
+
         encryptredirecturl += "&mandatory fields=" + encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + StudName + "|" + Installno + "|" + Semester + "|" + Mobile_No + "|" + EmailID + "|" + ReceiptType + "|" + dummy + "|", ASEKEY);//+ 
+
 
         //encryptredirecturl += "&mandatory fields=" + encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Idno + "|" + Semester + "|" + Userno + "|" + Installno + "|" + Mobile_No + "|" + EmailID + "|" + dummy + "|" + dummy, ASEKEY);//+ "|" + Semester + "|" + StudentType   (Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + Mobile_No + "|456", ASEKEY);
         encryptredirecturl += "&optional fields=";// +encryptFile(city + "|" + name, ASEKEY);
@@ -360,14 +361,14 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_EasyPayOnlinePaymentRequest : 
         encryptredirecturl += "&submerchantid=" + encryptFile(sub_merchant_id, ASEKEY);
         encryptredirecturl += "&transaction amount=" + encryptFile(pgamount, ASEKEY);
         encryptredirecturl += "&Idno=" + encryptFile(Idno, ASEKEY);
-        encryptredirecturl += "&Semester=" + encryptFile(Semester, ASEKEY);
+        encryptredirecturl += "&Studname=" + encryptFile(StudName, ASEKEY);
         encryptredirecturl += "&Userno=" + encryptFile(Userno, ASEKEY);
+        encryptredirecturl += "&Semester=" + encryptFile(Semester, ASEKEY);
+        encryptredirecturl += "&ReceiptType=" + encryptFile(ReceiptType, ASEKEY);
         encryptredirecturl += "&Installno=" + encryptFile(Installno, ASEKEY);
         encryptredirecturl += "&paymode=" + encryptFile(paymode, ASEKEY);
-
         int semregflag=0;
         semregflag = Convert.ToInt32(Session["SEMREG"]);
-
        
         //Decryption Logic Done
         ////string ss = encryptFile(Reference_No + "|" + sub_merchant_id + "|" + pgamount + "|" + StudentName + "|" + Mobile_No + "|" + EmailID + "|" + REG_NO + "|" + ReceiptType + "|" + Semester + "|" + StudentType, ASEKEY);////encryptFile(paymode, ASEKEY);
