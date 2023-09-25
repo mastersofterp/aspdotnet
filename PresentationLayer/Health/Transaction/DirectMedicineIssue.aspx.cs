@@ -94,7 +94,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                             FillEmployeeInfo(id);
                             trDependent.Visible = true;
                             lblEmp.Visible = true;
-                            lblDot.Visible = true;                         
+                            lblDot.Visible = true;
                             lblEmployeeCode.Visible = true;
                             trPatientHist.Visible = true;
                         }
@@ -381,45 +381,45 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
     {
         try
         {
-          
-                trOtherCategory.Visible = false;
-                HelMasterController objHelMaster = new HelMasterController();
-                DataSet ds = objHelMaster.GetOtherPatientInfo(idno);
-                if (ds.Tables[0].Rows.Count != null)
+
+            trOtherCategory.Visible = false;
+            HelMasterController objHelMaster = new HelMasterController();
+            DataSet ds = objHelMaster.GetOtherPatientInfo(idno);
+            if (ds.Tables[0].Rows.Count != null)
+            {
+                txtPatientName.Text = ds.Tables[0].Rows[0]["PATIENT_NAME"].ToString();
+                hfPatientName.Value = ds.Tables[0].Rows[0]["PID"].ToString();
+                if ((ds.Tables[0].Rows[0]["SEX"].ToString() == "M"))
                 {
-                    txtPatientName.Text = ds.Tables[0].Rows[0]["PATIENT_NAME"].ToString();
-                    hfPatientName.Value = ds.Tables[0].Rows[0]["PID"].ToString();
-                    if ((ds.Tables[0].Rows[0]["SEX"].ToString() == "M"))
-                    {
-                        rdbMale.Checked = true;
-                        rdbFemale.Checked = false;
-                    }
-                    else if ((ds.Tables[0].Rows[0]["SEX"].ToString() == "F"))
-                    {
-                        rdbMale.Checked = false;
-                        rdbFemale.Checked = true;
-                    }
-                    txtAge.Text = ds.Tables[0].Rows[0]["AGE"].ToString();
-                    txtWeight.Text = ds.Tables[0].Rows[0]["WEIGHT"].ToString();
-                    txtAge.Focus();
-                    lblPatientCat.Text = "O";
-                    this.BindListView(Convert.ToInt32(hfPatientName.Value), lblPatientCat.Text);
-                    if (Convert.ToInt32(Session["usertype"]) == 5)
-                    {
-                        btnPrescription.Visible = true;
-                    }
+                    rdbMale.Checked = true;
+                    rdbFemale.Checked = false;
                 }
+                else if ((ds.Tables[0].Rows[0]["SEX"].ToString() == "F"))
+                {
+                    rdbMale.Checked = false;
+                    rdbFemale.Checked = true;
+                }
+                txtAge.Text = ds.Tables[0].Rows[0]["AGE"].ToString();
+                txtWeight.Text = ds.Tables[0].Rows[0]["WEIGHT"].ToString();
+                txtAge.Focus();
+                lblPatientCat.Text = "O";
+                this.BindListView(Convert.ToInt32(hfPatientName.Value), lblPatientCat.Text);
+                if (Convert.ToInt32(Session["usertype"]) == 5)
+                {
+                    btnPrescription.Visible = true;
+                }
+            }
 
-                //// for fisrt time entry of Other Category Patient.
-                //if (txtPatientName.Text.Trim() == "Emergency Case")
-                //{
-                //    txtAge.Text = string.Empty;
-                //    trOtherCategory.Visible = true;
-                //}
-                //else
-                //{
+            //// for fisrt time entry of Other Category Patient.
+            //if (txtPatientName.Text.Trim() == "Emergency Case")
+            //{
+            //    txtAge.Text = string.Empty;
+            //    trOtherCategory.Visible = true;
+            //}
+            //else
+            //{
 
-                //}
+            //}
         }
         catch (Exception ex)
         {
@@ -446,7 +446,8 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.updOpdTransaction, "No sufficient stock", this.Page);
                 //lblMsg.Text = "No sufficient stock";                   
-                this.ModalPopupExtender2.Show();
+                //this.ModalPopupExtender2.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
                 return;
             }
             else if (rdbNo.Checked == true && Convert.ToInt32(txtQuantity.Text) < Convert.ToInt32(ds.Tables[0].Rows[0]["AVAILABLE_QTY"].ToString()) || rdbYes.Checked == true && Convert.ToInt32(txtQuantity.Text) < Convert.ToInt32(ds.Tables[0].Rows[0]["AVAILABLE_QTY"].ToString()))
@@ -938,7 +939,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
             {
                 lvPatientHist.DataSource = null;
                 lvPatientHist.DataBind();
-               // trPatientHist.Visible = false;
+                // trPatientHist.Visible = false;
             }
 
             //DataSet dsRec = objDirectCon.GetDirectIssueHistory(OPDID, PatientCat);
@@ -952,7 +953,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
             // {
             //     gridDirectMIssue.DataSource = null;
             //     gridDirectMIssue.DataBind();
-                 
+
             // }
         }
         catch (Exception ex)
@@ -971,7 +972,8 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
         {
             gvPrisc.DataSource = dt;
             gvPrisc.DataBind();
-            this.ModalPopupExtender2.Show();
+            //this.ModalPopupExtender2.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
         }
         catch (Exception ex)
         {
@@ -1094,12 +1096,14 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
         Session["RecTbl"] = null;
         ViewState["SRNO"] = null;
         pnlSGrid.Visible = false;
-        this.ModalPopupExtender2.Hide();
+        //this.ModalPopupExtender2.Hide();
+        ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('hide');", true);
         Session["RecContentTbl"] = null;
         ViewState["opdID"] = null;
         ViewState["action"] = "add";
         btnSubmitNew.Visible = false;
         Session["Carta"] = null;
+        hfPatientName.Value = null;
     }
 
     private void ShowReport(string reportTitle, string rptFileName, object sender)
@@ -1135,7 +1139,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 FirstDep.Visible = true;
                 SecDep.Visible = true;
                 ThiDep.Visible = true;
-                objCommon.FillDropDownList(ddlDependent, "PAYROLL_SB_FAMILYINFO", "FNNO", "RELATION + '- '+ MEMNAME AS MEMNAME", "IDNO=" + hfPatientName.Value + "AND RELATION <> 'SELF' AND MEMFOR=2", "FNNO");
+                objCommon.FillDropDownList(ddlDependent, "PAYROLL_SB_FAMILYINFO", "FNNO", "RELATION + '- '+ MEMNAME AS MEMNAME", "IDNO=" + hfPatientName.Value + "AND RELATION <> 'SELF'", "FNNO");
                 txtAge.Text = string.Empty;
                 txtWeight.Text = string.Empty;
             }
@@ -1168,7 +1172,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
         {
             if (ddlDependent.SelectedIndex > 0)
             {
-               // DataSet ds = objCommon.FillDropDown("PAYROLL_SB_FAMILYINFO", "FNNO", "DATEDIFF(YEAR,  DOB, GETDATE()) AS AGE", "FNNO=" + ddlDependent.SelectedValue, "");
+                // DataSet ds = objCommon.FillDropDown("PAYROLL_SB_FAMILYINFO", "FNNO", "DATEDIFF(YEAR,  DOB, GETDATE()) AS AGE", "FNNO=" + ddlDependent.SelectedValue, "");
                 DataSet ds = objCommon.FillDropDown("PAYROLL_SB_FAMILYINFO", "FNNO", "DBO.AGE_LENGTH(DOB) AS AGE", "FNNO=" + ddlDependent.SelectedValue, "");
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -1188,7 +1192,8 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
     protected void btnCancelP_Click(object sender, EventArgs e)
     {
         ClearPresc();
-        this.ModalPopupExtender2.Show();
+        //this.ModalPopupExtender2.Show();
+        ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
         gvPrisc.DataSource = null;
         gvPrisc.DataBind();
         Session["Carta"] = null;
@@ -1200,13 +1205,14 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
     {
         if (gvPrisc.Rows.Count > 0)
         {
-            this.ModalPopupExtender2.Show();
+            //this.ModalPopupExtender2.Show();
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
             objCommon.DisplayMessage(updOpdTransaction, "Please save prescription details and then close.", this);
-
         }
         else
         {
-            this.ModalPopupExtender2.Hide();
+            //this.ModalPopupExtender2.Hide();
+            ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('hide');", true);
         }
     }
 
@@ -1377,7 +1383,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
             {
                 lvMedicineissue.DataSource = ds;    // ViewState["opdID"] = ds.Tables[0].Rows[0]["OPDNO"].ToString(); pnlMedicineGrid
                 lvMedicineissue.DataBind();
-                pnlMedicineGrid.Visible = true;              
+                pnlMedicineGrid.Visible = true;
                 DataTable firstTable = ds.Tables[0];
                 ViewState["CurrentTable"] = firstTable;
 
@@ -1391,10 +1397,10 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                         CheckBox chkrow = (CheckBox)row.FindControl("chkIssue");
                         TextBox txtissue = (TextBox)row.FindControl("txtIssueQty");
                         //LinkButton lnkR = (LinkButton)row.FindControl("lnkRemove");
-                        
+
                         txtItemname.Enabled = false;
                         qty.Enabled = false;
-                        dno.Enabled = false;                        
+                        dno.Enabled = false;
                         txtissue.Enabled = true;
                         //lnkR.Visible = true;
                         //Button btnAdd = lvMedicineissue.FooterRow.FindControl("btnAdd") as Button;
@@ -1676,20 +1682,21 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
     {
         try
         {
-            if (hfPatientName.Value == "")
-            {
+            //if (hfPatientName.Value == "")
+            //{
                 lvPatientHist.Visible = false;
                 lvMedicineissue.Visible = false;
                 btnConfirm.Visible = true;
                 btnCancelP.Visible = true;
                 btnSubmitNew.Visible = true;
                 btnSubmit.Visible = false;
-                this.ModalPopupExtender2.Show();
-               // this.ModalPopupExtender2.Hide();
+                //this.ModalPopupExtender2.Show();
+                ScriptManager.RegisterStartupScript(this, GetType(), "OpenModalScript", "$('#divPrescription').modal('show');", true);
+                // this.ModalPopupExtender2.Hide();
                 //objCommon.DisplayMessage(updOpdTransaction, "Please Select Patient Name.", this);
                 // return;
-            }            
-          
+            //}
+
         }
         catch (Exception ex)
         {
@@ -1707,7 +1714,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 objD.PID = Convert.ToInt32(pidOtherUser);
                 lblPatientCat.Text = "O";
             }
-            else 
+            else
             {
                 string PatientName = objCommon.LookUp("HEALTH_PATIENT_DETAILS", "PATIENT_NAME", "PID =" + hfPatientName.Value);
                 if (PatientName == "Emergency Case")
@@ -1758,7 +1765,15 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 {
                     objD.DEPENDENTID = 0;
                     objD.PATIENT_CODE = 'E';
-                    objD.PATIENT_NAME = pNAME[1];
+                    //objD.PATIENT_NAME = pNAME[1];
+                    if (pNAME.Length == 1)
+                    {
+                        objHelTran.PATIENT_NAME = pNAME[0];
+                    }
+                    else
+                    {
+                        objHelTran.PATIENT_NAME = pNAME[1];
+                    }
                 }
                 else
                 {
@@ -1817,7 +1832,7 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 //        }
                 //    }
                 //}
-              
+
 
                 DataTable dtMedicine = new DataTable("MediTbl");
 
