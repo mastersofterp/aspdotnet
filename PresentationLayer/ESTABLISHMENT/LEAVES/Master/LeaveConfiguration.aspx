@@ -299,6 +299,15 @@
                                     </div>
                                     <asp:CheckBox ID="ChkValidateLeaveComb" runat="server" TabIndex="20" CssClass="form-control" ToolTip="Check Mark to Validate Leave Combination" />
                                 </div>
+<<<<<<< HEAD
+=======
+                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <label>Not Allow any Leave in Continuation</label>
+                                    </div>
+                                    <asp:CheckBox ID="chkLeaveincont" runat="server" TabIndex="21" CssClass="form-control" ToolTip="Check Mark to Not Allow any Leave in Continution" />
+                                </div>
+>>>>>>> 1b3fb3d ([FEATURE] [48677] Changes on Leave application,Leave Configration)
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
                                         <label>Show LWP/Loss Of Pay Leave on Leave Card</label>
