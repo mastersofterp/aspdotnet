@@ -172,7 +172,6 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
     #region Dynamic Search
     protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         try
         {
             //Panel3.Visible = false;
