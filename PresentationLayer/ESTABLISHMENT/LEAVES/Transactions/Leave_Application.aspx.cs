@@ -3474,7 +3474,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             #region LeaveContinution_Val
 
                             bool IsNotContinuationLeave = Convert.ToBoolean(objCommon.LookUp("PAYROLL_LEAVE_REF", "ISNULL(IsNotAllowLeaveinCont,0)as IsNotAllowLeaveinCont", ""));
-                            if (IsNotContinuationLeave == true && rblleavetype.SelectedIndex == 0)
+                            if (IsNotContinuationLeave == true)
                             {
 
                                 if (!ValidIscontleave())
@@ -4568,11 +4568,15 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
         DataSet LeaveValid;
         string leavedate = string.Empty;
         DateTime validdate;
+<<<<<<< HEAD
         int letrno;
+=======
+>>>>>>> 1b3fb3d6 ([FEATURE] [48677] Changes on Leave application,Leave Configration)
         try
         {
             if (txtFromdt.Text.ToString() != string.Empty && txtFromdt.Text.ToString() != "__/__/____")
             {
+<<<<<<< HEAD
                 if (ViewState["action"].ToString().Equals("edit"))
                 {
                     letrno = Convert.ToInt32(ViewState["letrno"]);
@@ -4583,6 +4587,10 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                 }
                 int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
                 LeaveValid = objApp.CheckIsLeaveCont(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), Convert.ToDateTime(txtJoindt.Text), stno, Convert.ToInt32(Session["idno"]), letrno);
+=======
+                int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
+                LeaveValid = objApp.CheckIsLeaveCont(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), Convert.ToDateTime(txtJoindt.Text), stno, Convert.ToInt32(Session["idno"]));
+>>>>>>> 1b3fb3d6 ([FEATURE] [48677] Changes on Leave application,Leave Configration)
                 if (LeaveValid.Tables[0].Rows.Count > 0)
                 {
                     leavedate = Convert.ToString(LeaveValid.Tables[0].Rows[0]["Validdate"]);
@@ -4618,6 +4626,6 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
         return true;
     }
 
-
+      
 }
 
