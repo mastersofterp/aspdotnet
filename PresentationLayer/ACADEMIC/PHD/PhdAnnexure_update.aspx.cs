@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 
 public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 {
+
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new IITMS.UAIMS_Common();
     PhdController objPhdC = new PhdController();
@@ -29,6 +30,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+      
         try
         {
             if (!Page.IsPostBack)
