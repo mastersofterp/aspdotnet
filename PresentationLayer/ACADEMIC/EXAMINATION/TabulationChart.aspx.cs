@@ -5643,7 +5643,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 dg.DataSource = ds.Tables[0];
                 dg.DataBind();
-                AddReportHeader(dg);
+                //AddReportHeader(dg);
                 string attachment = "attachment; filename=" + "GradeCardIssueRegister.xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
