@@ -582,47 +582,50 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-5">
-                                        <asp:Panel ID="lvPanel" runat="server" Visible="false">
-                                            <asp:ListView ID="lvTest" runat="server">
-                                                <LayoutTemplate>
-                                                    <div id="lgv1">
-                                                        <div class="sub-heading">
-                                                            <h5>List Of Test Title</h5>
-                                                        </div>
-                                                        <table class="table table-bordered table-hover">
-                                                            <thead>
-                                                                <tr class="bg-light-blue">
-                                                                    <th>Delete </th>
-                                                                    <th>TEST TITLE</th>
-                                                                    <th>PRINT</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr id="itemPlaceholder" runat="server" />
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tr>
-                                                        <td>
-                                                            <asp:ImageButton ID="btnDelete" runat="server" CommandArgument='<%# Eval("SRNO") %>'
-                                                                ImageUrl="~/images/delete.png" OnClick="btnDeleteRec_Click" ToolTip="Delete Record" />
-                                                        </td>
-                                                        <td><%# Eval("TEST_TITLE") %></td>
-                                                        <td>
-                                                            <asp:Button ID="btnReport" runat="server" Text="Print" CommandArgument='<%# Eval("OBSERNO") %>'
-                                                                OnClick="btnReport_Click" CssClass="btn btn-outline-info" ToolTip="Click here to Print"
-                                                                Enabled='<%#Eval("OBSERNO").ToString() == "0" ? false : true %>' />
-                                                        </td>
-                                                    </tr>
-                                                </ItemTemplate>
-                                            </asp:ListView>
-                                        </asp:Panel>
-                                    </div>
+                                    <%--<div class="col-12">--%>
                                 </div>
+                                <asp:Panel ID="lvPanel" runat="server" Visible="false">
+                                    <div class="col-12">
+                                        <asp:ListView ID="lvTest" runat="server">
+                                            <EmptyDataTemplate>
+                                                <asp:Label ID="ibler" runat="server" Text="No more Leave aaplication" CssClass="d-block text-center mt-3"></asp:Label>
+                                            </EmptyDataTemplate>
+                                            <LayoutTemplate>
+                                                <div class="sub-heading">
+                                                    <h5>List Of Test Title</h5>
+                                                </div>
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                    <thead class="bg-light-blue">
+                                                        <tr>
+                                                            <th>Delete </th>
+                                                            <th>TEST TITLE</th>
+                                                            <th>PRINT</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <asp:ImageButton ID="btnDelete" runat="server" CommandArgument='<%# Eval("SRNO") %>'
+                                                            ImageUrl="~/images/delete.png" OnClick="btnDeleteRec_Click" ToolTip="Delete Record" />
+                                                    </td>
+                                                    <td><%# Eval("TEST_TITLE") %></td>
+                                                    <td>
+                                                        <asp:Button ID="btnReport" runat="server" Text="Print" CommandArgument='<%# Eval("OBSERNO") %>'
+                                                            OnClick="btnReport_Click" CssClass="btn btn-outline-info" ToolTip="Click here to Print" />
+                                                        <%--Enabled='<%#Eval("OBSERNO").ToString() == "0" ? false : true %>'--%>
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </div>
+                                </asp:Panel>
+
+                                <%--</div>--%>
                             </div>
                         </asp:Panel>
                     </div>

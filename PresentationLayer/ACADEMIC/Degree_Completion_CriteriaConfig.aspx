@@ -61,7 +61,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
-                                            <label>Prerequisites Subjects</label>
+                                            <label>Core Courses</label>
                                         </div>
                                         <asp:ListBox ID="ddlpreSubjects" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="0"></asp:ListBox>
                                         <asp:RequiredFieldValidator ID="rfcprereq" runat="server" ControlToValidate="ddlpreSubjects" SetFocusOnError="true" Display="None" ErrorMessage="Please Select Prerequisites Subjects." ValidationGroup="submit"></asp:RequiredFieldValidator>
@@ -98,6 +98,7 @@
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="submit" />
                             </div>
 
+                           <%-- Set Course Catogory Wise Mix Max in ListView--%>
                             <div id="Div2" class="col-12 mt-3" runat="server" visible="false">
                                 <div class="col-12">
                                     <asp:Panel ID="Panel1" runat="server">

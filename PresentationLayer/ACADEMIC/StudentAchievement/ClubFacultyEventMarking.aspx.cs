@@ -68,6 +68,9 @@ public partial class ACADEMIC_StudentAchievement_ClubFacultyStudentEventMarking 
             }
         }
         //ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+        //ViewState["CREATE_EVENT_ID"] = null;
+        //ViewState[""]
+
     }
 
 
@@ -179,7 +182,19 @@ public partial class ACADEMIC_StudentAchievement_ClubFacultyStudentEventMarking 
 
     protected void btnShowActivityDetails_Click(object sender, EventArgs e)
     {
-        BindListView();
+        //int CREATE_EVENT_ID = Convert.ToInt32(objCommon.LookUp("ACD_ACHIEVEMENT_CREATE_EVENT", "ENDDATE", "CREATE_EVENT_ID=" + Convert.ToInt32(ViewState["CREATE_EVENT_ID"]) + " AND ENDDATE>1"));
+
+        ////int CREATE_EVENT_ID = Convert.ToInt32(objCommon.LookUp("ACD_ACHIEVEMENT_CREATE_EVENT", "ENDDATE", "CREATE_EVENT_ID='" + Convert.ToInt32(ViewState["CREATE_EVENT_ID"]+ &&)));
+        //if (CREATE_EVENT_ID > 0)
+        //{
+            BindListView();
+        //}
+
+        //else
+        //{
+        //    BindListView();
+        //}
+     
     }
     protected void btnCancelActivityDetails_Click(object sender, EventArgs e)
     {

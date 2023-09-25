@@ -1194,6 +1194,7 @@
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12"  id="divDAHeadID" runat="server" visible="false">
                                                          <div class="label-dynamic">
+                                                             <sup>* </sup>
                                                             <label>DA Head Calculation</label>
                                                         </div>
                                                            <asp:DropDownList ID="ddlDAHeadCalculation" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true"
@@ -1203,6 +1204,7 @@
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divHRAHEADID" runat="server"  visible="false">
                                                         <div class="label-dynamic">
+                                                            <sup>* </sup>
                                                             <label>HRA Head Calculation</label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlHRAHeadCalculation" runat="server" CssClass="form-control" AppendDataBoundItems="true" data-select2-enable="true"

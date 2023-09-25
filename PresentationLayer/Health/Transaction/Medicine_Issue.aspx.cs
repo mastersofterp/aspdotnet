@@ -22,6 +22,9 @@ using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Health;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic;
+using System.Net.Mail;
+using System.Net;
+using System.Text;
 
 public partial class Health_Transaction_Medicine_Issue : System.Web.UI.Page
 {
@@ -130,8 +133,15 @@ public partial class Health_Transaction_Medicine_Issue : System.Web.UI.Page
     {
         try
         {
-           this.BindData();
-            
+            if (txtPatientNo.Text == string.Empty)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('Patient Number is must to show details.');", true);
+                return;
+            }
+            else
+            {
+                this.BindData();
+            }
         } 
         catch (Exception ex)
         {

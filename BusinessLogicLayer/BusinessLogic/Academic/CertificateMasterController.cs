@@ -513,6 +513,35 @@ namespace IITMS
                     }
                     return ds;
                 }
+                //ADDED BY JAY TAKALKHEDE ON 02-09-2023(RFC.Enhancement.Major.2 (01-09-2023))
+                public DataSet AddBankEstimateCertificate(CertificateMaster objcertMaster, int Backno, string TypeofAcc, string AccNo, string Ifsc, int mode)
+                {
+
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[7];
+                        objParams[0] = new SqlParameter("@P_TYPE_OF_ACC", TypeofAcc);
+                        objParams[1] = new SqlParameter("@P_IDNO", objcertMaster.IdNo);
+                        objParams[2] = new SqlParameter("@P_Account_No", AccNo);
+                        objParams[3] = new SqlParameter("@P_CREATED_BY", objcertMaster.UaNO);
+                        objParams[4] = new SqlParameter("@P_MODE", mode);
+                        objParams[5] = new SqlParameter("@P_IFSC_Code", Ifsc);
+                        objParams[6] = new SqlParameter("@P_BANKNO", Backno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_INSERT_BANK_INFORMATION", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.CertificateMasterController.AddBankEstimateCertificate-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
                 //ADDED BY JAY TAKALKHEDE ON 27-07-2022
                 public int AddEstimateCertificate(CertificateMaster objcertMaster, int ORGID)
                 {

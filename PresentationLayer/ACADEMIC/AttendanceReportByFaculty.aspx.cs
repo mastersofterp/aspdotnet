@@ -64,7 +64,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                 else
                 {
                     //Page Authorization
-                    CheckPageAuthorization();
+                    //CheckPageAuthorization();
 
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -77,7 +77,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                     }
                     PopulateDropDownList();
 
-                    if (Session["dec"].ToString() == "1" || Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "8")
+                    if (Session["dec"].ToString() == "1" || Session["usertype"].ToString() == "1" || Session["usertype"].ToString() == "8" || Session["usertype"].ToString() == "3")
                     {
                         btnHODReport.Visible = true;
                         //branch.Visible = false;
@@ -117,8 +117,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                     if (Session["usertype"].ToString() != "3")
                         dvFaculty.Visible = true;
                 }
-                objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  Added By Nikhil L. on 30/01/2022
-                objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -  Added By Nikhil L. on 30/01/2022
+                //objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  Added By Nikhil L. on 30/01/2022
+                //objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -  Added By Nikhil L. on 30/01/2022
 
             }
             divMsg.InnerHtml = string.Empty;
@@ -256,9 +256,9 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
         {
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
 
-            if (Session["usertype"].ToString() == "8")
+            if (Session["usertype"].ToString() == "8" || Session["usertype"].ToString() == "3")
             {
-                objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B  WITH (NOLOCK) ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO>0 AND B.DEPTNO =" + Session["userdeptno"].ToString(), "D.DEGREENO");
+                objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B  WITH (NOLOCK) ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO>0 AND B.DEPTNO in (" + Session["userdeptno"].ToString() + ")", "D.DEGREENO");
             }
             else if (Session["usertype"].ToString() != "1")
             {
@@ -306,7 +306,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
         if (ddlDegree.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH", "BRANCHNO", "LONGNAME", "DEGREENO = " + ddlDegree.SelectedValue, "BRANCHNO");
-            if (Session["usertype"].ToString() == "8") // added by roshan pannase 15022020
+            if (Session["usertype"].ToString() == "8" || Session["usertype"].ToString() == "3") // added by roshan pannase 15022020
             {
                 objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B  WITH (NOLOCK) ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + Convert.ToInt32(ViewState["degreeno"]) + " AND B.DEPTNO =" + Session["userdeptno"].ToString(), "A.LONGNAME");
             }

@@ -5,7 +5,7 @@
 // CREATED BY    : Jay Takalkhede 
 // Modified BY   : Jay Takalkhede
 // Modified Date : 24-08-2023
-// Version :- 1) RFC.Feature.Major.1 (26-07-2023) 2) RFC.Enhancement.Major.2 (24-08-2023)
+// Version :- 1) RFC.Feature.Major.1 (26-07-2023) 2) RFC.Enhancement.Major.2 (24-08-2023) 3) RFC.Enhancement.Major.2 (01-09-2023)
 //===============================================//
 
 
@@ -50,7 +50,8 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         try
         {
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0 AND ACTIVESTATUS=1", "DEGREENO");
-            // objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
+            objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKCODE", "BANKNO>0 AND ACTIVESTATUS=1", "BANKNO");
+
             //Fill Dropdown admbatch
             objCommon.FillDropDownList(ddldegreerc, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0 AND ACTIVESTATUS=1", "DEGREENO");
             objCommon.FillDropDownList(ddlAdmyear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1  ", "ACADEMIC_YEAR_NAME DESC");
@@ -89,14 +90,6 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     //fill dropdown method
                     PopulateDropDown();
-                    if (Convert.ToInt32(Session["userno"]) == 1 || Convert.ToInt32(Session["userno"]) == 169)
-                    {
-                        //btnStatsticalReport.Visible = true;
-                    }
-                    else
-                    {
-                        // btnStatsticalReport.Visible = false;
-                    }
 
                     if (Convert.ToInt32(Session["OrgId"]) == 1)
                     {
@@ -117,7 +110,6 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
             throw;
         }
     }
-
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -132,6 +124,26 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         {
             //Even if PageNo is Null then, don't show the page
             Response.Redirect("~/notauthorized.aspx?page=Estimate_Certificate_Master.aspx");
+        }
+    }
+
+    public void HiddenItemBank()
+    {
+        if (Convert.ToInt32(Session["OrgId"]) == 6)
+        {
+            DivBank.Visible = true;
+            txtACNO.Visible = true;
+            ddlBank.Visible = true;
+            txtIFSC.Visible = true;
+            txttypeofAC.Visible = true;
+        }
+        else
+        {
+            DivBank.Visible = false;
+            txtACNO.Visible = false;
+            ddlBank.Visible = false;
+            txtIFSC.Visible = false;
+            txttypeofAC.Visible = false;
         }
     }
     #endregion
@@ -168,13 +180,13 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
             branchNo = Convert.ToInt32(ddlBranch.SelectedValue);
             semesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
             degreeNo = Convert.ToInt32(ddlDegree.SelectedValue);
-
-
+            
             ds = objcerMasterController.GetStudentListForEBC(Admyear, branchNo, semesterNo, degreeNo);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lvStudentRecords.DataSource = ds.Tables[0];
                 lvStudentRecords.DataBind();
+                HiddenItemBank();
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudentRecords);//Set label 
             }
             else
@@ -182,6 +194,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                 objCommon.DisplayMessage(this.UpdatePanel1, "No student data found", this);
                 lvStudentRecords.DataSource = null;
                 lvStudentRecords.DataBind();
+
             }
         }
         catch (Exception ex)
@@ -228,11 +241,13 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         if (count <= 0)
         {
             objCommon.DisplayMessage(this.updpnlExam2, "Please Select only one Student for issuing Certificate", this);
+            HiddenItemBank();
             return;
         }
         else if(count>1)
          {
                 objCommon.DisplayMessage(this.updpnlExam2, "Please Select only one Student for issuing Certificate", this);
+                HiddenItemBank();
                 return;
          }
         else
@@ -241,6 +256,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
             if (PRINT == "0")
             {
                 objCommon.DisplayMessage(this.updpnlExam2, "Please Confirm Student for issuing Certificate", this);
+                HiddenItemBank();
                 return;
             }
             else
@@ -271,19 +287,35 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
     {
         try
         {
+            CertificateMasterController objcertMasterController = new CertificateMasterController();
+            CertificateMaster objcertMaster = new CertificateMaster();
+               int Backno = 0;
+              string Banckname =string.Empty;
+              string TypeofAcc =string.Empty;
+              string AccNo     =string.Empty;
+              string Ifsc = string.Empty;
+              if (Convert.ToInt32(Session["OrgId"]) == 6)
+              {//RFC.Enhancement.Major.2 (01-09-2023)
+               Backno       = Convert.ToInt32(ddlBank.SelectedValue);
+               Banckname = ddlBank.SelectedItem.Text;
+               TypeofAcc = txttypeofAC.Text;
+               AccNo     = txtACNO.Text;
+               Ifsc      = txtIFSC.Text.ToUpper();
+              }
             string year=objCommon.LookUp("ACD_STUDENT", "YEAR", "IDNO=" + param);
             //int sessionno = Convert.ToInt32(Session["currentsession"]);
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-          // url += "&param=@P_IDNO=" + param + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_ACDYEAR=" + Convert.ToInt32(ddlAdmyear.SelectedValue) + ",YEAR=" + year.ToString();
-            url += "&param=@P_IDNO=" + param + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_ACDYEAR=" + Convert.ToInt32(ddlAdmyear.SelectedValue)  + ",YEAR=" + year.ToString();
-
-           //url += "&param=@P_IDNO=" + param + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_ACDYEAR=" + Convert.ToInt32(ddlAdmyear.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",YEAR=" + year.ToString();
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
+            if (Convert.ToInt32(Session["OrgId"]) == 6)
+            {//RFC.Enhancement.Major.2 (01-09-2023)
+                url += "&param=@P_IDNO=" + param + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_ACDYEAR=" + Convert.ToInt32(ddlAdmyear.SelectedValue) + ",YEAR=" + year.ToString() + ",BankName=" + Banckname + ",Accno=" + AccNo + ",IFSCCODE=" + Ifsc + ",ToBank=" + TypeofAcc;
+            }
+            else
+            {
+                url += "&param=@P_IDNO=" + param + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_ACDYEAR=" + Convert.ToInt32(ddlAdmyear.SelectedValue) + ",YEAR=" + year.ToString();
+            }
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -391,12 +423,14 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
             lvStudentRecords.DataBind();
         }
     }
+    #endregion
 
+    #region Confirm
     protected void btnConfirm_Click(object sender, EventArgs e)
     {
         int count1 = 0;
         int count = 0;
-        int count_Submit=0;
+        int count_Submit = 0;
         foreach (ListViewDataItem dataitem in lvStudentRecords.Items)
         {
             CheckBox cbRow = dataitem.FindControl("chkReport") as CheckBox;
@@ -406,11 +440,13 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         if (count <= 0)
         {
             objCommon.DisplayMessage(this.updpnlExam2, "Please Select only one Student for confirm and issuing Certificate", this);
+            HiddenItemBank();
             return;
         }
         else if (count > 1)
         {
             objCommon.DisplayMessage(this.updpnlExam2, "Please Select only one Student for confirm and issuing Certificate", this);
+            HiddenItemBank();
             return;
         }
         else
@@ -425,6 +461,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                     CheckBox cbRow = dataitem.FindControl("chkReport") as CheckBox;
                     if (cbRow.Checked == true)
                     {
+
                         count1++;
                         objcertMaster.IpAddress = ViewState["ipAddress"].ToString();
                         objcertMaster.UaNO = Convert.ToInt32(Session["userno"]);
@@ -437,6 +474,15 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                         objcertMaster.Remark = txtRemark.Text;
                         objcertMaster.SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
                         int ORGID = Convert.ToInt32(Session["OrgId"]);
+                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RFC.Enhancement.Major.2 (01-09-2023)
+                        {
+                            int Backno       = Convert.ToInt32(ddlBank.SelectedValue);
+                            string TypeofAcc = txttypeofAC.Text;
+                            string AccNo     = txtACNO.Text;
+                            string Ifsc      = txtIFSC.Text;
+                            int mode = 0;
+                            DataSet ds = objcerMasterController.AddBankEstimateCertificate(objcertMaster, Backno, TypeofAcc, AccNo, Ifsc, mode);//RFC.Enhancement.Major.2 (01-09-2023)
+                        }
                         CustomStatus cs = (CustomStatus)objcertMasterController.AddEstimateCertificate(objcertMaster, ORGID);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
@@ -458,14 +504,10 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                 if (count1 == count_Submit)
                 {
                     objCommon.DisplayMessage(this.updpnlExam2, "Process Done Successfully !!!", this);
+                    HiddenItemBank();
                     //BindList();
                     return;
                 }
-                //if (count1 <= 0)
-                //{
-                //    objCommon.DisplayMessage(this.updpnlExam2, "Please Select only one Student for issuing Certificate", this);
-                //    return;
-                //}
 
             }
             catch (Exception ex)
@@ -473,7 +515,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                 throw;
             }
         }
-        
+
     }
     #endregion
 

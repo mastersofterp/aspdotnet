@@ -262,6 +262,9 @@
                                                             <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto">
                                                                 <asp:ListView ID="lvCompAttach" runat="server">
                                                                     <LayoutTemplate>
+                                                                        <div class="sub-heading">
+                                                                            <h5>Attached Files</h5>
+                                                                        </div>
                                                                         <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                                             <thead>
                                                                                 <tr>

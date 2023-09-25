@@ -119,7 +119,6 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                 this.ShowDetails();
 
 
-
                                 foreach (ListViewDataItem dataitem in lvFailCourse.Items)
                                 {
                                     if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
@@ -138,6 +137,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                         }
                                         else
                                         {
+                                            // chkacc.Checked = true;
                                             chkacc.Enabled = true;
                                         }
 
@@ -163,8 +163,22 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                 //    btnSubmit.Enabled = true;
                                 //}
 
-                                // BindStudentDetails();
+                                //BindStudentDetails();
+
+
+                                string end_date = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "CONVERT(VARCHAR,SA.END_DATE,103)", "AM.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'   AND SA.STARTED = 1 AND COLLEGE_IDS=" + cid + "");
+
+                                objCommon.DisplayMessage("The exam registration should be completed before the date " + end_date + "", this.Page);
+
+                                //objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
+
+
                             }
+                            else
+                            {
+                                this.ShowDetails();
+                            }
+
                         }
                         else if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7")
                         {
@@ -278,6 +292,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     objCommon.DisplayMessage("Pre-Requisite Activity for this Page is Not Stopped!!", this.Page);
                     //dvMain.Visible = false;
                     ret = false;
+                    ShowDetails();
                 }
 
             }
@@ -825,8 +840,12 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
         {
             objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
             txtEnrollno.Text=string.Empty;
+            //btnPrintRegSlip.Visible = false;
             // dvMain.Visible = false;
             ret = false;
+           
+
+          //  ShowDetails();
         }
         dtr.Close();
 

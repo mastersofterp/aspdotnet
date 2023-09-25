@@ -30,6 +30,18 @@
             }
         }
 
+        function checkAddress(txt) {
+            //var address = document.getElementById('txtusn');
+            
+            var specialChars = /[!@#$%^&*()_+\=\[\]{};':"\\|<>?]+/;
+
+            if (specialChars.test(txt.value)) {
+                alert('Special Symbols Are Not Allowed!!!');
+                txt.value = txt.value.replace(specialChars, '');
+                return false;
+            }
+        }
+
         //function isSpecialKey(evt) {
         //    var charCode = (evt.which) ? evt.which : event.keyCode
         //    if ((charCode >= 65 && charCode <= 91) || (charCode >= 97 && charCode <= 123) || (charCode >= 48 || charCode <= 57))
@@ -601,14 +613,15 @@
                                                     <asp:ListItem Value="26">Mother Name</asp:ListItem>
                                                     <asp:ListItem Value="27">Part Time/Full Time</asp:ListItem>
                                                     <asp:ListItem Value="28">Address</asp:ListItem>
-                                                    <%--Added by Vinay Mishra on 17/08/2023 & 28/08/2023--%>
+                                                    <%--Added by Vinay Mishra on 17/08/2023 & 28/08/2023 & 14/09/2023--%>
                                                     <asp:ListItem Value="29">Medium Of Instruction</asp:ListItem>
                                                     <asp:ListItem Value="30">Parents Email Id</asp:ListItem>
+                                                    <asp:ListItem Value="31">Merit Number</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>
                                             <div style="margin-top:4px">
-                                                <asp:Label ID="lblAddressNote" runat="server" ForeColor="Red" Font-Bold="true" CssClass="mt-2" Text="Note - Do Not Use Single Quotation(') Mark/Character During Entering the Address/Permanent Address." Visible="false"></asp:Label>
+                                                <asp:Label ID="lblAddressNote" runat="server" ForeColor="Red" Font-Bold="true" CssClass="mt-2" Text="Note - Use only Comma(,), Hyphen(-) and Backslash(/) characters during entering the Address/Permanent Address. Other special character's are not acceptable." Visible="false"></asp:Label>
                                             </div>
                                         </div>
                                     </div>
@@ -677,7 +690,7 @@
                                                             <%-- <asp:RequiredFieldValidator ID ="rfvEmail" runat="server" ControlToValidate="txtemail" InitialValue="0" SetFocusOnError="true" ValidationGroup="teacherallot" ErrorMessage="Please Enter valid Email Address" Display="None"> </asp:RequiredFieldValidator>--%>
                                                             <asp:TextBox ID="txtAdmDate" runat="server" Style="text-align: right" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
                                                             <asp:Image ID="imgFrmDt" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />
-                                                            <asp:TextBox ID="txtLAdd" runat="server" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
+                                                            <asp:TextBox ID="txtLAdd" runat="server" Text='<%#Eval("COLUMNNAME")%>' onkeyup="return checkAddress(this)"></asp:TextBox>
                                                              <%--<asp:Textbox id="txtpadd" runat="server" text='<%#Eval("PCOLUMNNAME")%>'></asp:Textbox>--%>
                                                             <ajaxToolKit:CalendarExtender ID="ceFrmDt" runat="server" Enabled="true" CssClass="Calendar"
                                                                 EnableViewState="true" Format="dd/MM/yyyy" PopupButtonID="imgFrmDt" TargetControlID="txtAdmDate" />
@@ -691,7 +704,7 @@
                                                                 SetFocusOnError="true" />
                                                         </td>
                                                         <td id="tdDivPAddress" runat="server">
-                                                            <asp:Textbox id="txtpadd" runat="server" Text='<%#Eval("PCOLUMNNAME")%>'></asp:Textbox>
+                                                            <asp:Textbox id="txtpadd" runat="server" Text='<%#Eval("PCOLUMNNAME")%>' onkeyup="return checkAddress(this)"></asp:Textbox>
                                                         </td>
                                                     </tr>
                                                 </ItemTemplate>

@@ -124,6 +124,26 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                         btnCGPAReport.Visible = true;
                     }
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 8)
+                {
+                    if (Session["usertype"].ToString() == "3")
+                    {
+                        btnInternalMarkReg.Visible = false;
+                        btnExelrpt.Visible = false;
+                        btntrexcel.Visible = false;
+                        btnGradesheet.Visible = false;
+                        btnExamFeesPaid.Visible = false;
+                        btnCategoryWise.Visible = false;
+                        btnOverAllPercentage.Visible = false;
+                        btnOverAllSubjectPercentage.Visible = false;
+                        btnBranchSemAnalysis.Visible = false;
+                        btnResultAnalysis.Visible = false;
+                        btnFailStudentList.Visible = false;
+                        btnCourceWiseFailStudList.Visible = false;
+                        btnGetGpaReport.Visible = false;
+                        btnSubjectWiseResultanalysisReport.Visible = false;
+                    }
+                }
 
                 if (Convert.ToInt32(Session["OrgId"]) == 1) // R C Patel Institute
                 {
@@ -2387,20 +2407,20 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void btnGetGpaReport_Click(object sender, EventArgs e)
     {
-        //if (Convert.ToInt32(Session["OrgId"]) == 1)
-        //{
-        //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_RCPIT.rpt");
-        //}
+        if (Convert.ToInt32(Session["OrgId"]) == 1)
+        {
+            ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_RCPIT.rpt");
+        }
         //else if (Convert.ToInt32(Session["OrgId"]) == 2)
         //{
         //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa_CRESCENT.rpt");
         //}
-        //else
-        //{
-        //    ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
-        //}
+        else
+        {
+            ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
+        }
 
-        ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
+        //ShowGpaReport("GPA_CGPA", "rptSgpaCgpa.rpt");
     }
 
     private void ShowGpaReport(string reportTitle, string rptFileName)
@@ -2886,6 +2906,76 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlcourse.SelectedItem.Value = "0";
 
             ddlSem.Focus();
+        }
+    }
+    protected void btnCourseWiseExamRegistartion_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            GridView GVDayWiseAtt = new GridView();
+            string ContentType = string.Empty;
+            //int COLLEGE = Convert.ToInt32(ddlSchoolInstitite.SelectedValue);
+            //int COLLEGEID = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "COLLEGE_ID", "COSCHNO= '" + COLLEGE + "'"));
+            DataSet ds = null;
+            string proc_name = "PKG_GET_COURSE_WISE_EXAM_REGISTARTION_DETAILS";
+            string para_name = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO";
+            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlcourse.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "";
+            ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+            //if (ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables.Count > 0)
+            {
+                GVDayWiseAtt.DataSource = ds;
+                GVDayWiseAtt.DataBind();
+                string attachment = "attachment; filename=CourseWiseExamRegistartion.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/vnd.MS-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                GVDayWiseAtt.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Found for current selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Reports_Stud_BranchwiseReport.ShowReportExcel -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void btnSubjectWiseResultanalysisReport_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Analysis Report";
+        string rptFileName = "rptSubject_Wise_Result_Analysis.rpt";
+
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+                ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 }

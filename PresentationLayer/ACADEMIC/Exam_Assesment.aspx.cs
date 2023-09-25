@@ -26,6 +26,12 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic.Academic;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using ClosedXML.Excel;
+using System.Xml;
+using System.Text.RegularExpressions;
+using System.IO.Compression;
+using System.IO;
+using System.Collections.Generic;
 
 public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
 {
@@ -48,7 +54,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
     }
 
     #endregion End MasterPage set
-
     #region Page Load
 
     protected void Page_Load(object sender, EventArgs e)
@@ -89,7 +94,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
     }
 
     #endregion End Page Load
-
     private string GetUserIPAddress()
     {
         string User_IPAddress = string.Empty;
@@ -701,10 +705,12 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                 if (Convert.ToInt32(ViewState["usertype"]) == 1 || Convert.ToInt32(ViewState["usertype"]) == 7)
                 {
                     btnReport.Visible = true;
+                    btnReportExcel.Visible = true;
                 }
                 else
                 {
                     btnReport.Visible = false;
+                    btnReportExcel.Visible = true;
                 }
             }
             else
@@ -1178,7 +1184,9 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                                 decimal weightagemarks = Convert.ToDecimal(weightage.Text);
                                 decimal TotalMarks = OutOfMarks * (weightagemarks / 100);
 
-                                ViewState["TotalMarks"] = Math.Round(Convert.ToDecimal(ViewState["TotalMarks"].ToString()) + TotalMarks);
+                                //ViewState["TotalMarks"] = Math.Round(Convert.ToDecimal(ViewState["TotalMarks"].ToString()) + TotalMarks);
+                                ViewState["TotalMarks"] = (Convert.ToDecimal(ViewState["TotalMarks"].ToString()) + TotalMarks);
+
                                 if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) !=5 ) )
                                 {
                                     if (Intertnal < Convert.ToDecimal(ViewState["TotalMarks"].ToString()))
@@ -1664,7 +1672,7 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                     // FILL DROPDOWN  ddlSession_SelectedIndexChanged
                 }
             }
-            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", " DISTINCT SESSIONNO ", "SESSION_NAME", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ISNULL (IS_ACTIVE,0)= 1", "SESSIONNO DESC");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", " DISTINCT SESSIONNO ", "SESSION_PNAME", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ISNULL (IS_ACTIVE,0)= 1", "SESSIONNO DESC");
         }
 
 
@@ -1790,6 +1798,37 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
         {
             btnLock.Visible = false;
         }
+    }
+    protected void btnReportExcel_Click(object sender, EventArgs e)
+    {
+        DataSet ds = new DataSet();
+       
+
+        string proc_name = "PKG_Exam_Show_ExamComponent_NOT_DEFINED_EXCEL_REPORT";
+        string parameter = "@P_SESSIONNO,@P_COLLEGE_ID";
+        string Call_values = "" + ddlSession.SelectedValue + "," + ViewState["college_id"].ToString() + "";
+        ds = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+
+            GridView gv = new GridView();
+            gv.DataSource = ds.Tables[0];
+            gv.DataBind();
+            string attachment = "attachment;filename= ComponentNotDefined.xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/vnd.ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            gv.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(updSession, "No Data Found", this.Page);
+        }
+
     }
 }
 

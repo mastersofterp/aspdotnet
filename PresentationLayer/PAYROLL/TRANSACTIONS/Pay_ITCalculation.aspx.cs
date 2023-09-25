@@ -66,7 +66,7 @@ public partial class Pay_ITCalculation : System.Web.UI.Page
                 //function to fill dropdownlists
                 //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_NAME", "COLLEGE_NO", "COLLEGE_NAME", "COLLEGE_NO IN(" + Session["college_nos"] + ")", "COLLEGE_NO ASC");            
                 objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "COLLEGE_ID ASC");
-                //objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
+                objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
                 ddlStaff.Visible = true;
                 //ddlStaff.SelectedIndex = 0;
                 ddlCalculationBy.SelectedIndex = 0;
@@ -132,7 +132,32 @@ public partial class Pay_ITCalculation : System.Web.UI.Page
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect("Pay_ITCalculation.aspx");
+        //Response.Redirect("Pay_ITCalculation.aspx");
+        if (ddlCollege.SelectedIndex > 0)
+        {
+            ddlCollege.SelectedIndex = 0;
+        }
+        else
+        {
+            ddlCollege.SelectedIndex = 0;
+        }
+        if (ddlStaff.SelectedIndex > 0)
+        {
+            ddlStaff.SelectedIndex = 0;
+        }
+        else
+        {
+            ddlStaff.SelectedIndex = 0;
+        }
+        if (ddlCalculationBy.SelectedIndex > 0)
+        { 
+           ddlCalculationBy.SelectedIndex =0;
+        }
+        else
+        {
+          // ddlCalculationBy.SelectedIndex = 0;
+            ddlCalculationBy.SelectedValue = "";
+        }
     }
     protected void chkStaffWise_CheckedChanged(object sender, EventArgs e)
     {
@@ -190,6 +215,6 @@ public partial class Pay_ITCalculation : System.Web.UI.Page
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
+       // objCommon.FillDropDownList(ddlStaff, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
     }
 }

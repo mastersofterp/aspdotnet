@@ -97,14 +97,14 @@
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
-                                                   <sup>* </sup>
+                                                 <%--  <sup>* </sup>--%>
                                                 <label>PayHead</label>
                                             </div>
                                             <asp:TextBox ID="txtPayHead" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True" TabIndex="4" ToolTip="Please Enter Section">
                                             </asp:TextBox>
-                                            <asp:RequiredFieldValidator ID="rfvpayheadname" runat="server" ErrorMessage="Enter Pay Head Name" 
+                                           <%-- <asp:RequiredFieldValidator ID="rfvpayheadname" runat="server" ErrorMessage="Enter Pay Head Name" 
                                                 ControlToValidate="txtPayHead" Display="None" ValidationGroup="submit"  SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                        </div>
+                                     --%>   </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                    <sup>* </sup>
@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
-                                                <label>Is Perncentage</label>
+                                                <label>Is Percentage</label>
                                             </div>
                                             <asp:CheckBox ID="chkIsPercentage" runat="server" />
                                         </div>

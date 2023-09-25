@@ -20772,6 +20772,60 @@ namespace IITMS
 
 
                  #endregion
+
+                 #region Below code added by Shailendra K. for T-47998 on dated 06.09.2023 ENHANCEMENT_BASIC_STUDENT_DETAILS_UPDATE
+
+                 public DataSet RetrieveStudentDetailsToModifyAdmissionInfo(string search, string category, int uano)
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                         SqlParameter[] objParams = null;
+                         objParams = new SqlParameter[3];
+                         objParams[0] = new SqlParameter("@P_SEARCHSTRING", search);
+                         objParams[1] = new SqlParameter("@P_SEARCH", category);
+                         objParams[2] = new SqlParameter("@P_UA_NO", uano);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SEARCH_STUDENT_MODIFY_ADMISSION_INFO", objParams);
+                     }
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.RetrieveStudentDetailsToModifyAdmissionInfo-> " + ex.ToString());
+                     }
+                     return ds;
+                 }
+
+                 public int ModifyStudAdmissionInfo(int IDNO, int IDTYPE, int academicYear, int semesterNo, int admBatch)
+                 {
+                     int retStatus = Convert.ToInt32(CustomStatus.Others);
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+
+                         SqlParameter[] objParams = new SqlParameter[6];
+                         objParams[0] = new SqlParameter("@P_IDNO", IDNO);
+                         objParams[1] = new SqlParameter("@P_ID_TYPE", IDTYPE);
+                         objParams[2] = new SqlParameter("@P_ACADEMIC_YEAR", academicYear);
+                         objParams[3] = new SqlParameter("@P_SEMESTERNO", semesterNo);
+                         objParams[4] = new SqlParameter("@P_ADMBATCH", admBatch);
+                         objParams[5] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                         objParams[5].Direction = ParameterDirection.Output;
+
+                         object ret = objSQLHelper.ExecuteDataSetSP("PKG_ACD_MODIFY_STUD_ADMISSION_INFO", objParams);
+                         if (ret != null)
+                             if (ret.ToString() != "-99")
+                                 retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                     }
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.ModifyStudAdmissionInfo-> " + ex.ToString());
+                     }
+
+                     return retStatus;
+                 }
+
+                 #endregion
             }
 
 

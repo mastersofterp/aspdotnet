@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteMasterPage.master"
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteMasterPage.master" ViewStateEncryptionMode="Always" EnableViewStateMac="true"
     CodeFile="Course_Registration_Approval.aspx.cs" Inherits="ACADEMIC_Course_Registration_Approval" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">

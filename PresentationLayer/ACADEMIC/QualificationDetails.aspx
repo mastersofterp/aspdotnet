@@ -4,11 +4,11 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <style>
-        
-            #sidebar {
+        #sidebar {
             display: none;
         }
-            .page-wrapper.toggled .page-content {
+
+        .page-wrapper.toggled .page-content {
             padding-left: 15px;
         }
 
@@ -59,7 +59,10 @@
         .dataTables_scrollHeadInner {
             width: max-content !important;
         }
-        table .form-control {padding: 0.375rem 0.15rem;}
+
+        table .form-control {
+            padding: 0.375rem 0.15rem;
+        }
     </style>
 
     <script type="text/javascript">
@@ -114,7 +117,7 @@
 
                 var sum = Number(parseFloat(numVal1)) + Number(parseFloat(numVal2)) + Number(parseFloat(numVal3)) + Number(parseFloat(numVal4));
 
-                if (isHidden.style.display === "none") {
+                if (isHidden.style.display == "none") {
                     PCMTotal(this);
                 }
                 else {
@@ -175,7 +178,7 @@
 
             var pcmMaxMarks = parseFloat(pcmMaxMarksInput.value) || 0;
             var vocationalMaxMarks = parseFloat(vocationalMaxMarksInput.value) || 0;
-            
+
 
             if (isNaN(pcmMaxMarks) || isNaN(vocationalMaxMarks)) {
                 outOfMarksInput.value = ''; // Clear the result if either input is not a valid number
@@ -229,36 +232,36 @@
         function PCBTotal() {
             //alert("PCMtotal")
 
-                    var var1 = parseInt(document.getElementById('<%=txtphymark.ClientID%>').value);
-                    var var2 = parseInt(document.getElementById('<%=txtchem.ClientID%>').value);
-                    var var3 = parseInt(document.getElementById('<%=txtbiology.ClientID%>').value);
+            var var1 = parseInt(document.getElementById('<%=txtphymark.ClientID%>').value);
+            var var2 = parseInt(document.getElementById('<%=txtchem.ClientID%>').value);
+            var var3 = parseInt(document.getElementById('<%=txtbiology.ClientID%>').value);
 
-                    // to make sure that they are numbers
-                    if (!var1) { var1 = 0; }
-                    if (!var2) { var2 = 0; }
-                    if (!var3) { var3 = 0; }
+            // to make sure that they are numbers
+            if (!var1) { var1 = 0; }
+            if (!var2) { var2 = 0; }
+            if (!var3) { var3 = 0; }
 
-                    var ansC = document.getElementById('<%=txtPcmMarks.ClientID%>');
+            var ansC = document.getElementById('<%=txtPcmMarks.ClientID%>');
                     ansC.value = var1 + var2 + var3;
                     document.getElementById("hfdPcmMarks").value = ansC.value;         //Added by sachin on 20-07-2022
                     var marksPCB = ansC.value;
                     var Percentage = 0.00;
-                    //alert(marksPCM);
-                    //var Percentage = (marksPCM * 100 / 300).toFixed(2);
+            //alert(marksPCM);
+            //var Percentage = (marksPCM * 100 / 300).toFixed(2);
                     Percentage = Number((marksPCB / 300) * 100);
                     var Per2 = Percentage.toFixed(2)
-                            //alert(Percentage);
+            //alert(Percentage);
                     document.getElementById('<%=txtPcmPerct.ClientID %>').value = Per2;
                     document.getElementById("hfdPcmPer").value = Per2;
 
 
-                    //function myFunction() {
-                    //    var num = 26.666666666666668;
-                    //    var n = num.toFixed(2)
-                    //    document.getElementById("demo").innerHTML = n;
-                    //}
+            //function myFunction() {
+            //    var num = 26.666666666666668;
+            //    var n = num.toFixed(2)
+            //    document.getElementById("demo").innerHTML = n;
+            //}
 
-        }
+                }
     </script>
 
 
@@ -285,7 +288,7 @@
 
     </script>
 
-    
+
     <script type="text/javascript">
         function SumTotal(val) {
             debugger;
@@ -376,7 +379,8 @@
 
     </script>
 
-    <asp:HiddenField ID="hdnOrgId" runat="server"/>
+    <asp:HiddenField ID="hdnOrgId" runat="server" />
+    <asp:HiddenField ID="hdnDegree" runat="server" />
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -578,7 +582,7 @@
                                                             <asp:TextBox ID="txtMarksObtainedSsc" onkeypress="return isNumberKey(this, event);;" runat="server"
                                                                 placeholder="Enter Marks Obtained" ToolTip="Please Enter Marks Obtained" MaxLength="3"
                                                                 TabIndex="140" CssClass="form-control" onchange="calc(1);"></asp:TextBox>
-                                                        <%--    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender57" runat="server"
+                                                            <%--    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender57" runat="server"
                                                                 FilterType="Numbers" TargetControlID="txtMarksObtainedSsc">
                                                             </ajaxToolKit:FilteredTextBoxExtender>--%>
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtMarksObtainedSsc"
@@ -824,9 +828,9 @@
                                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender12" runat="server"
                                                                                     FilterType="Numbers" TargetControlID="txtmaths">
                                                                                 </ajaxToolKit:FilteredTextBoxExtender>
-                                   
-                                                                                
-                                                                                                                         </td>
+
+
+                                                                            </td>
                                                                             <td>
                                                                                 <asp:TextBox ID="txtmathstot" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     onchange="SumTotal(this);" TabIndex="158" placeholder="Enter Math's Marks" ToolTip="Please Enter Physics's Mark"
@@ -837,8 +841,10 @@
                                                                             </td>
                                                                             <td></td>
                                                                         </tr>
-                                                                        <tr id="trBiology" runat="server" style="display:none">
+<%--                                                                        <div style="clear:b"></div>--%>
+                                                                        <tr id="trBiology" runat="server" style="display:block">
                                                                             <td>Biology</td>
+                                                                           
                                                                             <td>
                                                                                 <asp:TextBox ID="txtbiology" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     onchange="findTotal(this);" onblur="TotPer(this);" TabIndex="153" placeholder="Enter Biology's Marks"
@@ -869,7 +875,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <asp:TextBox ID="txtPCMTotal" runat="server" CssClass="form-control" MaxLength="4"
-                                                                                    TabIndex="158" Text="300" Enabled="false" onchange=></asp:TextBox>
+                                                                                    TabIndex="158" Text="300" Enabled="false" onchange=""></asp:TextBox>
                                                                                 <%-- Added Enabled=false sachin by on 20-07-2022--%>
                                                                             </td>
                                                                             <td>
@@ -909,7 +915,7 @@
                                                                         <tr>
                                                                             <td><sup>*</sup><b>Total Marks</b></td>
                                                                             <td>
-                                                                               
+
                                                                                 <asp:TextBox ID="txtMarksObtainedHssc" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     TabIndex="162" placeholder="Enter Marks Obtained" ToolTip="Please Enter Marks Obtained"
                                                                                     name="txtMarksObtainedHssc" onkeyup="validateNumeric(this);" oninput="calculatePercentage();"></asp:TextBox>
@@ -920,7 +926,7 @@
                                                                                     Display="None" ErrorMessage="Please Enter Higher Secondary/12th Obtained Marks"
                                                                                     SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                                             </td>
-                                                                       
+
                                                                             <td>
                                                                                 <asp:TextBox ID="txtOutOfMarksHssc" onkeyup="validateNumeric(this);" placeholder="Enter Total Marks" Enabled="true"
                                                                                     ToolTip="Please Enter Total Out Of Marks" onchange="calculatePercentage();"
@@ -1380,7 +1386,7 @@
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnAddEntranceExam" runat="server" OnClick="btnAddEntranceExam_Click"
                                                     TabIndex="180" Text="Add" ToolTip="Add Entrance Exam" ValidationGroup="Entrance"
-                                                    CssClass="btn btn-primary"/>
+                                                    CssClass="btn btn-primary" />
                                             </div>
 
                                             <div class="col-md-12">
@@ -1564,7 +1570,7 @@
                                                         </div>
 
                                                         <asp:TextBox ID="txtSchoolCollegeNameQualifying" runat="server" CssClass="form-control"
-                                                            placeholder="Enter School / College Name" TabIndex="181" ></asp:TextBox>
+                                                            placeholder="Enter School / College Name" TabIndex="181"></asp:TextBox>
                                                     </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
@@ -1812,12 +1818,12 @@
                                                     ToolTip="Click to Save" CssClass="btn btn-primary" UseSubmitBehavior="false" OnClick="btnSubmit_Click"
                                                     ValidationGroup="Academic" OnClientClick="return validateSubjectTextBoxes();" />
                                                 <asp:ValidationSummary ID="vsAcademic" runat="server" ValidationGroup="Academic"
-                                                        DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
+                                                    DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
                                                 <button runat="server" id="btnGohome" visible="false" tabindex="194" onserverclick="btnGohome_Click"
                                                     class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
                                                     Go Back Home
                                                 </button>
-                                               <%-- <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
+                                                <%-- <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
                                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="Academic" />--%>
                                             </div>
                                         </ContentTemplate>
@@ -2130,8 +2136,10 @@
         }
     </script>
 
- <script>
-     function validateSubjectTextBoxes() {
+     <script>
+         function validateSubjectTextBoxes() {
+             //debugger;
+             //alert('hi')
          var numVal1 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").value);
          var numVal2 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtchem").value);
          var numVal3 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").value);
@@ -2145,7 +2153,9 @@
          var vocMarksObtained =  Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
          var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
          var orgid = $("#<%=hdnOrgId.ClientID %>").val();  
-         if (orgid != "5") {     //Added by Bhagyashree on 12062023 
+             var degree = $("#<%=hdnDegree.ClientID %>").val();
+             //alert(orgid + degree)
+         if (orgid != "5" && orgid == "6" && degree != "MASTER OF BUSINESS ADMINISTRATION") {    //Added by Bhagyashree on 12062023 //// Added by orgid and PG validation condiation Sachin Lohakare 11092023
              if (numVal1 <= 0) {
                  alert('Enter Valid Marks for Physics');
                  document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
@@ -2191,6 +2201,92 @@
     </script>
 
 
+  <%--  <script>
+        function validateSubjectTextBoxes() {
+            debugger;
+            var numVal1 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").value);
+            var numVal2 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtchem").value);
+            var numVal3 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").value);
+            var numVal4 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
+            var numVal6 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
+            var numVal5 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtbiology").value);
+            var isHidden = document.getElementById("ctl00_ContentPlaceHolder1_trBiology");
+            var obtainedMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtMarksObtainedHssc").value);
+            var totalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtOutOfMarksHssc").value);
+            var vocSubName = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value);
+            var vocMarksObtained = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
+            var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
+            var orgid = $("#<%=hdnOrgId.ClientID %>").val(); //Added by Bhagyashree on 12062023 //// Added by orgid Sachin Lohakare 11092023
+            var degree = "<%= Session["Degree"] %>";
+            //var lowercaseDegree = degree.toUpperCase();
+            //if (orgid != "5" && orgid != "6") {
+
+            //console.log("orgid:", orgid);
+            //console.log("degree:", degree);
+
+            if (orgid != "5" && degree != "MASTER OF BUSINESS ADMINISTRATION") {
+                //if (orgid == "6" && degree == "Master of Business Administration") {
+                // alert('hi')
+                // return false;
+                //}
+
+                if (numVal1 <= 0) {
+                    alert('Enter Valid Marks for Physics');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
+                    return false;
+                }
+                if (numVal2 <= 0) {
+                    alert('Enter Valid Marks for Chemistry');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtchem").focus();
+                    return false;
+                }
+                if (isHidden.style.display != "none") {
+                    if ((numVal3 <= 0 || numVal3 == '') && (numVal5 <= 0 || numVal5 == '')) {
+                        alert('Enter Valid Marks for Maths/Biology');
+                        document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                        return false;
+                    }
+                }
+                if (numVal4 <= 0 && numVal6 != 0) {
+                    alert('Enter Valid Marks for Vocational Subject');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                    return false;
+                }
+                if (numVal6 != '' && numVal4 == '') {
+                    alert('Enter Valid Marks for Vocational Subject');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                    return false;
+                }
+                if (isHidden.style.display === "none") {
+                    if (numVal3 <= 0 || numVal3 == '') {
+                        alert('Enter Valid Marks for Maths');
+                        document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                        return false;
+                    }
+                }
+                if (vocMarksObtained != '' && vocTotalMarks != '' && vocSubName == '') {
+                    alert('Enter Vocational Subject Name');
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value = '';
+                    document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").focus();
+                    return false;
+                }
+            }
+        }
+    </script>--%>
+
+<%--    <script type="text/javascript">
+        function shouldValidate() {
+            var orgid = $("#<%=hdnOrgId.ClientID %>").val();
+        var degree = $("#<%=hdnDegree.ClientID %>").val();
+
+        if (orgid == "6" && degree == "MASTER OF BUSINESS ADMINISTRATION") {
+            return true;
+        } else {
+            var validationPassed = validateSubjectTextBoxes();
+            return validationPassed;
+        }
+    }
+    </script>--%>
     <div id="divMsg" runat="server">
     </div>
 </asp:Content>

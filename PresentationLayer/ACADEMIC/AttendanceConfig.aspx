@@ -1,4 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="AttendanceConfig.aspx.cs" Inherits="ACADEMIC_AttendanceConfig" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" 
+    ViewStateEncryptionMode="Always" EnableViewStateMac="true" CodeFile="AttendanceConfig.aspx.cs" Inherits="ACADEMIC_AttendanceConfig" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -290,6 +291,7 @@
     <asp:HiddenField ID="hfdCourse" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdTeaching" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdHide" runat="server" ClientIDMode="Static" />
     <div>
         <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="updpnl"
             DynamicLayout="true" DisplayAfter="0">
@@ -321,21 +323,36 @@
                                     <asp:UpdatePanel ID="updpnl" runat="server">
                                         <ContentTemplate>
                                             <div class="row">
-                                                <div class="form-group col-lg-3 col-md-6 col-12" style="display:none">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>*</sup>
+                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"
+                                                        AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" >
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                        <%--<asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>--%>
+                                                    <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12">   <%-- style="display:none"--%>
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
                                                         <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlSchoolInstitute" runat="server" TabIndex="1" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSchoolInstitute_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
+                                                    <%--<asp:DropDownList ID="ddlSchoolInstitute" runat="server" TabIndex="1" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSchoolInstitute_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select </asp:ListItem>
-                                                    </asp:DropDownList>
-
+                                                    </asp:DropDownList>--%>
+                                                    <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="lstbxSchool_SelectedIndexChanged"></asp:ListBox>
                                                     <%-- <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true"></asp:ListBox>--%>
-                                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSchoolInstitute"
-                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="course">
-                                                    </asp:RequiredFieldValidator>--%>
+                                                    <asp:RequiredFieldValidator ID="rfvlstbxSchool" runat="server" ControlToValidate="lstbxSchool"
+                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="submit">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                                <%--<div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
                                                         <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
@@ -344,10 +361,10 @@
                                                         AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" >
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>--%>
-                                                    <asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
-                                                </div>
+                                                   <%-- <asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>
+                                                    <%--<asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                </div>--%>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divDepartment" visible="false">
                                                     <div class="label-dynamic">
@@ -554,7 +571,7 @@
                         </div>
 
                         <div class="col-12">
-                            <asp:ListView ID="lvAttConfig" runat="server">
+                            <%--<asp:ListView ID="lvAttConfig" runat="server">
                                 <LayoutTemplate>
                                     <div id="demo-grid">
                                         <div class="sub-heading">
@@ -579,7 +596,7 @@
                                                     <th>SMS Facility</th>
                                                     <th>Email Facility</th>
                                                     <th>Att Lock Days</th>
-                                                    <%--  <th>Att Lock Hours</th>--%>
+                                                    <%--  <th>Att Lock Hours</th>
                                                     <th style="display:none">Course Reg.(Before/After)</th>
                                                     <th>Teaching Plan</th>
                                                     <th>Active</th>
@@ -606,13 +623,144 @@
                                         <td><%#Eval("SMS_FACILITY")%></td>
                                         <td><%#Eval("EMAIL_FACILITY")%></td>
                                         <td><%#Eval("LOCK_ATT_DAYS")%></td>
-                                        <%-- <td><%#Eval("LOCK_ATT_HOURS")%></td>--%>
+                                        <%-- <td><%#Eval("LOCK_ATT_HOURS")%></td>
                                         <td style="display:none"><%#Eval("CREG_STATUS")%></td>
                                         <td><%#Eval("TEACHING_PLAN")%></td>
                                         <td><%#Eval("ACTIVE")%></td>
                                     </tr>
                                 </ItemTemplate>
-                            </asp:ListView>
+                            </asp:ListView>--%>
+
+                            <asp:Panel ID="pnlAttConfig" runat="server">
+                                <asp:ListView ID="lvAttConfig" runat="server" OnItemDataBound="lvAttConfig_ItemDataBound">
+                                    <LayoutTemplate>
+                                        <%--<div id="demo-grid">--%>
+                                            <div class="sub-heading">
+                                                <h5>Configuration List</h5>
+                                            </div>
+                                            <table class="table table-striped table-bordered nowrap" style="width: 100%">  <%--id="tab-le"--%>
+                                                <thead>
+                                                    <tr class="bg-light-blue">
+                                                        <th style="text-align: center; width: 2%">Edit</th>
+                                                        <th style="text-align: center; width: 2%">Show</th>
+                                                        <th style="text-align: center; width: 5%">Unique Group No</th>
+                                                        <th style="text-align: center; width: 9%">
+                                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label></th>
+                                                        <%--<th>
+                                                            <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label></th>
+                                                        <th>
+                                                            <asp:Label ID="lblDYlvDegree" runat="server" Font-Bold="true"></asp:Label></th>--%>
+                                                        <th style="text-align: center; width: 15%">
+                                                            <asp:Label ID="lblDYrdoSchemeType" runat="server" Font-Bold="true"></asp:Label></th>
+                                                        <%--<th>
+                                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label></th>--%>
+                                                        <th style="text-align: center; width: 8%">Start Date</th>
+                                                        <th style="text-align: center; width: 8%">End Date</th>
+                                                        <th style="text-align: center; width: 6%">Att Lock Days</th>
+                                                        <th style="text-align: center; width: 4%">SMS Facility</th>
+                                                        <th style="text-align: center; width: 4%">Email Facility</th>
+                                                        
+                                                        <%--  <th>Att Lock Hours</th>--%>
+                                                        <%--<th style="display:none">Course Reg.(Before/After)</th>--%>
+                                                        <th style="text-align: center; width: 4%">Teaching Plan</th>
+                                                        <th style="text-align: center; width: 4%">Active</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        <%--</div>--%>
+                                    </LayoutTemplate>
+
+                                    <ItemTemplate>
+                                        <table class="table table-hover table-bordered mb-0">
+                                            <tr id="MAIN" runat="server" class="col-md-12 mb-0">
+                                                <td>
+                                                    <tr>
+                                                        <td style="text-align: center; width: 2%">
+                                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" CommandArgument='<%# Eval("GROUPID")%>' ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click" ToolTip="Edit Record" />
+                                                        </td>
+                                                        <td style="text-align: center; width: 2%">
+                                                            <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
+                                                                <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
+                                                            </asp:Panel>
+                                                        </td>
+                                                        <td style="text-align: center; width: 5%">
+                                                            <asp:Label ID="lblGrpId" Text='<%# Eval("GROUPID")%>' runat="server"></asp:Label>
+                                                        </td>
+                                                        <td style="text-align: center; width: 8%"><%#Eval("SESSION_PNAME") %></td>
+                                                        <%-- <td><%#Eval("COLLEGE_NAME") %></td>
+                                                        <td><%#Eval("DEGREENAME")%></td>--%>
+                                                        <td style="text-align: center; width: 12%"><%#Eval("SCHEMETYPENAME")%></td>
+                                                        <%--<td><%#Eval("SEMESTERNAME")%></td>--%>
+                                                        <td style="text-align: center; width: 5%"><%#Eval("START_DATE")%></td>
+                                                        <td style="text-align: center; width: 5%"><%#Eval("END_DATE")%></td>
+                                                        <td style="text-align: center; width: 5%"><%#Eval("LOCK_ATT_DAYS")%></td>
+                                                        <td style="text-align: center; width: 4%"><%#Eval("SMS_FACILITY")%></td>
+                                                        <td style="text-align: center; width: 4%"><%#Eval("EMAIL_FACILITY")%></td>
+                                                        
+                                                        <%-- <td><%#Eval("LOCK_ATT_HOURS")%></td>--%>
+                                                        <%--<td style="display:none"><%#Eval("CREG_STATUS")%></td>--%>
+                                                        <td style="text-align: center; width: 4%"><%#Eval("TEACHING_PLAN")%></td>
+                                                        <td style="text-align: center; width: 4%">
+                                                            <asp:Label ID="lblActive" Text='<%#Eval("ACTIVE")%>' ForeColor='<%# Eval("ACTIVE").ToString().Equals("ACTIVE")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' runat="server"></asp:Label>
+                                                        </td>
+                                                        <ajaxToolKit:CollapsiblePanelExtender ID="cpeCourt2" runat="server" CollapseControlID="pnlDetails"
+                                                            Collapsed="true" CollapsedImage="~/Images/action_down.png" ExpandControlID="pnlDetails"
+                                                            ExpandedImage="~/Images/action_up.png" ImageControlID="imgExp" TargetControlID="pnlShowCDetails">
+                                                        </ajaxToolKit:CollapsiblePanelExtender>
+                                                    </tr>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <div class="col-12">
+                                            <asp:Panel ID="pnlShowCDetails" runat="server" CssClass="collapsePanel">
+                                                <asp:ListView ID="lvDetails" runat="server">
+                                                    <LayoutTemplate>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                                <thead class="b g-light-blue">
+                                                                    <tr>
+                                                                        <th style="text-align: left; width: 50%">School & Scheme</th>
+                                                                        <th style="text-align: left; width: 50%">Degree</th>
+                                                                        <%--<th>Branch</th>--%>
+                                                                        <th style="text-align: left; width: 50%">Semester</th>
+                                                                        <%--<th>Payment Applicable</th>
+                                                                        <th>Eligibility for Course Registration </th>--%>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server">
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </LayoutTemplate>
+
+                                                    <EmptyDataTemplate>
+                                                        <div style="text-align: center; font-family: Arial; font-size: medium">
+                                                            No Record Found
+                                                        </div>
+                                                    </EmptyDataTemplate>
+
+                                                    <ItemTemplate>
+                                                        <tr>
+                                                            <td style="text-align: left; width: 50%"><%# Eval("COLLEGE_NAME")%></td>
+                                                            <td style="text-align: left; width: 50%"><%# Eval("DEGREENAME")%></td>
+                                                            <%--<td><%# Eval("LONGNAME")%></td>--%>
+                                                            <td style="text-align: left; width: 50%"><%# Eval("SEMESTERNAME")%></td>
+                                                            <%--<td><%# Eval("PAYMENT_APPLICABLE_FOR_SEM_WISE")%></td>
+                                                            <td><%# Eval("ELIGIBILITYFORCRSREG")%></td>--%>
+                                                        </tr>
+                                                    </ItemTemplate>
+                                                </asp:ListView>
+                                            </asp:Panel>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:ListView>
+                            </asp:Panel>
                         </div>
 
                     </form>
@@ -642,7 +790,7 @@
         }
 
         function validate() {
-            //var school = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchoolInstitute").value;
+            var school = document.getElementById("ctl00_ContentPlaceHolder1_lstbxSchool").value;
             var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
             var degree = document.getElementById("ctl00_ContentPlaceHolder1_ddlDegree").value;
             var schmType = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchemeType").value;
@@ -650,11 +798,11 @@
             var attLock = document.getElementById("ctl00_ContentPlaceHolder1_txtAttLockDay").value;
             var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
             var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
-            //if (school == "0") {
-            //    alert("Please Select School/Institute Name.");
-            //    return false;
-            //}
-            if (session == "") {
+            if (school == "") {
+                alert("Please Select School/Institute Name.");
+                return false;
+            }
+            if (session == "0") {
                 alert("Please Select Session.");
                 return false;
             }

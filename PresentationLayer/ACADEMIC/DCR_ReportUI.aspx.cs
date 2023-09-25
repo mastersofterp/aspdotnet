@@ -112,11 +112,11 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
 
                     if (Session["OrgId"].ToString() == "6")// For RCPIPER only
                     {
-                        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN (3,4,5,6,7,9,10,11,12,13,14,15,16,17,18)", "RCPTTYPENO");
+                        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN (3,4,5,6,7,12,13,14,15,16,17,18)", "RCPTTYPENO");
                     }
                     else if (Session["OrgId"].ToString() == "1") // For RCPIT only
                     {
-                        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN (2,5,6,9,10,11)", "RCPTTYPENO");
+                        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN (2,5,6,11)", "RCPTTYPENO");
                     }
                     else
                     {

@@ -61,7 +61,7 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
         if (!Page.IsPostBack)
         {
             //objCommon.GetCommonReportData("PKG_ACD_INS_DEFAULT_USER_ROLE");
-
+            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Src", "test5();", true);
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -1057,6 +1057,9 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
     protected void btnBShow_Click(object sender, EventArgs e)
     {
         BindUserListView();
+        int pagesize = Convert.ToInt32(DataPager1.PageSize);
+        NumberDropDown.SelectedValue = pagesize.ToString();
+        DataPager1.SetPageProperties(0, DataPager1.PageSize, true);
 
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>ResetCheckBoxValue();</script>", false);
     }
@@ -1156,6 +1159,7 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
         lblBtotal.Visible = false;
         chkListRole.SelectedIndex = -1;
         btnBSubmit.Enabled = false;
+        DataPager1.Visible = false;
 
 
         clearListView();//new by arjun 13-01-2023
@@ -1480,4 +1484,15 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
     }
     #endregion
 
+    protected void lvBulkDetail_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        DataPager1.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+        BindUserListView();
+    }
+
+    protected void NumberDropDown_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DataPager1.SetPageProperties(0, DataPager1.PageSize, true);
+        DataPager1.PageSize = Convert.ToInt32(NumberDropDown.SelectedValue);
+    }
 }
