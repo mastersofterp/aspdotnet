@@ -301,7 +301,7 @@
                                 </div>
                                  <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
-                                        <label>Not Allow any Leave in Continution</label>
+                                        <label>Not Allow any Leave in Continuation</label>
                                     </div>
                                     <asp:CheckBox ID="chkLeaveincont" runat="server" TabIndex="21" CssClass="form-control" ToolTip="Check Mark to Not Allow any Leave in Continution" />
                                 </div>
