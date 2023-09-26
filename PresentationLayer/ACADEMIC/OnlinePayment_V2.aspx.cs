@@ -1448,32 +1448,11 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
             Session["paysession"] = session;
             //int uano = Convert.ToInt32(Session["userno"]);
-            if (Session["OrgId"].ToString() == "6")
-                {
-                degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                if (ddlReceiptType.SelectedValue == "AEF" || ddlReceiptType.SelectedValue == "EF")
-                    {
-                    int payactivityno = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME = 'Exam Registration'"));
-
-                    Session["payactivityno"] = payactivityno;
-                    }
-                else
-                    {
-                    Session["payactivityno"] = 1;
-                    }
-                }
-            if (Session["OrgId"].ToString() == "8")
-                {
-                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                }
-            else if (Session["OrgId"].ToString() == "16")
-                {
-                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
-                Session["payactivityno"] = activityno;
-                }
-
-            DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
+            college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            int Degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            int Branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+            //**********************************End by Nikhil L.********************************************//
+            DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_V2(OrganizationId, Convert.ToInt32(ddlSemester.SelectedValue), ddlReceiptType.Text, college_id, Degreeno, Branchno);
             if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
                 {
                 if (ds1.Tables[0].Rows.Count > 1)
@@ -1482,12 +1461,10 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     }
                 else
                     {
-                    Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
+                    Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                    Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
+                    //Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
-                    //Response.Redirect("http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
-
                     }
                 }
 
