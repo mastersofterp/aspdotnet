@@ -804,7 +804,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -817,7 +817,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
