@@ -94,13 +94,16 @@ public partial class HOSTEL_StudMoveNewSession : System.Web.UI.Page
     {
         try
         {
-            objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK=1 AND HOSTEL_SESSION_NO IN(SELECT MAX(HOSTEL_SESSION_NO) FROM ACD_HOSTEL_SESSION WHERE FLOCK=1)", "HOSTEL_SESSION_NO desc");
+            //objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK=1 AND HOSTEL_SESSION_NO IN(SELECT MAX(HOSTEL_SESSION_NO) FROM ACD_HOSTEL_SESSION WHERE FLOCK=1)", "HOSTEL_SESSION_NO desc");
+
+            objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "TOP 2 HOSTEL_SESSION_NO", "SESSION_NAME", " HOSTEL_SESSION_NO > 0", "HOSTEL_SESSION_NO DESC");
 
             objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO>0 ", "HOSTEL_NO");
 
             //objCommon.FillDropDownList(ddlNewSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK !=1 AND HOSTEL_SESSION_NO IN((SELECT MAX(HOSTEL_SESSION_NO) FROM ACD_HOSTEL_SESSION WHERE FLOCK !=1),(SELECT MAX(HOSTEL_SESSION_NO)+1 FROM ACD_HOSTEL_SESSION WHERE FLOCK=1)) ", "HOSTEL_SESSION_NO desc");
 
-            objCommon.FillDropDownList(ddlNewSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK !=1 AND HOSTEL_SESSION_NO > (SELECT HOSTEL_SESSION_NO FROM ACD_HOSTEL_SESSION WHERE FLOCK=1) AND START_DATE > GETDATE()", "HOSTEL_SESSION_NO desc");
+            //objCommon.FillDropDownList(ddlNewSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK !=1 AND HOSTEL_SESSION_NO > (SELECT HOSTEL_SESSION_NO FROM ACD_HOSTEL_SESSION WHERE FLOCK=1) AND END_DATE > GETDATE()", "HOSTEL_SESSION_NO desc");
+            objCommon.FillDropDownList(ddlNewSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK = 1 ", "HOSTEL_SESSION_NO DESC");
 
         }
         catch (Exception ex)
@@ -207,7 +210,7 @@ public partial class HOSTEL_StudMoveNewSession : System.Web.UI.Page
 
             if (cs == 1)
             {
-                objCommon.DisplayMessage(this.updPnl, "New Session Promoted Done Successfully...!", this.Page);
+                objCommon.DisplayMessage(this.updPnl, "New Session Promoted Done Successfully.", this.Page);
                 ddlNewSession.SelectedIndex = 0;
                 txtFromdate.Text = "";
                 txtTodate.Text = "";
@@ -217,7 +220,7 @@ public partial class HOSTEL_StudMoveNewSession : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(this.updPnl, "Error Occured Session Promotion..!", this.Page);
+                objCommon.DisplayMessage(this.updPnl, "Error Occured Session Promotion.", this.Page);
                 return;
             }
             this.ShowStudents();
