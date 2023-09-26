@@ -10254,7 +10254,7 @@ namespace IITMS
                 #endregion
 
                 #region ContinouesLeaveApplicationValidation
-                public DataSet CheckIsLeaveCont(DateTime fromdt, DateTime todt, DateTime joindt, int stno, int empno)
+                public DataSet CheckIsLeaveCont(DateTime fromdt, DateTime todt, DateTime joindt, int stno, int empno, int letrno)
                 {
                     DataSet ds = null;
                     try
@@ -10262,12 +10262,13 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
 
-                        objParams = new SqlParameter[5];
+                        objParams = new SqlParameter[6];
                         objParams[0] = new SqlParameter("@P_FROMDT", fromdt);
                         objParams[1] = new SqlParameter("@P_TODT", todt);
                         objParams[2] = new SqlParameter("@P_JOINDT", joindt);
                         objParams[3] = new SqlParameter("@P_STNO", stno);
                         objParams[4] = new SqlParameter("@P_Empid", empno);
+                        objParams[5] = new SqlParameter("@P_LETRNO", letrno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_CHECK_LEAVE_CONTINUE", objParams);
                     }
                     catch (Exception ex)
