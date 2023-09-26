@@ -668,6 +668,137 @@ namespace IITMS
                 }
                 #endregion
 
+
+                #region Login Detail
+
+                public DataSet GetDepartmentName(int userno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParam = null;
+                        objParam = new SqlParameter[1];
+                        objParam[0] = new SqlParameter("@P_UANO", userno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_DEPT_NAME_FOR_USERTYPE", objParam);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetSingleLeave->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetEmployeeListForDept(int userno , int shiftmanagement)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParam = null;
+                        objParam = new SqlParameter[2];
+                        objParam[0] = new SqlParameter("@P_UANO", userno);
+                        objParam[1] = new SqlParameter("@P_SHIFTMANAGEMENT", shiftmanagement);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_GET_DEPT_WISE_EMPLOYEE_NAME", objParam);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetSingleLeave->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+                #endregion
+
+                #region HodBiometric
+                public DataSet GetLoginDetailOnHodLogin(DateTime fromDate, DateTime toDate, int idno, string deptno, int college_no, int stno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_FROMDATE", fromDate);
+                        objParams[1] = new SqlParameter("@P_TODATE", toDate);
+                        objParams[2] = new SqlParameter("@P_IDNO ", idno);
+                        objParams[3] = new SqlParameter("@P_DEPTNO ", deptno);
+                        objParams[4] = new SqlParameter("@P_COLLEGE_NO ", college_no);
+                        objParams[5] = new SqlParameter("@P_STNO ", stno);
+                        ds = objSQLHelper.ExecuteDataSetSP("EMP_ATTENDANCESHEET_SHIFT_MULTIPLE_DEPT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetAllLeave-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+
+                    return ds;
+                }
+
+                public DataSet GetLoginDetailsForExcelOnHODLogin(DateTime fromDate, DateTime toDate, int idno, string deptno, string time_from, string time_to, string inout, int stno, int collegeid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[9];
+                        objParams[0] = new SqlParameter("@P_FROMDATE", fromDate);
+                        objParams[1] = new SqlParameter("@P_TODATE", toDate);
+                        objParams[2] = new SqlParameter("@P_IDNO ", idno);
+                        objParams[3] = new SqlParameter("@P_DEPTNO ", deptno);
+
+                        //objParams[4] = new SqlParameter("@P_INTIME_FROM ", intime_from);
+                        //objParams[5] = new SqlParameter("@P_INTIME_TO ", intime_to);
+
+                        if (!time_from.Equals(string.Empty))
+                            objParams[4] = new SqlParameter("@P_TIME_FROM", time_from);
+                        else
+                            objParams[4] = new SqlParameter("@P_TIME_FROM", DBNull.Value);
+
+                        if (!time_to.Equals(string.Empty))
+                            objParams[5] = new SqlParameter("@P_TIME_TO", time_to);
+                        else
+                            objParams[5] = new SqlParameter("@P_TIME_TO", DBNull.Value);
+
+                        //@P_INOUT
+                        objParams[6] = new SqlParameter("@P_INOUT ", inout);//IN/OUT/N
+                        //@P_STNO
+                        objParams[7] = new SqlParameter("@P_STNO ", stno);
+                        objParams[8] = new SqlParameter("@P_COLLEGE_NO ", collegeid);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("EMP_ATTENDANCESHEET_EXCEL_MULTIPLE_DEPT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetAllLeave-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+
+                    return ds;
+                }
+                #endregion
+
             }
         }
     }
