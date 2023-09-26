@@ -143,9 +143,10 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
                     merchantSubID = transactionData.merchantsubid;
                     timeStamp = transactionData.timestamp;
                     studIdno = transactionData.udf1;
-                    studName = transactionData.udf2;
-                    extra = transactionData.udf3;
-
+                    //studName = "ABC";
+                   installmentno=     Convert.ToInt32(transactionData.udf2);
+                   // installmentno = Convert.ToInt32(transactionData.udf3);
+                        
                     order_id = merchanttxnID;     //tokenID;
                     ViewState["order_id"] = order_id;
                     amount = totalAmount;
@@ -154,11 +155,11 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
                     orgid = 0;                                   //Convert.ToInt32(Request.Form["udf1"]);
                     payid = 0;                                   //Convert.ToInt32(Request.Form["udf2"]);
                     payactivityno = 0;                           //Convert.ToInt32(Request.Form["udf3"]);
-                    installmentno = 0;                           //Convert.ToInt32(Request.Form["udf4"]);
+                   // installmentno = Convert.ToInt32(Session["Installmentno"]);                           //Convert.ToInt32(Request.Form["udf4"]);
                     //int installmentno = Convert.ToInt32(0);
                     ViewState["IDNO"] = Idno;
 
-
+                    
                     //Added by Nikhil L. on 23-08-2022 for getting response and request url as per degreeno for RCPIPER.
                     if (Session["OrgId"].ToString() == "6")
                     {
@@ -193,10 +194,11 @@ public partial class IOBPayOnlinePaymentResponse : System.Web.UI.Page
                     Session["currentsession"] = objCommon.LookUp("ACD_SESSION_MASTER", "MAX(SESSIONNO)", "SESSIONNO>0");
                     Session["sessionname"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSION_NAME", "SESSIONNO=(SELECT MAX(SESSIONNO) FROM ACD_SESSION_MASTER WHERE SESSIONNO>0)");
                     string semester = objCommon.LookUp("ACD_DCR_TEMP", "SEMESTERNO", "IDNO=" + ViewState["IDNO"].ToString());
+                    string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + ViewState["IDNO"].ToString());
 
 
                     lblRegNo.Text = Regno;
-                    lblstudentname.Text = studName;                                    //firstname;
+                    lblstudentname.Text = Name;                                    //firstname;
                     lblOrderId.Text = order_id;
                     lblamount.Text = amount;
 

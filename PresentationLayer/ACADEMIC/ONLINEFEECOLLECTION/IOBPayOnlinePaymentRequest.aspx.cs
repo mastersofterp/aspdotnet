@@ -106,6 +106,7 @@ public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
                     Session["saltkey"]     = saltkey;
                     Session["accesscode"] = accesscode;
                     Session["hashsequence"] = hashsequence;
+                    Session["Instance"] = ds1.Tables[0].Rows[0]["INSTANCE"].ToString();
 
                     //key.Value = merchentkey;
                     ////hash.Value = hashsequence;
@@ -430,12 +431,24 @@ public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
         string txninitaction = "TXNINIT";
         string feetype = Session["BankFee_Type"] .ToString();
         string totalamt = Convert.ToString(Session["studAmt"]);
+        string LINK = string.Empty;
 
+        if (Convert.ToInt32(Session["Instance"]) == 1)
+            {
+            LINK = "https://testapp.iobnet.org/iobpay/iobpayRESTService/apitokenservice/generatenewtoken/";
+            }
+        else if (Convert.ToInt32(Session["Instance"]) == 2)
+            {
+            LINK = "https://www.iobnet.co.in/iobpay/iobpayRESTService/apitokenservice/generatenewtoken/";
+            }
+        else
+            {
+            LINK = "https://www.iobnet.co.in/iobpay/iobpayRESTService/apitokenservice/generatenewtoken/";
+            }
         //string replyurl = "http://localhost:8080";
         string replyurl = Session["ResponseUrl"].ToString();   //"http://localhost:8080/ResponseUrl.aspx";    
-        string iobpayapiurl ="https://testapp.iobnet.org/iobpay/iobpayRESTService/apitokenservice/generatenewtoken/";
+        string iobpayapiurl = LINK;//"https://testapp.iobnet.org/iobpay/iobpayRESTService/apitokenservice/generatenewtoken/";
         string iobpaytxniniturl = Session["RequestUrl"].ToString();     //"https://testapp.iobnet.org/iobpay/apitxninit.do";
-
         string merchanttxnid = Trxid;
 
         //Random random = new Random();
@@ -529,8 +542,8 @@ public partial class IOBPayOnlinePaymentRequest : System.Web.UI.Page
                                                                         //txninitreq.merchanttxnid = "000000001"; // unique merchant txn id
         txninitreq.merchanttxnid = merchanttxnid;
         txninitreq.udf1 = Session["idno"].ToString();                  // user defined field 1
-        txninitreq.udf2 = Session["payStudName"].ToString();           // user defined field 2
-        txninitreq.udf3 = ""; // user defined field 3
+        txninitreq.udf2 = Session["Installmentno"].ToString();           // user defined field 2
+        txninitreq.udf3 = "";// Session["Installmentno"].ToString(); // user defined field 3
 
         Session["tokenid"] = txninitreq.tokenid.ToString();
         string txninitjson = helper.ConvertObjectToJSon(txninitreq);
