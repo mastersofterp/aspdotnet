@@ -20826,6 +20826,29 @@ namespace IITMS
                  }
 
                  #endregion
+
+                 public DataSet CheckExistsStudentDataForDualDegree(int idno, int collegeid, int Degree, int Branch)
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                         SqlParameter[] objParams = null;
+                         objParams = new SqlParameter[4];
+                         objParams[0] = new SqlParameter("@P_IDNO", idno);
+                         objParams[1] = new SqlParameter("@P_COLLEGE", collegeid);
+                         objParams[2] = new SqlParameter("@P_DEGREE", Degree);
+                         objParams[3] = new SqlParameter("@P_BRANCH", Branch);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CHECKEXIST_STUENT_FOR_DUALDEGREE_STATUS", objParams);
+                     }
+
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.CheckExistsStudentDataForDualDegree->" + ex.ToString());
+                     }
+                     return ds;
+                 }
             }
 
 

@@ -34,6 +34,13 @@
             return false;
         };
     </script>
+
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
+
     <div>
         <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="updStudent"
             DynamicLayout="true" DisplayAfter="0">
@@ -98,7 +105,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnShow" runat="server" Text="Search" CssClass="btn btn-primary" OnClick="btnShow_Click" ValidationGroup="Show" />
+                                    <asp:Button ID="btnShow" runat="server" Text="Search" CssClass="btn btn-primary" OnClick="btnShow_Click" ValidationGroup="Show" OnClientClick="return submitPopup(this.name);" />
                                     <asp:Label ID="Label1" runat="server" Font-Bold="true" Visible="false" />
                                     <asp:Button ID="btnClose" runat="server" Text="Close" CssClass="btn btn-warning" OnClick="btnClose_Click" OnClientClick="return CloseSearchBox(this.name)" data-dismiss="modal" />
                                 </div>
@@ -116,7 +123,7 @@
                                                     </div>
                                                     <asp:Panel ID="Panel2" runat="server">
                                                         <div class="table-responsive">
-                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
                                                                         <th>Sr. No.
@@ -190,7 +197,7 @@
                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
-                                            
+
                                         </asp:ListView>
                                     </asp:Panel>
                                 </div>
@@ -217,7 +224,7 @@
                                                     <h5>Type of Student</h5>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                            <div class="form-group col-lg-4 col-md-6 col-12 ml-2">
                                                 <div class="label-dynamic">
                                                     <sup></sup>
                                                     <label>Type of Student</label>
@@ -229,7 +236,17 @@
                                                     <asp:ListItem Value="2">Higher Education</asp:ListItem>
                                                     <asp:ListItem Value="3">Sibling</asp:ListItem>
                                                 </asp:DropDownList>
+
                                             </div>
+
+                                            <div class="form-group col-lg-4 col-md-6 col-12 ml-2">
+                                                 <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label></label>
+                                                </div>
+                                                <asp:Button ID="Button1" runat="server" Text="Back" CssClass="btn btn-warning" OnClick="btnBack_Click"  />
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -252,14 +269,14 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherName" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supFatherName" runat="server">* </sup>
+                                                        <sup id="supFatherName" runat="server"></sup>
                                                         <label>Father's Name</label>
                                                     </div>
                                                     <asp:TextBox ID="txtFatherName" runat="server" CssClass="form-control" TabIndex="145" ToolTip="Please Enter Father's Name." onblur="conver_uppercase(this);" onkeyup="conver_uppercase(this);" placeholder="Please Enter Father's Name." />
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server"
                                                         TargetControlID="txtFatherName" FilterType="Custom" FilterMode="InvalidChars"
                                                         InvalidChars="1234567890" />
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvFatherName" runat="server" ControlToValidate="txtFatherName"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvFatherName" runat="server" ControlToValidate="txtFatherName"
                                                         Display="None" ErrorMessage="Please Enter Father's Name" ValidationGroup="academic"
                                                         SetFocusOnError="true">
                                                     </asp:RequiredFieldValidator>--%>
@@ -346,18 +363,17 @@
                                                         ErrorMessage="Please Enter Valid EmailID" ValidationGroup="academic"></asp:RegularExpressionValidator>
 
 
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvStudEmail" runat="server" ControlToValidate="txtStudEmail"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvStudEmail" runat="server" ControlToValidate="txtStudEmail"
                                                         Display="None" ErrorMessage="Please Enter Student Personal Email " ValidationGroup="academic"
                                                         SetFocusOnError="true">
                                                     </asp:RequiredFieldValidator>--%>
-
                                                 </div>
 
 
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divstate" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supstate" runat="server">*</sup>
+                                                        <sup id="supstate" runat="server"></sup>
                                                         <label>State</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlstate" runat="server" TabIndex="7" AutoPostBack="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlstate_SelectedIndexChanged"
@@ -408,9 +424,8 @@
 
                                                         <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlSchool" runat="server"  CssClass="form-control" data-select2-enable="true"
-                                                        ToolTip="Please Select School Admitted." TabIndex="11" AppendDataBoundItems="True" AutoPostBack="true"
-                                                       >
+                                                    <asp:DropDownList ID="ddlSchool" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                        ToolTip="Please Select School Admitted." TabIndex="11" AppendDataBoundItems="True" AutoPostBack="true">
                                                     </asp:DropDownList>
                                                     <%--<asp:RequiredFieldValidator ID="rfvSchool" runat="server" ControlToValidate="ddlSchool"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Institute School"
@@ -420,33 +435,32 @@
 
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divDegree" runat="server">
-                                                <div class="label-dynamic">
-                                                    <sup id="supDegree" runat="server">* </sup>
+                                                    <div class="label-dynamic">
+                                                        <sup id="supDegree" runat="server"></sup>
 
-                                                    <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>
-                                                </div>
-                                                <asp:DropDownList ID="ddlDegree" runat="server"  CssClass="form-control" data-select2-enable="true"
-                                                    ToolTip="Please Select Degree / Program" TabIndex="12" AppendDataBoundItems="True" AutoPostBack="true"
-                                                    >
-                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                </asp:DropDownList>
-                                               <%-- <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
+                                                        <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlDegree" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                        ToolTip="Please Select Degree / Program" TabIndex="12" AppendDataBoundItems="True" AutoPostBack="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
                                                     Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Degree / Program"
                                                     ValidationGroup="academic"></asp:RequiredFieldValidator>--%>
-                                            </div>
-
-
-
-                                             <div class="form-group col-lg-3 col-md-6 col-12" id="divBranch" runat="server">
-                                                <div class="label-dynamic">
-                                                    <sup id="supBranch" runat="server">* </sup>
-                                                    <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
                                                 </div>
-                                                <asp:DropDownList ID="ddlBranchShow" runat="server" TabIndex="13" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                                    ValidationGroup="academic" ToolTip="Please Select Branch" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" AutoPostBack="true">
-                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                </asp:DropDownList>
-                                                <%--<asp:RequiredFieldValidator ID="rfvddlBranch" runat="server" ControlToValidate="ddlBranch"
+
+
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divBranch" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supBranch" runat="server"></sup>
+                                                        <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlBranchShow" runat="server" TabIndex="13" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                        ValidationGroup="academic" ToolTip="Please Select Branch" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" AutoPostBack="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <%--<asp:RequiredFieldValidator ID="rfvddlBranch" runat="server" ControlToValidate="ddlBranch"
                                                     ErrorMessage="Please Select Branch" Display="None" ValidationGroup="academic"
                                                     SetFocusOnError="true" InitialValue="0">
                                                 </asp:RequiredFieldValidator>
@@ -454,7 +468,7 @@
                                                     ErrorMessage="Please Select Branch" Display="None" ValidationGroup="ddinfo" SetFocusOnError="true"
                                                     InitialValue="0">
                                                 </asp:RequiredFieldValidator>--%>
-                                            </div>
+                                                </div>
 
 
 
@@ -507,7 +521,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divYear" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supYear" runat="server">* </sup>
+                                                        <sup id="supYear" runat="server"></sup>
                                                         <label>Admission Year</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlYear" runat="server" TabIndex="16" AppendDataBoundItems="true"
@@ -522,12 +536,12 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divSemester" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supSemester" runat="server">* </sup>
+                                                        <sup id="supSemester" runat="server"></sup>
                                                         <label>Semester</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSemester" runat="server" TabIndex="17" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
                                                         ToolTip="Please Select Semester" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged" AutoPostBack="true" />
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Semester"
                                                         ValidationGroup="academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
@@ -536,7 +550,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divBatch" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supBatch" runat="server">* </sup>
+                                                        <sup id="supBatch" runat="server"></sup>
                                                         <label>Admission Batch</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBatch" runat="server" TabIndex="18" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Admission Batch" OnSelectedIndexChanged="ddlBatch_SelectedIndexChanged" AutoPostBack="true" />
@@ -631,7 +645,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Date of Birth</label>
                                                     </div>
                                                     <div class="input-group">
@@ -658,7 +672,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Religion</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlReligion" runat="server" TabIndex="1325" AppendDataBoundItems="true"
@@ -668,7 +682,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Nationality</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlNationality" runat="server" TabIndex="1326" AppendDataBoundItems="true"
@@ -678,7 +692,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>SR Category</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlCategory" runat="server" TabIndex="4" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
@@ -689,7 +703,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Claimed Category</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlClaimedCat" runat="server" TabIndex="5" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
@@ -699,7 +713,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Entrance Exam</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlExamNo" runat="server" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlExamNo_SelectedIndexChanged"
@@ -711,7 +725,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divotherentrance" runat="server" visible="false">
                                                     <div class="label-dynamic">
-                                                        <sup id="supotherentrance" runat="server">* </sup>
+                                                        <sup id="supotherentrance" runat="server"></sup>
                                                         <label>Other Entrance Exam</label>
                                                     </div>
                                                     <asp:TextBox ID="txtothetentrance" runat="server" TabIndex="8213" MaxLength="15" CssClass="form-control"></asp:TextBox>
@@ -739,7 +753,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Fees Paid at KEA/COMEDK</label>
                                                     </div>
                                                     <asp:TextBox ID="txtfeepaid" runat="server" TabIndex="12" ToolTip="Please Enter Fees." onblur="conver_uppercase(this);" onkeyup="conver_uppercase(this);" />
@@ -751,7 +765,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none;">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Martial Status</label>
                                                     </div>
                                                     <asp:RadioButton ID="rdoMarriedYes" runat="server" GroupName="Married"
@@ -764,7 +778,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none;">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Student Indus Email</label>
                                                     </div>
                                                     <asp:TextBox ID="txtIUEmail" runat="server" ToolTip="Please Enter Student Indus Email"
@@ -779,7 +793,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Blood Group</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBloodGrp" runat="server" TabIndex="20" AppendDataBoundItems="true"
@@ -789,7 +803,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none;">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Physical Handicap</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlPhyHandicap" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
@@ -802,19 +816,19 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divAllotedCat" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supAllotedCat" runat="server">* </sup>
+                                                        <sup id="supAllotedCat" runat="server"></sup>
                                                         <label>Category</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlAllotedCat" runat="server" TabIndex="21" AppendDataBoundItems="true"
                                                         CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Category" />
-                                                   <%-- <asp:RequiredFieldValidator ID="rfvAllotedCategory" runat="server" ControlToValidate="ddlAllotedCat"
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvAllotedCategory" runat="server" ControlToValidate="ddlAllotedCat"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Category"
                                                         ValidationGroup="academic"></asp:RequiredFieldValidator>--%>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none;">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Date of Admission</label>
                                                     </div>
                                                     <div class="input-group date">
@@ -833,7 +847,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none;">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Entrance Roll No.</label>
                                                     </div>
                                                     <asp:TextBox ID="txtJeeRollNo" runat="server" TabIndex="1866" MaxLength="15" placeholder="Please Enter Entrance exam Roll No"></asp:TextBox>
@@ -842,7 +856,7 @@
 
 
 
-                                              <%--  <div class="form-group col-lg-3 col-md-6 col-12" id="divDateOfReporting" runat="server">
+                                                <%--  <div class="form-group col-lg-3 col-md-6 col-12" id="divDateOfReporting" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup id="supDateOfReporting" runat="server">* </sup>
                                                         <label>Date of Entry</label>
@@ -897,7 +911,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Section</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSection" runat="server" TabIndex="2145" AppendDataBoundItems="true"
@@ -907,7 +921,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="Div1" runat="server" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>Aadhaar No.</label>
                                                     </div>
                                                     <asp:TextBox runat="server" ID="txtAadhaarNo" TabIndex="24" placeholder="Please Enter Aadhaar no." AutoPostBack="true" MaxLength="12" onkeyup="IsNumeric(this);" OnTextChanged="txtAadhaarNo_TextChanged"></asp:TextBox>
@@ -952,7 +966,7 @@
 
                                                 <div id="Div2" class="form-group col-lg-3 col-md-6 col-12" hidden="hidden" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>College Code</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlcolcode" runat="server" TabIndex="28" AppendDataBoundItems="true"
@@ -986,7 +1000,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                        <sup></sup>
                                                         <label>State</label>
                                                     </div>
                                                     <asp:TextBox ID="txtState" runat="server" class="tbState" CssClass="form-control" ToolTip="Please Enter State" TabIndex="24" />
@@ -998,7 +1012,7 @@
 
                                         <div class="col-12" id="trphoto_sign" runat="server" style="display: none">
                                             <div class="label-dynamic" id="trphotosign">
-                                                <sup>* </sup>
+                                                <sup></sup>
                                                 <label>Photo And Sign Upload</label>
                                             </div>
                                             <div class="col-12" id="divUpload" runat="server">
@@ -1100,7 +1114,7 @@
                                                         <h5>Local Address and Contact Details 
                                                         (Copy Address) 
                                                         <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/copy.png" OnClientClick="copyPermAddr(this)"
-                                                            ToolTip="Copy Permanent Address" TabIndex="16" /></label>
+                                                            ToolTip="Copy Permanent Address" TabIndex="16" Visible="false"/></label>
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -1118,7 +1132,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup></sup>
-                                                        <label>City</label>
+                                                        <label>City/Villege</label>
                                                     </div>
 
                                                     <asp:TextBox ID="txtLocalCity" runat="server" CssClass="form-control" ToolTip="Please Enter Local City"
@@ -1162,7 +1176,6 @@
                                                         <sup></sup>
                                                         <label>Email Id</label>
                                                     </div>
-
                                                     <asp:TextBox ID="txtGuardianEmail" runat="server" CssClass="form-control" TabIndex="16" ToolTip="Please Enter Email" />
                                                     <asp:RegularExpressionValidator ID="rfvGuardianEmail" runat="server" ControlToValidate="txtGuardianEmail"
                                                         Display="None" SetFocusOnError="True" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
@@ -1171,7 +1184,6 @@
                                             </div>
 
                                         </div>
-
 
                                         <div class="col-12">
                                             <div class="row">
@@ -1188,13 +1200,13 @@
                                                         <sup id="sup1" runat="server">* </sup>
                                                         <label>Admission Batch</label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlAdmBatch" runat="server" TabIndex="18" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Admission Batch" OnSelectedIndexChanged="ddlBatch_SelectedIndexChanged" AutoPostBack="true" >
+                                                    <asp:DropDownList ID="ddlAdmBatch" runat="server" TabIndex="18" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" ToolTip="Please Select Admission Batch" OnSelectedIndexChanged="ddlBatch_SelectedIndexChanged" AutoPostBack="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlAdmBatch"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Admission Batch"
                                                         ValidationGroup="academic"></asp:RequiredFieldValidator>
-                                                     
+
                                                 </div>
 
 
@@ -1214,7 +1226,7 @@
                                                     </asp:RequiredFieldValidator>
                                                 </div>
 
-                                                 
+
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1248,36 +1260,36 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSpecialisation" visible="false">
                                                     <div class="label-dynamic">
-                                                        <sup id="supSpecialisation" runat="server"> </sup>
+                                                        <sup id="supSpecialisation" runat="server"></sup>
                                                         <label>Specialisation</label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSpecialisation" runat="server" TabIndex="13" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
-                                                         ToolTip="Please Select Specialisation"> <%--ValidationGroup="academic"--%>
+                                                        ToolTip="Please Select Specialisation">
+                                                        <%--ValidationGroup="academic"--%>
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                   <%-- Commeneted By Vinay Mishra on 21/06/2023 As per Required in Ticket 44723--%>
+                                                    <%-- Commeneted By Vinay Mishra on 21/06/2023 As per Required in Ticket 44723--%>
                                                     <%--<asp:RequiredFieldValidator ID="rfvSpecialisation" runat="server" ControlToValidate="ddlSpecialisation"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Specialisation"
                                                         ValidationGroup="academic"></asp:RequiredFieldValidator>--%>
-
                                                 </div>
 
-                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="div4" runat="server">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="div4" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup id="sup2" runat="server">* </sup>
                                                         <label>Semester</label>
-                                                        
+
                                                     </div>
                                                     <asp:DropDownList ID="ddlSemesterNew" runat="server" TabIndex="17" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
-                                                        ToolTip="Please Select Semester" OnSelectedIndexChanged="ddlSemesterNew_SelectedIndexChanged" AutoPostBack="true" >
+                                                        ToolTip="Please Select Semester" OnSelectedIndexChanged="ddlSemesterNew_SelectedIndexChanged" AutoPostBack="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                        </asp:DropDownList>
+                                                    </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemesterNew"
                                                         Display="None" SetFocusOnError="true" InitialValue="0" ErrorMessage="Please Select Semester"
                                                         ValidationGroup="academic"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                               <div class="form-group col-lg-3 col-md-6 col-12" id="div5" runat="server">
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="div5" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup id="sup3" runat="server">*</sup>
                                                         <label>Admission Type</label>
@@ -1308,6 +1320,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 btn-footer">
+
                                             <asp:Button ID="btnSave" runat="server" Text="Submit" TabIndex="38" ToolTip="Submit Student Information"
                                                 ValidationGroup="academic" CssClass="btn btn-primary" OnClick="btnSave_Click" />
 
@@ -1336,6 +1349,95 @@
             text.value = text.value.toUpperCase();
         }
     </script>
+
+    <script type="text/javascript" lang="javascript">
+
+       <%-- $(document).ready(function () {
+            debugger
+            $("#<%= divpanel.ClientID %>").css("display", "none");
+            $("#<%= pnltextbox.ClientID %>").css("display", "none");
+            $("#<%= pnlDropdown.ClientID %>").css("display", "none");
+        });--%>
+        function submitPopup(btnsearch) {
+
+            debugger
+            var rbText;
+            var searchtxt;
+
+            var e = document.getElementById("<%=ddlSearch.ClientID%>");
+              var rbText = e.options[e.selectedIndex].text;
+              var ddlname = e.options[e.selectedIndex].text;
+              if (rbText == "Please Select") {
+                  alert('Please select Criteria as you want search...')
+              }
+
+              else {
+
+
+                  if (rbText == "ddl") {
+                      var skillsSelect = document.getElementById("<%=ddlDropdown.ClientID%>").value;
+
+                    var searchtxt = skillsSelect;
+                    if (searchtxt == "0") {
+                        alert('Please Select ' + ddlname + '..!');
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+                        return true;
+                        $("#<%= pnltextbox.ClientID %>").hide();
+
+                    }
+                }
+                else if (rbText == "BRANCH") {
+
+                    if (searchtxt == "Please Select") {
+                        alert('Please Select Branch..!');
+
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+
+                        return true;
+                    }
+
+                }
+                else {
+                    searchtxt = document.getElementById('<%=txtStudent.ClientID %>').value;
+                    if (searchtxt == "" || searchtxt == null) {
+                        alert('Please Enter Data you want to search..');
+                        document.getElementById('<%=txtStudent.ClientID %>').focus();
+                        return false;
+                    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+                        //$("#<%= divpanel.ClientID %>").hide();
+                        //$("#<%= pnltextbox.ClientID %>").show();
+
+                        return true;
+                    }
+                }
+        }
+    }
+
+    function ClearSearchBox(btncancelmodal) {
+        document.getElementById('<%=txtStudent.ClientID %>').value = '';
+        __doPostBack(btncancelmodal, '');
+        return true;
+    }
+    function CloseSearchBox(btnClose) {
+        document.getElementById('<%=txtStudent.ClientID %>').value = '';
+        __doPostBack(btnClose, '');
+        return true;
+    }
+
+
+
+
+
+
+
+    </script>
+
     <script>
         function Validate() {
             debugger
@@ -1363,8 +1465,8 @@
             debugger
             $("#<%= pnltextbox.ClientID %>").hide();
 
-                        $("#<%= pnlDropdown.ClientID %>").hide();
-         });
+            $("#<%= pnlDropdown.ClientID %>").hide();
+        });
     </script>
 </asp:Content>
 
