@@ -28,7 +28,7 @@ namespace IITMS
                 private int _schemeno = 0;
                 public int _subExamNo = 0;
                 public int _PATTERNNO = 0;
-                private int _CourseType=0;
+                private int _CourseType = 0;
                 public decimal _MAXMARKS;
 
 
@@ -40,7 +40,7 @@ namespace IITMS
                 private int _collegeno = 0;
                 private int _department;
                 private int _college_id;
-                
+
 
                 #endregion
 
@@ -319,7 +319,7 @@ namespace IITMS
                     set { _Status = value; }
                 }
 
-                public int PATTERNNO 
+                public int PATTERNNO
                 {
                     get { return _PATTERNNO; }
                     set { _PATTERNNO = value; }
@@ -554,6 +554,38 @@ namespace IITMS
                 //public int _Approvedby = 0;
                 //public int _Approvedstatus = 0;
                 #endregion
+
+
+                //Added By Atharva 		
+                private int _ActivityNo;
+                private string _Grade;
+                private bool _IsActiveStatus;
+                private int _CollegeCode;
+                private int _ActivityCode;
+
+                public int ActivityCode
+                {
+                    get { return _ActivityCode; }
+                    set { _ActivityCode = value; }
+                }
+
+                public int ActivityNo
+                {
+                    get { return _ActivityNo; }
+                    set { _ActivityNo = value; }
+                }
+
+                public string Grade
+                {
+                    get { return _Grade; }
+                    set { _Grade = value; }
+                }
+
+                public bool IsActive
+                {
+                    get { return _IsActiveStatus; }
+                    set { _IsActiveStatus = value; }
+                }
             }
             public class EndSemMark
             {
@@ -561,6 +593,8 @@ namespace IITMS
                 public int IDNO { get; set; }
                 public decimal? EXTERMARKS { get; set; }
             }
+
+
         }
     }
 }
