@@ -4456,6 +4456,34 @@ namespace IITMS
                 return ds;
             }
 
+
+            /// <summary>
+            /// Added by Saurabh S.
+            /// Get the data to be filled in the Auto Complete Textbox by IDNO
+            /// </summary>
+            /// <param name="idno"></param>
+            /// <param name="tablename"></param>
+            /// <param name="col1"></param>
+            /// <param name="col2"></param>
+            /// <returns></returns>
+
+
+            public string GetDataByIDNoForDualDegree(int idno, string tablename, string col1, string col2)
+            {
+                string data = string.Empty;
+                DataSet ds = this.FillDropDown(tablename, col1, col2, col1 + " = " + idno, string.Empty);
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        data = ds.Tables[0].Rows[0][1].ToString();
+                    }
+                }
+
+                return data;
+            }
+
         }//END Class Common
     }//END namespace UAIMS
 }//END namespace IITMS
