@@ -558,6 +558,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             dt_FEEDBACK.Columns.Add(new DataColumn("QANSID", typeof(int)));
             dt_FEEDBACK.Columns.Add(new DataColumn("QANSTEXT", typeof(string)));
             dt_FEEDBACK.Columns.Add(new DataColumn("QANSWERTEXT", typeof(string)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("ANS_OPTION_ID", typeof(int)));
             if (Session["usertype"].ToString() == "2")
             {
                 foreach (ListViewDataItem dataitem in lvCourse.Items)
@@ -566,6 +567,16 @@ public partial class LevelFeedback : System.Web.UI.Page
                     Label lblCourse = dataitem.FindControl("lblCourse") as Label;
                     TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
                     HiddenField hfOPTION_TYPE = dataitem.FindControl("hfOPTION_TYPE") as HiddenField;
+
+                    int dataItemIndex = 0;
+                    //int index = lvCourse.Items.IndexOf(dataitem.rblCourse);
+                    for (int i = 0; i <= Convert.ToInt32(rblCourse.SelectedIndex); i++)
+                    {
+                        // Access the data item index for each RadioButton
+                        dataItemIndex = i+1;
+
+                    }
+
                     if ((rblCourse.SelectedValue == "" && rblCourse.Visible==true) || (txtcourse.Text=="" && txtcourse.Visible==true)  )
                     {
                         objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
@@ -577,13 +588,13 @@ public partial class LevelFeedback : System.Web.UI.Page
                         {
                             //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
                             //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text);
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
                         }
                         else if (hfOPTION_TYPE.Value == "T")
                         {
                             //objSEB.AnswerIds += txtcourse.Text + ",";
                             //objSEB.QuestionIds += lblCourse.Text + ",";
-                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "");
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
                         }
                     }
                 }
