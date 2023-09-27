@@ -1489,35 +1489,70 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
     private void TimeTableExcel()
     {
+        //int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+
+
+        //string proc_name = "PKG_ACAD_EXAM_DATE_GET_REPORT_EXCEL";
+        //string para_name = "@P_SESSIONNO";
+        //string call_values = "" + sessionno + "";
+        //DataSet dsExcel = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+
+        //GridView gv = new GridView();
+        //if (dsExcel != null && dsExcel.Tables.Count > 0 && dsExcel.Tables[0].Rows.Count > 0)
+        //{
+        //    gv.DataSource = dsExcel;
+        //    gv.DataBind();
+        //    string attachment = "attachment ; filename=TimeTableExcelReport.xls";
+        //    Response.ClearContent();
+        //    Response.AddHeader("content-disposition", attachment);
+        //    Response.ContentType = "application/ms-excel";
+        //    StringWriter sw = new StringWriter();
+        //    HtmlTextWriter htw = new HtmlTextWriter(sw);
+        //    gv.RenderControl(htw);
+        //    Response.Write(sw.ToString());
+        //    Response.Flush();
+        //    Response.End();
+        //}
+        //else
+        //{
+        //    gv.DataSource = null;
+        //    gv.DataBind();
+        //    objCommon.DisplayMessage("Record Not Found", this.Page);
+        //}
+
         int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-
-
         string proc_name = "PKG_ACAD_EXAM_DATE_GET_REPORT_EXCEL";
         string para_name = "@P_SESSIONNO";
         string call_values = "" + sessionno + "";
-        DataSet dsExcel = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+        DataSet ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
+        ds.Tables[0].TableName = "SectionWise Exam Time Table";
+        ds.Tables[1].TableName = "DateWise Exam Time Table";
 
-        GridView gv = new GridView();
-        if (dsExcel != null && dsExcel.Tables.Count > 0 && dsExcel.Tables[0].Rows.Count > 0)
+        using (XLWorkbook wb = new XLWorkbook())
         {
-            gv.DataSource = dsExcel;
-            gv.DataBind();
-            string attachment = "attachment ; filename=TimeTableExcelReport.xls";
-            Response.ClearContent();
-            Response.AddHeader("content-disposition", attachment);
-            Response.ContentType = "application/ms-excel";
-            StringWriter sw = new StringWriter();
-            HtmlTextWriter htw = new HtmlTextWriter(sw);
-            gv.RenderControl(htw);
-            Response.Write(sw.ToString());
-            Response.Flush();
-            Response.End();
-        }
-        else
-        {
-            gv.DataSource = null;
-            gv.DataBind();
-            objCommon.DisplayMessage("Record Not Found", this.Page);
+            foreach (DataTable dt in ds.Tables)
+            {
+                if (dt != null)
+                {
+                    if (dt.Rows.Count > 0)
+                    {
+                        wb.Worksheets.Add(dt);
+                    }
+                }
+            }
+
+            Response.Clear();
+            Response.Buffer = true;
+            Response.Charset = "";
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment;filename=Exam_Time_Table.xlsx");
+            using (MemoryStream MyMemoryStream = new MemoryStream())
+            {
+                wb.SaveAs(MyMemoryStream);
+                MyMemoryStream.WriteTo(Response.OutputStream);
+                Response.Flush();
+                Response.End();
+            }
         }
     }
 
