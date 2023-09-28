@@ -338,7 +338,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     }
                     if (other_info == "0")
                     {
-                        objCommon.DisplayMessage(this.Page, "Please Submit Other Information... !", this.Page);
+                        objCommon.DisplayMessage(this.Page, "Please Submitted Other Information... !", this.Page);
                         return;
                     }
 
@@ -991,7 +991,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
 
 
                 int OrganizationId = Convert.ToInt32(Session["OrgId"]);
-                if (OrganizationId != 6)   // Added for RCPIPER by Sachin Lohakare 06-12-2022
+                if (OrganizationId != 6)   //Added by crescent sachin 06-12-2022
                 {
                     if (ddlBank.SelectedIndex == 0)
                     {
