@@ -463,7 +463,7 @@
                                         <asp:ListBox ID="lstSelectClub" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple"></asp:ListBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="Academic"
                                             ControlToValidate="lstSelectClub" runat="server"
-                                            Display="None" ErrorMessage="Please select Club"></asp:RequiredFieldValidator>
+                                            Display="None" ErrorMessage="Please Select Club"></asp:RequiredFieldValidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -513,7 +513,7 @@
                                         <asp:ListBox ID="lstbxFacultyCoordinator" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple"></asp:ListBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="Academic"
                                             ControlToValidate="lstbxFacultyCoordinator" runat="server"
-                                            Display="None" ErrorMessage="Please select FacultyCoordinator"></asp:RequiredFieldValidator>
+                                            Display="None" ErrorMessage="Please Select Faculty Coordinator"></asp:RequiredFieldValidator>
                                     </div>
 
 
@@ -692,7 +692,7 @@
 
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="Academic" Format="dd/MM/yyyy"
                                                 ControlToValidate="txtRegistrationDate" runat="server"
-                                                Display="None" ErrorMessage="Please select Registration Last Date"></asp:RequiredFieldValidator>
+                                                Display="None" ErrorMessage="Please Select Registration Last Date"></asp:RequiredFieldValidator>
 
                                             <%--                                     <asp:CompareValidator ID="CompareValidator1" ValidationGroup = "Academic" ForeColor = "Red" runat="server" 
                                         ControlToValidate = "txtRegistrationDate" ControlToCompare = "txtStartDate" Operator="GreaterThanEqual" Type = "Date" 
