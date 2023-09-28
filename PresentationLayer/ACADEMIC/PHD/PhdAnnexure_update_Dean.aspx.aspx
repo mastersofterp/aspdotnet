@@ -340,7 +340,7 @@
                                                                    <%-- <sup>* </sup>--%>
                                                                     <label>Supervisor Role</label>
                                                                 </div>
-
+                                                                <%--patches updated--%>
                                                                 <asp:DropDownList ID="ddlSupervisorrole" runat="server" AutoPostBack="true" AppendDataBoundItems="True"
                                                                     TabIndex="15" ToolTip="Please Select Supervisor role" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSupervisorrole_SelectedIndexChanged">
                                                                     <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>

@@ -256,7 +256,7 @@
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>--%>
                                                                 <asp:ListBox ID="ddlCourseMinor" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"></asp:ListBox>
-                                                                <asp:RequiredFieldValidator ID="rfvddlCourseMinor" runat="server" Display="None" ControlToValidate="ddlCourseMinor" ErrorMessage="Please Select Minor!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>
+                                                                <asp:RequiredFieldValidator ID="rfvddlCourseMinor" runat="server" Display="None" ControlToValidate="ddlCourseMinor" ErrorMessage="Please Select Minor!!!" InitialValue="" ValidationGroup="submit2"></asp:RequiredFieldValidator>
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
