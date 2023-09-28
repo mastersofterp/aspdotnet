@@ -8000,6 +8000,37 @@ namespace IITMS
                     return retStatus;
 
                 }
+                //Added by Shrikant W on 28-09-2023
+                public int UpdateStudentFinalInformation(Student objStudent)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
+                        objParams[1] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[1].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_FINAL_INFORMATION", objParams, true);
+
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudentFinalInformation-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+
+                }
                 /// <summary>
                 /// Updated by Swapnil.......
                 /// </summary>
@@ -12982,7 +13013,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student
-                        objParams = new SqlParameter[59];
+                        objParams = new SqlParameter[61];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_REGNO", objStudent.RegNo);
                         objParams[2] = new SqlParameter("@P_ENROLLNO", objStudent.EnrollNo);
@@ -13052,9 +13083,10 @@ namespace IITMS
                         //Added by Bhagyashree on 07-06-2023
                         objParams[56] = new SqlParameter("@P_ABCC_ID", objStudent.AbccId);
                         objParams[57] = new SqlParameter("@P_DTE_APPLICATION_ID", objStudent.DteAppId);
-
-                        objParams[58] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[58].Direction = ParameterDirection.Output;
+                        objParams[58] = new SqlParameter("@P_CASTENAME", objStudent.CasteName);
+                        objParams[59] = new SqlParameter("@P_MOTHER_ANNUAL_INCOME", objStudent.MotherAnnualIncome);
+                        objParams[60] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[60].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUDENT_PERSONAL_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
