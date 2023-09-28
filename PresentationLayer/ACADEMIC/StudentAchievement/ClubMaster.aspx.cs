@@ -337,76 +337,78 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
     }
 
 
+
+
+
     protected void btnExport_Click(object sender, EventArgs e)
     {
         try
         {
-           // DataSet ds = OBJCLUB.GetClubStudentListDeatils();
+            GridView gv = new GridView();
             DataSet ds = GetClubStudentListDeatils();
-
-            ds.Tables[0].TableName = "Detailed Reports";
-            ds.Tables[1].TableName = "Summary Reports";
-            
-         
-            using (XLWorkbook wb = new XLWorkbook())
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                foreach (System.Data.DataTable dt in ds.Tables)
-                {
-                    //Add System.Data.DataTable as Worksheet.
-                    wb.Worksheets.Add(dt);
-                }
-
-                //Export the Excel file.
-                Response.Clear();
-                Response.Buffer = true;
-                Response.Charset = "";
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=Club_Registered_Student_List.xlsx");
-                using (MemoryStream MyMemoryStream = new MemoryStream())
-                {
-                    wb.SaveAs(MyMemoryStream);
-                    MyMemoryStream.WriteTo(Response.OutputStream);
-                    Response.Flush();
-                    Response.End();
-                }
-               
+                gv.DataSource = ds;
+                gv.DataBind();
+                string Attachment = "Attachment; filename=" + "Club_Registered_Student_List.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", Attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                gv.HeaderStyle.Font.Bold = true;
+                gv.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Available To Export !!", this.Page);
             }
         }
         catch (Exception ex)
         {
-            throw ex;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ClubMaster.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+   
+
+
     protected void btnExportR_Click(object sender, EventArgs e)
     {
-        DataSet ds = GetClubActivityRegistration();
-
-        ds.Tables[0].TableName = "Detailed Reports";
-        ds.Tables[1].TableName = "Summary Reports";
-
-
-        using (XLWorkbook wb = new XLWorkbook())
+        try
         {
-            foreach (System.Data.DataTable dt in ds.Tables)
+            GridView gv = new GridView();
+            DataSet ds = GetClubActivityRegistration();
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                //Add System.Data.DataTable as Worksheet.
-                wb.Worksheets.Add(dt);
-            }
-
-            //Export the Excel file.
-            Response.Clear();
-            Response.Buffer = true;
-            Response.Charset = "";
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=Club_Activity_Registration_Report.xlsx");
-            using (MemoryStream MyMemoryStream = new MemoryStream())
-            {
-                wb.SaveAs(MyMemoryStream);
-                MyMemoryStream.WriteTo(Response.OutputStream);
-                Response.Flush();
+                gv.DataSource = ds;
+                gv.DataBind();
+                string Attachment = "Attachment; filename=" + "Club_Activity_Registration_Report.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", Attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                gv.HeaderStyle.Font.Bold = true;
+                gv.RenderControl(htw);
+                Response.Write(sw.ToString());
                 Response.End();
             }
-
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Available To Export !!", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ClubMaster.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 }
