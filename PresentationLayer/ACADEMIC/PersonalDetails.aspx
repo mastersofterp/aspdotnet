@@ -320,7 +320,11 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
+<<<<<<< HEAD
                                                         <%-- <sup>* </sup>--%>
+=======
+                                                        <sup id="supAlternateNoStud" runat="server">* </sup>
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         <label>Alternate Mobile No. </label>
                                                     </div>
                                                     <asp:TextBox ID="txtAlternateNoStud" CssClass="form-control" runat="server" MaxLength="10" TabIndex="5"
@@ -397,12 +401,21 @@
                                                     <%--   <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender13" runat="server"
                                                     TargetControlID="txtBirthPlace" FilterType="Custom" FilterMode="InvalidChars"
                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
+<<<<<<< HEAD
                                                     <asp:RequiredFieldValidator ID="rfvbirth" runat="server" ControlToValidate="txtBirthPlace"
+=======
+                                                                                                       <%--<asp:RequiredFieldValidator ID="rfvbirth" runat="server" ControlToValidate="txtBirthPlace"
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         Display="None" ErrorMessage="Please Enter Birth Place" SetFocusOnError="True"
                                                         TabIndex="1" ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
+<<<<<<< HEAD
+=======
+                                                        <sup id="supGender" runat="server">* </sup>
+                                                        <%--<asp:Label ID="supGender" runat="server" ForeColor="OrangeRed" Font-Size="Small">* </asp:Label>--%>
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         <label>Gender </label>
                                                     </div>
                                                     <asp:RadioButtonList ID="rdobtn_Gender" runat="server" TabIndex="9" RepeatDirection="Horizontal" ToolTip="Please Select Gender">
@@ -442,7 +455,11 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
+<<<<<<< HEAD
                                                         <%-- <sup>* </sup>--%>
+=======
+                                                        <sup id="supBloodGroup" runat="server">* </sup>
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         <label>Blood Group </label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlBloodGroupNo" CssClass="form-control" runat="server" AppendDataBoundItems="True"
@@ -478,7 +495,13 @@
                                                         Display="None" ErrorMessage="Please Select category" SetFocusOnError="True"
                                                         ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divCaste" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supCaste" runat="server"></sup>
+                                                        <label>Caste</label>
+                                                    </div>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
                                                     <asp:TextBox ID="txtCaste" CssClass="form-control" runat="server" TabIndex="14" ToolTip="Please Enter Caste"
@@ -487,6 +510,12 @@
                                                     
                                                 </div>
 >>>>>>> 343751a ([BUGFIX] [168347] Added validation To The Caste Textbox)
+=======
+                                                    <asp:TextBox ID="txtCaste" CssClass="form-control" runat="server" TabIndex="14" ToolTip="Please Enter Caste"
+                                                        placeholder="Enter Caste" onkeypress="return alphaOnly(event);"
+                                                        MaxLength="50" />
+                                                </div>
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
                                                         <label>Category </label>
@@ -517,9 +546,6 @@
                                                     <asp:TextBox ID="txtSubCaste" CssClass="form-control" runat="server" TabIndex="14" ToolTip="Please Enter Sub Caste"
                                                         placeholder="Enter Sub Caste" onkeypress="return alphaOnly(event);"
                                                         MaxLength="100" />
-                                                    <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender28" runat="server"
-                                                    TargetControlID="txtSubCaste" FilterType="Custom" FilterMode="InvalidChars"
-                                                    InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -677,14 +703,23 @@
 
                                                     </div>
                                                 </div>
+<<<<<<< HEAD
                                             </div>
                                             <asp:Panel ID="pnlApplicationId" runat="server" Visible="false">
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-6">
+=======
+                                                </div>
+                                            
+                                            <%--<asp:Panel ID="pnlApplicationId" runat="server" Visible="false">--%>
+                                                <div class="row" id="divApplicationId" runat="server" visible="false">
+                                                    <div class="form-group col-lg-3 col-md-6 col-6" id="divABCCId" runat="server">
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label id="lblAbccId">ABCC Id</label>
                                                         </div>
+
                                                         <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABCC Id" MaxLength="20"
                                                             TabIndex="19" placeholder="Enter ABCC Id" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="rfvtABCCId" runat="server" ControlToValidate="txtABCCId"
@@ -704,7 +739,9 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
-                                            </asp:Panel>
+                                               <%--</asp:Panel>--%>
+
+
 
                                             <div class="row" runat="server" id="FatherSection" visible="true">
                                                 <div class="col-12 mt-3">
@@ -714,6 +751,10 @@
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
+<<<<<<< HEAD
+=======
+                                                        <sup id="supFatherFullName" runat="server">* </sup>
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                         <label>Father's Full Name </label>
                                                     </div>
 
@@ -917,7 +958,11 @@
                                                         TargetControlID="txtMotherDesignation" FilterType="Custom" FilterMode="InvalidChars"
                                                         InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                 </div>
+<<<<<<< HEAD
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
+=======
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMOcc" runat="server">
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                                                     <div class="label-dynamic">
                                                         <label>Mother's Occupation </label>
                                                     </div>
@@ -935,6 +980,16 @@
                                                     </ajaxToolKit:FilteredTextBoxExtender>
                                                     <asp:RegularExpressionValidator runat="server" ErrorMessage="Mother's Office Phone No is Invalid" ID="RegularExpressionValidator3" ControlToValidate="txtMothersOfficeNo" ValidationExpression=".{10}.*"
                                                         Display="None" ValidationGroup="Academic"></asp:RegularExpressionValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMAnnualIncome" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supMAnnualIncome" runat="server"></sup>
+                                                        <label>Annual Income </label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtMAnnualIncome" CssClass="form-control" runat="server" TabIndex="30" MaxLength="8" ToolTip="Please Enter Annual Income" placeholder="Enter Annual Income"></asp:TextBox>
+                                                    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender10" runat="server" FilterType="Numbers"
+                                                        TargetControlID="txtMAnnualIncome">
+                                                    </ajaxToolKit:FilteredTextBoxExtender>
                                                 </div>
 
                                             </div>
@@ -986,7 +1041,11 @@
 
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnSubmit" runat="server" TabIndex="39" Text="Save & Continue >>" ToolTip="Click to Submit"
+<<<<<<< HEAD
                                                     CssClass="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Academic" />
+=======
+                                                    CssClass="btn btn-primary" OnClick="btnSubmit_Click" />
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
 
                                                 <button runat="server" id="btnGohome" visible="false" tabindex="40" onserverclick="btnGohome_Click" class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
                                                     Go Back Home
@@ -1096,6 +1155,19 @@
             }
         }
     </script>
+<<<<<<< HEAD
+=======
+
+    <script type="text/javascript">
+        function alertmessage(commaSeperatedString) {
+            var parts = commaSeperatedString.split(',');
+            var errorMessage = parts.join('\n');
+            alert(errorMessage);
+        }
+    </script>
+
+
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
     <script type="text/javascript">
         function pageLoad() {
 
@@ -1194,23 +1266,23 @@
             f ly: Palatino Linotype, Arial, Helvetica, sans-serif;
         }
     </style>
-     <script>
-         function allowAlphaNumericSpace(e) {
-             var code = ('charCode' in e) ? e.charCode : e.keyCode;
-             if (!(code == 32) && // space
-               !(code > 47 && code < 58) && // numeric (0-9)
-               !(code > 64 && code < 91) && // upper alpha (A-Z)
-               !(code > 96 && code < 123)) { // lower alpha (a-z)
-                 e.preventDefault();
-                 //    alert("Not Allowed Special Character..!");
-                 return true;
-             }
+    <script>
+        function allowAlphaNumericSpace(e) {
+            var code = ('charCode' in e) ? e.charCode : e.keyCode;
+            if (!(code == 32) && // space
+              !(code > 47 && code < 58) && // numeric (0-9)
+              !(code > 64 && code < 91) && // upper alpha (A-Z)
+              !(code > 96 && code < 123)) { // lower alpha (a-z)
+                e.preventDefault();
+                //    alert("Not Allowed Special Character..!");
+                return true;
+            }
 
-             else
+            else
 
-                 return false;
+                return false;
 
-         }
+        }
 
     </script>
     <div id="divMsg" runat="server">

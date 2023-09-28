@@ -35,6 +35,36 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 this.FillDropDown();
                 ShowStudentDetails();
                 rdoParents.Visible = true;                         //Added by sachin on 19-07-2022
+
+                int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
+
+                // Added By Shrikant W. on 25-09-2023
+                if (orgID == 12)
+                {
+                    divCaste.Visible = true;
+                }
+                else
+                {
+                    divCaste.Visible = false;
+                }
+
+                if (orgID == 8)
+                {
+                    divApplicationId.Visible = true;
+                }
+                else
+                {
+                    divApplicationId.Visible = false;
+                }
+
+                if (orgID == 1)
+                {
+                    divMAnnualIncome.Visible = true;
+                }
+                else
+                {
+                    divMAnnualIncome.Visible = false;
+                }
                 if (rdofatheralive.SelectedValue == "1")
                 {
                     MotherSection.Visible = true;
@@ -100,6 +130,57 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         {
                             btnSubmit.Visible = false;
                         }
+<<<<<<< HEAD
+=======
+
+
+                        // Added By Shrikant W. on 08-09-2023 For DAIICT                    
+                        if (orgID == 15)
+                        {
+                            if (Convert.ToInt32(personal_info) == 1)
+                            {
+                                if (txtDateOfBirth.Text != string.Empty)
+                                {
+                                    txtDateOfBirth.Enabled = false;
+                                }
+
+                                if (ddlNationality.SelectedValue != "0")
+                                {
+                                    ddlNationality.Enabled = false;
+                                }
+
+                                if (ddlClaimedcategory.SelectedValue != "0")
+                                {
+                                    ddlClaimedcategory.Enabled = false;
+                                }
+
+                                rdobtn_Gender.Enabled = false;
+                                rdoHosteler.Enabled = false;
+                                rdoInternationalStu.Enabled = false;
+                                rdbTransport.Enabled = false;
+
+                                DataSet ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
+
+                                if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
+                                {
+                                    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
+                                    string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+
+                                    if (photo != string.Empty)
+                                    {
+                                        fuPhotoUpload.Enabled = false;
+                                        btnPhotoUpload.Visible = false;
+                                    }
+
+                                    if (sign != string.Empty)
+                                    {
+                                        fuSignUpload.Enabled = false;
+                                        btnSignUpload.Visible = false;
+                                    }
+                                }
+                            }
+                        }
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                     }
                     //if (status.ToString() != "")
                     //{
@@ -169,6 +250,177 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         }
     }
 
+<<<<<<< HEAD
+=======
+
+    #region Student Related Configuration
+    protected void StudentConfiguration()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "PersonalDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string isActive = row["ISACTIVE"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string controlToMandatory = row["CONTROL_TO_MANDATORY"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string divID = string.Empty;
+            Control control = null, control2 = null, control3 = null;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+                divID = values[1].Trim();
+
+            }
+
+            if (values.Length == 2)
+            {
+                control = FindControlRecursive(Page, divID);
+                control3 = FindControlRecursive(Page, controlID);
+            }
+            else
+            {
+                control = FindControlRecursive(Page, controlToHide);
+            }
+
+            control2 = FindControlRecursive(Page, controlToMandatory);
+
+
+            if (control != null)
+            {
+                if (isActive == "checked" && isMandatory == "checked")
+                {
+                    control.Visible = true;
+                    control2.Visible = true;
+
+                }
+                else if (isActive == "checked" && controlToMandatory != null)
+                {
+                    control.Visible = true;
+                    control2.Visible = false;
+                }
+                else
+                {
+                    control.Visible = false;
+                    control2.Visible = false;
+
+                    if (values.Length == 2)
+                    {
+                        ClearControlValue(control3);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private Control FindControlRecursive(Control parentControl, string controlId)
+    {
+        if (parentControl == null)
+        {
+            return null;
+        }
+
+        Control control = parentControl.FindControl(controlId);
+
+        if (control == null)
+        {
+            foreach (Control childControl in parentControl.Controls)
+            {
+                control = FindControlRecursive(childControl, controlId);
+                if (control != null)
+                {
+                    return control;
+                }
+            }
+        }
+        return control;
+    }
+
+    private void ClearControlValue(Control control)
+    {
+        if (control is TextBox)
+        {
+            ((TextBox)control).Text = string.Empty;
+        }
+        else if (control is DropDownList)
+        {
+            ((DropDownList)control).SelectedIndex = 0;
+        }
+
+    }
+
+    public string ValidationAlert()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "PersonalDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        validationErrors.Add(captionName);
+                    }
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    if (dropdownlist.SelectedIndex == 0)
+                    {
+                        validationErrors.Add(captionName);
+                    }
+                }
+            }
+
+        }
+
+        if (validationErrors.Count > 0)
+        {
+            string errorMessage = string.Empty;
+
+            foreach (string errorControlCaption in validationErrors)
+            {
+                errorMessage += "Please Enter " + errorControlCaption + ',';
+            }
+            return errorMessage;
+        }
+        return string.Empty;
+    }
+    #endregion Student Related Configuration     // Added By Shrikant W. on 05-09-2023
+
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -300,6 +552,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 //27-06-2014
                 txtSubCaste.Text = dtr["SUB_CASTE"] == null ? string.Empty : dtr["SUB_CASTE"].ToString();
                 txtBirthPlace.Text = dtr["BIRTH_PLACE"] == null ? string.Empty : dtr["BIRTH_PLACE"].ToString();
+                txtCaste.Text = dtr["CASTENAME"] == null ? string.Empty : dtr["CASTENAME"].ToString();    // Added By Shrikant W. on 25-09-2023
 
                 rdobtn_Gender.SelectedValue = dtr["SEX"].ToString();//*****************
 
@@ -309,9 +562,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 ddlBloodGroupNo.SelectedValue = dtr["BLOODGRPNO"] == null ? "0" : dtr["BLOODGRPNO"].ToString();
 
                 ddladmthrough.SelectedValue = dtr["ADMROUNDNO"] == null ? "0" : dtr["ADMROUNDNO"].ToString();   //Added by sachin on 28-07-2022
-
-
-
 
                 ddlNationality.SelectedValue = dtr["NATIONALITYNO"] == null ? "1" : dtr["NATIONALITYNO"].ToString();
                 if (Convert.ToInt32(ddlNationality.SelectedValue) == 0)
@@ -384,6 +634,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 ddlOccupationNo.SelectedValue = dtr["OCCUPATIONNO"] == null ? "0" : dtr["OCCUPATIONNO"].ToString();
                 ddlMotherOccupation.SelectedValue = dtr["MOTHER_OCCUPATIONNO"] == null ? "0" : dtr["MOTHER_OCCUPATIONNO"].ToString();
                 txtMotherDesignation.Text = dtr["MOTHER_DESIG"] == null ? string.Empty : dtr["MOTHER_DESIG"].ToString();
+                txtMAnnualIncome.Text = dtr["MOTHER_ANNUAL_INCOME"] == null ? "0" : dtr["MOTHER_ANNUAL_INCOME"].ToString();
                 // ddlReligion.Enabled = false;
                 if (Convert.ToBoolean(dtr["HOSTELER"]) == true)
                 {
@@ -693,6 +944,169 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 {
                     if (rdoFather.SelectedValue == "1")
                     {
+<<<<<<< HEAD
+=======
+
+                        if (ddladmthrough.SelectedIndex == 0 && ViewState["usertype"].ToString() != "2")
+                        {
+                            objCommon.DisplayMessage(this.Page, "Please select Admission Through!", this.Page);
+                            return;
+                        }
+                    }
+
+
+                    if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "1" && txtAddharCardNo.Text == string.Empty && txtAddharCardNo.Text == "")
+                    {
+                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Aadhar Card No.!!", this.Page);
+                        return;
+                    }
+                    //else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "2" && txtCitizenshipNo.Text == "" && txtCitizenshipNo.Text == string.Empty)
+                    //{
+                    //    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Citizenship No.!!", this.Page);
+                    //    return;
+                    //}
+                    //else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "10" && txtCitizenshipNo.Text == "" && txtCitizenshipNo.Text == string.Empty)
+                    //{
+                    //    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Citizenship No.!!", this.Page);
+                    //    return;
+                    //}
+                    else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue != "1" && ddlNationality.SelectedValue != "2" && ddlNationality.SelectedValue != "10" && txtPassportNo.Text == string.Empty && txtPassportNo.Text == "")
+                    {
+                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Passport No.!!", this.Page);
+                        return;
+                    }
+                    if (idno != "")
+                    {
+                        string imgphoto = objCommon.LookUp("ACD_STUD_PHOTO", "photo", "IDNO=" + Convert.ToInt32(idno));
+                        string signphoto = objCommon.LookUp("ACD_STUD_PHOTO", "stud_sign", "IDNO=" + Convert.ToInt32(idno));
+
+                        if (imgphoto == string.Empty)
+                        {
+                            //objCommon.DisplayMessage(this.updpersonalinformation, "Please Upload Photo.", this.Page);
+                            //return;
+                        }
+                        if (signphoto == string.Empty)
+                        {
+                            //objCommon.DisplayMessage(this.updpersonalinformation, "Please Upload Signature.", this.Page);
+                            //return;
+                        }
+
+                    }
+
+
+
+                    //if (HasValidationErrors())
+                    //{
+                    //    //objCommon.DisplayMessage(errorString, this.Page);
+                    //  //  ScriptManager.RegisterStartupScript(this, this.GetType(), "validationAlert", errorString, true);   
+                    //    ClientScript.RegisterClientScriptBlock(GetType(), "sas", "<script> alert(" + errorString + ");</script>", false);
+                    //    return;
+                    //}
+
+
+
+                    objS.IdNo = Convert.ToInt32(txtIDNo.Text);
+                    objS.EnrollNo = txtEnrollno.Text.Trim();
+                    objS.RegNo = txtRegNo.Text.Trim();
+                    if (!txtStudFullname.Text.Trim().Equals(string.Empty)) objS.StudName = txtStudFullname.Text.Trim();
+                    if (!txtStudentName.Text.Trim().Equals(string.Empty)) objS.firstName = txtStudentName.Text.Trim();
+                    if (!txtStudMiddleName.Text.Trim().Equals(string.Empty)) objS.MiddleName = txtStudMiddleName.Text.Trim();
+                    if (!txtStudLastName.Text.Trim().Equals(string.Empty)) objS.LastName = txtStudLastName.Text.Trim();
+                    if (!txtFatherFullName.Text.Trim().Equals(string.Empty)) objS.FatherName = txtFatherFullName.Text.Trim();// ADDED CHANGES ON 19-05-2023 BY KAJAL JAISWAL FOR SAVING FATHER FULL NAME.
+                    if (!txtFatherName.Text.Trim().Equals(string.Empty)) objS.fatherfirstName = txtFatherName.Text.Trim();
+                    if (!txtFatherMiddleName.Text.Trim().Equals(string.Empty)) objS.FatherMiddleName = txtFatherMiddleName.Text.Trim();
+
+                    if (!txtFatherLastName.Text.Trim().Equals(string.Empty)) objS.FatherLastName = txtFatherLastName.Text.Trim();
+                    if (!txtFatherMobile.Text.Trim().Equals(string.Empty)) objS.FatherMobile = txtFatherMobile.Text.Trim();
+                    if (!txtFathersOfficeNo.Text.Trim().Equals(string.Empty)) objS.FatherOfficeNo = txtFathersOfficeNo.Text.Trim();
+                    if (!txtFatherDesignation.Text.Trim().Equals(string.Empty)) objSAddress.FATHER_DESIG = txtFatherDesignation.Text.Trim();//Father Qualification
+                    objSAddress.OCCUPATION = Convert.ToInt32(ddlOccupationNo.SelectedValue);
+
+                    if (!txtfatheremailid.Text.Trim().Equals(string.Empty)) objS.Fatheremail = txtfatheremailid.Text.Trim();
+                    if (!txtMotherName.Text.Trim().Equals(string.Empty)) objS.MotherName = txtMotherName.Text.Trim();
+                    string MotherMobile = txtMotherMobile.Text.Trim();
+                    if (!txtmotheremailid.Text.Trim().Equals(string.Empty)) objS.Motheremail = txtmotheremailid.Text.Trim();
+                    if (!txtMotherDesignation.Text.Trim().Equals(string.Empty)) objSAddress.MOTHERDESIGNATION = txtMotherDesignation.Text.Trim();
+                    if (!txtMAnnualIncome.Text.Trim().Equals(string.Empty)) objS.MotherAnnualIncome = Convert.ToInt32(txtMAnnualIncome.Text.Trim());
+
+                    string MotherOfficeNo = txtMothersOfficeNo.Text.Trim();
+                    objSAddress.MOTHEROCCUPATION = Convert.ToInt32(ddlMotherOccupation.SelectedValue);
+                    objS.Caste = Convert.ToInt32(ddlCaste.SelectedValue);
+                    objS.Subcaste = txtSubCaste.Text.Trim();
+                    if (!txtDateOfBirth.Text.Trim().Equals(string.Empty)) objS.Dob = Convert.ToDateTime(txtDateOfBirth.Text.Trim());
+                    objS.Annual_income = txtAnnualIncome.Text.Trim();
+                    objS.BloodGroupNo = Convert.ToInt32(ddlBloodGroupNo.SelectedValue);
+
+                    objS.AdmroundNo = Convert.ToInt32(ddladmthrough.SelectedValue);   //Added by sachin on 28-07-2022
+
+                    objS.ClaimType = Convert.ToInt32(ddlClaimedcategory.SelectedValue);//for student we are showing claimed category
+                    objS.PayTypeNO = Convert.ToInt32(ddlPayType.SelectedValue);
+                    objS.ReligionNo = Convert.ToInt32(ddlReligion.SelectedValue);
+                    objS.NationalityNo = Convert.ToInt32(ddlNationality.SelectedValue);
+                    objS.CategoryNo = Convert.ToInt32(ddlCasteCategory.SelectedValue);
+                    if (!txtPassportNo.Text.Trim().Equals(string.Empty)) objS.PassportNo = txtPassportNo.Text.Trim();
+                    if (!txtCitizenshipNo.Text.Trim().Equals(string.Empty)) objS.Citizenship = txtCitizenshipNo.Text.Trim();
+                    objS.Married = Convert.ToChar(rdobtn_marital.SelectedValue);
+                    if (!txtAddharCardNo.Text.Trim().Equals(string.Empty)) objS.AddharcardNo = txtAddharCardNo.Text.Trim();
+                    objS.Physical_Handicap = Convert.ToInt32(ddlHandicap.SelectedValue);
+                    objS.Sex = Convert.ToChar(rdobtn_Gender.SelectedValue);
+                    if (!txtInstituteEmail.Text.Trim().Equals(string.Empty)) IndusEmail = txtInstituteEmail.Text.Trim();
+
+                    if (!txtStudMobile.Text.Trim().Equals(string.Empty)) objS.StudentMobile = txtStudMobile.Text.Trim();
+                    if (!txtAlternateNoStud.Text.Trim().Equals(string.Empty)) objS.StudentAlternateMobile = txtAlternateNoStud.Text.Trim(); //Student Alternate Number added by Rishabh - 11/02/2022
+                    if (!txtFatherAlterateNo.Text.Trim().Equals(string.Empty)) objS.FatherAlternateMobile = txtFatherAlterateNo.Text.Trim();
+                    if (!txtMotherAlternateNo.Text.Trim().Equals(string.Empty)) objS.MotherAlternateMobile = txtMotherAlternateNo.Text.Trim();
+                    if (!txtStudentEmail.Text.Trim().Equals(string.Empty)) objS.EmailID = txtStudentEmail.Text.Trim();
+                    //if (!txtAlternateEmailId.Text.Trim().Equals(string.Empty)) objS.AlternateEmailID = txtAlternateEmailId.Text.Trim(); //Added By Rishabh on 13/04/2022
+                    if (!txtBirthPlace.Text.Trim().Equals(string.Empty)) objS.BirthPlace = txtBirthPlace.Text.Trim();
+                    if (!txtCaste.Text.Trim().Equals(string.Empty)) objS.CasteName = txtCaste.Text.Trim();   // Added By Shrikant W. on 25-09-2023
+                    objS.Age = "";
+
+                    if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7")
+                    {
+                        objS.Uano = Convert.ToInt32(Session["userno"]);
+                    }
+                    else
+                    {
+                        objS.Uano = 0;
+                    }
+
+
+
+                    if (fuPhotoUpload.HasFile)
+                    {
+                        //objSPhoto.Photo1 = objCommon.GetImageData(fuPhotoUpload);
+                        objSPhoto.Photo1 = this.ResizePhoto(fuPhotoUpload);
+
+                    }
+                    else
+                    {
+
+                        objSPhoto.Photo1 = null;
+
+                    }
+
+                    if (rdoHosteler.SelectedValue == "1")
+                    {
+                        objS.HostelSts = 1;
+                    }
+                    else
+                    {
+                        objS.HostelSts = 0;
+                    }
+                    if (rdbTransport.SelectedValue == "1")
+                    {
+                        objS.Transportation = 1;
+                    }
+                    else
+                    {
+                        objS.Transportation = 0;
+                    }
+
+                    if (rdofatheralive.SelectedValue == "1")
+                    {
+                        parent_alive = 1;
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                         father_alive = 1;
                     }
                     else
@@ -766,6 +1180,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         }
                     }
                 }
+<<<<<<< HEAD
 
                 objS.AbccId = txtABCCId.Text;
                 objS.DteAppId = txtDTEAppId.Text;
@@ -780,12 +1195,15 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updpersonalinformation, "Error Occured While Updating Personal Information!!", this.Page);
                 }
+=======
+>>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
             }
             else
             {
                 objCommon.DisplayMessage(this.updpersonalinformation, "You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
 
             }
+
         }
         catch (Exception ex)
         {
