@@ -87,7 +87,16 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         idno = Convert.ToInt32(Session["idno"]);
                         cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno));
                         if (CheckActivityCollege(cid))
-                        {                                               
+                        {
+
+                            int CheckAcademicActivity = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(FEES_COLLECTION,0)", ""));
+                            if (CheckAcademicActivity == 1)
+                            {
+                                objCommon.DisplayMessage("Academic fee not paid. Please Contact To Admin!!", this.Page);
+                                divbtn.Visible = false;
+                                return;                            
+                            }
+
                            this.ShowDetails();
                            bindcourses();                       
 
