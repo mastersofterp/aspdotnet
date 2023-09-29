@@ -14879,35 +14879,35 @@ namespace IITMS
                 //    return ds;
                 //}
                 /// <summary>
-                /// Added By Dileep Kare on 02.03.2022
+                /// Added By RAHUL M on 28.09.2023
                 /// </summary>
                 /// <param name="ddlValue"></param>
                 /// <param name="dt"></param>
                 /// <returns></returns>
-                public int StudentBulkPhotoUpdate(int ddlValue, DataTable dt)
-                {
+                public int StudentBulkPhotoUpdate(int ddlValue, DataTable dt, int UploadBy)
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
-                    {
+                        {
                         // if (!(photo == null))
                         // {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@P_ID", ddlValue);
                         objParams[1] = new SqlParameter("@P_STUD_BULK_UPDATE", dt);
-
+                        objParams[2] = new SqlParameter("@P_UPLOADBY", UploadBy);
                         if (objSQLHelper.ExecuteNonQuerySP("STUD_BULK_PHOTO_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                         // }
-                    }
+                        }
                     catch
-                    {
+                        {
 
                         throw;
-                    }
+                        }
 
                     return retStatus;
-                }
+                    }
 
                 public DataSet GetWithHeldReport(int sessionno, int degree, int branch, int scheme, int sem)
                 {
