@@ -66,10 +66,10 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                 Page.Title = Session["coll_name"].ToString();
 
                 //Load Page Help
-               
+
 
                 if (Request.QueryString["pageno"] != null)
-                {               
+                {
                     objCommon.FillDropDownList(ddlcollege, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT (C.COLLEGE_ID)", "ISNULL(C.COLLEGE_NAME,'')COLLEGE_NAME", "C.COLLEGE_ID IN(" + Session["college_nos"] + ") AND C.COLLEGE_ID > 0", "C.COLLEGE_ID");
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     if (ddlSession.SelectedValue == "0")
@@ -77,19 +77,19 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                         objCommon.DisplayMessage("The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
                         pnlMarkEntry.Visible = false;
                     }
-                   
+
                 }
                 else
                 {
-                   // CheckPageAuthorization();
+                    // CheckPageAuthorization();
                 }
-                 
+
             }
         }
         divMsg.InnerHtml = string.Empty;
     }
 
-     
+
 
     private void CheckPageAuthorization()
     {
@@ -135,16 +135,14 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             this.ShowMarkEntryReport("Reval Mark Entry Report", "rpt_Revel_mark_entry_report.rpt");
         }
     }
-
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
     }
-
     private void ShowMarkEntryReport(string reportTitle, string rptFileName)
     {
         try
-        {      
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
@@ -172,7 +170,6 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             SaveAndLock(1);
         }
     }
-
     private bool CheckMarks(int lock_status)
     {
         bool flag = true;
@@ -237,7 +234,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                                             break;
                                         }
                                     }
-                                } 
+                                }
                             }
                             else
                             {
@@ -282,7 +279,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             string studids = string.Empty;
             string marks = string.Empty;
             string Actualmarks = string.Empty;
-               
+
             MarksEntryController objMarksEntry = new MarksEntryController();
             Label lbl;
             TextBox txtMarks;
@@ -307,7 +304,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                     txtMarks = gvStudent.Rows[i].FindControl("txtMarks") as TextBox;
                     lblExternal = gvStudent.Rows[i].FindControl("lblExternal") as Label;
                     marks += txtMarks.Text.Trim() == string.Empty ? "-100," : txtMarks.Text + ",";
-                   // Actualmarks += lblExternal.Text.Trim() == string.Empty ? "-100," : lblExternal.Text + ",";
+                    // Actualmarks += lblExternal.Text.Trim() == string.Empty ? "-100," : lblExternal.Text + ",";
 
                 }
                 else if (lock_status == 1 || lock_status == 2)
@@ -333,7 +330,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
 
             string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
             CustomStatus cs = 0;
-             
+
             if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
                 cs = (CustomStatus)objMarksEntry.InsertRevaluationMarkEntrybyAdminRcpiper(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ddlscheme.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddldegree.SelectedValue), Convert.ToInt32(ddlbranch.SelectedValue), studids, marks, lock_status, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["OrgId"]));
@@ -412,11 +409,11 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                 ddlscheme.Items.Clear();
                 ddlscheme.Items.Add(new ListItem("Please Select", "0"));
 
-              
+
                 ddlCourse.Items.Clear();
                 ddlCourse.Items.Add(new ListItem("Please Select", "0"));
 
-             
+
             }
             Clear();
         }
@@ -442,7 +439,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             {
                 sp_procedure = "PKG_ACD_REVAL_MARK_ENTRY_STUDENT";
             }
-             
+
             string sp_parameters = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_COURSENO";
             string sp_callValues = "" + (ddlSession.SelectedValue) + "," + ddlscheme.SelectedValue + "," + (ddlsemester.SelectedValue) + "," + ddlCourse.SelectedValue + "";
             DataSet dsCERT = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
@@ -450,8 +447,8 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                 // gvStudent.Columns[4].HeaderText = string.Empty;
                 if (dsCERT.Tables[0].Rows.Count > 0 && dsCERT != null)
                 {
-                    hfdMaxMark.Value = dsCERT.Tables[0].Rows[0]["SMAX"].ToString();                                  
-                    gvStudent.Columns[4].HeaderText = "Reval Marks" + "  " + "[Max : " + hfdMaxMark.Value + "]";     
+                    hfdMaxMark.Value = dsCERT.Tables[0].Rows[0]["SMAX"].ToString();
+                    gvStudent.Columns[4].HeaderText = "Reval Marks" + "  " + "[Max : " + hfdMaxMark.Value + "]";
 
                     gvStudent.DataSource = dsCERT;
                     gvStudent.DataBind();
@@ -466,13 +463,86 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                         hfdMaxMark.Value = dsCERT.Tables[0].Rows[0]["SMAX"].ToString();
                         gvStudent.Columns[4].HeaderText = "Reval Marks" + "  " + "[Max : " + dsCERT.Tables[0].Rows[0]["SMAX"].ToString() + "]";
 
-                        if (Convert.ToInt32(dsCERT.Tables[0].Rows[0]["LOCK"].ToString()) == 1)
+                        #region PreviosMarkLockUnlock //Commeted dt on 27092023
+                        //if (Convert.ToInt32(dsCERT.Tables[0].Rows[0]["LOCK"].ToString()) == 1)
+                        //{
+                        //    gvStudent.Columns[5].Visible = true;
+                        //    gvStudent.Columns[6].Visible = false;
+                        //    btnSave.Enabled = false;
+                        //    btnLock.Enabled = false;
+                        //    btngrade.Visible = true;
+                        //}
+                        //else
+                        //{
+                        //    gvStudent.Columns[5].Visible = false;
+                        //    gvStudent.Columns[6].Visible = false;
+                        //    btnSave.Enabled = true;
+                        //    btnLock.Enabled = true;
+                        //    btngrade.Visible = false;
+                        //}
+                        //if (dsCERT.Tables[0].Rows[0]["NEW_GRADE"].ToString() != string.Empty && Convert.ToInt32(dsCERT.Tables[0].Rows[0]["LOCK"].ToString())==1)
+                        //{
+                        //    gvStudent.Columns[6].Visible = true;
+                        //    //gvStudent.Columns[5].Visible = true;
+                        //    btnSave.Enabled = false;
+                        //    btnLock.Enabled = false;
+
+                        //    btnSave.Visible = false;
+                        //    btnLock.Visible = false;
+                        //    btngrade.Visible = false;
+                        //    //btnMarksModifyReport.Visible = true;
+                        //    //btnfinalmarkentry.Visible = true;
+                        //    //btnmarkexcel.Visible = true;
+                        //}
+                        //else
+                        //{
+                        //    gvStudent.Columns[6].Visible = false;
+                        //   // btngrade.Visible = true;
+                        //    //btnfinalmarkentry.Visible = false;
+                        //    //btnmarkexcel.Visible = false;
+                        //}
+                        #endregion
+
+                        #region Checking the Marks lock for All Students
+                        int lockcount = 0;
+                        int gradecount = 0;
+                        for (int i = 0; i < dsCERT.Tables[0].Rows.Count; i++)
+                        {
+                            if (Convert.ToInt32(dsCERT.Tables[0].Rows[i]["LOCK"]) == 1)
+                            {
+                                lockcount++;
+                            }
+                        }
+                        for (int i = 0; i < dsCERT.Tables[0].Rows.Count; i++)
+                        {
+                            if (dsCERT.Tables[0].Rows[0]["NEW_GRADE"].ToString() != string.Empty)
+                            {
+                                gradecount++;
+                            }
+                        }
+
+                        if (dsCERT.Tables[0].Rows.Count == Convert.ToInt32(gradecount) && dsCERT.Tables[0].Rows.Count == Convert.ToInt32(lockcount))
+                        {
+                            gvStudent.Columns[6].Visible = true;
+                            gvStudent.Columns[5].Visible = true;
+                            btngrade.Visible = false;
+                            btnSave.Enabled = false;
+                            btnLock.Enabled = false;
+
+                            btnSave.Visible = false;
+                            btnLock.Visible = false;
+                        }
+                        else if (dsCERT.Tables[0].Rows.Count == Convert.ToInt32(lockcount))
                         {
                             gvStudent.Columns[5].Visible = true;
                             gvStudent.Columns[6].Visible = false;
+                            btngrade.Visible = true;
                             btnSave.Enabled = false;
                             btnLock.Enabled = false;
-                            btngrade.Visible = true;
+
+                            btnSave.Visible = false;
+                            btnLock.Visible = false;
+                            // btngrade.Visible = false;
                         }
                         else
                         {
@@ -481,28 +551,12 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                             btnSave.Enabled = true;
                             btnLock.Enabled = true;
                             btngrade.Visible = false;
-                        }
-                        if (dsCERT.Tables[0].Rows[0]["NEW_GRADE"].ToString() != string.Empty && Convert.ToInt32(dsCERT.Tables[0].Rows[0]["LOCK"].ToString())==1)
-                        {
-                            gvStudent.Columns[6].Visible = true;
-                            //gvStudent.Columns[5].Visible = true;
-                            btnSave.Enabled = false;
-                            btnLock.Enabled = false;
 
-                            btnSave.Visible = false;
-                            btnLock.Visible = false;
-                            btngrade.Visible = false;
-                            //btnMarksModifyReport.Visible = true;
-                            //btnfinalmarkentry.Visible = true;
-                            //btnmarkexcel.Visible = true;
+                            btnSave.Visible = true;
+                            btnLock.Visible = true;
                         }
-                        else
-                        {
-                            gvStudent.Columns[6].Visible = false;
-                           // btngrade.Visible = true;
-                            //btnfinalmarkentry.Visible = false;
-                            //btnmarkexcel.Visible = false;
-                        } 
+                        #endregion
+
                     }
                 }
                 else
@@ -547,7 +601,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
         ddlscheme.Items.Add(new ListItem("Please Select", "0"));
         ddlCourse.Items.Clear();
         ddlCourse.Items.Add(new ListItem("Please Select", "0"));
-       
+
         Clear();
     }
 
@@ -563,7 +617,6 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             }
             else
             {
-
                 ddlbranch.Items.Clear();
                 ddlbranch.Items.Add(new ListItem("Please Select", "0"));
 
@@ -575,7 +628,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
 
                 ddlCourse.Items.Clear();
                 ddlCourse.Items.Add(new ListItem("Please Select", "0"));
-               
+
             }
             Clear();
         }
@@ -606,7 +659,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
 
                 ddlCourse.Items.Clear();
                 ddlCourse.Items.Add(new ListItem("Please Select", "0"));
-  
+
             }
             Clear();
         }
@@ -635,7 +688,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                 ddlsemester.Items.Add(new ListItem("Please Select", "0"));
 
                 ddlCourse.Items.Clear();
-                ddlCourse.Items.Add(new ListItem("Please Select", "0")); 
+                ddlCourse.Items.Add(new ListItem("Please Select", "0"));
             }
             Clear();
         }
@@ -655,14 +708,13 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             if (Session["usertype"].ToString() == "3")
             { 
                 objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_REVAL_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME) COURSE_NAME ", "SR.SCHEMENO = " + ddlscheme.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue), "COURSE_NAME");
-                    ddlCourse.Focus();
-
+                ddlCourse.Focus();
             }
             else
             {
+                //objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_REVAL_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME) COURSE_NAME ", "SR.SCHEMENO = " + ddlscheme.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND (APP_TYPE LIKE 'REVAL' OR APP_TYPE LIKE '%REVALUATION%' OR APP_TYPE LIKE '%REVAL_PHOTO%' ) ", "COURSE_NAME");
                 objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_REVAL_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME) COURSE_NAME ", "SR.SCHEMENO = " + ddlscheme.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue), "COURSE_NAME");
                 ddlCourse.Focus();
-
             }
         }
         else
@@ -670,7 +722,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             ddlCourse.Items.Clear();
             ddlCourse.Items.Add(new ListItem("Please Select", "0"));
 
-         
+
         }
         Clear();
     }
@@ -702,9 +754,9 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
             CustomStatus cs = 0;
             if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-                cs = (CustomStatus)objMarksEntry.RevalGradeGeneration_Rcpiper(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), studids, subid, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(ddlscheme.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue));               
+                cs = (CustomStatus)objMarksEntry.RevalGradeGeneration_Rcpiper(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), studids, subid, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(ddlscheme.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue));
             }
-            else 
+            else
             {
                 cs = (CustomStatus)objMarksEntry.RevalGradeGeneration(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), studids, subid, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), Convert.ToInt32(ddlscheme.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue));
             }
@@ -723,11 +775,9 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-                
+
         }
-
-
     }
 
- 
+
 }

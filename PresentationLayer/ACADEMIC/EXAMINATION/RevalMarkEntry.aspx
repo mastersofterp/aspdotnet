@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="RevalMarkEntry.aspx.cs" Inherits="ACADEMIC_EXAMINATION_RevalMarkEntry" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="RevalMarkEntry.aspx.cs" Inherits="ACADEMIC_EXAMINATION_RevalMarkEntry" ViewStateEncryptionMode="Always" EnableViewStateMac="true"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
