@@ -865,7 +865,9 @@ public partial class ACADEMIC_TIMETABLE_TimeTable_Create : System.Web.UI.Page
             ddlExistingDates.Items.Clear();
             ddlExistingDates.Items.Add(new ListItem("Please Select", "0"));
             //to enable the save btn
-            objCommon.FillDropDownList(ddlSlotType, "ACD_SLOTTYPE", "SLOTTYPENO", "SLOTTYPE_NAME", "SLOTTYPENO > 0", "SLOTTYPENO");
+            objCommon.FillDropDownList(ddlSlotType, "ACD_SLOTTYPE", "SLOTTYPENO", "SLOTTYPE_NAME", "SLOTTYPENO > 0 AND ACTIVESTATUS=1", "SLOTTYPENO");
+            // added Active status condition for slot type for ticket no 49038
+
 
             ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "enableBtn();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () {enableBtn();});", true);
 
