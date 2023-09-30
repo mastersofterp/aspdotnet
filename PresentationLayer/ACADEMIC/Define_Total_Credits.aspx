@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="Define_Total_Credits.aspx.cs" Inherits="ACADEMIC_Define_Total_Credits" ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master"  AutoEventWireup="true" CodeFile="Define_Total_Credits.aspx.cs" Inherits="ACADEMIC_Define_Total_Credits" ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
