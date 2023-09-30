@@ -497,7 +497,8 @@ public partial class Health_Transaction_PatientDetails : System.Web.UI.Page
             objHelTran.MAC_ADDRESS = "";
             objHelTran.COLLEGE_CODE = Session["colcode"].ToString();
 
-            string[] pNAME = txtPatientName.Text.Split('*');
+            //string[] pNAME = txtPatientName.Text.Split('*');
+            string[] pNAME = txtPatientName.Text.Split('-');
             string[] dNAME = ddlDependent.SelectedItem.Text.Split('-');
             if (lblPatientCat.Text == "E")
             {
