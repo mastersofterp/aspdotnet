@@ -494,8 +494,9 @@
                                                     </div>
 
                                                     <asp:TextBox ID="txtCaste" CssClass="form-control" runat="server" TabIndex="14" ToolTip="Please Enter Caste"
-                                                        placeholder="Enter Caste" onkeypress="return alphaOnly(event);"
+                                                        placeholder="Enter Caste" onkeypress="return alphabetWithSpace(event);"
                                                         MaxLength="50" />
+                                                    
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                                     <div class="label-dynamic">
@@ -1208,18 +1209,40 @@
 
 
     </script>
+
+
+    <script>
+        function validateInput(inputElement) {
+            var inputValue = inputElement.value;
+            var alphabeticRegex = /^[A-Za-z]+$/;
+
+            if (!alphabeticRegex.test(inputValue)) {
+                document.getElementById('errorText').textContent = 'Only alphabetic characters are allowed.';
+                inputElement.value = inputValue.replace(/[^A-Za-z]/g, ''); // Remove non-alphabetic characters
+            } else {
+                document.getElementById('errorText').textContent = '';
+            }
+        }
+    </script>
+
     <script type="text/javascript">
-        function alphaOnly(e) {
+        function alphabetWithSpace(e) {
             var code;
+
             if (!e) var e = window.event;
 
             if (e.keyCode) code = e.keyCode;
             else if (e.which) code = e.which;
 
-            if ((code >= 48) && (code <= 57)) { return false; }
-            return true;
+            if (!(code >= 65 && code <= 90) || (code >= 97 && code <= 122) || code === 32) {
+                return false;
+            } else {
+                //e.preventDefault(); 
+                return true;
+            }
         }
     </script>
+
 
     <style id="cssStyle" type="text/css" media="all">
         .CS {
