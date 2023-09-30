@@ -40,7 +40,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
         if (Session["masterpage"] != null)
             objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
         else
-            objCommon.SetMasterPage(Page, "");
+            objCommon.SetMasterPage(Page, ""); 
 
     }
     protected void Page_Load(object sender, EventArgs e)
