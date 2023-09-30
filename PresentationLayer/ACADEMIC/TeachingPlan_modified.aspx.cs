@@ -540,6 +540,11 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 dvTutorial.Visible = true;
                 ddlTutorial.Items.Remove(ddlTutorial.Items.FindByValue("1"));
             }
+            else if (Convert.ToInt32(ViewState["IS_PRACTICAL"]) > 0 && Convert.ToInt32(ViewState["IS_THEORY"]) > 0)  //practical+theory
+            {
+                dvTutorial.Visible = true;
+                ddlTutorial.Items.Remove(ddlTutorial.Items.FindByValue("2"));
+            }
             else
             {
                 dvTutorial.Visible = false;
