@@ -48,6 +48,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
     Student_Acd objSA = new Student_Acd();
     StudentFees objStudentFees = new StudentFees();
     StudentController sc = new StudentController(); 
+
     bool IsNotActivitySem = false;
     bool flag = true;
     decimal Amt = 0;
@@ -84,12 +85,66 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     {
                         int cid = 0;
                         int idno = 0;
+                        int semesterno = 0; int schemeno = 0;
                         idno = Convert.ToInt32(Session["idno"]);
                         cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno));
+                        semesterno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + idno));
+                        schemeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno));
                         if (CheckActivityCollege(cid))
-                        {                                               
-                           this.ShowDetails();
-                           bindcourses();                       
+                        {
+                            #region check  ACD_EXAM_CONFIGURATION ACADEMIC FEES 
+                            int CheckAcademicActivity = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(FEES_COLLECTION,0)", ""));
+
+
+                            if (CheckAcademicActivity == 1)
+                            {
+                                DataSet ds = sc.AdmfessDues(Convert.ToInt32(Session["idno"]), Convert.ToInt32(semesterno));
+
+                                if (ds.Tables.Count == 0 || ds.Tables.Count == null)
+                                {
+                                    objCommon.DisplayMessage("Academic Fees Not Paid Please contact to Admin!", this.Page);
+                                    divbtn.Visible = false;
+                                    return;
+                                }
+
+
+                            }
+                            #endregion
+                            #region Check attendance
+                          
+                               int Attendance = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE,0)", ""));
+
+
+                               if (Attendance == 1)
+                               {
+
+                                   int Attendanceper = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(ATTENDANCE_PER,0)", ""));
+
+                                   DataSet ds1 = sc.GetStudentAttPerDashboard(Convert.ToInt32(Session["idno"]));
+                                  //if (ds1.Tables[0].Rows[0]["PER"] == null)
+                                  //{ ds1.Tables[0].Rows[0]["PER"] = 0; }
+                                   if (ds1.Tables[0].Rows.Count > 0)
+                                   {
+                                       if (Convert.ToInt32(ds1.Tables[0].Rows[0]["PER"]) < Attendanceper)
+                                       {
+
+                                        
+                                               objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
+                                               divbtn.Visible = false;
+                                      
+
+                                       }
+
+                                 
+                               }
+                                   else{
+                                    objCommon.DisplayMessage(updatepnl, "Dear Student," + "\\r\\n" + "Please note your attendance is low. You are not eligible to register for the final exam till such a time that you meet your advisor or admin and submit the explanation for low attendance.", this.Page);
+                                    divbtn.Visible = false;
+                                   }
+                                   }
+                            #endregion
+                            this.ShowDetails();
+                            bindcourses();                                
 
                         }                                               
                     }
@@ -434,6 +489,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     btnPay.Enabled = false;
                     btnPrintRegSlip.Visible = false;
                     btnPrintRegSlip.Enabled=false;
+                    divbtn.Visible = false;
                     return;
                 }
 
