@@ -86,6 +86,7 @@
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
+                                                   <sup>* </sup>
                                                 <label>Effect From Date</label>
                                             </div>
                                             <div class="input-group date">
@@ -106,6 +107,10 @@
                                                     InvalidValueMessage="BirthDate is Invalid (Enter dd/MM/yyyy Format)" Display="None"
                                                     TooltipMessage="Please Enter Birth Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
                                                     ValidationGroup="emp" SetFocusOnError="True" />
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtEffectDate"
+                                                    Display="None" ErrorMessage="Please select Effect Date" ValidationGroup="submit"
+                                                    SetFocusOnError="True">
+                                                </asp:RequiredFieldValidator>
                                             </div>
                                         </div>
 
@@ -116,7 +121,7 @@
 
                                                 <label>Yearly HRA Calculation</label>
                                             </div>
-                                            <asp:CheckBox runat="server" ID="chkYrHRACal" AutoPostBack="true" OnCheckedChanged="chkYrHRACal_CheckedChanged"  TabIndex="5"/>
+                                            <asp:CheckBox runat="server" ID="chkYrHRACal" AutoPostBack="true" OnCheckedChanged="chkYrHRACal_CheckedChanged" TabIndex="5" />
                                         </div>
 
 
@@ -182,8 +187,8 @@
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
-                                            <asp:Button runat="server" ID="btnAdd" Text="ADD" OnClick="btnAdd_Click" CssClass="btn btn-info" ValidationGroup="Add" TabIndex="9"/>
-                                             <asp:ValidationSummary ID="ValidationSummary2" DisplayMode="List" ShowMessageBox="true"  ShowSummary="false" ValidationGroup="Add" runat="server" />
+                                            <asp:Button runat="server" ID="btnAdd" Text="ADD" OnClick="btnAdd_Click" CssClass="btn btn-info" ValidationGroup="Add" TabIndex="9" />
+                                            <asp:ValidationSummary ID="ValidationSummary2" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Add" runat="server" />
                                         </div>
 
 
@@ -285,7 +290,7 @@
                                             <tr>
                                                 <td>
                                                     <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="../../Images/edit.png" CommandArgument='<%# Eval("DA_HEADID") %>'
-                                                        AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="12"/>
+                                                        AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="12" />
 
                                                 </td>
                                                 <td>
