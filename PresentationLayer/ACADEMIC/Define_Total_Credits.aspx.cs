@@ -18,7 +18,7 @@ using System.IO;
 using Mastersoft.Security;
 using Mastersoft.Security.IITMS;
 
- 
+
 
 public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 {
