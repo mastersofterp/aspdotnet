@@ -804,7 +804,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -817,7 +817,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -1485,6 +1485,15 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
         System.Threading.Thread.Sleep(5000);
     }
 
+    //private void FillDepartmentForHOD()
+    //{
+    //    DataSet ds = null;
+    //    ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+    //    if (ds.Tables[0].Rows.Count > 0)
+    //    {
+    //        int paydeptno = Convert.ToInt32(ds.Tables[0].Rows[0]["PAYROLL_DEPTNO"].ToString());
+    //    }
+    //}
 
     private void ShowReportForHOD(string reportTitle, string rptFileName)
     {
