@@ -144,7 +144,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                    }
                             #endregion
                             this.ShowDetails();
-                            bindcourses();                               
+                            bindcourses();                                
 
                         }                                               
                     }
