@@ -48,6 +48,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
     Student_Acd objSA = new Student_Acd();
     StudentFees objStudentFees = new StudentFees();
     StudentController sc = new StudentController(); 
+
     bool IsNotActivitySem = false;
     bool flag = true;
     decimal Amt = 0;
@@ -84,21 +85,32 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     {
                         int cid = 0;
                         int idno = 0;
+                        int semesterno = 0;
                         idno = Convert.ToInt32(Session["idno"]);
                         cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno));
+                        semesterno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + idno));
                         if (CheckActivityCollege(cid))
                         {
 
                             int CheckAcademicActivity = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(FEES_COLLECTION,0)", ""));
+
+
                             if (CheckAcademicActivity == 1)
                             {
-                                objCommon.DisplayMessage("Academic fee not paid. Please Contact To Admin!!", this.Page);
-                                divbtn.Visible = false;
-                                return;                            
+                                DataSet ds = sc.AdmfessDues(Convert.ToInt32(Session["idno"]), Convert.ToInt32(semesterno));
+
+                                if (ds.Tables.Count == 0 || ds.Tables.Count == null)
+                                {
+                                    objCommon.DisplayMessage("Academic Fees Not Paid Please contact to Admin!", this.Page);
+                                    divbtn.Visible = false;
+                                    return;
+                                }
+
+
                             }
 
-                           this.ShowDetails();
-                           bindcourses();                       
+                            this.ShowDetails();
+                            bindcourses();                               
 
                         }                                               
                     }
