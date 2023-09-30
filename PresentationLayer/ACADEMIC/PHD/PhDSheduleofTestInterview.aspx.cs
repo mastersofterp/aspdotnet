@@ -83,7 +83,7 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
                     {
                         //   lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
-                    ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                    Session["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     //fill dropdown method
                     PopulateDropDown();
                     BindList1();
@@ -152,9 +152,9 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
         {
             ImageButton btnEdit = sender as ImageButton;
             int SCHNO = Convert.ToInt32(btnEdit.CommandArgument);
-            ViewState["id"] = Convert.ToInt32(btnEdit.CommandArgument);
+            Session["id"] = Convert.ToInt32(btnEdit.CommandArgument);
             ShowDetail(SCHNO);
-            ViewState["action"] = "edit";
+            Session["action"] = "edit";
         }
         catch (Exception ex)
         {
@@ -280,9 +280,9 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
                 DateTime Config_SDate = Convert.ToDateTime(txtStartDate.Text);
                 Venue = txtVenue.Text;
                 STime = txtStartTime.Text;
-                if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
+                if (Session["action"] != null && Session["action"].ToString().Equals("edit"))
                 {
-                    int SCHNO = Convert.ToInt32(ViewState["id"]);
+                    int SCHNO = Convert.ToInt32(Session["id"]);
 
                     CustomStatus cs = (CustomStatus)objPhd.UpdPhdSchedule(objSR,AdmBatch, PhDSch, Venue, Config_SDate, STime, SCHNO, Collegeids, Convert.ToInt32(ddlExammode.SelectedValue.ToString()));
                     if (cs.Equals(CustomStatus.RecordUpdated))
@@ -290,14 +290,14 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
                         BindList1();
                         CLEAR();
                         objCommon.DisplayMessage(this, "Schedule Updated successfully", this.Page);
-                        ViewState["action"] = null;
+                        Session["action"] = null;
                     }
                     else
                     {
                         BindList1();
                         CLEAR();
                         objCommon.DisplayMessage(this, "Schedule Already Exists", this.Page);
-                        ViewState["action"] = null;
+                        Session["action"] = null;
                     }
                 }
                 else
@@ -350,6 +350,18 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
     #endregion
 
     #region SendEmail
+    protected void ddlExammode_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlExammode.SelectedValue.ToString() == "2")
+        {
+            divvenue.Visible = true;
+        }
+        else
+        {
+            divvenue.Visible = false;
+            txtVenue.Text = string.Empty;
+        }
+    }
     protected void BindList()
     {
         try
@@ -382,8 +394,23 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
     {
         try
         {
-            BindList();
-
+            if (ddlAdmbatchS.SelectedIndex > 0)
+            {
+                if (ddlCollgeid.SelectedIndex > 0)
+                {
+                    BindList();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updSend, "Please select school applied for. ", this.Page);
+                    return;
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(updSend, "Please Select Admission Batch ", this.Page);
+                return;
+            }
         }
         catch (Exception ex)
         {
@@ -532,104 +559,106 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
             }
             else
             {
-                foreach (ListViewDataItem lv in lvPhdA.Items)
+                if (ddlAdmbatchS.SelectedIndex > 0)
                 {
-                    CheckBox cbRow = lv.FindControl("chkReport") as CheckBox;
-                    if (cbRow.Checked == true)
+                    foreach (ListViewDataItem lv in lvPhdA.Items)
                     {
-                        Label lblEmail = lv.FindControl("lblEmail") as Label;
-                        string useremail = lblEmail.Text.Trim().Replace("'", "");
-
-                        if (lblEmail.Text.Trim() != "")
+                        CheckBox cbRow = lv.FindControl("chkReport") as CheckBox;
+                        if (cbRow.Checked == true)
                         {
-                            try
+                            Label lblEmail = lv.FindControl("lblEmail") as Label;
+                            string useremail = lblEmail.Text.Trim().Replace("'", "");
+
+                            if (lblEmail.Text.Trim() != "")
                             {
-                                int status = 0;
-                                Label lblName = lv.FindControl("lblName") as Label; ;
-                                Label lblUsername = lv.FindControl("lblUsername") as Label;
-                                HiddenField hdfb = lv.FindControl("hidBranch") as HiddenField;
-                                string EMAILID = string.Empty;
-                                string CollegeName = objCommon.LookUp("REFF", "CollegeName", " OrganizationId='" + Convert.ToInt32(Session["OrgId"]) + "'");
-                                string StudName = lblName.Text;
-                                string username = lblUsername.Text;
-                                string branch = hdfb.Value;
-                                string MSG = ddlSchedule.SelectedItem.Text;
-                                if (Convert.ToInt32(Session["OrgId"]) == 2)
+                                try
                                 {
-                                    EMAILID = "dean.research@crescent.education , dy.dean.academicresearch@crescent.education";
-                                }
-                                else
-                                {
-                                    EMAILID = objCommon.LookUp("REFF", "Email", " OrganizationId='" + Convert.ToInt32(Session["OrgId"]) + "'");
-                                }
-                                string[] repoarray;
-                                repoarray = MSG.Split('-');
-                                string Event = repoarray[0].ToString().TrimEnd();
-                                string time = string.Empty;
-                                string Exam = string.Empty;
-                                if (Convert.ToInt32(Session["OrgId"]) == 2)
-                                {
-                                    //if (Event == "Interview")
-                                    if (Event.Equals("Interview"))
+                                    int status = 0;
+                                    Label lblName = lv.FindControl("lblName") as Label; ;
+                                    Label lblUsername = lv.FindControl("lblUsername") as Label;
+                                    HiddenField hdfb = lv.FindControl("hidBranch") as HiddenField;
+                                    string EMAILID = string.Empty;
+                                    string CollegeName = objCommon.LookUp("REFF", "CollegeName", " OrganizationId='" + Convert.ToInt32(Session["OrgId"]) + "'");
+                                    string StudName = lblName.Text;
+                                    string username = lblUsername.Text;
+                                    string branch = hdfb.Value;
+                                    string MSG = ddlSchedule.SelectedItem.Text;
+                                    if (Convert.ToInt32(Session["OrgId"]) == 2)
                                     {
-                                        time = "as directed by the Head of the Department / Department Research Coordinator ";
-                                        Exam = Event;
+                                        EMAILID = "dean.research@crescent.education , dy.dean.academicresearch@crescent.education";
+                                    }
+                                    else
+                                    {
+                                        EMAILID = objCommon.LookUp("REFF", "Email", " OrganizationId='" + Convert.ToInt32(Session["OrgId"]) + "'");
+                                    }
+                                    string[] repoarray;
+                                    repoarray = MSG.Split('-');
+                                    string Event = repoarray[0].ToString().TrimEnd();
+                                    string time = string.Empty;
+                                    string Exam = string.Empty;
+                                    if (Convert.ToInt32(Session["OrgId"]) == 2)
+                                    {
+                                        //if (Event == "Interview")
+                                        if (Event.Equals("Interview"))
+                                        {
+                                            time = "as directed by the Head of the Department / Department Research Coordinator ";
+                                            Exam = Event;
+                                        }
+                                        else
+                                        {
+                                            time = repoarray[2].ToString();
+                                            Exam = "Entrance Exam";
+                                        }
                                     }
                                     else
                                     {
                                         time = repoarray[2].ToString();
-                                        Exam = "Entrance Exam";
                                     }
-                                }
-                                else
-                                {
-                                    time = repoarray[2].ToString();
-                                }
-                                string date = repoarray[1].ToString();
+                                    string date = repoarray[1].ToString();
 
-                                string exammode = repoarray[3].ToString();
-                                string venue = repoarray[4].ToString();
-                                string message = "<b>Dear " + StudName + "," + "</b><br />";
-                                message += "<br/>Greetings from " + CollegeName + "<br/>";
-                                message += "<br /><br /> With reference to your application " + username + ", we are pleased to inform you that your Online  " + Exam + " is scheduled as follows : <br />";
-                                message += "<br />Department of Registration: " + branch + "<br />";
-                                message += "<br />Date: " + date + "<br />";
-                                message += "<br />Venue: " + exammode + "<br />";
-                                message += "<br />Venue: " + venue + "<br />";
-                                message += "<br />Time Slot: " + time + " <br />";
-                                message += "<br />In case of any assistance, feel free to contact us at " + EMAILID + ".<br />";
-                                message += "<br />Regards<br />";
-                                message += "<br/>Dean (Research)<br />";
-                                message += "<br/>" + CollegeName + "<br />";
-                                if (lblEmail.Text != string.Empty)
-                                {
-                                    try
+                                    string exammode = repoarray[3].ToString();
+                                    string venue = repoarray[4].ToString();
+                                    string message = "<b>Dear " + StudName + "," + "</b><br />";
+                                    message += "<br/>Greetings from " + CollegeName + "<br/>";
+                                    message += "<br /><br /> With reference to your application " + username + ", we are pleased to inform you that your Online  " + Exam + " is scheduled as follows : <br />";
+                                    message += "<br />Department of Registration: " + branch + "<br />";
+                                    message += "<br />Date: " + date + "<br />";
+                                    message += "<br />Venue: " + exammode + "<br />";
+                                    message += "<br />Venue: " + venue + "<br />";
+                                    message += "<br />Time Slot: " + time + " <br />";
+                                    message += "<br />In case of any assistance, feel free to contact us at " + EMAILID + ".<br />";
+                                    message += "<br />Regards<br />";
+                                    message += "<br/>Dean (Research)<br />";
+                                    message += "<br/>" + CollegeName + "<br />";
+                                    if (lblEmail.Text != string.Empty)
                                     {
-                                        string email_type = string.Empty;
-                                        string Link = string.Empty;
-                                        int sendmail = 0;
-                                        DataSet ds = getModuleConfig();
-                                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                        try
                                         {
-                                            email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
-                                            Link = ds.Tables[0].Rows[0]["LINK"].ToString();
-                                        }
+                                            string email_type = string.Empty;
+                                            string Link = string.Empty;
+                                            int sendmail = 0;
+                                            DataSet ds = getModuleConfig();
+                                            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                                            {
+                                                email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
+                                                Link = ds.Tables[0].Rows[0]["LINK"].ToString();
+                                            }
 
-                                        if (email_type == "1" && email_type != "")
-                                        {
-                                            status = sendEmail(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview ");
-                                        }
-                                        else if (email_type == "2" && email_type != "")
-                                        {
-                                            Task<int> task = Execute(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview");
-                                            status = task.Result;
-                                        }
-                                        if (email_type == "3" && email_type != "")
-                                        {
-                                            status = OutLook_Email(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview");
-                                        }
-                                        //if (status == 1)
-                                        //{
+                                            if (email_type == "1" && email_type != "")
+                                            {
+                                                status = sendEmail(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview ");
+                                            }
+                                            else if (email_type == "2" && email_type != "")
+                                            {
+                                                Task<int> task = Execute(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview");
+                                                status = task.Result;
+                                            }
+                                            if (email_type == "3" && email_type != "")
+                                            {
+                                                status = OutLook_Email(message, lblEmail.Text, "PHD Schedule Announcement For Test and Interview");
+                                            }
+                                            //if (status == 1)
+                                            //{
                                             int count1 = 0;
                                             StudentRegist objSR = new StudentRegist();
                                             int AdmBatchS = Convert.ToInt32(ddlAdmbatchS.SelectedValue);
@@ -640,34 +669,40 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
                                             int Ca = objPhd.InsPhdScheduleemailLogmodified(objSR, Userno, username, AdmBatchS, COLLEGE_ID, Convert.ToInt32(ddlSchedule.SelectedValue.ToString()));
                                             //objCommon.DisplayMessage(this.updSend, "Send email Successfully", this.Page);
                                             count1++;
-                                        //}
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        throw;
+                                            //}
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            throw;
+                                        }
                                     }
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                throw;
-                            }
+                                catch (Exception ex)
+                                {
+                                    throw;
+                                }
 
+                            }
                         }
                     }
-                }
-                if (count <= 0)
-                {
-                    objCommon.DisplayMessage(this.updSend, "Failed To send email", this.Page);
-                    BindList();
-                    CLEAR1();
-                    return;
+                    if (count <= 0)
+                    {
+                        objCommon.DisplayMessage(this.updSend, "Failed To send email", this.Page);
+                        BindList();
+                        CLEAR1();
+                        return;
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updSend, "Send email Successfully", this.Page);
+                        BindList();
+                        CLEAR1();
+                        return;
+                    }
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this.updSend, "Send email Successfully", this.Page);
-                    BindList();
-                    CLEAR1();
+                    objCommon.DisplayMessage(this.updSend, "Please Select Schedule", this.Page);
                     return;
                 }
             }
@@ -765,16 +800,5 @@ public partial class ACADEMIC_PHD_PhDSheduleofTestInterview : System.Web.UI.Page
     //}
 
 
-    protected void ddlExammode_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlExammode.SelectedValue.ToString() == "2")
-        {
-            divvenue.Visible = true;
-        }
-        else
-        {
-            divvenue.Visible = false;
-            txtVenue.Text = string.Empty;
-        }
-    }
+   
 }

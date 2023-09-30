@@ -71,7 +71,7 @@ public partial class ACADEMIC_PHD_PhD_Registration_Approval : System.Web.UI.Page
                     {
                         //   lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
-                    ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
+                    //Session["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     //fill dropdown method
                     PopulateDropDown();
 
@@ -151,7 +151,23 @@ public partial class ACADEMIC_PHD_PhD_Registration_Approval : System.Web.UI.Page
     {
         try
         {
-            BindList();
+            if (ddlAdmBatch.SelectedIndex > 0)
+            {
+                if (ddlSchool.SelectedIndex > 0)
+                {
+                    BindList();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updSection, "Please select school applied for. ", this.Page);
+                    return;
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(updSection, "Please Select Admission Batch ", this.Page);
+                return;
+            }
         }
         catch (Exception ex)
         {
