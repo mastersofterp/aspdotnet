@@ -90,11 +90,11 @@
                                                     <sup>*</sup>
                                                     <label>Minimum Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtFromCredit" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Minimum Credits" ToolTip="Enter Minimum Credit Limit" />
+                                                <asp:TextBox ID="txtFromCredit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Minimum Credits" ToolTip="Enter Minimum Credit Limit" />
                                                 <asp:RequiredFieldValidator ID="rfvFromCredit" runat="server" ControlToValidate="txtFromCredit"
                                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Minimum credits." />
 
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtFromCredit" FilterType="Numbers, Custom" ValidChars="." FilterMode="ValidChars">
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtFromCredit" ValidChars="0123456789" FilterMode="ValidChars">
                                                 </ajaxToolKit:FilteredTextBoxExtender>
                                                 <asp:CompareValidator ID="cmpvCredit" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server" Operator="GreaterThan" Type="Integer" Display="None" ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>
 
@@ -112,7 +112,7 @@
                                                     <sup>*</sup>
                                                     <label>Maximum Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtToCredits" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:TextBox ID="txtToCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
 
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-12" id="div12" runat="server">
@@ -120,10 +120,10 @@
                                                     <sup>*</sup>
                                                     <label>Maximum Core Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtCoreCredits" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:TextBox ID="txtCoreCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtCoreCredits"
                                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Core credits." />
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtCoreCredits" FilterType="Numbers, Custom" ValidChars="." FilterMode="ValidChars">
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtCoreCredits" ValidChars="0123456789" FilterMode="ValidChars">
                                                 </ajaxToolKit:FilteredTextBoxExtender>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-12" id="div13" runat="server">
@@ -131,12 +131,12 @@
                                                     <sup>*</sup>
                                                     <label>Maximum Elective Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtElectiveCredits" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:TextBox ID="txtElectiveCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
                                                 <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
 
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtElectiveCredits"
                                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Elective credits." />
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtElectiveCredits" FilterType="Numbers, Custom" ValidChars="." FilterMode="ValidChars">
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtElectiveCredits" ValidChars="0123456789" FilterMode="ValidChars">
                                                 </ajaxToolKit:FilteredTextBoxExtender>
                                                 <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
                                             </div>
@@ -145,10 +145,10 @@
                                                     <sup>*</sup>
                                                     <label>Maximum Global Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtGlobalCredits" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:TextBox ID="txtGlobalCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtGlobalCredits"
                                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Global credits." />
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" TargetControlID="txtGlobalCredits" FilterType="Numbers, Custom" ValidChars="." FilterMode="ValidChars">
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" TargetControlID="txtGlobalCredits" ValidChars="0123456789" FilterMode="ValidChars">
                                                 </ajaxToolKit:FilteredTextBoxExtender>
 
                                             </div>
@@ -182,8 +182,8 @@
                                                     <sup></sup>
                                                     <label>Maximum Overload Credits Limit</label>
                                                 </div>
-                                                <asp:TextBox ID="txtOverloadCreditLimit" runat="server" MaxLength="5" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtOverloadCreditLimit" FilterType="Numbers, Custom" ValidChars="." FilterMode="ValidChars">
+                                                <asp:TextBox ID="txtOverloadCreditLimit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtOverloadCreditLimit" ValidChars="0123456789" FilterMode="ValidChars">
                                                 </ajaxToolKit:FilteredTextBoxExtender>
                                             </div>
                                             <div class="form-group col-lg-6 col-md-6 col-12 d-none">
