@@ -15,6 +15,8 @@ using System.Configuration;
 using System.Net;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using Mastersoft.Security;
+using Mastersoft.Security.IITMS;
 
 
 
@@ -114,10 +116,11 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 
     private void PopulateDropDownList()
     {
-        //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO");
-        //objCommon.FillDropDownList(ddlSession, "ACD_SCHEME", "SCHEMENO", "SCHEMENAME", "SCHEMENO>0", "SCHEMENO"); // Check Rahul Moraskar
+        objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME+'('+SHORT_NAME +'-'+ CODE +')' as COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
 
-        objCommon.FillListBox(lstbxSession, "ACD_SCHEME A INNER JOIN ACD_COLLEGE_SCHEME_MAPPING M ON A.SCHEMENO=M.SCHEMENO ", "DISTINCT A.SCHEMENO", "A.SCHEMENAME", "A.SCHEMENO>0", "A.SCHEMENO"); // Added by Rahul Moraskar
+        //objCommon.FillDropDownList(ddlSession, "ACD_SCHEME", "SCHEMENO", "SCHEMENAME", "SCHEMENO>0", "SCHEMENO"); // Check Rahul Moraskar COLLEGE_ID in (select UA_COLLEGE_NOS from User_Acc where UA_NO=9473)
+
+        //objCommon.FillListBox(lstbxSession, "ACD_SCHEME A INNER JOIN ACD_COLLEGE_SCHEME_MAPPING M ON A.SCHEMENO=M.SCHEMENO ", "DISTINCT A.SCHEMENO", "A.SCHEMENAME", "A.SCHEMENO>0 AND M.COLLEGE_ID=" + Convert.ToInt16(ddlCollege.SelectedValue), "A.SCHEMENO"); // Added by Rahul Moraskar
         // objCommon.FillDropDownList(lstbxSession, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
 
         //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO >0", "SEMESTERNO");
@@ -125,6 +128,12 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         //objCommon.FillDropDownList(ddlElective, "ACD_ELECTGROUP ", "GROUPNO", "GROUPNAME", "GROUPNO>0 AND ACTIVESTATUS=1", "GROUPNO"); // Check Rahul Moraskar
 
         objCommon.FillListBox(lstbxElective, "ACD_ELECTGROUP ", "GROUPNO", "GROUPNAME", "GROUPNO>0 AND ACTIVESTATUS=1", "GROUPNO");
+        DataSet dsElectiveGrp = objCommon.FillDropDown("ACD_ELECTGROUP ", "GROUPNO", "GROUPNAME", "GROUPNO>0 AND ACTIVESTATUS=1", "GROUPNO");
+        if (dsElectiveGrp != null && dsElectiveGrp.Tables[0].Rows.Count > 0)
+        {
+            lvElectiveGrpChoice.DataSource = dsElectiveGrp.Tables[0];
+            lvElectiveGrpChoice.DataBind();
+        }
     }
 
     //public void fillChecboxlistOfterm()
@@ -268,21 +277,38 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
             }
 
 
-            foreach (ListItem item in lstbxElective.Items)
+            //foreach (ListItem item in lstbxElective.Items)
+            //{
+            //    if (item.Selected == true)
+            //    {
+            //        electivechoice += item.Value + ',';
+            //    }
+            //}
+            //if (terms != string.Empty)
+            //{
+            //    electivechoice = electivechoice.Substring(0, electivechoice.Length - 1);
+            //}
+
+            foreach (ListViewDataItem itm in lvElectiveGrpChoice.Items)
             {
-                if (item.Selected == true)
+                HiddenField hdfElectiveGroupNo = itm.FindControl("hdfElectiveGroupNo") as HiddenField;
+                TextBox txtElectiveChoiseFor1 = itm.FindControl("txtElectiveChoiseFor1") as TextBox;
+
+                if (!string.IsNullOrEmpty(txtElectiveChoiseFor1.Text))
                 {
-                    electivechoice += item.Value + ',';
+                    if (!SecurityThreads.CheckSecurityInput(txtElectiveChoiseFor1.Text))
+                        electivechoice += hdfElectiveGroupNo.Value + '-' + txtElectiveChoiseFor1.Text.Trim() + ',';
+                    else
+                    {
+                        objCommon.DisplayMessage(updpnl, "Input String was not in correct Format!", this.Page);
+                        return;
+                    }
                 }
-            }
-            if (terms != string.Empty)
-            {
-                electivechoice = electivechoice.Substring(0, electivechoice.Length - 1);
             }
 
             dcl.TERM = terms;
             dcl.Schemenos = schemenos;
-            dcl.Electivegroupnos = electivechoice;
+            dcl.Electivegroupnos = electivechoice.TrimEnd(',');
 
             dcl.DEGREENO = 0; // Convert.ToInt32(ddlDegree.SelectedValue);
             dcl.STUDENT_TYPE = Convert.ToInt32(ddlStudentType.SelectedValue);
@@ -316,15 +342,16 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
             dcl.MAX_SCHEMELIMIT = 0; // maximumSchemeLimit;
             dcl.MIN_REG_CREDIT_LIMIT = string.IsNullOrEmpty(txtMinRegCredit.Text) ? 0 : Convert.ToInt32(txtMinRegCredit.Text);
             dcl.ELECTIVE_CHOISEFOR = !string.IsNullOrEmpty(txtElectiveChoiseFor.Text) ? Convert.ToInt32(txtElectiveChoiseFor.Text) : 0;
+            int collegeID = Convert.ToInt16(ddlCollege.SelectedValue);
 
             if (ViewState["edit"] != null && ViewState["edit"].ToString().Equals("edit"))
             {
-                cs = (CustomStatus)objDefineTotalCredit.AddCreditModified(dcl, Convert.ToInt32(ViewState["groupid"]));
+                cs = (CustomStatus)objDefineTotalCredit.AddCreditModified(dcl, Convert.ToInt32(ViewState["groupid"]),collegeID);
                 result = "Record Updated Successfully !!";
             }
             else
             {
-                cs = (CustomStatus)objDefineTotalCredit.AddCreditModified(dcl, 0);
+                cs = (CustomStatus)objDefineTotalCredit.AddCreditModified(dcl, 0, collegeID);
                 result = "Record Saved Successfully !!";
             }
 
@@ -544,9 +571,6 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         }
     }
 
-
-
-
     void showDetails()
     {
         string col3 = "DISTINCT ISNULL(C.GROUPID,0)GROUPID,CDB.COLLEGE_ID,CM.COLLEGE_NAME,ISNULL(FROM_CREDIT,0)FROM_CREDIT,ISNULL(TO_CREDIT,0)TO_CREDIT,ISNULL(CORE_CREDIT,0)CORE_CREDIT,ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT,ISNULL(OVERLOAD_CREDIT,0)OVERLOAD_CREDIT,0 as SCHEMENO,0 as TERM,0 as ELECTIVE_GROUPNO";
@@ -559,6 +583,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         ViewState["credits"] = dt2;
         lvCredit.DataBind();
     }
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         //ddlSessionType.SelectedIndex = 0;
@@ -583,7 +608,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         txtGlobalCredits.Text = string.Empty;
         txtFromCredit.Text = string.Empty;
         txtOverloadCreditLimit.Text = string.Empty;
-        
+
         ViewState["edit"] = "submit";
         btnSubmit.Text = "Submit";
         ViewState["recordNo"] = null;
@@ -618,7 +643,15 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         //ddlElective.SelectedIndex = 0; // Check Rahul Moraskar
         txtElectiveChoiseFor.Text = "";// objCommon.LookUp("ACD_ELECTGROUP", "CHOICEFOR", "ACTIVESTATUS=1 AND GROUPNO=" + Convert.ToInt32(ddlElective.SelectedValue));
         //Response.Redirect(Request.Url.ToString());
+        ddlCollege.SelectedIndex = 0;
+
+        foreach (ListViewDataItem itm in lvElectiveGrpChoice.Items)
+        {
+            TextBox txtElectiveChoiseFor1 = itm.FindControl("txtElectiveChoiseFor1") as TextBox;
+            txtElectiveChoiseFor1.Text = string.Empty;
+        }
     }
+
     protected void btnEdit_Click(object sender, EventArgs e)
     {
     }
@@ -917,23 +950,47 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
                         }
                     }
                 }
-                ViewState["ELECTIVE_GROUPNO"] = Convert.ToString(ds.Tables[0].Rows[0]["ELECTIVE_GROUPNO"]);
-                if (ViewState["ELECTIVE_GROUPNO"] != null && ViewState["ELECTIVE_GROUPNO"] != "")
-                {
-                    string electiveno = ViewState["ELECTIVE_GROUPNO"].ToString();
-                    string[] subs3 = electiveno.Split(',');
 
-                    foreach (ListItem lstbxElective1 in lstbxElective.Items)
+                // below code added by Shailendra K. on dated 30.09.2023 as per T-48611
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    int groupNo = Convert.ToInt16(ds.Tables[0].Rows[i]["ELECTIVE_GROUPNO"]);
+                    string choiceFor = Convert.ToString(ds.Tables[0].Rows[i]["ELECTIVE_CHOISEFOR"]);
+                    foreach (ListViewDataItem itm in lvElectiveGrpChoice.Items)
                     {
-                        for (int i = 0; i < subs3.Count(); i++)
-                        {
-                            if (subs3[i].ToString().Trim() == lstbxElective1.Value)
-                            {
-                                lstbxElective1.Selected = true;
-                            }
-                        }
+                        HiddenField hdfElectiveGroupNo = itm.FindControl("hdfElectiveGroupNo") as HiddenField;
+                        TextBox txtElectiveChoiseFor1 = itm.FindControl("txtElectiveChoiseFor1") as TextBox;
+
+                        if (Convert.ToInt16(hdfElectiveGroupNo.Value) == groupNo)
+                            txtElectiveChoiseFor1.Text = choiceFor;
                     }
                 }
+
+                ddlCollege.SelectedValue = Convert.ToString(ds.Tables[0].Rows[0]["COLLEGE_ID"]);
+
+                // Above code added by Shailendra K. on dated 30.09.2023 as per T-48611
+
+                // below code commented by Shailendra K. on dated 30.09.2023 as per T-48611
+
+                //ViewState["ELECTIVE_GROUPNO"] = Convert.ToString(ds.Tables[0].Rows[0]["ELECTIVE_GROUPNO"]);
+                //if (ViewState["ELECTIVE_GROUPNO"] != null && ViewState["ELECTIVE_GROUPNO"] != "")
+                //{
+                //    string electiveno = ViewState["ELECTIVE_GROUPNO"].ToString();
+                //    string[] subs3 = electiveno.Split(',');
+
+                //    foreach (ListItem lstbxElective1 in lstbxElective.Items)
+                //    {
+                //        for (int i = 0; i < subs3.Count(); i++)
+                //        {
+                //            if (subs3[i].ToString().Trim() == lstbxElective1.Value)
+                //            {
+                //                lstbxElective1.Selected = true;
+                //            }
+                //        }
+                //    }
+                //}
+
 
 
                 //for (int i = 0; i < lstbxSemester.Items.Count; i++)
@@ -950,7 +1007,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
                 //        lstbxElective.Items[i].Selected = (lstbxElective.Items[i].Value.ToString() == ds.Tables[0].Rows[0]["ELECTIVE_GROUPNO"].ToString()) ? true : false;
                 //    }
                 //}
-                txtElectiveChoiseFor.Text = !string.IsNullOrEmpty(ds.Tables[0].Rows[0]["ELECTIVE_CHOISEFOR"].ToString()) ? ds.Tables[0].Rows[0]["ELECTIVE_CHOISEFOR"].ToString() : "1";
+                //  txtElectiveChoiseFor.Text = !string.IsNullOrEmpty(ds.Tables[0].Rows[0]["ELECTIVE_CHOISEFOR"].ToString()) ? ds.Tables[0].Rows[0]["ELECTIVE_CHOISEFOR"].ToString() : "1";
                 ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"].ToString();
                 txtFromCredit.Text = ds.Tables[0].Rows[0]["FROM_CREDIT"].ToString();
                 txtToCredits.Text = ds.Tables[0].Rows[0]["TO_CREDIT"].ToString();
@@ -1072,6 +1129,18 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         else
         {
             objCommon.DisplayMessage(this.Page, "Record Not Found!!!", this.Page);
+        }
+    }
+    protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlCollege.SelectedIndex > 0)
+        {
+            objCommon.FillListBox(lstbxSession, "ACD_SCHEME A INNER JOIN ACD_COLLEGE_SCHEME_MAPPING M ON A.SCHEMENO=M.SCHEMENO ", "DISTINCT A.SCHEMENO", "A.SCHEMENAME", "A.SCHEMENO>0 AND M.COLLEGE_ID=" + Convert.ToInt16(ddlCollege.SelectedValue), "A.SCHEMENO"); // Added by Rahul Moraskar
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "Please Select College!!!", this.Page);
+            return;
         }
     }
 }
