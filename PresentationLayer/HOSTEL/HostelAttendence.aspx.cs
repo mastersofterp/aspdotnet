@@ -149,7 +149,9 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                 foreach (ListViewDataItem item in lvDetails.Items)
                 {
                     DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
-                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
+
                 }
              }
              else
@@ -177,7 +179,8 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
                     TextBox txtTime = item.FindControl("txtTime") as TextBox;
                     
-                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
                     ddlRemark.SelectedValue = ds.Tables[0].Rows[i]["REMARKNO"].ToString();
                     
                    // if (ddlRemark.SelectedValue == "3")
@@ -491,7 +494,8 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     foreach (ListViewDataItem item in lvDetails.Items)
                     {
                         DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
-                        objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                        //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                        objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
                     }
                 }
                 else
@@ -519,7 +523,8 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                         DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
                         TextBox txtTime = item.FindControl("txtTime") as TextBox;
 
-                        objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                        //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                        objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
                        
                         ddlRemark.SelectedValue = ds.Tables[0].Rows[i]["REMARKNO"].ToString();
 
@@ -684,7 +689,8 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
                     TextBox txtTime = item.FindControl("txtTime") as TextBox;
 
-                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
+                    objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
 
                     ddlRemark.SelectedValue = ds.Tables[0].Rows[i]["REMARKNO"].ToString();
 
