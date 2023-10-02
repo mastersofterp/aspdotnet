@@ -201,7 +201,10 @@ public partial class HOSTEL_REPORT_HostelFeeCollectionReport : System.Web.UI.Pag
     {
         try
         {
-            string attachment = "attachment; filename=" + "DateWiseFeeCollectionReport.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "DateWiseFeeCollectionReport.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "DateWiseFeeCollectionReport.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -248,7 +251,10 @@ public partial class HOSTEL_REPORT_HostelFeeCollectionReport : System.Web.UI.Pag
     {
         try
         {
-            string attachment = "attachment; filename=" + "HostelWiseFeeCollectionReport.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "HostelWiseFeeCollectionReport.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "HostelWiseFeeCollectionReport.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";

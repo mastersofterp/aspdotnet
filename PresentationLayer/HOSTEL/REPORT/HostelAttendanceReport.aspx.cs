@@ -131,7 +131,10 @@ public partial class HOSTEL_REPORT_HostelAttendanceReport : System.Web.UI.Page
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment; filename=HostelAttendanceMonthly.xls";
+                string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+                string res = string.Concat(getdate, "HostelAttendanceMonthly.xls");
+                string attachment = "attachment; filename=" + res;
+                //string attachment = "attachment; filename=HostelAttendanceMonthly.xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
