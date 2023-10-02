@@ -145,7 +145,11 @@
                                                 </ItemTemplate>
                                             </asp:ListView>
                                         </ContentTemplate>
+                                       <Triggers>
+                                           <asp:PostBackTrigger ControlID="ListView1" />
+                                       </Triggers>
                                     </asp:UpdatePanel>
+
                                 </div>
                             </div>
 
