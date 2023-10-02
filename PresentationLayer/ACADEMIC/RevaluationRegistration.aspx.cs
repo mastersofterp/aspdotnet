@@ -192,17 +192,17 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
                     string RECON = (objCommon.LookUp("ACD_DCR", "DISTINCT RECON", "SESSIONNO=" + ViewState["SESSIONNO"] + " AND IDNO=" + ViewState["idno"] + " AND RECIEPT_CODE='PRF'"));//photocopy recon=1 then only eligible for revaluation
 
-                    if (Convert.ToInt32(Session["OrgId"]) != 9 && Convert.ToInt32(Session["OrgId"]) != 2 && Convert.ToInt32(Session["OrgId"]) != 6)
-                    {
-                        if (RECON == "1" || RECON == "True")
-                        {
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(updDetails, "Not Eligible For Revaluation Because You have not Applied or confirmed your photocopy details yet !!!", this.Page);
-                            return;
-                        }
-                    }
+                    //if (Convert.ToInt32(Session["OrgId"]) != 9 && Convert.ToInt32(Session["OrgId"]) != 2 && Convert.ToInt32(Session["OrgId"]) != 6)
+                    //{
+                    //    if (RECON == "1" || RECON == "True")
+                    //    {
+                    //    }
+                    //    else
+                    //    {
+                    //        objCommon.DisplayMessage(updDetails, "Not Eligible For Revaluation Because You have not Applied or confirmed your photocopy details yet !!!", this.Page);
+                    //        return;
+                    //    }
+                    //}
 
                     //if (RECON == "1" || RECON == "True")  //to check recon 1 or not of photocopy // Commented by Pritish S. on 20/10/2020
                     ////if ("1" == "1")
@@ -1217,11 +1217,14 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             {
                 ShowReportPhotoCopyReval("Photo Copy Registration Slip", "rptPhotoRevaluation_Rcpiper.rpt");
             }
-            else
+            else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 // ShowReport("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
                 ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluationCRESCENT.rpt");
-
+            }
+            else
+            {
+                ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
             }
         }
         catch { }
@@ -1490,9 +1493,13 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
-        else
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)  
         {
             BillDeskPaymentGateway();   //BillDesk Payment Gateway   
+        }
+        else  
+        {
+            PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
     }
 
@@ -1676,8 +1683,16 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             objStudentFees.SessionNo = (ViewState["SESSIONNO"].ToString());
             objStudentFees.OrderID = lblOrderID.Text;
 
-            //insert in acd_fees_log
-            result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "RF", 2); //2 for reval
+
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
+            {
+                //insert in acd_fees_log
+                result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "RF", 2); //2 for reval
+            }
+            else
+            {
+                result = 1;   //Fees log maintined in other client except crescent 
+            }
 
             if (result > 0)
             {

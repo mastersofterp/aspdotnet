@@ -1246,11 +1246,14 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             {
                 ShowReportPhotoCopyReval("Photo Copy Registration Slip", "rptPhotoRevaluation_Rcpiper.rpt");
             }
-            else
+            else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 //ShowReport("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");  
                 ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluationCRESCENT.rpt");
-
+            }
+            else
+            {
+                ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
             }
         }
         catch { }
@@ -1278,14 +1281,12 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
-    }
-
+    } 
 
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
-        {
-
+        { 
             int sessionno = Convert.ToInt32(ViewState["sessionno"]);
             int idno = Convert.ToInt32(lblName.ToolTip);
             string semester = objCommon.LookUp("ACD_REVAL_RESULT", "DISTINCT SEMESTERNO", "IDNO=" + idno + "AND APP_TYPE= 'PHOTO COPY' " + "AND SESSIONNO=" + sessionno);
@@ -1895,9 +1896,13 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         {
             PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
-        else
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)     
         {
             BillDeskPaymentGateway();   //BillDesk Payment Gateway   //Crescent
+        }
+        else  
+        {
+            PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
     }
     #endregion
@@ -1922,6 +1927,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         #region "Online Payment"
         try
         {
+            ViewState["SESSIONNO"] = Convert.ToString(ViewState["sessionno"]);
             int ifPaidAlready = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(1) PAY_COUNT", "IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND RECIEPT_CODE = 'PRF' AND RECON = 1 AND ISNULL(CAN,0)=0"));
 
             if (ifPaidAlready > 0)
@@ -1973,9 +1979,15 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             string Schemeno = ViewState["Schemeno"].ToString();
 
 
-            //insert in acd_fees_log
-            result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "PRF", 1); //1 for photo copy
-
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
+            {
+                //insert in acd_fees_log
+                result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "PRF", 1); //1 for photo copy
+            }
+            else
+            {
+                result = 1;   //Fees log maintined in other client except crescent 
+            }
             //logStatus = ObjFCC.AddPhotoRevalFeeLogDcrTemp(objStudentFees, Schemeno, Courenos, IPADDRESS, Semesternos, COLLEGE_CODE, UA_NO, Grades, ccodes, "PHOTO COPY", Extermarks, Convert.ToInt32(Session["usertype"]));
             //"PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));  //Added on 25082022
 
