@@ -165,13 +165,13 @@
                                             </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                    <%--<sup>* </sup>--%>
                                                     <label>Remark</label>
                                                 </div>
                                                 <asp:TextBox ID="txtDetails" runat="server" TabIndex="2" CssClass="form-control" TextMode="MultiLine" MaxLength="350" />
-                                                <asp:RequiredFieldValidator ID="rfvRemark" runat="server"
+                                                <%--<asp:RequiredFieldValidator ID="rfvRemark" runat="server"
                                                     ControlToValidate="txtDetails" Display="None" ErrorMessage="Please Enter Remark"
-                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>
+                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>--%>
                                             </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
@@ -204,7 +204,7 @@
                                             </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                    <%--<sup>* </sup>--%>
                                                     <label>Preferable Time From</label>
                                                 </div>
                                                 <asp:TextBox ID="txtPerferTime" runat="server" MaxLength="8" CssClass="form-control" Text="10:00 AM" TabIndex="4" />
@@ -222,13 +222,13 @@
                                                     InvalidValueMessage="Preferable From Time is invalid" Display="None" TooltipMessage="Input a time"
                                                     EmptyValueBlurredText="*" InvalidValueBlurredMessage="*" 
                                                     ValidationGroup="complaint" ErrorMessage="mevEnterTime" /> --%>
-                                                <asp:RequiredFieldValidator ID="rfvTimeFrom" runat="server"
+                                               <%-- <asp:RequiredFieldValidator ID="rfvTimeFrom" runat="server"
                                                     ControlToValidate="txtPerferTime" Display="None" ErrorMessage="Please Enter Preferable Time From & To"
-                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>
+                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>--%>
                                             </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                    <%--<sup>* </sup>--%>
                                                     <label>And To</label>
                                                 </div>
                                                 <asp:TextBox ID="txtPerferTo" runat="server" MaxLength="8" CssClass="form-control" Text="06:00 PM" TabIndex="5" />
@@ -245,9 +245,9 @@
                                                     InvalidValueMessage="Preferable To Time is invalid" Display="None" TooltipMessage="Input a time"
                                                     EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
                                                     ValidationGroup="complaint" ErrorMessage="mevEnterTimeTo" />--%>
-                                                <asp:RequiredFieldValidator ID="rfvTimeTo" runat="server"
+                                                <%--<asp:RequiredFieldValidator ID="rfvTimeTo" runat="server"
                                                     ControlToValidate="txtPerferTo" Display="None" ErrorMessage="Please Enter Preferable Time From & To"
-                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>
+                                                    ValidationGroup="complaint"></asp:RequiredFieldValidator>--%>
                                             </div>
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
