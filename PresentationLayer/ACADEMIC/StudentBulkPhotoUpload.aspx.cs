@@ -351,8 +351,12 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
             DataTable dt;
             dt = ((DataTable)Session["studentTbl"]);
             dt.Rows.Remove(this.GetEditableDataRow(dt, btnDelete.CommandArgument));
+          
             Session["studentTbl"] = dt;
             this.BindListView_DemandDraftDetails(dt);
+            btnSave.Enabled = false;
+           // btnSave.Visible = false;
+            
         }
         catch
         {
