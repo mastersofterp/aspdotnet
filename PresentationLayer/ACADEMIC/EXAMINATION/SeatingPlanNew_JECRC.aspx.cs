@@ -1172,10 +1172,12 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
             examno = examno.TrimEnd(',');
         }
         string dates = DateTime.Now.ToString("yyyy-MM-dd");
-        //if (Convert.ToInt32(Session["OrgId"]) == 5)
-        //{
+    
 
-            DataSet ds = objsc.GetStudentsExamDateNEW(dates, examno);
+            string proc_name = "PKG_GET_EXAM_DATE_FOR_DATE";
+            string parameter = "@P_EXAMDATE,@P_EXAM_TT_TYPE,@P_SESSIONNO";
+            string Call_values = "" + dates + "," + examno + "," + 0 + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlExamdate.DataSource = ds;
@@ -1184,16 +1186,7 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
                 ddlExamdate.DataBind();
             }
             ddlslot.Focus();
-        
-        //}
-        //else
-        //{
-
-        //    objCommon.FillDropDownList(ddlExamdate,"ACD_EXAM_DATE ED INNER JOIN ACD_SESSION_MASTER SM ON ED.SESSIONNO=SM.SESSIONNO ", "Distinct ED.SESSIONNO", " CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", " EXAMDATE IS NOT NULL AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE in( " + examno + ")", "ED.SESSIONNO");  // AND EXAM_TT_TYPE = 11" 
-
-        //}
-        //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
-        //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE ED inner join acd_session_master SM on (ED.SESSIONNO=SM.SESSIONNO) ", "EXDTNO", "  CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO");  // AND EXAM_TT_TYPE = 11" 
+   
 
     }
 
@@ -1761,8 +1754,7 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
          int count;
          foreach (ListViewDataItem item in lvExamCoursesOnDate.Items)
          {
-            // CheckBox lnk = sender as CheckBox;
-             // Label lblenrollno = lnk.Parent.FindControl("lblstuenrollno") as Label;
+         
              Label lblcourse = item.FindControl("lblCourseno") as Label;
              CheckBox lblcourselist = item.FindControl("chkStudent") as CheckBox;
 

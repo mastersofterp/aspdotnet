@@ -778,7 +778,7 @@
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divCollege" runat="server" >
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label>
@@ -786,11 +786,11 @@
                                         <asp:DropDownList ID="ddlCollege" runat="server" TabIndex="1" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged1" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <%-- <asp:RequiredFieldValidator ID="rfvCollege" runat="server" ControlToValidate="ddlCollege"
-                                            Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="0" ValidationGroup="configure"></asp:RequiredFieldValidator>--%>
+                                         <asp:RequiredFieldValidator ID="rfvCollege" runat="server" ControlToValidate="ddlCollege"
+                                            Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="0" ValidationGroup="configure"></asp:RequiredFieldValidator>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12" hidden="hidden">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSession" runat="server" >
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <asp:Label ID="lblDYtxtSession" runat="server" Font-Bold="true"></asp:Label>
@@ -798,8 +798,8 @@
                                         <asp:DropDownList ID="ddlSession" runat="server" TabIndex="2" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <%-- <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
-                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="configure"></asp:RequiredFieldValidator>--%>
+                                         <asp:requiredfieldvalidator id="rfvsession" runat="server" controltovalidate="ddlsession"
+                                            display="none" errormessage="please select session" initialvalue="0" validationgroup="configure"></asp:requiredfieldvalidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
