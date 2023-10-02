@@ -8000,6 +8000,37 @@ namespace IITMS
                     return retStatus;
 
                 }
+                //Added by Shrikant W on 28-09-2023
+                public int UpdateStudentFinalInformation(Student objStudent)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
+                        objParams[1] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[1].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_FINAL_INFORMATION", objParams, true);
+
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudentFinalInformation-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+
+                }
                 /// <summary>
                 /// Updated by Swapnil.......
                 /// </summary>
@@ -12982,7 +13013,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student
-                        objParams = new SqlParameter[59];
+                        objParams = new SqlParameter[61];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         objParams[1] = new SqlParameter("@P_REGNO", objStudent.RegNo);
                         objParams[2] = new SqlParameter("@P_ENROLLNO", objStudent.EnrollNo);
@@ -13052,9 +13083,10 @@ namespace IITMS
                         //Added by Bhagyashree on 07-06-2023
                         objParams[56] = new SqlParameter("@P_ABCC_ID", objStudent.AbccId);
                         objParams[57] = new SqlParameter("@P_DTE_APPLICATION_ID", objStudent.DteAppId);
-
-                        objParams[58] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[58].Direction = ParameterDirection.Output;
+                        objParams[58] = new SqlParameter("@P_CASTENAME", objStudent.CasteName);
+                        objParams[59] = new SqlParameter("@P_MOTHER_ANNUAL_INCOME", objStudent.MotherAnnualIncome);
+                        objParams[60] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[60].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUDENT_PERSONAL_INFORMATION", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -14847,35 +14879,35 @@ namespace IITMS
                 //    return ds;
                 //}
                 /// <summary>
-                /// Added By Dileep Kare on 02.03.2022
+                /// Added By RAHUL M on 28.09.2023
                 /// </summary>
                 /// <param name="ddlValue"></param>
                 /// <param name="dt"></param>
                 /// <returns></returns>
-                public int StudentBulkPhotoUpdate(int ddlValue, DataTable dt)
-                {
+                public int StudentBulkPhotoUpdate(int ddlValue, DataTable dt, int UploadBy)
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
-                    {
+                        {
                         // if (!(photo == null))
                         // {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@P_ID", ddlValue);
                         objParams[1] = new SqlParameter("@P_STUD_BULK_UPDATE", dt);
-
+                        objParams[2] = new SqlParameter("@P_UPLOADBY", UploadBy);
                         if (objSQLHelper.ExecuteNonQuerySP("STUD_BULK_PHOTO_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                         // }
-                    }
+                        }
                     catch
-                    {
+                        {
 
                         throw;
-                    }
+                        }
 
                     return retStatus;
-                }
+                    }
 
                 public DataSet GetWithHeldReport(int sessionno, int degree, int branch, int scheme, int sem)
                 {
@@ -20826,6 +20858,29 @@ namespace IITMS
                  }
 
                  #endregion
+
+                 public DataSet CheckExistsStudentDataForDualDegree(int idno, int collegeid, int Degree, int Branch)
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                         SqlParameter[] objParams = null;
+                         objParams = new SqlParameter[4];
+                         objParams[0] = new SqlParameter("@P_IDNO", idno);
+                         objParams[1] = new SqlParameter("@P_COLLEGE", collegeid);
+                         objParams[2] = new SqlParameter("@P_DEGREE", Degree);
+                         objParams[3] = new SqlParameter("@P_BRANCH", Branch);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CHECKEXIST_STUENT_FOR_DUALDEGREE_STATUS", objParams);
+                     }
+
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.CheckExistsStudentDataForDualDegree->" + ex.ToString());
+                     }
+                     return ds;
+                 }
             }
 
 

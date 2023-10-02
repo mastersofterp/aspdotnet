@@ -386,7 +386,7 @@ namespace IITMS
 
 
 
-                public int AddCreditModified(DefineCreditLimit dci, int gropuid)
+                public int AddCreditModified(DefineCreditLimit dci, int gropuid,int collegeID)
                 {
                     int status = 0;
 
@@ -395,7 +395,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add
-                        objParams = new SqlParameter[24];
+                        objParams = new SqlParameter[25];
                         objParams[0] = new SqlParameter("@P_SCHEMENOS", dci.Schemenos);
                         objParams[1] = new SqlParameter("@P_STUDENTTYPE", dci.STUDENT_TYPE);
                         objParams[2] = new SqlParameter("@P_FROMRANGE", dci.FROM_CGPA);
@@ -419,8 +419,9 @@ namespace IITMS
                         objParams[20] = new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
                         objParams[21] = new SqlParameter("@P_OVERLOAD_CREDIT", dci.Overload_credit); //added by nehal on 16052023
                         objParams[22] = new SqlParameter("@P_GROUPID", gropuid); //added by nehal on 16052023
-                        objParams[23] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objParams[23].Direction = ParameterDirection.Output;
+                        objParams[23] = new SqlParameter("@P_COLLEGE_ID", collegeID); //added by Shailendra K. on 30.09.2023
+                        objParams[24] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[24].Direction = ParameterDirection.Output;
 
                         //if (objSQLHelper.ExecuteNonQuerySP("PKG_SESSION_SP_INS_SESSIONMASTER", objParams, true) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);

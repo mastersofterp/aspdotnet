@@ -31,21 +31,6 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Diagnostics;
 using Newtonsoft.Json.Linq;
-using ClosedXML.Excel;
-using System.Data.OleDb;
-
-using Microsoft.WindowsAzure.Storage;
-//using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Storage.Blob;
-
-using System.Threading.Tasks;
-//using System.Activities.Statements;
-
-
-using Microsoft.Win32;
-//using Microsoft.WindowsAzure.Storage.Auth;
-using DynamicAL_v2;
-
 
 
 public partial class Academic_MarkEntryforIA : System.Web.UI.Page
@@ -53,10 +38,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     MarksEntryController objMarksEntry = new MarksEntryController();
-    int s;
-    string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
-    //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_MEContainerName"].ToString();
-    string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameExam"].ToString();
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -115,28 +96,22 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 string colgno = Session["college_nos"].ToString();
 
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
-
+                
                 //objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE", "SUBID", "SUBNAME", "SUBID > 0", "SUBID");
                 //ddlSession.SelectedIndex = 1;
                 ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
 
                 if (ddlSession.SelectedValue == "0")
                 {
-                    // objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
+                   // objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
                 }
                 else
                 {
                     this.GetExamWiseDates();
                 }
-                //Page.Form.Attributes.Add("enctype", "multipart/form-data");
-                //this.Page.Form.Enctype = "multipart/form-data";
             }
-
-            //Page.Form.Attributes.Add("enctype", "multipart/form-data");
-            this.Page.Form.Enctype = "multipart/form-data";
         }
         divMsg.InnerHtml = string.Empty;
-
     }
 
     private void ShowCourses()
@@ -179,66 +154,10 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 ViewState["COURSENO"] = lblCourse.ToolTip;
                 ViewState["CCODE"] = (objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO='" + lblCourse.ToolTip + "'"));
                 string[] sec_batch = lnk.CommandArgument.ToString().Split('+');
-                string COURSENAME = (objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO='" + lblCourse.ToolTip + "'"));
-                int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
-                //Added by gaurav For check Status for end Sem mark entry 07-09-2022
-                ViewState["EXAMNO"] = sec_batch[2];
-                string examno = objCommon.LookUp("acd_exam_name", "FLDNAME", "examno=" + ViewState["EXAMNO"]);
-
-                #region ADDED BY GAURAV S 11_01_2023 FOR CPUH/K FOR CHECK EXTERNAL MARK ENTRY CHECK
-                //Added by gaurav For check Status for end Sem mark entry 07-09-2022
-
-                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
-                {
-                    if (examno == "EXTERMARK")
-                    {
-                        int TestMark = 0;
-                        double maxmark = 0.00;
-                        maxmark = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip)));
-                        if (maxmark > 0)
-                        {
 
 
-
-                            TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
-                            if (TestMark > 0)
-                            {
-                                if (examno == "EXTERMARK")
-                                {
-
-                                    string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CPU_K_H";
-                                    string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-                                    string sp_callValues = "" + ViewState["COURSENO"] + "," + SCHEMENO + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-
-                                    DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-                                    if (dschk.Tables.Count > 0)
-                                    {
-                                        if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-                                        {
-                                            string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-                                            if (islocked == "0" || islocked == string.Empty || islocked == null)
-                                            {
-                                                objCommon.DisplayMessage(this.updpanle1, "Kindly Check the Internal Mark Entry is not Completed or Not Locked for " + COURSENAME + " !", this.Page);
-                                                return;
-
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-
-                                objCommon.DisplayMessage(this.updpanle1, "Internal Mark Entry yet not start for " + COURSENAME + " !", this.Page);
-                                return;
-                            }
-                        }
-                        // }
-                    }
-                }
-                #endregion
-
+                
+                
 
                 // Check Mark Enrty Activitity -- Added by Abhinay Lad [14-09-2019]
                 DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND EXAMNO=" + Convert.ToInt32(lnk.CommandArgument.ToString().Split('+')[2]) + " )", "SESSIONNO DESC");
@@ -261,15 +180,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 CourseNo = Convert.ToInt32((btn.Parent.FindControl("hdnfld_courseno") as HiddenField).Value);
                 ViewState["sem"] = Convert.ToInt32((btn.Parent.FindControl("hdnsem") as HiddenField).Value);
 
-                string excelStatus = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ExcelMarkEntry", "");
-                if (excelStatus == "1")
-                {
-                    lnkExcekImport.Visible = true;
-                }
-                else
-                {
-                    lnkExcekImport.Visible = false;
-                }
+
 
 
                 if (lnk.CommandArgument.ToString().Split('+')[3].ToString().Equals("S10"))
@@ -277,14 +188,11 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                     ViewState["S10"] = Convert.ToString(lnk.CommandArgument.ToString().Split('+')[3]);
                     ViewState["MODEL_EXAM_NAME"] = Convert.ToString(lnk.CommandArgument.ToString().Split('+')[4]);
 
-                    string itemName = Convert.ToString(lnk.CommandArgument.ToString().Split('+')[4]);
-                    string itemValue = Convert.ToString(lnk.CommandArgument.ToString().Split('+')[3]) + "-" + Convert.ToString(lnk.CommandArgument.ToString().Split('+')[2]);
-
-
-
+                    string itemName=Convert.ToString(lnk.CommandArgument.ToString().Split('+')[4]);
+                    string itemValue =Convert.ToString(lnk.CommandArgument.ToString().Split('+')[3])+"-"+Convert.ToString(lnk.CommandArgument.ToString().Split('+')[2]);
                     ddlExam.Items.Clear();
                     ddlExam.Items.Add(new ListItem("Select Exam", "0"));
-                    ddlExam.Items.Add(new ListItem(itemName, itemValue));
+                    ddlExam.Items.Add(new ListItem(itemName,itemValue));
                     ddlExam.SelectedIndex = 1;
                     ddlExam.Enabled = false;
                     ddlSubExam.Visible = false;
@@ -330,64 +238,62 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                         objCommon.DisplayMessage(this.updpanle1, "Exam for the Selected Course may not be Started Or may be Locked!!!", this.Page);
 
 
-                    ViewState["examNo"] = Convert.ToString(lnk.CommandArgument.Split('+')[2]);
-                    //ViewState["fldname"] = Convert.ToString(lnk.CommandArgument.Split('+')[3]);
+                     ViewState["examNo"] = Convert.ToString(lnk.CommandArgument.Split('+')[2]);
+                     //for (int i = 0; i < dsExams.Tables[0].Rows.Count; i++)
+                     //{
+                     //    if (ViewState["examNo"] == dsExams.Tables[0].Rows[i]["EXAMNO"].ToString())
+                     //    {
+                             if (exams.Length > 0)
+                             {
+                                 ViewState["exams"] = exams.Split(','); //store arrat
+                                 ViewState["exam"] = exams;
 
-                    //for (int i = 0; i < dsExams.Tables[0].Rows.Count; i++)
-                    //{
-                    //    if (ViewState["examNo"] == dsExams.Tables[0].Rows[i]["EXAMNO"].ToString())
-                    //    {
-                    if (exams.Length > 0)
-                    {
-                        ViewState["exams"] = exams.Split(','); //store arrat
-                        ViewState["exam"] = exams;
+                                 ddlExam.Items.Clear();
+                                 ddlExam.Items.Add(new ListItem("Select Exam", "0"));
 
-                        ddlExam.Items.Clear();
-                        ddlExam.Items.Add(new ListItem("Select Exam", "0"));
+                                 DataTableReader dtr = dsExams.Tables[0].CreateDataReader();
 
-                        DataTableReader dtr = dsExams.Tables[0].CreateDataReader();
+                                 while (dtr.Read())
+                                 {
+                                     if (ViewState["examNo"].ToString() == dtr["EXAMNO"].ToString())
+                                     {
+                                         if (dtr["FLDNAME2"] != DBNull.Value)
+                                         {
+                                             if (ddlSubjectType.SelectedIndex > 0)
+                                             {
+                                                 ddlExam.Items.Add(new ListItem(dtr["EXAMNAME"].ToString(), dtr["FLDNAME2"].ToString()));
+                                             }
+                                         }
+                                     }
+                                 }
+                                 dtr.Close();
 
-                        while (dtr.Read())
-                        {
-                            if (ViewState["examNo"].ToString() == dtr["EXAMNO"].ToString())
-                            {
-                                if (dtr["FLDNAME2"] != DBNull.Value)
-                                {
-                                    if (ddlSubjectType.SelectedIndex > 0)
-                                    {
-                                        ddlExam.Items.Add(new ListItem(dtr["EXAMNAME"].ToString(), dtr["FLDNAME2"].ToString()));
-                                    }
-                                }
-                            }
-                        }
-                        dtr.Close();
+                                 if (ddlExam.Items.Count > 0)
+                                 {
+                                     pnlSelection.Visible = false;
+                                     pnlMarkEntry.Visible = true;
+                                     pnlStudGrid.Visible = false;
+                                     //btnBack.Visible = false;
+                                     btnSave.Visible = false;
+                                     btnLock.Visible = false;
+                                     btnPrintReport.Visible = false;
+                                     lblStudents.Visible = false;
+                                     ddlSubExam.SelectedIndex = 0;
+                                     ddlSubExam.Enabled = false;
+                                 }
 
-                        if (ddlExam.Items.Count > 0)
-                        {
-                            pnlSelection.Visible = false;
-                            pnlMarkEntry.Visible = true;
-                            pnlStudGrid.Visible = false;
-                            //btnBack.Visible = false;
-                            btnSave.Visible = false;
-                            btnLock.Visible = false;
-                            btnPrintReport.Visible = false;
-                            lblStudents.Visible = false;
-                            ddlSubExam.SelectedIndex = 0;
-                            ddlSubExam.Enabled = false;
-                        }
+                                 DataSet dss = objCommon.FillDropDown("ACD_MARK_ENTRY_STATUS_CODES", "*", "", "", "");
+                                 rptMarkCodes.DataSource = dss;
+                                 rptMarkCodes.DataBind();
+                             }
 
-                        DataSet dss = objCommon.FillDropDown("ACD_MARK_ENTRY_STATUS_CODES", "*", "", "", "");
-                        rptMarkCodes.DataSource = dss;
-                        rptMarkCodes.DataBind();
-                    }
-
-                    else
-                    {
-                        objCommon.DisplayMessage(this.updpanle1, "No Exam for the Selected Course may be not be Started Or may be Locked!!!", this.Page);
-                    }
-                    //    }
-                    //}
-
+                             else
+                             {
+                                 objCommon.DisplayMessage(this.updpanle1, "No Exam for the Selected Course may be not be Started Or may be Locked!!!", this.Page);
+                             }
+                     //    }
+                     //}
+                
                 }
             }
         }
@@ -413,8 +319,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         pnlSelection.Visible = true;
         pnlMarkEntry.Visible = false;
         GetStatus();
-        pnlUP.Visible = false;                      //Added by Sachin A on 16082022
-        ddlSort.SelectedIndex = 0;
     }
 
     private void CheckPageAuthorization()
@@ -448,8 +352,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         {
             string API_Output = "";
             string examtype = string.Empty;
-            string examno = ViewState["examNo"].ToString();
-
             //check for if any exams on
             if (ddlExam.SelectedIndex > 0)
             {
@@ -462,7 +364,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 string marks = string.Empty;
 
                 MarksEntryController objMarksEntry = new MarksEntryController();
-
                 Label lbl;
                 TextBox txtMarks;
 
@@ -482,7 +383,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 }
                 string[] course = lblCourse.Text.Split('~');
                 string ccode = course[0].Trim();
-                // Added By Abhinay Lad [17-07-2019]*---
+                // Added By Abhinay Lad [17-07-2019]
                 int courseNo = Convert.ToInt32(lblCourse.ToolTip);
                 int FlagReval = 0;
 
@@ -493,144 +394,73 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
                 string examname = ddlExam.SelectedValue;
                 string subExam_Name = (ddlSubExam.Visible == true) ? ddlSubExam.SelectedValue : "S10T1-19";
-                string[] Exam = ddlExam.SelectedValue.Split('-');
-                if (Exam[1].StartsWith("S"))
-                    examtype = "S";
-                else if (Exam[1].StartsWith("E"))
-                    examtype = "E";
 
-                string examnameExtern = string.Empty;
-
-
-                // ddlSubExam
-                //ADDED BY GAURAV 09_01_2023
+                //if (ddlExam.SelectedValue.Length > 2 && ddlExam.SelectedIndex > 0)
+                //    examname = ddlExam.SelectedValue.Substring(2);
+                //else if (ddlExam.SelectedIndex > 0)
+                //    examname = ddlExam.SelectedValue;
 
                 CustomStatus cs;
-                #region ADDED BY GAURAV S FOR CPU/H END SEM MARK ENTRY SAVE 11_01_2023
-                string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
-                string Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1]) + "AND  SUBEXAMNO=" + ddlSubExam.SelectedValue.Split('-')[1]);
-
-                string examnoname = objCommon.LookUp("acd_exam_name", "fldname", "examno=" + Convert.ToInt32(ViewState["examNo"]));
-                int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
-                //return;             
-                // CPUKOTA/HAMIRPUR
-                if (examnoname == "EXTERMARK")
+                if (ViewState["markentryotp"] != null && ViewState["markentryotp"].ToString() == "1")
                 {
-                    examname = Exam[1];
-                    if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11")
-                    {
-                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
-                    }
-                    else
-                    {
-                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
-                    }
+                    string smsmobile, to_email;
+                    string sms_text = string.Empty;
+                    string email_text = string.Empty;
+                    string from_email = objCommon.LookUp("reff", "EMAILSVCID", "");
 
+                    if (ViewState["to_email"].ToString() != string.Empty)
+                        to_email = ViewState["to_email"].ToString();
+                    else
+                        to_email = string.Empty;
+
+                    if (ViewState["smsmobile"].ToString() != string.Empty)
+                        smsmobile = ViewState["smsmobile"].ToString();
+                    else
+                        smsmobile = string.Empty;
+
+                    if (ViewState["sms_text"].ToString() != string.Empty)
+                        sms_text = ViewState["sms_text"].ToString();
+                    else
+                        sms_text = string.Empty;
+
+                    if (ViewState["email_text"].ToString() != string.Empty)
+                        email_text = ViewState["email_text"].ToString();
+                    else
+                        email_text = string.Empty;
+
+
+
+
+                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
                 }
-                #endregion
                 else
                 {
-                    #region other
-                    if (ViewState["markentryotp"] != null && ViewState["markentryotp"].ToString() == "1")
-                    {
-                        string smsmobile, to_email;
-                        string sms_text = string.Empty;
-                        string email_text = string.Empty;
-                        string from_email = objCommon.LookUp("reff", "EMAILSVCID", "");
+                        cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+                    
+                }
 
-                        if (ViewState["to_email"].ToString() != string.Empty)
-                            to_email = ViewState["to_email"].ToString();
-                        else
-                            to_email = string.Empty;
-
-                        if (ViewState["smsmobile"].ToString() != string.Empty)
-                            smsmobile = ViewState["smsmobile"].ToString();
-                        else
-                            smsmobile = string.Empty;
-
-                        if (ViewState["sms_text"].ToString() != string.Empty)
-                            sms_text = ViewState["sms_text"].ToString();
-                        else
-                            sms_text = string.Empty;
-
-                        if (ViewState["email_text"].ToString() != string.Empty)
-                            email_text = ViewState["email_text"].ToString();
-                        else
-                            email_text = string.Empty;
-
-
-                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 1)
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 2)
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CRESCENT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                        else
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-
-                        }
-                    }
-                    else
-                    {
-                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 1)   //ADDED BY PRAFULL ON DT 23012023 
-                        {
-                            //cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 2)
-                        {
-
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CRESCENT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-
-                        else
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                    }
-
-                    #endregion
-                }//add gaurav end
-
+                
                 if (cs.Equals(CustomStatus.RecordSaved))
-                // if (1==1)
                 {
                     if (lock_status == 1)
                     {
                         objCommon.DisplayMessage(this.updpanle1, "Marks Locked Successfully!!!", this.Page);
                         objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                        pnlUP.Visible = false;                      //Added by Sachin A on 06082022
                     }
                     else
                     {
                         objCommon.DisplayMessage(this.updpanle1, "Marks Saved Successfully. Please Click on Lock button to Final Submit the Marks", this.Page);
                         objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
                     }
-
                     //ShowStudents();
                     btnShow_Click(null, null);
                 }
-
-
                 else if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                     if (lock_status == 1)
                     {
                         objCommon.DisplayMessage(this.updpanle1, "Marks Locked Successfully!!!", this.Page);
                         objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                        pnlUP.Visible = false;                       //Added by Sachin A on 06082022
                     }
                     else
                     {
@@ -641,6 +471,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                     btnShow_Click(null, null);
                 }
                 else if (cs.Equals(CustomStatus.Others))
+                
                 {
                     objCommon.DisplayMessage(this.updpanle1, "STOP !!! Exam Rule is not Defined for Selected Subject.", this.Page);
                     //ShowStudents();
@@ -652,7 +483,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                     objCommon.DisplayMessage(this.updpanle1, "Error in Saving Marks!", this.Page);
                 }
             }
-
         }
         catch (Exception ex)
         {
@@ -661,7 +491,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
-
     }
 
     private bool CheckExamON()
@@ -767,7 +596,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         return flag;
     }
 
-    #region
     protected void btnLock_Click(object sender, EventArgs e)
     {
         SaveAndLock(1);
@@ -847,7 +675,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         //}
         #endregion
     }
-    #endregion
 
     protected void btnCancel2_Click(object sender, EventArgs e)
     {
@@ -912,32 +739,19 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
     protected void ddlSubjectType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddlSubjectType.SelectedIndex > 0)
-        {
-            this.ShowCourses();
-            this.GetStatus();
-            this.BindCourse();
-        }
-        else
-        {
-            ddlcourse.Items.Clear();
-            ddlcourse.Items.Add(new ListItem("Please Select", "0"));
-            rptExamName.DataSource = null;
-            rptExamName.DataBind();
-            Div_ExamNameList.Visible = false;
-        }
-
+        this.ShowCourses();
+        this.GetStatus();
     }
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
-        if (ddlSubExam.Visible == true && ddlSubExam.SelectedIndex > 0)
+        if (ddlSubExam.Visible==true && ddlSubExam.SelectedIndex > 0)
         {
             ShowStudents();
         }
         else
         {
-            if (ddlExam.Enabled == false && Convert.ToString(ViewState["S10"]) == "S10")
+            if (ddlExam.Enabled==false && Convert.ToString(ViewState["S10"]) == "S10")
             {
                 ShowStudents_For_Model_Exam();
             }
@@ -953,18 +767,17 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     {
         try
         {
-            ViewState["LOCK_STATUS"] = string.Empty;
             string[] course = lblCourse.Text.Split('-');
             DataSet dsStudent = null;
             //DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + Convert.ToInt32(ViewState["COURSENO"]) + ") AND COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + "", "");
 
             DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + Convert.ToInt32(ViewState["COURSENO"]) + ") AND COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + "AND SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + "", "");
 
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            if (ds != null && ds.Tables[0].Rows.Count>0)
             {
                 if (Convert.ToInt32(ds.Tables[0].Rows[0][0]) < 0)
                 {
-                    objCommon.DisplayMessage(this.updpanle1, "STOP !!! Rule 1 for " + Convert.ToString(ddlSubExam.SelectedItem.Text) + " is not Defined", this.Page);
+                    objCommon.DisplayMessage(this.updpanle1, "STOP !!! Rule 1 for "+ Convert.ToString(ddlSubExam.SelectedItem.Text) + " is not Defined", this.Page);
                     return;
                 }
                 else if (Convert.ToInt32(ds.Tables[0].Rows[0][1]) < 0)
@@ -981,16 +794,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
             //dsStudent = objMarksEntry.GetStudentsForMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue));
 
-            if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
-            {
-                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
-            }
-            else
-            {
-
-                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
-            }
-
+            dsStudent = objMarksEntry.GetStudentsForMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
             int lockcount = 0;
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
@@ -1047,7 +851,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                     }
                     else
                     {
-                        btnSave.Visible = true; btnLock.Visible = true;
+                        btnSave.Visible = true; btnLock.Visible = true; 
                     }
 
                     pnlSelection.Visible = false; pnlMarkEntry.Visible = true; pnlStudGrid.Visible = true; lblStudents.Visible = true;
@@ -1062,7 +866,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 {
                     btnSave.Visible = false;
                     btnLock.Visible = false;
-                    ViewState["LOCK_STATUS"] = "1";
                 }
             }
         }
@@ -1109,7 +912,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             string Call_Values = "" + ddlSession.SelectedValue + "," + Convert.ToInt32(ViewState["COURSENO"]) + "," + Convert.ToInt16(ViewState["sem"]) + "," + Convert.ToInt16(hdfSection.Value) + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + Convert.ToInt32(Session["userno"].ToString()) + "," + Convert.ToString(ViewState["MODEL_EXAM_NAME"]) + "";
 
             dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-
+            
             int lockcount = 0;
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
@@ -1191,25 +994,11 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     //methods to get marks entry status course wise..........added on [14-09-2016]
     private void GetStatus()
     {
-        ViewState["Semester"] = string.Empty;
         DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             //GVEntryStatus.DataSource = ds;
             //GVEntryStatus.DataBind();
-
-
-            if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 2)
-            {
-                ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();
-            }//Added on 04082022
-            else
-            {
-                ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["LOCKSTATUS"].ToString();
-                // ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();
-            }
-            ViewState["Semester"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
-
             rptExamName.DataSource = ds;
             rptExamName.DataBind();
             Div_ExamNameList.Visible = true;
@@ -1331,10 +1120,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     protected void ddlSubExam_SelectedIndexChanged(object sender, EventArgs e)
     {
         pnlStudGrid.Visible = false; lblStudents.Visible = false;
-        pnlUP.Visible = false;// added by gaurav
         btnSave.Visible = false; btnLock.Visible = false; btnPrintReport.Visible = false;
-
-
     }
 
     protected void gvStudent_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1385,7 +1171,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     {
 
         string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExam.SelectedItem.Text) + "'");
-        string FULLMNAME = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Session["userno"]);
+
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
@@ -1419,7 +1205,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             if (dsmemssage != null && dsmemssage.Tables[0].Rows.Count > 0)
             {
                 string message = string.Empty;
-                string stopDate = string.Empty;
+                string stopDate= string.Empty;
                 for (int i = 0; i < dsmemssage.Tables[0].Rows.Count; i++)
                 {
                     string examname = dsmemssage.Tables[0].Rows[i]["EXAMNAME"].ToString();
@@ -1432,8 +1218,8 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                         {
                             //divstatus.Visible = true;
                             //message += "  " + examname + " - " + status;
-                            message += " " + examname + ",";
-                            stopDate += " " + status + ",";
+                            message += " "+examname + ",";
+                            stopDate += " "+status + ",";
                         }
                     }
                 }
@@ -1454,13 +1240,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlSubjectType.Items.Clear();
-        ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
-        ddlcourse.Items.Clear();
-        ddlcourse.Items.Add(new ListItem("Please Select", "0"));
-        rptExamName.DataSource = null;
-        rptExamName.DataBind();
-        Div_ExamNameList.Visible = false;
         if (Convert.ToInt32(ddlSession.SelectedValue) > 0)
         {
             objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", "DISTINCT R.SUBID", "SUBNAME", "S.SUBID > 0 AND (UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " OR UA_NO_PRAC=" + Convert.ToInt32(Session["userno"].ToString()) + ") AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "");
@@ -1602,17 +1381,17 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
     protected void btnPrintReport_Click(object sender, EventArgs e)
     {
-        if (ddlSubExam.Visible == false)
+        if (ddlSubExam.Visible==false)
         {
             string reportTitle = "MarksListReport";
             string rptFileName = "rptMarksList2_NEW.rpt";
-
+       
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(hdfSection.Value) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + ",@P_EXAM_NAME=" + Convert.ToString(ViewState["MODEL_EXAM_NAME"]) + "";
-
+            
             string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this.updpanle1, this.updpanle1.GetType(), "key", Print_Val, true);
         }
@@ -1634,9 +1413,9 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
-
+        
         ddlExamPrint.Items.Clear();
-        ddlExamPrint.Items.Add(new ListItem("Please Select", "0"));
+        ddlExamPrint.Items.Add(new ListItem("Please Select","0"));
         ddlExamPrint.Items.Add(new ListItem(ViewState["examName_POP"].ToString(), ViewState["examNo_POP"].ToString()));
 
         ddlSubExamPrint.Items.Clear();
@@ -1660,7 +1439,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#PrintModal').modal('show');</script>", false);
         updPopUp.Update();
     }
-
 
     protected void ddlExamPrint_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1699,7 +1477,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         }
     }
 
-    #region btnPrintFront_Click
     protected void btnPrintFront_Click(object sender, EventArgs e)
     {
         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#PrintModal').modal('hide');</script>", false);
@@ -1736,7 +1513,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
         }
     }
-    #endregion
 
     //protected void btnPrintAll_Click(object sender, EventArgs e)
     //{
@@ -1807,7 +1583,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
                 string reportTitle = "CatMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_ForTheory.rpt";
-                // string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_CPU.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
@@ -1824,9 +1599,8 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             {
 
                 string reportTitle = "CatMarksListReport";
-                string rptFileName = "rptMarksList_Examwise.rpt";
-                // string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_CPU.rpt"; --comment by gaurav
-                //string rptFileName = "rptMarksList_ExamwiseNew.rpt"; // COMMENT BY GAURAV 31_01_2023
+                // string rptFileName = "rptMarksList_Examwise.rpt";
+                string rptFileName = "rptMarksList_ExamwiseNew.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
@@ -1842,708 +1616,6 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             }
         }
     }
-
-
-    //ADDED BY SACHIN A 03082022 TO SAVE MARK EXCEL SHEET THROUGH
-
-    #region ExcelSheet MarkEntry
-    protected void lnkExcekImport_Click(object sender, EventArgs e)
-    {
-        if (ddlExam.SelectedIndex > 0 && ddlSubExam.SelectedIndex > 0)
-        {
-            //     LinkButton lnk = sender as LinkButton;
-            //     if (!lnk.ToolTip.Equals(string.Empty))
-            //     {
-            //         lblCourse.Text = lnk.Text;
-            //         lblCourse.ToolTip = lnk.ToolTip;
-            //         ViewState["COURSENO"] = lblCourse.ToolTip;
-            //         ViewState["CCODE"] = (objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO='" + lblCourse.ToolTip + "'"));
-            //         string[] sec_batch = lnk.CommandArgument.ToString().Split('+');
-            //         string COURSENAME = (objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO='" + lblCourse.ToolTip + "'"));
-            //         int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
-            //         //Added by gaurav For check Status for end Sem mark entry 07-09-2022
-            //         ViewState["EXAMNO"] = sec_batch[2];
-            //         string examno = objCommon.LookUp("acd_exam_name", "FLDNAME", "examno=" + ViewState["EXAMNO"]);
-
-
-            //         string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CPU_K_H";
-            //         string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-            //         string sp_callValues = "" + ViewState["COURSENO"] + "," + SCHEMENO + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-
-            //         DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-            //         if (dschk.Tables.Count > 0)
-            //         {
-            //             if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-            //             {
-            //                 string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-            //                 if (islocked == "0" || islocked == string.Empty || islocked == null)
-            //                 {
-            //                     objCommon.DisplayMessage(this.updpanle1, "Kindly Check the Internal Mark Entry is not Completed or Not Locked for " + COURSENAME + " !", this.Page);
-            //                     return;
-
-            //                 }
-            //             }
-            //         }
-
-            //     }
-
-
-
-
-
-
-
-
-            //if (ViewState["markentrystatus"].ToString() == "0")
-            if (ViewState["LOCK_STATUS"] == "")
-            {
-                pnlUP.Visible = true;
-            }
-            else
-            {
-                pnlUP.Visible = false;
-                objCommon.DisplayMessage(updpanle1, "Mark Entry is locked!", this.Page);
-            }
-        }
-    }
-
-    protected void btnBlankDownld_Click(object sender, EventArgs e)
-    {
-        if (ddlExam.SelectedIndex > 0)      //&& (ddlSubExam.SelectedIndex != 0)
-        {
-            try
-            {
-                string excelname = string.Empty;
-                string[] course = lblCourse.Text.Split('-');
-                DataSet dsStudent = null;
-
-                ViewState["StudCount"] = 0;
-                int MExamNo = Convert.ToInt32(ViewState["examNo"].ToString());
-                string subexamno = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "ISNULL(ACTIVESTATUS,0)=1 AND EXAMNO=" + MExamNo + "AND FLDNAME='" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[0] + "'");
-
-                //dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToInt32(Examno[0]), Convert.ToInt32(ViewState["COURSENO"]));
-                dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), subexamno);
-
-                if (dsStudent != null && dsStudent.Tables.Count > 0)
-                {
-                    if (dsStudent.Tables[0].Rows.Count > 0)
-                    {
-                        //excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ViewState["CCODE"].ToString() + '_' + ddlExam.SelectedItem.Text + "_" + DateTime.Now.ToString("dd-MM-yyyy");
-                        excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ViewState["CCODE"].ToString() + '_' + ddlExam.SelectedItem.Text + "_" + ddlSubExam.SelectedItem.Text + "_" + DateTime.Now.ToString("dd-MM-yyyy");
-
-                        ViewState["StudCount"] = dsStudent.Tables[0].Rows.Count;
-                        //Bind the Student List
-                        DataTable dst = dsStudent.Tables[0];
-                        DataGrid dg = new DataGrid();
-                        if (dsStudent != null && dsStudent.Tables.Count > 0)
-                        {
-                            if (dsStudent.Tables[0].Rows.Count > 0)
-                            {
-                                string[] selectedColumns = new[] { "IDNO", "STUDNAME", "REGNO1", "CCODE", "COURSENAME", "DEGREENAME", "BRANCHNAME", "SCHEMENAME", "SEMESTERNAME", "SESSIONNAME", "EXAMNAME", "SUBEXAMNAME", "SECTIONNAME", "MAXMARK" };
-
-                                DataTable dt = new DataView(dst).ToTable(false, selectedColumns);
-                                dt.Columns["REGNO1"].ColumnName = "REGNO / ROLL_NO"; // change column names
-                                //dt.Columns["SMAX"].ColumnName = "MAX MARKS"; // change column names
-                                dt.Columns.Add("MARKS");
-
-                                using (XLWorkbook wb = new XLWorkbook())
-                                {
-                                    //foreach (System.Data.DataTable dtt in dsStudent.Tables)
-                                    //{
-                                    //Add System.Data.DataTable as Worksheet.
-                                    wb.Worksheets.Add(dt);
-                                    //}
-
-                                    //Export the Excel file.
-                                    Response.Clear();
-                                    Response.Buffer = true;
-                                    Response.Charset = "";
-                                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                                    Response.AddHeader("content-disposition", "attachment;filename=" + excelname + ".xlsx");
-                                    using (MemoryStream MyMemoryStream = new MemoryStream())
-                                    {
-                                        wb.SaveAs(MyMemoryStream);
-                                        MyMemoryStream.WriteTo(Response.OutputStream);
-                                        Response.Flush();
-                                        Response.End();
-                                    }
-                                }
-                            }
-                        }
-
-                        pnlSelection.Visible = false;
-                        pnlMarkEntry.Visible = true;
-                        pnlStudGrid.Visible = true;
-                        lblStudents.Visible = true;
-                        btnBack.Visible = true;
-
-                    }
-                    else
-                    {
-                        //objCommon.DisplayMessage(updpanle1, "Students Not Found..!!", this.Page);
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_PracticalMarkEntry.ShowStudents --> " + ex.Message + " " + ex.StackTrace);
-                else
-                    objUCommon.ShowError(Page, "Server Unavailable.");
-                objCommon.DisplayMessage(ex.ToString(), this.Page);
-            }
-        }
-        else
-        {
-            objCommon.DisplayMessage(updpanle1, "Please Select Exam!!", this.Page);
-            ddlExam.Focus();
-        }
-    }
-    protected void btnUpload_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            if (ddlSubExam.SelectedIndex != 0)
-            {
-                if (FuBrowse.HasFile)           //  if (FuBrowse.HasFile) //(FuBrowse.PostedFile != null)
-                {
-                    string path = MapPath("~/ExcelData/");
-                    ViewState["FileName"] = string.Empty;
-                    string filename = FuBrowse.FileName.ToString();
-                    string Extension = Path.GetExtension(filename);
-                    string Filepath = Server.MapPath("~/ExcelData/" + filename);
-                    CreateBlobContainer(blob_ContainerName);
-                    if (filename.Contains(".xls") || filename.Contains(".xlsx"))
-                    {
-                        ViewState["FileName"] = filename;
-                        //FuBrowse.SaveAs(path + filename + ".xls");
-                        //FuBrowse.SaveAs(path + filename);
-                        FuBrowse.SaveAs(path + filename);// To save file in code folder to validate marks.
-
-                        //DataTable dt = AL.Blob_GetAllBlobs(blob_ConStr, blob_ContainerName);
-                        //gdvBlobs.DataSource = dt;
-                        //gdvBlobs.DataBind();                  
-
-
-                        if (!CheckFormatAndImport(Extension, Filepath, "yes"))
-                        {
-                            File.Delete(Filepath); // To delete file from code folder after saved file in blob storage
-                        }
-                        else
-                        {
-                            int retval = Blob_Upload(blob_ConStr, blob_ContainerName, filename, FuBrowse);
-                            if (retval == 0)
-                            {
-                            }
-                            else
-                            {
-                                File.Delete(Filepath); // To delete file from code folder after saved file in blob storage
-                            }
-                            ShowStudents();
-                            pnlUP.Visible = false;
-                            objCommon.DisplayMessage(updpanle1, "Mark Entry Uploaded Successfully !", this);
-                        }
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(updpanle1, "Only Excel Sheet is Allowed!", this);
-                        return;
-                    }
-
-                }
-
-                else
-                {
-                    objCommon.DisplayMessage(updpanle1, "Select File to Upload!!!", this);
-                    return;
-                }
-            }
-            else
-            {
-                objCommon.DisplayMessage(updpanle1, "Please Select SubExam!!!", this);
-                return;
-            }
-
-        }
-
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(this.Page, " ACADEMIC_StudentFileUpload->" + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
-        }
-    }
-    private bool CheckFormatAndImport(string Extension, string FilePath, string isHDR)  //bool
-    {
-        string filename = ViewState["FileName"].ToString();
-        Exam objExam = new Exam();
-        string conStr = "";
-        switch (Extension)
-        {
-            case ".xls": //Excel 97-03
-                conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
-                break;
-            case ".xlsx": //Excel 07
-                conStr = ConfigurationManager.ConnectionStrings["Excel07+ConString"].ConnectionString;
-                break;
-        }
-
-        conStr = String.Format(conStr, FilePath);
-
-        string Message = string.Empty;
-        int count = 0;
-        OleDbConnection connExcel = new OleDbConnection(conStr);
-        try
-        {
-
-            OleDbCommand cmdExcel = new OleDbCommand();
-            OleDbDataAdapter oda = new OleDbDataAdapter();
-            DataSet ds = null;
-            DataTable dt = new DataTable();
-            cmdExcel.Connection = connExcel;
-            //Get the name of First Sheet
-            connExcel.Open();
-
-            DataTable dtExcelSchema;
-            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-
-            string SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-            connExcel.Close();
-            //Read Data from First Sheet
-            connExcel.Open();
-            cmdExcel.CommandText = "SELECT * From [" + SheetName + "]";
-            oda.SelectCommand = cmdExcel;
-            oda.Fill(dt);
-
-            //Check for lock and null marks
-            if (CheckExcelMarks(0, dt) == false)
-            {
-                return false;
-            }
-            else
-            {
-                SaveExcelMarks(0, dt, Convert.ToInt32(ViewState["Semester"].ToString()));            //04082022
-                return true;
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Please Check if the data is saved in sheet1 of the file you are uploading or the file is in correct format!! ACADEMIC_StudentFileUpload->" + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(this.Page, "Server UnAvailable");
-            return false;
-        }
-        finally
-        {
-            connExcel.Close();
-            connExcel.Dispose();
-        }
-    }
-    protected void CreateBlobContainer(string Name)
-    {
-
-        //Get the reference of the Storage Account
-        CloudStorageAccount storageaccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString());
-        //Get the reference of the Storage Blob
-
-        CloudBlobClient client = storageaccount.CreateCloudBlobClient();
-
-        //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
-        CloudBlobContainer container = client.GetContainerReference(Name);
-        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-        container.CreateIfNotExists();
-    }
-
-    private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
-    {
-        CloudStorageAccount account = CloudStorageAccount.Parse(ConStr);
-        CloudBlobClient client = account.CreateCloudBlobClient();
-        CloudBlobContainer container = client.GetContainerReference(ContainerName);
-        return container;
-    }
-
-    public void DeleteIFExits(string FileName)
-    {
-        CloudBlobContainer container = Blob_Connection(blob_ConStr, blob_ContainerName);
-        string FN = Path.GetFileNameWithoutExtension(FileName);
-        try
-        {
-            Parallel.ForEach(container.ListBlobs(FN, true), y =>
-            {
-                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-                ((CloudBlockBlob)y).DeleteIfExists();
-            });
-        }
-        catch (Exception)
-        {
-        }
-    }
-
-    public int Blob_Upload(string ConStr, string ContainerName, string DocName, FileUpload FU)
-    {
-        CloudBlobContainer container = Blob_Connection(ConStr, ContainerName);
-        int retval = 1;
-        string Ext = Path.GetExtension(FU.FileName);
-        string FileName = DocName;
-        try
-        {
-            DeleteIFExits(FileName);
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
-
-            CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
-            cblob.UploadFromStream(FU.PostedFile.InputStream);
-        }
-        catch
-        {
-            retval = 0;
-            return retval;
-        }
-        return retval;
-    }
-
-    private bool CheckExcelMarks(int lock_status, DataTable dt)
-    {
-        bool flag = true;
-        try
-        {
-            Label lbl;
-            TextBox txt;
-            string marks = string.Empty;
-            string maxMarks = string.Empty;
-            DataColumnCollection columns = dt.Columns;
-            if (columns.Contains("MARKS"))
-            {
-                for (int j = 13; j < dt.Columns.Count; j++)    //columns
-                {
-                    for (int i = 0; i < dt.Rows.Count; i++)   //rows 
-                    {
-
-                        //if (gvStudent.Columns[j].Visible == true)
-                        //{
-                        if (j == 13) // MARKS
-                        {
-                            //lbl = gvStudent.Rows[i].Cells[j].FindControl("lblMarks") as Label;      //Max Marks 
-                            //txt = gvStudent.Rows[i].Cells[j].FindControl("txtMarks") as TextBox;    //Marks Entered 
-                            //maxMarks = maxMarks.Trim();
-                            //marks = dt.Rows[i]["MARKS"].ToString();
-                            maxMarks = dt.Rows[i]["MAXMARK"].ToString();
-                            marks = dt.Rows[i]["MARKS"].ToString();
-                            if (!marks.Equals(string.Empty) && !maxMarks.Equals(string.Empty))
-                            {
-                                if (marks == "")
-                                {
-                                    if (lock_status == 1)
-                                    {
-                                        objCommon.DisplayMessage(updpanle1, "Marks Entry Not Completed!! Please Enter the Marks for all Students.", this.Page);
-                                        //ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
-
-                                        flag = false;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    //Check for Marks entered greater than Max Marks
-                                    if (Convert.ToDouble(marks) > Convert.ToDouble(maxMarks))
-                                    {
-
-                                        if (Convert.ToDouble(marks) != 902 && Convert.ToDouble(marks) != 903 && Convert.ToDouble(marks) != 904 && Convert.ToDouble(marks) != 905 && Convert.ToDouble(marks) != 906)
-                                        {
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero). Only -1, -2, -3 and -4 are allowed.");
-
-                                            flag = false;
-                                            break;
-                                        }
-                                    }
-                                    else if (Convert.ToDouble(marks) < 0)
-                                    {
-                                        //Note : 401 for Absent and Not Eligible
-                                        if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
-                                        {
-                                        }
-                                        else
-                                        {
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero). Only -1, -2, -3 and -4 are allowed.");
-
-                                            flag = false;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                ////Check for Marks entered greater than Max Marks
-                                //if (Convert.ToInt16(marks) > Convert.ToInt16(maxMarks))
-                                //{
-                                //    //Note : 401 for Absent; 402 for Debar; 403 for Copy Case 
-                                //    if (Convert.ToInt16(marks) == 401 || Convert.ToInt16(marks) == 402 || Convert.ToInt16(marks) == 403)
-                                //    {
-                                //    }
-                                //    else
-                                //    {
-                                //        ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "]");
-                                //        txt.Focus();
-                                //        flag = false;
-                                //        break;
-                                //    }
-                                //}
-                            }
-                            else
-                            {
-
-                                //if (lock_status == 1)
-                                //{
-
-                                ShowMessage("Marks Entry Not Completed!! Please Enter the Marks for all Students.");
-                                flag = false;
-                                break;
-                                //}
-
-                            }
-                        }
-                        //}
-                        if (flag == false)
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                ShowMessage("Invalid Excel File !!");
-                flag = false;
-
-            }
-
-
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Academic_MarkEntry.CheckMarks --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-        return flag;
-    }
-    private void SaveExcelMarks(int lock_status, DataTable dt, int semno)
-    {
-        try
-        {
-            string examtype = string.Empty;
-            string subExam = string.Empty;
-            CustomStatus cs = CustomStatus.Error;
-            CustomStatus log = CustomStatus.Error;
-            string file_name = ViewState["FileName"].ToString();
-
-            //check for if any exams on
-            if (ddlExam.SelectedIndex > 0)
-            {
-                //subExam = objCommon.LookUp("ACD_SUBEXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "SUBEXAMNO=" + ddlExam.SelectedValue + "");   //
-                //subExam = objCommon.LookUp("ACD_SUBEXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "SUBEXAMNO=" + ViewState["examNo"].ToString() + "");
-                subExam = objCommon.LookUp("ACD_SUBEXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "EXAMNO=" + ViewState["examNo"].ToString() + "AND FLDNAME='" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[0] + "'");
-
-                string studids = string.Empty;
-                string marks = string.Empty;
-
-                MarksEntryController objMarksEntry = new MarksEntryController();
-                Label lbl;
-                TextBox txtMarks;
-
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                //Note : -100 for Marks will be converted as NULL           
-                //NULL means mark entry not done.                           
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    studids += dt.Rows[i]["IDNO"].ToString() + ",";
-                    marks += dt.Rows[i]["MARKS"].ToString() == string.Empty ? "-100," : dt.Rows[i]["MARKS"].ToString() + ",";
-                }
-                int sectionno = Convert.ToInt32(hdfSection.Value);
-                int courseno = Convert.ToInt32(lblCourse.ToolTip);
-                string[] course = lblCourse.Text.Split('~');
-                string ccode = course[0].Trim();
-
-
-
-                if (ddlExam.SelectedValue.StartsWith("S"))
-                    examtype = "S";
-                else if (ddlExam.SelectedValue.StartsWith("E"))
-                    examtype = "E";
-                // examtype = "S";-- comment by gaurav 14_02_2023
-
-                //return;
-                if (!string.IsNullOrEmpty(studids))
-                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryForSubExam(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype);
-
-                ///TO SAVE BLOG LOG//////////////
-                log = (CustomStatus)objMarksEntry.InsertMarkEntryBlobLog(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, file_name);
-                //////////////
-
-                if (cs.Equals(CustomStatus.RecordSaved))
-                {
-                    if (lock_status == 1)
-                    {
-                        objCommon.DisplayMessage(updpanle1, "Marks Locked Successfully!!!", this.Page);
-                        objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                        ShowStudents();
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(updpanle1, "Marks Saved Successfully.", this.Page);
-                        objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                        ShowStudents();
-                    }
-                }
-                else
-                    objCommon.DisplayMessage("Error in Saving Marks!", this.Page);
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_PracticalMarkEntry.SaveAndLock --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-    }
-
-    #region not in used
-    private void SaveExcelData()
-    {
-        try
-        {
-            CustomStatus cs = CustomStatus.Error;
-            string examtype = string.Empty;
-            string subExam = string.Empty;
-            //excelname = Session["username"].ToString() + '_' + ddlSession.SelectedItem.Text + '_' + ViewState["CCODE"].ToString() + '_' + ddlExam.SelectedItem.Text + "_" + ddlSubExam.SelectedItem.Text + "_" + DateTime.Now.ToString("dd-MM-yyyy");
-            string userfullname = Session["username"].ToString();
-            int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-            int courseno = Convert.ToInt32(lblCourse.ToolTip);
-            string[] course = lblCourse.Text.Split('~');
-            string ccode = course[0].Trim();
-            int exam = Convert.ToInt32(ViewState["ExamNo"]);
-            int user = Convert.ToInt32(Session["userno"]);
-            string ipaddress = ViewState["ipAddress"].ToString();
-            int subtype = Convert.ToInt16(ddlSubjectType.SelectedValue);
-            string filename = ViewState["FileName"].ToString();
-            int sectionno = Convert.ToInt32(hdfSection.Value);
-            if (ddlExam.SelectedIndex > 0)
-            {
-                // subExam = objCommon.LookUp("ACD_SUBEXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "SUBEXAMNO=" + ViewState["examNo"].ToString() + "");
-                subExam = objCommon.LookUp("ACD_SUBEXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "EXAMNO=" + ViewState["examNo"].ToString() + "AND FLDNAME='" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[0] + "'");
-            }
-            else
-            {
-            }
-            if (!string.IsNullOrEmpty(filename))
-                // cs = (CustomStatus)objMarksEntry.UpdateMarkEntryForSubExam(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["ExamNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype);
-
-                if (cs.Equals(CustomStatus.RecordSaved))
-                {
-                    objCommon.DisplayMessage(updpanle1, "Marks Locked Successfully!!!", this.Page);
-                }
-                else
-                {
-                    objCommon.DisplayMessage(updpanle1, "Marks Saved Successfully.", this.Page);
-                }
-
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_PracticalMarkEntry.SaveAndLock --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-
-    }
-    #endregion
-
-    protected void btnCancel1_Click(object sender, EventArgs e)
-    {
-        pnlUP.Visible = false;                      //Added by Sachin A on 16082022
-    }
-
-    #endregion
-
-    //Added by Gaurav dt on 12092022 for to check mark entry lock status
-
-    #region For JECRC Check For EndSem Mark Entry Done Or not
-    private int GetStatusForMarkEntry()
-    {
-        int ret = 0;
-        int courseno = Convert.ToInt32(ViewState["COURSENO"]);
-        //ViewState["Semester"] = string.Empty;
-        DataSet ds = objMarksEntry.GetCourse_MarksEntryStatusForMArkEntry(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue), courseno);
-
-
-        int lockcount = 0;
-
-        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-        {
-            if (Convert.ToInt32(ds.Tables[0].Rows[i]["LOCKSTATUS"]) == 1)
-            {
-                lockcount++;
-            }
-        }
-
-        if (lockcount == 1 || lockcount == 0)
-        {
-
-            objUCommon.DisplayMessage(this.pnlSelection, "FIRST COMPLETE YOUE INTERNAL COMPONENT MARKS ENTRY..!!!", this);
-            ret = 1;
-
-        }
-        return ret;
-
-    }
-    #endregion
-
-    protected void BindCourse()
-    {
-        ddlcourse.Items.Clear();
-        ddlcourse.Items.Add(new ListItem("Please Select", "0"));
-        if (Div_ExamNameList.Visible == true)
-        {
-            //objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.CCODE   = C.CCODE )  ", "DISTINCT R.COURSENO", "C.COURSE_NAME", " SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND C.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");
-            objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.COURSENO  = C.COURSENO )  ", "DISTINCT R.COURSENO", "C.COURSE_NAME", " SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND R.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");        
-        }
-    }
-
-    protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlcourse.SelectedIndex > 0)
-        {
-            foreach (RepeaterItem row in rptExamName.Items)
-            {
-                HiddenField hdn = row.FindControl("hdnfld_courseno") as HiddenField;
-                if (hdn.Value == ddlcourse.SelectedValue)
-                {
-                    row.Visible = true;
-                }
-                else
-                {
-                    row.Visible = false;
-                }
-            }
-        }
-        else
-        {
-            foreach (RepeaterItem row in rptExamName.Items)
-            {
-                row.Visible = true;
-            }
-        }
-    }
-
-
 }
+
 

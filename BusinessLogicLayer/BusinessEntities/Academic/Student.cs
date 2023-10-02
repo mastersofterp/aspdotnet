@@ -414,6 +414,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
 
         // Added by Shrikant Waghmare on  24-08-2023
         private int _academicyearno = 0;
+
+        // Added by Shrikant Waghmare on 23-09-2023
+        private string _casteName = string.Empty;
+
+        //Added by Shrikant Waghmare on 26-09-2023
+        private int _motherAnnualIncome = 0;
+
         //methods
 
 
@@ -2415,6 +2422,20 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
          {
              get { return _academicyearno; }
              set { _academicyearno = value; }
+         }
+
+         // Added By Shrikant W. on 23-09-2023
+         public string CasteName
+         {
+             get { return _casteName; }
+             set { _casteName = value; }
+         }
+
+         // Added By Shrikant W. on 26-09-2023
+         public int MotherAnnualIncome
+         {
+             get { return _motherAnnualIncome; }
+             set { _motherAnnualIncome = value; }
          }
         
     }

@@ -93,7 +93,7 @@
 
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-lg-10 col-md-9 col-12">
+                                    <div class="col-lg-10 col-md-10 col-12">
                                         <div class="row">
 
                                             <div class="form-group col-md-2 ">
@@ -151,6 +151,7 @@
                                                 </div>
 
                                             </div>
+
 
                                         </div>
 
@@ -316,10 +317,10 @@
                                                 </div>
                                             </div>
 
-                                             <div class="form-group col-lg-2 col-md-6 col-12">
-                                              <span class="pr-5">
-                                                  <label for="chk_grade_faculty" style="font-size: small;">Grade Allotment From Faculty End </label>
-                                              </span>
+                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                                <span class="pr-5">
+                                                    <label for="chk_grade_faculty" style="font-size: small;">Grade Allotment From Faculty End </label>
+                                                </span>
                                             </div>
                                             <div class="form-group  col-md-2 ">
                                                 <div class="custom-control custom-switch">
@@ -331,7 +332,7 @@
 
                                         </div>
 
-                                         <div class="row">
+                                        <div class="row">
                                             <div class="form-group col-lg-2 col-md-6 col-12">
                                                 <span class="pr-5">
                                                     <label for="chk_grade_admin" style="font-size: small;">Grade Allotment From Admin End</label>
@@ -357,19 +358,95 @@
                                                 </div>
                                             </div>
 
-                                             <div class="form-group col-lg-2 col-md-6 col-12">
-                                              <span class="pr-5">
-                                                  <label for="chk_chgrange" style="font-size: small;">Change Grade Range</label>
-                                              </span>
+                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                                <span class="pr-5">
+                                                    <label for="chk_chgrange" style="font-size: small;">Change Grade Range</label>
+                                                </span>
                                             </div>
                                             <div class="form-group  col-md-2 ">
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input" id="chk_chgrange">
                                                     <label class="custom-control-label" for="chk_chgrange"></label>
                                                     <asp:HiddenField ID="hdfrange" runat="server" ClientIDMode="Static" />
+
                                                 </div>
                                             </div>
+
+                                              <%-------------------edit---------------------%>
+                                            
+                                                <div class="form-group col-lg-2 col-md-6 col-12 ">
+                                                    <span class="pr-5">
+                                                        <label for="chk_college" style="font-size: small;">College</label>
+                                                    </span>
+                                                </div>
+
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chk_college">
+                                                        <label class="custom-control-label" for="chk_college"></label>
+                                                        <asp:HiddenField ID="hdfcollege" runat="server" ClientIDMode="Static" />
+                                                        
+                                                    </div>
+                                                </div>
+                                                   
+                                                 <div class="form-group col-lg-2 ">
+                                                    <span class="pr-5">
+                                                        <label for="chk_session" style="font-size: small;">Session</label>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chk_session">
+                                                        <label class="custom-control-label" for="chk_session"></label>
+                                                        <asp:HiddenField ID="hdfsession" runat="server" ClientIDMode="Static" />
+                                                    </div>
+                                                </div>
+
+                                             <div class="form-group col-lg-2 ">
+                                                    <span class="pr-5">
+                                                        <label for="chk_feescollection" style="font-size: small;">Academic Fees Collection</label>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chk_feescollection">
+                                                        <label class="custom-control-label" for="chk_feescollection"></label>
+                                                        <asp:HiddenField ID="hdffeescollection" runat="server" ClientIDMode="Static" />
+                                                    </div>
+                                                </div>
+
+                                             <div class="form-group col-lg-2 ">
+                                                    <span class="pr-5">
+                                                        <label for="chk_relative" style="font-size: small;">Relative</label>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chk_relative">
+                                                        <label class="custom-control-label" for="chk_relative"></label>
+                                                        <asp:HiddenField ID="hdfrelative" runat="server" ClientIDMode="Static" />
+                                                    </div>
+                                                </div>
+                                             <div class="form-group col-lg-2 ">
+                                                    <span class="pr-5">
+                                                        <label for="chk_absolute" style="font-size: small;">Absolute</label>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input" id="chk_absolute">
+                                                        <label class="custom-control-label" for="chk_absolute"></label>
+                                                        <asp:HiddenField ID="hdfabsolute" runat="server" ClientIDMode="Static" />
+                                                    </div>
+                                                </div>
+                                                    </div>
+                                              
+                                             
                                         </div>
+                                       
+                                              
+                                          
+
                                     </div>
                                 </div>
                             </div>
@@ -448,7 +525,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            
 
         </ContentTemplate>
         <Triggers>
@@ -501,6 +578,12 @@
             var gradefaculty = document.getElementById("chk_grade_faculty");
             var graph = document.getElementById("chkGraph");
             var GradeRange = document.getElementById("chk_chgrange");
+            var college = document.getElementById("chk_college");
+            var session = document.getElementById("chk_session");
+            var feescollection = document.getElementById("chk_feescollection");
+            var relative = document.getElementById("chk_relative");
+            var absolute = document.getElementById("chk_absolute");
+
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -580,9 +663,25 @@
             if (GradeRange.checked) {
                 $('#hdfrange').val(true);
             }
+            if (college.checked)
+            {
+                $('#hdfcollege').val(true);
+            }
+            if (session.checked) {
+                $('#hdfsession').val(true);
+            }
+            if (feescollection.checked) {
+                $('#hdffeescollection').val(true);
+            }
+            if (relative.checked) {
+                $('#hdfrelative').val(true)
+            }
+            if (absolute.checked) {
+                $('#hdfabsolute').val(true)
+            }
         }
-        
-     
+
+
     </script>
     <script>
         function setrule(val) {

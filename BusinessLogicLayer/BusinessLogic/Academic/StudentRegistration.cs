@@ -6867,6 +6867,48 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //added by shubham for convocation registration page
+        public int AddConvocationRegistrationDetails(StudentRegist objSR, string Amt, string order_id, int semesterno)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                //Add New Convocation Registered Details
+                objParams = new SqlParameter[11];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                objParams[3] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[4] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                objParams[5] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[6] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                objParams[7] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[8] = new SqlParameter("@P_FEES", Amt);
+                objParams[9] = new SqlParameter("@P_ORDER_ID", order_id);
+                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_CONVOCATION_REGISTRATION_CREATE_DEMAND_FOR_STUDENT ", objParams, true);
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
+
 
     }
 }

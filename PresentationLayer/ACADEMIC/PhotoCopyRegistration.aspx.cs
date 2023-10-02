@@ -94,8 +94,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 ViewState["action"] = "add";
                 ViewState["idno"] = "0";
 
-
-                //ViewState["sessionno"] = "41";   //Added for test dt on 08092023
+                 
 
                 //Check for Activity On/Off for Reval registration.
                 if (Session["usertype"].ToString() == "2")
@@ -634,7 +633,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     //#endregion
 
                     #region TOTALAMOUNT
-                    string TOTALAMOUNT = string.Empty;
+                    string TOTALAMOUNT = "0";
                     string sp_proc = "PKG_ACD_GET_EXAM_REG_AMOUNT";
                     string sp_para = "@P_UA_NO,@P_SESSIONNO,@P_SEMESTERNO,@P_IDNO,@P_DEGREENO,@P_PAGE_LINK,@P_STATUS";
                     string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + sessionno + "," + Convert.ToString(Session["semester_reg"]) + "," + Convert.ToInt32(ViewState["idno"]) + "," + hfDegreeNo.Value + "," + Request.QueryString["pageno"].ToString() + "," + 3 + "";   //Status 3 for Photocopy registered courses fee  
@@ -645,6 +644,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     {
                         TOTALAMOUNT = dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString() == null ? "0" : dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString();
                     }
+                    //ViewState["Exam_Amout"] = TOTALAMOUNT;
                     #endregion
 
                     divTotalCourseAmount.Visible = true;
@@ -876,6 +876,13 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 objCommon.DisplayMessage(updDetails, "Please Select At least One Subject from list!!", this.Page);
                 return;
             }
+
+            if (lblTotalAmount.Text == string.Empty || lblTotalAmount.Text == "0")
+            {
+                objCommon.DisplayMessage(updDetails, "Exam Fee not defined!!", this.Page);
+                return;
+            } 
+
 
             foreach (ListViewDataItem dataitem in lvCurrentSubjects.Items)
             {
@@ -1169,6 +1176,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         {
             PhotoCopy_Amt = Convert.ToDecimal(dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString()) == null ? 0 : Convert.ToDecimal(dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString());
         }
+
 
     }
 
@@ -2331,6 +2339,11 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 btnPaymentReport.Visible = true;
                 return;
             }
+            //if (lblTotalAmount.Text == string.Empty || Convert.ToString(ViewState["Exam_Amout"]) == "0")
+            //{
+            //    objCommon.DisplayMessage(updDetails, "Exam Fee not defined!!", this.Page);
+            //    return;
+            //}
 
             int result = 0;
             int logStatus = 0;
@@ -2346,7 +2359,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(updDetails, "You are not eligible for Fee Payment !", this);
                 return;
-            }
+            } 
 
             objStudentFees.UserNo = Convert.ToInt32(ViewState["idno"]);
             objStudentFees.Amount = Convert.ToDouble(ViewState["Final_Amt"]);

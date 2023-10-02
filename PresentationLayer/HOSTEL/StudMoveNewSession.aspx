@@ -19,7 +19,7 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
-                                    <label>Current Session </label>
+                                    <label>Old Session </label>
                                 </div>
                                <asp:DropDownList ID="ddlCurSession" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1">
                          </asp:DropDownList>

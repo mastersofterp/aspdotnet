@@ -31,6 +31,7 @@ public partial class ACADEMIC_StudentAchievement_Create_Eventaspx : System.Web.U
     string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
     string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName_CLUB"].ToString();
 
+
     int createeventid = 0;
 
 
@@ -895,7 +896,7 @@ public partial class ACADEMIC_StudentAchievement_Create_Eventaspx : System.Web.U
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 BindListView();
-                objCommon.DisplayMessage(this, "Record Updated sucessfully", this.Page);
+                objCommon.DisplayMessage(this, "Record Updated Successfully", this.Page);
                 ClearCreateEventData();
             }
         }

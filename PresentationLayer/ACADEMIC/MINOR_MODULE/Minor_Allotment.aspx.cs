@@ -323,7 +323,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
                         {
                             if (items.Selected == true)
                             {
-                                minorlst += items.Value + ',';
+                                minorlst = items.Value + ',';
                             }
                         }
                         minorlst = minorlst.Substring(0, minorlst.Length - 1);

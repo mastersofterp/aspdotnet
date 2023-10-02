@@ -14,14 +14,17 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
+using ClosedXML.Excel;
+using System.IO;
 
 
 
 public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
 {
+    string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
-   // StudentController objSC = new StudentController();
+    // StudentController objSC = new StudentController();
     ClubController OBJCLUB = new ClubController();
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -61,10 +64,10 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
         divMsg.InnerHtml = string.Empty;
     }
 
-     private void populateDropDown()
+    private void populateDropDown()
     {
         objCommon.FillDropDownList(ddlIncharge, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (1,2)", "UA_NO");
- 
+
     }
     private void BindListView()
     {
@@ -124,7 +127,7 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
             int InchargeNo = Convert.ToInt32(ddlIncharge.SelectedValue);
             string Email = string.Empty;
             int Active = 0;
-            string Regno =string.Empty;
+            string Regno = string.Empty;
             Typeofactivity = txttypeactivity.Text;
             Email = txtemail.Text;
             Regno = txtregno.Text;
@@ -140,7 +143,7 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
             {
                 Active = 0;
             }*/
-            
+
             if (hfdActiveClub.Value == "true")
             {
                 Active = 1;
@@ -175,7 +178,7 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
                 if (ViewState["action"].ToString().Equals("add"))
                 {
 
-                    CustomStatus cs = (CustomStatus)OBJCLUB.AddClubData(Typeofactivity,InchargeNo, Email, Regno, Active, CREATED_BY, ipAddress, organizationid);
+                    CustomStatus cs = (CustomStatus)OBJCLUB.AddClubData(Typeofactivity, InchargeNo, Email, Regno, Active, CREATED_BY, ipAddress, organizationid);
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         ViewState["action"] = "add";
@@ -195,7 +198,7 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
                     if (ViewState["CLUBNO"] != null)
                     {
                         CLUBNO = Convert.ToInt32(ViewState["CLUBNO"].ToString());
-                        CustomStatus cs = (CustomStatus)OBJCLUB.UpdateClubData(CLUBNO, Typeofactivity,InchargeNo, Email, Regno, Active, CREATED_BY, ipAddress, organizationid);
+                        CustomStatus cs = (CustomStatus)OBJCLUB.UpdateClubData(CLUBNO, Typeofactivity, InchargeNo, Email, Regno, Active, CREATED_BY, ipAddress, organizationid);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
                             ViewState["action"] = null;
@@ -242,7 +245,7 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
         ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActiveClub(true);", true);
 
         txtregno.Text = string.Empty;
-       
+
     }
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
@@ -267,11 +270,11 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
             }*/
 
             if (Active == 1)
-            {               
-                ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActiveClub(true);", true);                
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActiveClub(true);", true);
             }
             else
-            {                
+            {
                 ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActiveClub(false);", true);
             }
 
@@ -293,4 +296,148 @@ public partial class ACADEMIC_ClubActivityMaster : System.Web.UI.Page
     //        objCommon.DisplayMessage(this.Page, "Maximum limit of one acitivty registration is 500", this.Page);
     //    }
     //}
+
+
+    public DataSet GetClubStudentListDeatils()
+    {
+        DataSet ds = null;
+
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = new SqlParameter[0];
+
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CLUB_REGISTERED_STUDENT_LIST_REPORT", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetAllSubModuleDetails-> " + ex.ToString());
+        }
+
+        return ds;
+    }
+
+    public DataSet GetClubActivityRegistration()
+    {
+        DataSet ds = null;
+
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = new SqlParameter[0];
+
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_CLUB_ACTIVITY_REGISTRATION_REPORT", objParams);
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetAllSubModuleDetails-> " + ex.ToString());
+        }
+
+        return ds;
+    }
+
+
+    protected void btnExport_Click(object sender, EventArgs e)
+    {
+        // DataSet ds = OBJCLUB.GetClubStudentListDeatils();
+        try
+        {
+        DataSet ds = GetClubStudentListDeatils();
+
+        ds.Tables[0].TableName = "Detailed Reports";
+        ds.Tables[1].TableName = "Summary Reports";
+
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                foreach (System.Data.DataTable dt in ds.Tables)
+                {
+                    //Add System.Data.DataTable as Worksheet.
+                    wb.Worksheets.Add(dt);
+                }
+
+                //Export the Excel file.
+                Response.Clear();
+                Response.Buffer = true;
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;filename=Club_Registered_Student_List.xlsx");
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(Response.OutputStream);
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+        }
+
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "No Data Available To Export !!", this.Page);
+        }
+            
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ClubMaster.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
 }
+
+
+
+    protected void btnExportR_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            DataSet ds = GetClubActivityRegistration();
+
+            ds.Tables[0].TableName = "Detailed Reports";
+            ds.Tables[1].TableName = "Summary Reports";
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in ds.Tables)
+                    {
+                        //Add System.Data.DataTable as Worksheet.
+                        wb.Worksheets.Add(dt);
+                    }
+
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=Club_Activity_Registration_Report.xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Available To Export !!", this.Page);
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ClubMaster.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+}
+    
+

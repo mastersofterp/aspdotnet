@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="ModifyAdmissionInfo.aspx.cs" Inherits="ACADEMIC_ModifyAdmissionInfo" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" ViewStateEncryptionMode="Always" EnableViewStateMac="true" CodeFile="ModifyAdmissionInfo.aspx.cs" Inherits="ACADEMIC_ModifyAdmissionInfo" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 

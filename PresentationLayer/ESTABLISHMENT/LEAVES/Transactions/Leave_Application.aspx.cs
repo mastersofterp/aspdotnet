@@ -3464,6 +3464,21 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             }
                             //==========================end for Leave prefix and suffix========================================//
                             ///
+                            //Added By Piyush Thakre on 25-09-2023//
+                            #region LeaveContinution_Val
+
+                            bool IsNotContinuationLeave = Convert.ToBoolean(objCommon.LookUp("PAYROLL_LEAVE_REF", "ISNULL(IsNotAllowLeaveinCont,0)as IsNotAllowLeaveinCont", ""));
+                            if (IsNotContinuationLeave == true && rblleavetype.SelectedIndex == 0)
+                            {
+
+                                if (!ValidIscontleave())
+                                {
+                                    return;
+                                }
+                            }
+
+                            #endregion
+                            //=============================//
                         }
                     }
                 }
@@ -4540,6 +4555,61 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
             Response.Write(ex.Message);
         }
 
+    }
+
+    private bool ValidIscontleave()
+    {
+        DataSet LeaveValid;
+        string leavedate = string.Empty;
+        DateTime validdate;
+        int letrno;
+        try
+        {
+            if (txtFromdt.Text.ToString() != string.Empty && txtFromdt.Text.ToString() != "__/__/____")
+            {
+                if (ViewState["action"].ToString().Equals("edit"))
+                {
+                    letrno = Convert.ToInt32(ViewState["letrno"]);
+                }
+                else
+                {
+                    letrno = 0;
+                }
+                int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
+                LeaveValid = objApp.CheckIsLeaveCont(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), Convert.ToDateTime(txtJoindt.Text), stno, Convert.ToInt32(Session["idno"]), letrno);
+                if (LeaveValid.Tables[0].Rows.Count > 0)
+                {
+                    leavedate = Convert.ToString(LeaveValid.Tables[0].Rows[0]["Validdate"]);
+                    ViewState["Validleave"] = leavedate;
+                    // validdate= LeaveValid.Tables[0].Rows[0]["VALIDDATE"].ToString();
+
+                    if (leavedate != null)
+                    {
+                        MessageBox("Leave Can not Apply Continuously");
+                        btnSave.Enabled = false;
+                        return false;
+                    }
+                    else
+                    {
+                        //txtFromdt.Text = LeaveValid.Tables[0].Rows[0]["Validdate"].ToString();
+                    }
+                }
+
+            }
+            else
+            {
+                btnSave.Enabled = false;
+                return false;
+
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+        return true;
     }
 
       
