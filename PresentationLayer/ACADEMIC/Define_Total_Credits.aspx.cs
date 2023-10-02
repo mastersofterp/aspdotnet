@@ -971,7 +971,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
                     }
                 }
 
-                ddlCollege.SelectedValue = Convert.ToString(ds.Tables[0].Rows[0]["COLLEGE_ID"]);
+              
 
                 // Above code added by Shailendra K. on dated 30.09.2023 as per T-48611
 
@@ -1137,14 +1137,14 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddlCollege.SelectedIndex > 0)
-        {
-            objCommon.FillListBox(lstbxSession, "ACD_SCHEME A INNER JOIN ACD_COLLEGE_SCHEME_MAPPING M ON A.SCHEMENO=M.SCHEMENO ", "DISTINCT A.SCHEMENO", "A.SCHEMENAME", "A.SCHEMENO>0 AND M.COLLEGE_ID=" + Convert.ToInt16(ddlCollege.SelectedValue), "A.SCHEMENO"); // Added by Rahul Moraskar
-        }
-        else
-        {
-            objCommon.DisplayMessage(this.Page, "Please Select College!!!", this.Page);
-            return;
-        }
+        //if (ddlCollege.SelectedIndex > 0)
+        //{
+        objCommon.FillListBox(lstbxSession, "ACD_SCHEME A INNER JOIN ACD_COLLEGE_SCHEME_MAPPING M ON A.SCHEMENO=M.SCHEMENO ", "DISTINCT A.SCHEMENO", "A.SCHEMENAME", "A.SCHEMENO>0 AND M.COLLEGE_ID=" + Convert.ToInt16(ddlCollege.SelectedValue), "A.SCHEMENO"); // Added by Rahul Moraskar
+        //}
+        //else
+        //{
+        //    objCommon.DisplayMessage(this.Page, "Please Select College!!!", this.Page);
+        //    return;
+        //}
     }
 }
