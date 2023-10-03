@@ -61,6 +61,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvCollege" runat="server" ControlToValidate="ddlCollege"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select College" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                    
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -73,6 +74,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Session" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                        
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -86,6 +88,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Degree" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                        
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -98,6 +101,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvBranch" runat="server" ControlToValidate="ddlBranch"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Branch" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                       
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -116,6 +120,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFilter"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Filter by Registration Status" ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                        
                                     </div>
                                     <%--<div class="form-group col-lg-6 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -131,11 +136,13 @@
                                 <asp:Button ID="btnShow" runat="server" Text="Show Students List" TabIndex="5" OnClick="btnShow_Click"
                                     ValidationGroup="Show" CssClass="btn btn-primary" />
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CssClass="btn btn-primary"
-                                    TabIndex="6" ValidationGroup="SUBMIT" OnClientClick="return showConfirm();" />
+                                    TabIndex="6" ValidationGroup="Show"  />
+                               <%-- "--%>
                                 <asp:Button ID="btnCancel" runat="server" Text="Clear" TabIndex="7" OnClick="btnCancel_Click"
                                     CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="valSummery2" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
+                                 
                             </div>
                             <div class="col-12" id="tblInfo" runat="server">
                                  <div class="row">
