@@ -92,7 +92,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     this.GetExamWiseDates();
                 }
-                btnPublish.Text = "Publish";
+                //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
             }
         }
         divMsg.InnerHtml = string.Empty;
@@ -336,7 +336,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
 
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        int Gd = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "isnull(GRADEPATTERN,0) as GRADEPATTERN ", "SCHEMENO='" + ViewState["SCHEMENO"] + "'")));
+        int Gd = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "ISNULL(GRADEPATTERN,0) AS GRADEPATTERN ", "SCHEMENO='" + ViewState["SCHEMENO"] + "'")));
         if (Gd == 1)
         {
             Updategradecard(0);
@@ -491,7 +491,19 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
             }
             else
             {
-                cs = (CustomStatus)objMarksEntry.UpdateMarkEntry_Grade_CC(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+
+                //cs = (CustomStatus)objMarksEntry.UpdateMarkEntry_Grade_CC(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+
+                if (examtype == "S")
+                {
+                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntry_Grade_CC(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+                }
+                else
+                {
+                    int examno = Convert.ToInt32(objCommon.LookUp("ACD_SUBEXAM_NAME", "EXAMNO", "SUBEXAMNO=" + Convert.ToInt32(Convert.ToString(subExam_Name.Split('-')[1]))));
+                    cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU_ADMIN_COMPONANT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(ViewState["SCHEMENO"]), Convert.ToInt32(hdfSection.Value), subExam_Name, examno, subExam_Name);
+                }
+
 
             }
             if (cs.Equals(CustomStatus.RecordSaved))
@@ -974,13 +986,15 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                     ////HIDE STUDENT NAME COLUMN IF MARK ENTRY IS FROM EMDSEM
                     string subexam = ddlSubExam.SelectedValue;
                     string substring = subexam.Substring(0, 1);
-                    if (substring == "E")
+                    int internalmark = Convert.ToInt32(Math.Round(Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])))));
+                    //if (substring == "E")
+                    if (substring == "E" && internalmark > 0)
                     {
                         ViewState["LOCKSTATUS"] = Convert.ToString(dsStudent.Tables[0].Rows[0]["LOCK"]);
                         if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LOCKS1"]) == 0)
                         {
                             objCommon.DisplayMessage(this.updpanle1, "Internal Grade/Mark Entry is not Done.", this.Page);
-                            return;  
+                            return;
                         }
                         gvStudent.Columns[2].Visible = false;
                     }
@@ -1014,14 +1028,21 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                         }
                         for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
                         {
-                            if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["PUBLISH"]) == true)
+                            if (!string.IsNullOrEmpty(dsStudent.Tables[0].Rows[0]["PUBLISH"].ToString()))
                             {
-                                pubcount++;
-                                btnPublish.Text = "Unpublish";
+                                if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["PUBLISH"]) == true)
+                                {
+                                    pubcount++;
+                                    //btnPublish.Text = "Unpublish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
+                                }
+                                else
+                                {
+                                    //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
+                                }
                             }
                             else
                             {
-                                btnPublish.Text = "Publish";
+                                //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
                             }
                         }
                     }
@@ -1104,7 +1125,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1  and isnull(GN.ACTIVESTATUS,0)=1 and isnull(GS.ACTIVESTATUS,0)=1 and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
                                 }
                             }
                             else if (Convert.ToBoolean(getdatestudent.Tables[0].Rows[0]["Lock"]) == true)
@@ -1112,7 +1133,10 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString());
+                                    if (Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString()) != "")
+                                    {
+                                        ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString());
+                                    }
                                     a++;
                                     ddlgrade.Enabled = false;
                                 }
@@ -1122,8 +1146,11 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
-                                    ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString());
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    if (Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString()) != "")
+                                    {
+                                        ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[a]["SGRADE"].ToString());
+                                    }
                                     a++;
                                     ddlgrade.Enabled = true;
 
@@ -1135,17 +1162,21 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1 and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
                                 }
                             }
                             int b = 0;
+
                             if (getdatestudent.Tables[0].Rows[0]["PUBLISH"] == System.DBNull.Value)
                             {
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1 and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
-                                    ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    if (Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString()) != "")
+                                    {
+                                        ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    }
                                     b++;
                                 }
 
@@ -1155,10 +1186,13 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    if (Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString()) != "")
+                                    {
+                                        ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    }
                                     b++;
-                                    ddlgrade.Enabled = false;
-                                    btnPublish.Text = "Unpublish";
+                                    //ddlgrade.Enabled = false;
+                                    //btnPublish.Text = "Unpublish"; //Commented on 30-09-2023 End sem Garde Entry Not required button
 
                                 }
 
@@ -1168,8 +1202,11 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 foreach (GridViewRow rw in gvStudent.Rows)
                                 {
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
-                                    ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    if (Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString()) != "")
+                                    {
+                                        ddlgrade.SelectedItem.Text = Convert.ToString(getdatestudent.Tables[0].Rows[b]["SGRADE"].ToString());
+                                    }
                                     b++;
                                     ddlgrade.Enabled = true;
                                     btnLock.Enabled = true;
@@ -1184,7 +1221,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                                 {
 
                                     DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                    objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1 and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                    objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
 
                                 }
                             }
@@ -1194,7 +1231,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                             foreach (GridViewRow rw in gvStudent.Rows)
                             {
                                 DropDownList ddlgrade = (DropDownList)rw.FindControl("ddlgrademarks") as DropDownList;
-                                objCommon.FillDropDownList(ddlgrade, "acd_direct_grade_system GS inner join acd_grade_new GN on GS.gradeno=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "isnull(GS.ACTIVESTATUS,0)=1 and isnull(GN.ACTIVESTATUS,0)=1  and levelno=" + Convert.ToInt32(2) + " and  schemano=" + ViewState["SCHEMENO"].ToString() + "", "");
+                                objCommon.FillDropDownList(ddlgrade, "ACD_DIRECT_GRADE_SYSTEM GS INNER JOIN ACD_GRADE_NEW GN ON GS.GRADENO=GN.GRADENO", "GS.GRADENO", "GN.GRADE", "ISNULL(GS.ACTIVESTATUS,0)=1 AND ISNULL(GN.ACTIVESTATUS,0)=1 AND LEVELNO=" + Convert.ToInt32(2) + " AND  SCHEMANO=" + ViewState["SCHEMENO"].ToString() + "", "");
                                 ddlgrade.Items.Add(new ListItem("Please select", "0"));
                                 ddlgrade.SelectedIndex = 0;
                             }
@@ -1209,8 +1246,13 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                     {
                         btnSave.Visible = true; btnLock.Visible = true;
                     }
-                    pnlSelection.Visible = false; pnlMarkEntry.Visible = true; pnlStudGrid.Visible = true; lblStudents.Visible = true;
-                    btnSave.Visible = true; btnLock.Visible = true; btnPrintReport.Visible = true; //
+                    pnlSelection.Visible = false;
+                    pnlMarkEntry.Visible = true;
+                    pnlStudGrid.Visible = true;
+                    lblStudents.Visible = true;
+                    btnSave.Visible = true;
+                    btnLock.Visible = true;
+                    btnPrintReport.Visible = true; //
                 }
                 else
                 {
@@ -1221,12 +1263,12 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     btnSave.Visible = false;
                     btnLock.Visible = false;
-                    btnPublish.Visible = true;
+                    //btnPublish.Visible = true; //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 else
                 {
-                    btnPublish.Visible = true;
-                    btnPublish.Text = "Publish";
+                    //btnPublish.Visible = true;  //Commented on 30-09-2023 End sem Garde Entry Not required button
+                    //btnPublish.Text = "Publish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
             }
         }
@@ -1497,7 +1539,7 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
         int scheme = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])));
         int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DEGREENO", "SCHEMENO=" + scheme));
         int branchno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "BRANCHNO", "SCHEMENO=" + scheme));
-        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "COLLEGE_ID", "SCHEMENO=" +scheme+ "AND DEGREENO="+degreeno+"AND BRANCHNO="+branchno));
+        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "COLLEGE_ID", "SCHEMENO=" + scheme + "AND DEGREENO=" + degreeno + "AND BRANCHNO=" + branchno));
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
@@ -2279,13 +2321,13 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Grade Publish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Unpublish";
+                    //btnPublish.Text = "Unpublish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 else
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Grade Unpublish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Publish";
+                    //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
 
                 }
                 GetDataGrade(0);
@@ -2297,14 +2339,14 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Grade Publish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Unpublish";
+                    //btnPublish.Text = "Unpublish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
 
                 }
                 else
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Grade Unpublish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Publish";
+                    //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 ShowStudents();
                 btnShow_Click(null, null);
@@ -2439,13 +2481,13 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Marks Publish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Unpublish";
+                    //btnPublish.Text = "Unpublish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 else
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Marks Unpublish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Publish";
+                    //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 btnShow_Click(null, null);
             }
@@ -2455,13 +2497,13 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Marks Publish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Unpublish";
+                    //btnPublish.Text = "Unpublish";    //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 else
                 {
                     objCommon.DisplayMessage(this.updpanle1, "Marks Unpublish Successfully!!!", this.Page);
                     objCommon.RecordActivity(int.Parse(Session["loginid"].ToString()), int.Parse(Request.QueryString["pageno"].ToString()), 2);
-                    btnPublish.Text = "Publish";
+                    //btnPublish.Text = "Publish";  //Commented on 30-09-2023 End sem Garde Entry Not required button
                 }
                 btnShow_Click(null, null);
             }
