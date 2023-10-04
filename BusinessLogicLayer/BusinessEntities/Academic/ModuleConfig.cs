@@ -12,6 +12,7 @@ namespace IITMS
             {
                 private string _fieldName = string.Empty;
                 private int _configid = 0; // 
+                private string _OUTSTANDING_MESSAGE = string.Empty;
 
                 public bool RegnoGenFeeCollection
                 {
@@ -121,6 +122,23 @@ namespace IITMS
                 {
                     get;
                     set;
+                }
+
+                public bool OUTSTANDING_FEECOLLECTION
+                {
+                    get;
+                    set;
+                }
+                public string OUTSTANDING_MESSAGE
+                {
+                    get
+                    {
+                        return _OUTSTANDING_MESSAGE;
+                    }
+                    set
+                    {
+                        _OUTSTANDING_MESSAGE = value;
+                    }
                 }
             }
         }

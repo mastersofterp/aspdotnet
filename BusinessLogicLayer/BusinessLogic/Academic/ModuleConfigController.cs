@@ -23,7 +23,7 @@ namespace IITMS
                 /// <returns></returns>
                 /// //
                 /// 
-                /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related)
+                /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) 
                 public int SaveModuleConfiguration(ModuleConfig objConfig, int UANO, string IPAddress, string Mac_Address, bool trisem, bool chkoutsatnding,
                 bool sempromdemand, bool semadmissionoffbtn, bool semadmbeforesempromotion, bool semadmissionaftersempromotion, bool studReactvationlarefine,
                 bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
@@ -36,7 +36,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[50];
+                        sqlParams = new SqlParameter[52];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -88,8 +88,11 @@ namespace IITMS
                         sqlParams[47] = new SqlParameter("@P_ALLOW_CURRENT_SEM_FOR_REDO_IMPROVE_CRS_REG", AllowCurrSemForRedoImprovementCrsReg);
 
                         sqlParams[48] = new SqlParameter("@P_AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO", ModAdmInfoUserNos);
-                        sqlParams[49] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[49].Direction = ParameterDirection.Output;
+                        // Added by Gopal M 03102023 - Ticket #46419
+                        sqlParams[49] = new SqlParameter("@P_OUTSTANDING_FEECOLLECTION", objConfig.OUTSTANDING_FEECOLLECTION);
+                        sqlParams[50] = new SqlParameter("@P_OUTSTANDING_MESSAGE", objConfig.OUTSTANDING_MESSAGE);
+                        sqlParams[51] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[51].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);

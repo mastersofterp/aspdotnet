@@ -317,6 +317,35 @@
                                                         </div>
                                                     </div>
 
+                                                    <%-- New code added by -Gopal M 02102023--%>
+
+                                                     <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Outstanding Fee Collection</h5>
+                                                        </div>
+                                                    </div>
+
+                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblOutstandingFeeCollection" runat="server" Font-Bold="true">Yes,If Allow to Outstanding Fee Collection on Student Entry Page.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkOutstandingFeeCollection" name="chkOutstandingFeeCollection" />
+                                                            <label data-on="Yes" tabindex="8" data-off="No" for="chkOutstandingFeeCollection" onclick="ClickOutstandingFeeCollection(this.id);"></label>
+                                                        </div>
+                                                    </div>
+
+                                                     <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="OutstandingMessageDiv" style="display:none">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblOutstandingMessage" runat="server" Font-Bold="true">Outstanding Message</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                             <asp:TextBox ID="txtOutstandingMessage" runat="server" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
+                                                           <%-- <input type="text" id="txtOutstandingMessage" class="form-control" placeholder="Enter Outstanding Message"  />--%>
+                                                        </div>
+                                                    </div>
 
 
                                                     <div class="col-12">
@@ -1218,6 +1247,7 @@
                 <asp:HiddenField ID="hfdchkCreateRegno" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdchkcreateusernewprntentry" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdRedoImprovementCourseRegFlag" runat="server" ClientIDMode="Static" />
+                 <asp:HiddenField ID="hfchkOutstandingFeeCollection" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -2030,8 +2060,7 @@
                 dataType: "json",
                 success: function (data) {
                     debugger;
-                    var Jdata = JSON.parse(data.d);
-
+                    var Jdata = JSON.parse(data.d);                  
                     var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>" ;
                     htmlpage += "<thead class='bg-light-blue'><tr>";
                     htmlpage += "<th hidden>STUDCONFIG_ID</th>";
@@ -2044,7 +2073,7 @@
                     htmlpage += "</tr></thead><tbody>";
                         
                    
-                    var output = Jdata.map(i => 
+                    var output = Jdata.map(i =>
                     "<tr>"+
                     "<td hidden>" + i.STUDCONFIG_ID +  "</td>" +
                     "<td>" + i.CAPTION_NAME + "</td>" + 
@@ -2238,6 +2267,10 @@
             $('[id*=chkRedoImprovementCourseRegFlag]').prop('checked', val);       
         }
 
+        function CheckOnstandingFeeCollection(val) {
+            $('[id*=chkOutstandingFeeCollection]').prop('checked', val);
+        }
+
         //
         function validate() {
             $('#hfchknewstudentemail').val($('#chknewstudentemail').prop('checked'));
@@ -2273,6 +2306,8 @@
             $('#hfdchkAttTeaching').val($('#chkAttTeaching').prop('checked'));
             $('#hfdchkcreateusernewprntentry').val($('#chkcreateusernewprntentry').prop('checked'));
             $('#hfdRedoImprovementCourseRegFlag').val($('#chkRedoImprovementCourseRegFlag').prop('checked'));
+
+            $('#hfchkOutstandingFeeCollection').val($('#chkOutstandingFeeCollection').prop('checked'));
         }
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
@@ -2485,6 +2520,20 @@
             $('[id*=rdActiveStatus]').prop('checked', val);
         }
         
+    </script>
+
+    <script>
+        function ClickOutstandingFeeCollection(val)
+        {
+            var isChecked = $("#chkOutstandingFeeCollection").is(":checked");
+            if (isChecked) {
+                //$("#OutstandingMessageDiv").css("display", "none");
+                $("#<%=(OutstandingMessageDiv.ClientID)%>").hide();
+            } 
+            else {
+                $('#<%=OutstandingMessageDiv.ClientID %>').show();                
+            }
+        }
     </script>
 </asp:Content>
 
