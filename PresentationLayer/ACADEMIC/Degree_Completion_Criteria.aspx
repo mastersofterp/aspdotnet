@@ -270,11 +270,20 @@
                                                                     <asp:Label ID="lblcoursemincredit" runat="server" Text='<%# Eval("MIN_CREDITS")%>'></asp:Label></td>
 
                                                                 <td>
-                                                                    <asp:Label ID="lblobtaincredit" runat="server" Text='<%# Eval("CREDITS")%>'></asp:Label></td>
+                                                                    <asp:Label ID="lblobtaincredit1" runat="server" Text='<%# Eval("CREDITS")%>'></asp:Label></td>
                                                             </tr>
                                                         </ItemTemplate>
                                                     </asp:ListView>
                                                 </asp:Panel>
+                                            </div>
+                                            <div class="col-12 mt-5">
+                                                <div class="col-lg-12 col-md-12 col-12 btn-footer" style="align-content: center" id="div2" runat="server">
+                                                     <ul class="list-group list-group-unbordered">
+                                                        <li class="list-group-item">
+                                                    <asp:Button ID="btnReport" runat="server" OnClick="btnReport_Click" CssClass="btn btn-primary" Text="Detail Report" />
+                                                     </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
 
