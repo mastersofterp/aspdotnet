@@ -36,9 +36,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-
                         sqlParams = new SqlParameter[52];
-
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -90,7 +88,6 @@ namespace IITMS
                         sqlParams[47] = new SqlParameter("@P_ALLOW_CURRENT_SEM_FOR_REDO_IMPROVE_CRS_REG", AllowCurrSemForRedoImprovementCrsReg);
 
                         sqlParams[48] = new SqlParameter("@P_AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO", ModAdmInfoUserNos);
-
                         // Added by Gopal M 03102023 - Ticket #46419
                         sqlParams[49] = new SqlParameter("@P_OUTSTANDING_FEECOLLECTION", objConfig.OUTSTANDING_FEECOLLECTION);
                         sqlParams[50] = new SqlParameter("@P_OUTSTANDING_MESSAGE", objConfig.OUTSTANDING_MESSAGE);
