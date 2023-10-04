@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="PhD_Registration_Approval.aspx.cs" Inherits="ACADEMIC_PHD_PhD_Registration_Approval" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="PhD_Registration_Approval.aspx.cs" Inherits="ACADEMIC_PHD_PhD_Registration_Approval" ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>

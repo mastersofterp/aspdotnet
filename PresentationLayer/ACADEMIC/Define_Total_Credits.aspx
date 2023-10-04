@@ -1,9 +1,9 @@
-﻿<%@ page title="" language="C#" masterpagefile="~/SiteMasterPage.master" autoeventwireup="true" codefile="Define_Total_Credits.aspx.cs" inherits="ACADEMIC_Define_Total_Credits" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="Define_Total_Credits.aspx.cs" Inherits="ACADEMIC_Define_Total_Credits" ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
 
-<%@ register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="ajaxToolKit" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 
-<asp:content id="Content2" contentplaceholderid="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
     <style>
@@ -11,271 +11,270 @@
             width: max-content !important;
         }
     </style>
+    <div>
+        <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updpnl"
+            DynamicLayout="true" DisplayAfter="0">
+            <ProgressTemplate>
+                <div id="preloader">
+                    <div id="loader-img">
+                        <div id="loader">
+                        </div>
+                        <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                    </div>
+                </div>
+            </ProgressTemplate>
+        </asp:UpdateProgress>
+    </div>
     <asp:UpdatePanel ID="updpnl" runat="server">
         <ContentTemplate>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
-                        <div id="div5" runat="server"></div>
+                        <div id="div16" runat="server"></div>
                         <div class="box-header with-border">
                             <h3 class="box-title">
                                 <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
-
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="form-group col-lg-12 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <asp:Label runat="server" ID="lblDYddlScheme"></asp:Label>
-                                        </div>
-                                        <asp:ListBox ID="lstbxSession" runat="server" AppendDataBoundItems="true" TabIndex="6"
-                                            CssClass="multi-select-demo" SelectionMode="multiple" AutoPostBack="true"
-                                            OnSelectedIndexChanged="lstbxSession_SelectedIndexChanged"></asp:ListBox>
-                                        <%--  <asp:RequiredFieldValidator ID="rfvlstbxSession" runat="server" ControlToValidate="lstbxSession"
+                                    <div class="col-lg-6 col-lg-6 col-12">
+                                        <div class="row">
+                                            <div class="form-group col-lg-12 col-md-12 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>College</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlCollege" runat="server" CssClass="form-control" data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged" AppendDataBoundItems="true" ToolTip="Select College">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlCollege"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select College."
+                                                    InitialValue="0" />
+                                            </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>
+                                                        <asp:Label runat="server" ID="lblDYddlScheme"></asp:Label></label>
+                                                </div>
+                                                <asp:ListBox ID="lstbxSession" runat="server" AppendDataBoundItems="true" TabIndex="6"
+                                                    CssClass="multi-select-demo" SelectionMode="multiple" AutoPostBack="true"
+                                                    OnSelectedIndexChanged="lstbxSession_SelectedIndexChanged"></asp:ListBox>
+                                                <%--  <asp:RequiredFieldValidator ID="rfvlstbxSession" runat="server" ControlToValidate="lstbxSession"
                                             ValidationGroup="Submit" Display="None" ErrorMessage="Please select Scheme."
                                             InitialValue="0" />--%>
-                                        <asp:RequiredFieldValidator ID="rfvlstbxSession1" ControlToValidate="lstbxSession" InitialValue=""
-                                            Display="None" ValidationGroup="Submit" runat="server" ErrorMessage="Please select Scheme."></asp:RequiredFieldValidator>
-
-                                        <%--     <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"
-                                    onchange="clearSearchKey();" CssClass="form-control" data-select2-enable="true" ToolTip="Select Session">
-                                    <asp:ListItem>Please Select</asp:ListItem>
-                                </asp:DropDownList>
-                                <asp:RequiredFieldValidator ID="valCounterUser" runat="server" ControlToValidate="ddlSession"
-                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Scheme."
-                                    InitialValue="0" />--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>
-                                                <asp:Label ID="lblDYddlSemester" runat="server"></asp:Label></label>
-                                        </div>
-                                        <%--   <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="true" AutoPostBack="true" onchange="clearSearchKey();" CssClass="form-control" data-select2-enable="true" ToolTip="Select Semester">
-                                    <asp:ListItem>Please Select</asp:ListItem>
-                                </asp:DropDownList>--%>
-
-                                        <asp:ListBox ID="lstbxSemester" runat="server" AppendDataBoundItems="true" TabIndex="6"
-                                            CssClass="form-control multi-select-demo" SelectionMode="multiple"></asp:ListBox>
-
-                                        <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="lstbxSemester"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please select Semester." InitialValue="" />
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="Div11" visible="false" runat="server">
-                                        <div id="Div8" class="form-group col-md-4" visible="false" runat="server">
-                                            <label>Minimum Scheme Limit</label>
-                                            <div>
+                                                <asp:RequiredFieldValidator ID="rfvlstbxSession1" ControlToValidate="lstbxSession" InitialValue=""
+                                                    Display="None" ValidationGroup="Submit" runat="server" ErrorMessage="Please select Scheme."></asp:RequiredFieldValidator>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>
+                                                        <asp:Label ID="lblDYddlSemester" runat="server"></asp:Label></label>
+                                                </div>
+                                                <asp:ListBox ID="lstbxSemester" runat="server" AppendDataBoundItems="true" TabIndex="6"
+                                                    CssClass="form-control multi-select-demo" SelectionMode="multiple"></asp:ListBox>
+                                                <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="lstbxSemester"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Semester." InitialValue="" />
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="Div11" visible="false" runat="server">
+                                                <div class="label-dynamic" id="Div8" visible="false" runat="server">
+                                                    <sup>*</sup>
+                                                    <label>Minimum Scheme Limit</label>
+                                                </div>
                                                 <asp:CheckBox ID="chkMinimumSchemeLimit" runat="server" AutoPostBack="true" OnCheckedChanged="chkMinimumSchemeLimit_CheckedChanged" />Minimum Scheme Limit
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <label><span style="color: red; font: bold">*</span>Minimum Credits Limit</label>
-
-                                        <asp:TextBox ID="txtFromCredit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Minimum Credits" ToolTip="Enter Minimum Credit Limit" />
-                                        <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
-
-                                        <asp:RequiredFieldValidator ID="rfvFromCredit" runat="server" ControlToValidate="txtFromCredit"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Minimum credits." />
-
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtFromCredit" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <asp:CompareValidator ID="cmpvCredit" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server" Operator="GreaterThan" Type="Integer" Display="None" ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="Divmaxschem" visible="false" runat="server">
-                                        <div class="label-dynamic">
-                                            <label>Maximum Scheme Limit</label>
-                                        </div>
-                                        <asp:CheckBox ID="chkMaximumSchemeLimit" runat="server" AutoPostBack="true" OnCheckedChanged="chkMaximumSchemeLimit_CheckedChanged" />
-                                        Maximum Scheme Limit
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divmaxcreditlimit" runat="server" visible="false">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Maximum Credits Limit </label>
-                                        </div>
-                                        <asp:TextBox ID="txtToCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                        <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
-
-                                        <%-- <asp:RequiredFieldValidator ID="valPrintName" runat="server" ControlToValidate="txtToCredits"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum credits." />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtToCredits" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>--%>
-
-                                        <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div12" runat="server">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Maximum Core Credits Limit </label>
-                                        </div>
-                                        <asp:TextBox ID="txtCoreCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                        <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
-
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtCoreCredits"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Core credits." />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtCoreCredits" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div13" runat="server">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Maximum Elective Credits Limit </label>
-                                        </div>
-                                        <asp:TextBox ID="txtElectiveCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                        <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
-
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtElectiveCredits"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Elective credits." />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtElectiveCredits" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div14" runat="server">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Maximum Global Credits Limit </label>
-                                        </div>
-                                        <asp:TextBox ID="txtGlobalCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                        <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
-
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtGlobalCredits"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Global credits." />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" TargetControlID="txtGlobalCredits" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Elective</label>
-                                        </div>
-                                        <%-- <asp:DropDownList ID="ddlElective" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlElective_SelectedIndexChanged"
-                                    CssClass="form-control" data-select2-enable="true" ToolTip="Select Session">
-                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                </asp:DropDownList>--%>
-
-                                        <asp:ListBox ID="lstbxElective" runat="server" AppendDataBoundItems="true" ValidationGroup="Submit" TabIndex="6"
-                                            CssClass="form-control multi-select-demo" SelectionMode="multiple" AutoPostBack="true"
-                                            OnSelectedIndexChanged="lstbxElective_SelectedIndexChanged"></asp:ListBox>
-
-                                        <asp:RequiredFieldValidator ID="rfvElective" runat="server" ControlToValidate="lstbxElective"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please select Elective."
-                                            InitialValue="" />
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Choice for</label>
-                                        </div>
-
-                                        <asp:TextBox ID="txtElectiveChoiseFor" runat="server" MaxLength="2" ondrop="return false;"
-                                            onkeydown="return (!((event.keyCode>=65 && event.keyCode <= 95) || event.keyCode >= 106) && event.keyCode!=32);"
-                                            onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Choice For Elective"
-                                            ToolTip="Enter Choice For selected Elective" />
-                                        <asp:RequiredFieldValidator ID="rfvElectiveChoise" runat="server" ControlToValidate="txtElectiveChoiseFor" SetFocusOnError="true"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please select Elective Choice For." />
-                                    </div>
-                                     <div class="form-group col-lg-3 col-md-6 col-12" id="div15" runat="server">
-                                        <div class="label-dynamic">
-                                            <label>Maximum Overload Credits Limit </label>
-                                        </div>
-                                        <asp:TextBox ID="txtOverloadCreditLimit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtOverloadCreditLimit" ValidChars="0123456789" FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                       
-                                    </div>
-
-                                    <div class="form-group col-md-6" style="display: none;">
-                                        <label><span style="color: red; font: bold">*</span>Degree</label>
-                                        <asp:DropDownList ID="ddlDegree" runat="server" CssClass="form-control" AppendDataBoundItems="true" ToolTip="Select Degree">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlDegree"
-                                            ValidationGroup="a" Display="None" ErrorMessage="Please select Degree."
-                                            InitialValue="0" />
-                                    </div>
-
-                                    <div id="Div1" class="form-group col-md-6" visible="false" runat="server">
-                                        <label>Admission Type</label>
-                                        <asp:DropDownList ID="ddlAdmissionType" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            <asp:ListItem Value="1">Regular</asp:ListItem>
-                                            <asp:ListItem Value="2">Direct Second Year</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlAdmissionType"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please select Admission type."
-                                            InitialValue="0" />
-                                    </div>
-
-                                    <div id="Div2" class="form-group col-md-6" visible="false" runat="server">
-                                        <label>Student  Result</label>
-                                        <asp:DropDownList ID="ddlStudentType" runat="server" CssClass="form-control">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            <asp:ListItem Value="1">All Pass</asp:ListItem>
-                                            <asp:ListItem Value="2">Backlog</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvStudentType" runat="server" ControlToValidate="ddlStudentType"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please select Student Result."
-                                            InitialValue="0" />
-                                    </div>
-
-                                    <div id="Div3" class="form-group col-md-3" runat="server" visible="false">
-                                        <label>From  CGPA</label>
-
-                                        <asp:TextBox ID="txtFromRange" runat="server" MaxLength="4" CssClass="form-control" placeholder=" Range CGPA" />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="fteFromrange" runat="server" TargetControlID="txtFromRange" ValidChars="0123456789." FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="rfvFromrange" runat="server" ControlToValidate="txtFromRange"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter From  CGPA." />
-
-                                    </div>
-                                    <div id="Div4" class="form-group col-md-3" runat="server" visible="false">
-                                        <label>To  CGPA</label>
-                                        <asp:TextBox ID="txtToRange" runat="server" MaxLength="4" placeholder="Range CGPA" CssClass="form-control" />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtToRange" ValidChars="0123456789." FilterMode="ValidChars">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtToRange"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter To  CGPA." />
-                                        <%-- <asp:CompareValidator ID="CompareValidator1" ControlToCompare="txtFromRange" ControlToValidate="txtToRange" runat="server"  Operator="GreaterThan" Type="Double" Display="None"  ValidationGroup="Submit" ErrorMessage="To  CGPA  should be greater than From  CGPA"></asp:CompareValidator>--%>
-
-
-                                        <div class="form-group col-md-6" id="mincredregular" runat="server" visible="false">
-                                            <label>Minimum Regular Credit limit</label>
-
-                                            <asp:TextBox ID="txtMinRegCredit" runat="server" MaxLength="4" placeholder="Minimum Regular Credit limit" CssClass="form-control" />
-                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server" TargetControlID="txtMinRegCredit" ValidChars="0123456789." FilterMode="ValidChars">
-                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                            <%--            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtMinRegCredit"
-                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Minimum Regular Credit Limit." />--%>
-
-                                            <div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-
-                                        <div class="row">
-
-                                            <div class="form-group col-md-6" id="Div7" visible="false" runat="server">
-                                                <label>Additional Courses Learning</label>
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <asp:CheckBox ID="chkAddionalCourse" runat="server" AutoPostBack="true" OnCheckedChanged="chkAddionalCourse_CheckedChanged" />
-                                                        Additional Courses Learning
-                                                    </label>
+                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Minimum Credits Limit</label>
                                                 </div>
+                                                <asp:TextBox ID="txtFromCredit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Minimum Credits" ToolTip="Enter Minimum Credit Limit" />
+                                                <asp:RequiredFieldValidator ID="rfvFromCredit" runat="server" ControlToValidate="txtFromCredit"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Minimum credits." />
+
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtFromCredit" ValidChars="0123456789" FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <asp:CompareValidator ID="cmpvCredit" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server" Operator="GreaterThan" Type="Integer" Display="None" ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>
+
                                             </div>
-                                            <div class="form-group col-md-6" runat="server" visible="false" id="trAdditionalCourses">
-                                                <label>Additional courses Degree Type</label>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="Divmaxschem" visible="false" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Maximum Scheme Limit</label>
+                                                </div>
+                                                <asp:CheckBox ID="chkMaximumSchemeLimit" runat="server" AutoPostBack="true" OnCheckedChanged="chkMaximumSchemeLimit_CheckedChanged" />
+                                                Maximum Scheme Limit
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divmaxcreditlimit" runat="server" visible="false">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Maximum Credits Limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtToCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
 
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="div12" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Maximum Core Credits Limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtCoreCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtCoreCredits"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Core credits." />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtCoreCredits" ValidChars="0123456789" FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="div13" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Maximum Elective Credits Limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtElectiveCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <%-- <span id="error" style="color: Red; display: none">* Enter Numeric value</span>--%>
 
-                                                <asp:DropDownList ID="ddlAdditionalCourseDegree" runat="server" CssClass="form-control">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="txtElectiveCredits"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Elective credits." />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtElectiveCredits" ValidChars="0123456789" FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <%--<asp:CompareValidator ID="cvToCredits" ControlToCompare="txtFromCredit" ControlToValidate="txtToCredits" runat="server"  Operator="GreaterThan" Type="Integer" Display="None"  ValidationGroup="Submit" ErrorMessage="Minimum Credit should be less than Maximum Credit"></asp:CompareValidator>--%>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="div14" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Maximum Global Credits Limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtGlobalCredits" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtGlobalCredits"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please enter Maximum Global credits." />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" TargetControlID="txtGlobalCredits" ValidChars="0123456789" FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" style="display: none">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Elective</label>
+                                                </div>
+                                                <asp:ListBox ID="lstbxElective" runat="server" AppendDataBoundItems="true" ValidationGroup="Submit" TabIndex="6"
+                                                    CssClass="form-control multi-select-demo" SelectionMode="multiple" AutoPostBack="true"
+                                                    OnSelectedIndexChanged="lstbxElective_SelectedIndexChanged"></asp:ListBox>
+                                               <%-- <asp:RequiredFieldValidator ID="rfvElective" runat="server" ControlToValidate="lstbxElective"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Elective."
+                                                    InitialValue="" />--%>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" style="display: none">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Choice for</label>
+                                                </div>
+                                                Choices for Elective
+                                                <asp:TextBox ID="txtElectiveChoiseFor" runat="server" MaxLength="2" ondrop="return false;"
+                                                    onkeydown="return (!((event.keyCode>=65 && event.keyCode <= 95) || event.keyCode >= 106) && event.keyCode!=32);"
+                                                    onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Choice For Elective"
+                                                    ToolTip="Enter Choice For selected Elective" />
+                                               <%-- <asp:RequiredFieldValidator ID="rfvElectiveChoise" runat="server" ControlToValidate="txtElectiveChoiseFor" SetFocusOnError="true"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Elective Choice For." />--%>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="div15" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Maximum Overload Credits Limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtOverloadCreditLimit" runat="server" MaxLength="2" ondrop="return false;" onpaste="return false;" AutoComplete="OFF" CssClass="form-control" placeholder="Maximum Credits" ToolTip="Enter Maximum Credit Limit" />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtOverloadCreditLimit" ValidChars="0123456789" FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12 d-none">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Degree</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlDegree" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" ToolTip="Select Degree">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlDegree"
+                                                    ValidationGroup="a" Display="None" ErrorMessage="Please select Degree."
+                                                    InitialValue="0" />
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="Div1" visible="false" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Admission Type</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlAdmissionType" runat="server" CssClass="form-control" data-select2-enable="true">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    <asp:ListItem Value="1">Regular</asp:ListItem>
+                                                    <asp:ListItem Value="2">Direct Second Year</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlAdmissionType"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Admission type."
+                                                    InitialValue="0" />
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="Div2" visible="false" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Student  Result</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlStudentType" runat="server" CssClass="form-control" data-select2-enable="true">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    <asp:ListItem Value="1">All Pass</asp:ListItem>
+                                                    <asp:ListItem Value="2">Backlog</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="rfvStudentType" runat="server" ControlToValidate="ddlStudentType"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please select Student Result."
+                                                    InitialValue="0" />
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6 col-12" id="Div3" runat="server" visible="false">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>From  CGPA</label>
+                                                </div>
+                                                <asp:TextBox ID="txtFromRange" runat="server" MaxLength="4" CssClass="form-control" placeholder=" Range CGPA" />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="fteFromrange" runat="server" TargetControlID="txtFromRange" ValidChars="0123456789." FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <asp:RequiredFieldValidator ID="rfvFromrange" runat="server" ControlToValidate="txtFromRange"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter From  CGPA." />
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="Div4" runat="server" visible="false">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>To  CGPA</label>
+                                                </div>
+                                                <asp:TextBox ID="txtToRange" runat="server" MaxLength="4" placeholder="Range CGPA" CssClass="form-control" />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtToRange" ValidChars="0123456789." FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtToRange"
+                                                    ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter To  CGPA." />
+
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="mincredregular" runat="server" visible="false">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Minimum Regular Credit limit</label>
+                                                </div>
+                                                <asp:TextBox ID="txtMinRegCredit" runat="server" MaxLength="4" placeholder="Minimum Regular Credit limit" CssClass="form-control" />
+                                                <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server" TargetControlID="txtMinRegCredit" ValidChars="0123456789." FilterMode="ValidChars">
+                                                </ajaxToolKit:FilteredTextBoxExtender>
+                                                <%--            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txtMinRegCredit"
+                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Minimum Regular Credit Limit." />--%>
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="Div7" visible="false" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Additional Courses Learning</label>
+                                                </div>
+                                                <asp:CheckBox ID="chkAddionalCourse" runat="server" AutoPostBack="true" OnCheckedChanged="chkAddionalCourse_CheckedChanged" />
+                                                Additional Courses Learning
+                                            </div>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false" id="trAdditionalCourses">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label>Additional courses Degree Type</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlAdditionalCourseDegree" runat="server" CssClass="form-control" data-select2-enable="true">
                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     <asp:ListItem Value="1">UG</asp:ListItem>
                                                     <asp:ListItem Value="2">UG + PG</asp:ListItem>
@@ -284,20 +283,65 @@
                                                     ValidationGroup="Submit" Display="None" ErrorMessage="Please select Additional courses Degree Type."
                                                     InitialValue="0" />
                                             </div>
+                                            <div class="form-group col-lg-12 col-md-12 col-12" id="Div10" runat="server" visible="false">
+                                                <div class=" note-div">
+                                                    <h5 class="heading">Note</h5>
+                                                    <p><i class="fa fa-star" aria-hidden="true"></i><span>Total Credit Definition for Course Registration </span></p>
+
+                                                </div>
+                                            </div>
                                         </div>
-
                                     </div>
-                                    <div class="form-group col-md-12">
-
-                                        <div class="form-group col-md-6" id="Div9" runat="server">
+                                    <div class="col-lg-6 col-md-6 col-12 ">
+                                        <div class="sub-heading">
+                                            <h5>Choices for Elective</h5>
                                         </div>
-                                    </div>
-
-                                    <div id="Div10" class="col-md-12" runat="server" visible="false">
-                                        <p class="text-info"><strong><i class="fa fa-pencil"></i>Note :</strong> Total Credit Defination for Course Registration</p>
+                                        <asp:Panel ID="Panel1" runat="server" CssClass="collapsePanel">
+                                            <asp:ListView ID="lvElectiveGrpChoice" runat="server" ItemPlaceholderID="PlaceHolder1">
+                                                <LayoutTemplate>
+                                                    <div class="table-responsive" style="height: 360px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                            <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                                                <tr>
+                                                                    <th>Elective
+                                                                    </th>
+                                                                    <th>Choice For Elective
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <%--   <tr id="itemPlaceholder" runat="server" />--%>
+                                                                <asp:PlaceHolder ID="PlaceHolder1" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <%# Eval("GROUPNAME")%>
+                                                            <asp:HiddenField ID="hdfElectiveGroupNo" runat="server" Value=' <%# Eval("GROUPNO")%>' />
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txtElectiveChoiseFor1" runat="server" MaxLength="2" ondrop="return false;"
+                                                                onkeydown="return (!((event.keyCode>=65 && event.keyCode <= 95) || event.keyCode >= 106) && event.keyCode!=32);"
+                                                                onpaste="return false;" AutoComplete="OFF" CssClass="form-control" />
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtElectiveChoiseFor1" ValidChars="0123456789" FilterMode="ValidChars">
+                                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                                <EmptyDataTemplate>
+                                                    <div style="text-align: center; font-family: Arial; font-size: medium">
+                                                        No Record Found
+                                                    </div>
+                                                </EmptyDataTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="form-group col-md-6" id="Div6" runat="server" visible="false">
                                 <label><span style="color: red; font: bold">*</span> Semester </label>
@@ -309,11 +353,12 @@
 
                             <div class="col-12 btn-footer">
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" ValidationGroup="Submit" CssClass="btn btn-primary" ToolTip="Submit" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" ToolTip="Cancel" />
                                 <asp:Button ID="btnLock" runat="server" Text="Lock" OnClick="btnLock_Click" CssClass="btn btn-warning" Visible="false" ToolTip="Lock" />
-                                <asp:Button ID="btnExcel" runat="server" Text="Excel Report" OnClick="btnExcel_Click" CssClass="btn btn-primary" ToolTip="Export to Excel" />
+                                <asp:Button ID="btnExcel" runat="server" Text="Excel Report" OnClick="btnExcel_Click" CssClass="btn btn-info" ToolTip="Export to Excel" />
                                 <asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Submit" />
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" ToolTip="Cancel" />
+
                             </div>
 
                             <div class="col-12" id="divTracking" runat="server">
@@ -324,8 +369,8 @@
                                                 <div class="sub-heading">
                                                     <h5>Credit Definition</h5>
                                                 </div>
-                                                <table class="table table-striped table-bordered nowrap mb-0" style="width: 100%">
-                                                    <thead class="bg-light-blue">
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                    <thead class="bg-light-blue mb-0">
                                                         <tr>
                                                             <th style="text-align: center; width: 5%">Edit
                                                             </th>
@@ -346,7 +391,7 @@
                                                             </th>
                                                             <th style="text-align: center; width: 12%">Global Credit Limit
                                                             </th>
-                                                             <th style="text-align: center; width: 12%">Overload Credit Limit
+                                                            <th style="text-align: center; width: 12%">Overload Credit Limit
                                                             </th>
                                                             <th style="text-align: center; width: 8%">Lock
                                                             </th>
@@ -356,6 +401,7 @@
                                                         <tr id="itemPlaceholder" runat="server" />
                                                     </tbody>
                                                 </table>
+
                                             </LayoutTemplate>
                                             <ItemTemplate>
                                                 <table class="table table-hover table-bordered mb-0">
@@ -365,7 +411,7 @@
                                                                 <td style="text-align: center; width: 5%">
                                                                     <asp:ImageButton ID="btnEdit" runat="server" AlternateText="Edit Record" CausesValidation="false"
                                                                         CommandArgument='<%# Eval("GROUPID") %>'
-                                                                        ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click1"  TabIndex="10" ToolTip='<%# Eval("GROUPID") %>' />
+                                                                        ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click1" TabIndex="10" ToolTip='<%# Eval("GROUPID") %>' />
                                                                 </td>
                                                                 <td style="text-align: center; width: 5%">
                                                                     <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
@@ -396,7 +442,7 @@
                                                                 <td style="text-align: center; width: 12%">
                                                                     <%# Eval("GLOBAL_CREDIT")%>
                                                                 </td>
-                                                                 <td style="text-align: center; width: 12%">
+                                                                <td style="text-align: center; width: 12%">
                                                                     <%# Eval("OVERLOAD_CREDIT")%>
                                                                 </td>
                                                                 <td style="text-align: center; width: 8%">
@@ -676,5 +722,5 @@
             });
         });
     </script>
-</asp:content>
+</asp:Content>
 

@@ -1750,7 +1750,8 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
             objD.MAC_ADDRESS = "";
             objD.COLLEGE_CODE = Session["colcode"].ToString();
 
-            string[] pNAME = txtPatientName.Text.Split('*');
+           // string[] pNAME = txtPatientName.Text.Split('*');
+            string[] pNAME = txtPatientName.Text.Split('-');
             string[] dNAME = ddlDependent.SelectedItem.Text.Split('-');
             if (lblPatientCat.Text == "E")
             {
@@ -1758,7 +1759,18 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 {
                     objD.DEPENDENTID = 0;
                     objD.PATIENT_CODE = 'E';
+
                     objD.PATIENT_NAME = pNAME[1];
+
+                    //objD.PATIENT_NAME = pNAME[1];
+                    if (pNAME.Length == 1)
+                    {
+                        objD.PATIENT_NAME = pNAME[0];
+                    }
+                    else
+                    {
+                        objD.PATIENT_NAME = pNAME[1];
+                    }
                 }
                 else
                 {

@@ -132,7 +132,10 @@ public partial class examseatingreports : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 5)
         {
 
-            DataSet ds = objsc.GetStudentsExamDateNEW(dates, examno);
+            string proc_name = "PKG_GET_EXAM_DATE_FOR_DATE";
+            string parameter = "@P_EXAMDATE,@P_EXAM_TT_TYPE,@P_SESSIONNO";
+            string Call_values = "" + dates + "," + examno + "," + 0 + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlExamdate.DataSource = ds;

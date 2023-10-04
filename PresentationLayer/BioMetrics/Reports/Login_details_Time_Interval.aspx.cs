@@ -81,7 +81,6 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             txtFdate.Text = DateTime.Now.ToString();
             txtDate.Text = DateTime.Now.ToString();
 
-
             if (ua_type != 1)
             {
                 trEmp.Visible = true;
@@ -90,6 +89,15 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 trdept.Visible = tr1.Visible = trcollege.Visible = false;
                 trsearchtype.Visible = false;
                 rblSelect.SelectedValue = "1";
+                string userdeptno = Convert.ToString(Session["userdeptno"]);
+                //bool IsBioAuthorityPerson;
+                //if (IDNO != 0 || IDNO == null)
+                //{
+                //    IsBioAuthorityPerson = Convert.ToBoolean(objCommon.LookUp("PAYROLL_EMPMAS", "ISNULL(IsBioAuthorityPerson,0) AS IsBioAuthorityPerson", "IDNO=" + IDNO + ""));
+                //}
+                //else
+                //{
+                //}
                 this.FillEmployeeIdno();
                 //ddlEmployee.SelectedIndex = 1;
                 btnCancel.Visible = false;
@@ -319,7 +327,42 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
 
             if (rblEmpType.SelectedValue == "0")
             {
+
                 objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+
+                    }
+                }
+                else
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
             }
             else
             {
@@ -682,7 +725,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
 
             DateTime fdate = Convert.ToDateTime(txtFdate.Text);
             DateTime tdate = Convert.ToDateTime(txtDate.Text);
-
+            int ua_type = Convert.ToInt32(Session["usertype"]);
             //int monthDiff = Math.Abs((fdate.Month - tdate.Month) + 12 * (fdate.Year - tdate.Year));
 
             //if (monthDiff > 1)
@@ -700,16 +743,27 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 {
                     if (ddldept.SelectedIndex > 0)
                     {
-
-                        //ShowReport("LoginDetail", "ESTB_LoginDetail_Report.rpt");
-                        ShowReport("LoginDetailAll", "ESTB_LoginDetail_All_Report1.rpt");
+                        if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
+                        {
+                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                        }
+                        else
+                        {
+                            //ShowReport("LoginDetail", "ESTB_LoginDetail_Report.rpt");
+                            ShowReport("LoginDetailAll", "ESTB_LoginDetail_All_Report1.rpt");
+                        }
 
                     }
                     else
                     {
-
-                        ShowReport("LoginDetailAll", "ESTB_LoginDetail_All_Report1.rpt");
-
+                        if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
+                        {
+                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                        }
+                        else
+                        {
+                            ShowReport("LoginDetailAll", "ESTB_LoginDetail_All_Report1.rpt");
+                        }
                     }
                 }
                 else if (chkGraph.Checked == true)
@@ -1164,12 +1218,24 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             DataSet ds = null;
             if (rblSelect.SelectedValue == "0")
             {
+                if ((ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"]))))
+                {
+                    ds = objBioMetric.GetLoginDetailsForExcelOnHODLogin(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToString(Session["userdeptno"]), "N", "N", "N", Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
+                }
+                else
+                {
+                ds = objBioMetric.GetLoginDetailsForExcel(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToInt32(ddldept.SelectedValue), "N", "N", "N", Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
+                }
+            }            
+            else
+            {if ((ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"]))))
+                {
+                    ds = objBioMetric.GetLoginDetailsForExcelOnHODLogin(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToString(Session["userdeptno"]), "N", "N", "N", Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
+                }
+                else
+                {
                 ds = objBioMetric.GetLoginDetailsForExcel(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToInt32(ddldept.SelectedValue), "N", "N", "N", Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
             }
-            else
-            {
-                ds = objBioMetric.GetLoginDetailsForExcel(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToInt32(ddldept.SelectedValue), "N", "N", "N", Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
-
             }
 
             if (ds.Tables[0].Rows.Count > 0)
@@ -1243,11 +1309,22 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             {
                 string empval = "0";
                 //ddlEmployee.SelectedValue = empval;
-                if (ua_type != 1)
+                if (ua_type != 1 && (ua_type != 8 && (!Convert.ToBoolean(ViewState["IsBioAuthorityPerson"]))))
                 {
                     if (rblEmpType.SelectedValue == "0")
                     {
                         ds = objBioMetric.GetLoginDetailsnew(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToInt32(ddldept.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlStaff.SelectedValue));
+                    }
+                    else if (rblEmpType.SelectedValue == "1")
+                    {
+                        ds = objBioMetric.GetLoginDetails_ShiftMgt(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToInt32(ddldept.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlStaff.SelectedValue));
+                    }
+                }
+                else if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
+                {
+                    if (rblEmpType.SelectedValue == "0")
+                    {
+                        ds = objBioMetric.GetLoginDetailOnHodLogin(Convert.ToDateTime(txtFdate.Text), Convert.ToDateTime(txtDate.Text), Convert.ToInt32(ddlEmployee.SelectedValue), Convert.ToString(Session["userdeptno"]), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlStaff.SelectedValue));
                     }
                     else if (rblEmpType.SelectedValue == "1")
                     {

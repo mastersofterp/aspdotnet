@@ -285,7 +285,7 @@
                                                             </asp:DropDownList>--%>
 
                                                             <asp:TextBox ID="txtPTaluka" CssClass="form-control" runat="server" ToolTip="Please Enter Taluka"
-                                                                ValidationGroup="Academic" TabIndex="13" MaxLength="12" placeholder="Enter Taluka Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));" />
+                                                                ValidationGroup="Academic" TabIndex="13" MaxLength="30" placeholder="Enter Taluka Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));" />
 
 
 
@@ -485,7 +485,7 @@
                                                             </asp:DropDownList>--%>
 
                                                             <asp:TextBox ID="txtLTaluka" CssClass="form-control" runat="server" ToolTip="Please Enter Taluka"
-                                                                ValidationGroup="Academic" TabIndex="13" MaxLength="23" placeholder="Enter Taluka Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));" />
+                                                                ValidationGroup="Academic" TabIndex="13" MaxLength="30" placeholder="Enter Taluka Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));" />
 
 
                                                             <asp:HiddenField ID="HiddenField2" runat="server" />

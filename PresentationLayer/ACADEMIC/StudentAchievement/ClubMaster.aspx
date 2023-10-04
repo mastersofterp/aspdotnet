@@ -125,6 +125,13 @@
                                     TabIndex="6" CssClass="btn btn-info" Style="display: none;" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel"
                                     TabIndex="7" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                
+                                   <asp:LinkButton ID="btnExport" runat="server" CssClass="btn btn-primary" TabIndex="3" OnClick="btnExport_Click"
+                                                            Text="Download Excel Sheet" ToolTip="Download Excel Sheet" Enabled="true"> Club Student List Report</asp:LinkButton>
+
+                                  <asp:LinkButton ID="btnExportR" runat="server" CssClass="btn btn-primary" TabIndex="4" OnClick="btnExportR_Click"
+                                                            Text="Download Excel Sheet" ToolTip="Download Excel Sheet" Enabled="true"> Club Activity Registration Report</asp:LinkButton>
+
 
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
                                     ShowSummary="false" DisplayMode="List" ValidationGroup="submit" />
@@ -195,8 +202,12 @@
                 <div id="divMsg" runat="server">
                 </div>
             </div>
-
+            
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnExport" />
+            <asp:PostBackTrigger ControlID="btnExportR" />
+        </Triggers>
 
     </asp:UpdatePanel>
     <script>

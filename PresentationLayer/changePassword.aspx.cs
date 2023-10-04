@@ -33,6 +33,8 @@ using System.IO;
 using Mastersoft.Security.IITMS;
 using BusinessLogicLayer.BusinessLogic;
 using System.Net;
+using PageControlValidator;
+
 
 
 public partial class changePassword : System.Web.UI.Page
@@ -139,6 +141,36 @@ public partial class changePassword : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+
+        string DisplayMessage = string.Empty;
+
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtOldPassword.Text, txtOldPassword.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtOldPassword.Focus();
+            return;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtNewPassword.Text, txtNewPassword.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtNewPassword.Focus();
+            return;
+        }
+
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtConfirmPassword.Text, txtConfirmPassword.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtConfirmPassword.Focus();
+            return;
+        }
+
+
         LogFile objLF = new LogFile();
         int mailsend = 0;
         int smssend = 0;
@@ -257,6 +289,18 @@ public partial class changePassword : System.Web.UI.Page
             //    //return;
             //}
             //if (mailid == useremail && txtEmailId.Text.Trim() != "")
+
+            Regex pass = new Regex("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{10,}$");
+            if (!pass.IsMatch(txtConfirmPassword.Text))
+            {
+                objCommon.DisplayMessage(this, "Password should be at least 10 characters,Must contain at least one lower case letter, one upper case letter, one digit and one special character", this);             
+                return;
+            }
+            else
+            {
+                //Success.
+            }
+
 
             if (txtEmailId.Text.Trim() != "")
             {

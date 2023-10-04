@@ -99,7 +99,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
                 //Check for Activity On/Off for Reval registration.
                 //if (CheckActivity() == false)
-                //    return;
+
 
                 if (Session["usertype"].ToString() == "2")
                 {
@@ -162,30 +162,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         CheckRevaluationEligibility();
     }
 
-    //protected void btnCancel_Click(object sender, EventArgs e)
-    //{
-    //    ViewState["idno"] = "0";
-    //    divCourses.Visible = true;
-    //    //ddlSession.Enabled = false;
-    //    ddlSession.SelectedIndex = 0;
-    //    txtRollNo.Text = string.Empty;
-    //    txtRollNo.Enabled = true;
-    //    ddlSession.Enabled = true;
-    //    lvCurrentSubjects.DataSource = null;
-    //    lvCurrentSubjects.DataBind();
-    //    tblInfo.Visible = false;
-    //    divSem.Visible = false;
-    //    btnSubmit.Visible = false;
-    //    lblErrorMsg.Text = string.Empty;
-    //    lblTotalAmount.Text = "0";
-    //    CourseAmt = 0;
-    //    divTotalCourseAmount.Visible = false;
-    //    divNote.Visible = false;
-    //    btnPrintRegSlip.Visible = false;
-    //    divAllCoursesFromHist.Visible = false;
-    //    divRegCourses.Visible = false;
-    //}
-
+   
     public void CheckRevaluationEligibility()
     {
         try
@@ -602,7 +579,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     string subcount = objCommon.LookUp("ACD_REVAL_RESULT", "COUNT(DISTINCT 1)", "SESSIONNO=" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CANCEL,0)=0 AND APP_TYPE='REVAL' ");
                     if (subcount == "1")
                     {
-                        string TOTALAMOUNT = string.Empty; 
+                        string TOTALAMOUNT = "0"; 
                         string sp_proc = "PKG_ACD_GET_EXAM_REG_AMOUNT";
                         string sp_para = "@P_UA_NO,@P_SESSIONNO,@P_SEMESTERNO,@P_IDNO,@P_DEGREENO,@P_PAGE_LINK,@P_STATUS";
                         string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Convert.ToString(ViewState["SESSIONNO"]) + "," + Convert.ToString(Session["semester_reg"]) + "," + Convert.ToInt32(ViewState["idno"]) + "," + hfDegreeNo.Value + "," + Request.QueryString["pageno"].ToString() + "," + 4 + "";   //Status 3 for Photocopy registered courses fee bind
@@ -613,6 +590,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                         {
                             TOTALAMOUNT = dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString() == null ? "0" : dsTotAmt.Tables[0].Rows[0]["TOTAL_AMT"].ToString();
                         }
+                        //ViewState["Exam_Amout"] = TOTALAMOUNT;
 
                         //if (Convert.ToInt32(Session["OrgId"]) == 2)
                         //{
@@ -845,6 +823,11 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             if (courseno == "0")
             {
                 objCommon.DisplayMessage(updDetails, "Please Select At least One Subject from list!!", this.Page);
+                return;
+            }
+            if (lblTotalAmount.Text == string.Empty || lblTotalAmount.Text == "0")
+            {
+                objCommon.DisplayMessage(updDetails, "Exam Fee Not Defined", this.Page);
                 return;
             }
 
@@ -2060,7 +2043,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno);
             //int semesterno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DISTINCT SEMESTERNO", "IDNO=" + idno));
 
-            int PayStatus = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(1)", "IDNO=" + idno + "AND SESSIONNO=" + sessionno + "AND ISNULL(RECON,0)=" + 1 + "AND RECIEPT_CODE= 'PRF' "));
+            int PayStatus = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(1)", "IDNO=" + idno + "AND SESSIONNO=" + sessionno + "AND ISNULL(RECON,0)=" + 1 + "AND RECIEPT_CODE= 'RF' "));
 
             if (PayStatus > 0)
             {
@@ -2070,7 +2053,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
 
-                url += "&param=@P_COLLEGE_CODE=" + college_id + ",@P_IDNO=" + Convert.ToInt32(ViewState["idno"]) + ",@P_SESSIONNO=" + sessionno + ",@P_SEMESTERNO=" + semesterno + ",@P_TYPE=2" + ",@P_RECIEPT_CODE=RF";     //Added reciept code condition
+                url += "&param=@P_COLLEGE_CODE=" + college_id + ",@P_IDNO=" + Convert.ToInt32(ViewState["idno"]) + ",@P_SESSIONNO=" + sessionno + ",@P_SEMESTERNO=" + semesterno + ",@P_TYPE=2" + ",@P_RECIEPT_CODE=RF";     
                 divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 divMsg.InnerHtml += " </script>";

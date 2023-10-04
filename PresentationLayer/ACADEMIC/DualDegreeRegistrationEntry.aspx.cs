@@ -40,12 +40,16 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 PopulateDropDown();                                
                 //txtDateOfReporting.Text = DateTime.Today.ToString("dd/MM/yyyy");
                 divSearchInfo.Visible = false;
+                btnSave.Enabled = true;
                 
             }
 
             ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
              
     }
+
+    #region Public Private Methods
+
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -67,7 +71,7 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
     {
         try
         {
- 
+
             objCommon.FillDropDownList(ddlCollegeNew, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
             // objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_NAME");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
@@ -76,7 +80,7 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 ddlSchool.SelectedValue = "1";
             }
             objCommon.FillDropDownList(ddlBatch, "ACD_ADMBATCH", "TOP (1) BATCHNO", "BATCHNAME", "BATCHNO>0 AND ACTIVESTATUS=1", "BATCHNO DESC");
-            
+
             //ddlBatch.SelectedValue = "1";
             ddlBatch.SelectedIndex = 1;
             objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
@@ -112,7 +116,7 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
             objCommon.FillDropDownList(ddlCategory, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORYNO");
             //fill dropdown adm quota
             //objCommon.FillDropDownList(ddlBloodGroup, "ACD_BLOODGRP", "BLOODGRPNO", "BLOODGRPNAME", "BLOODGRPNO>0", "BLOODGRPNO");
-           // this.objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKNAME", "ACTIVESTATUS=1", "BANKNAME");
+            // this.objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKNAME", "ACTIVESTATUS=1", "BANKNAME");
             //objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "QUALIFYNO");
             objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "QUALIFYNO >0 AND QEXAMSTATUS='E'", "QUALIEXMNAME");
 
@@ -129,90 +133,12 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
         }
     }
 
-    protected void ddlstate_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlstate.SelectedIndex > 0)
-        {
-            objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO>0 and STATENO=" + ddlstate.SelectedValue, "CITY");
-
-        }
-        else
-        {
-            ddlCity.SelectedIndex = 0;
-        }
-    }
-    
-    
-    
-    protected void ddlAdmType_TextChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            if (ddlAdmType.SelectedValue.Equals("1"))
-            {
-                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
-                ddlYear.SelectedValue = "1";
-                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
-                ddlSemester.SelectedValue = "1";
-            }
-            else if (ddlAdmType.SelectedValue.Equals("2"))
-            {
-                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
-                ddlYear.SelectedValue = "2";
-                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
-                ddlSemester.SelectedIndex = 1;
-            }
-            else
-            {
-                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
-                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (8) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0", "SEMESTERNO");
-
-            }
-
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-    }
-
-    protected void ddlYear_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlYear.SelectedValue, "SEMESTERNO");
-    }
-    protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-    protected void ddlBatch_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-    protected void ddlExamNo_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-    protected void ddlPaymentType_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-
-    protected void txtAadhaarNo_TextChanged(object sender, EventArgs e)
-    {
-        int l = (txtAadhaarNo.Text).Length;
-
-        if (l < 12 && l != 0)
-        {
-            objCommon.DisplayUserMessage(updStudent, "Please enter 12 digit Aadhar No.", this.Page);
-        }
-    }
-
     private void ShowStudentDetails()
     {
         pnlLV.Visible = false;
         divsearchbar.Visible = false;
         string idno = string.Empty;
-         
+
         PopulateDropDownList();
         DataSet dsStudent = objSC.GetStudentDataForDualDegree(Session["stuinfoidno"].ToString());
         //DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A,ACD_STU_ADDRESS B", "A.IDNO", "A.STUDNAME,A.REGNO,A.IDNO,A.ROLLNO,A.STUDFIRSTNAME,A.STUDMIDDLENAME,A.STUDLASTNAME,A.FATHERFIRSTNAME,A.FATHERMIDDLENAME,A.FATHERLASTNAME,A.MOTHERNAME,A.DOB,A.SEX,ISNULL(A.RELIGIONNO,0)RELIGIONNO,A.MARRIED,A.NATIONALITYNO,ISNULL(A.CATEGORYNO,0)CATEGORYNO,A.CASTE,A.ADMDATE,A.DEGREENO,A.BRANCHNO,A.YEAR,A.STUDENTMOBILE,A.STUDENTMOBILE2,A.SEMESTERNO,A.PTYPE,A.STATENO,A.ADMBATCH,A.IDTYPE,A.YEAR_OF_EXAM,A.ALL_INDIA_RANK,A.STATE_RANK,A.PERCENTAGE,A.PERCENTILE,A.QEXMROLLNO,A.ADMCATEGORYNO,A.QUALIFYNO,A.SCHOLORSHIPTYPENO,A.PHYSICALLY_HANDICAPPED,A.ADMROUNDNO,A.COLLEGE_CODE,A.MERITNO,A.APPLICATIONID,A.SCORE,B.STADDNO, B.IDNO, B.PADDRESS, ISNULL(A.SCHOLORSHIP,0),A.COLLEGE_ID,A.FATHERMOBILE,SCHOLORSHIP,A.ADDHARCARDNO,ISNULL(A.TRANSPORT,0)TRANSPORT,A.HOSTELER,B.PCITY,ISNULL(A.INSTALLMENT,0)INSTALLMENT,B.PSTATE,B.PPINCODE,A.EMAILID,B.PTELEPHONE,B.LADDRESS,B.LTELEPHONE,B.LMOBILE,B.LEMAIL,A.ADMQUOTANO,A.BLOODGRPNO,B.LCITY,B.LSTATE", "ISNULL(A.ADMCAN,0)=0 AND A.IDNO=B.IDNO AND A.REGNO = '" + txtREGNo.Text.Trim() + "'","");
@@ -267,27 +193,27 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 ddlNationality.SelectedValue = (dsStudent.Tables[0].Rows[0]["NATIONALITYNO"].ToString());
                 ddlCategory.SelectedValue = (dsStudent.Tables[0].Rows[0]["CATEGORYNO"].ToString());
                 txtPermanentAddress.Text = dsStudent.Tables[0].Rows[0]["PADDRESS"].ToString();
-                txtCity.Text = (dsStudent.Tables[0].Rows[0]["PCITY"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PCITY"].ToString()), "ACD_CITY", "CITYNO", "CITY"));
-                txtState.Text = (dsStudent.Tables[0].Rows[0]["PSTATE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PSTATE"].ToString()), "ACD_STATE", "STATENO", "STATENAME"));
+                txtCity.Text = (dsStudent.Tables[0].Rows[0]["PCITY"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PCITY"].ToString()), "ACD_CITY", "CITYNO", "CITY"));
+                txtState.Text = (dsStudent.Tables[0].Rows[0]["PSTATE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PSTATE"].ToString()), "ACD_STATE", "STATENO", "STATENAME"));
                 txtPIN.Text = dsStudent.Tables[0].Rows[0]["PPINCODE"].ToString();
                 txtContactNumber.Text = dsStudent.Tables[0].Rows[0]["PTELEPHONE"].ToString();
                 // txtDateOfReporting.Text = (dsStudent.Tables[0].Rows[0]["ADMDATE"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["ADMDATE"].ToString()).ToString("dd/MM/yyyy"));
-                ddlDegree.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString()), "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE DR ON(DR.DEGREENO=D.DEGREENO)", "D.DEGREENO", "D.DEGREENAME"));
-                ddlBranchShow.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString()), "ACD_BRANCH", "BRANCHNO", "LONGNAME"));
-                ddlBatch.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString()), "ACD_ADMBATCH", "BATCHNO", "BATCHNAME"));
-                ddlYear.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["YEAR"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["YEAR"].ToString()), "ACD_YEAR", "YEAR", "YEARNAME"));
-                ddlPaymentType.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["PTYPE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PTYPE"].ToString()), "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME"));
+                ddlDegree.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString()), "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE DR ON(DR.DEGREENO=D.DEGREENO)", "D.DEGREENO", "D.DEGREENAME"));
+                ddlBranchShow.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["BRANCHNO"].ToString()), "ACD_BRANCH", "BRANCHNO", "LONGNAME"));
+                ddlBatch.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString()), "ACD_ADMBATCH", "BATCHNO", "BATCHNAME"));
+                ddlYear.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["YEAR"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["YEAR"].ToString()), "ACD_YEAR", "YEAR", "YEARNAME"));
+                ddlPaymentType.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["PTYPE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["PTYPE"].ToString()), "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME"));
 
-                 
+
                 if (ddlPaymentType.SelectedItem.Text != string.Empty)
                 {
                     string Paytype = objCommon.LookUp("ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENO=" + dsStudent.Tables[0].Rows[0]["PTYPE"].ToString());
-                     ViewState["Ptype"] = Paytype ;
+                    ViewState["Ptype"] = Paytype;
                 }
 
-               
+
                 // txtStateOfEligibility.Text = (dsStudent.Tables[0].Rows[0]["STATENO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["STATENO"].ToString()), "ACD_STATE", "STATENO", "STATENAME"));
-                ddlAdmType.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["IDTYPE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["IDTYPE"].ToString()), "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION"));
+                ddlAdmType.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["IDTYPE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["IDTYPE"].ToString()), "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION"));
                 // txtAllIndiaRank.Text = dsStudent.Tables[0].Rows[0]["ALL_INDIA_RANK"].ToString();
                 //  txtYearOfExam.Text = dsStudent.Tables[0].Rows[0]["YEAR_OF_EXAM"].ToString();
                 //txtStateRank.Text = dsStudent.Tables[0].Rows[0]["STATE_RANK"].ToString();
@@ -306,8 +232,8 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 txtGuardianEmail.Text = dsStudent.Tables[0].Rows[0]["LEMAIL"].ToString();
                 ddlBloodGrp.SelectedValue = (dsStudent.Tables[0].Rows[0]["BLOODGRPNO"].ToString());
                 //ddlQuota.SelectedItem.Text = (dsStudent.Tables[0].Rows[0]["ADMQUOTANO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["ADMQUOTANO"].ToString()), "ACD_QUOTA", "QUOTANO", "QUOTA"));
-                txtLocalCity.Text = (dsStudent.Tables[0].Rows[0]["LCITY"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LCITY"].ToString()), "ACD_CITY", "CITYNO", "CITY"));
-                txtLocalState.Text = (dsStudent.Tables[0].Rows[0]["LSTATE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LSTATE"].ToString()), "ACD_STATE", "STATENO", "STATENAME"));
+                txtLocalCity.Text = (dsStudent.Tables[0].Rows[0]["LCITY"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LCITY"].ToString()), "ACD_CITY", "CITYNO", "CITY"));
+                txtLocalState.Text = (dsStudent.Tables[0].Rows[0]["LSTATE"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNoForDualDegree(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LSTATE"].ToString()), "ACD_STATE", "STATENO", "STATENAME"));
                 //PHYSICAL HADICAPP
                 ddlPhyHandicap.SelectedValue = (dsStudent.Tables[0].Rows[0]["PHYSICALLY_HANDICAPPED"].ToString());
                 //ROUND FOR MCA
@@ -343,13 +269,440 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
         }
     }
 
+    protected void clearallfield()
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
 
+    public byte[] ResizePhoto(FileUpload fu)
+    {
+
+        byte[] image = null;
+        if (fu.PostedFile != null && fu.PostedFile.FileName != "")
+        {
+            string strExtension = System.IO.Path.GetExtension(fu.FileName);
+            // Resize Image Before Uploading to DataBase
+            System.Drawing.Image imageToBeResized = System.Drawing.Image.FromStream(fu.PostedFile.InputStream);
+            int imageHeight = imageToBeResized.Height;
+            int imageWidth = imageToBeResized.Width;
+            int maxHeight = 240;
+            int maxWidth = 320;
+            imageHeight = (imageHeight * maxWidth) / imageWidth;
+            imageWidth = maxWidth;
+
+            if (imageHeight > maxHeight)
+            {
+                imageWidth = (imageWidth * maxHeight) / imageHeight;
+                imageHeight = maxHeight;
+            }
+
+            // Saving image to smaller size and converting in byte[]
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
+            System.IO.MemoryStream stream = new MemoryStream();
+            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            stream.Position = 0;
+            image = new byte[stream.Length + 1];
+            stream.Read(image, 0, image.Length);
+        }
+        return image;
+    }
+
+    public byte[] ResizePhotoSign(FileUpload fu)
+    {
+        byte[] image = null;
+        if (fu.PostedFile != null && fu.PostedFile.FileName != "")
+        {
+            string strExtension = System.IO.Path.GetExtension(fu.FileName);
+            //string strExtension = System.IO.Path.GetExtension(hdfSignUpload.Value);
+
+            // Resize Image Before Uploading to DataBase
+            System.Drawing.Image imageToBeResized = System.Drawing.Image.FromStream(fu.PostedFile.InputStream);
+            int imageHeight = imageToBeResized.Height;
+            int imageWidth = imageToBeResized.Width;
+            int maxHeight = 240;
+            int maxWidth = 320;
+            imageHeight = (imageHeight * maxWidth) / imageWidth;
+            imageWidth = maxWidth;
+
+            if (imageHeight > maxHeight)
+            {
+                imageWidth = (imageWidth * maxHeight) / imageHeight;
+                imageHeight = maxHeight;
+            }
+
+            // Saving image to smaller size and converting in byte[]
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
+            System.IO.MemoryStream stream = new MemoryStream();
+            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            stream.Position = 0;
+            image = new byte[stream.Length + 1];
+            stream.Read(image, 0, image.Length);
+        }
+        return image;
+    }
+
+    private void DisableFields()
+    {
+        txtStudentfullName.Enabled = false;
+        txtFatherName.Enabled = false;
+        txtStudMobile.Enabled = true;
+        txtStudMobile2.Enabled = true;
+        txtStudEmail.Enabled = false;
+        txtState.Enabled = false;
+        ddlCity.Enabled = false;
+        ddlSchool.Enabled = false;
+        ddlDegree.Enabled = false;
+        ddlBranchShow.Enabled = false;
+        ddlSemester.Enabled = false;
+        ddlBatch.Enabled = false;
+        // txtAge.Attributes.
+        ddlBatch.Attributes.Add("readonly", "readonly");
+        ddlAdmType.Enabled = false;
+        ddlCategory.Enabled = false;
+        txtDateOfBirth.Enabled = false;
+        //txtDateOfReporting.Enabled = false;
+        ddlPaymentType.Enabled = false;
+        txtAadhaarNo.Enabled = false;
+        ddlAllotedCat.Enabled = false;
+        txtStudentfullName.Enabled = false;
+        ddlBloodGrp.Enabled = false;
+        ddlAdmType.Enabled = false;
+        //btnSave.Enabled = false;
+        ddlYear.Enabled = false;
+        ddladmthrough.Enabled = false;
+        txtParentmobno.Enabled = false;
+        ddlstate.Enabled = false;
+        ddlstate.Attributes.Add("readonly", "readonly");
+        txtPermanentAddress.Enabled = false;
+        txtCity.Enabled = false;
+        txtPIN.Enabled = false;
+        txtMobileNo.Enabled = false;
+        txtContactNumber.Enabled = false;
+        txtPostalAddress.Enabled = false;
+        txtLocalCity.Enabled = false;
+        txtLocalState.Enabled = false;
+        txtGuardianMobile.Enabled = false;
+        txtGuardianPhone.Enabled = false;
+        txtGuardianEmail.Enabled = false;
+    }
+
+    private void DisableFieldsSibling()
+    {
+        txtStudentfullName.Enabled = true;
+        txtFatherName.Enabled = true;
+        txtStudMobile.Enabled = true;
+        txtStudMobile2.Enabled = true;
+        txtStudEmail.Enabled = false;
+        txtState.Enabled = false;
+        ddlCity.Enabled = false;
+        ddlDegree.Enabled = false;
+        ddlSchool.Enabled = false;
+        ddlDegree.Enabled = false;
+        ddlBranchShow.Enabled = false;
+        ddlSemester.Enabled = false;
+        ddlBatch.Enabled = false;
+        // txtAge.Attributes.
+        ddlBatch.Attributes.Add("readonly", "readonly");
+        ddlAdmType.Enabled = false;
+        ddlCategory.Enabled = false;
+        txtDateOfBirth.Enabled = false;
+        //txtDateOfReporting.Enabled = false;
+        ddlPaymentType.Enabled = false;
+        txtAadhaarNo.Enabled = false;
+        ddlAllotedCat.Enabled = false;
+        txtStudentfullName.Enabled = true;
+        ddlBloodGrp.Enabled = false;
+        ddlAdmType.Enabled = false;
+        //btnSave.Enabled = false;
+        ddlYear.Enabled = false;
+        ddladmthrough.Enabled = false;
+        txtParentmobno.Enabled = false;
+        ddlstate.Enabled = false;
+        ddlstate.Attributes.Add("readonly", "readonly");
+        txtPermanentAddress.Enabled = false;
+        txtCity.Enabled = false;
+        txtPIN.Enabled = false;
+        txtMobileNo.Enabled = false;
+        txtContactNumber.Enabled = false;
+        txtPostalAddress.Enabled = false;
+        txtLocalCity.Enabled = false;
+        txtLocalState.Enabled = false;
+        txtGuardianMobile.Enabled = false;
+        txtGuardianPhone.Enabled = false;
+        txtGuardianEmail.Enabled = false;
+    }
+
+    private void EnableFields()
+    {
+        txtStudMobile2.Enabled = true;
+        txtFatherName.Enabled = true;
+        txtStudentfullName.Enabled = true;
+        txtStudMobile.Enabled = true;
+        txtStudEmail.Enabled = true;
+        txtState.Enabled = true;
+        ddlCity.Enabled = true;
+        ddlSchool.Enabled = true;
+        // ddlDegree.Enabled = true;
+        ddlBranch.Enabled = true;
+        ddlSemester.Enabled = true;
+        ddlBatch.Enabled = true;
+        ddlAdmType.Enabled = true;
+        ddlCategory.Enabled = true;
+        txtDateOfBirth.Enabled = true;
+        // txtDateOfReporting.Enabled = true;
+        ddlPaymentType.Enabled = true;
+        txtAadhaarNo.Enabled = true;
+        ddlAllotedCat.Enabled = true;
+        ddlstate.Enabled = true;
+        txtStudentfullName.Enabled = true;
+        ddlBloodGrp.Enabled = true;
+        ddlAdmType.Enabled = true;
+        //btnSave.Enabled = true;
+        ddlYear.Enabled = true;
+        ddladmthrough.Enabled = true;
+        txtParentmobno.Enabled = true;
+        txtPermanentAddress.Enabled = true;
+        txtCity.Enabled = true;
+        txtPIN.Enabled = true;
+        txtMobileNo.Enabled = true;
+        txtContactNumber.Enabled = true;
+        txtPostalAddress.Enabled = true;
+        txtLocalCity.Enabled = true;
+        txtLocalState.Enabled = true;
+        txtGuardianMobile.Enabled = true;
+        txtGuardianPhone.Enabled = true;
+        txtGuardianEmail.Enabled = true;
+    }
+
+    private void clearsavefileds()
+    {
+        ddlPaymentTypeNew.SelectedIndex = 0;
+        ddlAdmtypeNew.SelectedIndex = 0;
+        ddlSemesterNew.SelectedIndex = 0;
+        ddlSpecialisation.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlDegreeNew.SelectedIndex = 0;
+        ddlDegreeNew.SelectedIndex = 0;
+        ddlCollegeNew.SelectedIndex = 0;
+    }
+
+    private void bindlist(string category, string searchtext)
+    {
+        StudentController objSC = new StudentController();
+        DataSet ds = objSC.RetrieveStudentDetailsAdmCancel(searchtext, category);
+
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            pnlLV.Visible = true;
+            lvStudent.Visible = true;
+            lvStudent.DataSource = ds;
+            lvStudent.DataBind();
+            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label - 
+            lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
+        }
+        else
+        {
+            lblNoRecords.Text = "Total Records : 0";
+            lvStudent.Visible = false;
+            lvStudent.DataSource = null;
+            lvStudent.DataBind();
+        }
+    }
+
+    private void PopulateDropDown()
+    {
+        try
+        {
+            this.objCommon.FillDropDownList(ddlSearch, "ACD_SEARCH_CRITERIA", "ID", "CRITERIANAME, ISNULL(IS_FEE_RELATED,0) IS_FEE_RELATED", "ID > 0 AND ISNULL(IS_FEE_RELATED,0)=0", "SRNO");
+            ddlSearch.SelectedIndex = 0;
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BranchChange.PopulateDropDown-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    #endregion
+
+    #region Selected Index Changed Events
+
+    protected void ddlstate_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlstate.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO >0 AND ACTIVESTATUS = 1 AND STATENO=" + ddlstate.SelectedValue, "CITY");
+        }
+        else
+        {
+            ddlCity.SelectedIndex = 0;
+        }
+    }
+    protected void ddlYear_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1 AND YEARNO=" + ddlYear.SelectedValue, "SEMESTERNO");
+    }
+    protected void ddlDegreeNew_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlCollegeNew.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(B.ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue), "B.LONGNAME");
+            ddlBranch.Focus();
+        }
+        else
+        {
+            ddlBranch.SelectedIndex = 0;
+            objCommon.DisplayMessage(updStudent, "Please select college/school!", this.Page);
+            return;
+        }
+        ddlBranch.SelectedIndex = 0;
+    }
+    protected void ddlCollegeNew_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlCollegeNew.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlDegreeNew, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlCollegeNew.SelectedValue, "D.DEGREENAME");
+            ddlDegreeNew.Focus();
+        }
+        else
+        {
+            ddlDegreeNew.SelectedIndex = 0;
+            ddlBranch.SelectedIndex = 0;
+        }
+        ddlDegreeNew.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+    }
+    protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlBranch.SelectedIndex > 0)
+        {
+            int count = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "count(1)", "CORE_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue)));
+            if (count > 0)
+            {
+                divSpecialisation.Visible = true;
+                objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND ISNULL(B.ISCORE,0)=1 AND ISNULL(ISSPECIALISATION,0) = 1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue) + " AND CD.CORE_BRANCHNO =" + Convert.ToInt32(ddlBranch.SelectedValue), "B.LONGNAME");
+            }
+            else
+            {
+                divSpecialisation.Visible = false;
+            }
+        }
+        else
+        {
+            divSpecialisation.Visible = false;
+        }
+
+    }
+    protected void ddlTypeofStudent_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlTypeofStudent.SelectedValue == "1" || ddlTypeofStudent.SelectedValue == "2")
+        {
+            divSearchInfo.Visible = true;
+            this.ShowStudentDetails();
+            DisableFields();
+            clearsavefileds();
+
+        }
+        else if (ddlTypeofStudent.SelectedValue == "3")
+        {
+            divSearchInfo.Visible = true;
+            DisableFieldsSibling();
+            clearsavefileds();
+        }
+        else
+        {
+            divSearchInfo.Visible = false;
+            EnableFields();
+            clearsavefileds();
+        }
+
+    }
+    protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            //divdata.Visible = false;
+            //ClearControls();
+
+            if (ddlSearch.SelectedIndex > 0)
+            {
+                txtStudent.Text = string.Empty;
+                DataSet ds = objCommon.GetSearchDropdownDetails(ddlSearch.SelectedItem.Text);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    string ddltype = ds.Tables[0].Rows[0]["CRITERIATYPE"].ToString();
+                    string tablename = ds.Tables[0].Rows[0]["TABLENAME"].ToString();
+                    string column1 = ds.Tables[0].Rows[0]["COLUMN1"].ToString();
+                    string column2 = ds.Tables[0].Rows[0]["COLUMN2"].ToString();
+                    if (ddltype == "ddl")
+                    {
+                        pnltextbox.Visible = false;
+                        txtStudent.Visible = false;
+                        pnlDropdown.Visible = true;
+
+                        divtxt.Visible = false;
+                        //lblDropdown.Text = ddlSearch.SelectedItem.Text;
+                        objCommon.FillDropDownList(ddlDropdown, tablename, column1, column2, column1 + ">0", column1);
+                    }
+                    else
+                    {
+                        pnltextbox.Visible = true;
+                        divtxt.Visible = true;
+                        txtStudent.Visible = true;
+                        pnlDropdown.Visible = false;
+                    }
+                }
+            }
+            else
+            {
+                pnltextbox.Visible = false;
+                pnlDropdown.Visible = false;
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+    protected void ddlSemesterNew_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void ddlBatch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void ddlExamNo_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void ddlPaymentType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+    protected void ddlSpotOption_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    #endregion
+
+    #region Onclick Events
     protected void btnSave_Click(object sender, EventArgs e)
     {
         //ddlBatch.Enabled = true;
         //string regNo = string.Empty;
 
         int BranchNo = 0;
+        string BranchText = string.Empty;
+
         string IUEmail = string.Empty;
         StudentController objSC = new StudentController();
         Student objS = new Student();
@@ -371,21 +724,39 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 return;
             }
 
-           
+
+
 
             if (ddlSpecialisation.SelectedIndex > 0)
             {
                 objS.Specialization = "1";
                 objS.BranchNo = Convert.ToInt32(ddlSpecialisation.SelectedValue);
                 BranchNo = Convert.ToInt32(ddlSpecialisation.SelectedValue);
+                BranchText = ddlSpecialisation.SelectedItem.Text;
             }
             else
             {
                 objS.Specialization = "0";
                 objS.BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
                 BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
+                BranchText = ddlBranch.SelectedItem.Text;
             }
-            DataSet dsstandardfees = objSC.GetStandardFeesDetails(Convert.ToInt32(ddlCollegeNew.SelectedValue), Convert.ToInt32(ddlDegreeNew.SelectedValue), BranchNo , "TF", Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlPaymentTypeNew.SelectedValue), Convert.ToInt32(Session["OrgId"]));
+
+            int Countheckstatus = 0;
+            DataSet checkstatuscount = objSC.CheckExistsStudentDataForDualDegree(idno, Convert.ToInt32(ddlCollegeNew.SelectedValue), Convert.ToInt32(ddlDegreeNew.SelectedValue), BranchNo);
+
+            if (checkstatuscount.Tables[0].Rows.Count > 0)
+            {
+                Countheckstatus = Convert.ToInt32(checkstatuscount.Tables[0].Rows[0]["COUNT"].ToString());
+            }
+
+            if (Countheckstatus > 0)
+            {
+                objCommon.DisplayMessage(this.Page, "You are already admitted for " + BranchText + ".", this.Page);
+                return;
+            }
+
+            DataSet dsstandardfees = objSC.GetStandardFeesDetails(Convert.ToInt32(ddlCollegeNew.SelectedValue), Convert.ToInt32(ddlDegreeNew.SelectedValue), BranchNo, "TF", Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlPaymentTypeNew.SelectedValue), Convert.ToInt32(Session["OrgId"]));
             int Count = 0;
 
             if (dsstandardfees.Tables[0].Rows.Count > 0)
@@ -396,6 +767,7 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
             if (Count == 0)
             {
                 objCommon.DisplayMessage(this.Page, "Standard Fees is Not Defined Please Define Standard Fees First.", this.Page);
+                return;
             }
             else
             {
@@ -457,7 +829,7 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
                 if (!txtStudMobile.Text.Trim().Equals(string.Empty))
                     objS.StudentMobile = txtStudMobile.Text.Trim();
                 if (!txtStudMobile2.Text.Trim().Equals(string.Empty))
-                    objS.StudMobileno2 = txtStudMobile2.Text.Trim(); 
+                    objS.StudMobileno2 = txtStudMobile2.Text.Trim();
                 if (!txtParentmobno.Text.Trim().Equals(string.Empty))
                     objS.FatherMobile = txtParentmobno.Text.Trim();
                 if (!txtcetcomorederno.Text.Trim().Equals(string.Empty))
@@ -678,312 +1050,29 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
 
                 //}               
                 string output = objSC.AddDualDegreeeNewStudent(objS, objStud, IUEmail, objUa, DualDegreeStatus, idno);
+
                 objCommon.DisplayMessage(this.Page, "You are Successfully Admitted for Dual Degree.", this.Page);
+                btnSave.Enabled = false;
                 //CLEARALLFIELD();  
                 divSearchInfo.Visible = false;
                 EnableFields();
+                clearsavefileds();
                 //clearallfield();
 
-             }            
+            }
         }
         catch (Exception ex)
         {
             throw;
         }
     }
-    protected void clearallfield()
-    {
-        Response.Redirect(Request.Url.ToString());
-    }
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-         
+
         Response.Redirect(Request.Url.ToString());
     }
 
-    public byte[] ResizePhoto(FileUpload fu)
-    {
-
-        byte[] image = null;
-        if (fu.PostedFile != null && fu.PostedFile.FileName != "")
-        {
-            string strExtension = System.IO.Path.GetExtension(fu.FileName);
-            // Resize Image Before Uploading to DataBase
-            System.Drawing.Image imageToBeResized = System.Drawing.Image.FromStream(fu.PostedFile.InputStream);
-            int imageHeight = imageToBeResized.Height;
-            int imageWidth = imageToBeResized.Width;
-            int maxHeight = 240;
-            int maxWidth = 320;
-            imageHeight = (imageHeight * maxWidth) / imageWidth;
-            imageWidth = maxWidth;
-
-            if (imageHeight > maxHeight)
-            {
-                imageWidth = (imageWidth * maxHeight) / imageHeight;
-                imageHeight = maxHeight;
-            }
-
-            // Saving image to smaller size and converting in byte[]
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
-            System.IO.MemoryStream stream = new MemoryStream();
-            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
-            stream.Position = 0;
-            image = new byte[stream.Length + 1];
-            stream.Read(image, 0, image.Length);
-        }
-        return image;
-    }
-
-    public byte[] ResizePhotoSign(FileUpload fu)
-    {
-        byte[] image = null;
-        if (fu.PostedFile != null && fu.PostedFile.FileName != "")
-        {
-            string strExtension = System.IO.Path.GetExtension(fu.FileName);
-            //string strExtension = System.IO.Path.GetExtension(hdfSignUpload.Value);
-
-            // Resize Image Before Uploading to DataBase
-            System.Drawing.Image imageToBeResized = System.Drawing.Image.FromStream(fu.PostedFile.InputStream);
-            int imageHeight = imageToBeResized.Height;
-            int imageWidth = imageToBeResized.Width;
-            int maxHeight = 240;
-            int maxWidth = 320;
-            imageHeight = (imageHeight * maxWidth) / imageWidth;
-            imageWidth = maxWidth;
-
-            if (imageHeight > maxHeight)
-            {
-                imageWidth = (imageWidth * maxHeight) / imageHeight;
-                imageHeight = maxHeight;
-            }
-
-            // Saving image to smaller size and converting in byte[]
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
-            System.IO.MemoryStream stream = new MemoryStream();
-            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
-            stream.Position = 0;
-            image = new byte[stream.Length + 1];
-            stream.Read(image, 0, image.Length);
-        }
-        return image;
-    }
-    private void DisableFields()
-    {
-        txtStudentfullName.Enabled = false;
-        txtFatherName.Enabled = false;
-        txtStudMobile.Enabled = true;
-        txtStudMobile2.Enabled = true;
-        txtStudEmail.Enabled = false;
-        txtState.Enabled = false;
-        ddlCity.Enabled = false;
-        ddlSchool.Enabled = false;
-        ddlDegree.Enabled = false;
-        ddlBranchShow.Enabled = false;
-        ddlSemester.Enabled = false;
-        ddlBatch.Enabled = false;      
-        // txtAge.Attributes.
-        ddlBatch.Attributes.Add("readonly", "readonly");
-        ddlAdmType.Enabled = false;
-        ddlCategory.Enabled = false;
-        txtDateOfBirth.Enabled = false;
-        //txtDateOfReporting.Enabled = false;
-        ddlPaymentType.Enabled = false;
-        txtAadhaarNo.Enabled = false;
-        ddlAllotedCat.Enabled = false;
-        txtStudentfullName.Enabled = false; 
-        ddlBloodGrp.Enabled = false;
-        ddlAdmType.Enabled = false;
-        //btnSave.Enabled = false;
-        ddlYear.Enabled = false;           
-        ddladmthrough.Enabled = false;
-        txtParentmobno.Enabled = false;
-        ddlstate.Enabled = false;
-        ddlstate.Attributes.Add("readonly", "readonly");
-        txtPermanentAddress.Enabled=false;
-        txtCity.Enabled=false;
-        txtPIN.Enabled=false;
-        txtMobileNo.Enabled=false;
-        txtContactNumber.Enabled=false;
-        txtPostalAddress.Enabled=false;
-        txtLocalCity.Enabled=false;
-        txtLocalState.Enabled=false;
-        txtGuardianMobile.Enabled=false;
-        txtGuardianPhone.Enabled=false;
-        txtGuardianEmail.Enabled = false;
-    }
-
-    private void DisableFieldsSibling()
-    {
-        txtStudentfullName.Enabled = true;     
-        txtFatherName.Enabled = true;
-        txtStudMobile.Enabled = true;
-        txtStudMobile2.Enabled = true;
-        txtStudEmail.Enabled = false;
-        txtState.Enabled = false;
-        ddlCity.Enabled = false;
-        ddlDegree.Enabled = false;
-        ddlSchool.Enabled = false;
-        ddlDegree.Enabled = false;
-        ddlBranchShow.Enabled = false;
-        ddlSemester.Enabled = false;
-        ddlBatch.Enabled = false;
-        // txtAge.Attributes.
-        ddlBatch.Attributes.Add("readonly", "readonly");
-        ddlAdmType.Enabled = false;
-        ddlCategory.Enabled = false;
-        txtDateOfBirth.Enabled = false;
-        //txtDateOfReporting.Enabled = false;
-        ddlPaymentType.Enabled = false;
-        txtAadhaarNo.Enabled = false;
-        ddlAllotedCat.Enabled = false;
-        txtStudentfullName.Enabled = true;
-        ddlBloodGrp.Enabled = false;
-        ddlAdmType.Enabled = false;
-        //btnSave.Enabled = false;
-        ddlYear.Enabled = false;
-        ddladmthrough.Enabled = false;
-        txtParentmobno.Enabled = false;
-        ddlstate.Enabled = false;
-        ddlstate.Attributes.Add("readonly", "readonly");
-        txtPermanentAddress.Enabled = false;
-        txtCity.Enabled = false;
-        txtPIN.Enabled = false;
-        txtMobileNo.Enabled = false;
-        txtContactNumber.Enabled = false;
-        txtPostalAddress.Enabled = false;
-        txtLocalCity.Enabled = false;
-        txtLocalState.Enabled = false;
-        txtGuardianMobile.Enabled = false;
-        txtGuardianPhone.Enabled = false;
-        txtGuardianEmail.Enabled = false;
-    }
-
-    private void EnableFields()
-    {
-        txtStudMobile2.Enabled = true;
-        txtFatherName.Enabled = true;
-        txtStudentfullName.Enabled = true;
-        txtStudMobile.Enabled = true;
-        txtStudEmail.Enabled = true;
-        txtState.Enabled = true;
-        ddlCity.Enabled = true;
-        ddlSchool.Enabled = true;
-        // ddlDegree.Enabled = true;
-        ddlBranch.Enabled = true;
-        ddlSemester.Enabled = true;
-        ddlBatch.Enabled = true;
-        ddlAdmType.Enabled = true;
-        ddlCategory.Enabled = true;
-        txtDateOfBirth.Enabled = true;
-       // txtDateOfReporting.Enabled = true;
-        ddlPaymentType.Enabled = true;
-        txtAadhaarNo.Enabled = true;
-        ddlAllotedCat.Enabled = true;
-        ddlstate.Enabled = true;
-        txtStudentfullName.Enabled = true;      
-        ddlBloodGrp.Enabled = true;
-        ddlAdmType.Enabled = true;
-        //btnSave.Enabled = true;
-        ddlYear.Enabled = true;       
-        ddladmthrough.Enabled = true;
-        txtParentmobno.Enabled = true;
-        txtPermanentAddress.Enabled = true;
-        txtCity.Enabled = true;
-        txtPIN.Enabled = true;
-        txtMobileNo.Enabled = true;
-        txtContactNumber.Enabled = true;
-        txtPostalAddress.Enabled = true;
-        txtLocalCity.Enabled = true;
-        txtLocalState.Enabled = true;
-        txtGuardianMobile.Enabled = true;
-        txtGuardianPhone.Enabled = true;
-        txtGuardianEmail.Enabled = true;
-    }
-     
-   
-    protected void ddlSpotOption_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-
-
-
-    protected void ddlDegreeNew_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlCollegeNew.SelectedIndex > 0)
-        {
-            objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(B.ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue), "B.LONGNAME");
-            ddlBranch.Focus();
-        }
-        else
-        {        
-            ddlBranch.SelectedIndex = 0;
-            objCommon.DisplayMessage(updStudent, "Please select college/school!", this.Page);
-            return;
-        }  
-        ddlBranch.SelectedIndex = 0;
-    }
-    protected void ddlCollegeNew_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlCollegeNew.SelectedIndex > 0)
-        {        
-            objCommon.FillDropDownList(ddlDegreeNew, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlCollegeNew.SelectedValue, "D.DEGREENAME");
-            ddlDegreeNew.Focus();            
-        }
-        else
-        {     
-            ddlDegreeNew.SelectedIndex = 0;
-            ddlBranch.SelectedIndex = 0;          
-        }        
-        ddlDegreeNew.SelectedIndex = 0;
-        ddlBranch.SelectedIndex = 0;
-    }
-    protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlBranch.SelectedIndex > 0)
-        {
-            int count = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "count(1)", "CORE_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue)));
-            if (count > 0)
-            {
-                divSpecialisation.Visible = true;
-                objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegreeNew.SelectedValue) + " AND ISNULL(B.ISCORE,0)=1 AND ISNULL(ISSPECIALISATION,0) = 1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlCollegeNew.SelectedValue) + " AND CD.CORE_BRANCHNO =" + Convert.ToInt32(ddlBranch.SelectedValue), "B.LONGNAME");
-
-            }
-            else
-            {
-                divSpecialisation.Visible = false;
-            }
-        }
-        else
-        {
-            divSpecialisation.Visible = false;
-
-        }
-        
-    }
-    
-
-
-    protected void ddlTypeofStudent_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlTypeofStudent.SelectedValue == "1" || ddlTypeofStudent.SelectedValue == "2")
-        {
-            divSearchInfo.Visible = true;
-            this.ShowStudentDetails();
-            DisableFields();
-        }
-        else if (ddlTypeofStudent.SelectedValue == "3")
-        {
-            divSearchInfo.Visible = true;
-            DisableFieldsSibling();
-        }
-        else
-        {
-            divSearchInfo.Visible = false;
-            EnableFields();
-        }
-       
-    }
     protected void lnkId_Click(object sender, EventArgs e)
     {
         LinkButton lnk = sender as LinkButton;
@@ -998,20 +1087,37 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
         Session["stuinfoenrollno"] = lblenrollno.Text.Trim();
         Session["stuinfofullname"] = lnk.Text.Trim();
         Session["stuinfoidno"] = Convert.ToInt32(lnk.CommandArgument);
-        ViewState["idno"] = Session["stuinfoidno"].ToString();  
+        ViewState["idno"] = Session["stuinfoidno"].ToString();
 
-       // divdata.Visible = true;
+
+        int countdual = Convert.ToInt32(objCommon.LookUp("ACD_STUD_DUAL_DEGREE_ADM_LOG", "count(IDNO)", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND ISNULL(DUAL_DEGREE_STATUS,0)>0"));
+        if (countdual > 0)
+        {
+            objCommon.DisplayMessage(this.Page, "You are Already Admitted for Dual Degree.", this.Page);
+            return;
+        }
+
+
+        int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "count(IDNO)", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND ISNULL(DUAL_DEGREE_STATUS,0)>0"));
+        if (count > 0)
+        {
+            objCommon.DisplayMessage(this.Page, "You are Already Admitted for Dual Degree.", this.Page);
+            return;
+        }
+
+        // divdata.Visible = true;
         lvStudent.Visible = false;
         lvStudent.DataSource = null;
         lblNoRecords.Visible = false;
         updEdit.Visible = false;
-       // pnlstudetails.Visible = true;
+        // pnlstudetails.Visible = true;
         divtypeofStudent.Visible = true;
-       // divSearchInfo.Visible = true;
+        // divSearchInfo.Visible = true;
         pnlbody.Visible = false;
         ShowStudentDetails();
-       // ShowDetails(Convert.ToInt32(lnk.CommandArgument));
+        // ShowDetails(Convert.ToInt32(lnk.CommandArgument));
     }
+
     protected void btnShow_Click(object sender, EventArgs e)
     {
         lblNoRecords.Visible = true;
@@ -1024,97 +1130,64 @@ public partial class ACADEMIC_DualDegreeRegistrationEntry : System.Web.UI.Page
         bindlist(ddlSearch.SelectedItem.Text, value);
         ddlDropdown.ClearSelection();
         txtStudent.Text = string.Empty;
-      //  divdata.Visible = false;
+        //  divdata.Visible = false;
     }
+
     protected void btnClose_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
     }
-    protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
+
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
+    #endregion
+
+    #region Text Changed Events
+
+    protected void ddlAdmType_TextChanged(object sender, EventArgs e)
     {
         try
         {
-            //divdata.Visible = false;
-            //ClearControls();
-            if (ddlSearch.SelectedIndex > 0)
+            if (ddlAdmType.SelectedValue.Equals("1"))
             {
-                txtStudent.Text = string.Empty;
-                DataSet ds = objCommon.GetSearchDropdownDetails(ddlSearch.SelectedItem.Text);
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    string ddltype = ds.Tables[0].Rows[0]["CRITERIATYPE"].ToString();
-                    string tablename = ds.Tables[0].Rows[0]["TABLENAME"].ToString();
-                    string column1 = ds.Tables[0].Rows[0]["COLUMN1"].ToString();
-                    string column2 = ds.Tables[0].Rows[0]["COLUMN2"].ToString();
-                    if (ddltype == "ddl")
-                    {
-                        pnltextbox.Visible = false;
-                        txtStudent.Visible = false;
-                        pnlDropdown.Visible = true;
-
-                        divtxt.Visible = false;
-                        //lblDropdown.Text = ddlSearch.SelectedItem.Text;
-                        objCommon.FillDropDownList(ddlDropdown, tablename, column1, column2, column1 + ">0", column1);
-                    }
-                    else
-                    {
-                        pnltextbox.Visible = true;
-                        divtxt.Visible = true;
-                        txtStudent.Visible = true;
-                        pnlDropdown.Visible = false;
-                    }
-                }
+                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
+                ddlYear.SelectedValue = "1";
+                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
+                ddlSemester.SelectedValue = "1";
+            }
+            else if (ddlAdmType.SelectedValue.Equals("2"))
+            {
+                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
+                ddlYear.SelectedValue = "2";
+                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
+                ddlSemester.SelectedIndex = 1;
             }
             else
             {
-                pnltextbox.Visible = false;
-                pnlDropdown.Visible = false;
+                objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
+                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (8) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0", "SEMESTERNO");
+
             }
+
         }
-        catch
+        catch (Exception ex)
         {
             throw;
         }
     }
-    private void bindlist(string category, string searchtext)
-    {
-        StudentController objSC = new StudentController();
-        DataSet ds = objSC.RetrieveStudentDetailsAdmCancel(searchtext, category);
 
-        if (ds.Tables[0].Rows.Count > 0)
-        {
-            pnlLV.Visible = true;
-            lvStudent.Visible = true;
-            lvStudent.DataSource = ds;
-            lvStudent.DataBind();
-            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label - 
-            lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
-        }
-        else
-        {
-            lblNoRecords.Text = "Total Records : 0";
-            lvStudent.Visible = false;
-            lvStudent.DataSource = null;
-            lvStudent.DataBind();
-        }
-    }
-    private void PopulateDropDown()
+    protected void txtAadhaarNo_TextChanged(object sender, EventArgs e)
     {
-        try
-        {
-            this.objCommon.FillDropDownList(ddlSearch, "ACD_SEARCH_CRITERIA", "ID", "CRITERIANAME, ISNULL(IS_FEE_RELATED,0) IS_FEE_RELATED", "ID > 0 AND ISNULL(IS_FEE_RELATED,0)=0", "SRNO");
-            ddlSearch.SelectedIndex = 0;
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_BranchChange.PopulateDropDown-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
-        }
-    }
-    protected void ddlSemesterNew_SelectedIndexChanged(object sender, EventArgs e)
-    {
+        int l = (txtAadhaarNo.Text).Length;
 
+        if (l < 12 && l != 0)
+        {
+            objCommon.DisplayUserMessage(updStudent, "Please enter 12 digit Aadhar No.", this.Page);
+        }
     }
+
+    #endregion
+   
 }

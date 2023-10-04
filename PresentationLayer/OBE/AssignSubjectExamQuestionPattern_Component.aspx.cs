@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Services;
-using IITMS;
-using IITMS.SQLServer.SQLDAL;
-using Newtonsoft.Json;
 using System.Web.Script.Services;
 using System.Data;
-using System.Web.Script.Serialization;
 
-using System.Data.SqlClient;
 using Saplin.Controls;
 using IITMS.NITPRM.BusinessLayer.BusinessEntities;
-using IITMS.NITPRM;
 using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS;
@@ -238,8 +230,7 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
     protected void btnSave_Click(object sender, EventArgs e)
     {
         ExamQuestionPaperController objExmPCon = new ExamQuestionPaperController();
-        int Weightages = txtWeightage.Text == string.Empty ? 0 : Convert.ToInt32(txtWeightage.Text);//added on 04092023
-
+        decimal Weightages = txtWeightage.Text == string.Empty ? 0 : Convert.ToDecimal(txtWeightage.Text);//added on 04092023
         foreach (RepeaterItem repeaterItem in rptExamQuestion.Items)
         {
             ListBox ddl = (ListBox)repeaterItem.FindControl("ddlBloomCategory");
@@ -473,15 +464,16 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
             int OrgID = Convert.ToInt32(Session["OrgId"]);
 
             #region Added on 31082023
-            int Weightage = txtWeightage.Text == string.Empty ? 0 : Convert.ToInt32(txtWeightage.Text);
-
+            decimal Weightage = txtWeightage.Text == string.Empty ? 0 : Convert.ToDecimal(txtWeightage.Text);
+            int WT = Convert.ToInt32(Weightage);
+       
             decimal internalmark = txtinternal.Text == string.Empty ? 0 : Convert.ToDecimal(txtinternal.Text);
 
             decimal externalmark = txtExternal.Text == string.Empty ? 0 : Convert.ToDecimal(txtExternal.Text);
 
             decimal Marktot = txttot.Text == string.Empty ? 0 : Convert.ToDecimal(txttot.Text);
             #endregion
-            int result = objStatC.SaveQuestionPaper(txtQuestionPaperName.Text, Convert.ToInt32(hdSchemeSubjectIdDDl.Value), Convert.ToInt32(hdExamPatternMappingIdDDl.Value), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToDouble(txtMaximumMarks.Text), txtAreaDiscription.Text, islock, isactive, Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(hdnSectionId.Value), dt, dt1, dt2, OrgID, Weightage, internalmark, externalmark, Marktot);
+            int result = objStatC.SaveQuestionPaper(txtQuestionPaperName.Text, Convert.ToInt32(hdSchemeSubjectIdDDl.Value), Convert.ToInt32(hdExamPatternMappingIdDDl.Value), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToDouble(txtMaximumMarks.Text), txtAreaDiscription.Text, islock, isactive, Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(hdnSectionId.Value), dt, dt1, dt2, OrgID, WT, internalmark, externalmark, Marktot);
           
             if (result == 1)
             {   
@@ -597,6 +589,7 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
                         }
 
                         txtMaximumMarks.Text = (ds.Tables[0].Rows[0]["MaxMarks"].ToString());
+                        txtWeightage.Text = "";
                         if ((ds.Tables[0].Rows[0]["IsLock"].ToString()) == "1")
                         {
                             IsLock.Checked = true;
@@ -837,15 +830,15 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
                     }
                     txtMaximumMarks.Text = (ds.Tables[0].Rows[0]["MaxMarks"].ToString());
                     txtWeightage.Text = (ds.Tables[0].Rows[0]["WEIGHTAGE"].ToString());//added on 04092023
-                    
+
                     if (ddlPattern.SelectedItem != null)
                     {
                         objCommon.FillDropDownList(ddlPattern, "tblQuestionPatternMaster", "QuestionPatternId", "QuestionPatternName", "MARKS=" + txtMaximumMarks.Text + "", "QuestionPatternId");
 
-                   int QPAttern = Convert.ToInt32(objCommon.LookUp("TBLEXAMPAPERQUESTIONS", "distinct QuestionPatternId", "QuestionPaperId=" + hdQuestionPaperId.Value));//added on 04092023
-                       //ddlPattern.SelectedValue = Convert.ToString(ds3.Tables[0].Rows[0]["QuestionPatternId"]); 
-                       ddlPattern.SelectedValue = Convert.ToString(QPAttern); 
-                       
+                        int QPAttern = Convert.ToInt32(objCommon.LookUp("TBLEXAMPAPERQUESTIONS", "distinct QuestionPatternId", "QuestionPaperId=" + hdQuestionPaperId.Value));//added on 04092023
+                        //ddlPattern.SelectedValue = Convert.ToString(ds3.Tables[0].Rows[0]["QuestionPatternId"]); 
+                        ddlPattern.SelectedValue = Convert.ToString(QPAttern);
+
                     }
 
                     if ((ds.Tables[0].Rows[0]["IsLock"].ToString()) == "True")
