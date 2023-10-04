@@ -141,8 +141,7 @@ public partial class StudeHome : System.Web.UI.Page
                         if (dsoutstaning.Tables.Count > 0 && dsoutstaning != null && dsoutstaning.Tables[0] != null && dsoutstaning.Tables[0].Rows.Count > 0)
                         {
                             lblLastLoginTime.Text = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
-                            var amt = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
-                            var msg = Outstanding_Message.Replace(@"[Amount]", amt.ToString() + " Rs.");
+                            var msg = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString() + " Rs. " + Outstanding_Message;
                             objCommon.DisplayMessage(msg, this.Page);
                             ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7", "AddClassTobtnoutfees();", true);
                         }
