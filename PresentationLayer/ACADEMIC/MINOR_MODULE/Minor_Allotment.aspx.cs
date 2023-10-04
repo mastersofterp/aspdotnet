@@ -619,11 +619,7 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
             return;
         }
 
-        if (ddlScheme.SelectedValue == "0")
-        {
-            objCommon.DisplayMessage(this.updCourse, "Please Select Scheme!!!", this.Page);
-            return;
-        }
+      
 
         if (ddlSemesterminor.SelectedValue == "0")
         {

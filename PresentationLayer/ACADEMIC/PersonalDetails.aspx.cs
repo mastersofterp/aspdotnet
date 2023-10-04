@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Web;
 using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -8,12 +9,19 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Linq;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
+using System.Collections.Generic;
+
 
 public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
+    ModuleConfigController objConfig = new ModuleConfigController();
+
+    List<string> validationErrors = new List<string>();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -34,6 +42,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                 this.FillDropDown();
                 ShowStudentDetails();
+                StudentConfiguration();
                 rdoParents.Visible = true;                         //Added by sachin on 19-07-2022
 
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
@@ -130,8 +139,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         {
                             btnSubmit.Visible = false;
                         }
-<<<<<<< HEAD
-=======
 
 
                         // Added By Shrikant W. on 08-09-2023 For DAIICT                    
@@ -180,19 +187,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                                 }
                             }
                         }
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                     }
-                    //if (status.ToString() != "")
-                    //{
-                    //    if (status == "1")
-                    //    {
-                    //        btnSubmit.Visible = false;
-                    //    }
-                    //    else if (status == "2")
-                    //    {
-                    //        btnSubmit.Visible = true;
-                    //    }
-                    //}
                     CheckFinalSubmission(); // Added by Bhagyashree on 30052023
                 }
                 else if (ViewState["usertype"].ToString() == "8") //HOD
@@ -250,8 +245,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         }
     }
 
-<<<<<<< HEAD
-=======
 
     #region Student Related Configuration
     protected void StudentConfiguration()
@@ -420,7 +413,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
     }
     #endregion Student Related Configuration     // Added By Shrikant W. on 05-09-2023
 
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -744,208 +736,63 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        StudentController objSC = new StudentController();
-        Student objS = new Student();
-        StudentPhoto objSPhoto = new StudentPhoto();
-        StudentAddress objSAddress = new StudentAddress();
-        StudentQualExm objSQualExam = new StudentQualExm();
-        string IndusEmail = string.Empty;
-        string idno = string.Empty;
-        int father_alive = 0;
-        int mother_alive = 0;
-        int parent_alive = 0;
-        try
+
+        string errorString = ValidationAlert();      // Added By Shrikant W. on 04-09-2023
+
+        if (errorString != string.Empty)
         {
-            if (Convert.ToDateTime(txtDateOfBirth.Text) > DateTime.Now.Date)
+            ClientScript.RegisterStartupScript(this.GetType(), "alertmessage", "alertmessage('" + errorString + "');", true);
+        }
+        else
+        {
+            StudentController objSC = new StudentController();
+            Student objS = new Student();
+            StudentPhoto objSPhoto = new StudentPhoto();
+            StudentAddress objSAddress = new StudentAddress();
+            StudentQualExm objSQualExam = new StudentQualExm();
+            string IndusEmail = string.Empty;
+            string idno = string.Empty;
+            int father_alive = 0;
+            int mother_alive = 0;
+            int parent_alive = 0;
+            try
             {
-                objCommon.DisplayMessage(this.Page, "Date of Birth Should not be greater than Current Date !", this.Page);
-                return;
-            }
-
-            string paramvalue = CommonComponent.Parameters.ParameterValue(CommonComponent.Parameters.ALLOW_PHOTO_SIGN_MANDATORY_ON_STUD_PROFILE);
-
-            if (paramvalue == "1") //onliy for MITA
-            {
-                if (!fuPhotoUpload.HasFile && ViewState["StudPhoto"].ToString() == "0")
+                if (Convert.ToDateTime(txtDateOfBirth.Text) > DateTime.Now.Date)
                 {
-                    objCommon.DisplayMessage(this.Page, "Please upload Photo !", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Date of Birth Should not be greater than Current Date !", this.Page);
                     return;
                 }
-                else if (!fuSignUpload.HasFile && ViewState["StudSign"].ToString() == "0")
-                {
-                    objCommon.DisplayMessage(this.Page, "Please upload Signature !", this.Page);
-                    return;
-                }
-            }
 
-            if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
-            {
-                if (ViewState["usertype"].ToString() == "2")
-                {
-                    idno = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(Session["idno"]));
-                }
-                else
-                {
-                    idno = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]));
-                }
+                string paramvalue = CommonComponent.Parameters.ParameterValue(CommonComponent.Parameters.ALLOW_PHOTO_SIGN_MANDATORY_ON_STUD_PROFILE);
 
-                //if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 8)    //Added by sachin on 28-07-2022
-                if (Convert.ToInt32(Session["OrgId"]) == 8)    //Remove orgId not show Admission Through messes
+                if (paramvalue == "1") //onliy for MITA
                 {
-
-                    if (ddladmthrough.SelectedIndex == 0 && ViewState["usertype"].ToString() != "2")
+                    if (!fuPhotoUpload.HasFile && ViewState["StudPhoto"].ToString() == "0")
                     {
-                        objCommon.DisplayMessage(this.Page, "Please select Admission Through!", this.Page);
+                        objCommon.DisplayMessage(this.Page, "Please upload Photo !", this.Page);
+                        return;
+                    }
+                    else if (!fuSignUpload.HasFile && ViewState["StudSign"].ToString() == "0")
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please upload Signature !", this.Page);
                         return;
                     }
                 }
 
-
-                if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "1" && txtAddharCardNo.Text == string.Empty && txtAddharCardNo.Text == "")
+                if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
                 {
-                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Aadhar Card No.!!", this.Page);
-                    return;
-                }
-                //else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "2" && txtCitizenshipNo.Text == "" && txtCitizenshipNo.Text == string.Empty)
-                //{
-                //    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Citizenship No.!!", this.Page);
-                //    return;
-                //}
-                //else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue == "10" && txtCitizenshipNo.Text == "" && txtCitizenshipNo.Text == string.Empty)
-                //{
-                //    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Citizenship No.!!", this.Page);
-                //    return;
-                //}
-                else if (ddlNationality.SelectedIndex > 0 && ddlNationality.SelectedValue != "1" && ddlNationality.SelectedValue != "2" && ddlNationality.SelectedValue != "10" && txtPassportNo.Text == string.Empty && txtPassportNo.Text == "")
-                {
-                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Passport No.!!", this.Page);
-                    return;
-                }
-                if (idno != "")
-                {
-                    string imgphoto = objCommon.LookUp("ACD_STUD_PHOTO", "photo", "IDNO=" + Convert.ToInt32(idno));
-                    string signphoto = objCommon.LookUp("ACD_STUD_PHOTO", "stud_sign", "IDNO=" + Convert.ToInt32(idno));
-
-                    if (imgphoto == string.Empty)
+                    if (ViewState["usertype"].ToString() == "2")
                     {
-                        //objCommon.DisplayMessage(this.updpersonalinformation, "Please Upload Photo.", this.Page);
-                        //return;
+                        idno = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(Session["idno"]));
                     }
-                    if (signphoto == string.Empty)
+                    else
                     {
-                        //objCommon.DisplayMessage(this.updpersonalinformation, "Please Upload Signature.", this.Page);
-                        //return;
+                        idno = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]));
                     }
 
-                }
-                objS.IdNo = Convert.ToInt32(txtIDNo.Text);
-                objS.EnrollNo = txtEnrollno.Text.Trim();
-                objS.RegNo = txtRegNo.Text.Trim();
-                if (!txtStudFullname.Text.Trim().Equals(string.Empty)) objS.StudName = txtStudFullname.Text.Trim();
-                if (!txtStudentName.Text.Trim().Equals(string.Empty)) objS.firstName = txtStudentName.Text.Trim();
-                if (!txtStudMiddleName.Text.Trim().Equals(string.Empty)) objS.MiddleName = txtStudMiddleName.Text.Trim();
-                if (!txtStudLastName.Text.Trim().Equals(string.Empty)) objS.LastName = txtStudLastName.Text.Trim();
-                if (!txtFatherFullName.Text.Trim().Equals(string.Empty)) objS.FatherName = txtFatherFullName.Text.Trim();// ADDED CHANGES ON 19-05-2023 BY KAJAL JAISWAL FOR SAVING FATHER FULL NAME.
-                if (!txtFatherName.Text.Trim().Equals(string.Empty)) objS.fatherfirstName = txtFatherName.Text.Trim();
-                if (!txtFatherMiddleName.Text.Trim().Equals(string.Empty)) objS.FatherMiddleName = txtFatherMiddleName.Text.Trim();
-
-                if (!txtFatherLastName.Text.Trim().Equals(string.Empty)) objS.FatherLastName = txtFatherLastName.Text.Trim();
-                if (!txtFatherMobile.Text.Trim().Equals(string.Empty)) objS.FatherMobile = txtFatherMobile.Text.Trim();
-                if (!txtFathersOfficeNo.Text.Trim().Equals(string.Empty)) objS.FatherOfficeNo = txtFathersOfficeNo.Text.Trim();
-                if (!txtFatherDesignation.Text.Trim().Equals(string.Empty)) objSAddress.FATHER_DESIG = txtFatherDesignation.Text.Trim();//Father Qualification
-                objSAddress.OCCUPATION = Convert.ToInt32(ddlOccupationNo.SelectedValue);
-
-                if (!txtfatheremailid.Text.Trim().Equals(string.Empty)) objS.Fatheremail = txtfatheremailid.Text.Trim();
-                if (!txtMotherName.Text.Trim().Equals(string.Empty)) objS.MotherName = txtMotherName.Text.Trim();
-                string MotherMobile = txtMotherMobile.Text.Trim();
-                if (!txtmotheremailid.Text.Trim().Equals(string.Empty)) objS.Motheremail = txtmotheremailid.Text.Trim();
-                if (!txtMotherDesignation.Text.Trim().Equals(string.Empty)) objSAddress.MOTHERDESIGNATION = txtMotherDesignation.Text.Trim();
-
-                string MotherOfficeNo = txtMothersOfficeNo.Text.Trim();
-                objSAddress.MOTHEROCCUPATION = Convert.ToInt32(ddlMotherOccupation.SelectedValue);
-                objS.Caste = Convert.ToInt32(ddlCaste.SelectedValue);
-                objS.Subcaste = txtSubCaste.Text.Trim();
-                if (!txtDateOfBirth.Text.Trim().Equals(string.Empty)) objS.Dob = Convert.ToDateTime(txtDateOfBirth.Text.Trim());
-                objS.Annual_income = txtAnnualIncome.Text.Trim();
-                objS.BloodGroupNo = Convert.ToInt32(ddlBloodGroupNo.SelectedValue);
-
-                objS.AdmroundNo = Convert.ToInt32(ddladmthrough.SelectedValue);   //Added by sachin on 28-07-2022
-
-                objS.ClaimType = Convert.ToInt32(ddlClaimedcategory.SelectedValue);//for student we are showing claimed category
-                objS.PayTypeNO = Convert.ToInt32(ddlPayType.SelectedValue);
-                objS.ReligionNo = Convert.ToInt32(ddlReligion.SelectedValue);
-                objS.NationalityNo = Convert.ToInt32(ddlNationality.SelectedValue);
-                objS.CategoryNo = Convert.ToInt32(ddlCasteCategory.SelectedValue);
-                if (!txtPassportNo.Text.Trim().Equals(string.Empty)) objS.PassportNo = txtPassportNo.Text.Trim();
-                if (!txtCitizenshipNo.Text.Trim().Equals(string.Empty)) objS.Citizenship = txtCitizenshipNo.Text.Trim();
-                objS.Married = Convert.ToChar(rdobtn_marital.SelectedValue);
-                if (!txtAddharCardNo.Text.Trim().Equals(string.Empty)) objS.AddharcardNo = txtAddharCardNo.Text.Trim();
-                objS.Physical_Handicap = Convert.ToInt32(ddlHandicap.SelectedValue);
-                objS.Sex = Convert.ToChar(rdobtn_Gender.SelectedValue);
-                if (!txtInstituteEmail.Text.Trim().Equals(string.Empty)) IndusEmail = txtInstituteEmail.Text.Trim();
-
-                if (!txtStudMobile.Text.Trim().Equals(string.Empty)) objS.StudentMobile = txtStudMobile.Text.Trim();
-                if (!txtAlternateNoStud.Text.Trim().Equals(string.Empty)) objS.StudentAlternateMobile = txtAlternateNoStud.Text.Trim(); //Student Alternate Number added by Rishabh - 11/02/2022
-                if (!txtFatherAlterateNo.Text.Trim().Equals(string.Empty)) objS.FatherAlternateMobile = txtFatherAlterateNo.Text.Trim();
-                if (!txtMotherAlternateNo.Text.Trim().Equals(string.Empty)) objS.MotherAlternateMobile = txtMotherAlternateNo.Text.Trim();
-                if (!txtStudentEmail.Text.Trim().Equals(string.Empty)) objS.EmailID = txtStudentEmail.Text.Trim();
-                //if (!txtAlternateEmailId.Text.Trim().Equals(string.Empty)) objS.AlternateEmailID = txtAlternateEmailId.Text.Trim(); //Added By Rishabh on 13/04/2022
-                if (!txtBirthPlace.Text.Trim().Equals(string.Empty)) objS.BirthPlace = txtBirthPlace.Text.Trim();
-                objS.Age = "";
-
-                if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7")
-                {
-                    objS.Uano = Convert.ToInt32(Session["userno"]);
-                }
-                else
-                {
-                    objS.Uano = 0;
-                }
-
-
-
-                if (fuPhotoUpload.HasFile)
-                {
-                    //objSPhoto.Photo1 = objCommon.GetImageData(fuPhotoUpload);
-                    objSPhoto.Photo1 = this.ResizePhoto(fuPhotoUpload);
-
-                }
-                else
-                {
-
-                    objSPhoto.Photo1 = null;
-
-                }
-
-                if (rdoHosteler.SelectedValue == "1")
-                {
-                    objS.HostelSts = 1;
-                }
-                else
-                {
-                    objS.HostelSts = 0;
-                }
-                if (rdbTransport.SelectedValue == "1")
-                {
-                    objS.Transportation = 1;
-                }
-                else
-                {
-                    objS.Transportation = 0;
-                }
-
-                if (rdofatheralive.SelectedValue == "1")
-                {
-                    parent_alive = 1;
-                    father_alive = 1;
-                    mother_alive = 1;
-                }
-                else
-                {
-                    if (rdoFather.SelectedValue == "1")
+                    //if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 8)    //Added by sachin on 28-07-2022
+                    if (Convert.ToInt32(Session["OrgId"]) == 8)    //Remove orgId not show Admission Through messes
                     {
-<<<<<<< HEAD
-=======
 
                         if (ddladmthrough.SelectedIndex == 0 && ViewState["usertype"].ToString() != "2")
                         {
@@ -1106,109 +953,114 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     if (rdofatheralive.SelectedValue == "1")
                     {
                         parent_alive = 1;
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
                         father_alive = 1;
-                    }
-                    else
-                    {
-                        father_alive = 0;
-                    }
-                    if (rdoMother.SelectedValue == "1")
-                    {
                         mother_alive = 1;
                     }
                     else
                     {
-                        mother_alive = 0;
-                    }
-                }
-
-                if (rdoInternationalStu.SelectedValue == "1") //Added By Rishabh on 13/04/2022
-                {
-                    objS.InternationalStu = "Yes";
-                }
-                else
-                {
-                    objS.InternationalStu = "No";
-                }
-                if (Convert.ToInt32(Session["OrgId"]) == 8) // For MIT 
-                {
-                    if (txtABCCId.Text != string.Empty && txtDTEAppId.Text != string.Empty)
-                    {
-                        if (ViewState["usertype"].ToString() == "2")
+                        if (rdoFather.SelectedValue == "1")
                         {
-
-                            string abccidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "ABCC_ID='" + txtABCCId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["idno"]) + "");
-                            if (abccidcount != string.Empty)
-                            {
-                                if (Convert.ToInt32(abccidcount) > 0)
-                                {
-                                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC Id", this.Page);
-                                    return;
-                                }
-                            }
-                            string dteappidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "DTE_APPLICATION_ID='" + txtDTEAppId.Text + "' AND IDNO<>" + Convert.ToInt32(Session["idno"]) + "");
-                            if (dteappidcount != string.Empty)
-                            {
-                                if (Convert.ToInt32(dteappidcount) > 0)
-                                {
-                                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application Id", this.Page);
-                                    return;
-                                }
-                            }
+                            father_alive = 1;
                         }
                         else
                         {
-                            string abccidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "ABCC_ID='"+ txtABCCId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["stuinfoidno"]) + "");
-                            if (abccidcount != string.Empty)
+                            father_alive = 0;
+                        }
+                        if (rdoMother.SelectedValue == "1")
+                        {
+                            mother_alive = 1;
+                        }
+                        else
+                        {
+                            mother_alive = 0;
+                        }
+                    }
+
+                    if (rdoInternationalStu.SelectedValue == "1") //Added By Rishabh on 13/04/2022
+                    {
+                        objS.InternationalStu = "Yes";
+                    }
+                    else
+                    {
+                        objS.InternationalStu = "No";
+                    }
+                    if (Convert.ToInt32(Session["OrgId"]) == 8) // For MIT 
+                    {
+                        if (txtABCCId.Text != string.Empty && txtDTEAppId.Text != string.Empty)
+                        {
+                            if (ViewState["usertype"].ToString() == "2")
                             {
-                                if (Convert.ToInt32(abccidcount) > 0)
+
+                                string abccidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "ABCC_ID='" + txtABCCId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["idno"]) + "");
+                                if (abccidcount != string.Empty)
                                 {
-                                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC Id", this.Page);
-                                    return;
+                                    if (Convert.ToInt32(abccidcount) > 0)
+                                    {
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC Id", this.Page);
+                                        return;
+                                    }
+                                }
+                                string dteappidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "DTE_APPLICATION_ID='" + txtDTEAppId.Text + "' AND IDNO<>" + Convert.ToInt32(Session["idno"]) + "");
+                                if (dteappidcount != string.Empty)
+                                {
+                                    if (Convert.ToInt32(dteappidcount) > 0)
+                                    {
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application Id", this.Page);
+                                        return;
+                                    }
                                 }
                             }
-                            string dteappidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "DTE_APPLICATION_ID='" + txtDTEAppId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["stuinfoidno"]) + "");
-                            if (dteappidcount != string.Empty)
+                            else
                             {
-                                if (Convert.ToInt32(dteappidcount) > 0)
+                                string abccidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "ABCC_ID='" + txtABCCId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["stuinfoidno"]) + "");
+                                if (abccidcount != string.Empty)
                                 {
-                                    objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application Id", this.Page);
-                                    return;
+                                    if (Convert.ToInt32(abccidcount) > 0)
+                                    {
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC Id", this.Page);
+                                        return;
+                                    }
+                                }
+                                string dteappidcount = objCommon.LookUp("ACD_STUDENT", "count(idno)idno", "DTE_APPLICATION_ID='" + txtDTEAppId.Text + "' AND IDNO <>" + Convert.ToInt32(Session["stuinfoidno"]) + "");
+                                if (dteappidcount != string.Empty)
+                                {
+                                    if (Convert.ToInt32(dteappidcount) > 0)
+                                    {
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application Id", this.Page);
+                                        return;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-<<<<<<< HEAD
 
-                objS.AbccId = txtABCCId.Text;
-                objS.DteAppId = txtDTEAppId.Text;
+                    objS.AbccId = txtABCCId.Text;
+                    objS.DteAppId = txtDTEAppId.Text;
 
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentPersonalInformation(objS, objSAddress, objSPhoto, objSQualExam, MotherMobile, MotherOfficeNo, IndusEmail, Convert.ToInt32(Session["usertype"]), father_alive, mother_alive, parent_alive);
-                if (cs.Equals(CustomStatus.RecordUpdated))
-                {
-                    Response.Redirect("~/academic/AddressDetails.aspx");
-                    // ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Student Personal Information Updated Successfully!!'); location.href='AddressDetails.aspx';", true);
+                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentPersonalInformation(objS, objSAddress, objSPhoto, objSQualExam, MotherMobile, MotherOfficeNo, IndusEmail, Convert.ToInt32(Session["usertype"]), father_alive, mother_alive, parent_alive);
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        Response.Redirect("~/academic/AddressDetails.aspx");
+                        // ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Student Personal Information Updated Successfully!!'); location.href='AddressDetails.aspx';", true);
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updpersonalinformation, "Error Occured While Updating Personal Information!!", this.Page);
+                    }
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this.updpersonalinformation, "Error Occured While Updating Personal Information!!", this.Page);
+                    objCommon.DisplayMessage(this.updpersonalinformation, "You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
+
                 }
-=======
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
             }
-            else
+
+            catch (Exception ex)
             {
-                objCommon.DisplayMessage(this.updpersonalinformation, "You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
-
+                throw;
+                //this.ClearControl();
             }
 
-        }
-        catch (Exception ex)
-        {
-            throw;
-            //this.ClearControl();
         }
     }
     protected void btnGohome_Click(object sender, EventArgs e)
