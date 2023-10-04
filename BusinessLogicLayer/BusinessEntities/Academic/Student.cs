@@ -423,12 +423,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
 
         //methods
 
-        // Added by Shrikant Waghmare on 23-09-2023
-        private string _casteName = string.Empty;
-
-        //Added by Shrikant Waghmare on 26-09-2023
-        private int _motherAnnualIncome = 0;
-
+      
 
         #region Public Property Fields
         public decimal NataMarks //Added By Rishabh on 13/04/2022
@@ -2428,10 +2423,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              set { _academicyearno = value; }
          }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
          // Added By Shrikant W. on 23-09-2023
          public string CasteName
          {
@@ -2445,9 +2437,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              get { return _motherAnnualIncome; }
              set { _motherAnnualIncome = value; }
          }
-<<<<<<< HEAD
-=======
-        
->>>>>>> e63510d ([ENHANCMENT] [49053] Added Mother Annual Income Textbox)
+
     }
 }
