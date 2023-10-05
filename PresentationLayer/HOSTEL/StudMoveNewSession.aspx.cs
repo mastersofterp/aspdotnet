@@ -96,7 +96,7 @@ public partial class HOSTEL_StudMoveNewSession : System.Web.UI.Page
         {
             //objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "HOSTEL_SESSION_NO", "SESSION_NAME", "FLOCK=1 AND HOSTEL_SESSION_NO IN(SELECT MAX(HOSTEL_SESSION_NO) FROM ACD_HOSTEL_SESSION WHERE FLOCK=1)", "HOSTEL_SESSION_NO desc");
 
-            objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "TOP 2 HOSTEL_SESSION_NO", "SESSION_NAME", " HOSTEL_SESSION_NO > 0", "HOSTEL_SESSION_NO DESC");
+            objCommon.FillDropDownList(ddlCurSession, "ACD_HOSTEL_SESSION", "TOP 2 HOSTEL_SESSION_NO", "SESSION_NAME", " HOSTEL_SESSION_NO > 0 AND FLOCK = 0 ", "HOSTEL_SESSION_NO DESC");
 
             objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO>0 ", "HOSTEL_NO");
 
