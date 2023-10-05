@@ -416,12 +416,12 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
     private void GetCourses()
     {
-        if (Convert.ToInt32(Session["OrgId"]) != 9)
-        {
+        //if (Convert.ToInt32(Session["OrgId"]) != 9)
+        //{
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(6)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(6)').hide();});", true);
+        //    ScriptManager.RegisterStartupScript(this.updExamdate, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(6)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(6)').hide();});", true);
 
-        }
+        //}
 
         int schemeno = Convert.ToInt32(ViewState["schemeno"]);
         int semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
@@ -1196,12 +1196,12 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
     private void GetCourses1()
     {
-        if (Convert.ToInt32(Session["OrgId"]) != 9)
-        {
+        //if (Convert.ToInt32(Session["OrgId"]) != 9)
+        //{
 
-            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(6)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(6)').hide();});", true);
+        //    ScriptManager.RegisterStartupScript(this.updglobal, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(6)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(6)').hide();});", true);
 
-        }
+        //}
         DataSet ds = objExamController.GetCoursesGlobleElectiv(Convert.ToInt16(ddlSession1.SelectedValue), Convert.ToInt16(ddlSubjecttype1.SelectedValue), Convert.ToInt16(ddlSubexamname1.SelectedValue));
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
@@ -1575,6 +1575,12 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
     private void GetCommonCourses()
     {
+        //if (Convert.ToInt32(Session["OrgId"]) != 9)
+        //{
+
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#BatchTheory1').hide();$('td:nth-child(6)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(6)').hide();});", true);
+
+        //}
         DataSet ds = objExamController.GetCommonCourseTimeTable(Convert.ToInt16(ddlSession2.SelectedValue), Convert.ToInt16(ddlSubjecttype2.SelectedValue), Convert.ToInt16(ddlSubexamname2.SelectedValue), Convert.ToInt16(ddlcoursecat.SelectedValue));
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
