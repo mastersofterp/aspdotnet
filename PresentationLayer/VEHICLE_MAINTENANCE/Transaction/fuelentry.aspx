@@ -692,7 +692,7 @@
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" ValidationGroup="ScheduleDtl"
                             OnClick="btnSubmit_Click" TabIndex="17" CausesValidation="true" ToolTip="Click here to Submit" 
-                            UseSubmitBehavior="false" OnClientClick="this.disabled='true'; setTimeout('enableButton()', 5000) "/>
+                            UseSubmitBehavior="false" OnClientClick="this.disabled='true'; setTimeout('enableButton()', 10000) "/>
                         <%-- OnClientClick="checkissuedate();"--%>
                         <asp:Button ID="btnReport" runat="server" Text="Report" CssClass="btn btn-info" OnClick="btnReport_Click"
                             TabIndex="19" CausesValidation="false" ToolTip="Click here to Show Report"  Visible="false"/>
