@@ -938,6 +938,16 @@
         function validateAssign() {
             debugger;
             var numberOfChecked = $('[id*=tblCurrentSubjects] input:checkbox:checked').length;
+
+            if (numberOfChecked == 0)
+                numberOfChecked = $('[id*=tblUniCoreSub] input:checkbox:checked').length;
+
+            if (numberOfChecked == 0)
+                numberOfChecked = $('[id*=tblGlobalSubjects] input:checkbox:checked').length;
+
+            if (numberOfChecked == 0)
+                numberOfChecked = $('[id*=tblValueAddedGroup] input:checkbox:checked').length;
+
             if (numberOfChecked == 0) {
                 alert('Please select atleast one course from the course list for course registration..!!');
                 return false;
