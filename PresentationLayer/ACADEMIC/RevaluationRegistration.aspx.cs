@@ -967,7 +967,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")//for student
             {
-                result = objSReg.AddPhotoCopyRegisteration(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objSReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
             }
             else if (Session["usertype"].ToString() == "1") //Admin
             {
@@ -2407,6 +2407,11 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
                     Session["PAYID"] = PAYID;
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 18)//Hits
+                {
+                    PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%IOB Pay%'"));
+                    Session["PAYID"] = PAYID;
+                }
                 else
                 {
                     PAYID = 1;               //Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
@@ -2433,6 +2438,8 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     {
                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                        Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString() == null ? "1" : ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
+
                         Response.Redirect(RequestUrl, false);
 
                         //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
@@ -2440,7 +2447,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     }
                 }
                 else
-                {
+                {  
                     objCommon.DisplayMessage(this.Page,"Payment Gateway not define",this.Page);
                     return;
                 }
@@ -2465,7 +2472,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
     protected void ReportStatus()
     {
-        if ((Convert.ToInt32(Session["OrgId"]) == 6) && (Session["usertype"].ToString() == "1"))
+        if ((Convert.ToInt32(Session["OrgId"]) != 2) && (Session["usertype"].ToString() == "1"))
         {
             btnSubmit.Visible = false;
             btnChallan.Visible = false;

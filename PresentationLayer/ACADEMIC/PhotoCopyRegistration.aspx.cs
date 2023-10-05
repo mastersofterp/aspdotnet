@@ -1020,7 +1020,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")
             {
-                result = objSReg.AddPhotoCopyRegisteration(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objSReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
                 btnChallan.Visible = false;
             }
             else //for admin
@@ -1057,8 +1057,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 //to hide all courses
                 //BindCourseListForPHOTOCOPY();
                 divAllCoursesFromHist.Visible = false;
-
-
+                 
                 /////////////////////////////////////////////
                 divRegCourses.Visible = true;
 
@@ -1089,7 +1088,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 9)   //Added 03112022 for challan report disabled 
                 {
                     btnChallan.Visible = false;
-                }
+                } 
             }
             else
             {
@@ -2400,7 +2399,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             }
             else
             {
-                result = 1;   //Fees log maintined in other client except crescent 
+                result = 1;   //Fees log not maintined in other client except crescent 
             }
 
             if (result > 0)
@@ -2504,6 +2503,11 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
                     Session["PAYID"] = PAYID;
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 18)//rajagiri and rcpiper
+                {
+                    PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%IOB Pay%'"));
+                    Session["PAYID"] = PAYID;
+                }
                 else
                 {
                     PAYID = 1;               //Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
@@ -2528,14 +2532,16 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                         //Session["CHECKSUM_KEY"] = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();     //Added on 21082022
                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                        Response.Redirect(RequestUrl, false);
+                        Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString() == null ? "1" : ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();  //Added for Hits  
 
+                        Response.Redirect(RequestUrl, false);
+                         
                         //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
                         //Response.Redirect(requesturl, false);
                     }
                 }
                 else
-                {
+                {  
                     objCommon.DisplayMessage(this.Page, "Payment Gateway not define", this.Page);
                     return;
                 } 
@@ -2689,8 +2695,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
                             btnSubmit.Visible = false;
                             btnPrintRegSlip.Visible = false;
-
-
+                             
                             lblTotalAmount.Text = "0";
                             CourseAmt = 0;
                             divTotalCourseAmount.Visible = false;
@@ -2716,9 +2721,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                                 lvCurrentSubjects.DataSource = null;
                                 lvCurrentSubjects.DataBind();
                                 lvCurrentSubjects.Visible = false;
-                            }
-
-
+                            } 
                         }
                         else
                         {
@@ -2974,7 +2977,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
     protected void ReportStatus()
     {
-        if ((Convert.ToInt32(Session["OrgId"]) == 6) && (Session["usertype"].ToString() == "1"))
+        if ((Convert.ToInt32(Session["OrgId"]) != 2) && (Session["usertype"].ToString() == "1"))
         {
             btnSubmit.Visible = false;
             btnChallan.Visible = false;
