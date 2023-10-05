@@ -967,7 +967,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")//for student
             {
-                result = objSReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objBackReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
             }
             else if (Session["usertype"].ToString() == "1") //Admin
             {

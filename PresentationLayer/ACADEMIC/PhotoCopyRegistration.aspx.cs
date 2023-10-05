@@ -1020,7 +1020,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")
             {
-                result = objSReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objBackReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
                 btnChallan.Visible = false;
             }
             else //for admin
