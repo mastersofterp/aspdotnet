@@ -370,7 +370,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divmilege" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
-                                                        <label>Milege</label>
+                                                        <label>Mileage</label>
                                                     </div>
                                                     <asp:TextBox ID="txtMilege" runat="server" TabIndex="11"
                                                         CssClass="form-control" ToolTip="Enter Milege" MaxLength="15" ReadOnly="true" onblur="CalculateAmount();"></asp:TextBox>

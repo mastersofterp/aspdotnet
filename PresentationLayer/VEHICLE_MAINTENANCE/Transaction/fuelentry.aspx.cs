@@ -221,8 +221,9 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
     {
         clear();
         ddlIssueType.SelectedValue = "0";
-        lvFuel.DataSource = null;
-        lvFuel.DataBind();
+        //lvFuel.DataSource = null;
+        //lvFuel.DataBind();
+        lvFuel.Visible = false;
      //   updDocument.Visible = false;
     }
 
@@ -612,6 +613,28 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
             }
             else
             {
+
+                if (ViewState["FEID"] == null)
+                {
+                    int DuplicateIndent = Convert.ToInt32(objCommon.LookUp("VEHICLE_FUELENTRY", "(Count(ISNULL(FEID,0))) AS FEID", "VIDNO='" + ddlVehicle.SelectedValue + "' and ITEM_ID='" + ddlItem.SelectedValue + "' and FUELDATE='" + Convert.ToDateTime(txtFuelDate.Text).ToString("yyyy-MM-dd") + "'"));
+                    if (DuplicateIndent > 0)
+                    {
+                        objCommon.DisplayMessage(updActivity, "Indent is Already Exist.", this.Page);
+                       // txtEndReading.Text = string.Empty;
+                        return;
+                    }
+                }
+                else
+                {
+                    int DuplicateIndent = Convert.ToInt32(objCommon.LookUp("VEHICLE_FUELENTRY", "(Count(ISNULL(FEID,0))) AS FEID", "VIDNO='" + ddlVehicle.SelectedValue + "' and ITEM_ID='" + ddlItem.SelectedValue + "' and FUELDATE='" + Convert.ToDateTime(txtFuelDate.Text).ToString("yyyy-MM-dd") + "' and FEID !='" + Convert.ToInt32(ViewState["FEID"]) + "'"));
+                    if (DuplicateIndent>0)
+                    {
+                        objCommon.DisplayMessage(updActivity, "Indent is Already Exist.", this.Page);
+                      //  txtEndReading.Text = string.Empty;
+                        return;
+                    }
+                }
+
                 objVM.VEHICLECAT = Convert.ToString('I');
                 objVM.PURPOSE_OF_WITHDRAWAL = string.Empty;
             }
@@ -672,8 +695,8 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
                     {
                         objVM.FFEID = Convert.ToInt32(ViewState["FEID"].ToString());
                         CustomStatus cs = (CustomStatus)objVMC.FuelEntryInsertUpdate(objVM);
-                        if (cs.Equals(CustomStatus.RecordSaved))
-                        {
+                        //if (cs.Equals(CustomStatus.RecordSaved))  //06-10-2023
+                        //{
 
                             BindList(Convert.ToInt32(rdblistVehicleType.SelectedValue), Convert.ToInt32(ddlIssueType.SelectedValue));
                             clear();
@@ -689,7 +712,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
                                 objCommon.DisplayMessage(this.updActivity, "Coupon No. is Already Exist.", this.Page);
                             }
                             return;
-                        }
+                       // }
                     }
                 }
             }
@@ -792,7 +815,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
             //BindList(Convert.ToInt32(rdblistVehicleType.SelectedValue));
             clear();
             ddlIssueType.SelectedValue = "0";
-            btnDirectReport.Visible = true;
+            btnDirectReport.Visible = false;
            // divRate.Visible = true;
             lvFuel.DataSource = null;
             lvFuel.DataBind();
@@ -835,6 +858,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
             ddlIssueType.SelectedValue = "0";
             btnDirectReport.Visible = false;
             //divRemark.Visible = true;
+            UplReqLetter.Visible = false;
         }
     }
     // this event is used to get the unit of the selected items.
