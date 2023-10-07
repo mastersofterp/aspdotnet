@@ -20,11 +20,11 @@ namespace IITMS
                 private int _degreeNo = 0;
                 private int _student_type = 0;
                 private int _adm_type = 0;
-                private int _from_credit = 0;
-                private int _to_credit = 0;
+                private double _from_credit = 0;
+                private double _to_credit = 0;
                 private double _to_cgpa = 0.0;
                 private double _from_cgpa = 0.0;
-                private int _minRegCreditLimit = 0;
+                private double _minRegCreditLimit = 0;
                 private int _PubliishYesNo = 0;
 
                 private int _additional_course = 0;
@@ -41,10 +41,10 @@ namespace IITMS
                 private int _schemeNo = 0;
                 private string _schemeName = string.Empty;
 
-                private int _core_credit = 0;
-                private int _elective_credit = 0;
-                private int _global_credit = 0;
-                private int _overload_credit = 0;
+                private double _core_credit = 0;
+                private double _elective_credit = 0;
+                private double _global_credit = 0;
+                private double _overload_credit = 0;
                 private string _schemenos = string.Empty;
                 private string _electivegroupnos = string.Empty;
                 #endregion
@@ -81,7 +81,7 @@ namespace IITMS
                 }
 
 
-                public int MIN_REG_CREDIT_LIMIT
+                public double MIN_REG_CREDIT_LIMIT
                 {
                     get { return _minRegCreditLimit; }
                     set { _minRegCreditLimit = value; }
@@ -122,12 +122,12 @@ namespace IITMS
                     get { return _student_type; }
                     set { _student_type = value; }
                 }
-                public int FROM_CREDIT
+                public double FROM_CREDIT
                 {
                     get { return _from_credit; }
                     set { _from_credit = value; }
                 }
-                public int TO_CREDIT
+                public double TO_CREDIT
                 {
                     get { return _to_credit; }
                     set { _to_credit = value; }
@@ -186,13 +186,13 @@ namespace IITMS
                 public int SCHEMENO { get { return _schemeNo; } set { _schemeNo = value; } }
                 public string SCHEMENAME { get { return _schemeName; } set { _schemeName = value; } }
 
-                public int Core_credit
+                public double Core_credit
                 { get { return _core_credit; } set { _core_credit = value; } }
-                public int Elective_credit
+                public double Elective_credit
                 { get { return _elective_credit; } set { _elective_credit = value; } }
-                public int Global_credit
+                public double Global_credit
                 { get { return _global_credit; } set { _global_credit = value; } }
-                public int Overload_credit
+                public double Overload_credit
                 {
                     get { return _overload_credit; }
                     set { _overload_credit = value; }
