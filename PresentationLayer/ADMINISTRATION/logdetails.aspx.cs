@@ -692,8 +692,13 @@ public partial class Administration_logDetais : System.Web.UI.Page
                 {
                     DataTableReader dr = null;
                     dr = ds1.Tables[0].CreateDataReader();
-                    string filename = Server.MapPath("~/error/LogDetails.txt");
+                    string directoryPath = Server.MapPath("~/error");
+                    string filename = Path.Combine(directoryPath, "LogDetails.txt");
 
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
 
                     using (StreamWriter sw = File.CreateText(filename))
                     {
