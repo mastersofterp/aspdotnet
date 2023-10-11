@@ -95,7 +95,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 {
                     divInternalMarks.Visible = true;
                 }
-                else if (Convert.ToInt32(Session["OrgId"]) == 5)
+                else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
                 {
 
                     divInternalMarks1.Visible = true;
@@ -818,7 +818,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             {
                 getinternalmarks();
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 getinternalmarks1();
             }
@@ -998,7 +998,17 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         }
         StudentController objSC = new StudentController();
-        DataSet dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        DataSet dsInternal = null;
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+
+            dsInternal = objSC.GetDetailsOfInternalMarksHeader_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
+        else
+        {
+
+             dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
         ViewState["dshead"] = dsInternal;
         DataTable dt = new DataTable();
 
@@ -1038,7 +1048,15 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             lvInter.DataSource = null;
             lvInter.DataBind();
         }
-        DataSet dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        DataSet dsInternal1 = null;
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+            dsInternal1 = objSC.GetDetailsOfInternalMarks1_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
+        else
+        {
+            dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
         if (dsInternal1 != null && dsInternal1.Tables.Count > 0 && dsInternal1.Tables[0].Rows.Count > 0)
         {
             lvInter.DataSource = dsInternal1.Tables[0];
