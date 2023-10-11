@@ -171,10 +171,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnLedgerReport.Visible = true;
                 btnConsoli.Visible = false;
                 btnConsoliA4.Visible = false;
-
+                btnConsolidateGradeCard.Visible = true;
                 btnProgrssionrpt.Visible = false;
                 pre_eleven.Visible = false;
-                btnConsolidateGradeCard.Visible = true;
+
                 btnCount.Visible = true;
                 DatePublish.Visible = false;
                 btnSRNo.Visible = false;
@@ -568,7 +568,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                         stuadmbatch.Value = hdn_fld.Value;
                     }
                     //ShowDate();
-
+                    Session["studcnt"] = ds.Tables[0].Rows.Count;   //Added dt on 06102023
                 }
                 else
                     if (ddlClgname.SelectedIndex == 0)
@@ -698,7 +698,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 if (retIDNO.Length == 0) retIDNO = lblStudname.ToolTip.ToString();
                 else
-                retIDNO += "$" + lblStudname.ToolTip.ToString();
+                    retIDNO += "$" + lblStudname.ToolTip.ToString();
             }
         }
         if (retIDNO.Equals("")) return "0";
@@ -1062,9 +1062,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
     }
 
-
-
-
     protected void btnGradeCard_Click1(object sender, EventArgs e)
     {
 
@@ -1072,11 +1069,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         #region RCPIT Grad Card
         if (Convert.ToInt32(Session["OrgId"]) == 1)
         {
-
-            ShowReport_GradeCard("GradeCard", "rptGradeCardSemesterwise.rpt");
-            this.ShowGradeCard("Grade_Card", "rptTabulationRegistarStud.rpt");
-
-
             string ids = string.Empty;
             foreach (ListViewDataItem item in lvStudent.Items)
             {
@@ -1093,7 +1085,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             }
             ids = ids.TrimEnd('.');
 
-            this.ShowGradeCardNew("Grade Card", "MarksGrade_RCPIT.rpt", ids);  
+            this.ShowGradeCardNew("Grade Card", "MarksGrade_RCPIT.rpt", ids);
 
         }
         #endregion
@@ -2001,31 +1993,22 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         #region For DAIICT Grad Card Added By Tejas Thakre on 14/08/2023
         else if (Convert.ToInt32(Session["OrgId"]) == 15)
         {
-
-           
+            #region logic1
+            string stdids = string.Empty;
+            int cntlength = 0;
             foreach (ListViewDataItem item in lvStudent.Items)
             {
                 CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
-                
-                if (chk1.Checked== true)
-                {
-                    ids = "0";
-                    //flag = 1;
-                    this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_DAIICT.rpt", ids);
-                    return;
-                }
-
-
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
                 CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                 Label lblStudname = item.FindControl("lblStudname") as Label;
-                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+
                 if (chk.Checked == true)
                 {
-
-                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
-
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
                 }
-
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
 
                 if (ddlStuType.SelectedIndex < 0)
                 {
@@ -2043,12 +2026,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
                 int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
 
-
             }
-            //ids = ids.TrimEnd(',');
-            //this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_DAIICT.rpt", ids);
-            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_DAIICT.rpt", ids);
-
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_DAIICT.rpt", stdids);
+            #endregion
         }
         #endregion
 
@@ -2056,25 +2041,72 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         else if (Convert.ToInt32(Session["OrgId"]) == 18)
         {
 
-            string ids = string.Empty;
+            string stdids = string.Empty;
+            int cntlength = 0;
+
+            MarksEntryController objMarkEntry = new MarksEntryController();
+            int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            int College_id = Convert.ToInt32(ViewState["college_id"]);
+            int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+            int Branchno = Convert.ToInt32(ViewState["branchno"]);
+            int ua_no = Convert.ToInt32(Session["userno"].ToString());
+            int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+            string idnos = GetIDNOFGenerateGradeNo();
+            objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+            int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+            int DurationCheck = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
             foreach (ListViewDataItem item in lvStudent.Items)
             {
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
                 CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                 Label lblStudname = item.FindControl("lblStudname") as Label;
 
-                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                if (chk.Checked)
+                if (chk.Checked == true)
                 {
-                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ",";
-
-                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
                 }
-            }
-            ids = ids.TrimEnd(',');
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
 
-            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_HITS.rpt", ids);
+                if (ddlStuType.SelectedIndex < 0)
+                {
+                    objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                }
+
+
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            if (DurationCheck == 5)
+            {
+                //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_New.rpt"); //added on 070922 for only show 10 semester
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_HITS_V.rpt", stdids);
+            }
+            else if (DurationCheck == 2)
+            {
+                //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_II.rpt"); //added on 070922  for only show 4 semester
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_HITS_II.rpt", stdids);
+            }
+            else if (DurationCheck == 3)
+            {
+                //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_III.rpt"); //added on 070922 for only show 6 semester
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_HITS_III.rpt", stdids);
+            }
+            else
+            {
+                //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_IV.rpt"); //added on 070922 for only show 8 semester
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_HITS.rpt", stdids);
+
+            }
+
         }
         #endregion
+
         else
         {
 
@@ -2197,7 +2229,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 1)
                 {
                     // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
-                    
+
                     url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_STUDTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
 
                 }
@@ -2241,23 +2273,25 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 4) // CPUH added by Tejas Thakre on 08/04/2023
                 {
-                    url += "&param=@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 3) // CPUKOTA added by Tejas Thakre on 12/04/2023
                 {
-                    url += "&param=@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 17) // UTKAL added by Tejas Thakre on 03/07/2023
                 {
-                    url += "&param=@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 15) // DAIICT added by Tejas Thakre on 08/04/2023
                 {
+
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 18) // HITS added by Tejas Thakre on 04/09/2023
                 {
-                    url += "&param=@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else
                 {
@@ -2553,11 +2587,11 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 15) //for DAIICT Added By Tejas Thakre on 17-08-2023
                 {
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO1();// +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW();  //GetIDNO1();// +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 18) //for HITS Added By Tejas Thakre on 04-09-2023
                 {
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();// +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW(); // +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
                 }
                 else
                 {
@@ -2746,9 +2780,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else
                 {
-
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
-
+                    if (Convert.ToInt32(Session["OrgId"]) == 15)
+                    {
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
+                    }
+                    else
+                    {
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
+                    }
                 }
 
 
@@ -3768,6 +3807,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         // For HITS REPORT
         else if (Convert.ToInt32(Session["OrgId"]) == 18)
         {
+
             string ids = string.Empty;
             //CheckBox chk = item.FindControl("chkStudent") as CheckBox;
             foreach (ListViewDataItem item in lvStudent.Items)
@@ -3811,14 +3851,29 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objMarkEntry.GradeCardNumberGeneration(Sessionno, ids, College_id, Degreeno, Branchno, Semesterno, ua_no);
 
                 int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                //if (duration == Semesterno)
-                //{
-                //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                //}
-                //else
-                //{
-                this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_HITS_Without_Header.rpt");
-                // }
+                int DurationCheck = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
+                if (DurationCheck == 5)
+                {
+                    //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_New.rpt"); //added on 070922 for only show 10 semester
+                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_HITS_Withour_Header_V.rpt");
+                }
+                else if (DurationCheck == 2)
+                {
+                    //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_II.rpt"); //added on 070922  for only show 4 semester
+                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_HITS_Without_Header_II.rpt");
+                }
+                else if (DurationCheck == 3)
+                {
+                    //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_III.rpt"); //added on 070922 for only show 6 semester
+                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_HITS_Without_Header_III.rpt");
+                }
+                else
+                {
+                    //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_IV.rpt"); //added on 070922 for only show 8 semester
+                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_HITS_Without_Header.rpt");
+                }
+
             }
         }
         else
@@ -4601,6 +4656,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         lvStudent.DataSource = null;
         lvStudent.DataBind();
         pnlStudent.Visible = false;
+        ddlSession.SelectedIndex = 0;
 
     }
 
@@ -4957,6 +5013,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         //#endregion
 
 
+
         #region RCPIT Grad Card
         if (Convert.ToInt32(Session["OrgId"]) == 1)
         {
@@ -4996,9 +5053,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
         }
 
-
-
-
         #endregion
 
 
@@ -5012,6 +5066,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                 Label lblStudname = item.FindControl("lblStudname") as Label;
+
 
                 string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
                 if (chk.Checked)
@@ -5117,7 +5172,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 8)
                 {
                     //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + 0 + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW();
                 }
                 #endregion
                 else
@@ -5130,6 +5185,11 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
 
                 ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "Please Select at least one student !!!!", this.Page);
+                return;
             }
         }
         catch (Exception ex)
@@ -5797,5 +5857,39 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         {
 
         }
+    }
+
+    private string GetIDNOS_NEW()
+    {
+        string retIDNO = string.Empty;
+        int cntlength = 0;
+        foreach (ListViewDataItem item in lvStudent.Items)
+        {
+            CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+            Label lblStudname = item.FindControl("lblStudname") as Label;
+
+            if (chk.Checked)
+            {
+                if (retIDNO.Length == 0)
+                {
+                    retIDNO = lblStudname.ToolTip.ToString();
+                }
+                else
+                {
+                    retIDNO += "$" + lblStudname.ToolTip.ToString();
+                }
+                cntlength++;
+            }
+        }
+
+        int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+        if (cntid == cntlength)
+        {
+            retIDNO = "0";
+        }
+        if (retIDNO.Equals("")) return "0";
+        else return retIDNO;
+
     }
 }
