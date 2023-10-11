@@ -4737,7 +4737,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="sessionno"></param>
         /// <param name="deptno"></param>
         /// <returns></returns>
-        public DataSet GetPendingAttData(int sessionno, int deptno, DateTime fromdate, DateTime todate)
+        public DataSet GetPendingAttData(int sessionno, string deptno, DateTime fromdate, DateTime todate)
         {
             DataSet ds = null;
             try
@@ -4769,7 +4769,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="uano"></param>
         /// <param name="deptno"></param>
         /// <returns></returns>
-        public DataSet GetPendingAttDates(int sessionno, int courseno, int secno, int sem, int sch, int uano, int deptno)
+        public DataSet GetPendingAttDates(int sessionno, int courseno, int secno, int sem, int sch, int uano, string deptno)
         {
             DataSet ds = null;
             try
@@ -4800,7 +4800,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="uano"></param>
         /// <param name="deptno"></param>
         /// <returns></returns>
-        public DataSet GetPendingAttDataCourseWise(int sessionno, int courseno, int uano, int deptno)
+        public DataSet GetPendingAttDataCourseWise(int sessionno, int courseno, int uano, string deptno)
         {
             DataSet ds = null;
             try
@@ -5534,7 +5534,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
-        public DataSet GetPendingAttDataTimeSlot(int sessionno, int deptno, DateTime fromdate, DateTime todate, int courseno, int uano)
+        public DataSet GetPendingAttDataTimeSlot(int sessionno, string deptno, DateTime fromdate, DateTime todate, int courseno, int uano)
         {
             DataSet ds = null;
             try

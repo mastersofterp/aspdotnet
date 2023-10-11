@@ -55,7 +55,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             }
             else
             {
-                ViewState["deptno"] = Convert.ToInt32(Session["userdeptno"]);
+
+                ViewState["deptno"] = Session["userdeptno"];
             }
             PopulateDropDownList();
         }
@@ -89,14 +90,15 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0)
             {
-                ddlSession.DataSource = ds;
-                ddlSession.DataValueField = ds.Tables[0].Columns[0].ToString();
-                ddlSession.DataTextField = ds.Tables[0].Columns[4].ToString();
+                DataTable dt =(from r in ds.Tables[0].AsEnumerable() orderby Convert.ToInt32(r["SESSIONNO"]) descending select r).CopyToDataTable();
+                ddlSession.DataSource = dt;
+                ddlSession.DataValueField = dt.Columns[0].ToString();
+                ddlSession.DataTextField = dt.Columns[4].ToString();
                 ddlSession.DataBind();
                 ddlSession.SelectedIndex = 0;
                 ddlSessionBulk.DataSource = ds;
-                ddlSessionBulk.DataValueField = ds.Tables[0].Columns[0].ToString();
-                ddlSessionBulk.DataTextField = ds.Tables[0].Columns[4].ToString();
+                ddlSessionBulk.DataValueField = dt.Columns[0].ToString();
+                ddlSessionBulk.DataTextField = dt.Columns[4].ToString();
                 ddlSessionBulk.DataBind();
                 ddlSessionBulk.SelectedIndex = 0;
             }
@@ -117,7 +119,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             if (ddlSession.SelectedIndex > 0)
             {
 
-                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
+                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvParent.DataSource = ds;
@@ -156,7 +158,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdfSchemeno = e.Row.FindControl("hdfSchemeno") as HiddenField;
                 HiddenField hdnUaNo = e.Row.FindControl("hdnUaNo") as HiddenField;
 
-                DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), Convert.ToInt32(ViewState["deptno"]));
+                DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), ViewState["deptno"].ToString());
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvChildGrid.DataSource = ds;
@@ -189,7 +191,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdfTempExam = e.Row.FindControl("hdfTempExam") as HiddenField;
                 //HtmlGenericControl div = e.Row.FindControl("divcR") as HtmlGenericControl;
                 HiddenField hdfUano = e.Row.FindControl("hdfUano") as HiddenField;
-                DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), Convert.ToInt32(ViewState["deptno"]));
+                DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), ViewState["deptno"].ToString());
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvChildGrid.DataSource = ds;
@@ -468,7 +470,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             if (ddlSessionBulk.SelectedIndex > 0)
             {
 
-                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
+                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvBulkEmail.DataSource = ds;
@@ -549,7 +551,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 string subject = string.Empty;
                 subject = "Incomplete Attendance Mail";
 
-                DataSet dsAtt = objAttC.GetPendingAttDataTimeSlot(Convert.ToInt32(ddlSessionBulk.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value));
+                DataSet dsAtt = objAttC.GetPendingAttDataTimeSlot(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value));
                 string date = string.Empty;
                 string message = string.Empty;
                 //message = "Dear " + UA_FULLNAME.Value + ",\n Kindly mark the incomplete attendance entry. \n It is mandatory to complete the attendance within (Attendance lock by days).\n";
