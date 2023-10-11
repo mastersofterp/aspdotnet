@@ -333,7 +333,7 @@
 
                         </div>
 
-                    <%--  <div class="col-12 table-responsive">
+                          <div class="col-12 table-responsive">
                             <asp:ListView ID="lvItemDetails" runat="server">
                                 <EmptyDataTemplate>
                                     <center>
@@ -371,15 +371,15 @@
                                         </td>
                                      
                                         <td>
-                                       <%-- <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
+<%--                                            <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
                                                 AlternateText='<%# Eval("FILENAME")%>' CommandName='<%# Eval("FILENAME")%>' OnClick="imgFile_Click" />--%>
-                                          <%--  <asp:ImageButton ID="imgFile" runat="server" OnClick="imgFile_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                             <asp:ImageButton ID="imgFile" runat="server" OnClick="imgFile_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
                                                                                     data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
-                        </div>--%>
+                        </div>
 
 
                          <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">

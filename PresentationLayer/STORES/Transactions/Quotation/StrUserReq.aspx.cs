@@ -449,7 +449,6 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
             // file upload on Blobe start Gaurav
             string file = string.Empty;
             ServiceBook objSevBook = new ServiceBook();
-  
             if (FileUpload1.HasFile)
             {
                 if (FileTypeValid(System.IO.Path.GetExtension(FileUpload1.FileName)))
@@ -567,11 +566,10 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                     FileUpload1.Focus();
                 }
             }
-            //else
-            //{
-            ////    objCommon.DisplayMessage(this.Page, "Please Select File", this.Page);
-               
-            //}
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "Please Select File", this.Page);
+            }
             // file upload on Blobe end Gaurav
 
             if (ddlIndentSlipNo.SelectedValue == null || ddlIndentSlipNo.SelectedValue == "0")
@@ -606,14 +604,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                     if (duplicateCkeck == 0)
                     {
                        // objdeptRequest.FILENAME = FileUpload1.FileName;
-                        if (objSevBook.ATTACHMENTS != null)
-                        {
-                            objdeptRequest.FILENAME = objSevBook.ATTACHMENTS;
-                        }
-                        else
-                        {
-                            objdeptRequest.FILENAME = string.Empty;
-                        }
+                        objdeptRequest.FILENAME = objSevBook.ATTACHMENTS;
                         objdeptRequest.FILEPTH = file;
                       
                         CustomStatus cs = (CustomStatus)objDeptReqController.AddDeptRequest(objdeptRequest);
