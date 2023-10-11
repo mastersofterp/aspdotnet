@@ -2,24 +2,12 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <style>
+    <%--<style>
         #ctl00_ContentPlaceHolder1_divCourses .dataTables_scrollHeadInner,
         #ctl00_ContentPlaceHolder1_div1 .dataTables_scrollHeadInner,
         #ctl00_ContentPlaceHolder1_div4 .dataTables_scrollHeadInner {
             width: max-content !important;
         }
-<<<<<<< HEAD
-    </style>
-    <style>
-        .multiselect-container {
-            position: absolute;
-            transform: translate3d(0px, -46px, 0px);
-            top: 0px;
-            left: 0px;
-            will-change: transform;
-            height: 200px;
-            overflow: auto;
-=======
     </style>--%>
     <style>
         #ctl00_ContentPlaceHolder1_divCourses .dataTables_scrollHeadInner {
@@ -47,7 +35,6 @@
             transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
             margin-left: -15px !important;
             margin-bottom: 5px !important;
->>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
         }
     </style>
 
@@ -1063,7 +1050,7 @@
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                             </div>
 
-                                            <div class=" col-12">
+                                            <div class=" col-12 courseteacher">
 
                                                 <asp:ListView ID="lvCourseTeacher" runat="server" OnItemDataBound="lvCourseTeacher_ItemDataBound">
                                                     <LayoutTemplate>
@@ -1075,7 +1062,7 @@
                                                                 <input type="text" id="FilterData" onkeyup="SearchFunction()" placeholder="Search" class="Searchfilter" />
                                                             </div>
                                                         </div>
-                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblCourse">
+                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblCourse">
                                                             <thead class="bg-light-blue">
                                                                 <tr>
                                                                     <th>
@@ -1092,16 +1079,12 @@
                                                                     <th>Is ADTeacher</th>
                                                                 </tr>
                                                             </thead>
-<<<<<<< HEAD
-                                                            <tbody>
-=======
                                                             <tbody id="tblStudentRecords" style="overflow: auto">
                                                                 <tr id="itemPlaceholder" runat="server" />
                                                             </tbody>
                                                             <%--   <tbody>
->>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
                                                                 <tr id="itemPlaceholder" runat="server" />
-                                                            </tbody>
+                                                            </tbody>--%>
                                                         </table>
                                                     </LayoutTemplate>
                                                     <ItemTemplate>
@@ -2303,26 +2286,6 @@
 
                 if (td1) {
                     //Name search                 
-<<<<<<< HEAD
-                    if (namefalg == 0 ) {
-                        txtValue = td1.textContent || td1.innerText;
-
-                        if (txtValue != "") {
-                            if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                                regnoflag = 1;
-                                Tcount++;
-                                var e = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_chkAccept");
-                                var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_hdfCourseteach");
-                                //if (e != null) {
-                                //    if (e.checked == true) {
-                                //        Pcount++;
-                                //    }
-                                //    if (e.checked == false && e1.value == 1) {
-                                //        ODcount++;
-                                //    }
-                                //}
-=======
->>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
 
                     txtValue = td1.textContent || td1.innerText;
                     // alert(txtValue);
@@ -2335,12 +2298,9 @@
                             trRow[i].style.display = "";
 
                         }
-<<<<<<< HEAD
-=======
                         else {
                             trRow[i].style.display = "none";
                         }
->>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
                     }
 
 
