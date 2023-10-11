@@ -178,6 +178,9 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 }
                 //SetFocus(ddlClgScheme);
                 ddlClgScheme.Focus();
+<<<<<<< HEAD
+>>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
+=======
 >>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
             }
         }
@@ -279,6 +282,9 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         Clear();
 
         ddlClgScheme.Focus();
+<<<<<<< HEAD
+>>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
+=======
 >>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
     }
 

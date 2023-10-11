@@ -7213,7 +7213,11 @@ namespace IITMS
                 #endregion
 
                 #region Added By Rohit Diwate on date 21092023
+<<<<<<< HEAD
                 public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode,int feedback)
+=======
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode,,int feedback)
+>>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
                 {
                     int status = 0;
                     try

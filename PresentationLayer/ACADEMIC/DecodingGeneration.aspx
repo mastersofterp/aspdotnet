@@ -51,8 +51,11 @@
                                             <label>Session</label>
                                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <asp:DropDownList ID="ddlSession" runat="server" AutoPostBack="true" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true">
 =======
+=======
+>>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
                                         <asp:DropDownList ID="ddlSession" runat="server" AutoPostBack="true" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
 >>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
@@ -127,8 +130,13 @@
                                             <label>Course</label>
                                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <asp:DropDownList ID="ddlCourse" runat="server"
                                             AppendDataBoundItems="True" AutoPostBack="True"
+=======
+                                        <asp:DropDownList ID="ddlCourse" runat="server" CssClass="d-none"
+                                            AppendDataBoundItems="True" AutoPostBack="True" TabIndex="1"
+>>>>>>> 9a9e4fd ([ENHANCEMENT] [48077] Barcode and seat number generation)
 =======
                                         <asp:DropDownList ID="ddlCourse" runat="server" CssClass="d-none"
                                             AppendDataBoundItems="True" AutoPostBack="True" TabIndex="1"
