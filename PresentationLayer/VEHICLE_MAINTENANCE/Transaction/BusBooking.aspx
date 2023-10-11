@@ -192,6 +192,8 @@
                                                 </asp:DropDownList>
                                             </div>
 
+                                         
+
                                             <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divSeats" visible="False">
                                                 <div class="label-dynamic">
                                                     <sup>*</sup>
@@ -236,6 +238,19 @@
 
                                             </div>
 
+                                               <%--//------09-10-2023------start------%>
+
+                                             <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="devreceiptcode" visible="False">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Receipt Id</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlReceipt" runat="server" TabIndex="3" AppendDataBoundItems="True"
+                                                    CssClass="form-control" data-select2-enable="true" ToolTip="Select Receipt Id" >
+                                                    <asp:ListItem Value="0" meta:resourcekey="ListItemResource5">Please Select </asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                            <%--//------09-10-2023------end------%>
 
 
                                         </div>
@@ -244,9 +259,6 @@
 
                                     <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divimg" visible="False">
                                         <div class="row">
-
-
-
                                             <div class="col-12 ">
                                                 <div class="sub-heading">
                                                     <h5>
