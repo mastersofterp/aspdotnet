@@ -96,7 +96,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 ddlSession.DataTextField = dt.Columns[4].ToString();
                 ddlSession.DataBind();
                 ddlSession.SelectedIndex = 0;
-                ddlSessionBulk.DataSource = dt;
+                ddlSessionBulk.DataSource = ds;
                 ddlSessionBulk.DataValueField = dt.Columns[0].ToString();
                 ddlSessionBulk.DataTextField = dt.Columns[4].ToString();
                 ddlSessionBulk.DataBind();
@@ -118,7 +118,6 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSession.SelectedIndex > 0)
             {
-                divSingle_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -160,7 +159,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdnUaNo = e.Row.FindControl("hdnUaNo") as HiddenField;
 
                 DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), ViewState["deptno"].ToString());
-                if (ds != null)
+                if (ds.Tables[0].Rows.Count > 0)
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
@@ -197,8 +196,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 //HtmlGenericControl div = e.Row.FindControl("divcR") as HtmlGenericControl;
                 HiddenField hdfUano = e.Row.FindControl("hdfUano") as HiddenField;
                 DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), ViewState["deptno"].ToString());
-
-                if (ds != null)
+                if (ds.Tables[0].Rows.Count > 0)
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
@@ -486,8 +484,6 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSessionBulk.SelectedIndex > 0)
             {
-                btnSendEmail.Visible = true;
-                divBulk_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
