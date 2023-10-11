@@ -8,6 +8,7 @@
         #ctl00_ContentPlaceHolder1_div4 .dataTables_scrollHeadInner {
             width: max-content !important;
         }
+<<<<<<< HEAD
     </style>
     <style>
         .multiselect-container {
@@ -18,6 +19,35 @@
             will-change: transform;
             height: 200px;
             overflow: auto;
+=======
+    </style>--%>
+    <style>
+        #ctl00_ContentPlaceHolder1_divCourses .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+
+        .courseteacher .dataTables_filter {
+            display: none !important;
+        }
+
+        .courseteacher .dt-buttons {
+            display: none !important;
+        }
+    </style>
+    <style>
+        .Searchfilter {
+            font-size: 15px !important;
+            padding: 0.375rem 0.75rem !important;
+            display: block !important;
+            width: 100% !important;
+            height: 42px !important;
+            background-color: transparent !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 0.25rem !important;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+            margin-left: -15px !important;
+            margin-bottom: 5px !important;
+>>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
         }
     </style>
 
@@ -1062,7 +1092,14 @@
                                                                     <th>Is ADTeacher</th>
                                                                 </tr>
                                                             </thead>
+<<<<<<< HEAD
                                                             <tbody>
+=======
+                                                            <tbody id="tblStudentRecords" style="overflow: auto">
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                            <%--   <tbody>
+>>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
                                                                 <tr id="itemPlaceholder" runat="server" />
                                                             </tbody>
                                                         </table>
@@ -1662,12 +1699,12 @@
                                                     <ItemTemplate>
                                                         <tr>
                                                             <td><%# Container.DataItemIndex + 1 %>
-                                                                <asp:HiddenField ID="HiddenField1" runat="server" Value='<%# Eval("COURSENO")%>' />
-                                                                <asp:HiddenField ID="HiddenField2" runat="server" Value='<%# Eval("UA_NO")%>' />
-                                                                <asp:HiddenField ID="HiddenField3" runat="server" Value='<%# Eval("CT_NO")%>' />
-                                                                <asp:HiddenField ID="HiddenField4" runat="server" Value='<%# Eval("SECTIONNO")%>' />
-                                                                <asp:HiddenField ID="HiddenField5" runat="server" Value='<%# Eval("ROOMNO")%>' />
-                                                                <asp:HiddenField ID="HiddenField6" runat="server" Value='<%# Eval("BATCHNO")%>' />
+                                                                <asp:HiddenField ID="hdnCourseNoCT" runat="server" Value='<%# Eval("COURSENO")%>' />
+                                                                <asp:HiddenField ID="hdnTeacherCT" runat="server" Value='<%# Eval("UA_NO")%>' />
+                                                                <asp:HiddenField ID="hdnCTNO" runat="server" Value='<%# Eval("CT_NO")%>' />
+                                                                <asp:HiddenField ID="hdnSectionCT" runat="server" Value='<%# Eval("SECTIONNO")%>' />
+                                                                <asp:HiddenField ID="hdnRoomCT" runat="server" Value='<%# Eval("ROOMNO")%>' />
+                                                                <asp:HiddenField ID="hdnBatchCT" runat="server" Value='<%# Eval("BATCHNO")%>' />
                                                             </td>
                                                             <td>
                                                                 <%# Eval("COURSE_NAME")%>
@@ -2266,6 +2303,7 @@
 
                 if (td1) {
                     //Name search                 
+<<<<<<< HEAD
                     if (namefalg == 0 ) {
                         txtValue = td1.textContent || td1.innerText;
 
@@ -2283,14 +2321,26 @@
                                 //        ODcount++;
                                 //    }
                                 //}
+=======
+>>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
 
-                                trRow[i].style.display = "";
+                    txtValue = td1.textContent || td1.innerText;
+                    // alert(txtValue);
+                    if (txtValue != "") {
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            regnoflag = 1;
+                            Tcount++;
 
-                            }
-                            else {
-                                trRow[i].style.display = "none";
-                            }
+
+                            trRow[i].style.display = "";
+
                         }
+<<<<<<< HEAD
+=======
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+>>>>>>> 5fd56b5 ([BUGFIX] [48608] COURSE TEACHER ALLOTMENT)
                     }
 
 
