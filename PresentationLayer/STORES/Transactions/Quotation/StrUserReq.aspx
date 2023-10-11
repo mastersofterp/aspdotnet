@@ -400,6 +400,7 @@
                                         </td>
                                         <td>
                                             <%# Eval("ITEM_NAME")%>
+                                           
                                         </td>
                                         <td>
                                             <%# Eval("REQ_QTY")%>
@@ -417,14 +418,24 @@
                                                                             <%# Eval("ITEM_SPECIFICATION")%>
                                                                         </td>--%>
                                         <td>
-                                            <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
-                                                AlternateText='<%# Eval("FILENAME")%>' CommandName='<%# Eval("ITEM_NAME")%>' OnClick="imgdownload_Click" />
+                                           <%-- <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
+                                                AlternateText='<%# Eval("FILENAME")%>' CommandName='<%# Eval("ITEM_NAME")%>' OnClick="imgdownload_Click" />--%>
+
+                                              <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgdownload_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
 
                                         </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
                         </div>
+
+                          <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                    </div>
 
 
 
