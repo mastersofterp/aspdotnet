@@ -26,7 +26,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
     {
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-        public int AddHostelSession(string sessionName, DateTime sessionStart, DateTime sessionEnd, string collegeCode, int active)
+        public int AddHostelSession(string sessionName, DateTime sessionStart, DateTime sessionEnd, string collegeCode, int active,int isshow)
         {
             int status = 0;
            
@@ -41,6 +41,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_COLLEGE_CODE", collegeCode),
                     new SqlParameter("@P_FLOCK",active),
                     new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
+                    new SqlParameter("@P_ISSHOW",isshow),
                     new SqlParameter("@P_HOSTEL_SESSION_NO", status)                    
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -60,7 +61,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return status;
         }
 
-        public int UpdateHostelSession(string sessionName, DateTime sessionStart, DateTime sessionEnd, int hostelSessionNo, int active)
+        public int UpdateHostelSession(string sessionName, DateTime sessionStart, DateTime sessionEnd, int hostelSessionNo, int active, int isshow)
         {
             int status;
             try
@@ -73,6 +74,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_END_DATE", sessionEnd),
                     new SqlParameter("@P_FLOCK",active),
                     new SqlParameter("@P_ORGANIZATION_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
+                    new SqlParameter("@P_ISSHOW",isshow),
                     new SqlParameter("@P_HOSTEL_SESSION_NO", hostelSessionNo)                    
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;

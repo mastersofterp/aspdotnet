@@ -141,6 +141,13 @@
                                     <asp:ListItem Value="0" Tabindex="5">No</asp:ListItem>
                                 </asp:RadioButtonList>
                             </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Show for Reports</label>
+                                </div>
+                                <asp:CheckBox ID="chkIsShow" runat="server" TabIndex="6" Checked="True" />
+                            </div>
                         </div>
                     </div>
 
@@ -172,6 +179,8 @@
                                             </th>
                                             <th>Active
                                             </th>
+                                            <th>Show
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -196,6 +205,9 @@
                                     </td>
                                     <td>
                                         <%# Eval("ACTIVE") %>
+                                    </td>
+                                    <td>
+                                        <%# Eval("IS_SHOW") %>
                                     </td>
 
                                 </tr>
