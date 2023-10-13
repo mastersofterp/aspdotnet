@@ -271,7 +271,8 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
             }
             else
             {
-                string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
+                string sessionns = GetSessionns();
+                string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Student_Wise_PhotoCopy_Details", "rptStudentWisePhotoCopyDetails.rpt", param);
             }
         }
@@ -295,7 +296,8 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
             }
             else
             {
-                string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
+                string sessionns = GetSessionns();
+                string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Subject_Wise_PhotoCopy_Details", "rptSubjectWisePhotoCopyDetails.rpt", param);
             }
         }
@@ -337,7 +339,7 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         }
         else
         {
-            url += "&param=" + param + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=" + param + ",@P_COLLEGE_CODE=" + ddlCollege.SelectedValue;
         }
         //@P_CHALLAN_TYPE = 1 --- for photo copy and  2 --for reval
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
