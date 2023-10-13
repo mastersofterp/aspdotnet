@@ -363,7 +363,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPUploadDocument : System.Web.UI.P
             }
             else
             {
-                objCommon.DisplayMessage(this, "No Recored Found!", this);
+                objCommon.DisplayMessage(this, "No Record Found.", this);
                 pnlGV1.Visible = false;
                 lvSchedule.Visible = false;
                 lvSchedule.DataSource = null;

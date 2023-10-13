@@ -98,6 +98,8 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_StudentTransfer : System.Web.UI
                 lstProgram.DataValueField = ds.Tables[0].Columns[0].ToString();
                 lstProgram.DataTextField = ds.Tables[0].Columns[1].ToString();
                 lstProgram.DataBind();
+
+
             }
         }
         catch
@@ -105,6 +107,9 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_StudentTransfer : System.Web.UI
             throw;
         }
     }
+
+
+   
 
     protected void lstProgram_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -186,6 +191,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_StudentTransfer : System.Web.UI
             DataSet ds = null;
             ds = GetStudentList(ADMBATCH, ProgramType, DegreeNo, branchno);
 
+
             lvSchedule.Items.Clear();
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -205,7 +211,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_StudentTransfer : System.Web.UI
                 lvSchedule.DataSource = null;
                 lvSchedule.DataBind();
                 pnlCount.Visible = false;
-                objCommon.DisplayMessage(upAttendance, "Record Not Found,Please Upload The All Mondatory Document And Paid The Final Admission Fee.", this.Page);
+                objCommon.DisplayMessage(upAttendance, "Record Not Found,Please Upload The All Mandatory Document And Paid The Final Admission Fee.", this.Page);
                 //btnAttendance.Visible = false;
             }
         }
