@@ -61,6 +61,34 @@
         }
     </style>
 
+    <div class="modal fade" id="preview" role="dialog">
+                 <div class="modal-dialog modal-lg">
+                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                         <ContentTemplate>
+                             <div class="modal-content">
+
+                                 <!-- Modal Header -->
+                                 <div class="modal-header">
+                                     <h4 class="modal-title">Document</h4>
+                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 </div>
+
+                                 <!-- Modal body -->
+                                 <div class="modal-body text-center">
+                                     <asp:Literal ID="ltEmbed" runat="server" />
+                                 </div>
+
+                                 <!-- Modal footer -->
+                                 <div class="modal-footer">
+                                     <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnclose">Close</button>
+                                 </div>
+
+                             </div>
+                         </ContentTemplate>
+                     </asp:UpdatePanel>
+                 </div>
+             </div>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -279,7 +307,7 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccine Name </label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtFirstDoseVaccName" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                <asp:TextBox ID="txtFirstDoseVaccName" runat="server" CssClass="form-control" MaxLength="25"></asp:TextBox>
                                                             </div>
 
                                                             <div class="form-group col-12">
@@ -287,7 +315,7 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccination Center</label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtFirstDoseVaccCenter" runat="server" CssClass="form-control" />
+                                                                <asp:TextBox ID="txtFirstDoseVaccCenter" runat="server" CssClass="form-control" MaxLength="100" />
                                                             </div>
 
                                                             <div class="form-group col-12">
@@ -300,7 +328,7 @@
                                                                         <i id="imgFirstDoseVaccDate1" runat="server" class="fa fa-calendar"></i>
                                                                     </div>
                                                                     <asp:TextBox ID="txtFirstDoseVaccDate" runat="server" TabIndex="3" ValidationGroup="submit"
-                                                                        CssClass="form-control" />
+                                                                        CssClass="form-control" Font-Bold="true" onchange="return ValidateDate()" />
                                                                     <%--  <asp:Image ID="imgFirstDoseVaccDate" runat="server" ImageUrl="~/images/calendar.png" />--%>
                                                                     <ajaxToolKit:CalendarExtender ID="ceFirstDoseVaccDate" runat="server" Format="dd/MM/yyyy"
                                                                         TargetControlID="txtFirstDoseVaccDate" PopupButtonID="imgFirstDoseVaccDate1" />
@@ -328,8 +356,18 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccination Certificate:</label>
                                                                 </div>
-                                                                <asp:LinkButton ID="lnkbtnFirstDoseCert" runat="server" OnClick="lnkbtnFirstDoseCert_Click"></asp:LinkButton>
+                                                                <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                <ContentTemplate>
+                                                                <asp:Button ID="lnkbtnFirstDoseCert" runat="server" OnClick="lnkbtnFirstDoseCert_Click" ToolTip='<%# Eval("FIRSTDOSE_FILE_NAME") %>' data-toggle="modal" data-target="#preview"
+                                                                    CommandArgument='<%# Eval("FIRSTDOSE_FILE_NAME") %>'
+                                                                         Visible='<%# Convert.ToString(Eval("FIRSTDOSE_FILE_NAME"))==string.Empty?false:true %>'></asp:Button>
                                                                 <asp:HiddenField ID="hidFirstDoseFilePath" runat="server" />
+                                                                     </ContentTemplate>
+                                                                <Triggers>
+                                                                    <asp:AsyncPostBackTrigger ControlID="lnkbtnFirstDoseCert" EventName="Click" />
+                                                                    <%--  <asp:PostBackTrigger ControlID="btnFetch"/>data-toggle="modal" data-target="#PassModel"--%>
+                                                                </Triggers>
+                                                            </asp:UpdatePanel>
                                                             </div>
 
                                                             <div class="col-12 btn-footer">
@@ -354,7 +392,7 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccine Name </label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtSecondDoseVaccName" runat="server" CssClass="form-control" />
+                                                                <asp:TextBox ID="txtSecondDoseVaccName" runat="server" CssClass="form-control" MaxLength="25" />
                                                             </div>
 
                                                             <div class="form-group col-12">
@@ -362,7 +400,7 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccination Center</label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtSecondDoseVaccCenter" runat="server" CssClass="form-control" />
+                                                                <asp:TextBox ID="txtSecondDoseVaccCenter" runat="server" CssClass="form-control" MaxLength="100" />
                                                             </div>
 
                                                             <div class="form-group col-12">
@@ -375,7 +413,7 @@
                                                                         <i id="imgSecondDoseVaccDate1" runat="server" class="fa fa-calendar"></i>
                                                                     </div>
                                                                     <asp:TextBox ID="txtSecondDoseVaccDate" runat="server" TabIndex="3" ValidationGroup="submit"
-                                                                        CssClass="form-control" Font-Bold="true" />
+                                                                        CssClass="form-control" Font-Bold="true" onchange="return ValidateDate()" />
                                                                     <%--    <asp:Image ID="imgSecondDoseVaccDate" runat="server" ImageUrl="~/images/calendar.png" />--%>
                                                                     <ajaxToolKit:CalendarExtender ID="ceSecondDoseVaccDate" runat="server" Format="dd/MM/yyyy"
                                                                         TargetControlID="txtSecondDoseVaccDate" PopupButtonID="imgSecondDoseVaccDate1" />
@@ -403,14 +441,23 @@
                                                                     <sup>* </sup>
                                                                     <label>Vaccination Certificate:</label>
                                                                 </div>
-
-                                                                <asp:LinkButton ID="lnkbtnSecondDoseVaccCert" runat="server" OnClick="lnkbtnSecondDoseVaccCert_Click"></asp:LinkButton>
+                                                                <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                                                                <ContentTemplate>
+                                                                <asp:Button ID="lnkbtnSecondDoseVaccCert" runat="server" OnClick="lnkbtnSecondDoseVaccCert_Click" 
+                                                                        ToolTip='<%# Eval("SECONDDOSE_FILE_NAME") %>' data-toggle="modal" data-target="#preview"
+                                                                    CommandArgument='<%# Eval("SECONDDOSE_FILE_NAME") %>'  Visible='<%# Convert.ToString(Eval("SECONDDOSE_FILE_NAME"))==string.Empty?false:true %>'></asp:Button>
                                                                 <asp:HiddenField ID="hidSecondDoseFilePath" runat="server" />
+                                                                    </ContentTemplate>
+                                                                <Triggers>
+                                                                    <asp:AsyncPostBackTrigger ControlID="lnkbtnSecondDoseVaccCert" EventName="Click" />
+                                                                    <%--  <asp:PostBackTrigger ControlID="btnFetch"/>data-toggle="modal" data-target="#PassModel"--%>
+                                                                </Triggers>
+                                                            </asp:UpdatePanel>
                                                             </div>
 
                                                             <div class="col-12 btn-footer">
                                                                 <asp:Button ID="btnSecondDose" runat="server" Text="Submit" CssClass="btn btn-primary" OnClick="btnSecondDose_Click" Enabled="false" OnClientClick="return showLockConfirm();" />
-                                                                <asp:Button ID="btnsecondcancel" runat="server" Text="Cancel" CssClass="btn btn-warning" Enabled="false" OnClick="btnsecondcancel_Click" OnClientClick="return showUnLockConfirm();" />
+                                                                <asp:Button ID="btnsecondcancel" runat="server" Text="Cancel" CssClass="btn btn-warning" Enabled="false" OnClick="btnsecondcancel_Click" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -423,8 +470,8 @@
                                 </div>
 
                                 <div class="col-12 btn-footer mt-4">
-                                    <asp:Button ID="Button1" runat="server" TabIndex="38" Text="Save & Continue >>" ToolTip="Click to Submit"
-                                        class="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Academic" />
+                                    <asp:LinkButton ID="Button1" runat="server" TabIndex="38" Text="Save & Continue >>" ToolTip="Click to Submit"
+                                        class="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Academic" OnClientClick="return validateVaccination();"/>
 
                                     <button runat="server" id="Button2" visible="false" tabindex="39" onserverclick="btnGohome_ServerClick" class="btn btn-warning btnGohome" tooltip="Click to Go Back Home">
                                         Go Back Home
@@ -464,7 +511,170 @@
         }
     </script>
 
+    <script type="text/javascript">
+        function validateVaccination() {
+            var userType = '<%= Session["usertype"].ToString() %>';
+            var rdVaccinated = document.getElementById('<%= rdVaccinated.ClientID %>');
+            var rdNotVaccinated = document.getElementById('<%= rdNotVaccinated.ClientID %>');
 
+            if (usertype == 2) {
+                if (!rdVaccinated.checked && !rdNotVaccinated.checked) {
+                    alert("Please select Either Yes or No for Vaccination Status!");
+                    return false;
+                }
+                return true;
+            }
+            
+        }
+    </script>
+
+        <script>
+            function ValidateDate() {
+                var Fromdate = document.getElementById('<%=txtFirstDoseVaccDate.ClientID%>').value;
+                var Todate = document.getElementById('<%=txtSecondDoseVaccDate.ClientID%>').value;
+                var From_date = moment(Fromdate, 'DD/MM/YYYY');
+                var To_date = moment(Todate, 'DD/MM/YYYY');
+
+                var currentDate = moment(); // Get the current date
+
+                if (From_date.isAfter(currentDate)) { // Compare with the current date
+                    alert("First Dose Vaccination Date Cannot Be Future Date!");
+                    document.getElementById('<%=txtFirstDoseVaccDate.ClientID%>').value = '';
+                    return;
+                }
+                else if (To_date.isAfter(currentDate)) {
+                    alert("Second Dose Vaccination Date Cannot Be Future Date!");
+                    document.getElementById('<%=txtSecondDoseVaccDate.ClientID%>').value = '';
+                    return;
+                }
+                else if (To_date.isBefore(From_date)) { 
+                    alert("Second Dose Vaccination Date Cannot be Less Than First Dose Vaccination Date!");
+                    document.getElementById('<%=txtSecondDoseVaccDate.ClientID%>').value = '';
+                    return;
+                }
+            }
+
+    </script>
+
+    <script>
+        
+        document.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+        });
+
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        };
+
+</script>
+
+    <script src="../JAVASCRIPTS/Inspect.js"></script>
+
+
+    <script>
+
+    // ADDED BY GAURAV SONPAROTE 16_08_2023
+
+        $(document).ready(function () {
+var getSystemOS = getMobileOperatingSystem();
+if (getSystemOS !== "iOS") {
+console.log('Is DevTools open:', window.devtools.isOpen);
+console.log('DevTools orientation:', window.devtools.orientation);
+if (window.devtools.isOpen == true && window.devtools.orientation != undefined) {
+alert("Please Close The Inspector Window.");
+location.reload();
+}
+// Get notified when it's opened/closed or orientation changes
+window.addEventListener('devtoolschange', function (event) {
+// window.addEventListener('devtoolschange', event => {
+console.log('Is DevTools open:', event.detail.isOpen);
+console.log('DevTools orientation:', event.detail.orientation);
+console.log(event);
+if (event.detail.isOpen == true && event.detail.orientation != undefined) {
+alert("Please Close The Inspector Window.");
+location.reload();
+}
+});
+}
+function getMobileOperatingSystem() {
+var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+// Windows Phone must come first because its UA also contains "Android"
+if (/windows phone/i.test(userAgent)) {
+return "Windows Phone";
+}
+
+if (/android/i.test(userAgent)) {
+return "Android";
+}
+
+// iOS detection from: http://stackoverflow.com/a/9039885/177710
+if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+return "iOS";
+}
+
+return "unknown";
+}
+});
+
+$(document).ready(function () {
+
+$(document)[0].oncontextmenu = function () { return true; }
+
+$(document).mousedown(function (e) {
+if (e.button == 2) {
+return true;
+} else {
+return true;
+}
+});
+// FOR right click off ---------------START
+//$(document).ready(function () {
+
+// $(document)[0].oncontextmenu = function () { return false; }
+
+// $(document).mousedown(function (e) {
+// if (e.button == 2) {
+// return false;
+// } else {
+// return true;
+// }
+// });
+
+// --------------------------------------END
+document.onkeydown = function (e) {
+if (event.keyCode == 123) {
+return false;
+}
+if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+return false;
+}
+if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+return false;
+}
+if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+return false;
+}
+if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+return false;
+}
+}
+});
+</script>
 </asp:Content>
 
 

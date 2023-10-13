@@ -6178,6 +6178,44 @@ namespace IITMS
                     return retStatus;
                 }
 
+                // Added By Sagar Mankar on Date 05102023
+                public int GenerateBarcodeNumber(int SchemeNo, int SemesterNo, int SessionNo)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    Object ret = 0;
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SCHEMENO", SchemeNo);
+                        objParams[1] = new SqlParameter("@P_SEMESTERNO", SemesterNo);
+                        objParams[2] = new SqlParameter("@P_SESSIONNO", SessionNo);
+                        //objParams[1] = new SqlParameter("@P_BRANCHNO", branchNo);
+                        //objParams[2] = new SqlParameter("@P_COURSENO", courseNo);
+                        //objParams[3] = new SqlParameter("@P_DIGIT", DigitsNo);
+                        //objParams[4] = new SqlParameter("@P_IP_ADDRESS", ipAddress);
+                        //objParams[5] = new SqlParameter("@P_USER_ID", userId);
+                        //objParams[6] = new SqlParameter("@P_COLLEGE_CODE", collegeCode);
+                        objParams[3] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[3].Direction = ParameterDirection.Output;
+
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_BARCODE_AND_SEATNO_GENERATION", objParams, true);
+
+                        //  if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_DECODENO_RANDOM", objParams, false) != null)
+                        if (Convert.ToInt32(ret) == 1)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.GenerateDecodeNumber->" + ex.ToString());
+                    }
+
+                    return retStatus;
+                }
+
                 public int UpdateLockDecodeNo(int sessionno, int courseno, int lck)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -7175,13 +7213,13 @@ namespace IITMS
                 #endregion
 
                 #region Added By Rohit Diwate on date 21092023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode,int feedback)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[25];
+                        SqlParameter[] objParam = new SqlParameter[27];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -7204,9 +7242,11 @@ namespace IITMS
                         objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
                         objParam[20] = new SqlParameter("@P_COLLEGE", college); //Added by Rohit Diwate on 150923
                         objParam[21] = new SqlParameter("@P_SESSION", session); //Added by Rohit Diwate on 150923
-                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", session); //Added by Rohit Diwate on 210923
+                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", feescollection); //Added by Rohit Diwate on 210923
                         objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
                         objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
+                        objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
+                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback); 
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 

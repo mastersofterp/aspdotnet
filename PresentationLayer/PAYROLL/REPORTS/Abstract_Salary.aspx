@@ -3,6 +3,9 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+  <link href="../plugins/multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+ <link href='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>' rel="stylesheet" />
+  <script src='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.js") %>'></script>
     <style>
         .dataTables_scrollHeadInner {
             width: max-content !important;
@@ -79,7 +82,7 @@
                                         InitialValue="0" Display="None"></asp:RequiredFieldValidator>--%>
                                 </div>
 
-                                <div class="form-group col-lg-3 col-md-6 col-12" id="trstaff" runat="server">
+                                <div class="form-group col-lg-3 col-md-6 col-12" id="trstaff" runat="server" visible="false">
                                     <div class="label-dynamic">
                                        <%-- <sup>* </sup>--%>
                                         <%--<label>Staff</label>--%>
@@ -91,7 +94,12 @@
                                         ControlToValidate="ddlStaffNo"  ErrorMessage="Please Select Scheme/Staff"
                                         ValidationGroup="Payroll"></asp:RequiredFieldValidator>
                                 </div>
-
+                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divmaxnooffile" runat="server" visible="true">
+                                        <div class="label-dynamic">
+                                            <label>Scheme/Staff</label>
+                                        </div>
+                                           <asp:ListBox ID="ddlStaffNo1" runat="server" AppendDataBoundItems="true"  TabIndex="11"  CssClass="form-control multi-select-demo" SelectionMode="Multiple"></asp:ListBox>  
+                                    </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <div class="label-dynamic">
                                         <label>Employee Type</label>
@@ -583,4 +591,36 @@
     </div>
     <div id="divMsg" runat="server">
     </div>
+       <script type="text/javascript">
+           $(document).ready(function () {
+               $('.multi-select-demo').multiselect({
+                   includeSelectAllOption: true,
+                   maxHeight: 200
+               });
+           });
+           var parameter = Sys.WebForms.PageRequestManager.getInstance();
+           parameter.add_endRequest(function () {
+               $('.multi-select-demo').multiselect({
+                   includeSelectAllOption: true,
+                   maxHeight: 200
+               });
+           });
+    </script>
+     <script>
+         function checkout() {
+             var checkBoxes = document.getElementsByClassName('ddlStaffNo1');
+             var nbChecked = 0;
+             for (var i = 0; i < checkBoxes.length; i++) {
+                 if (checkBoxes[i].checked) {
+                     nbChecked++;
+                 };
+             };
+             if (nbChecked == 0) {
+                 alert('Please, select at least one Staff/Scheme!');
+                 return false;
+             } else {
+                 //Do what you need for form submission, if needed...
+             }
+         }
+    </script>
 </asp:Content>

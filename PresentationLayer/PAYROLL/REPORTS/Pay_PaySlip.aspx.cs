@@ -112,14 +112,36 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
 
 
     private void ShowWholeEmployeePayslip(string reportTitle, string rptFileName)
-    {     
+    {
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + "$";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
+        else
+        {
+            stafflist = stafflist.Substring(0, stafflist.Length - 1);
+        }
         string Script = string.Empty;
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
         url += "Reports/commonreportNew.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&format=No";
         url += "&path=~,Reports,Payroll," + rptFileName;
-        url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+      //  url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+        url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + stafflist + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
         Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.GetType(), "Report", Script, true);
 
@@ -129,13 +151,35 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
 
     private void ShowWholeEmployeePayslipForCresent(string reportTitle, string rptFileName)
     {
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + "$";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
+        else
+        {
+            stafflist = stafflist.Substring(0, stafflist.Length - 1);
+        }
         string Script = string.Empty;
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
         url += "Reports/commonreportNew.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&format=No";
         url += "&path=~,Reports,Payroll," + rptFileName;
-        url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=0,@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=0";
+        //url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=0,@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=0";
+        url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + stafflist + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=0";
         Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.GetType(), "Report", Script, true);
 
@@ -160,13 +204,36 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
            // divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
            // divMsg.InnerHtml += " </script>";
 
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            else 
+            {
+                stafflist = stafflist.Substring(0, stafflist.Length - 1);
+            }
+
             string Script = string.Empty;
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/commonreportNew.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&format=No";
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",username=" + Session["username"].ToString() + ",Bank_Name=" + txtBankName.Text.ToString();
+           // url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",username=" + Session["username"].ToString() + ",Bank_Name=" + txtBankName.Text.ToString();
+            url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + stafflist + ",@P_IDNO=" + Convert.ToInt32(ddlEmployeeNo.SelectedValue) + ",@P_EMPTYPENO=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",username=" + Session["username"].ToString() + ",Bank_Name=" + txtBankName.Text.ToString();
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.GetType(), "Report", Script, true);
 
@@ -367,6 +434,7 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
 
             //FILL STAFF
             objCommon.FillDropDownList(ddlStaffNo, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
+            objCommon.FillListBox(ddlStaffNo1, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
 
             //FILL EMPLOYEE
            // objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),PFILENO) + ']'", "IDNO>0 AND STAFFNO="+ddlStaffNo.SelectedValue+" AND COLLEGE_NO="+ddlCollege.SelectedValue, "FNAME");
@@ -456,6 +524,7 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
 
             //FILL STAFF
             objCommon.FillDropDownList(ddlStaffNo, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO=" + staffno, "STAFFNO");
+            objCommon.FillListBox(ddlStaffNo1, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO=" + staffno, "STAFFNO");
 
             //FILL EMPLOYEE
             objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS ", "IDNO", "'['+ convert(nvarchar(150),EmployeeId) + ']' +' '+ FNAME + ' ' + MNAME + ' ' + LNAME", "IDNO=" + IDNO, "");
@@ -501,22 +570,56 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
     {
         if (ddlCollege.SelectedValue == "0")
         {
-            if (Convert.ToInt32(ddlStaffNo.SelectedValue) > 0)
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
             {
-                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO=" + ddlStaffNo.SelectedValue, "FNAME");
-
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + ",";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            if (count > 0)
+            {
+                stafflist = stafflist.Substring(0, stafflist.Length - 1);
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO in (" + stafflist + ")", "FNAME");
             }
             else
             {
                 objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0", "FNAME");
-  
             }
         }
         else
         {
-            if (Convert.ToInt32(ddlStaffNo.SelectedValue) > 0)
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
             {
-                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO=" + ddlStaffNo.SelectedValue + " AND COLLEGE_NO=" + ddlCollege.SelectedValue, "FNAME");
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + ",";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            if (count  > 0)
+            {
+                stafflist = stafflist.Substring(0, stafflist.Length - 1);
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO in ( " + stafflist + ") AND COLLEGE_NO=" + ddlCollege.SelectedValue, "FNAME");
             }
             else
             {
@@ -669,6 +772,7 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
 
     private void ShowThreeMonthSalaryStatements(string reportTitle, string rptFileName)
     {
+
         string Script = string.Empty;
         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
         url += "Reports/commonreportNew.aspx?";
@@ -725,5 +829,48 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
          //   + Session["colcode"].ToString(); // @P_COLLEGE_CODE=" + Session["colcode"].ToString();
         Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.GetType(), "Report", Script, true);
+    }
+    protected void ddlStaffNo1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + ",";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
+        if (count == 0)
+        {
+            if (Convert.ToInt32(ddlCollege.SelectedValue) > 0)
+            {
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0  AND COLLEGE_NO=" + ddlCollege.SelectedValue, "FNAME");
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0", "FNAME");
+            }
+        }
+        else if(count > 0)
+        {
+            stafflist = stafflist.Substring(0, stafflist.Length - 1);
+            if (Convert.ToInt32(ddlCollege.SelectedValue) > 0)
+            {
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO IN (" + stafflist + ") AND COLLEGE_NO=" + ddlCollege.SelectedValue, "FNAME");
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS", "IDNO", "FNAME + ' ' + MNAME + ' ' + LNAME + '['+ convert(nvarchar(150),EmployeeId) + ']'", "IDNO>0 AND STAFFNO IN (" + stafflist + ")", "FNAME");
+            }
+        } 
     }
 }

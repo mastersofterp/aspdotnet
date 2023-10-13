@@ -18,7 +18,7 @@ using System.IO;
 using Mastersoft.Security;
 using Mastersoft.Security.IITMS;
 
-
+ 
 
 public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 {
@@ -315,9 +315,9 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 
             txtFromRange.Text = "";
             txtToRange.Text = "";
-            dcl.Core_credit = Convert.ToInt32(txtCoreCredits.Text);
-            dcl.Elective_credit = Convert.ToInt32(txtElectiveCredits.Text);
-            dcl.Global_credit = Convert.ToInt32(txtGlobalCredits.Text);
+            dcl.Core_credit = Convert.ToDouble(txtCoreCredits.Text);
+            dcl.Elective_credit = Convert.ToDouble(txtElectiveCredits.Text);
+            dcl.Global_credit = Convert.ToDouble(txtGlobalCredits.Text);
 
             if (txtOverloadCreditLimit.Text == "")
             {
@@ -325,11 +325,11 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
             }
             else
             {
-                dcl.Overload_credit = Convert.ToInt32(txtOverloadCreditLimit.Text); ;
+                dcl.Overload_credit = Convert.ToDouble(txtOverloadCreditLimit.Text); ;
             }
 
-            dcl.TO_CREDIT = Convert.ToInt32(dcl.Core_credit + dcl.Elective_credit + dcl.Global_credit + dcl.Overload_credit);
-            dcl.FROM_CREDIT = Convert.ToInt32(txtFromCredit.Text); //txtFromCredit.Text == null ? "0" : txtFromCredit.Text.ToString(); 
+            dcl.TO_CREDIT = Convert.ToDouble(dcl.Core_credit + dcl.Elective_credit + dcl.Global_credit + dcl.Overload_credit);
+            dcl.FROM_CREDIT = Convert.ToDouble(txtFromCredit.Text); //txtFromCredit.Text == null ? "0" : txtFromCredit.Text.ToString(); 
             if (dcl.FROM_CREDIT > dcl.TO_CREDIT)
             {
                 objCommon.DisplayMessage(updpnl, "Minimum Credit Limit Must Be Same or Less Than Maximum All Credit Limit!", this.Page);
@@ -340,7 +340,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
             dcl.DEGREE_TYPE = Convert.ToInt32(ddlAdditionalCourseDegree.SelectedValue);
             dcl.MIN_SCHEMELIMIT = 0;// minimumSchemeLimit;
             dcl.MAX_SCHEMELIMIT = 0; // maximumSchemeLimit;
-            dcl.MIN_REG_CREDIT_LIMIT = string.IsNullOrEmpty(txtMinRegCredit.Text) ? 0 : Convert.ToInt32(txtMinRegCredit.Text);
+            dcl.MIN_REG_CREDIT_LIMIT = string.IsNullOrEmpty(txtMinRegCredit.Text) ? 0 : Convert.ToDouble(txtMinRegCredit.Text);
             dcl.ELECTIVE_CHOISEFOR = !string.IsNullOrEmpty(txtElectiveChoiseFor.Text) ? Convert.ToInt32(txtElectiveChoiseFor.Text) : 0;
             int collegeID = Convert.ToInt16(ddlCollege.SelectedValue);
 

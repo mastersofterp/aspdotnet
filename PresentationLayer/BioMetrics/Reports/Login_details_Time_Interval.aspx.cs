@@ -804,7 +804,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -817,7 +817,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -1494,4 +1494,108 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
     //        int paydeptno = Convert.ToInt32(ds.Tables[0].Rows[0]["PAYROLL_DEPTNO"].ToString());
     //    }
     //}
+
+    private void ShowReportForHOD(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            //------------------------------------------------------------
+            string time_from, time_to, in_out = string.Empty;
+
+            int userno = Convert.ToInt32(Session["userno"]);
+            string deptno = objCommon.LookUp("User_acc", "UA_DEPTNO", "UA_NO = " + Convert.ToInt32(Session["userno"]));
+            string department = deptno.Replace(",", "/");
+            if (rblTime.SelectedValue == "0")
+            {
+                if (txtInTimeFrom.Text != string.Empty && txtInTimeTo.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter End Intime Range", this);
+                    return;
+                }
+                else if (txtInTimeTo.Text != string.Empty && txtInTimeFrom.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter Start Intime Range", this);
+                    return;
+                }
+                else
+                {
+                    time_from = txtInTimeFrom.Text;
+                    time_to = txtInTimeTo.Text;
+                    in_out = "IN";
+                }
+            }
+            
+            else if (rblTime.SelectedValue == "1")
+            {
+                if (txtOutTimeFrom.Text != string.Empty && txtOutTimeTo.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter End Outtime Range", this);
+                    return;
+                }
+                else if (txtOutTimeTo.Text != string.Empty && txtOutTimeFrom.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter Start Outtime Range", this);
+                    return;
+                }
+                else
+                {
+                    time_from = txtOutTimeFrom.Text;
+                    time_to = txtOutTimeTo.Text;
+                    in_out = "OUT";
+                }
+            }
+            else if (chkGraph.Checked == false)
+            {
+                time_from = "N";
+                time_to = "N";
+                in_out = "N";
+            }
+            else
+            {
+                if (rblTime.SelectedValue == "0" && chkGraph.Checked == true)
+                {
+                    in_out = "IN";
+                    time_from = "N";
+                    time_to = "N";
+                }
+                else if (rblTime.SelectedValue == "1" && chkGraph.Checked == true)
+                {
+                    in_out = "OUT";
+                    time_from = "N";
+                    time_to = "N";
+                }
+                else
+                {
+                    time_from = "N";
+                    time_to = "N";
+                    in_out = "N";
+                }
+
+
+
+            }
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("biometrics")));
+
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
+            int idno = 0;
+            idno = Convert.ToInt32(ddlEmployee.SelectedValue);
+
+            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + department + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Login_details_Time_Interval.ShowReport -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
 }

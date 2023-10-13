@@ -291,7 +291,7 @@ namespace BusinessLogicLayer.BusinessLogic
         // Sachin 20 FEB 2018
         //for export to excel abstract Salary Report 
 
-        public DataSet GetAtstractRegisterExcel(string monthYear, int StaffNo,int EmpTypeNo,int CollegeNo,string collCode)
+        public DataSet GetAtstractRegisterExcel(string monthYear, string StaffNo,int EmpTypeNo,int CollegeNo,string collCode)
         {
             DataSet ds = null;
             try

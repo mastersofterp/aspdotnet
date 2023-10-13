@@ -907,7 +907,7 @@
                                                     <thead class="bg-light-blue">
                                                         <tr>
                                                             <th style="text-align: left;">Select
-                                                           <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" ToolTip='<%# Eval("REGNO") %>' />
+                                                           <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" ToolTip='<%# Eval("REGNO") %>' Checked="false" />
                                                                 <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("REGNO") %>' />
 
                                                             </th>
@@ -1002,6 +1002,23 @@
             }
         }
     </script>
+
+      <script language="javascript" type="text/javascript">
+          function totAll1(headchk) {
+              var frm = document.forms[0]
+              for (i = 0; i < document.forms[0].elements.length; i++) {
+                  var e = frm.elements[i];
+                  if (e.type == 'checkbox') {
+                      if (headchk.checked == true)
+                          e.checked = true;
+                      else
+                          e.checked = false;
+                  }
+              }
+          }
+    </script>
+
+
     <%--<script>
         $(document).ready(function () {
             bindDataTable();

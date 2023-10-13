@@ -605,7 +605,7 @@
 
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="submit"
-                                                        OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary"  /> 
+                                                        OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary"  OnClientClick="return validate();"/> 
                                                    <%-- OnClientClick="return validate();"--%>
                                                     <asp:Button ID="btnReport" runat="server" OnClick="btnReport_Click" Text="Report"
                                                         CssClass="btn btn-info" Style="display: none;" />

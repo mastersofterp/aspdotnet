@@ -312,6 +312,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
         divPONum.Visible = false;
         divGRNNum.Visible = false;
         divGrnNumtxt.Visible = false;
+        pnlAttachmentList.Visible = false;
     }
     #region AddItem
 
@@ -1184,7 +1185,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
                 }
             }
         }
-        else if (ds.Tables[0].Rows[0]["GRNID"].ToString() != "0" || ds.Tables[0].Rows[0]["GRNID"].ToString() != null)
+        else if (ds.Tables[0].Rows[0]["GRNID"].ToString() != "0") // || ds.Tables[0].Rows[0]["GRNID"].ToString() != null)
         {
             string[] GRNNum = ds.Tables[0].Rows[0]["GRNID"].ToString().Split("$".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             foreach (string GRN in GRNNum)
@@ -1238,7 +1239,8 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
             hdnListCount.Value = ds.Tables[2].Rows.Count.ToString();
             ViewState["TaxTable"] = ds.Tables[2];
         }
-        if (ds.Tables[3].Rows[0]["GRN_NUMBER"].ToString() == "")
+       // if (ds.Tables[3].Rows[0]["GRN_NUMBER"].ToString() == "")
+        if (ds.Tables[1].Rows[0]["GRNID"].ToString() == "0")
         {
             divGrnNumtxt.Visible = false;
 

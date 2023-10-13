@@ -192,17 +192,17 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
                     string RECON = (objCommon.LookUp("ACD_DCR", "DISTINCT RECON", "SESSIONNO=" + ViewState["SESSIONNO"] + " AND IDNO=" + ViewState["idno"] + " AND RECIEPT_CODE='PRF'"));//photocopy recon=1 then only eligible for revaluation
 
-                    if (Convert.ToInt32(Session["OrgId"]) != 9 && Convert.ToInt32(Session["OrgId"]) != 2 && Convert.ToInt32(Session["OrgId"]) != 6)
-                    {
-                        if (RECON == "1" || RECON == "True")
-                        {
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(updDetails, "Not Eligible For Revaluation Because You have not Applied or confirmed your photocopy details yet !!!", this.Page);
-                            return;
-                        }
-                    }
+                    //if (Convert.ToInt32(Session["OrgId"]) != 9 && Convert.ToInt32(Session["OrgId"]) != 2 && Convert.ToInt32(Session["OrgId"]) != 6)
+                    //{
+                    //    if (RECON == "1" || RECON == "True")
+                    //    {
+                    //    }
+                    //    else
+                    //    {
+                    //        objCommon.DisplayMessage(updDetails, "Not Eligible For Revaluation Because You have not Applied or confirmed your photocopy details yet !!!", this.Page);
+                    //        return;
+                    //    }
+                    //}
 
                     //if (RECON == "1" || RECON == "True")  //to check recon 1 or not of photocopy // Commented by Pritish S. on 20/10/2020
                     ////if ("1" == "1")
@@ -967,7 +967,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")//for student
             {
-                result = objSReg.AddPhotoCopyRegisteration(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objBackReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "REVAL", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
             }
             else if (Session["usertype"].ToString() == "1") //Admin
             {
@@ -1217,11 +1217,14 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             {
                 ShowReportPhotoCopyReval("Photo Copy Registration Slip", "rptPhotoRevaluation_Rcpiper.rpt");
             }
-            else
+            else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 // ShowReport("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
                 ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluationCRESCENT.rpt");
-
+            }
+            else
+            {
+                ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
             }
         }
         catch { }
@@ -1490,9 +1493,13 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
-        else
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)  
         {
             BillDeskPaymentGateway();   //BillDesk Payment Gateway   
+        }
+        else  
+        {
+            PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
     }
 
@@ -1676,8 +1683,16 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             objStudentFees.SessionNo = (ViewState["SESSIONNO"].ToString());
             objStudentFees.OrderID = lblOrderID.Text;
 
-            //insert in acd_fees_log
-            result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "RF", 2); //2 for reval
+
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
+            {
+                //insert in acd_fees_log
+                result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "RF", 2); //2 for reval
+            }
+            else
+            {
+                result = 1;   //Fees log maintined in other client except crescent 
+            }
 
             if (result > 0)
             {
@@ -2392,6 +2407,11 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
                     Session["PAYID"] = PAYID;
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 18)//Hits
+                {
+                    PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%IOB Pay%'"));
+                    Session["PAYID"] = PAYID;
+                }
                 else
                 {
                     PAYID = 1;               //Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
@@ -2418,6 +2438,8 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     {
                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
+                        Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString() == null ? "1" : ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();
+
                         Response.Redirect(RequestUrl, false);
 
                         //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
@@ -2425,7 +2447,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     }
                 }
                 else
-                {
+                {  
                     objCommon.DisplayMessage(this.Page,"Payment Gateway not define",this.Page);
                     return;
                 }
@@ -2450,7 +2472,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
     protected void ReportStatus()
     {
-        if ((Convert.ToInt32(Session["OrgId"]) == 6) && (Session["usertype"].ToString() == "1"))
+        if ((Convert.ToInt32(Session["OrgId"]) != 2) && (Session["usertype"].ToString() == "1"))
         {
             btnSubmit.Visible = false;
             btnChallan.Visible = false;

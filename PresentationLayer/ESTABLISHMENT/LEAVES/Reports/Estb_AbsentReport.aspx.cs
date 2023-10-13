@@ -291,7 +291,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Estb_AbsentReport : Syste
         //ddlEmployee.SelectedValue = "0";
         // ddlEmployee.SelectedItem.Text = "Please Select";
         //txtDate.Text = string.Empty;
-        if (ddlCollege.SelectedIndex > 0)
+        if (ddlCollege.SelectedIndex >= 0)
         {
             if (rblSelect.SelectedValue == "1")
             {

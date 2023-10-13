@@ -9,6 +9,7 @@
 // MODIFIED DESC :                                                                      
 //======================================================================================
 using System;
+using System.Web;
 using System.Data;
 using System.IO;
 using System.Web.UI;
@@ -19,6 +20,11 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Linq;
 using System.Configuration;
+using Mastersoft.Security.IITMS;
+using PageControlValidator;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
+using System.Threading.Tasks;
 
 public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
 {
@@ -26,6 +32,9 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
     IITMS.UAIMS_Common objUCommon = new IITMS.UAIMS_Common();
     VaccinationController objvaccination = new VaccinationController();
     StudentController objSC = new StudentController();
+
+    string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
+    string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName"].ToString();
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -123,7 +132,7 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                     divAdmissionApprove.Visible = false;
                     divadmissiondetailstreeview.Visible = false;
                     ShowDetails(idno);
-                    CheckFinalSubmission();  // Added By Bhagyashree on 30052023
+                    CheckFinalSubmission();  // Added By Bhagyashree on 30052023                    
                 }
                 else
                 {
@@ -131,16 +140,27 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                     //lnkApproveAdm.Visible = true;
                     divAdmissionApprove.Visible = true;
                     divadmissiondetailstreeview.Visible = true;
-                    ShowDetails(idno);
+                    ShowDetails(idno);                  
                     // HideRowForAdmin();
                 }
 
             }
-
-
         }
         divMsg.InnerHtml = string.Empty;
+    }
 
+    // Added By Shrikant Waghmare on 28-08-2023
+    public void rdoVaccinationStateMaintain()
+    {
+
+        if (Session["rdovaccination"] == "1")
+        {
+            rdVaccinated.Checked = true;
+        }
+        else
+        {
+            rdNotVaccinated.Checked = true;
+        }
     }
 
     private void HideRowForAdmin()
@@ -148,6 +168,95 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
         trVaccinationCondition.Visible = true;
         trVaccinated.Visible = true;
     }
+
+    #region BlogStorage
+
+
+    public int Blob_UploadDepositSlip(string ConStr, string ContainerName, string DocName, FileUpload FU, byte[] ChallanCopy)
+    {
+        CloudBlobContainer container = Blob_Connection(ConStr, ContainerName);
+        int retval = 1;
+
+        string Ext = Path.GetExtension(FU.FileName);
+        string FileName = DocName + Ext;
+        try
+        {
+            DeleteIFExits(FileName);
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Blob
+            });
+
+            CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
+            cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
+            if (!cblob.Exists())
+            {
+                using (Stream stream = new MemoryStream(ChallanCopy))
+                {
+                    cblob.UploadFromStream(stream);
+                }
+            }
+            //cblob.UploadFromStream(FU.PostedFile.InputStream);
+        }
+        catch
+        {
+            retval = 0;
+            return retval;
+        }
+        return retval;
+    }
+
+    public DataTable Blob_GetById(string ConStr, string ContainerName, string Id)
+    {
+        CloudBlobContainer container = Blob_Connection(ConStr, ContainerName);
+        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+        var permission = container.GetPermissions();
+        permission.PublicAccess = BlobContainerPublicAccessType.Container;
+        container.SetPermissions(permission);
+
+        DataTable dt = new DataTable();
+        dt.TableName = "FilteredBolb";
+        dt.Columns.Add("Name");
+        dt.Columns.Add("Uri");
+
+        //var blobList = container.ListBlobs(useFlatBlobListing: true);
+        var blobList = container.ListBlobs(Id, true);
+        foreach (var blob in blobList)
+        {
+            string x = (blob.Uri.ToString().Split('/')[blob.Uri.ToString().Split('/').Length - 1]);
+            string y = x.Split('_')[0];
+            dt.Rows.Add(x, blob.Uri);
+        }
+        return dt;
+    }
+
+    private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
+    {
+        CloudStorageAccount account = CloudStorageAccount.Parse(ConStr);
+        CloudBlobClient client = account.CreateCloudBlobClient();
+        CloudBlobContainer container = client.GetContainerReference(ContainerName);
+        return container;
+    }
+
+    public void DeleteIFExits(string FileName)
+    {
+        CloudBlobContainer container = Blob_Connection(blob_ConStr, blob_ContainerName);
+        string FN = Path.GetFileNameWithoutExtension(FileName);
+        try
+        {
+            Parallel.ForEach(container.ListBlobs(FN, true), y =>
+            {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+                ((CloudBlockBlob)y).DeleteIfExists();
+            });
+        }
+        catch (Exception) { }
+    }
+
+    #endregion BlogStorage
+
     private void CheckFinalSubmission()
     {
         string finalsubmit = objCommon.LookUp("ACD_ADM_STUD_INFO_SUBMIT_LOG", "ISNULL(FINAL_SUBMIT,0)FINAL_SUBMIT", "IDNO=" + Convert.ToInt32(Session["idno"]) + "");
@@ -158,10 +267,54 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
             Button1.Visible = true;
         }
     }
+
+    protected Boolean ValidatePageControls()
+    {
+        string DisplayMessage = string.Empty;
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtFirstDoseVaccName.Text, txtFirstDoseVaccName.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtFirstDoseVaccName.Focus();
+            return false;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtFirstDoseVaccCenter.Text, txtFirstDoseVaccCenter.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtFirstDoseVaccCenter.Focus();
+            return false;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtSecondDoseVaccName.Text, txtSecondDoseVaccName.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtSecondDoseVaccName.Focus();
+            return false;
+        }
+
+        DisplayMessage = ValidateControls.ValidateTextBoxLength(txtSecondDoseVaccCenter.Text, txtSecondDoseVaccCenter.MaxLength);
+        if (DisplayMessage != "")
+        {
+            objCommon.DisplayMessage(this.Page, "" + DisplayMessage + "", Page);
+            txtSecondDoseVaccCenter.Focus();
+            return false;
+        }
+        return true;
+    }
+
     protected void btnFirstDose_Click(object sender, EventArgs e)
     {
         try
         {
+            if (ValidatePageControls() == false)
+            {
+                return;
+            }
+            
             if (txtFirstDoseVaccName.Text == string.Empty || txtFirstDoseVaccCenter.Text == string.Empty || txtFirstDoseVaccDate.Text == string.Empty)
             {
                 objCommon.DisplayMessage(this, "Please fill up all the mandatory field", this.Page);
@@ -173,26 +326,46 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                 return;
             }
 
+
+            string FILE_NAME = string.Empty;
+            byte[] imgData;
+
             if (fuFirstDoseVaccCert.HasFile)
             {
+                imgData = objCommon.GetImageData(fuFirstDoseVaccCert);
+                string ext = System.IO.Path.GetExtension(fuFirstDoseVaccCert.FileName).ToLower();
+                FILE_NAME = imgData.ToString();
+                string filename_Certificate = Path.GetFileName(fuFirstDoseVaccCert.PostedFile.FileName);
+
+                FILE_NAME = lblName.ToolTip + "_First_Dose_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ext;
+                int retval = Blob_UploadDepositSlip(blob_ConStr, blob_ContainerName, lblName.ToolTip + "_First_Dose_" + DateTime.Now.ToString("yyyyMMddHHmmss"), fuFirstDoseVaccCert, imgData);
+                if (retval == 0)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                    return;
+                }
+
+
                 string filePath = MapPath("~/FilePathVaccination/");  // for test
                 //string filePath = ConfigurationManager.AppSettings["FilePathVaccination"].ToString();
                 string fileSavePath = filePath + "\\First_Dose";
-                string fileName = "First_Dose_" + lblName.ToolTip + Path.GetExtension(fuFirstDoseVaccCert.FileName);
-                int ret = UploadVaccinationCertificate(fuFirstDoseVaccCert, fileName, fileSavePath);
-                if (ret == 0)
-                {
-                    return;
-                }
-                lnkbtnFirstDoseCert.Text = fileName;
-                hidFirstDoseFilePath.Value = fileSavePath;
+                //string fileName = "First_Dose_" + lblName.ToolTip + Path.GetExtension(fuFirstDoseVaccCert.FileName);
+                //int ret = UploadVaccinationCertificate(fuFirstDoseVaccCert, fileName, fileSavePath);
+                //if (ret == 0)
+                //{
+                //    ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+
+                //        return;
+                //}
+                lnkbtnFirstDoseCert.Text = FILE_NAME;
+                //hidFirstDoseFilePath.Value = fileSavePath;
             }
             else
             {
                 objCommon.DisplayMessage(this, "Please Upload the Covid Vaccination Certificate !!", this.Page);
                 return;
             }
-            CustomStatus cs = (CustomStatus)objvaccination.AddUpdateFirstDoseVaccination(lblName.ToolTip, txtFirstDoseVaccName.Text, txtFirstDoseVaccCenter.Text, txtFirstDoseVaccDate.Text, hidFirstDoseFilePath.Value, lnkbtnFirstDoseCert.Text, hidVaccinationStat.Value);
+            CustomStatus cs = (CustomStatus)objvaccination.AddUpdateFirstDoseVaccination(lblName.ToolTip, txtFirstDoseVaccName.Text, txtFirstDoseVaccCenter.Text, txtFirstDoseVaccDate.Text, hidFirstDoseFilePath.Value, FILE_NAME, hidVaccinationStat.Value);
             if (cs.Equals(CustomStatus.RecordSaved))
             {
                 objCommon.DisplayMessage(this, "Record Saved Successfully !!", this.Page);
@@ -218,6 +391,7 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
 
         }
     }
+
     private int UploadVaccinationCertificate(FileUpload fileUpload, string fileName, string fileSavePath)
     {
         int retval = 0;
@@ -256,6 +430,11 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
     {
         try
         {
+            if (ValidatePageControls() == false)
+            {
+                return;
+            }
+
             if (txtSecondDoseVaccName.Text == string.Empty || txtSecondDoseVaccCenter.Text == string.Empty || txtSecondDoseVaccDate.Text == string.Empty)
             {
                 objCommon.DisplayMessage("Please fill up all the mandatory field", this.Page);
@@ -266,19 +445,36 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                 objCommon.DisplayMessage(this, "Please enter valid Second Dose Vaccination Date  ", this.Page);
                 return;
             }
+
+            string FILE_NAME = string.Empty;
+            byte[] imgData;
+
             if (fuSecondDoseVaccCert.HasFile)
             {
-                string filePath = MapPath("~/FilePathVaccination/");  // for test
-                //string filePath = ConfigurationManager.AppSettings["FilePathVaccination"].ToString();
-                string fileSavePath = filePath + "\\Second_Dose";
-                string fileName = "Second_Dose_" + lblName.ToolTip + Path.GetExtension(fuSecondDoseVaccCert.FileName);
-                int ret = UploadVaccinationCertificate(fuSecondDoseVaccCert, fileName, fileSavePath);
-                if (ret == 0)
+                imgData = objCommon.GetImageData(fuSecondDoseVaccCert);
+                string ext = System.IO.Path.GetExtension(fuSecondDoseVaccCert.FileName).ToLower();
+                FILE_NAME = imgData.ToString();
+                string filename_Certificate = Path.GetFileName(fuSecondDoseVaccCert.PostedFile.FileName);
+
+                FILE_NAME = lblName.ToolTip + "_Second_Dose_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ext;
+                int retval = Blob_UploadDepositSlip(blob_ConStr, blob_ContainerName, lblName.ToolTip + "_Second_Dose_" + DateTime.Now.ToString("yyyyMMddHHmmss"), fuSecondDoseVaccCert, imgData);
+                if (retval == 0)
                 {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                     return;
                 }
-                lnkbtnSecondDoseVaccCert.Text = fileName;
-                hidSecondDoseFilePath.Value = fileSavePath;
+
+                string filePath = Server.MapPath("~/FilePathVaccination/");  // for test
+                //string filePath = ConfigurationManager.AppSettings["FilePathVaccination"].ToString();
+                //string fileSavePath = filePath + "\\Second_Dose";
+                //string fileName = "Second_Dose_" + lblName.ToolTip + Path.GetExtension(fuSecondDoseVaccCert.FileName);
+                //int ret = UploadVaccinationCertificate(fuSecondDoseVaccCert, fileName, fileSavePath);
+                //if (ret == 0)
+                //{
+                //    return;
+                //}
+                lnkbtnSecondDoseVaccCert.Text = FILE_NAME;
+                //hidSecondDoseFilePath.Value = fileSavePath;
             }
             //// Added by sachin 21-10-2022  validation 
             else
@@ -287,7 +483,7 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                 return;
             }
 
-            CustomStatus cs = (CustomStatus)objvaccination.UpdateSecondDoseVaccination(lblName.ToolTip, txtSecondDoseVaccName.Text, txtSecondDoseVaccCenter.Text, txtSecondDoseVaccDate.Text, hidSecondDoseFilePath.Value, lnkbtnSecondDoseVaccCert.Text);
+            CustomStatus cs = (CustomStatus)objvaccination.UpdateSecondDoseVaccination(lblName.ToolTip, txtSecondDoseVaccName.Text, txtSecondDoseVaccCenter.Text, txtSecondDoseVaccDate.Text, hidSecondDoseFilePath.Value, FILE_NAME);
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 objCommon.DisplayMessage("Record Saved Successfully !!", this.Page);
@@ -326,26 +522,132 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
 
     protected void lnkbtnFirstDoseCert_Click(object sender, EventArgs e)
     {
-        string url = string.Format("VeiwVaccinationCertificate.aspx?idno={0}&dose=1", lblName.ToolTip);
-        string script = "<script type='text/javascript'>window.open('" + url + "')</script>";
-        this.ClientScript.RegisterStartupScript(this.GetType(), "script", script);
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+
+        string filename = objCommon.LookUp("ACD_COVID_VACCINATION_DETAIL", "FIRSTDOSE_FILE_NAME", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]));
+        try
+            
+        {
+            string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
+            string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName"].ToString();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            string directoryName = "~/DownloadImg" + "/";
+            directoryPath = Server.MapPath(directoryName);
+
+            if (!Directory.Exists(directoryPath.ToString()))
+            {
+
+                Directory.CreateDirectory(directoryPath.ToString());
+            }
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = string.Empty;
+            img = filename;
+            var ImageName = img;
+
+            if (img != null || img != "")
+            {
+                DataTable dtBlobPic = Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string filePath = directoryPath + "\\" + ImageName;
+
+                if ((System.IO.File.Exists(filePath)))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+                embed += "If you are unable to view file, you can download from <a href = \"{0}\">here</a>";
+                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+                embed += "</object>";
+
+                ltEmbed.Text = string.Format(embed, ResolveUrl("~/DownloadImg/" + ImageName));
+                //BindListView();
+            }
+        }
+        catch (Exception ex)
+        {
+        }
     }
+
+    //    string url = string.Format("VeiwVaccinationCertificate.aspx?idno={0}&dose=1", lblName.ToolTip);
+    //    string script = "<script type='text/javascript'>window.open('" + url + "')</script>";
+    //    this.ClientScript.RegisterStartupScript(this.GetType(), "script", script);
+    //}
 
     protected void lnkbtnSecondDoseVaccCert_Click(object sender, EventArgs e)
     {
-        string url = string.Format("VeiwVaccinationCertificate.aspx?idno={0}&dose=2", lblName.ToolTip);
-        string script = "<script type='text/javascript'>window.open('" + url + "')</script>";
-        this.ClientScript.RegisterStartupScript(this.GetType(), "script", script);
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+
+        string filename = objCommon.LookUp("ACD_COVID_VACCINATION_DETAIL", "SECONDDOSE_FILE_NAME", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]));
+        try
+        {
+            string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
+            string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerName"].ToString();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            string directoryName = "~/DownloadImg" + "/";
+            directoryPath = Server.MapPath(directoryName);
+
+            if (!Directory.Exists(directoryPath.ToString()))
+            {
+
+                Directory.CreateDirectory(directoryPath.ToString());
+            }
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = string.Empty;
+            img = filename;
+            var ImageName = img;
+
+            if (img != null || img != "")
+            {
+                DataTable dtBlobPic = Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string filePath = directoryPath + "\\" + ImageName;
+
+                if ((System.IO.File.Exists(filePath)))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+                embed += "If you are unable to view file, you can download from <a href = \"{0}\">here</a>";
+                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+                embed += "</object>";
+
+                ltEmbed.Text = string.Format(embed, ResolveUrl("~/DownloadImg/" + ImageName));
+                //BindListView();
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+
+
+
+    //    string url = string.Format("VeiwVaccinationCertificate.aspx?idno={0}&dose=2", lblName.ToolTip);
+    //    string script = "<script type='text/javascript'>window.open('" + url + "')</script>";
+    //    this.ClientScript.RegisterStartupScript(this.GetType(), "script", script);
     }
 
     protected void btnsecondcancel_Click(object sender, EventArgs e)
     {
-
+        txtSecondDoseVaccName.Text = string.Empty;
+        txtSecondDoseVaccDate.Text = string.Empty;
+        txtSecondDoseVaccCenter.Text = string.Empty;
     }
 
     protected void btnFirstCancel_Click(object sender, EventArgs e)
     {
-
+        txtFirstDoseVaccName.Text = string.Empty;
+        txtFirstDoseVaccCenter.Text = string.Empty;
+        txtFirstDoseVaccDate.Text = string.Empty;
     }
 
     protected void lnkGoHome_Click(object sender, EventArgs e)
@@ -500,6 +802,10 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                     //trNotVaccinated.Visible = false;
                     rdVaccinated.Checked = false;
                     rdNotVaccinated.Checked = false;
+                    rdoVaccinationStateMaintain();
+
+                    
+
                 }
                 //string documentUpdStat = ds.Tables[0].Rows[0]["DOCUMENTSTAT"].ToString();
                 //FillDocumentList(lblSchoName.ToolTip, documentUpdStat);
@@ -716,6 +1022,17 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         int idno = 0;
+
+        if (rdVaccinated.Checked == true)
+        {
+            Session["rdovaccination"] = "1";
+        }
+        else
+        {
+            Session["rdovaccination"] = "0";
+        }
+
+
         if (ViewState["usertype"].ToString() == "2")
         {
             idno = (Convert.ToInt32(Session["idno"]));
@@ -730,7 +1047,6 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
         {
             CustomStatus cs = (CustomStatus)objvaccination.UpdateVaccinationStatus(idno);
             Response.Redirect("~/academic/OtherInformation.aspx");
-
         }
 
         else
@@ -772,6 +1088,15 @@ public partial class ACADEMIC_CovidVaccinationDetails : System.Web.UI.Page
                         return;
                     }
                 }
+            }
+
+            if (rdNotVaccinated.Checked == true)
+            {
+                Session["rdovaccination"] = "1";
+            }
+            else
+            {
+                Session["rdovaccination"] = "0";
             }
         }
     }

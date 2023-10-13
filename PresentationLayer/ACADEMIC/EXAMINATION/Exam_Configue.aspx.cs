@@ -65,10 +65,10 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     private void BindView()
     {
 
-        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,ISNULL(GRADE_ADMIN,0) AS GRADE_ADMIN,ISNULL(GRADE_FACULTY,0) AS GRADE_FACULTY,ISNULL(GRAPH,0) AS GRAPH,ISNULL(GRADE_RANGE,0) AS GRADE_RANGE, ISNULL(COLLEGE,0) AS COLLEGE,ISNULL(SESSION,0) AS SESSION,ISNULL(FEES_COLLECTION,0) AS FEES_COLLECTION,ISNULL(RELATIVE,0) AS RELATIVE,ISNULL(ABSOLUTE,0) AS ABSOLUTE", "", "");
+        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,ISNULL(GRADE_ADMIN,0) AS GRADE_ADMIN,ISNULL(GRADE_FACULTY,0) AS GRADE_FACULTY,ISNULL(GRAPH,0) AS GRAPH,ISNULL(GRADE_RANGE,0) AS GRADE_RANGE, ISNULL(COLLEGE,0) AS COLLEGE,ISNULL(SESSION,0) AS SESSION,ISNULL(FEES_PAID,0) AS FEES_PAID,ISNULL(RELATIVE,0) AS RELATIVE,ISNULL(ABSOLUTE,0) AS ABSOLUTE, ISNULL(BARCODE,0) AS BARCODE, ISNULL(FEEDBACK,0) AS FEEDBACK", "", "");
         if (ds != null && ds.Tables.Count > 0)
         {
-            string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation", "chk_Decode", "chk_SeatNumber", "chk_MarkEnrtyExcel", "chk_Section", "chk_Batch", "chk_grade_admin", "chk_grade_faculty", "chkGraph", "chk_chgrange", "chk_college", "chk_session", "chk_feescollection","chk_relative","chk_absolute" };
+            string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation", "chk_Decode", "chk_SeatNumber", "chk_MarkEnrtyExcel", "chk_Section", "chk_Batch", "chk_grade_admin", "chk_grade_faculty", "chkGraph", "chk_chgrange", "chk_college", "chk_session", "chk_feescollection", "chk_relative", "chk_absolute", "chk_barcode", "chk_feedback" };
             int arr_val = 0;
             string str = "$(document).ready(function(){";
             string val;
@@ -143,6 +143,8 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         int feescollection = 0;
         int relative = 0;
         int absolute = 0;
+        int barcode = 0;
+        int feedback = 0;
 
         //examrule,garcerule,latefee,Improvement,exampattern,revaluation,resultpublish,condonation,feetype
         if (hdfexamregister.Value == "true")
@@ -188,6 +190,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         {
             condonation = 1;
         }
+       
         if (hdfdecodenos.Value == "true")
         {
             decode = 1;
@@ -204,6 +207,10 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         if (hdfFacgrade.Value == "true")
         {
             Grade_Faculty = 1;
+        }
+        else 
+        {
+            Grade_Faculty = 0;
         }
 
 
@@ -223,9 +230,16 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         {
             graph = 1;
         }
+        //else { 
+        //    graph = 0;
+        //}
         if (hdfrange.Value == "true")
         {
             change_range = 1;
+        }
+        else 
+        {
+            change_range = 0;
         }
         if (hdfcollege.Value == "true")
         {
@@ -247,13 +261,21 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         {
             absolute = 1;
         }
+        if (hdfbarcode.Value == "true")
+        {
+            barcode = 1;
+        }
+        if (hdffeedback.Value == "true")
+        {
+            feedback = 1;
+        }
 
 
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype);
 
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0);
         //added by Injamam For batch and section
-        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session,feescollection,relative,absolute);
+        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session,feescollection,relative,absolute,barcode,feedback);
         if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
         {
             objCommon.DisplayMessage("Record Save Sucessfully.... !", this.Page);
@@ -265,7 +287,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         }
 
         //BindSubjectType();
-        clear();
+        //clear();
     }
 
     private void BindSubjectType()
@@ -323,6 +345,8 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         hdffeescollection.Value = "";
         hdfrelative.Value = "";
         hdfabsolute.Value = "";
+        hdfbarcode.Value = "";
+        hdffeedback.Value = "";
         BindView();
 
     }
@@ -343,7 +367,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     {
 
 
-        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,FEE_TYPE,PASS_RULE,MARK_ENTRY,ExcelMarkEntry,FEES_PAID,Fee_type,PASS_RULE,SEC_TIMETABLE,BATCH_TIMETABLE,COLLEGE,SESSION,FEES_COLLECTION,RELATIVE,ABSOLUTE", "", "");
+        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,FEE_TYPE,PASS_RULE,MARK_ENTRY,ExcelMarkEntry,FEES_PAID,Fee_type,PASS_RULE,SEC_TIMETABLE,BATCH_TIMETABLE,COLLEGE,SESSION,FEES_COLLECTION,RELATIVE,ABSOLUTE,BARCODE", "", "");
         if (ds != null && ds.Tables.Count > 0)
         {
             string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation" };

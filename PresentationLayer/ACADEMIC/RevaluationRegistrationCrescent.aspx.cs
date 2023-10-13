@@ -103,7 +103,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
 
                 if (Session["usertype"].ToString() == "2")
                 {
-                    if (CheckActivityStudent() == false)
+                    if (CheckRegistrationActivity() == false)  //CheckActivityStudent
                         return;
 
                     tblSession.Visible = false;
@@ -590,7 +590,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 lvCurrentSubjects.Visible = true;
 
                 string RECON = objCommon.LookUp("ACD_DCR", "Distinct isnull(RECON,0) RECON", "SESSIONNO=" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CAN,0)=0 and RECIEPT_CODE='RF' ");
-
+                
                 if (RECON == "1" || RECON == "True")
                 {
                     if (Session["usertype"].ToString() == "2")
@@ -615,7 +615,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                         {
                             // string TOTALAMOUNT = objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", "SESSIONNO=" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CAN,0)=0 and RECIEPT_CODE='RF' ");
                             //string TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE");
-                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY COURSEFEE");
+                            TOTALAMOUNT = objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND R.SESSIONNO=RF.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY COURSEFEE");
                         }
                         divTotalCourseAmount.Visible = true;
                         lblTotalAmount.Text = TOTALAMOUNT;
@@ -1072,7 +1072,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
         {
             // RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", " IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "  AND ISNULL(CAN,0)=0 AND RECIEPT_CODE='RF'"));
             //RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * REVAL_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND APP_TYPE='REVAL' AND ISNULL(CANCEL,0)=0 GROUP BY REVAL_FEE"));
-            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
+            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND R.SESSIONNO=RF.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + "AND FEETYPE=" + 3 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND APP_TYPE='REVAL' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
         }
         lblTotalAmount.Text = RegTotalAmt.ToString();
         ViewState["Exam_Amout"] = string.Empty;
@@ -2242,6 +2242,46 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
     }
 
     #endregion
+
+    private bool CheckRegistrationActivity()
+    {
+        try
+        {
+            bool ret = true;
+            string sp_proc = "PKG_ACD_CHECK_REGISTRATION_ACTIVITY";
+            string sp_para = "@P_UA_NO,@P_PAGE_LINK,@P_UA_TYPE";
+            string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Request.QueryString["pageno"].ToString() + "," + Session["usertype"] + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables != null && ds.Tables[0] != null)
+            {
+                ViewState["sessionno"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
+                ViewState["SESSIONNO"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
+
+                return ret;
+            }
+            else
+            {
+                objCommon.DisplayMessage(updDetails, "Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
+                ret = false;
+                return ret;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+            {
+                objCommon.ShowError(Page, "ACADEMIC_PhotoCopyRegistration.CheckActivity() --> " + ex.Message + " " + ex.StackTrace);
+                return false;
+            }
+            else
+            {
+                objCommon.ShowError(Page, "Server Unavailable.");
+                return false;
+            }
+        }
+    }
 }
 
 

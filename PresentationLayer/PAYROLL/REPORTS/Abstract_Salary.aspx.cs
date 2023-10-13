@@ -114,6 +114,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID>0", "COLLEGE_ID ASC");
             objCommon.FillDropDownList(ddlStaffNo, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
             objCommon.FillDropDownList(ddlEmployeeType, "PAYROLL_EMPLOYEETYPE", "EMPTYPENO", "EMPLOYEETYPE", "EMPTYPENO>0", "EMPTYPENO");
+            objCommon.FillListBox(ddlStaffNo1, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO>0", "STAFFNO");
         }
         catch (Exception ex)
         {
@@ -167,6 +168,23 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
@@ -176,7 +194,8 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             if (chkAbstarct.Checked)
             {
                 url += "pagetitleForEmployeeCummulativeAbstractSalary=" + reportTitle;
-                url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0";
+                //url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0"; // Original
+                url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + stafflist + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0";
                 url += "&paramForEmployeeCummulativeAbstractSalary=username=" + Session["username"].ToString();
                 url += "&paramForEmployeeCummulativeAbstractSalary=&@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " ";
             }
@@ -185,18 +204,15 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Payroll," + rptFileName;
                 // url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue)+",username=Admin";
-                url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",username=Admin,@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " ";
+                // url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",username=Admin,@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " ";
+                url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + stafflist + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",username=Admin,@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " ";
                 divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 divMsg.InnerHtml += " </script>";
-
-
                 //old 
-
                 //url += "pagetitleForEmployeeAbstractSalary=" + reportTitle;
                 //url += "&pathForEmployeeAbstractSalary=~,Reports,Payroll," + rptFileName + ",@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_IDNO=0";
                 //url += "&paramForEmployeeAbstractSalary=username=" + Session["username"].ToString();
-
             }
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -218,6 +234,23 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         try
         {
 
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
 
             //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             //url += "Reports/CommonReport.aspx?";
@@ -242,14 +275,27 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             if (chkAbstarct.Checked)
             {
                 url += "pagetitleForEmployeeCummulativeAbstractSalary=" + reportTitle;
-                url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0";
+                //url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0";
+                url += "&pathForEmployeeCummulativeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + stafflist + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_IDNO=0";
                 url += "&paramForEmployeeCummulativeAbstractSalary=username=" + Session["username"].ToString();
             }
             else
             {
-                url += "pagetitleForEmployeeAbstractSalary=" + reportTitle;
-                url += "&pathForEmployeeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + "&@P_IDNO=0";
-                url += "&paramForEmployeeAbstractSalary=username=" + Session["username"].ToString();
+               // url += "pagetitleForEmployeeAbstractSalary=" + reportTitle;
+               // // url += "&pathForEmployeeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + "&@P_IDNO=0";
+               //// url += "&pathForEmployeeAbstractSalary=~,Reports,Payroll," + rptFileName + "&@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + "&@P_STAFF_NO=" + stafflist + "&@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "&@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + "&@P_IDNO=0";
+               // url += "&paramForEmployeeAbstractSalary=username=" + Session["username"].ToString();
+
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Payroll," + rptFileName;
+                // url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue)+",username=Admin";
+                // url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",username=Admin,@P_COLLEGE_CODE=" + Session["colcode"].ToString() + " ";
+                url += "&param=@P_MON_YEAR=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + stafflist + ",@P_IDNO=0" + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",username=Admin ";
+                divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                divMsg.InnerHtml += " </script>";
+            
+            
             }
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -407,16 +453,16 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     }
     protected void chkAbstractSummary_CheckedChanged(object sender, EventArgs e)
     {
-        if (chkAbstractSummary.Checked == true)
-        {
-            trmultistaff.Visible = true;
-            trstaff.Visible = false;
-        }
-        else
-        {
-            trmultistaff.Visible = false;
-            trstaff.Visible = true;
-        }
+        //if (chkAbstractSummary.Checked == true)
+        //{
+        //    trmultistaff.Visible = true;
+        //    trstaff.Visible = false;
+        //}
+        //else
+        //{
+        //    trmultistaff.Visible = false;
+        //    trstaff.Visible = true;
+        //}
     }
 
     private void ShowReport(string param, string reportTitle, string rptFileName)
@@ -481,11 +527,51 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            if (count == 0)
+            {
+                stafflist = "0";
+                ShowMessage("Select One Staff Name");
+                return;
+            }
+            else if (count == 1)
+            {
+                stafflist = stafflist.Substring(0, stafflist.Length - 1);
+            }
+            else
+            {
+                ShowMessage("Select Only One Staff Name");
+                return;
+            }
+
+
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGENO=" + ddlCollege.SelectedValue;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + stafflist + ",@P_COLLEGENO=" + ddlCollege.SelectedValue;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + stafflist + ",@P_COLLEGENO=" + ddlCollege.SelectedValue;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -502,11 +588,29 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGENO=" + ddlCollege.SelectedValue + ",@P_IDNO=" + 0;
+         //  url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGENO=" + ddlCollege.SelectedValue + ",@P_IDNO=" + 0;
+           url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MON_YEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + stafflist + ",@P_COLLEGENO=" + ddlCollege.SelectedValue + ",@P_IDNO=" + 0;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -519,16 +623,33 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
     private void ShowSupplementaryReport2(string reportTitle, string rptFileName)
     {
         try
         {
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONYEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFFNO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONYEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFFNO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONYEAR=" + ddlMonthYear.SelectedItem.Text + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_STAFF_NO=" + stafflist;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -541,7 +662,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
+    //SELECT  ONLY ONE STAFF FOR GENERATING THIS REPORT
     protected void btnSalarySummary_Click(object sender, EventArgs e)
     {
         ShowSalarySummaryReport("Employee_Salary_Summary", "rptAbstract_Summary_Report.rpt");
@@ -550,11 +671,6 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         ShowSupplementaryReport("Employee_Supplementary_Report", "Pay_SuppliBillREport.rpt");
     }
-
-
-
-
-
     //Sachin ghagre 05 June 2017
 
     #region Export to Excel
@@ -574,9 +690,27 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+
             Payroll_Report_Controller objPC = new Payroll_Report_Controller();
 
-            DataSet ds = objPC.GetAtstractRegisterExcel(ddlMonthYear.SelectedItem.Text, Convert.ToInt32(ddlStaffNo.SelectedValue), Convert.ToInt32(ddlEmployeeType.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue), Session["colcode"].ToString());
+            DataSet ds = objPC.GetAtstractRegisterExcel(ddlMonthYear.SelectedItem.Text, stafflist, Convert.ToInt32(ddlEmployeeType.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue), Session["colcode"].ToString());
             DataTable dt = ds.Tables[0];
 
 
@@ -684,7 +818,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
 
 
     //Sachin ghagre 24 Apr 2018
-
+    //SELECT  ONLY ONE STAFF FOR GENERATING THIS REPORT
     protected void btnGrossDiff_Click(object sender, EventArgs e)
     {
         ShowGrossDifferenceReport("GrossDiffernce Report", "Payroll_GrossDiffReport.rpt");
@@ -695,11 +829,46 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+            if (count == 0)
+            {
+                stafflist = "0";
+                ShowMessage("Select One Staff Name");
+                return;
+            }
+            else if (count == 1)
+            {
+                stafflist = stafflist.Substring(0, stafflist.Length - 1);
+            }
+            else
+            {
+                ShowMessage("Select Only One Staff Name");
+                return;
+            }
+
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("payroll")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TABNAME=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + ddlStaffNo.SelectedValue + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_EMPTYPENO=" + ddlEmployeeType.SelectedValue;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TABNAME=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + stafflist + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_EMPTYPENO=" + ddlEmployeeType.SelectedValue;
+           // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TABNAME=" + ddlMonthYear.SelectedItem.Text + ",@P_STAFF_NO=" + stafflist + ",@P_COLLEGE_NO=" + ddlCollege.SelectedValue + ",@P_EMPTYPENO=" + ddlEmployeeType.SelectedValue;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -794,12 +963,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             Response.Write(sw.ToString());
             Response.End();
         }
-
-
     }
-
-
-
     protected void btnexporttoexcelsalaryreg_Click(object sender, EventArgs e)
     {
         if (ddlMonthYear.SelectedIndex == 0)
@@ -810,18 +974,39 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
 
         if (chkAbstractSummary.Checked == true)
         {
+            // new code here
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+
             string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
             string ContentType = string.Empty;
             string monyear = ddlMonthYear.SelectedItem.ToString();
             int EmpTypeNo = Convert.ToInt32(ddlEmployeeType.SelectedValue);
-            int StaffNo = Convert.ToInt32(lstStaffFill.SelectedValue);
+            string StaffNo = stafflist;
+           //int StaffNo = Convert.ToInt32(lstStaffFill.SelectedValue);
             int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
             int IDNO = 0;
             DataSet ds = EmployeeSalaryRegisterWithAbstract(monyear, StaffNo, CollegeNo);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
-                string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+               // string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+                string StaffName="";
                 string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
                 string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
                 GridView GVEmpChallan = new GridView();
@@ -882,19 +1067,40 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         }
         else
         {
+
             // new code here
+            int count = 0;
+            string stafflist = string.Empty;
+            for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+            {
+                if (ddlStaffNo1.Items[i].Selected)
+                {
+                    stafflist += ddlStaffNo1.Items[i].Value + "$";
+                    count++;
+                }
+                else
+                {
+                }
+            }
+            if (count == 0)
+            {
+                stafflist = "";
+            }
+
             string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
             string ContentType = string.Empty;
             string monyear = ddlMonthYear.SelectedItem.ToString();
             int EmpTypeNo = Convert.ToInt32(ddlEmployeeType.SelectedValue);
-            int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+           // int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+            string StaffNo = stafflist;
             int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
             int IDNO = 0;
             DataSet ds = EmployeeSalaryRegister(monyear, EmpTypeNo, StaffNo, CollegeNo, IDNO);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
-                string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+                //string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+                string StaffName = "";
                 string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
                 string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
 
@@ -958,20 +1164,38 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             return;
         }
 
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + "$";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
 
         // new code here
         string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
         string ContentType = string.Empty;
         string monyear = ddlMonthYear.SelectedItem.ToString();
         int EmpTypeNo = Convert.ToInt32(ddlEmployeeType.SelectedValue);
-        int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        //int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        string StaffNo = stafflist;
         int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
         int IDNO = 0;
         DataSet ds = PayBillIncome(monyear, EmpTypeNo, StaffNo, CollegeNo, IDNO);
         if (ds.Tables[0].Rows.Count > 0)
         {
             string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
-            string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+           // string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
             string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
             string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
 
@@ -1031,6 +1255,23 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             ShowMessage("Please Select Month");
             return;
         }
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + "$";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
 
 
         // new code here
@@ -1038,14 +1279,15 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         string ContentType = string.Empty;
         string monyear = ddlMonthYear.SelectedItem.ToString();
         int EmpTypeNo = Convert.ToInt32(ddlEmployeeType.SelectedValue);
-        int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        //int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        string StaffNo = stafflist;
         int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
         int IDNO = 0;
         DataSet ds = PayBillRecovery(monyear, EmpTypeNo, StaffNo, CollegeNo, IDNO);
         if (ds.Tables[0].Rows.Count > 0)
         {
             string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
-            string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+            //string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
             string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
             string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
 
@@ -1100,7 +1342,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
 
 
 
-    public DataSet EmployeeSalaryRegisterWithAbstract(string monyear, int StaffNo, int CollegeNo)
+    public DataSet EmployeeSalaryRegisterWithAbstract(string monyear, string StaffNo, int CollegeNo)
     {
         DataSet ds = null;
         try
@@ -1119,7 +1361,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         }
         return ds;
     }
-    public DataSet EmployeeSalaryRegister(string monyear, int EmpTypeNo, int StaffNo, int CollegeNo, int IDNO)
+    public DataSet EmployeeSalaryRegister(string monyear, int EmpTypeNo, string StaffNo, int CollegeNo, int IDNO)
     {
         DataSet ds = null;
         try
@@ -1164,7 +1406,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         return ds;
     }
 
-    public DataSet PayBillRecovery(string monyear, int EmpTypeNo, int StaffNo, int CollegeNo, int IDNO)
+    public DataSet PayBillRecovery(string monyear, int EmpTypeNo, string  StaffNo, int CollegeNo, int IDNO)
     {
         DataSet ds = null;
         try
@@ -1186,7 +1428,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         return ds;
     }
 
-    public DataSet PayBillIncome(string monyear, int EmpTypeNo, int StaffNo, int CollegeNo, int IDNO)
+    public DataSet PayBillIncome(string monyear, int EmpTypeNo, string StaffNo, int CollegeNo, int IDNO)
     {
         DataSet ds = null;
         try

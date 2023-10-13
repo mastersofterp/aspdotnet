@@ -3,6 +3,15 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+ <link href="../plugins/multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+ <link href='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>' rel="stylesheet" />
+  <script src='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.js") %>'></script>
+     <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
+
     <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
         <ContentTemplate>
             <div class="row">
@@ -54,7 +63,7 @@
                                                     ></asp:RequiredFieldValidator>
                                             </div>
 
-                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
                                                 <div class="label-dynamic">
                                                     <%--<sup>* </sup>--%>
                                                     <label>Staff</label>
@@ -67,6 +76,12 @@
                                                     ValidationGroup="Payroll" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                             </div>
 
+                                      <div class="form-group col-lg-3 col-md-6 col-12" id="divmaxnooffile" runat="server" visible="true">
+                                        <div class="label-dynamic">
+                                            <label>Scheme/Staff</label>
+                                        </div>
+                                           <asp:ListBox ID="ddlStaffNo1" runat="server" AppendDataBoundItems="true"  TabIndex="11"  CssClass="form-control multi-select-demo" SelectionMode="Multiple" OnSelectedIndexChanged="ddlStaffNo1_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>  
+                                    </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12" style="display:none;">
                                                 <div class="label-dynamic">
                                                     <label>Staff</label>
@@ -171,7 +186,38 @@
             </div>
             <div id="divMsg" runat="server">
             </div>
-
+              <script type="text/javascript">
+                  $(document).ready(function () {
+                      $('.multi-select-demo').multiselect({
+                          includeSelectAllOption: true,
+                          maxHeight: 200
+                      });
+                  });
+                  var parameter = Sys.WebForms.PageRequestManager.getInstance();
+                  parameter.add_endRequest(function () {
+                      $('.multi-select-demo').multiselect({
+                          includeSelectAllOption: true,
+                          maxHeight: 200
+                      });
+                  });
+          </script>
+            <script>
+                function checkout() {
+                    var checkBoxes = document.getElementsByClassName('ddlStaffNo1');
+                    var nbChecked = 0;
+                    for (var i = 0; i < checkBoxes.length; i++) {
+                        if (checkBoxes[i].checked) {
+                            nbChecked++;
+                        };
+                    };
+                    if (nbChecked == 0) {
+                        alert('Please, select at least one Staff/Scheme!');
+                        return false;
+                    } else {
+                        //Do what you need for form submission, if needed...
+                    }
+                }
+    </script>
             <script type="text/javascript">
                 function DisableDropDownList(disable) {
                     document.getElementById('ctl00_ContentPlaceHolder1_ddlEmployeeNo').selectedIndex = 0;

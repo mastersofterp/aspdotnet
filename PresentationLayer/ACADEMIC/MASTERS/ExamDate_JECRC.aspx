@@ -19,17 +19,19 @@
         #ctl00_ContentPlaceHolder1_Panel2 .select2.select2-container, #ctl00_ContentPlaceHolder1_Panel2 .btn-group, #ctl00_ContentPlaceHolder1_lvcommoncourse_ctrl0_txtExamDate1 {
             width: 230px !important;
         }
-        /*#gridrow .dataTables_scrollBody {
-            overflow: inherit !important;
-        }
 
-            #gridrow .dataTables_scrollBody .btn-group {
+        /*#gridrow2 .dataTables_scrollBody {
+            overflow: inherit !important;
+        }*/
+
+        /*#gridrow2 .dataTables_scrollBody .btn-group {
                 width: 250px !important;
             }
 
-            #gridrow .dataTables_scrollBody .select2-container {
+            #gridrow2 .dataTables_scrollBody .select2-container {
                 width: 250px !important;
             }*/
+
         @media (max-width: 1200px) {
             .tbl-panel2 {
                 width: 100%;
@@ -37,6 +39,7 @@
             }
         }
     </style>
+
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updExamdate"
             DynamicLayout="true" DisplayAfter="0">
@@ -401,8 +404,7 @@
                                                         <sup>* </sup>
                                                         <label>Session</label>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlSession1" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
-                                                        AutoPostBack="true" OnSelectedIndexChanged="ddlSession1_SelectedIndexChanged">
+                                                    <asp:DropDownList ID="ddlSession1" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlSession1_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSession1"
@@ -751,8 +753,8 @@
                                                                     ErrorMessage="Please Select Slot" InitialValue="0" SetFocusOnError="true" ValidationGroup="submit2" />
                                                             </td>
                                                             <td style="text-align: center;">
-                                                                <asp:ImageButton ID="imgaddcourse" runat="server" OnClick="imgaddcourse_Click" ImageUrl="../../Images/Addblue.png" Style="height: 20px; width: 20px;" Visible="false" />
-                                                                <asp:ImageButton ID="imgbtnrowremove" runat="server" OnClick="imgbtnrowremove_Click" ImageUrl="~/images/delete.gif" Visible="false" />
+                                                                <asp:ImageButton ID="imgaddcourse" runat="server" OnClick="imgaddcourse_Click" ImageUrl="~/Images/Addblue.png" Style="height: 20px; width: 20px;" Visible="false" />
+                                                                <asp:ImageButton ID="imgbtnrowremove" runat="server" OnClick="imgbtnrowremove_Click" ImageUrl="~/Images/delete.png" Visible="false" />
                                                             </td>
                                                         </tr>
                                                     </ItemTemplate>
@@ -765,21 +767,23 @@
                                             <div class="col-12 mt-4" id="gridrow2">
                                                 <asp:ListView ID="lvtimetable" runat="server">
                                                     <LayoutTemplate>
-                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                                            <thead class="bg-light-blue">
-                                                                <tr>
-                                                                    <th>Edit</th>
-                                                                    <th>Course</th>
-                                                                    <th>Scheme</th>
-                                                                    <th>Exam Date</th>
-                                                                    <th>Exam Slot</th>
-                                                                    <th>Cancel</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr id="itemPlaceholder" runat="server" />
-                                                            </tbody>
-                                                        </table>
+                                                        <div class="tbl-panel3">
+                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblTim">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Edit</th>
+                                                                        <th>Course</th>
+                                                                        <th>Scheme</th>
+                                                                        <th>Exam Date</th>
+                                                                        <th>Exam Slot</th>
+                                                                        <th>Cancel</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </LayoutTemplate>
                                                     <ItemTemplate>
                                                         <tr>
@@ -805,7 +809,7 @@
                                                                 <asp:HiddenField ID="hdf_slotno1" runat="server" Value='<%# Eval("SLOTNO")%>' />
                                                             </td>
                                                             <td style="text-align: center;">
-                                                                <asp:ImageButton ID="imgbtnDelete" runat="server" CommandArgument=" <%# Container.DataItemIndex + 1 %>" OnClick="imgbtnDelete_Click" ImageUrl="~/images/delete.gif" OnClientClick="return showConfirm();" />
+                                                                <asp:ImageButton ID="imgbtnDelete" runat="server" CommandArgument=" <%# Container.DataItemIndex + 1 %>" OnClick="imgbtnDelete_Click" ImageUrl="~/Images/delete.png" OnClientClick="return showConfirm();" />
                                                             </td>
                                                         </tr>
                                                     </ItemTemplate>
@@ -1067,6 +1071,6 @@
         }
     </script>
 
-</asp:Content>
-<asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">
+    <%--</asp:Content>
+<asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">--%>
 </asp:Content>

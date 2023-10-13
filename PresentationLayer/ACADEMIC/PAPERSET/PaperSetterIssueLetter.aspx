@@ -14,9 +14,12 @@
             <asp:UpdateProgress ID="updProg3" runat="server" AssociatedUpdatePanelID="upIssueletter"
                 DisplayAfter="0">
                 <ProgressTemplate>
-                    <div style="width: 120px; background-color: Transparent; padding-left: 5px">
-                        <img src="../../IMAGES/ajax-loader.gif" alt="Loading" />
-                        Please Wait..
+                    <div id="preloader">
+                        <div id="loader-img">
+                            <div id="loader">
+                            </div>
+                            <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
+                        </div>
                     </div>
                 </ProgressTemplate>
             </asp:UpdateProgress>
@@ -44,7 +47,7 @@
                                             <span style="color: red;">*</span>
                                             <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                       <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
+                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
                                             ValidationGroup="offered" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" data-select2-enable="true" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>

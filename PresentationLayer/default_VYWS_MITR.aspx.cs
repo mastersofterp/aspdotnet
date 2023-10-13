@@ -24,11 +24,14 @@ using System.Text.RegularExpressions;
 using BusinessLogicLayer.BusinessLogic;
 using Mastersoft.Security.IITMS;
 using PageControlValidator;
+using Newtonsoft.Json.Linq;
+using DynamicAL_v2;
 
 //using EASendMail;
 
 public partial class default_VYWS_MITR : System.Web.UI.Page
 {
+    DynamicControllerAL AL = new DynamicControllerAL();
     public class Packet
     {
         public string userno { get; set; }
@@ -245,6 +248,420 @@ public partial class default_VYWS_MITR : System.Web.UI.Page
                 lblStatus.Text = "Server UnAvailable";
         }
     }
+    // ---------------------------For SSO Added By Lakhan (07/07/2022)---------------------------
+    void getCookies()
+    {
+        string ToA = "", UA = "";
+        HttpCookie cookiess = Request.Cookies["ToA"];
+        if (cookiess != null)
+        {
+            ToA = Server.HtmlEncode(cookiess.Value);
+            cookiess = Request.Cookies["UA"];
+            UA = Server.HtmlEncode(cookiess.Value);
+
+            string ConStr = ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            string SP = "PKG_CRUD_TOKEN_MANAGEMENT";
+            string PM = "@P_UA_NAME, @P_ACC_TOKEN, @P_CREATED_DNT, @P_EXPIRY_DNT, @P_TIME_LIMIT, @P_DEVICE_TYPE, @P_OPERATION";
+            string VL = "" + UA + "," + ToA + ",0,0,0,0,2";
+            DataSet ds = AL.DynamicSPCall_Select(SP, PM, VL);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                if (ds.Tables[0].Rows[0]["STATUS"].ToString() == "1")
+                {
+                    txt_username.Text = ds.Tables[0].Rows[0]["UA_NAME"].ToString();
+                    TokenBasedLogin();
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this, "You are not Authorize to use SVCE.", this.Page);
+            }
+        }
+    }
+    void TokenBasedLogin()
+    {
+        try
+        {
+            #region try block
+            User_AccController objUC = new User_AccController();
+            string macAddress = string.Empty;
+            string username = txt_username.Text.Trim().Replace("'", "");
+            int ATTEMPT = 0;
+            string lastlogout = string.Empty;
+            DataSet dsUserAcc = objCommon.FillDropDown("USER_ACC", "ISNULL(UA_NO,0) UA_NO", "ISNULL(UA_EMAIL,'') UA_EMAIL,ISNULL(UA_STATUS,0) UA_STATUS,CHANGEPASSDATE,ISNULL(UA_TYPE,0) UA_TYPE,ISNULL(UA_FIRSTLOG,0) UA_FIRSTLOG", "UA_NAME='" + username + "' AND UA_NAME IS NOT NULL", "UA_NO"); //Added by Irfan Shaikh on 20190424
+            DataSet dsReff = objCommon.FillDropDown("REFF", "*", "", string.Empty, string.Empty);
+
+            emailid = dsUserAcc.Tables[0].Rows[0]["UA_EMAIL"].ToString(); //Added by Irfan Shaikh on 20190424
+            string ua_status = dsUserAcc.Tables[0].Rows[0]["UA_STATUS"].ToString(); //Added by Irfan Shaikh on 20190424    
+
+
+
+            //DateTime expiryDate = Convert.ToDateTime(dsReff.Tables[0].Rows[0]["DOB"].ToString()); //Added by Irfan Shaikh on 20190424
+
+            //if (DateTime.Compare(expiryDate, DateTime.Now) < 0)
+            //{
+            //    txt_username.Text = string.Empty;
+            //    return;
+            //}
+
+            //DateTime ChangePassDate = Convert.ToDateTime(dsUserAcc.Tables[0].Rows[0]["CHANGEPASSDATE"]); //Added by Irfan Shaikh on 20190424
+            //int ua_type = Convert.ToInt32(dsUserAcc.Tables[0].Rows[0]["UA_TYPE"]); //Added by Irfan Shaikh on 20190424
+            //string UA_FIRSTLOG = dsUserAcc.Tables[0].Rows[0]["UA_FIRSTLOG"].ToString(); //Added by Irfan Shaikh on 20190424
+
+            //DateTime TodayDate = DateTime.Now;
+            //int Difference = (TodayDate - ChangePassDate).Days;
+
+            //DataSet dsUserRight = objCommon.FillDropDown("USER_RIGHTS", "ISNULL(MAILINDAYS,0) MAILINDAYS,ISNULL(FIRSTLOGDAYS,0) FIRSTLOGDAYS", "", "USERTYPEID=" + ua_type, string.Empty); //Added by Irfan Shaikh on 20190424 
+
+            //int MAILINDAYS = Convert.ToInt32(dsUserRight.Tables[0].Rows[0]["MAILINDAYS"]); //Added by Irfan Shaikh on 20190424
+            //int FIRSTLOGDAYS = Convert.ToInt32(dsUserRight.Tables[0].Rows[0]["FIRSTLOGDAYS"]); //Added by Irfan Shaikh on 20190424
+
+            //if (FIRSTLOGDAYS <= Difference)
+            //{
+            //    //int status = objUC.SetFirstLog(username);
+            //    //  return;
+            //}
+
+
+
+            ATTEMPT = Convert.ToInt32(dsReff.Tables[0].Rows[0]["ATTEMPT"].ToString()); //Added by Irfan Shaikh on 20190424);
+
+            int UANO = Convert.ToInt32(dsUserAcc.Tables[0].Rows[0]["UA_NO"].ToString()); //Added by Irfan Shaikh on 20190424);
+
+            if (UANO != 0)
+            {
+                //Login Succeded
+                UserAcc objUA = objUC.GetSingleRecordByUANo(UANO);
+
+                DataSet ds = objCommon.FillDropDown("ACD_ACCESS_MASTER A INNER JOIN ACD_MACHINE_TYPE_MASTER B ON (B.MACTYPENO=A.MACTYPENO AND B.COLLEGE_CODE=A.COLLEGE_CODE)", "A.MACADD", "B.MACTYPE_STATUS", "A.UA_NO=" + objUA.UA_No + "", "");
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0][1]) == 0)
+                    {
+                        Session["USER_MAC"] = Convert.ToString(ds.Tables[0].Rows[0][0]);
+                    }
+                    else
+                    {
+                        Session["USER_MAC"] = "0";
+                    }
+                }
+
+                if (objUA.UA_No != 0)
+                {
+                    Session["OrgId"] = objUA.OrganizationId;// Added By SUnita P - 09122021
+                    Session["userno"] = objUA.UA_No.ToString();
+                    Session["idno"] = objUA.UA_IDNo.ToString();
+                    Session["username"] = objUA.UA_Name;
+                    Session["usertype"] = objUA.UA_Type;
+                    Session["userfullname"] = objUA.UA_FullName;
+                    Session["dec"] = objUA.UA_Dec.ToString();
+                    Session["userdeptno"] = objUA.UA_DeptNo.ToString();
+                    Session["colcode"] = dsReff.Tables[0].Rows[0]["COLLEGE_CODE"].ToString(); //Added by Irfan Shaikh on 20190424
+                    Session["currentsession"] = objCommon.LookUp("ACD_SESSION_MASTER", "MAX(SESSIONNO)", "SESSIONNO>0 AND FLOCK=1");
+                    Session["firstlog"] = objUA.UA_FirstLogin;
+                    Session["ua_status"] = objUA.UA_Status;
+                    Session["ua_section"] = objUA.UA_section.ToString();
+                    Session["UA_DESIG"] = objUA.UA_Desig.ToString();
+                    Session["UA_EmpDeptNo"] = objUA.UA_EmpDeptNo.ToString();
+                    ipAddress = Request.ServerVariables["REMOTE_HOST"];
+                    Session["ipAddress"] = ipAddress;
+                    Session["payment"] = "default";
+
+                    Session["macAddress"] = macAddress;
+                    if (Convert.ToString(Session["firstlog"]) == "False")
+                    {
+                        Response.Redirect("~/agreement.aspx", false);
+                    }
+
+                    if (ua_status == "1")
+                    {
+                        string subject = "MIS Login Credentials";
+                        string message = "Due to the unsucessfully  " + ATTEMPT + " login attempt ,your MIS account is blocked. Please contact system administrator!";
+                        if (emailid != "")
+                        {
+                            objCommon.sendEmail(message, emailid, subject);
+                        }
+                        objCommon.DisplayMessage(this, "Your Account is Blocked.Please Contact system Administrator!", this.Page);
+                        return;
+                    }
+
+                    string lastloginid = objCommon.LookUp("LOGFILE", "MAX(ID)", "UA_NAME='" + Session["username"].ToString() + "' AND UA_NAME IS NOT NULL");
+
+                    Session["lastloginid"] = lastloginid.ToString();
+                    if (Session["lastloginid"].ToString() != string.Empty)
+                    {
+                        lastlogout = objCommon.LookUp("LOGFILE", "LOGOUTTIME", "ID=" + Convert.ToInt32(Session["lastloginid"].ToString()));
+                    }
+
+                    string Allowpopup = dsReff.Tables[0].Rows[0]["ALLOWLOGOUTPOPUP"].ToString();//Added by Irfan Shaikh on 20190424
+                    Session["sessionname"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSION_NAME", "FLOCK=1");
+                    Session["hostel_session"] = objCommon.LookUp("ACD_HOSTEL_SESSION", "MAX(HOSTEL_SESSION_NO)", "FLOCK=1");
+
+                    Session["WorkingDate"] = DateTime.Now.ToString();
+                    Session["college_nos"] = objUA.COLLEGE_CODE;
+
+                    macAddress = GetMACAddress();
+                    Session["macAddress"] = macAddress;
+                    Session["Session"] = Session["sessionname"].ToString();
+                    //Code for LogTable
+                    //=================
+                    int retLogID = LogTableController.AddtoLog(Session["username"].ToString(), Session["ipAddress"].ToString(), Session["macAddress"].ToString(), DateTime.Now);
+                    Session["logid"] = retLogID + 1;
+                    Session["loginid"] = retLogID.ToString();
+                    string IMAGE = string.Empty;
+
+                    #region FOR STORE MODULE
+                    //////FOR STORE MODULE
+                    //================================================================================
+                    if (Session["usertype"].ToString() != "2")
+                    {
+                        Application["strrefmaindept"] = objCommon.LookUp("STORE_REFERENCE", "MDNO", "");
+                        Session["sanctioning_authority"] = objCommon.LookUp("STORE_REFERENCE", "SANCTIONING_AUTHORITY", "");
+                        Session["Is_Mail_Send"] = objCommon.LookUp("STORE_REFERENCE", "IS_MAIL_SEND", "");
+                        if (Session["userno"] != null)
+                        {
+                            string SDNO = string.Empty;
+                            if (Session["idno"].ToString() != "0" && Session["idno"].ToString().Trim() != "")
+                            {
+                                SDNO = objCommon.LookUp("PAYROLL_EMPMAS", "ISNULL(SUBDEPTNO,0) SUBDEPTNO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()));
+                                if (Convert.ToInt32(SDNO) > 0)
+                                {
+                                    Session["SubDepID"] = SDNO;
+                                    Session["strdeptcode"] = objCommon.LookUp("STORE_SUBDEPARTMENT", "MDNO", "PAYROLL_SUBDEPTNO=" + Convert.ToInt32(SDNO));
+
+                                    if (Session["strdeptcode"] != null && Session["strdeptcode"].ToString().Trim() != "")
+                                    {
+                                        Session["strdeptname"] = objCommon.LookUp("STORE_DEPARTMENT", "MDNAME", "MDNO=" + Convert.ToInt32(Session["strdeptcode"].ToString()));
+                                    }
+                                    else
+                                    {
+                                        Session["strdeptname"] = null;
+                                    }
+                                }
+                            }
+                            else if (Session["userno"] != null)
+                            {
+                                Session["strdeptcode"] = objCommon.LookUp("STORE_DEPARTMENTUSER", "DISTINCT MDNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+                                if (Session["strdeptcode"] != null && Session["strdeptcode"].ToString().Trim() != "")
+                                {
+                                    Session["strdeptname"] = objCommon.LookUp("STORE_DEPARTMENT", "MDNAME", "MDNO=" + Convert.ToInt32(Session["strdeptcode"].ToString()));
+                                }
+                                else
+                                {
+                                    Session["strdeptname"] = null;
+                                }
+                            }
+                            else
+                            {
+                                //Session["strdeptname"] = objCommon.LookUp("STORE_DEPARTMENT", "MDNAME", "MDNO=" + Convert.ToInt32(Application["strrefmaindept"].ToString()));
+                                //Session["strdeptcode"] = Application["strrefmaindept"].ToString();
+                            }
+                        }
+                    }
+                    //================================================================================
+
+                    LogFile objLF = new LogFile();
+                    objLF.Ua_Name = Session["username"].ToString();
+                    objLF.LoginTime = DateTime.Now;
+                    macAddress = GetMACAddress();
+                    Session["macAddress"] = macAddress;
+                    //int logInID = objUC.AddtoLogTran(Session["username"].ToString(), ipAddress, Session["macAddress"].ToString(), Convert.ToDateTime(DateTime.Now));
+                    //Session["loginid"] = logInID.ToString();
+                    //////STORE MODULE END
+                    #endregion FOR STORE MODULE
+
+                    if (Convert.ToString(Session["firstlog"]) == "False")
+                    {
+                        Response.Redirect("~/agreement.aspx", false);
+                    }
+                    else
+                    {
+                        if (Session["lastloginid"].ToString() != "")
+                        {
+                            if (lastlogout == "" && Allowpopup == "1")
+                            {
+                                Response.Redirect("~/SignoutHold.aspx", false);
+                            }
+                            else
+                            {
+                                //Response.Redirect("~/home.aspx", false);
+                                if (Session["usertype"].ToString() == "2")
+                                {
+                                    Response.Redirect("~/studeHome.aspx", false);
+                                }
+                                else if (Session["usertype"].ToString() == "3")
+                                {
+                                    Response.Redirect("~/homeFaculty.aspx", false);
+                                }
+                                else if (Session["usertype"].ToString() == "1")
+                                {
+                                    //Response.Redirect("~/home.aspx", false);
+                                    Response.Redirect("~/principalHome.aspx", false);
+                                }
+                                else
+                                {
+                                    Response.Redirect("~/home.aspx", false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //Response.Redirect("~/home.aspx", false);
+                            if (Session["usertype"].ToString() == "2")
+                            {
+                                Response.Redirect("~/studeHome.aspx", false);
+                            }
+                            else if (Session["usertype"].ToString() == "3")
+                            {
+                                Response.Redirect("~/homeFaculty.aspx", false);
+                            }
+                            else if (Session["usertype"].ToString() == "1")
+                            {
+                                //Response.Redirect("~/home.aspx", false);
+                                Response.Redirect("~/principalHome.aspx", false);
+                            }
+                            else
+                            {
+                                Response.Redirect("~/home.aspx", false);
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    //Number of wrong login attempts at a time
+                    ATTEMPT = Convert.ToInt32(dsReff.Tables[0].Rows[0]["ATTEMPT"]); //Added by Irfan Shaikh on 20190424);
+
+                    if (ua_status == "1")
+                    {
+                        string subject = "MIS Login Credentials";
+                        string message = "Due to the unsuccessful " + ATTEMPT + " login attempt ,your MIS account is blocked. Please contact system administrator!";
+                        if (emailid != "")
+                        {
+                            objCommon.sendEmail(message, emailid, subject);
+                        }
+                        objCommon.DisplayMessage(this, "Your Account is Blocked.Please Contact system Administrator!", this.Page);
+                        return;
+                    }
+                    else
+                    {
+                        //ipAddress = Request.ServerVariables["REMOTE_HOST"];
+                        //macAddress = GetMACAddress();
+                        //Session["macAddress"] = macAddress;
+                        //wrongAttempt = objUC.Failedlogin(username, ipAddress, Session["macAddress"].ToString(), Convert.ToDateTime(DateTime.Now));
+                        //objCommon.DisplayMessage(this, "Login Failed !, Please Check Your Username Or Password !Only " + (ATTEMPT - wrongAttempt) + " attempt left!!", this.Page);
+                        //txtcaptcha.Text = string.Empty;
+                    }
+                }
+            }
+            else
+            {
+                txt_username.Text = string.Empty;
+                objCommon.DisplayMessage(this, "Login Failed !, Please Check Your Username Or Password #2 !", this.Page);
+                txtcaptcha.Text = string.Empty;
+            }
+            #endregion try block
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this, "Login Failed !, Please Check Your Username Or Password #3 !", this.Page);
+        }
+    }
+    private void GenerateOauthToken(string ua_name, string DomainURL)
+    {
+        string URL = DomainURL + "/WEB_API/OauthToken.asmx/GenerateToken";
+        string TimeOut = "60";
+        // string URL = "https://jecrcuat.mastersofterp.in/WEB_API/OauthToken.asmx/GenerateToken";   // Used with local For localhost url 
+        string postData = "UserName=" + ua_name + "&TimeLimit=" + TimeOut + "";
+
+        var data = webPostMethod(postData, URL);
+
+        if (data.Contains("access_token"))
+        {
+            string x = data.Split('{')[1];
+            string y = x.Split('}')[0];
+            string z = "{" + y + "}";
+            dynamic parsed_data = JObject.Parse(z);
+            setCookies(Convert.ToString(parsed_data.access_token), ua_name);
+        }
+    }
+    public string webPostMethod(string postData, string URL)
+    {
+        string responseFromServer = "";
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
+        request.Method = "POST";
+        request.Credentials = CredentialCache.DefaultCredentials;
+        ((HttpWebRequest)request).UserAgent = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 7.1; Trident/5.0)";
+        request.Accept = "/";
+        request.UseDefaultCredentials = true;
+        request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+        byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+        request.ContentType = "application/x-www-form-urlencoded";
+        request.ContentLength = byteArray.Length;
+        Stream dataStream = request.GetRequestStream();
+        dataStream.Write(byteArray, 0, byteArray.Length);
+        dataStream.Close();
+        WebResponse response = request.GetResponse();
+        dataStream = response.GetResponseStream();
+        StreamReader reader = new StreamReader(dataStream);
+        responseFromServer = reader.ReadToEnd();
+        reader.Close();
+        dataStream.Close();
+        response.Close();
+        return responseFromServer;
+    }
+    void setCookies(string acc_tok, string ua_name)
+    {
+        //string userRoleId = "";
+        //string libraryId = "";
+        //string SP = "PKG_CRUD_LIBRARY_USER";
+        //string PR = "@P_UA_NO, @P_ROLE_ID, @P_OPERATION";
+        //string VL = "" + Convert.ToInt32(Session["userno"]) + ",0,2";
+        //DataTable dt = (AL.DynamicSPCall_Select(SP, PR, VL)).Tables[0];
+        //if (dt.Rows.Count > 0)
+        //{
+        //    userRoleId = dt.Rows[0]["ROLE_ID"].ToString();
+        //    libraryId = dt.Rows[0]["Library_Id"].ToString();
+        //}
+
+        string Url = System.Configuration.ConfigurationManager.AppSettings["DomainName"].ToString();
+        int TimeOut = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["DomainTimeOut"].ToString());
+
+        HttpCookie ToA = new HttpCookie("ToA");
+        ToA.Value = acc_tok;
+        ToA.Domain = Url;
+        ToA.Expires = DateTime.Now.AddMinutes(TimeOut);
+        Response.Cookies.Add(ToA);
+
+        HttpCookie UA = new HttpCookie("UA");
+        UA.Value = ua_name;
+        UA.Domain = Url;
+        UA.Expires = DateTime.Now.AddMinutes(TimeOut);
+        Response.Cookies.Add(UA);
+
+        //HttpCookie LibraryId = new HttpCookie("LibraryId");
+        //LibraryId.Value = libraryId;
+        //LibraryId.Domain = Url;
+        //LibraryId.Expires = DateTime.Now.AddMinutes(TimeOut);
+        //Response.Cookies.Add(LibraryId);
+
+        HttpCookie CollegeId = new HttpCookie("CollegeId");
+        CollegeId.Value = "15";
+        CollegeId.Domain = Url;
+        CollegeId.Expires = DateTime.Now.AddMinutes(TimeOut);
+        Response.Cookies.Add(CollegeId);
+
+        //HttpCookie RoleId = new HttpCookie("RoleId");
+        //RoleId.Value = userRoleId;
+        //RoleId.Domain = Url;
+        //RoleId.Expires = DateTime.Now.AddMinutes(TimeOut);
+        //Response.Cookies.Add(RoleId);
+
+
+    }
+
+    // ---------------------------For SSO Added By Lakhan (07/07/2022)---------------------------
 
     protected void lnkbtnTP_Click(object sender, EventArgs e)
     {
@@ -321,6 +738,7 @@ public partial class default_VYWS_MITR : System.Web.UI.Page
                             string ua_status = objCommon.LookUp("USER_ACC WITH (NOLOCK)", "UA_STATUS", "UA_NAME='" + username + "' and UA_NAME IS NOT NULL");
 
                             ATTEMPT = Convert.ToInt32(objCommon.LookUp("reff with (nolock)", "ATTEMPT", ""));
+                            string OBETokenUrl = objCommon.LookUp("reff with (nolock)", "OBE_ERP_URL", "").ToString();
                             //objCommon.DisplayMessage(updLog,"Login Failed !, Please Check Your Username Or Password !", this.Page);
 
                             int UANO = Convert.ToInt16(objCommon.LookUp("USER_ACC WITH (NOLOCK)", "ISNULL(UA_NO,0)", "UA_NAME='" + username + "' and UA_NAME IS NOT NULL"));
@@ -385,6 +803,13 @@ public partial class default_VYWS_MITR : System.Web.UI.Page
                                                 //ADDED on date 18/07/2018 
                                                 //Response.Redirect("~/agreement.aspx");  //related to 90-Days
                                             }
+
+
+                                            //----------------------Added By LAKHAN M FOR SSO --------------------------------------
+                                            GenerateOauthToken(objUA.UA_Name, OBETokenUrl);
+                                            //---------------------------------------------------------------------------------------
+
+
                                             ATTEMPT = Convert.ToInt32(objCommon.LookUp("reff with (nolock)", "ATTEMPT", ""));
                                             //objCommon.DisplayMessage(updLog,"Login Failed !, Please Check Your Username Or Password !", this.Page);
                                             if (ua_status == "1")
