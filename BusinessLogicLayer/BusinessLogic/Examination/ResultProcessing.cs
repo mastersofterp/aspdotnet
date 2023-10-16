@@ -533,6 +533,47 @@ namespace IITMS
 
 
                 }
+
+
+                #region Examination Date is added for the result publish added by Injamam Ansari 16-10-2023
+                public int AddPublishResult(int sessionno, int degreeno, int branchno, int semesterno, string idnos, DateTime pdate, string ipAdd, int status, int Prev_status, int schemeno, string examdate)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[12];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[2] = new SqlParameter("@P_BRANCHNO", branchno);
+                        objParams[3] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[4] = new SqlParameter("@P_IDNO", idnos);
+                        objParams[5] = new SqlParameter("@P_IPADDRESS", ipAdd);
+                        objParams[6] = new SqlParameter("@P_PUB_UNPUB_DATE", pdate);
+                        objParams[7] = new SqlParameter("@P_PUB_UNPUB", status);
+                        objParams[8] = new SqlParameter("@P_PREV_STATUS", Prev_status);
+                        objParams[9] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParams[10] = new SqlParameter("@P_EXAM_DATE", examdate);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PROC_EXAM_PUBLISH_RESULT", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(ret);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.AddCourse-> " + ex.ToString());
+                    }
+                    return retStatus;
+
+                }
+                #endregion
             }
 
         }//END: BusinessLayer.BusinessLogic
