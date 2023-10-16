@@ -58,6 +58,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
                 FillDepartment();
                 FillStaffType();
                 FillLeave();
+                btnEmployeeRpt.Visible = false;
             }
         }
     }
@@ -274,8 +275,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
         btnReport.Enabled = true;
         btnExport.Enabled = true;
         ddlEmployee.SelectedValue = "0";
-    }
-   
+        rdbleavestatus.Enabled = true;
+    }  
     
    
     protected void txtTodt_TextChanged1(object sender, EventArgs e)
@@ -553,6 +554,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
             btnEmployeeRpt.Visible = true;
             btnReport.Enabled = false;
             btnExport.Enabled = false;
+            rdbleavestatus.Enabled = false;
+            rdbleavestatus.SelectedValue = "0";
         }
         else
         {
@@ -561,6 +564,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
             btnReport.Enabled = true;
             btnExport.Enabled = true;
             ddlEmployee.SelectedValue = "0";
+            rdbleavestatus.Enabled = true;
         }
     }
 
@@ -646,4 +650,5 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
                 objUCommon.ShowError(Page, "Server.UnAvailable");
         }
     }
+
 }
