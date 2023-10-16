@@ -24,7 +24,7 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     CourseController objCC = new CourseController();
-     
+
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -67,7 +67,7 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         {
             Response.Redirect("~/default.aspx");
         }
-         
+
     }
 
     #region FillDropDownList
@@ -90,13 +90,13 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
             // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0  AND ISNULL(IS_ACTIVE,0) = 1", "SESSIONNO DESC");
             // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0  AND ISNULL(IS_ACTIVE,0) = 1 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS LIKE '%" + collegeid + "%'" + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() , "SESSIONNO DESC");
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0  AND ISNULL(IS_ACTIVE,0) = 1 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS LIKE '%" + Session["college_nos"] + "%'" + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString(), "SESSIONNO DESC");
-        } 
-        objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO"); 
+        }
+        objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO");
         objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO>0", "SECTIONNO");
         objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNO DESC");
 
     }
-#endregion
+    #endregion
 
     #region CheckPageAuthorization
     //function to check page is authorized or not
@@ -259,19 +259,19 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         {
             if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Student_Wise_PhotoCopy_Details", "rptStudentWisePhotoCopyDetailsCrescent.rpt", param);
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Student_Wise_PhotoCopy_Details", "rptStudentWisePhotoCopyDetails_Rcpiper.rpt", param);
             }
             else
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Student_Wise_PhotoCopy_Details", "rptStudentWisePhotoCopyDetails.rpt", param);
             }
@@ -284,19 +284,19 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         {
             if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Subject_Wise_PhotoCopy_Details", "rptSubjectWisePhotoCopyDetailsCrescent.rpt", param);
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Subject_Wise_PhotoCopy_Details", "rptSubjectWisePhotoCopyDetailsRcpiper.rpt", param);
             }
             else
             {
-                string sessionns = GetSessionns();
+                string sessionns = GetSessionnsNew();
                 string param = "@P_SESSIONNO=" + sessionns + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_REVAL_TYPE=" + Convert.ToInt32(ddlRevalType.SelectedValue) + ",@P_ADMBATCH=" + Convert.ToInt32(ddlAdmBatch.SelectedValue);
                 ShowReport("Subject_Wise_PhotoCopy_Details", "rptSubjectWisePhotoCopyDetails.rpt", param);
             }
@@ -332,10 +332,10 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 9)
         {
             url += "&param=" + param + ",@P_COLLEGE_CODE=" + ddlCollege.SelectedValue;               //Session["colcode"].ToString();          
-        } 
+        }
         if (Convert.ToInt32(Session["OrgId"]) == 6)
         {
-            url += "&param=" + param + ",@P_COLLEGE_CODE=" +  Session["colcode"].ToString();   
+            url += "&param=" + param + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
         }
         else
         {
@@ -349,7 +349,7 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
         ScriptManager.RegisterClientScriptBlock(updReval, updReval.GetType(), "controlJSScript", sb.ToString(), true);
 
     }
-  
+
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         // if (ddlCollege.SelectedIndex > 0)
@@ -367,17 +367,17 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
     private void PopulateSessionDropDown()   //Added by Sachin A dt on 27022023 as per requirement
     {
         try
-        { 
+        {
             //Fill Dropdown Session 
             string college_IDs = objCommon.LookUp("User_Acc", "UA_COLLEGE_NOS", "UA_NO=" + Session["userno"].ToString());
             //DataSet dsCollegeSession = objCC.GetCollegeSession(7, college_IDs);
-            string collegeids = college_IDs.Replace(",","$");
+            string collegeids = college_IDs.Replace(",", "$");
 
             string sp_procedure = "PKG_ACD_GET_COLLEGESESSION";
             string sp_parameters = "@P_MODE,@P_COLLEGE_IDNOS";
             string sp_callValues = "" + 1 + "," + collegeids + "";
-            DataSet dsCollegeSession = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues); 
-           
+            DataSet dsCollegeSession = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+
             ddlCollegeSession.Items.Clear();
             //ddlCollege.Items.Add("Please Select");
             ddlCollegeSession.DataSource = dsCollegeSession;
@@ -441,8 +441,8 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
     protected void btnSupplyReport_Click(object sender, EventArgs e)
     {
         try
-        { 
-            string sessionno  = GetSessionns();
+        {
+            string sessionno = GetSessionns();
             string sp_procedure = "PKG_SUPPLEMENTARY_EXAM_REG_SP_COPYDETAILS_EXCEL";
             string sp_parameters = "@P_SESSIONNO";
             string sp_callValues = "" + sessionno + "";
@@ -485,7 +485,7 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
         finally
-        { 
+        {
         }
     }
     #endregion
@@ -495,14 +495,14 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 2)
         {
-            btnSupplyReport.Visible = true; 
+            btnSupplyReport.Visible = true;
             btnReviewReport.Visible = false;
             btnApproved.Visible = false;
             btnRefund.Visible = false;
         }
         else
         {
-            btnSupplyReport.Visible = false; 
+            btnSupplyReport.Visible = false;
             btnReviewReport.Visible = false;
             btnApproved.Visible = false;
             btnRefund.Visible = false;
@@ -516,8 +516,11 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
             for (int k = 0; k < ddlCollegeSession.Items.Count; k++)
             {
                 if (ddlCollegeSession.Items[k].Selected == true)
+                {
                     sessionno += ddlCollegeSession.Items[k].Value + "$";
+                }
             }
+
             string sessionns = string.Empty;
             if (sessionno.Equals(""))
             {
@@ -609,6 +612,39 @@ public partial class ACADEMIC_RevaluationReport : System.Web.UI.Page
             ShowReviewRefund("Review Report", "rptReviewRefund.rpt", param);
         }
         catch { }
+    }
+    public string GetSessionnsNew()
+    {
+        try
+        {
+            int count = 0;
+            string sessionno = string.Empty;
+            for (int k = 0; k < ddlCollegeSession.Items.Count; k++)
+            {
+                if (ddlCollegeSession.Items[k].Selected == true)
+                {
+                    sessionno += ddlCollegeSession.Items[k].Value + "$";
+                    count++;
+                }
+            }
+            int cnt = ddlCollegeSession.Items.Count == null ? 0 : ddlCollegeSession.Items.Count;
+
+            string sessionns = string.Empty;
+            if (sessionno.Equals(""))
+            {
+                sessionns = "0";
+            }
+            else if (cnt == count)
+            {
+                sessionns = "0";
+            }
+            else
+            {
+                sessionns = sessionno.TrimEnd('$');
+            }
+            return sessionns;
+        }
+        catch { return null; }
     }
     #endregion
 }
