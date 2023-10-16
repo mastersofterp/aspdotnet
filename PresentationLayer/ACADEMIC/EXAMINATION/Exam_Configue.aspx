@@ -436,6 +436,9 @@
                                         </div>
                                     </div>
 
+
+                                </div>
+                                <div class="row">
                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
                                         <span class="pr-5">
                                             <label for="chk_feedback" style="font-size: small;">Student Feedback</label>
@@ -447,6 +450,22 @@
                                             <label class="custom-control-label" for="chk_feedback"></label>
                                             <asp:HiddenField ID="hdffeedback" runat="server" ClientIDMode="Static" />
                                         </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_attendance" style="font-size: small;">Attendance %</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_attendance">
+                                            <label class="custom-control-label" for="chk_attendance"></label>
+                                            <asp:HiddenField ID="hdfattendance" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="max_tickets">
+                                        <asp:TextBox ID="txtAttendance"  runat="server"></asp:TextBox>
                                     </div>
                                 </div>
 
@@ -534,7 +553,15 @@
         </Triggers>
 
     </asp:UpdatePanel>
-    <script></script>
+    <script>
+
+        jQuery(document).ready(function ($) {
+            $('input.custom-control-input').change(function () {
+                if ($(this).is(':checked')) $('div.max_tickets').show();
+                else $('div.max_tickets').hide();
+            }).change();
+        });
+    </script>
     <script>
 
 
@@ -584,6 +611,7 @@
             var absolute = document.getElementById("chk_absolute");
             var barcode = document.getElementById("chk_barcode");
             var feedback = document.getElementById("chk_feedback");
+            var attendance = document.getElementById("chk_attendance");
 
 
             if (examreg.checked) {
@@ -778,9 +806,18 @@
             if (feedback.checked) {
                 $('#hdffeedback').val(true)
             }
-            else {
+            else
+            {
                 $('#hdffeedback').val(false)
             }
+            if (attendance.checked) {
+                $('#hdfattendance').val(true)
+            }
+            else
+            {
+                $('#hdfattendance').val(false)
+            }
+     
         }
 
 
