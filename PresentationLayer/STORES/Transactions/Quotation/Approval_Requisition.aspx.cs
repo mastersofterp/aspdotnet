@@ -589,16 +589,16 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
             lblInprocessBudgetAmt.Text = ds.Tables[0].Rows[0]["INPROCESS_BUDGET_AMOUNT"].ToString();
     
 
-            if (ds.Tables[2].Rows.Count != 0)
-            {
-                lvItemDetails.DataSource = ds.Tables[2];
-                lvItemDetails.DataBind();
-            }
-            else
-            {
-                lvItemDetails.DataSource = null;
-                lvItemDetails.DataBind();
-            }
+            //if (ds.Tables[2].Rows.Count != 0)
+            //{
+            //    lvItemDetails.DataSource = ds.Tables[2];
+            //    lvItemDetails.DataBind();
+            //}
+            //else
+            //{
+            //    lvItemDetails.DataSource = null;
+            //    lvItemDetails.DataBind();
+            //}
 
             if (objCommon.LookUp("STORE_reference", "isnull(IS_BUDGET_HEAD,0)IS_BUDGET_HEAD", "IS_BUDGET_HEAD=1").Trim() == "1")
             {
