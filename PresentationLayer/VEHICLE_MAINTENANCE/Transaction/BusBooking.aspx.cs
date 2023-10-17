@@ -190,10 +190,13 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BusBooking : System.Web.UI.
             //  objCommon.DisplayMessage(this.updActivity, BookingStatus , this.Page);
             int balancefees = Routefees - bookedfees;
             ddlRoute.SelectedValue = dsBookingDetails.Tables[0].Rows[0]["ROUTEID"].ToString();
+            ddlRoute.Enabled = false;
             ddlRoute_SelectedIndexChanged(null, null);
             ddlStop.SelectedValue = dsBookingDetails.Tables[0].Rows[0]["STOPID"].ToString();
+            ddlStop.Enabled = false;
             lblfees.Text = balancefees.ToString();
             div1.Visible = true;
+            btnShowStrbtnShowStr.Enabled = false;
             txtBusSeate.Text = dsBookingDetails.Tables[0].Rows[0]["SEAT_NO"].ToString();
             lblPfees.Text = bookedfees.ToString(); //dsBookingDetails.Tables[0].Rows[0]["FEES"].ToString();
             lblTfees.Text = Routefees.ToString();
