@@ -784,16 +784,27 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                     {
 
                         int lock_status = Convert.ToInt32(objCommon.LookUp("ACD_GRADE_POINT", "DISTINCT ISNULL(LOCKED_STATUS,0)", "SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND CCODE='" + ddlCourse.SelectedValue + "'"));
-
-                        if (lock_status == 0)
+                        if (ViewState["RangeChange"].ToString() == "1")
                         {
-                            btnReRange.Enabled = true;
-                            btnReRange.Visible = true;
-                            btnRangeLock.Enabled = false;
-                            btnRangeLock.Visible = false;
-                            btnRangrlock.Visible = true;
-                            btnRangrUnlock.Visible = false;
+                            if (lock_status == 0)
+                            {
+                                btnReRange.Enabled = true;
+                                btnReRange.Visible = true;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = true;
+                                btnRangrUnlock.Visible = false;
 
+                            }
+                            else
+                            {
+                                btnReRange.Visible = false;
+                                btnRangeLock.Enabled = false;
+                                btnRangeLock.Visible = false;
+                                btnRangrlock.Visible = false;
+                                //btnupdscaledn.Visible = false;
+                                btnRangrUnlock.Visible = true;
+                            }
                         }
                         else
                         {
@@ -801,8 +812,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                             btnRangeLock.Enabled = false;
                             btnRangeLock.Visible = false;
                             btnRangrlock.Visible = false;
-                            //btnupdscaledn.Visible = false;
-                            btnRangrUnlock.Visible = true;
+                        
                         }
                     }
                     else
