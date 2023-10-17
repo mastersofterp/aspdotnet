@@ -617,6 +617,8 @@
                                                     <asp:ListItem Value="29">Medium Of Instruction</asp:ListItem>
                                                     <asp:ListItem Value="30">Parents Email Id</asp:ListItem>
                                                     <asp:ListItem Value="31">Merit Number</asp:ListItem>
+                                                    <asp:ListItem Value="32">Father Mobile Number</asp:ListItem>
+                                                    <asp:ListItem Value="33">Mother Mobile Number</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>
