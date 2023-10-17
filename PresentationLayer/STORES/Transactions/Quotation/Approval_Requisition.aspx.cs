@@ -584,19 +584,21 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
             lblReqDate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["REQ_DATE"]).ToString("dd/MM/yyyy");
             lblDeptName.Text = ds.Tables[0].Rows[0]["SDNAME"].ToString();
             lblAuthorityName.Text = ds.Tables[0].Rows[0]["NAME"].ToString();
+            lblpurjusti.Text = ds.Tables[0].Rows[0]["REMARK"].ToString(); 
             lblBudgetBalAmt.Text = ds.Tables[0].Rows[0]["BUDGET_BALANCE_AMOUNT"].ToString();
             lblInprocessBudgetAmt.Text = ds.Tables[0].Rows[0]["INPROCESS_BUDGET_AMOUNT"].ToString();
+    
 
-            if (ds.Tables[2].Rows.Count != 0)
-            {
-                lvItemDetails.DataSource = ds.Tables[2];
-                lvItemDetails.DataBind();
-            }
-            else
-            {
-                lvItemDetails.DataSource = null;
-                lvItemDetails.DataBind();
-            }
+            //if (ds.Tables[2].Rows.Count != 0)
+            //{
+            //    lvItemDetails.DataSource = ds.Tables[2];
+            //    lvItemDetails.DataBind();
+            //}
+            //else
+            //{
+            //    lvItemDetails.DataSource = null;
+            //    lvItemDetails.DataBind();
+            //}
 
             if (objCommon.LookUp("STORE_reference", "isnull(IS_BUDGET_HEAD,0)IS_BUDGET_HEAD", "IS_BUDGET_HEAD=1").Trim() == "1")
             {
@@ -632,7 +634,7 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
                 foreach (ListViewDataItem lv in lvitemReq.Items)
                 {
                     HtmlControl tdApproxCost = (HtmlControl)lv.FindControl("tdApproxCost");
-                    tdApproxCost.Visible = false;
+                   // tdApproxCost.Visible = false;
                 }
             }
             else

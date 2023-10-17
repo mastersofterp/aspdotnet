@@ -191,6 +191,10 @@
                                         <a class="sub-label">
                                             <asp:Label ID="lblAuthorityName" runat="server" Text=""></asp:Label></a>
                                     </li>
+                                    <li class="list-group-item"><b>Purchase Justification :</b>
+                                        <a class="sub-label">
+                                            <asp:Label ID="lblpurjusti" runat="server" Text=""></asp:Label></a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -212,6 +216,7 @@
                             </div>
                         </div>
 
+                                                                                
 
                         <div class="col-md-12">
 
@@ -258,6 +263,9 @@
 
                                                         <th id="thStatus" runat="server" visible="false">Status
                                                         </th>
+                                                        <th>
+                                                            Download
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -287,7 +295,7 @@
                                             <asp:HiddenField ID="hdReqtrNo" runat="server" Value='<%# Eval("REQTRNO")%>' />
                                             <asp:HiddenField ID="hdbAcceptReject" runat="server" Value='<%# Eval("ITEM_ACCEPT_REJECT")%>' />
                                         </td>
-                                        <td style="width: 10%">
+                                        <td >
                                             <asp:Label ID="lblREQUESTED_QTY" runat="server" Visible="true" Text='<%# Eval("REQUESTED_QTY")%>'></asp:Label>
 
                                         </td>
@@ -302,6 +310,7 @@
                                         <td id="tdApproxCost" runat="server">
                                             <asp:Label ID="lblCost" runat="server" Text='<%# Eval("Tot_Cost")%>'></asp:Label>
                                         </td>
+                                       
                                         <td id="tdItemSpec" runat="server" visible="false">
                                             <asp:Label ID="lblItemSpeci" runat="server" Text='<%# Eval("ITEM_SPECIFICATION")%>'></asp:Label>
                                         </td>
@@ -311,13 +320,20 @@
                                             <%-- <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("AR_STATUS") == "R" ? "Reject":"Accept" %>'></asp:Label>   --%>
                                             <%# Eval("AR_STATUS")%>
                                         </td>
+                                       <td>
+                                       <%-- <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
+                                                AlternateText='<%# Eval("FILENAME")%>' CommandName='<%# Eval("FILENAME")%>' OnClick="imgFile_Click" />--%>
+                                          <asp:ImageButton ID="imgFile" runat="server" OnClick="imgFile_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+                                         
+                                        </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
 
                         </div>
 
-                          <div class="col-12 table-responsive">
+                    <%--  <div class="col-12 table-responsive">
                             <asp:ListView ID="lvItemDetails" runat="server">
                                 <EmptyDataTemplate>
                                     <center>
@@ -355,15 +371,15 @@
                                         </td>
                                      
                                         <td>
-<%--                                            <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
+                                       <%-- <asp:ImageButton ID="imgFile" runat="Server" ImageUrl="~/Images/action_down.png" CommandArgument='<%# Eval("FILEPATH")%>'
                                                 AlternateText='<%# Eval("FILENAME")%>' CommandName='<%# Eval("FILENAME")%>' OnClick="imgFile_Click" />--%>
-                                             <asp:ImageButton ID="imgFile" runat="server" OnClick="imgFile_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                          <%--  <asp:ImageButton ID="imgFile" runat="server" OnClick="imgFile_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
                                                                                     data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
-                        </div>
+                        </div>--%>
 
 
                          <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
