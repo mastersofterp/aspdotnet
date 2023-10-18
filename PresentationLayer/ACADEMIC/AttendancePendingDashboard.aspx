@@ -144,8 +144,8 @@
                                             <Columns>
                                                 <asp:BoundField DataField="UA_FULLNAME" HeaderText="Faculty Name" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
-                                                    ItemStyle-HorizontalAlign="Center" />
+                                               <%-- <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
+                                                    ItemStyle-HorizontalAlign="Center" />--%>
                                                 <asp:BoundField DataField="DEPARTMENT" HeaderText="Department" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="SCHOOL" HeaderText="School" HeaderStyle-HorizontalAlign="Center"
@@ -168,7 +168,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Send E-Mail" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%" HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Button ID="btnSendDeptMail" OnClick="btnSendDeptMail_Click" CssClass="btn btn-primary btn-sm" ValidationGroup='<%# Eval("UA_EMAIL") %>'
+                                                        <asp:Button ID="btnSendDeptMail" OnClick="btnSendDeptMail_Click" CssClass="btn btn-primary btn-sm" CommandArgument='<%# Eval("UA_EMAIL") %>'  ValidationGroup='<%# Eval("UA_EMAIL") %>'
                                                             Text="Send Mail" runat="server" />
                                                     </ItemTemplate>
                                                     <HeaderStyle HorizontalAlign="Center" />
@@ -354,8 +354,8 @@
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="UA_FULLNAME" HeaderText="Faculty Name" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
-                                                    ItemStyle-HorizontalAlign="Center" />
+                                               <%-- <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
+                                                    ItemStyle-HorizontalAlign="Center" />--%>
                                                 <asp:BoundField DataField="DEPARTMENT" HeaderText="Department" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="SCHOOL" HeaderText="School" HeaderStyle-HorizontalAlign="Center"
@@ -368,7 +368,7 @@
                                                     HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <div id="divcR" runat="server">
-                                                            <a href="JavaScript:divexpandcollapse('div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>');">
+                                                           <%-- <a href="JavaScript:divexpandcollapse('div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>');">--%>
                                                                 <%--  <img alt='<%# Eval("COURSE_MARKS_PENDING") %>' id='CLOSE<%# Eval("SRNO") %>' border="0" title='<%# Eval("COURSE_MARKS_PENDING") %>' />--%>
                                                                 <asp:Label runat="server" ID="lbl" Text='<%# Eval("CCODE") %>'></asp:Label>
                                                                 <asp:HiddenField ID="hdfTempExam" runat="server" Value='<%# Eval("COURSENO") %>' />
