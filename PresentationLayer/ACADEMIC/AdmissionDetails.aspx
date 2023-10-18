@@ -360,6 +360,80 @@
                                                     
                                                     </div>
 
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSeatType" runat="server" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <label>Seat Type </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlSeatType" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Seat Type"
+                                                            ValidationGroup="Academic">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Govt. Quota</asp:ListItem>
+                                                                <asp:ListItem Value="2">TFWS</asp:ListItem>
+                                                                <asp:ListItem Value="3">J&S Quota</asp:ListItem>
+                                                                <asp:ListItem Value="4">Management Quota</asp:ListItem>
+                                                                <asp:ListItem Value="5">Against Cap</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                        
+                                                        </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmCenter" runat="server" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <label>Admission Centre </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlAdmCentre" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Admission Centre"
+                                                            ValidationGroup="Academic">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Government</asp:ListItem>
+                                                                <asp:ListItem Value="2">College</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                       
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divDefenceQuota" runat="server" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <label>Defence Quota </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlDefenceQuota" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Defence Quota"
+                                                            ValidationGroup="Academic">
+                                                                <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="0">No</asp:ListItem>
+                                                                <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                                </asp:DropDownList>
+
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divMinorityQuota" runat="server" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <label>Minority Quota </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlMinorityQuota" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Minority Quota"
+                                                            ValidationGroup="Academic">
+                                                                <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="0">No</asp:ListItem>
+                                                                <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                                </asp:DropDownList>      
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmRound" runat="server" visible="false">
+                                                        <div class="label-dynamic">
+                                                            <sup></sup>
+                                                            <label>Admission Round </label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlAdmRound" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Admission Round"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                    </div>
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
                                                             <sup></sup>

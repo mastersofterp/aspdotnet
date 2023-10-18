@@ -25,6 +25,11 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             ddlYear.Attributes.Add("disabled", "disabled");
             ddlAcademicYear.Attributes.Add("disabled", "disabled");
             ddlSchoolCollege.Attributes.Add("disabled", "disabled");
+            ddlSeatType.Attributes.Add("disabled", "disabled");
+            ddlAdmCentre.Attributes.Add("disabled", "disabled");
+            ddlDefenceQuota.Attributes.Add("disabled", "disabled");
+            ddlMinorityQuota.Attributes.Add("disabled", "disabled");
+            ddlAdmRound.Attributes.Add("disabled", "disabled");
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -37,6 +42,16 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 //  CheckPageAuthorization();
                 ViewState["usertype"] = Session["usertype"];
 
+                int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
+
+                if (orgID == 19)                                      // Added By Shrikant W. on 12-10-2023
+                {
+                    divSeatType.Visible = true;
+                    divAdmCenter.Visible = true;
+                    divDefenceQuota.Visible = true;
+                    divMinorityQuota.Visible = true;
+                    divAdmRound.Visible = true;
+                }
 
                 if (ViewState["usertype"].ToString() == "2")
                 {
@@ -194,6 +209,11 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 {
                     this.DocumentRequaired(3);
                 }
+
+                ddlSeatType.SelectedValue = dtr["SEAT_TYPE"] == null ? "0" : dtr["SEAT_TYPE"].ToString();
+                ddlAdmCentre.SelectedValue = dtr["ADMISSION_CENTRE"] == null ? "0" : dtr["ADMISSION_CENTRE"].ToString();
+                ddlDefenceQuota.SelectedValue = dtr["DEFENCE_QUOTA"] == null ? "0" : dtr["DEFENCE_QUOTA"].ToString();
+                ddlMinorityQuota.SelectedValue = dtr["MINORITY_QUOTA"] == null ? "0" : dtr["MINORITY_QUOTA"].ToString();
             }
         }
        
@@ -213,6 +233,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlAdmCaste, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORYNO");
             objCommon.FillDropDownList(ddlclaim, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORY");
             objCommon.FillDropDownList(ddlAcademicYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ISNULL(ACTIVE_STATUS,0) = 1 AND ISNULL(IS_CURRENT_FY,0)=1 ", "ACADEMIC_YEAR_NAME");
+            objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
         }
         catch (Exception ex)
         {
