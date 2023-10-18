@@ -16,6 +16,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
+using System.Globalization;
 
 public partial class ACADEMIC_PublishResult : System.Web.UI.Page
 {
@@ -299,7 +300,16 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(txtExamDate.Text))
             {
-                examdate = (Convert.ToDateTime(txtExamDate.Text.ToString())).ToString();
+                if (Checkdate(txtExamDate.Text) == false)
+                {
+                    objCommon.DisplayMessage(updUpdate, "Examination Date is not in Valid Format", this.Page);
+                    SetFocus(txtExamDate);
+                    return;
+                }
+                else
+                {
+                    examdate = (Convert.ToDateTime(txtExamDate.Text.ToString())).ToString();
+                }
             }
             string ids = string.Empty;
             ids = GetStudentID();
@@ -875,4 +885,21 @@ public partial class ACADEMIC_PublishResult : System.Web.UI.Page
         btnUnpublish.Enabled = false;
         SetFocus(txtDateOfPublish);
     }
+
+    protected bool Checkdate(string examdate)
+    {
+        bool status = false;
+        DateTime d;
+        if (DateTime.TryParseExact(examdate, new string[] { "dd/MM/yyyy", "MM/dd/yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out d))
+        {
+            status = true;
+        }
+        else
+        {
+            status = false;
+        }
+
+        return status;
+    }
+
 }

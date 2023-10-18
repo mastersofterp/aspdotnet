@@ -230,7 +230,7 @@
                                                 </div>
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
-                                                        <i class="fa fa-calendar"></i>
+                                                        <i class="fa fa-calendar" id="imgCalDateOfPublish"></i>
                                                     </div>
                                                     <asp:TextBox ID="txtDateOfPublish" runat="server"
                                                         TabIndex="1" ToolTip="Please Enter Publish Date" />
@@ -262,16 +262,25 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar" id="imgExamDate"></i>
                                                     </div>
-                                                    <asp:TextBox runat="server" ID="txtExamDate" TabIndex="1" ToolTip="Please Enter Date of Examination"></asp:TextBox>
-                                                    <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy"
-                                                        TargetControlID="txtExamDate" PopupButtonID="imgExamDate1" />
-                                                    <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" TargetControlID="txtExamDate"
-                                                        Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
-                                                        MaskType="Date" />
-                                                    <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" EmptyValueMessage="Please Enter Date of Examination"
-                                                        ControlExtender="meExamDate" ControlToValidate="txtExamDate" IsValidEmpty="false"
-                                                        InvalidValueMessage="Exam Date is invalid" Display="None" ErrorMessage="Please Enter Date of Examination"
-                                                        InvalidValueBlurredMessage="*" SetFocusOnError="true" />
+                                                    <asp:TextBox ID="txtExamDate" runat="server"
+                                                        TabIndex="1" ToolTip="Please Enter Exam Date" />
+
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtExamDate"
+                                                        Display="None" ErrorMessage="Please Enter Date Of Exam" SetFocusOnError="True"
+                                                        ValidationGroup="examdate"></asp:RequiredFieldValidator>
+                                                    <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd/MM/yyyy"
+                                                        TargetControlID="txtExamDate" PopupButtonID="imgExamDate"
+                                                        Enabled="True">
+                                                    </ajaxToolKit:CalendarExtender>
+                                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" TargetControlID="txtExamDate"
+                                                        Mask="99/99/9999" MaskType="Date" AcceptAMPM="True" ErrorTooltipEnabled="True"
+                                                        CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat=""
+                                                        CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
+                                                        CultureTimePlaceholder="" Enabled="True" />
+                                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="MaskedEditExtender1" ControlToValidate="txtExamDate"
+                                                        IsValidEmpty="False" EmptyValueMessage="" InvalidValueMessage="Exam date is invalid"
+                                                        EmptyValueBlurredText="" InvalidValueBlurredMessage="" Display="Dynamic" ValidationGroup="examdate" />
+
                                                 </div>
                                             </div>
                                         </div>
@@ -303,6 +312,8 @@
                                             ShowMessageBox="true" ShowSummary="false" ValidationGroup="report" />
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
                                             ShowMessageBox="true" ShowSummary="false" ValidationGroup="reportgraph" />
+                                        <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List"
+                                            ShowMessageBox="true" ShowSummary="false" ValidationGroup="examdate" />
                                     </div>
                                     <div style="display: none">
                                         Total Students Selected:
