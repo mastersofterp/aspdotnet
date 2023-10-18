@@ -79,6 +79,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
                     if (Convert.ToInt32(ds.Tables[0].Rows[i][j]) == 1)
                     {
                         val = "true";
+                        txtAttendance.Visible = true;
                     }
                     else
                     {
@@ -95,6 +96,21 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "" + str + "", true);
 
         }
+
+        //int Atten;
+        int percent;
+        percent = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ATTENDANCE_PERCENTAGE", ""));
+        //Atten = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ATTENDANCE", ""));
+
+        txtAttendance.Text = percent.ToString();
+        //if (Atten == 1)
+        //{
+        //    txtAttendance.Visible = true;
+        //}
+        //else
+        //{
+        //    txtAttendance.Visible = false;
+        //}
 
     }
 
@@ -147,6 +163,10 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         int feedback = 0;
         int attendance = 0;
         int attendance_percentage = 0;
+        String atten = txtAttendance.Text;
+
+        
+
 
         //examrule,garcerule,latefee,Improvement,exampattern,revaluation,resultpublish,condonation,feetype
         if (hdfexamregister.Value == "true")
@@ -274,7 +294,25 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         if (hdfattendance.Value == "true")
         {
             attendance = 1;
-            attendance_percentage = Convert.ToInt32(txtAttendance.Text);
+
+            if(atten== "")
+            {
+                attendance_percentage = 0;
+            }
+            else
+            {
+                if (int.TryParse(txtAttendance.Text, out attendance_percentage))
+                {
+                    attendance_percentage = Convert.ToInt32(txtAttendance.Text);
+                }
+                else
+                {
+                    attendance_percentage = 0;
+                }
+            }
+            
+           
+           
         }
 
 

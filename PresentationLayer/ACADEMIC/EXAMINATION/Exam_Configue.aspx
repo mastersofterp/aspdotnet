@@ -459,13 +459,23 @@
                                     </div>
                                     <div class="form-group col-md-1">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="chk_attendance">
+                                    
+                                            <input type="checkbox" class="custom-control-input" id="chk_attendance" >
+                                             <%--<asp:checkbox  type="checkbox" class="custom-control-input" runat="server" id="chk_attendance" />--%>
+                                           
                                             <label class="custom-control-label" for="chk_attendance"></label>
-                                            <asp:HiddenField ID="hdfattendance" runat="server" ClientIDMode="Static" />
+                                            <asp:HiddenField ID="hdfattendance" runat="server" ClientIDMode="Static" Value="1" />
+                                               
                                         </div>
                                     </div>
                                     <div class="max_tickets">
                                         <asp:TextBox ID="txtAttendance"  runat="server"></asp:TextBox>
+                                       <%-- <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator1"
+                                            ControlToValidate="txtAttendance"
+                                            ValidationExpression="^\d+$"
+                                            ErrorMessage="Only Numbers Accepted."
+                                            Display="Dynamic" />--%>
+
                                     </div>
                                 </div>
 
@@ -556,12 +566,14 @@
     <script>
 
         jQuery(document).ready(function ($) {
+            debugger;
             $('input.custom-control-input').change(function () {
                 if ($(this).is(':checked')) $('div.max_tickets').show();
-                else $('div.max_tickets').hide();
+               // else $('div.max_tickets').hide();
             }).change();
         });
     </script>
+     
     <script>
 
 
@@ -812,6 +824,7 @@
             }
             if (attendance.checked) {
                 $('#hdfattendance').val(true)
+                if ($(this).is(':checked')) $('div.max_tickets').show();
             }
             else
             {
