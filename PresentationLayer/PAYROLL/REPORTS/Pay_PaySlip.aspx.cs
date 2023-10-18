@@ -375,13 +375,22 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
     {
         try
         {
+            string Type = "EmpSalaryCertificate";
             if (rdoSelectEmployee.Checked && ddlEmployeeNo.SelectedIndex == 0)
             {
                 ShowMessage("Please Select Employee.");
                 return; 
             }
+            string ReportName = objCommon.LookUp("PayReportConfiguration", "IDCardReportName", "IDCardType='" + Type + "' AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]));
 
-            ShowReportEmployeePayslip("Employee_PaySlip", "rptSalaryCertificate.rpt");
+            if (ReportName != "")
+            {
+                ShowReportEmployeePayslip("Employee_PaySlip", ReportName);
+            }
+            else
+            {
+                ShowReportEmployeePayslip("Employee_PaySlip", "rptSalaryCertificate.rpt");
+            }
            // ShowReportSalaryCertificate("Employee_PaySlip", "rptSalaryCertificateNew.rpt");
         }
         catch (Exception ex)
