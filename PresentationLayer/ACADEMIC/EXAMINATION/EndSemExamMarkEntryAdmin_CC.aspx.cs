@@ -366,6 +366,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     else
                     {
                         SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[1]); ;
+                      //  string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
                        // Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Exam[1]);
 
 
@@ -373,7 +374,19 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                     }
 
-                       CustomStatus cs = 0; 
+                    #region added  by gaurav s 
+                    if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
+                    {
+                        if (examtype != "S")
+                        {
+                            SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
+                            Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1]) + "AND  SUBEXAMNO=" + ddlSubExamName.SelectedValue.Split('-')[1]);
+                        }
+                      
+                    }
+
+                    #endregion
+                    CustomStatus cs = 0; 
                         if (examtype == "S")
                         {
                              cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNewAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, 0, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, SubExamComponentName, Convert.ToInt32(ddlsemester.SelectedValue), 0);
@@ -2226,6 +2239,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                             btnGrade.Visible = false;
                                             btnEndSemReport.Visible = true;
                                         }
+
+                                        #region ADDED BY GAURAV FOR CPU HIDE GRADE BUTTON 13_09_2023
+                                        if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
+                                        {
+                                            btnGrade.Enabled = false;
+                                            btnGrade.Visible = false;
+                                            gvStudent.Columns[7].Visible = false;
+                                            btnReGrade.Visible = false;
+                                            btnReGrade.Enabled = false;
+
+
+                                        }
+                                        #endregion
+
                                     }
                                 }
                                 else
@@ -2273,6 +2300,18 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnReGrade.Enabled = false;
                                         btnReGrade.Visible = false;
                                     }
+                                    #region ADDED BY GAURAV FOR CPU HIDE GRADE BUTTON 13_09_2023
+                                    if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
+                                    {
+                                        btnGrade.Enabled = false;
+                                        btnGrade.Visible = false;
+                                        gvStudent.Columns[7].Visible = false;
+                                        btnReGrade.Visible = false;
+                                        btnReGrade.Enabled = false;
+
+
+                                    }
+                                    #endregion
                                 }
                                 else
                                 {
