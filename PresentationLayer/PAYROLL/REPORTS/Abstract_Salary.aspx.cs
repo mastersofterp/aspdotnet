@@ -410,16 +410,33 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     {
         try
         {
+            OrganizationId = Convert.ToInt32(Session["OrgId"]);
+
+            string ReportName = objCommon.LookUp("PayReportConfiguration", "IDCardReportName", "OrganizationId=" + OrganizationId + " AND IdType=4");
+
             if (chkAbstarct.Checked)
             {
-                ShowReportEmployeeAbstractSalary("Employee_Abstract_Salary_Dept", "rptAbstract_Cummulative.rpt");
+                if (ReportName == "")
+                {
+                     ShowReportEmployeeAbstractSalary("Employee_Abstract_Salary_Dept", "rptAbstract_Cummulative.rpt");
+                }
+                else
+                {
+                     ShowReportEmployeeAbstractSalary("Employee_Abstract_Salary_Dept", ReportName);
+                }
             }
             else
             {
-                ShowReportEmployeeAbstractSalaryDeptWise("Employee_Abstract_Salary_Dept", "rptAbstract_Salary_DeptWise.rpt");
+                if (ReportName == "")
+                {
+                    ShowReportEmployeeAbstractSalaryDeptWise("Employee_Abstract_Salary_Dept", "rptAbstract_Salary_DeptWise.rpt");
+                }
+                else
+                {
+                    ShowReportEmployeeAbstractSalaryDeptWise("Employee_Abstract_Salary_Dept", ReportName);
+                }
                 // ShowReportEmployeeAbstractSalaryDeptWise("Employee_Abstract_Salary_Dept", "rptAbstract_Salary_DeptWise_New.rpt");
             }
-
         }
         catch (Exception ex)
         {
@@ -898,13 +915,39 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
             return;
         }
 
-
+        int count = 0;
+        string stafflist = string.Empty;
+        for (int i = 0; i < ddlStaffNo1.Items.Count; i++)
+        {
+            if (ddlStaffNo1.Items[i].Selected)
+            {
+                stafflist += ddlStaffNo1.Items[i].Value + "$";
+                count++;
+            }
+            else
+            {
+            }
+        }
+        if (count == 0)
+        {
+            stafflist = "";
+        }
+        else if (count == 1)
+        {
+            stafflist = stafflist.Substring(0, stafflist.Length - 1);
+        }
+        else
+        {
+            ShowMessage("Select Only One Staff Name");
+            return;
+        }
         // new code here
         string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
         string ContentType = string.Empty;
         string monyear = ddlMonthYear.SelectedItem.ToString();
         int EmpTypeNo = Convert.ToInt32(ddlEmployeeType.SelectedValue);
-        int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
+        string StaffNo = stafflist;
+        //int StaffNo = Convert.ToInt32(ddlStaffNo.SelectedValue);
         int CollegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
         int IDNO = 0;
         DataSet ds = EmployeeSalaryRegisterActualRate(monyear, EmpTypeNo, StaffNo, CollegeNo, IDNO);
@@ -1384,7 +1427,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
     }
 
 
-    public DataSet EmployeeSalaryRegisterActualRate(string monyear, int EmpTypeNo, int StaffNo, int CollegeNo, int IDNO)
+    public DataSet EmployeeSalaryRegisterActualRate(string monyear, int EmpTypeNo, string StaffNo, int CollegeNo, int IDNO)
     {
         DataSet ds = null;
         try
