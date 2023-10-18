@@ -96,7 +96,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 ddlSession.DataTextField = dt.Columns[4].ToString();
                 ddlSession.DataBind();
                 ddlSession.SelectedIndex = 0;
-                ddlSessionBulk.DataSource = ds;
+                ddlSessionBulk.DataSource = dt;
                 ddlSessionBulk.DataValueField = dt.Columns[0].ToString();
                 ddlSessionBulk.DataTextField = dt.Columns[4].ToString();
                 ddlSessionBulk.DataBind();
@@ -159,7 +159,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdnUaNo = e.Row.FindControl("hdnUaNo") as HiddenField;
 
                 DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), ViewState["deptno"].ToString());
-                if (ds.Tables[0].Rows.Count > 0)
+                if (ds != null)
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
@@ -196,7 +196,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 //HtmlGenericControl div = e.Row.FindControl("divcR") as HtmlGenericControl;
                 HiddenField hdfUano = e.Row.FindControl("hdfUano") as HiddenField;
                 DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), ViewState["deptno"].ToString());
-                if (ds.Tables[0].Rows.Count > 0)
+
+                if (ds != null)
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
