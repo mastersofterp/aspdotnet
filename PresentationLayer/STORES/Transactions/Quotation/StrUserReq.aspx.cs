@@ -30,6 +30,10 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 using IITMS.SQLServer.SQLDAL;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage;
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
 
 
 
@@ -45,7 +49,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
     public static string RETPATH = "";
     public string path = string.Empty;
     public string dbPath = string.Empty;
-
+    BlobController objBlob = new BlobController();
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -102,7 +106,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                 txtIndentSlipDate.Text = DateTime.Now.Date.ToShortDateString();
                 txtPersonName.Text = Session["userfullname"].ToString();
                 CheckBudgetHeadConfiguration();
-
+                BlobDetails();
                 //lblPassingPath.Text = objCommon.LookUp("STORE_PASSING_AUTHORITY_PATH", "PAPATH", "ISNULL(PATH_FOR,'P')='P' AND EMP_IDNO=" + Convert.ToInt32(Session["userno"]));
                 //if (lblPassingPath.Text == string.Empty)
                 //{
@@ -150,6 +154,44 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
         {
             //Even if PageNo is Null then, don't show the page
             Response.Redirect("~/notauthorized.aspx?page=create_user.aspx");
+        }
+    }
+
+    public void MessageBox(string msg)
+    {
+        ScriptManager.RegisterClientScriptBlock(this.Page, this.GetType(), "MSG", "alert('" + msg + "');", true);
+    }
+
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "ContainerNamestoresdoctest";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
         }
     }
 
@@ -351,55 +393,186 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
             //============ End Commented part ===================================================
 
             //============ start file upload =====================================
+            //============ Comment Start Gaurav Varma =====================================
+            //string file = string.Empty;
+            //string filename = string.Empty;
+            //if (FileUpload1.HasFile)
+            //{
+            //    if (FileTypeValid(System.IO.Path.GetExtension(FileUpload1.FileName)))
+            //    {
+            //        if (ddlIndentSlipNo.SelectedIndex == 0)
+            //        {
+            //            file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (txtIndentSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
+            //        }
+            //        else
+            //        {
+            //            //file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (ddlIndentSlipNo.SelectedItem.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
+            //            file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (objdeptRequest.REQ_NO).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
+            //        }
+            //        if (!System.IO.Directory.Exists(file))
+            //        {
+            //            System.IO.Directory.CreateDirectory(file);
+            //        }
+
+
+            //        ViewState["FILE_PATH"] = file;
+            //        dbPath = file;
+            //        filename = FileUpload1.FileName;
+            //        ViewState["FILE_NAME"] = filename;
+
+            //        path = file + "\\" + FileUpload1.FileName;
+
+            //        //CHECKING FOLDER EXISTS OR NOT file
+            //        if (!System.IO.Directory.Exists(path))
+            //        {
+            //            if (!File.Exists(path))
+            //            {
+            //                FileUpload1.PostedFile.SaveAs(path);
+            //            }
+            //            else
+            //            {
+            //                Showmessage("File Already Exist.");
+            //                return;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        objCommon.DisplayUserMessage(this.Page, "Please Upload Valid Files[.pdf,.xls,.doc,.txt]", this.Page);
+            //        FileUpload1.Focus();
+            //        return;
+            //    }
+            //}
+            //============ Comment End Gaurav Varma =====================================
+
+            //  int idno = _idnoEmp;
+            // file upload on Blobe start Gaurav
             string file = string.Empty;
-            string filename = string.Empty;
+            ServiceBook objSevBook = new ServiceBook();
+  
             if (FileUpload1.HasFile)
             {
                 if (FileTypeValid(System.IO.Path.GetExtension(FileUpload1.FileName)))
                 {
-                    if (ddlIndentSlipNo.SelectedIndex == 0)
+                    if (FileUpload1.HasFile)
                     {
-                        file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (txtIndentSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
+                        if (FileUpload1.FileContent.Length >= 1024 * 10000)
+                        {
+
+                            MessageBox("File Size Should Not Be Greater Than 10 Mb");
+                            FileUpload1.Dispose();
+                            FileUpload1.Focus();
+                            return;
+                        }
+                    }
+
+                    string FileName = FileUpload1.FileName;
+                    if (ViewState["FILE1"] != null && ((DataTable)ViewState["FILE1"]) != null)
+                    {
+                        DataTable dtM = (DataTable)ViewState["FILE1"];
+                        for (int i = 0; i < dtM.Rows.Count; i++)
+                        {
+                            if (dtM.Rows[i]["DisplayFileName"].ToString() == FileName)
+                            {
+                                MessageBox("File Already Exist!");
+                                return;
+                            }
+                        }
+                    }
+                    int req_id = 0;
+                    int reqid1 = 0;
+
+                    if (ViewState["REQTRNO"] == null)
+                    {
+                        req_id = Convert.ToInt32(objCommon.LookUp("STORE_REQ_MAIN", "isnull(MAX(REQTRNO)+1,0) REQTRNO", ""));
+                        reqid1 = Convert.ToInt32(objCommon.LookUp("STORE_REQ_TRAN", "isnull(MAX(REQ_TNO)+1,0) REQ_TNO", ""));
                     }
                     else
                     {
-                        //file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (ddlIndentSlipNo.SelectedItem.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
-                        file = Docpath + "STORES\\REQUISITIONS\\REQ_" + (objdeptRequest.REQ_NO).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ddlItemName.SelectedItem.Text.Trim();
+                        req_id = Convert.ToInt32(ViewState["REQTRNO"]);
+
+
                     }
-                    if (!System.IO.Directory.Exists(file))
+                     file = Docpath + "TEMP_CONDUCTTRAINING_FILES\\APP_0";
+                    ViewState["SOURCE_FILE_PATH"] = file;
+                    string PATH = Docpath + "TRAINING_CONDUCTED\\";
+                    ViewState["DESTINATION_PATH"] = PATH;
+                    if (lblBlobConnectiontring.Text == "")
                     {
-                        System.IO.Directory.CreateDirectory(file);
+                        objSevBook.ISBLOB = 0;
                     }
-
-
-                    ViewState["FILE_PATH"] = file;
-                    dbPath = file;
-                    filename = FileUpload1.FileName;
-                    ViewState["FILE_NAME"] = filename;
-
-                    path = file + "\\" + FileUpload1.FileName;
-
-                    //CHECKING FOLDER EXISTS OR NOT file
-                    if (!System.IO.Directory.Exists(path))
+                    else
                     {
-                        if (!File.Exists(path))
+                        objSevBook.ISBLOB = 1;
+                    }
+                    if (objSevBook.ISBLOB == 1)
+                    {
+                        string filename = string.Empty;
+                        string FilePath = string.Empty;
+                        // string IdNo = _idnoEmp.ToString();
+                        if (FileUpload1.HasFile)
                         {
-                            FileUpload1.PostedFile.SaveAs(path);
+                            string contentType = contentType = FileUpload1.PostedFile.ContentType;
+                            string ext = System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
+                            //HttpPostedFile file = flupld.PostedFile;
+                            //filename = objSevBook.IDNO + "_familyinfo" + ext;
+                            //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
+                            string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+                            filename = req_id + "_REQTRNO_" + time + ext;
+                            objSevBook.ATTACHMENTS = filename;
+
+                            if (FileUpload1.FileContent.Length <= 1024 * 10000)
+                            {
+                                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                                bool result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                                if (result == true)
+                                {
+
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, req_id + "_REQTRNO_" + time, FileUpload1);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+                                    //int tano = Addfieldstotbl(filename);
+                                    //BindListView_Attachments();
+                                }
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        string filename = FileUpload1.FileName;
+                        if (!System.IO.Directory.Exists(file))
                         {
-                            Showmessage("File Already Exist.");
-                            return;
+                            System.IO.Directory.CreateDirectory(file);
+                        }
+
+                        if (!System.IO.Directory.Exists(path))
+                        {
+                            if (!File.Exists(path))
+                            {
+                                int tano = Addfieldstotbl(filename);
+                                path = file + "\\TC_" + tano + System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
+                                FileUpload1.PostedFile.SaveAs(path);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    objCommon.DisplayUserMessage(this.Page, "Please Upload Valid Files[.pdf,.xls,.doc,.txt]", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Please Upload Valid Files[.jpg,.pdf,.xls,.doc,.txt]", this.Page);
                     FileUpload1.Focus();
-                    return;
                 }
             }
+            //else
+            //{
+            ////    objCommon.DisplayMessage(this.Page, "Please Select File", this.Page);
+               
+            //}
+            // file upload on Blobe end Gaurav
 
             if (ddlIndentSlipNo.SelectedValue == null || ddlIndentSlipNo.SelectedValue == "0")
             {
@@ -432,8 +605,17 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
 
                     if (duplicateCkeck == 0)
                     {
-                        objdeptRequest.FILENAME = FileUpload1.FileName;
+                       // objdeptRequest.FILENAME = FileUpload1.FileName;
+                        if (objSevBook.ATTACHMENTS != null)
+                        {
+                            objdeptRequest.FILENAME = objSevBook.ATTACHMENTS;
+                        }
+                        else
+                        {
+                            objdeptRequest.FILENAME = string.Empty;
+                        }
                         objdeptRequest.FILEPTH = file;
+                      
                         CustomStatus cs = (CustomStatus)objDeptReqController.AddDeptRequest(objdeptRequest);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
@@ -442,6 +624,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                             BindListView_ItemDetails();
                             //Showmessage("Item Added Successfully.");
                         }
+                            
                     }
                     else
                     {
@@ -458,7 +641,15 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                         {
                             if (FileUpload1.HasFile)
                             {
-                                objdeptRequest.FILENAME = FileUpload1.FileName;
+                                //objdeptRequest.FILENAME = FileUpload1.FileName;
+                                if (objSevBook.ATTACHMENTS != null)
+                                {
+                                    objdeptRequest.FILENAME = objSevBook.ATTACHMENTS;
+                                }
+                                else
+                                {
+                                    objdeptRequest.FILENAME = string.Empty;
+                                }
                                 objdeptRequest.FILEPTH = file;
                             }
                             else
@@ -493,8 +684,14 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                 objUaimsCommon.ShowError(Page, "Stores_Transactions_Str_user_Requisition.butSubmit_Click() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
+
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Complaints_TRANSACTION_Eapplication.btnAdd_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
 
     protected void btnEdit_Click(object sender, EventArgs e)
     {
@@ -1613,6 +1810,110 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
         }
     }
 
+    private void CreateTable()
+    {
+        DataTable dt = new DataTable();
+        DataColumn dc;
+        //dc = new DataColumn("SRNO", typeof(int));
+        //dt.Columns.Add(dc);
+
+        dc = new DataColumn("DisplayFileName", typeof(string));
+        dt.Columns.Add(dc);
+
+
+        dc = new DataColumn("FILENAME", typeof(string));
+        dt.Columns.Add(dc);
+
+        dc = new DataColumn("REQ_TNO", typeof(int));
+        dt.Columns.Add(dc);
+        ViewState["INV1"] = dt;
+    }
+
+    private int Addfieldstotbl(string filename)
+    {
+        if (ViewState["INV1"] != null && ((DataTable)ViewState["INV1"]) != null)
+        {
+            DataTable dt = (DataTable)ViewState["INV1"];
+            DataRow dr = dt.NewRow();
+            //int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
+            //dr["SRNO"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["DisplayFileName"] = FileUpload1.FileName;
+            dr["FILENAME"] = filename;
+            
+            dt.Rows.Add(dr);
+            ViewState["FILE1"] = dt;
+            this.BindListView_Attachments(dt);
+            // ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+        }
+        else
+        {
+            CreateTable();
+            DataTable dt = (DataTable)ViewState["INV1"];
+            DataRow dr = dt.NewRow();
+            //int FUID = Convert.ToInt32(ViewState["FUID"]) + 1;
+            //dr["SRNO"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dr["DisplayFileName"] = FileUpload1.FileName;
+            dr["FILENAME"] = filename;
+            // ViewState["FUID"] = Convert.ToInt32(ViewState["FUID"]) + 1;
+            dt.Rows.Add(dr);
+            ViewState["FILE1"] = dt;
+            //pnlAttachmentList.Visible = true;
+            this.BindListView_Attachments(dt);
+        }
+        return Convert.ToInt32(ViewState["FUID"]);
+    }
+    private void BindListView_Attachments(DataTable dt)
+    {
+        try
+        {
+            lvItemDetails.DataSource = dt;
+            lvItemDetails.DataBind();
+           // pnlAttachmentList.Visible = true;
+
+            if (lblBlobConnectiontring.Text != "")
+            {
+                Control ctrHeader = lvItemDetails.FindControl("divBlobDownload");
+                Control ctrHead1 = lvItemDetails.FindControl("divattachblob");
+                Control ctrhead2 = lvItemDetails.FindControl("divattach");
+                ctrHeader.Visible = true;
+                ctrHead1.Visible = true;
+                ctrhead2.Visible = false;
+
+                foreach (ListViewItem lvRow in lvItemDetails.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                    Control ckattach = (Control)lvRow.FindControl("attachfile");
+                    Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    ckBox.Visible = true;
+                    attachblob.Visible = true;
+                    ckattach.Visible = false;
+
+                }
+            }
+            else
+            {
+
+                Control ctrHeader = lvItemDetails.FindControl("divDownload");
+                ctrHeader.Visible = false;
+
+                foreach (ListViewItem lvRow in lvItemDetails.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+                    ckBox.Visible = false;
+
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Academic_FeeCollection.BindListView_DemandDraftDetails() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
     #region File Upload
 
     //Check for Valid File 
@@ -1634,8 +1935,46 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
 
     protected void imgdownload_Click(object sender, ImageClickEventArgs e)
     {
-        ImageButton btn = sender as ImageButton;
-        DownloadFile(btn.AlternateText, btn.CommandName, btn.CommandArgument);
+       // ImageButton btn = sender as ImageButton;
+
+         string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        } catch (Exception ex)
+        {
+            throw;
+        }
+
+        //DownloadFile(btn.AlternateText, btn.CommandName, btn.CommandArgument);
     }
 
     public void DownloadFile(string fileName, string ItemName, string FilePath)
@@ -1647,6 +1986,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                 if (ddlIndentSlipNo.SelectedIndex == 0)
                 {
                     path = Docpath + "STORES\\REQUISITIONS\\REQ_" + (txtIndentSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ItemName.Trim();
+                    //  path = FilePath + "\\" + fileName;
                 }
                 else
                 {
@@ -1656,7 +1996,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
 
 
                 FileStream sourceFile = new FileStream((path + "\\" + fileName), FileMode.Open);
-
+                // FileStream sourceFile = new FileStream((path), FileMode.Open);
                 long fileSize = sourceFile.Length;
                 byte[] getContent = new byte[(int)fileSize];
                 sourceFile.Read(getContent, 0, (int)sourceFile.Length);
@@ -1678,6 +2018,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                 Showmessage("File Not Found.");
                 return;
             }
+
         }
         catch (Exception ex)
         {

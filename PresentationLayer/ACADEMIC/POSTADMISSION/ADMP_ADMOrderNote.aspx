@@ -605,7 +605,7 @@
              });
 
              if (value == 0) {
-                 alert("Please select at least one recored.");
+                 alert("Please select at least one record.");
                 return false;
              }
              else {

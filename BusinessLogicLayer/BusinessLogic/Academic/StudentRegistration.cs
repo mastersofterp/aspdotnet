@@ -6909,7 +6909,51 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
+        //added by ROHIT  SUMMER TERM
+        public int AddExamRegistered_Summer(StudentRegist objSR)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
 
+                //Add New eXAM Registered Subject Details
+                objParams = new SqlParameter[11];
+
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNOS);
+                objParams[3] = new SqlParameter("@P_BACK_COURSENOS", objSR.COURSENOS);
+                objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[5] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                //objParams[6] = new SqlParameter("@P_PREV_STATUS", Prev_status);
+                objParams[6] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[7] = new SqlParameter("@P_ROLLNO", objSR.ROLLNO);
+                objParams[8] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                objParams[9] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+
+                //object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_RESULT_FAIL_LIST_BACKLOG_REG", objParams, true);
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_RESULT_INSERT_FAIL_LIST_SUMMER", objParams, true);
+                //PKG_EXAM_RESULT_INSERT_FAIL_LIST_BACKLOG_REG
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
     }
 }
 

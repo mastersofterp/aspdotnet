@@ -8,6 +8,7 @@
 //=================================================================================
 
 using System;
+using System.Text;
 using System.IO;
 using System.Collections;
 using System.Configuration;
@@ -508,7 +509,127 @@ public partial class Administration_logDetais : System.Web.UI.Page
         }
     }
 
-    protected void btnDownload_Click(object sender, EventArgs e)
+    //protected void btnDownload_Click(object sender, EventArgs e)
+    //{
+        #region Old Logic
+    //try
+    //{
+    //    LogFile objLog = new LogFile();
+    //    objLog.Ua_Name = ddlName.Text.Trim();
+    //    SqlDataReader dr = LogTableController.GetLogDetail(objLog.Ua_Name);
+
+    //    string filename = Server.MapPath("~/error/LogDetails.txt");
+    //    using (StreamWriter sw = File.CreateText(filename))
+    //    {
+    //        // Add some text to the file
+    //        sw.WriteLine(" LogFile");
+    //        sw.WriteLine("=========");
+    //        sw.WriteLine(); 
+    //        //sw.WriteLine(" Date : " + DateTime.Today);
+    //        //sw.WriteLine();
+    //        sw.WriteLine(" User Name : " + objLog.Ua_Name);
+    //        sw.WriteLine();
+    //        sw.WriteLine(" Login Time \t\t\t Logout Time \t\t\t\t IP Address \t\t\t\t Mac Address");
+    //        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    //        while (dr.Read())
+    //        {
+    //            sw.WriteLine(" " + dr["logintime"] + " \t\t " + dr["logouttime"] + " \t\t\t " + dr["IPADDRESS"] +" \t\t\t\t" + dr["MACADDRESS"]);
+    //        }
+    //        if (dr != null) dr.Close();
+    //    }
+
+    //    //Download
+    //    //=======================================
+    //    Response.Clear();
+    //    Response.ContentType = "text/comma-separated-values";            
+    //    Response.AddHeader("Content-Disposition", "attachment; filename=LogDetails.txt");
+    //    Response.Flush();
+    //    Response.WriteFile(Server.MapPath("~/error/LogDetails.txt"));
+    //    Response.End();
+    //    Response.Close();            
+    //    //=======================================
+
+    //}
+    //catch (Exception ex)
+    //{
+    //    if (Convert.ToBoolean(Session["error"]) == true)
+    //        objUCommon.ShowError(Page, "logDetails.btnDownload_Click-> " + ex.Message + " " + ex.StackTrace);
+    //    else
+    //        objUCommon.ShowError(Page, "Server UnAvailable");
+    //}
+    #endregion Old Logic  
+
+    //    try
+    //    {
+    //        if (Convert.ToDateTime(txtFromdt.Text) <= Convert.ToDateTime(txtTodt.Text))
+    //        {
+    //            LogFile objLog = new LogFile();
+
+    //            objLog.Ua_Name = ddlName.Text.Trim();
+    //            //SqlDataReader dr = LogTableController.GetLogDetail(objLog.Ua_Name);
+    //            DataSet ds1 = LogTableController.GetAllLogFileDate(objLog, ddlName.SelectedItem.ToString(), txtFromdt.Text, txtTodt.Text);
+
+    //            if (ds1 != null)
+    //            {
+    //                if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+    //                {
+    //                    DataTableReader dr = null;
+    //                    dr = ds1.Tables[0].CreateDataReader();
+    //                    string filename = Server.MapPath("~/error/LogDetails.txt");
+    //                    using (StreamWriter sw = File.CreateText(filename))
+    //                    {
+    //                        // Add some text to the file
+    //                        sw.WriteLine(" LogFile");
+    //                        sw.WriteLine("=========");
+    //                        sw.WriteLine();
+    //                        //sw.WriteLine(" Date : " + DateTime.Today);
+    //                        //sw.WriteLine();
+    //                        sw.WriteLine(" User Name : " + objLog.Ua_Name);
+    //                        sw.WriteLine();
+    //                        sw.WriteLine(" Login Time \t\t\t Logout Time \t\t\t\t IP Address \t\t\t\t Mac Address");
+    //                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+    //                        while (dr.Read())
+    //                        {
+    //                            sw.WriteLine(" " + dr["logintime"] + " \t\t " + dr["logouttime"] + " \t\t\t " + dr["IPADDRESS"] + " \t\t\t\t" + dr["MACADDRESS"]);
+    //                        }
+    //                        if (dr != null) dr.Close();
+    //                    }
+
+    //                    //Download
+    //                    //=======================================
+    //                    Response.Clear();
+    //                    Response.ContentType = "text/comma-separated-values";
+    //                    Response.AddHeader("Content-Disposition", "attachment; filename=LogDetails.txt");
+    //                    Response.Flush();
+    //                    Response.WriteFile(Server.MapPath("~/error/LogDetails.txt"));
+    //                    Response.End();
+    //                    Response.Close();
+    //                    //=======================================
+    //                }
+    //                else
+    //                {
+    //                    ShowMessage("No Details found based on given selection.");
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            //ClientScript.RegisterStartupScript(GetType(), "alert", "<script>alert('From Date should be Smaller than To Date')</script>");
+    //            ShowMessage("From Date should be Smaller than To Date.");
+    //            lvList.DataSource = null;
+    //            lvList.DataBind();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objUCommon.ShowError(Page, "logDetails.btnDownload_Click-> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objUCommon.ShowError(Page, "Server UnAvailable");
+    //    }
+    //}
+
+    protected void btnDownload_Click(object sender, EventArgs e)    // Modified By Shrikant Waghmare on 04-10-2023 Because LogFile was not Downloading
     {
         #region Old Logic
         //try
@@ -556,64 +677,58 @@ public partial class Administration_logDetais : System.Web.UI.Page
         //    else
         //        objUCommon.ShowError(Page, "Server UnAvailable");
         //}
-        #endregion Old Logic
+        #endregion Old Logic  
 
         try
         {
             if (Convert.ToDateTime(txtFromdt.Text) <= Convert.ToDateTime(txtTodt.Text))
             {
                 LogFile objLog = new LogFile();
-
                 objLog.Ua_Name = ddlName.Text.Trim();
-                //SqlDataReader dr = LogTableController.GetLogDetail(objLog.Ua_Name);
+
                 DataSet ds1 = LogTableController.GetAllLogFileDate(objLog, ddlName.SelectedItem.ToString(), txtFromdt.Text, txtTodt.Text);
 
-                if (ds1 != null)
+                if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                 {
-                    if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
-                    {
-                        DataTableReader dr = null;
-                        dr = ds1.Tables[0].CreateDataReader();
-                        string filename = Server.MapPath("~/error/LogDetails.txt");
-                        using (StreamWriter sw = File.CreateText(filename))
-                        {
-                            // Add some text to the file
-                            sw.WriteLine(" LogFile");
-                            sw.WriteLine("=========");
-                            sw.WriteLine();
-                            //sw.WriteLine(" Date : " + DateTime.Today);
-                            //sw.WriteLine();
-                            sw.WriteLine(" User Name : " + objLog.Ua_Name);
-                            sw.WriteLine();
-                            sw.WriteLine(" Login Time \t\t\t Logout Time \t\t\t\t IP Address \t\t\t\t Mac Address");
-                            sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
-                            while (dr.Read())
-                            {
-                                sw.WriteLine(" " + dr["logintime"] + " \t\t " + dr["logouttime"] + " \t\t\t " + dr["IPADDRESS"] + " \t\t\t\t" + dr["MACADDRESS"]);
-                            }
-                            if (dr != null) dr.Close();
-                        }
+                    DataTableReader dr = null;
+                    dr = ds1.Tables[0].CreateDataReader();
+                    string directoryPath = Server.MapPath("~/error");
+                    string filename = Path.Combine(directoryPath, "LogDetails.txt");
 
-                        //Download
-                        //=======================================
-                        Response.Clear();
-                        Response.ContentType = "text/comma-separated-values";
-                        Response.AddHeader("Content-Disposition", "attachment; filename=LogDetails.txt");
-                        Response.Flush();
-                        Response.WriteFile(Server.MapPath("~/error/LogDetails.txt"));
-                        Response.End();
-                        Response.Close();
-                        //=======================================
-                    }
-                    else
+                    if (!Directory.Exists(directoryPath))
                     {
-                        ShowMessage("No Details found based on given selection.");
+                        Directory.CreateDirectory(directoryPath);
                     }
+
+                    using (StreamWriter sw = File.CreateText(filename))
+                    {
+                        sw.WriteLine(" LogFile");
+                        sw.WriteLine("=========");
+                        sw.WriteLine();
+                        sw.WriteLine(" User Name : " + objLog.Ua_Name);
+                        sw.WriteLine();
+                        sw.WriteLine(" Login Time \t\t\t Logout Time \t\t\t\t IP Address \t\t\t\t Mac Address");
+                        sw.WriteLine("-----------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+                        while (dr.Read())
+                        {
+                            sw.WriteLine(" " + dr["logintime"] + " \t\t " + dr["logouttime"] + " \t\t\t " + dr["IPADDRESS"] + " \t\t\t\t" + dr["MACADDRESS"]);
+                        }
+                    }
+
+                    Response.Clear();
+                    Response.ContentType = "text/comma-separated-values";
+                    Response.AddHeader("Content-Disposition", "attachment; filename=LogDetails.txt");
+                    Response.TransmitFile(filename);
+                    Response.End();
+                }
+                else
+                {
+                    ShowMessage("No Details found based on the given selection.");
                 }
             }
             else
             {
-                //ClientScript.RegisterStartupScript(GetType(), "alert", "<script>alert('From Date should be Smaller than To Date')</script>");
                 ShowMessage("From Date should be Smaller than To Date.");
                 lvList.DataSource = null;
                 lvList.DataBind();
@@ -621,12 +736,10 @@ public partial class Administration_logDetais : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "logDetails.btnDownload_Click-> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server UnAvailable");
+            ShowMessage("An error occurred: " + ex.Message);
         }
     }
+
     protected void btnExcelDetails_Click(object sender, EventArgs e)
     {
         DataSet dsLogDetails=(DataSet)ViewState["LogDetails"];

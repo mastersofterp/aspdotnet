@@ -73,8 +73,9 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
                     rptMarkCodes.Visible = true;
                     pnlSelection.Visible = false;
                 }
-
-                if (Convert.ToInt32(Session["userno"]) == 1)
+                int ua_type = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"])));
+                //if (Convert.ToInt32(Session["userno"]) == 1)
+                if (ua_type == 1)
                 {
                     objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
                 }
@@ -913,8 +914,12 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
         lvCourse.DataSource = null;
         lvCourse.DataBind();
         lvCourse.Visible = false;
-        this.ShowCourses();
-        this.GetStatus();
+        Div_ExamNameList.Visible = false;
+        if (ddlSubjectType.SelectedIndex > 0)
+        {
+            this.ShowCourses();
+            this.GetStatus();
+        }
     }
 
     protected void btnShow_Click(object sender, EventArgs e)
@@ -1600,7 +1605,9 @@ public partial class Academic_MarkEntryforIA_External_CC : System.Web.UI.Page
         Div_ExamNameList.Visible = false;
         if (Convert.ToInt32(ddlSession.SelectedValue) > 0)
         {
-            if (Convert.ToInt32(Session["userno"]) == 1)
+            int ua_type = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Convert.ToInt32(Session["userno"])));
+            //if (Convert.ToInt32(Session["userno"]) == 1)
+            if (ua_type == 1)
             {
                 objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", "DISTINCT S.SUBID", "SUBNAME", "S.SUBID > 0 AND ISNULL(S.ACTIVESTATUS,0)=1 AND R.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "");
             }

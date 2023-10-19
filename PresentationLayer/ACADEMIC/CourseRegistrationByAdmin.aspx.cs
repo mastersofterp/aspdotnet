@@ -209,6 +209,13 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             {
                 objSR.COURSENOS = objSR.COURSENOS.TrimEnd('$');
             }
+
+            if (flag == 1)
+            {
+                objCommon.DisplayMessage(updReg, "Please Select Atleast One Record.!!", this.Page);
+                return;
+            }
+
             objSR.Backlog_course = objSR.Backlog_course.TrimEnd('$');
             //if (objSR.COURSENOS.Length > 0 || objSR.Backlog_course.Length > 0 || objSR.Audit_course.Length > 0)
             //{
@@ -1438,9 +1445,37 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             int flag = 0;
             int ret = 0;
             int scount = 0;
+            int count = 0;
             StudentRegist objSR = new StudentRegist();
 
             objSR.EXAM_REGISTERED = 0;
+
+            foreach (ListItem Item in lboOfferCourse.Items)
+            {
+                if (Item.Selected)
+                {
+                    objSR.COURSENOS += Item.Value + "$";
+                    count++;
+                }
+            }
+
+            if (count <= 0)
+            {
+                objCommon.DisplayMessage(this.Page, "Please Check atleast one Course.", this.Page);
+                return;
+            }
+            count = 0;
+            foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
+            {
+                CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
+                if (cbRow.Checked == true) count++;
+            }
+            
+            if (count <= 0)
+            {
+                objCommon.DisplayMessage(this.Page, "Please Check atleast one Student.", this.Page);
+                return;
+            }
 
             foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
             {
@@ -1448,18 +1483,6 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
                 if (cbRow.Checked == true)
                 {
-                    int count = 0;
-                   
-                    foreach (ListItem Item in lboOfferCourse.Items)
-                    {
-                        if (Item.Selected)
-                        {
-                            objSR.COURSENOS += Item.Value + "$";
-                            count++;
-
-                        }
-                    }
-
                     //if (objSR.COURSENOS == null)
                     //{
                     //    objSR.COURSENOS = "0";

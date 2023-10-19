@@ -285,6 +285,12 @@
                                                                                 </th>
                                                                                 <th>Mobile No.
                                                                                 </th>
+                                                                                <th>
+                                                                                    Final Submit Status
+                                                                                </th>
+                                                                                <th>
+                                                                                    Lock/Unlock Status
+                                                                                </th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -327,6 +333,12 @@
                                                                 </td>
                                                                 <td>
                                                                     <%#Eval("STUDENTMOBILE") %>
+                                                                </td>
+                                                                <td>
+                                                                    <asp:Label ID="lblFinalSubmitStatus" style="text-align:center; vertical-align:middle;" Font-Bold="true" runat="server" ForeColor="Green" Text='<%# Eval("FINAL_SUBMIT_STATUS")%>'></asp:Label>
+                                                                </td>
+                                                                <td>
+                                                                    <asp:Label ID="lblLockUnlockStatus" style="text-align:center; vertical-align:middle;" Font-Bold="true" runat="server" ForeColor='Green' Text='<%# Eval("LOCK/UNLOCK_STATUS")%>'></asp:Label>
                                                                 </td>
                                                             </tr>
                                                         </ItemTemplate>

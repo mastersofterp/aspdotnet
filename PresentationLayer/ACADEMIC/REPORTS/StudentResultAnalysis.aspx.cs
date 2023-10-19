@@ -384,8 +384,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         updPopUp_6.Update();
     }
 
-
-
     protected void btnConsolidatedInternalTestMarkReport_Click(object sender, EventArgs e)
     {
         //if (txtFromDate.Text == string.Empty)
@@ -404,9 +402,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#ConsolidatedModel_2').modal('show');</script>", false);
         updPopUp_2.Update();
     }
-
-
-
 
     protected void btnCATInternalMarks_Click(object sender, EventArgs e)
     {
@@ -480,10 +475,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     }
 
-
-
-
-
     protected void lbtn_ConsoPrint_Internal_Click(object sender, EventArgs e)
     {
         string reportTitle = "CONSOLIDATED_INTERNAL_TEST_MARK_REPORT";
@@ -507,8 +498,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
-
 
     protected void lbtn_ConsoExcel_Internal_Click(object sender, EventArgs e)
     {
@@ -552,15 +541,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
 
     }
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
     protected void lbtn_ConsoReport_Print_Click(object sender, EventArgs e)
     {
@@ -608,6 +588,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
     protected void lbtn_ConsoReport_Excel_Click(object sender, EventArgs e)
     {
         if (ddlSem.SelectedIndex == 0)
@@ -649,13 +630,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
-
-
-
-
-
-
+    
     /*
     private void ShowReportBlankTR(string reportTitle, string rptFileName)
     {
@@ -1491,6 +1466,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }*/
+
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
         ddlSem.Items.Clear();
@@ -1629,6 +1605,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         }
 
     }
+
     protected void btnGraderpt_Click(object sender, EventArgs e)
     {
         if (ddlSem.SelectedIndex == 0)
@@ -2044,6 +2021,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnOverAllPercentage_Click(object sender, EventArgs e)
     {
         ShowReportOverall("OverAll_Percentage", "rptOverAllPercentage.rpt");
@@ -2160,6 +2138,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
     protected void btnBranchSemAnalysis_Click(object sender, EventArgs e)
     {
         if (ddlClgname.SelectedIndex == 0)
@@ -2295,6 +2274,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
         }
     }
+
     protected void btnFailStudentList_Click(object sender, EventArgs e)
     {
         ShowTR("FailStudentList", "rptStudentFailedList.rpt", 3);
@@ -2811,7 +2791,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
     //    }
     //}
 
-
     protected void btnCGPAReport_Click(object sender, EventArgs e) //Added by Tejas Thakre 12_06_2023
     {
 
@@ -2908,6 +2887,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSem.Focus();
         }
     }
+
     protected void btnCourseWiseExamRegistartion_Click(object sender, EventArgs e)
     {
         try
@@ -2949,6 +2929,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnSubjectWiseResultanalysisReport_Click(object sender, EventArgs e)
     {
         string reportTitle = "Analysis Report";
@@ -2978,5 +2959,48 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+    protected void btnsubtituteexamexcel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string proc_ = "PKG_ACAD_SUBSTITUTE_EXAM_REGISTERED_REPORT";
+            string para_ = "@P_SCHEMENO,@P_SESSIONNO,@P_SEMESTERNO,@P_UA_NO";
+            string value = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(Session["userno"]);
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+
+            GridView GVStudData = new GridView();
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                GVStudData.DataSource = ds;
+                GVStudData.DataBind();
+
+                string attachment = "attachment;filename=Substitute Exam Registered Report.xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.Charset = "";
+                Response.ContentType = "application/ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                GVStudData.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+
+            }
+            else
+            {
+                objCommon.DisplayMessage("No Substitute Registration Data Found", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_btnsubtituteexamexcel_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+  
 }
 

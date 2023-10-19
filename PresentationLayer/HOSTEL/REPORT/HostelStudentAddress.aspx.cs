@@ -202,7 +202,10 @@ public partial class Academic_HostelStudentAddress : System.Web.UI.Page
     {
         try
         {
-            string attachment = "attachment; filename=" + "HostelStudentAddress.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "HostelStudentAddress.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "HostelStudentAddress.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";

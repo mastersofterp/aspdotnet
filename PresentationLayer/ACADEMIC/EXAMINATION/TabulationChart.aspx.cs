@@ -128,6 +128,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+
+                //divYear.Visible = true;
+                //btnElibilityReport.Visible = true;
+
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -161,6 +165,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = true;
                 btnLedger.Visible = true; // ADDED BY SHUBHM ON 18-08-2023
                 btnGradeCardIssueRegister.Visible = true;
+                divYear.Visible = true;
+                btnElibilityReport.Visible = true;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
             {
@@ -275,6 +281,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+               
 
             }
         }
@@ -498,6 +505,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         ////objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT C.COLLEGE_ID", "C.COLLEGE_NAME", "C.COLLEGE_ID > 0 AND CD.UGPGOT IN (" + Session["ua_section"] + ") ", "C.COLLEGE_ID");
         //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER C WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.COLLEGE_ID=C.COLLEGE_ID)", "DISTINCT C.COLLEGE_ID", "C.COLLEGE_NAME", "C.COLLEGE_ID > 0", "C.COLLEGE_ID");
         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
+        objCommon.FillDropDownList(ddlYears, "ACD_YEAR WITH (NOLOCK)", "YEAR", "YEARNAME", "YEAR > 0 and isnull(ACTIVESTATUS,0)=1", "YEAR");
         //objCommon.FillDropDownList(ddlAdmbatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNO DESC");
     }
 
@@ -4657,6 +4665,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         lvStudent.DataBind();
         pnlStudent.Visible = false;
         ddlSession.SelectedIndex = 0;
+        ddlYears.SelectedIndex = 0;
 
     }
 
@@ -5892,4 +5901,53 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         else return retIDNO;
 
     }
+
+
+    protected void btnElibilityReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
+            int Yearno = Convert.ToInt32(ddlYears.SelectedValue);
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + "Eligibility Report";
+            if (Yearno == 1)
+            {
+                url += "&path=~,Reports,Academic," + "rptSemPromotion_I.rpt";
+            }
+            else if (Yearno == 2)
+            {
+                url += "&path=~,Reports,Academic," + "rptSemPromotion_II.rpt";
+            }
+            else if (Yearno == 3)
+            {
+                url += "&path=~,Reports,Academic," + "rptSemPromotion_III.rpt";
+
+            }
+            else
+            {
+                url += "&path=~,Reports,Academic," + "rptSemPromotion_IV.rpt";
+            }
+
+            url += "&param=@P_SCHEMENO=" + schemeno + ",@P_YEAR	=" + Yearno;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_CourseRegistration.btnElibilityReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
+
+
+    }
+
 }

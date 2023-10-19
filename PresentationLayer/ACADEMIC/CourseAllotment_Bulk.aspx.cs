@@ -2962,6 +2962,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
         try
         {
             int _count = 0;
+            int TimeTableCount = 0;
             CheckBox chk = sender as CheckBox;
 
             ListViewItem item = (ListViewItem)chk.NamingContainer;
@@ -2970,15 +2971,25 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             HiddenField hdnSection = (HiddenField)item.FindControl("hdnSectionCT");
             HiddenField hdnBatchNo = (HiddenField)item.FindControl("hdnBatchCT");
             HiddenField hdnUANO = (HiddenField)item.FindControl("hdnTeacherCT");
+            
             string cName = string.Empty;
             cName = objCommon.LookUp("ACD_COURSE WITH (NOLOCK)", "CCODE+' - ['+COURSE_NAME+']'", "COURSENO=" + Convert.ToInt32(hdnCourseNo.Value));
             int CTNO = Convert.ToInt32(chk1.ToolTip);
             if (chk1.Checked)
             {
+     
                 _count = objCommon.LookUp("ACD_ATTENDANCE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)"));
                 if (Convert.ToInt32(_count) > 0)
                 {
                     objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, as this faculty has already taken attendance for subject - " + cName, this.Page);
+                    chk1.Checked = false;
+                    return;
+                }
+
+                TimeTableCount = Convert.ToInt32(objCommon.LookUp("ACD_TIME_TABLE_CONFIG WITH (NOLOCK)", "COUNT(1)", "CTNO=" + CTNO));
+                if (Convert.ToInt32(TimeTableCount) > 0)
+                {
+                    objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, TimeTable is already created for this Faculty.", this.Page);
                     chk1.Checked = false;
                     return;
                 }

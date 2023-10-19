@@ -651,6 +651,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
 
     protected void btnTranscriptWithFormat_Click(object sender, EventArgs e)  // Added for Tejas Thakre 11_09_2023 for Common Code
     {
+
         ShowTranscriptReport("AllTranscript", "rpt_Transcript_Report.rpt");
     }
 

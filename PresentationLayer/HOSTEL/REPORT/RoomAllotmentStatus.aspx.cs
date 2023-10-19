@@ -285,7 +285,10 @@ public partial class Academic_RoomAllotmentStatus : System.Web.UI.Page
         }
         try
         {
-            string attachment = "attachment; filename=" + "RoomAllotmentStatus.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "RoomAllotmentStatus.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "RoomAllotmentStatus.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -348,7 +351,10 @@ public partial class Academic_RoomAllotmentStatus : System.Web.UI.Page
         }
         try
         {
-            string attachment = "attachment; filename=" + "StudentListForHostel.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "StudentListForHostel.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "StudentListForHostel.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -411,7 +417,10 @@ public partial class Academic_RoomAllotmentStatus : System.Web.UI.Page
         }
         try
         {
-            string attachment = "attachment; filename=" + "VacantReportOfRoom.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "VacantReportOfRoom.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "VacantReportOfRoom.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";

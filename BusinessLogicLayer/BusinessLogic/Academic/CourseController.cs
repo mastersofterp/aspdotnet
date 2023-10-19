@@ -4522,6 +4522,25 @@ namespace IITMS
                     return ds;
                 }
 
+                public DataSet GetAllStudentWiseCourseRegistrationSummaryReportExcelData(int sessionid, string collegenos)
+                    {
+                    DataSet ds = null;
+                    try
+                        {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_SESSION_ID", sessionid);
+                        objParams[1] = new SqlParameter("@P_COLLEGE_ID", collegenos);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_COURSE_REGISTRATION_STUDENT_SUMMARY_DETAILS_EXCEL", objParams);
+                        }
+                    catch (Exception ex)
+                        {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetAllCourseRegistrationData-> " + ex.ToString());
+                        }
+                    return ds;
+                    }
+
                 public int InActiveGlobalOfferedCoursesTeacherAllotment(int sessionno, int courseno, int ua_no, string IpAddress, int Modifiedby)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);

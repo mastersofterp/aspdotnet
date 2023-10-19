@@ -167,7 +167,10 @@ public partial class HOSTEL_REPORT_HostelStudentInformation : System.Web.UI.Page
     {
         try
         {
-            string attachment = "attachment; filename=" + "HostelStudInformation.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "HostelStudInformation.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "HostelStudInformation.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";

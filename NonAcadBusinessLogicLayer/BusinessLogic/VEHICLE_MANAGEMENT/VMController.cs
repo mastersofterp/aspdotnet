@@ -1657,8 +1657,10 @@ namespace IITMS
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_VEH_FUELENTRY_INS_UPD", objParams, true);
                         if (Convert.ToInt32(ret) == -99)
                             retstatus = Convert.ToInt32(CustomStatus.Error);
-                        else
+                        else if (Convert.ToInt32(ret) == 1)
                             retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordExist);
                     }
                     catch (Exception ex)
                     {

@@ -2115,6 +2115,76 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
         ScriptManager.RegisterClientScriptBlock(updFee, updFee.GetType(), "Src", "ShowDropDown();", true);
     }
 
+    //protected void del_Click(object sender, ImageClickEventArgs e)
+    //{
+    //    //lstSemester.SelectedValue = null;
+    //    ImageButton btnDelete = sender as ImageButton;
+    //    int FID = int.Parse(btnDelete.CommandArgument);
+    //    SqlDataReader dr = Exm.GetFeeDetails(FID);
+
+    //    if (dr != null)
+    //    {
+    //        if (dr.Read())
+    //        {
+    //            //int ClgId = Convert.ToInt32(dr["college_id"]);
+    //            //int ClgId = (dr["college_id"] != null && Convert.ToInt32(dr["college_id"]) > 0) ? Convert.ToInt32(dr["college_id"]) : 0;
+    //            //int ClgId = (dr["college_id"] != null && Convert.ToInt32(dr["college_id"]) > 0) ? 0 : Convert.ToInt32(dr["college_id"]);
+    //            int ClgId = Convert.ToInt32(dr["college_id"] == DBNull.Value ? 0 : Convert.ToInt32(dr["college_id"]));
+
+    //            //ddlCollege_SelectedIndexChanged(new object(), new EventArgs());
+
+    //            //int Sessionno = Convert.ToInt32(dr["sessionno"]);
+    //            int Sessionno = Convert.ToInt32(dr["sessionno"] == DBNull.Value ? 0 : Convert.ToInt32(dr["sessionno"]));
+
+    //            int FeeType = Convert.ToInt32(dr["FEETYPE"]);
+    //            int Degreeno = Convert.ToInt32(dr["degreeno"]);
+    //            string txt = dr["ApplicableFee"].ToString();
+
+    //            //int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]);
+    //            int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]));
+
+    //            if (txtconformmessageValue.Value == "Yes")
+    //            {
+    //                CustomStatus cs = (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);
+
+    //                if (cs.Equals(CustomStatus.RecordSaved))
+    //                {
+    //                    objCommon.DisplayMessage(this, "Record Cancel Successfully...!!!", this.Page);
+    //                    Load();
+    //                    lvFee.Visible = false;
+    //                    divCredit.Visible = false;
+    //                    divCourse.Visible = false;
+    //                    lvSem.Visible = false;
+    //                    divRenge.Visible = false;
+    //                    return;
+    //                }
+    //                else
+    //                {
+    //                    objCommon.DisplayMessage(this, "Something Went Wrong...!!!", this.Page);
+    //                    Load();
+    //                    lvFee.Visible = false;
+    //                    divCredit.Visible = false;
+    //                    divCourse.Visible = false;
+    //                    lvSem.Visible = false;
+    //                    divRenge.Visible = false;
+    //                    return;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                //objCommon.DisplayMessage(this, "Something went Wrong..", this.Page);
+    //                Load();
+    //                lvFee.Visible = false;
+    //                divCredit.Visible = false;
+    //                divCourse.Visible = false;
+    //                lvSem.Visible = false;
+    //                divRenge.Visible = false;
+    //                return;
+    //            }
+    //        }
+    //    }
+    //}
+
     protected void del_Click(object sender, ImageClickEventArgs e)
     {
         //lstSemester.SelectedValue = null;
@@ -2140,14 +2210,38 @@ public partial class ACADEMIC_EXAMINATION_Exam_Fee_Config : System.Web.UI.Page
                 int Degreeno = Convert.ToInt32(dr["degreeno"]);
                 string txt = dr["ApplicableFee"].ToString();
 
+                //int hdfExamRegistered =
                 //int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]);
                 int FeeStru = Convert.ToInt32(dr["FEESTRUCTURE_TYPE"] == DBNull.Value ? 0 : Convert.ToInt32(dr["FEESTRUCTURE_TYPE"]));
 
                 if (txtconformmessageValue.Value == "Yes")
                 {
-                    CustomStatus cs = (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);
 
-                    if (cs.Equals(CustomStatus.RecordSaved))
+
+                    // DataSet dsStudent;
+
+                    string SP_Name = "PKG_CANCEL_FEE_DEFINATION_CC";
+                    string SP_Parameters = "@P_FID,@P_OUT";
+                    string Call_Values = "" + FID + "," + 0 + "";// +"," + Convert.ToInt16(ViewState["sem"]) + "," +
+                    string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                    // dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values,true);
+
+                    // string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+
+
+                    // return;
+                    // CustomStatus cs = string.Empty;// (CustomStatus)Exm.FeeDelete(ClgId, Sessionno, FeeType, Degreeno, FeeStru);//commented by gaurav
+
+
+
+                    // string SP_Name = "PKG_CANCEL_FEE_DEFINATION_CC";
+                    // string SP_Parameters = "@P_FID";
+                    // string Call_Values = "" + + "";// +"," + Convert.ToInt16(ViewState["sem"]) + "," +
+                    // dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+
+                    //if (que_out.Equals(1))
+                    if (que_out == "1")
                     {
                         objCommon.DisplayMessage(this, "Record Cancel Successfully...!!!", this.Page);
                         Load();

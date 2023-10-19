@@ -44,8 +44,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
     UAIMS_Common objUCommon = new UAIMS_Common();
     LeavesController objApp = new LeavesController();
     Leaves objLM = new Leaves();
-    
-    
+
+
     string leave_code = string.Empty;
     static string leavename = string.Empty;
     static double balance_leave = 0;
@@ -1119,7 +1119,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
             Boolean IsClassArrangeRequired = Convert.ToBoolean(ViewState["IsClassArrangeRequired"]);
             Boolean IsClassArrangeAcceptanceRequired = Convert.ToBoolean(ViewState["IsClassArrangeAcceptanceRequired"]);
             //if (IsClassArrangeRequired == true || IsClassArrangeAcceptanceRequired == true)
-            if (IsClassArrangeRequired == true )
+            if (IsClassArrangeRequired == true)
             {
                 pnlEngaged.Visible = true;
                 //PnlAddEngaged.Visible = true;
@@ -1900,7 +1900,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
 
 
 
-                    SendEmailCommon objSendEmail = new SendEmailCommon(); 
+                    SendEmailCommon objSendEmail = new SendEmailCommon();
                     int status = 0;
                     try
                     {
@@ -2268,7 +2268,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                     {
                         MessageBox("Please Fill Load Detail.");
                         return;
-                    }                  
+                    }
                 }
             }
 
@@ -2309,7 +2309,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                     objLeaves.STATUS = "P";
                     //double cal = Convert.ToDouble(objCommon.LookUp("PAYROLL_LEAVE", "CAL", "LNO=" + Convert.ToInt32(ViewState["LNO"].ToString())));
                     // double cal = Convert.ToDouble(objCommon.LookUp("PAYROLL_LEAVE", "CAL", "LEAVENO=" + Convert.ToInt32(ViewState["LNO"].ToString()) + " AND STNO=" + stafftypeno));
-                    
+
                     //double cal = Convert.ToDouble(ViewState["CAL"]);
                     //double noofdays = Convert.ToDouble(txtNodays.Text);
                     objLeaves.SESSION_SERVICE_SRNO = Convert.ToInt32(ViewState["SESSION_SERVICE_SRNO"]);
@@ -2835,6 +2835,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                     {
                         int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
                         int collegeno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "college_no", "IDNO=" + Convert.ToInt32(Session["idno"])));
+                        Boolean Is_SHift_mgt = Convert.ToBoolean(objCommon.LookUp("PAYROLL_EMPMAS", "isnull(IS_SHIFT_MANAGMENT,0)as IS_SHIFT_MANAGMENT", "IDNO=" + Convert.ToInt32(Session["idno"])));
                         if (ViewState["SESSION_SRNO"].ToString().Trim() != "0".ToString().Trim())
                         {
                             //select * from payroll_leave_session WHERE '2017-07-12' BETWEEN FDT AND TDT AND SESSION_SRNO=1
@@ -2875,192 +2876,197 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                         //Added  by Sonal Banode on 29-10-200
                         int offdays = Convert.ToInt32(objCommon.LookUp("PAYROLL_LEAVE_REF", "ISNULL(OffDayNumber,0)AS OffDayNumber", ""));
                         //
+                        //Added by Sonal Banode
+                        //
                         //////////////////////////////////////////////////////////////////////
-                        if (Convert.ToDateTime(txtFromdt.Text) == Convert.ToDateTime(txtTodt.Text))
+                        if (Is_SHift_mgt == false)
                         {
-                            // DataSet dsHoliday = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='N' AND STNO IN(0," + stno + ")", "");
-                            if (ViewState["LEAVE"] != null)
+                            if (Convert.ToDateTime(txtFromdt.Text) == Convert.ToDateTime(txtTodt.Text))
                             {
-                                if (ViewState["LEAVE"].ToString() != "RH")
+                                // DataSet dsHoliday = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='N' AND STNO IN(0," + stno + ")", "");
+                                if (ViewState["LEAVE"] != null)
                                 {
-                                    DataSet dsHoliday = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='N' AND STNO IN(0," + stno + ")" + "AND college_no =" + Convert.ToInt32(collegeno), "");
-                                    if (dsHoliday.Tables[0].Rows.Count > 0 && workdays <= 0)
+                                    if (ViewState["LEAVE"].ToString() != "RH")
                                     {
-                                        MessageBox("Sorry! Leave Not allowed on Holiday");
-                                        btnSave.Enabled = false;
-                                        clearcancel();
-                                        return;
-                                    }
-                                    string dayname = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
-                                    if (dayname == "Sunday" && workdays <= 0)
-                                    {
-                                        MessageBox("Sorry! Leave Not allowed on Sunday");
-                                        btnSave.Enabled = false;
-                                        return;
-                                    }
-                                    if (dayname == "Saturday" && workdays <= 0 && offdays == 6)
-                                    {
-                                        MessageBox("Sorry ! Leave not allowed on Saturday");
-                                        btnSave.Enabled = false;
-                                        return;
-                                    }
-
-                                    //if (dayname == "Monday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                                    //{
-                                    //    MessageBox("Sorry ! Leave not allowed From Monday");
-                                    //    btnSave.Enabled = false;
-                                    //    return;
-                                    //}
-
-                                    //if (dayname == "Thursday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                                    //{
-                                    //    MessageBox("Sorry ! Leave not allowed From Thursday");
-                                    //    btnSave.Enabled = false;
-                                    //    return;
-                                    //}
-                                    //if (dayname == "Friday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                                    //{
-                                    //    MessageBox("Sorry ! Leave not allowed From Friday");
-                                    //    btnSave.Enabled = false;
-                                    //    return;
-                                    //}
-
-                                }
-                                else if (ViewState["LEAVE"].ToString() == "RH")
-                                {
-                                    if (Convert.ToDateTime(txtFromdt.Text) == Convert.ToDateTime(txtTodt.Text))
-                                    {
-                                        DataSet dsHoliday1 = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='Y'  AND STNO IN(0," + stno + ")" + "AND college_no =" + Convert.ToInt32(collegeno), "");
-                                        if (dsHoliday1.Tables[0].Rows.Count > 0)
+                                        DataSet dsHoliday = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='N' AND STNO IN(0," + stno + ")" + "AND college_no =" + Convert.ToInt32(collegeno), "");
+                                        if (dsHoliday.Tables[0].Rows.Count > 0 && workdays <= 0)
                                         {
-
-                                        }
-                                        else
-                                        {
-                                            MessageBox("This is not a Restricted Holiday!!Please Check");
+                                            MessageBox("Sorry! Leave Not allowed on Holiday");
                                             btnSave.Enabled = false;
+                                            clearcancel();
                                             return;
                                         }
-                                        string dayname1 = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
-                                        if (dayname1 == "Sunday" && workdays <= 0)
+                                        string dayname = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
+                                        if (dayname == "Sunday" && workdays <= 0)
                                         {
                                             MessageBox("Sorry! Leave Not allowed on Sunday");
                                             btnSave.Enabled = false;
                                             return;
                                         }
-                                        if (dayname1 == "Saturday" && workdays <= 0 && offdays == 6)
+                                        if (dayname == "Saturday" && workdays <= 0 && offdays == 6)
                                         {
-                                            MessageBox("Sorry! Leave Not allowed on Saturday");
+                                            MessageBox("Sorry ! Leave not allowed on Saturday");
                                             btnSave.Enabled = false;
                                             return;
                                         }
-                                        //Added BY SHrikant Bharne  
-                                        DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
-                                        if (dsRH.Tables[0].Rows.Count > 0)
-                                        {
-                                            int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
 
-                                            if (valid == 0)
+                                        //if (dayname == "Monday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                        //{
+                                        //    MessageBox("Sorry ! Leave not allowed From Monday");
+                                        //    btnSave.Enabled = false;
+                                        //    return;
+                                        //}
+
+                                        //if (dayname == "Thursday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                        //{
+                                        //    MessageBox("Sorry ! Leave not allowed From Thursday");
+                                        //    btnSave.Enabled = false;
+                                        //    return;
+                                        //}
+                                        //if (dayname == "Friday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                        //{
+                                        //    MessageBox("Sorry ! Leave not allowed From Friday");
+                                        //    btnSave.Enabled = false;
+                                        //    return;
+                                        //}
+
+                                    }
+                                    else if (ViewState["LEAVE"].ToString() == "RH")
+                                    {
+                                        if (Convert.ToDateTime(txtFromdt.Text) == Convert.ToDateTime(txtTodt.Text))
+                                        {
+                                            DataSet dsHoliday1 = objCommon.FillDropDown("payroll_holidays_vacation", "DATE", "STNO", "DATE='" + Convert.ToDateTime(txtFromdt.Text).ToString("yyyy-MM-dd") + "' and isnull(RESTRICT_STATUS,'N')='Y'  AND STNO IN(0," + stno + ")" + "AND college_no =" + Convert.ToInt32(collegeno), "");
+                                            if (dsHoliday1.Tables[0].Rows.Count > 0)
                                             {
-                                                MessageBox("Please Check Restricted Holiday Date");
-                                                txtTodt.Text = string.Empty;
+
                                             }
                                             else
                                             {
-
-                                            }
-                                        }
-                                        ///////////////////////////
-                                    }
-                                    else
-                                    {
-                                        //MessageBox("This is not a Restricted Holiday!!Please Check");
-                                        //btnSave.Enabled = false;
-                                        //return;
-                                        /// Added By Shrikant Bharne for Countinues to Take Restricated Holiday leave in countinetion if it is Restricated.
-                                        DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
-                                        if (dsRH.Tables[0].Rows.Count > 0)
-                                        {
-                                            int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
-
-                                            if (valid == 0)
-                                            {
-                                                MessageBox("Please Check Restricted Holiday Date");
-                                                //txtTodt.Text = string.Empty;
+                                                MessageBox("This is not a Restricted Holiday!!Please Check");
                                                 btnSave.Enabled = false;
                                                 return;
+                                            }
+                                            string dayname1 = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
+                                            if (dayname1 == "Sunday" && workdays <= 0)
+                                            {
+                                                MessageBox("Sorry! Leave Not allowed on Sunday");
+                                                btnSave.Enabled = false;
+                                                return;
+                                            }
+                                            if (dayname1 == "Saturday" && workdays <= 0 && offdays == 6)
+                                            {
+                                                MessageBox("Sorry! Leave Not allowed on Saturday");
+                                                btnSave.Enabled = false;
+                                                return;
+                                            }
+                                            //Added BY SHrikant Bharne  
+                                            DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
+                                            if (dsRH.Tables[0].Rows.Count > 0)
+                                            {
+                                                int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
+
+                                                if (valid == 0)
+                                                {
+                                                    MessageBox("Please Check Restricted Holiday Date");
+                                                    txtTodt.Text = string.Empty;
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                            }
+                                            ///////////////////////////
+                                        }
+                                        else
+                                        {
+                                            //MessageBox("This is not a Restricted Holiday!!Please Check");
+                                            //btnSave.Enabled = false;
+                                            //return;
+                                            /// Added By Shrikant Bharne for Countinues to Take Restricated Holiday leave in countinetion if it is Restricated.
+                                            DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
+                                            if (dsRH.Tables[0].Rows.Count > 0)
+                                            {
+                                                int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
+
+                                                if (valid == 0)
+                                                {
+                                                    MessageBox("Please Check Restricted Holiday Date");
+                                                    //txtTodt.Text = string.Empty;
+                                                    btnSave.Enabled = false;
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    btnSave.Enabled = true;
+                                                }
+
                                             }
                                             else
                                             {
                                                 btnSave.Enabled = true;
                                             }
+                                        }
+                                    }
+                                }
+                            }
 
+                            else
+                            {
+                                //string dayname = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
+                                //if (dayname == "Monday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                //{
+                                //    MessageBox("Sorry ! Leave not allowed From Monday");
+                                //    btnSave.Enabled = false;
+                                //    return;
+                                //}
+
+                                //if (dayname == "Thursday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                //{
+                                //    MessageBox("Sorry ! Leave not allowed From Thursday");
+                                //    btnSave.Enabled = false;
+                                //    return;
+                                //}
+                                //if (dayname == "Friday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
+                                //{
+                                //    MessageBox("Sorry ! Leave not allowed From Friday");
+                                //    btnSave.Enabled = false;
+                                //    return;
+                                //}
+
+
+                                if (ViewState["LEAVE"].ToString() == "RH")
+                                {
+                                    /// Added By Shrikant Bharne for Countinues to Take Restricated Holiday leave in countinetion if it is Restricated.
+                                    DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
+                                    if (dsRH.Tables[0].Rows.Count > 0)
+                                    {
+                                        int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
+
+                                        if (valid == 0)
+                                        {
+                                            MessageBox("Please Check Restricted Holiday Date");
+                                            //txtTodt.Text = string.Empty;
+                                            btnSave.Enabled = false;
+                                            return;
                                         }
                                         else
                                         {
                                             btnSave.Enabled = true;
                                         }
-                                    }
-                                }
-                            }
-                        }
 
-                        else
-                        {
-                            //string dayname = Convert.ToDateTime(txtFromdt.Text).DayOfWeek.ToString();
-                            //if (dayname == "Monday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                            //{
-                            //    MessageBox("Sorry ! Leave not allowed From Monday");
-                            //    btnSave.Enabled = false;
-                            //    return;
-                            //}
-
-                            //if (dayname == "Thursday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                            //{
-                            //    MessageBox("Sorry ! Leave not allowed From Thursday");
-                            //    btnSave.Enabled = false;
-                            //    return;
-                            //}
-                            //if (dayname == "Friday" && Convert.ToBoolean(ViewState["isValidatedays"]) == true)
-                            //{
-                            //    MessageBox("Sorry ! Leave not allowed From Friday");
-                            //    btnSave.Enabled = false;
-                            //    return;
-                            //}
-
-
-                            if (ViewState["LEAVE"].ToString() == "RH")
-                            {
-                                /// Added By Shrikant Bharne for Countinues to Take Restricated Holiday leave in countinetion if it is Restricated.
-                                DataSet dsRH = objApp.GetRestricatedHoliday(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
-                                if (dsRH.Tables[0].Rows.Count > 0)
-                                {
-                                    int valid = Convert.ToInt32(dsRH.Tables[0].Rows[0]["VALID"].ToString());
-
-                                    if (valid == 0)
-                                    {
-                                        MessageBox("Please Check Restricted Holiday Date");
-                                        //txtTodt.Text = string.Empty;
-                                        btnSave.Enabled = false;
-                                        return;
                                     }
                                     else
                                     {
                                         btnSave.Enabled = true;
                                     }
-
                                 }
                                 else
                                 {
                                     btnSave.Enabled = true;
                                 }
-                            }
-                            else
-                            {
-                                btnSave.Enabled = true;
-                            }
 
 
+                            }
                         }
                         Boolean IsValidDate = Convert.ToBoolean(ViewState["isValidatedays"].ToString());
                         if (IsValidDate == true)
@@ -3263,7 +3269,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             string join = string.Empty;
 
                             objlv.JOINDT = Convert.ToDateTime(txtJoindt.Text);
-                            objlv.FROMDT = Convert.ToDateTime(txtFromdt.Text); 
+                            objlv.FROMDT = Convert.ToDateTime(txtFromdt.Text);
                             objlv.NO_DAYS = days;
                             objlv.STNO = stno;
                             objlv.COLLEGE_NO = Convert.ToInt32(ViewState["COLLEGE_NO"].ToString());
@@ -3294,7 +3300,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             if (IsRequiredLoad == true)
                             {
                                 pnlFacLoad.Visible = true;
-                                
+
                                 ShowEmployeeSchedule(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text));
                             }
                             else
@@ -3304,8 +3310,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             //Added by Sonal Banode 10-04-2023
                             //if (ViewState["action"].ToString().Equals("add"))
                             //{
-                                
-                          
+
+
 
                             #region CL_VALIDATION1
                             //if (Convert.ToString(ViewState["LEAVE_CODE"]).Trim() == "CL".ToString().Trim() || ViewState["LEAVE_CODE"] == "cl")
@@ -3413,7 +3419,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
 
                             ///Newly Added by Shrikant B on 18-08-2023 for 
                             //===========================new code for Leave prefix and suffix==================================//
-                            Boolean IsValidatedLeaveComb = Convert.ToBoolean(objCommon.LookUp("Payroll_leave_ref", "isnull(IsValidatedLeaveComb,0) as IsValidatedLeaveComb",""));
+                            Boolean IsValidatedLeaveComb = Convert.ToBoolean(objCommon.LookUp("Payroll_leave_ref", "isnull(IsValidatedLeaveComb,0) as IsValidatedLeaveComb", ""));
 
                             if (IsValidatedLeaveComb)
                             {
@@ -4459,12 +4465,12 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
 
         int ret = 0;
         int empid = Convert.ToInt32(Session["idno"]);
-        double Balance=0;
-        string LeaveName="";       
+        double Balance = 0;
+        string LeaveName = "";
         int leaveno = Convert.ToInt32(ViewState["LEAVENO"]);
         DataSet ds = objApp.GetLeavesStatusForLWPApply(empid, YEAR, 0);
         if (ds.Tables[0].Rows.Count > 0)
-        {           
+        {
 
             for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
             {
@@ -4478,8 +4484,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                 }
             }
 
-            
-        }       
+
+        }
         return ret;
     }
 
@@ -4518,7 +4524,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                         string Joindt = ds.Tables[1].Rows[i]["Joindt"].ToString();
                         string toEmailId = ds.Tables[1].Rows[i]["EMAILID"].ToString();
                         string Sub = "Notification for Charge Notification";
-                       
+
 
                         string leavename = ds.Tables[1].Rows[i]["Leave_Name"].ToString();
 
@@ -4529,7 +4535,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                                    + "and you have been assigned charge for date " + ChargeDate + "." + Environment.NewLine + Environment.NewLine + "Thanks and Regards" + Environment.NewLine + employeename;
 
                         string ToEmail = ds.Tables[1].Rows[i]["EmailId"].ToString();
-                        SendEmailCommon objSendEmail = new SendEmailCommon(); 
+                        SendEmailCommon objSendEmail = new SendEmailCommon();
                         int status = 0;
                         try
                         {
@@ -4612,6 +4618,6 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
         return true;
     }
 
-      
+
 }
 

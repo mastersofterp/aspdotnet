@@ -34,7 +34,7 @@ using System.Configuration;
 using System.Xml;
 using System.Security.Cryptography;
 using System.Collections.Generic;
- 
+
 
 public partial class Academic_ExamRegistration : System.Web.UI.Page
 {
@@ -144,7 +144,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                    }
                             #endregion
                             this.ShowDetails();
-                            bindcourses();                               
+                            bindcourses();                                
 
                         }                                               
                     }

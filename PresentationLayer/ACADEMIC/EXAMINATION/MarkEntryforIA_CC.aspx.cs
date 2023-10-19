@@ -2488,11 +2488,11 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                     {
                         if (dsStudent.Tables[0].Rows.Count > 0)
                         {
-                            string[] selectedColumns = new[] { "IDNO", "STUDNAME", "REGNO1", "CCODE", "COURSENAME", "DEGREENAME", "BRANCHNAME", "SCHEMENAME", "SEMESTERNAME", "SESSIONNAME", "EXAMNAME", "SUBEXAMNAME", "SECTIONNAME", "MAXMARK" };
+                            string[] selectedColumns = new[] { "IDNO", "STUDNAME", "REGNO1","ROLL_NO", "CCODE", "COURSENAME", "DEGREENAME", "BRANCHNAME", "SCHEMENAME", "SEMESTERNAME", "SESSIONNAME", "EXAMNAME", "SUBEXAMNAME", "SECTIONNAME", "MAXMARK" };
 
                             DataTable dt = new DataView(dst).ToTable(false, selectedColumns);
-                            dt.Columns["REGNO1"].ColumnName = "REGNO / ROLL_NO"; // change column names
-
+                            dt.Columns["REGNO1"].ColumnName = "REGNO"; // change column names
+                            dt.Columns["ROLL_NO"].ColumnName = "ROLLNO";
                             dt.Columns.Add("MARKS");
 
                             using (XLWorkbook wb = new XLWorkbook())

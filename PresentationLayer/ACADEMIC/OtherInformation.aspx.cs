@@ -101,6 +101,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                         }
                         if (final_submit == "1")
                         {
+                            btnSave.Visible = false;
                             btnSubmit.Visible = false;
                             btnAddSport.Visible = false;
                             btnadd.Visible = false;
@@ -342,6 +343,34 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     }
 
                 }
+
+                DataSet ds = null;
+                ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
+                    string sign = ds.Tables[0].Rows[0]["SIGN"].ToString();
+
+                    if (photo == string.Empty && sign == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Photo and Signature", this.Page);
+                        return;
+                    }
+
+                    if (photo == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Photo", this.Page);
+                        return;
+                    }
+
+                    if (sign == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Signature", this.Page);
+                        return;
+                    }
+                }
+
                 DataSet dscheckdocuments = null;
                 if (ViewState["usertype"].ToString() == "2")
                 {

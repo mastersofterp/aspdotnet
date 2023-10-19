@@ -306,7 +306,7 @@
 
                                                 <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	 </p>
                                             </li>
-                                            <li class=" nav selectthree list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Faculty Wise Result Ananlysis</a></b>
+                                            <li class=" nav selectthree list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Faculty Wise Result Analysis</a></b>
 
                                                 <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	 </p>
                                             </li>
@@ -358,6 +358,10 @@
 
                                                 <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester  </p>
                                             </li>
+                                            <li class="nav selectfifteen list-group-item-new " id="pre_fifteen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Substitute Exam Registration Report</a></b>
+
+                                                <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session </p>
+                                            </li>
 
 
                                         </ul>
@@ -381,7 +385,7 @@
 
                                         </div>
 
-                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
+                                        <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control" 
                                             ValidationGroup="offered" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
@@ -402,6 +406,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator21" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                        </asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="schemesession">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -441,6 +448,9 @@
                                         </asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator22" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                        </asp:RequiredFieldValidator>
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="schemesession">
                                         </asp:RequiredFieldValidator>
                                     </div>
 
@@ -796,7 +806,7 @@
                                 <asp:Button ID="btnFaculty" runat="server" Text="Faculty Wise Result Analysis" CssClass="btn btn-info" OnClick="btnFaculty_Click" TabIndex="1" CausesValidation="false" Visible="false" />
                                 <asp:Button ID="btnAnalysis" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnAnalysis_Click" TabIndex="1" CausesValidation="false" Visible="false" />
 
-                                <asp:Button ID="btnExamFeesPaid" runat="server" Text="Exam Fees Paid Excel Report" CssClass="btn btn-info" OnClick="btnExamFeesPaid_Click" TabIndex="1" CausesValidation="false" />
+                                <asp:Button ID="btnExamFeesPaid" runat="server" Text="Exam Fees Paid Excel Report" CssClass="btn btn-info" OnClick="btnExamFeesPaid_Click" TabIndex="1" ValidationGroup="schemesession"/>
 
                                 <%-- <asp:Button ID="btnModelExam" runat="server" OnClick="btnModelExam_Click" ValidationGroup="report" Text="Model Exam Mark" CssClass="btn btn-info" style="display:none"/>
                             <asp:Button ID="btnCorrelationAnalysis" runat="server" OnClick="btnCorrelationAnalysis_Click" ValidationGroup="AnalysisReport" Text="Correlation Analysis" CssClass="btn btn-info" style="display:none"/>
@@ -826,9 +836,9 @@
 
                                 <asp:Button ID="btnCategoryWise" runat="server" TabIndex="1" Text="Degree Wise" CssClass="btn btn-info" OnClick="btnCategoryWise_Click" CausesValidation="false" />
                                 <asp:Button ID="btnOverAllPercentage" runat="server" TabIndex="1" Text="Over All Percentage" CssClass="btn btn-info" OnClick="btnOverAllPercentage_Click" CausesValidation="false" />
-                                <asp:Button ID="btnOverAllSubjectPercentage" runat="server" TabIndex="1" Text="Over All Subject Percentage" CssClass="btn btn-info" OnClick="btnOverAllSubjectPercentage_Click" CausesValidation="false" />
-                                <asp:Button ID="btnBranchSemAnalysis" runat="server" TabIndex="1" Text="Branch Semester wise Result Analysis" CssClass="btn btn-info" OnClick="btnBranchSemAnalysis_Click" CausesValidation="false" />
-                                <asp:Button ID="btnResultAnalysis" runat="server" TabIndex="1" Text="Result Analysis" CssClass="btn btn-info" OnClick="btnResultAnalysis_Click" CausesValidation="false" />
+                                <asp:Button ID="btnOverAllSubjectPercentage" runat="server" TabIndex="1" Text="Over All Subject Percentage" CssClass="btn btn-info" OnClick="btnOverAllSubjectPercentage_Click" ValidationGroup="schemesession"/>
+                                <asp:Button ID="btnBranchSemAnalysis" runat="server" TabIndex="1" Text="Branch Semester wise Result Analysis" CssClass="btn btn-info" OnClick="btnBranchSemAnalysis_Click" ValidationGroup="schemesession" />
+                                <asp:Button ID="btnResultAnalysis" runat="server" TabIndex="1" Text="Result Analysis" CssClass="btn btn-info" OnClick="btnResultAnalysis_Click" ValidationGroup="schemesession" />
 
                             </div>
 
@@ -842,7 +852,7 @@
                                 <asp:Button ID="btnBranchWiseResultAnalysis" runat="server" TabIndex="1" Text="Branch Wise Result Analysis" CssClass="btn btn-info" ValidationGroup="Branch" OnClick="btnBranchWiseResultAnalysis_Click" />
                                 <asp:Button ID="btnCourseWiseExamRegistartion" Text="Course Wise Exam Registartion" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourseWiseExamRegistartion_Click" ValidationGroup="CourseWiseExamRegistartion" />
                                 <asp:Button ID="btnSubjectWiseResultanalysisReport" Text="Subject Wise Result Analysis Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSubjectWiseResultanalysisReport_Click" ValidationGroup="SubjectWiseResultanalysisReport" />
-                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
+
 
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Branch" CausesValidation="false" />
                                 <asp:ValidationSummary ID="ValidationSummary8" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseFailStudList" CausesValidation="false" />
@@ -851,6 +861,11 @@
 
                             </div>
 
+                            <div class="col-12 btn-footer">
+                                <asp:Button ID="btnsubtituteexamexcel" Text="Substitute Registeration Excel" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnsubtituteexamexcel_Click" ValidationGroup="schemesession" />
+                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
+                                <asp:ValidationSummary ID="valsumschemesession" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="schemesession" CausesValidation="false" />
+                            </div>
                         </div>
 
                     </div>
@@ -864,6 +879,7 @@
             <asp:PostBackTrigger ControlID="btnExamFeesPaid" />
             <asp:PostBackTrigger ControlID="btnCGPAReport" />
             <asp:PostBackTrigger ControlID="btnCourseWiseExamRegistartion" />
+            <asp:PostBackTrigger ControlID="btnsubtituteexamexcel" />
             <%--  <asp:AsyncPostBackTrigger ControlID="btnSubWiseRslt" />--%>
             <%-- <asp:PostBackTrigger ControlID="btnStatistical" />
             <asp:PostBackTrigger ControlID="btnSGPA" />
@@ -1091,6 +1107,7 @@
             });
         });
     </script>
+
     <script>
         $(document).ready(function () {
             $("body").on("click", ".Selection-box", function () {
@@ -1130,8 +1147,8 @@
                     $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSection").removeClass("red-color");
                     //$("#ctl00_ContentPlaceHolder1_ddlSection").addClass("red-color");
-
 
                 });
                 $(".selectfour").click(function () {
@@ -1187,11 +1204,8 @@
                     $("#ctl00_ContentPlaceHolder1_ddlSem").removeClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
 
-
-                    $("#ctl00_ContentPlaceHolder1_ddlClgname").rem("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
-
-
                 });
                 $(".selecteleven").click(function () {
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
@@ -1201,9 +1215,6 @@
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
                 });
                 $(".selecttwelve").click(function () {
-
-
-
                     $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
@@ -1223,6 +1234,13 @@
                     $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
 
+                });
+                $(".selectfifteen ").click(function () {
+                    $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSem").removeClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSection").removeClass("red-color");
                 });
 
             });

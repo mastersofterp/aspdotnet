@@ -1409,7 +1409,8 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
                             Session["ReceiptType"] = "REF";
                             Session["idno"] = Convert.ToInt32(ViewState["IDNO"].ToString()); //hdfIdno.Value;
                             Session["paysession"] = Convert.ToInt32(Session["sessionno_current"]); // hdfSessioNo.Value;
-                            Session["paysemester"] = ViewState["SEM"].ToString(); // ddlSemester.SelectedValue;
+                            //Session["paysemester"] = ViewState["SEM"].ToString(); // ddlSemester.SelectedValue;
+                            Session["paysemester"] = lblSemester.Text;
                             Session["homelink"] = "RetestExamRegistration_All.aspx";
                             Session["regno"] = ViewState["REGNO"].ToString(); // lblRegno.Text;
                             Session["payStudName"] = ViewState["STUDNAME"].ToString(); //lblStudName.Text;
@@ -1456,45 +1457,48 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
                 }
 
 
-                #endregion    
-                objCommon.DisplayMessage("Exam Registration Done Successfully!!!", this.Page);
+                #endregion  
+  
 
-                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                {
-                    if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
-                    {
+                #region Comment bu gaurav 17_10_2023
+                // objCommon.DisplayMessage("Exam Registration Done Successfully!!!", this.Page);
 
-                        CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
-                        // chkacc.Enabled = false;
-                        HiddenField hdfexam = dataitem.FindControl("hdfExamRegistered") as HiddenField;
-                        Label lblExamType = dataitem.FindControl("lblExamType") as Label;
+                //foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //{
+                //    if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
+                //    {
 
-                        if (hdfexam.Value == "1")
-                        {
-                            chkacc.Enabled = false;
-                        }
-                        else if (lblExamType.ToolTip == "0")
-                        {
-                            chkacc.Enabled = false;
-                        }
-                        else
-                        {
-                            chkacc.Enabled = true;
-                        }
+                //        CheckBox chkacc = dataitem.FindControl("chkAccept") as CheckBox;
+                //        // chkacc.Enabled = false;
+                //        HiddenField hdfexam = dataitem.FindControl("hdfExamRegistered") as HiddenField;
+                //        Label lblExamType = dataitem.FindControl("lblExamType") as Label;
+
+                //        if (hdfexam.Value == "1")
+                //        {
+                //            chkacc.Enabled = false;
+                //        }
+                //        else if (lblExamType.ToolTip == "0")
+                //        {
+                //            chkacc.Enabled = false;
+                //        }
+                //        else
+                //        {
+                //            chkacc.Enabled = true;
+                //        }
                       
-                    }
-                }
+                //    }
+                //}
+                #endregion
+                //int a = lvFailCourse.Items.Count;
+                //int b = 0;
+                //foreach (ListViewDataItem dataitem in lvFailCourse.Items)
+                //{
 
-                int a = lvFailCourse.Items.Count;
-                int b = 0;
-                foreach (ListViewDataItem dataitem in lvFailCourse.Items)
-                {
+                //    CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
+                //    if (chk.Enabled == false)
+                //        b++;
 
-                    CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                    if (chk.Enabled == false)
-                        b++;
-
-                }
+                //}
               
 
             }
@@ -1951,7 +1955,7 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
 
              if (Convert.ToInt32(REGNO) > 0)
              {
-                 int fees = int.Parse(REGNO) * 300;
+                 int fees = int.Parse(REGNO) * 350;
                  btnsave.Visible = false;
                  btnSubmit.Visible = true;
                  lblTotalExamFee.Text = fees.ToString()+".00";
@@ -1962,7 +1966,7 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
                  if (Convert.ToInt32(REGNO3)>0)                
                    
                 {
-                    int fees = int.Parse(REGNO3) * 300;
+                    int fees = int.Parse(REGNO3) * 350;
                     lblTotalExamFee.Text = fees.ToString() + ".00";
                     btnsave.Visible = true;
                     //btnsave.Enabled = true;
@@ -1992,14 +1996,14 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
                      
                      if (Convert.ToInt32(REGNO4) > 0)
                      {
-                         int fees = int.Parse(REGNO4) * 300;
+                         int fees = int.Parse(REGNO4) * 350;
                          lblTotalExamFee.Text = fees.ToString() + ".00";
                          btnsave.Visible = true;
                          //btnsave.Enabled = true;
                          btnSubmit.Visible = false;
                      }
                      else{
-                         int fees = int.Parse(REGNO2) * 300;
+                         int fees = int.Parse(REGNO2) * 350;
                      lblTotalExamFee.Text = fees.ToString() + ".00";
                      btnsave.Visible = true;
                      //btnsave.Enabled = true;
@@ -2031,7 +2035,7 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
 
         string REGNO2 = objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "COUNT(IDNO)", "IDNO='" + Session["idno"] + "' and STUDENT_REQUEST=1  and ADMIN_APPROVE=1 and ADVISOR_APPROVE=1");
        // string REGNO = objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "COUNT(IDNO)", "IDNO='" + Session["idno"] + "' and EXAMNO=" + ddlexamnameabsentstudent.SelectedValue + " and SUBEXAMNO=" + ddlsubexamname.SelectedValue + " and ADMIN_APPROVE=1 and ADVISOR_APPROVE=1 and STUDENT_REQUEST=1");
-        int fees = int.Parse(REGNO2) * 300;
+        int fees = int.Parse(REGNO2) * 350;
         if (Convert.ToInt32(REGNO2) > 0)
         {
            // btnsave.Visible = false;
@@ -2043,7 +2047,7 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
         else
         {
             string REGNO = objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "COUNT(IDNO)", "IDNO='" + Session["idno"] + "' and STUDENT_REQUEST=1");
-             int feess = int.Parse(REGNO) * 300;
+            int feess = int.Parse(REGNO) * 350;
           if(Convert.ToInt32(REGNO)>0)
           {
                 lblTotalExamFee.Text = feess.ToString() + ".00";
@@ -2744,11 +2748,11 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
 
                      if (REGNO2 > 0)
                      {
-                         fees = REGNO2 * 300;
+                         fees = REGNO2 * 350;
                          lblTotalExamFee.Text = fees.ToString() + ".00";
                      }
                      else {
-                         fees = 300;
+                         fees = 350;
                          lblTotalExamFee.Text = (Convert.ToDouble(lblTotalExamFee.Text) + Convert.ToDouble(fees)).ToString() + ".00";
                         // fees = Convert.ToInt32(amt.ToolTip) * fees;
                          //chk.Checked = true;
@@ -2760,8 +2764,8 @@ public partial class Academic_Examination_ExamRegistration : System.Web.UI.Page
                  }
                 
                      else
-                     {                        
-                         fees = 300;                   
+                     {
+                         fees = 350;                   
                          lblTotalExamFee.Text = (Convert.ToDouble(lblTotalExamFee.Text) + Convert.ToDouble(fees)).ToString() + ".00";
                          btnsave.Visible = true;
                          btnSubmit.Visible = false;
