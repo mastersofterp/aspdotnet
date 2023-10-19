@@ -157,7 +157,10 @@ public partial class Hostel_Report_HostelVacantRooms : System.Web.UI.Page
     {
         try
         {
-            string attachment = "attachment; filename=" + "Hostelvacantroom.xls";
+            string getdate = DateTime.Now.ToString("dd/MMM/yyyy_hh:mm:ss");
+            string res = string.Concat(getdate, "Hostelvacantroom.xls");
+            string attachment = "attachment; filename=" + res;
+            //string attachment = "attachment; filename=" + "Hostelvacantroom.xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
