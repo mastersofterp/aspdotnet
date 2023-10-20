@@ -330,6 +330,11 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 
             dcl.TO_CREDIT = Convert.ToDouble(dcl.Core_credit + dcl.Elective_credit + dcl.Global_credit + dcl.Overload_credit);
             dcl.FROM_CREDIT = Convert.ToDouble(txtFromCredit.Text); //txtFromCredit.Text == null ? "0" : txtFromCredit.Text.ToString(); 
+            if (dcl.TO_CREDIT == 0)
+            {
+                objCommon.DisplayMessage(updpnl, "Maximum Credit Limit Must Be greater than Zero (0)!", this.Page);
+                return;
+            }
             if (dcl.FROM_CREDIT > dcl.TO_CREDIT)
             {
                 objCommon.DisplayMessage(updpnl, "Minimum Credit Limit Must Be Same or Less Than Maximum All Credit Limit!", this.Page);
