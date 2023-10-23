@@ -28,6 +28,11 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Script.Serialization;
 
 public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
 {
@@ -88,7 +93,17 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
             objCommon.FillDropDownList(ddlDegreeType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "ACTIVESTATUS=1", "UA_SECTION");
             objCommon.FillDropDownList(ddlKnowledgePartner, "ACD_KNOWLEDGE_PARTNER", "KNOWLEDGE_PARTNER_NO", "KNOWLEDGE_PARTNER", "ISNULL(ACTIVESTATUS,0)=1", "KNOWLEDGE_PARTNER");
 
+            //Added by Sakshi
 
+            if (txtBranchname.Text != string.Empty)
+            {
+                txtBranchNameHindi.Text = TranslateText(txtBranchname.Text);
+            }
+
+            if (txtDegreeName.Text != string.Empty)
+            {
+                txtDegreeNameHindi.Text = TranslateText(txtDegreeName.Text);
+            }
         }
         else
         {
@@ -244,11 +259,11 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
             objDeg.DegreeTypeName = txtDegreeType.Text.Trim();
             if (hfdStatDegTyp.Value == "true")
             {
-                objDeg.ActiveStatus = true;
+                objDeg.Active= true;
             }
             else
             {
-                objDeg.ActiveStatus = false;
+                objDeg.Active = false;
             }
 
             // Check whether to add or update
@@ -386,6 +401,7 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
     {
         txtDegreeName.Text = string.Empty;
         txtDegreeShortName.Text = string.Empty;
+        txtDegreeNameHindi.Text = string.Empty;
         txtDegreeCode.Text = string.Empty;
         ddlDegreeType.SelectedIndex = 0;
         ViewState["actionDegMaster"] = "add";
@@ -422,64 +438,49 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
     {
         try
         {
-            objDeg.DegreeName = txtDegreeName.Text.Trim();
-            objDeg.DegreeShort_Name = txtDegreeShortName.Text.Trim();
-            objDeg.DegreeCode = txtDegreeCode.Text.Trim();
-            objDeg.DegreeTypeID = Convert.ToInt32(ddlDegreeType.SelectedValue); //Added By Rishabh -  16/11/2021
-            if (hfdStatDegMaster.Value == "true")
-            {
-                objDeg.ActiveStatus = true;
-            }
-            else
-            {
-                objDeg.ActiveStatus = false;
-            }
 
-            //Check whether to add or update
-            if (ViewState["actionDegMaster"] != null)
+            if (CheckValidationForDegree() == true)
             {
-                if (ViewState["actionDegMaster"].ToString().Equals("add"))
+                objDeg.DegreeName = txtDegreeName.Text.Trim();
+                objDeg.DegreeShort_Name = txtDegreeShortName.Text.Trim();
+                objDeg.DegreeCode = txtDegreeCode.Text.Trim();
+                objDeg.DegreeTypeID = Convert.ToInt32(ddlDegreeType.SelectedValue); //Added By Rishabh -  16/11/2021
+                objDeg.DegreeName_Hindi = txtDegreeNameHindi.Text;  // Added by Gopal M - 09/10/2027  Ticket#49241
+                if (hfdStatDegMaster.Value == "true" ||(hfdStatDegMaster.Value == "" && Session["Status"].ToString() == "InActive"))
                 {
-                    if (ViewState["DEGREENO"] != null)
-                    {
-                        objDeg.DegreeID = Convert.ToInt32(ViewState["DEGREENO"]);
-                    }
-                    CustomStatus cs = (CustomStatus)objController.SaveDegreeMasterData(objDeg);
-                    if (cs.Equals(CustomStatus.RecordSaved))
-                    {
-                        objCommon.DisplayUserMessage(this.updDegreeMaster, "Record Saved Successfully!", this.Page);
-                    }
-                    else
-                    {
-                        objCommon.DisplayUserMessage(this.updDegreeMaster, "Record already exist", this.Page);
-                    }
-
+                    objDeg.Active = true;
                 }
                 else
                 {
-                    //Edit  
-                    if (ViewState["DEGREENO"] != null)
-                    {
+                    objDeg.Active = false;
+                }
+
+                //Check whether to add or update
+                if (ViewState["actionDegMaster"] != null)
+                {                  
                         if (ViewState["DEGREENO"] != null)
                         {
                             objDeg.DegreeID = Convert.ToInt32(ViewState["DEGREENO"]);
                         }
                         CustomStatus cs = (CustomStatus)objController.SaveDegreeMasterData(objDeg);
-                        if (cs.Equals(CustomStatus.RecordUpdated))
+                        if (cs.Equals(CustomStatus.RecordSaved))
                         {
-                            objCommon.DisplayUserMessage(this.updDegreeMaster, "Record Updated Successfully!", this.Page);
+                            objCommon.DisplayUserMessage(this.updDegreeMaster, "Record Saved Successfully!", this.Page);
                         }
-                        else
-                        {
-                            objCommon.DisplayUserMessage(this.updDegreeMaster, "Record already exist", this.Page);
-                        }
+                             else if (cs.Equals(CustomStatus.RecordUpdated))
+                            {
+                                objCommon.DisplayUserMessage(this.updDegreeMaster, "Record Updated Successfully!", this.Page);
+                            }
+                            else
+                            {
+                                objCommon.DisplayUserMessage(this.updDegreeMaster, "Record already exist", this.Page);
+                            }  
                     }
+                    BindListViewDegMaster();
+                    ClearControlsDegMaster();
                 }
-                BindListViewDegMaster();
-                ClearControlsDegMaster();
-            }
-        }
 
+            }
         catch (Exception ex)
         {
             throw;
@@ -519,13 +520,19 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
                 txtDegreeCode.Text = ds.Tables[0].Rows[0]["DEGREE_CODE"].ToString();
                 //objCommon.FillDropDownList(ddlDegreeType, "ACD_UA_SECTION", "UA_SECTION", "UA_SECTIONNAME", "ACTIVESTATUS=1", "UA_SECTION");
                 ddlDegreeType.SelectedValue = ds.Tables[0].Rows[0]["UA_SECTION"].ToString();
-
+                txtDegreeNameHindi.Text = ds.Tables[0].Rows[0]["DEGREENAMEHINDI"].ToString();  // Added by Gopal M 09/10/2023 Ticket #49241
+                if (txtDegreeName.Text != string.Empty)
+                {
+                    txtDegreeNameHindi.Text = TranslateText(txtDegreeName.Text);
+                }
                 if (ds.Tables[0].Rows[0]["ACTIVESTATUS"].ToString() == "Active")
                 {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetStatDegMaster(true);", true);
+                    Session["Status"] = "Active";
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetStatDegMaster(true);", true);       
                 }
                 else
                 {
+                    Session["Status"] = "InActive";
                     ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetStatDegMaster(false);", true);
                 }
             }
@@ -557,6 +564,7 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
         ddlKnowledgePartner.SelectedIndex = 0;
         ViewState["actionbranch"] = "add";
         ViewState["BRANCHNO"] = null;
+        txtBranchNameHindi.Text = string.Empty;
     }
 
     protected void btnSavebranch_Click(object sender, EventArgs e)
@@ -585,6 +593,7 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
                 ObjBranch.ShortName = txtBranchshortname.Text.Trim();
                 ObjBranch.Branchname_Origral = txtBranchname.Text.Trim();
                 ObjBranch.KpNo = Convert.ToInt32(ddlKnowledgePartner.SelectedValue);
+                ObjBranch.BranchNameInHindi = txtBranchNameHindi.Text;
                 if (hfdbranch.Value == "true")
                 {
                     ObjBranch.IsActive = true;
@@ -691,6 +700,11 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
                 txtBranchname.Text = ds.Tables[0].Rows[0]["BRANCHNAME_ORIGNAL"] == null ? string.Empty : ds.Tables[0].Rows[0]["BRANCHNAME_ORIGNAL"].ToString();
                 txtBranchshortname.Text = ds.Tables[0].Rows[0]["SHORTNAME"] == null ? string.Empty : ds.Tables[0].Rows[0]["SHORTNAME"].ToString();
                 ddlKnowledgePartner.SelectedValue = ds.Tables[0].Rows[0]["KNOWLEDGE_PARTNER_NO"].ToString();
+                txtBranchNameHindi.Text = ds.Tables[0].Rows[0]["BRANCHNAMEINLOCALLANGUAGE"].ToString();
+                if (txtBranchname.Text != string.Empty)
+                {
+                    txtBranchNameHindi.Text = TranslateText(txtBranchname.Text);
+                }
                 if (ds.Tables[0].Rows[0]["ACTIVESTATUS"].ToString() == "Active")
                 {
                     ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetStatBranch(true);", true);
@@ -717,4 +731,96 @@ public partial class RFC_CONFIG_Masters_BasicMasterCreation : System.Web.UI.Page
     }
 
     #endregion Branch_Master
+
+
+    //Added CheckValidationForDegree  by Gopal M 09/10/2023 Ticket #49241  OR Security Path ServerSide Validation
+    public bool CheckValidationForDegree()
+    {
+        bool result = false;
+        if (txtDegreeName.Text != string.Empty)
+        {
+            result = true;
+        }
+        else
+        {
+            objCommon.DisplayUserMessage(this.updDegreeMaster, "Please Enter Degree Name!", this.Page);
+            return false;
+        }
+        if (txtDegreeShortName.Text != string.Empty)
+        {
+            result = true;
+        }
+        else
+        {
+            objCommon.DisplayUserMessage(this.updDegreeMaster, "Please Enter Degree Short Name!", this.Page);
+            return false;
+        }
+        if (txtDegreeCode.Text != string.Empty)
+        {
+            result = true;
+        }
+        else
+        {
+            objCommon.DisplayUserMessage(this.updDegreeMaster, "Please Enter Degree Code!", this.Page);
+            return false;
+        }
+        if (ddlDegreeType.SelectedValue != "0")
+        {
+            result = true;
+        }
+        else
+        {
+            objCommon.DisplayUserMessage(this.updDegreeMaster, "Please Selcet Degree Type!", this.Page);
+            return false;
+        }
+
+        if (result == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+
+    }
+
+    //Added by Sakshi Makwana 18/10/2023
+    protected void txtDegreeName_TextChanged(object sender, EventArgs e)
+    {
+        if (txtDegreeName.Text != string.Empty)
+        {
+            txtDegreeNameHindi.Text = TranslateText(txtDegreeName.Text);
+        }
+    }
+
+    public string TranslateText(string input)
+    {
+        //var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q={HttpUtility.UrlEncode("+input+")}";
+        var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=" + input + "";
+        var webClient = new WebClient
+        {
+            Encoding = System.Text.Encoding.UTF8
+        };
+        var result = webClient.DownloadString(url);
+        try
+        {
+            result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+            return result;
+        }
+        catch
+        {
+            return "Error";
+        }
+    }
+
+    protected void txtBranchname_TextChanged(object sender, EventArgs e)
+    {
+        if (txtBranchname.Text != string.Empty)
+        {
+            txtBranchNameHindi.Text = TranslateText(txtBranchname.Text);
+        }
+    }
 }
+   

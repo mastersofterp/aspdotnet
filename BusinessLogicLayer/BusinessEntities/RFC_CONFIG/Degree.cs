@@ -36,6 +36,8 @@ namespace IITMS
                 private int _degreeTypeID;
                 private string _degree_Name;
                 private string _degreeShort_Name;
+                public string _DegreeName_Hindi;
+         
                 //End
 
                 #endregion
@@ -54,6 +56,27 @@ namespace IITMS
                         _degreeCode = value;
                     }
                 }
+
+                //Added by Sakshi - 18/10/2023
+                public bool Active
+                {
+                    get;
+                    set;
+                }
+               
+
+                public string DegreeName_Hindi
+                {
+                    get
+                    {
+                        return _DegreeName_Hindi;
+                    }
+                    set
+                    {
+                        _DegreeName_Hindi = value;
+                    }
+                }
+
                 public int DegreeTypeID
                 {
                     get { return _degreetype_id; }
@@ -72,11 +95,7 @@ namespace IITMS
                     set { _degreeTypeName = value; }
                 }
 
-                public bool ActiveStatus
-                {
-                    get;
-                    set;
-                }
+              
                 // Added by Rishabh on 07-10-2021
                 public int DegreeID
                 {

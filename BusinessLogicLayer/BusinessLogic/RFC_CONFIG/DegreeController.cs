@@ -27,7 +27,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
         string connectionstring = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
         /// <summary>
-        /// MODIFIED By Rishabh B. on 09/03/2022 - for orgid
+        /// MODIFIED By Sakshi M. on 18/10/2023 - for Active Status
         /// </summary>
         public int SaveDegreeTypeData(Degree ObjDegree)
         {
@@ -44,7 +44,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
                 sqlParams[3] = new SqlParameter("@MODIFIEDBY", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"]));
                 sqlParams[4] = new SqlParameter("@IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
                 sqlParams[5] = new SqlParameter("@ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 06/12/2021
-                sqlParams[6] = new SqlParameter("@ACTIVESTATUS", ObjDegree.ActiveStatus);
+                sqlParams[6] = new SqlParameter("@ACTIVESTATUS", ObjDegree.Active);
                 sqlParams[7] = new SqlParameter("@MACADDRESS", System.Web.HttpContext.Current.Session["macAddress"]);
                 sqlParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
                 sqlParams[8].Direction = ParameterDirection.Output;
@@ -80,8 +80,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
             }
             return ds;
         }
+
         /// <summary>
-        /// MODIFIED By Rishabh on 09/03/2022 - for Orgid
+        /// MODIFIED By Sakshi M. on 18/10/2023 - for Active Status
         /// </summary>
         public int SaveDegreeMasterData(Degree ObjDegM)
         {
@@ -90,7 +91,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionstring);
                 SqlParameter[] sqlParams = null;
-                sqlParams = new SqlParameter[12];
+                sqlParams = new SqlParameter[13];
 
                 sqlParams[0] = new SqlParameter("@DEGREENO", ObjDegM.DegreeID);
                 sqlParams[1] = new SqlParameter("@DEGREENAME", ObjDegM.DegreeName);
@@ -100,11 +101,12 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
                 sqlParams[5] = new SqlParameter("@CREATEDBY", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"]));
                 sqlParams[6] = new SqlParameter("@MODIFIEDBY", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"]));
                 sqlParams[7] = new SqlParameter("@IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
-                sqlParams[8] = new SqlParameter("@ACTIVESTATUS", ObjDegM.ActiveStatus);
+                sqlParams[8] = new SqlParameter("@ACTIVESTATUS", ObjDegM.Active);
                 sqlParams[9] = new SqlParameter("@MACADDRESS", System.Web.HttpContext.Current.Session["macAddress"]);
                 sqlParams[10] = new SqlParameter("@ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 06/12/2021 
-                sqlParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                sqlParams[11].Direction = ParameterDirection.Output;
+                sqlParams[11] = new SqlParameter("@DEGREENAMEHINDI", ObjDegM.DegreeName_Hindi);
+                sqlParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                sqlParams[12].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_CONFIG_DEGREE_MASTER_INSERT_UPDATE", sqlParams, true);
                 status = Convert.ToInt32(ret);
@@ -116,6 +118,8 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
             }
             return status;
         }
+
+
        
        
         /// <summary>
