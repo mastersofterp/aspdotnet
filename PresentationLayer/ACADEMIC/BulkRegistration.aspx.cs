@@ -806,7 +806,10 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 2)
             ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipForCrescentStudentWise.rpt");
         else
-            ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt");
+        {
+            //  ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt"); // commented by vipul T. As per T-49243
+            ShowReportStudentWise(idno, "RegistrationSlip", "rptCourseRegSlip.rpt"); // added by vipul T. As per T-49243
+        }
     }
 
     private void ShowReportStudentWise(int idno, string reportTitle, string rptFileName)
@@ -818,28 +821,38 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             if (Convert.ToInt32(Session["OrgId"]) == 9 || Convert.ToInt32(Session["OrgId"]) == 7)
-            {  
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
-                + ",@P_SESSIONNO=" + ddlSession.SelectedValue 
-                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
-                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue 
-                + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
-                + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
-                + ",@UserName=" + Session["username"] 
-                + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) 
-                + ",@P_IDNO=" + idno;            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"])
+                    + ",@P_SESSIONNO=" + ddlSession.SelectedValue
+                    + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
+                    + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue
+                    + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"])
+                    + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue
+                    + ",@UserName=" + Session["username"]
+                    + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])
+                    + ",@P_IDNO=" + idno;            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
             }
             else
-            { 
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() 
-                + ",@P_SESSIONNO=" + ddlSession.SelectedValue 
-                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
-                + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue 
-                + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
-                + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
-                + ",@UserName=" + Session["username"] 
-                + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) 
-                + ",@P_IDNO=" + idno;            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            {
+                if (Convert.ToInt32(Session["OrgId"]) == 2)
+                {
+                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString()
+                    + ",@P_SESSIONNO=" + ddlSession.SelectedValue
+                    + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
+                    + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue
+                    + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"])
+                    + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue
+                    + ",@UserName=" + Session["username"]
+                    + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])
+                    + ",@P_IDNO=" + idno;            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                }
+                else
+                {
+                    url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString()
+                       + ",@P_IDNO=" + idno
+                       + ",@P_SESSIONNO=" + ddlSession.SelectedValue
+                       + ",@UserName=" + Session["username"].ToString();
+                }
             }
             
             
