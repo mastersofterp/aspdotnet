@@ -7376,6 +7376,90 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
         }
 
+        //Added By Sakshi M on 25-10-2023
+        public int CalculateAttendance(Attendance Attentdobj)
+            {
+            int retstatus = 0;
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objparams = null;
+                objparams = new SqlParameter[3];
+                objparams[0] = new SqlParameter("@P_STATUS", Attentdobj.Status);
+                objparams[1] = new SqlParameter("@P_FLAG", Attentdobj.Flag);
+                objparams[2] = new SqlParameter("@P_STATUSNO", Attentdobj.StatusNo);
+                object obj = objSQLHelper.ExecuteNonQuerySP("ACD_ATTENDANCE_CALCULATE_UPD", objparams, true);
+                if (obj != null)
+                    retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                }
+            catch (Exception ex)
+                {
+                retstatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.UpdateStatus->" + ex.ToString());
+                }
+            return retstatus;
+            }
+
+        //Added By Sakshi M on 25-10-2023
+        public DataSet ShowAtendanceStatus()
+            {
+            DataSet dr = null;
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                dr = objSQLHelper.ExecuteDataSet("SP_GET_STUDENT_ATTENDANCE_STATUS");
+                }
+            catch (Exception ex)
+                {
+                return dr;
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.ShowAtendanceStatus-> " + ex.ToString());
+                }
+            return dr;
+            }
+        //Added By Sakshi M on 25-10-2023
+        public SqlDataReader GetStatusDetail(Attendance objAttendanceEntity)
+            {
+
+            SqlDataReader dr;
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objparams = null;
+                objparams = new SqlParameter[1];
+                objparams[0] = new SqlParameter("@P_STATUSNO", objAttendanceEntity.StatusNo);
+                dr = objSQLHelper.ExecuteReaderSP("SP_GET_STATUS_DETAIL", objparams);
+                return dr;
+
+                }
+            catch (Exception ex)
+                {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController. GetStatusDetail-> " + ex.ToString());
+                }
+            }
+
+        //Added By Sakshi M on 25-10-2023
+        public int CalculateAttendanceSubmit(Attendance objAttendanceEntity)
+            {
+            int retstatus = 0;
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objparams = null;
+                objparams = new SqlParameter[2];
+                objparams[0] = new SqlParameter("@P_STATUS", objAttendanceEntity.Status);
+                objparams[1] = new SqlParameter("@P_FLAG", objAttendanceEntity.Flag);
+                object obj = objSQLHelper.ExecuteNonQuerySP("ACD_INS_ATTENDANCE_CALCULATE", objparams, true);
+                if (obj != null)
+                    retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                }
+            catch (Exception ex)
+                {
+                retstatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.CalculateAttendanceSubmit->" + ex.ToString());
+                }
+            return retstatus;
+            }
+
     }
 
 }

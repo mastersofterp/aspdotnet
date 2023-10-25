@@ -191,6 +191,45 @@ namespace IITMS
                     get { return _percentageTo; }
                     set { _percentageTo = value; }
                 }
+
+                private string _Status;
+                private int _Flag;
+                private int _StatusNo;
+                public string Status
+                    {
+                    get
+                        {
+                        return _Status;
+                        }
+                    set
+                        {
+                        _Status = value;
+                        }
+                    }
+
+                public int Flag
+                    {
+                    get
+                        {
+                        return _Flag;
+                        }
+                    set
+                        {
+                        _Flag = value;
+                        }
+                    }
+
+                public int StatusNo
+                    {
+                    get
+                        {
+                        return _StatusNo;
+                        }
+                    set
+                        {
+                        _StatusNo = value;
+                        }
+                    }
                 #endregion
             }
         }
