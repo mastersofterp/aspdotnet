@@ -83,6 +83,8 @@
                                             <asp:ListItem Value="4">All Courses</asp:ListItem>
                                             <asp:ListItem Value="5">Pending Courses</asp:ListItem>
                                             <asp:ListItem Value="6">Consolidated Registration Report</asp:ListItem>
+                                            <asp:ListItem Value="7">Consolidated Student Wise Course Registration Report</asp:ListItem>
+
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlReportType"
                                             Display="None" ErrorMessage="Please Select Report Type." InitialValue="0" SetFocusOnError="true"

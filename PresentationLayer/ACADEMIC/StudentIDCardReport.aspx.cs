@@ -180,6 +180,11 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
         {
             int orgid = Convert.ToInt32(Session["OrgId"]);
 
+
+
+
+
+
             if (orgid == 9)
             {
                 SaveQRCODE();
@@ -356,10 +361,30 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
             StudentController studCont = new StudentController();
             DataSet ds;
             ds = studCont.GetStudentListForIdentityCard(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlAdmbatch.SelectedValue), Convert.ToInt32(ddlClg.SelectedValue));
+
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                lvStudentRecords.DataSource = ds;
-                lvStudentRecords.DataBind();
+
+                if (txtRangeTo.Text == string.Empty && txtRangeFrom.Text == string.Empty)
+                {
+                    lvStudentRecords.DataSource = ds;
+                    lvStudentRecords.DataBind();
+                }
+                else
+                {
+                    int rangeTo = Convert.ToInt32(txtRangeTo.Text);
+                    int rangeFrom = Convert.ToInt32(txtRangeFrom.Text);
+
+                    if (rangeFrom > rangeTo)
+                    {
+                        objCommon.DisplayMessage(this.updStudent, "Please Select Valid Range!!", this.Page);
+                        return;
+                    }
+                    DataTable xdata = (from r in ds.Tables[0].AsEnumerable() where Convert.ToInt32(r["SRNO"]) <= rangeTo && Convert.ToInt32(r["SRNO"]) >= rangeFrom select r).CopyToDataTable();
+                    lvStudentRecords.DataSource = xdata;
+                    lvStudentRecords.DataBind();
+                }
+            
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudentRecords);//Set label -
                 hftot.Value = ds.Tables[0].Rows.Count.ToString();
             }
@@ -671,6 +696,9 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
 
     protected void ddlClg_SelectedIndexChanged(object sender, EventArgs e)
     {
+        lvStudentRecords.DataSource = null;
+        lvStudentRecords.DataBind();
+
         if (ddlClg.SelectedValue != "0")
         {
             int orgid = Convert.ToInt32(Session["OrgId"]);
@@ -683,6 +711,8 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
         }
         else
         {
+            lvStudentRecords.DataSource = null;
+            lvStudentRecords.DataBind();
             ddlDegree.Items.Clear();
             ddlDegree.Items.Add(new ListItem("Please Select", "0"));
             ddlBranch.Items.Clear();
@@ -710,5 +740,14 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
         {
             throw;
         }
+    }
+    protected void ddlAdmbatch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ddlClg.SelectedIndex = 0;
+        ddlDegree.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlSemester.SelectedIndex = 0;
+        lvStudentRecords.DataSource = null;
+        lvStudentRecords.DataBind();
     }
 }

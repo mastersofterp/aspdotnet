@@ -19,6 +19,7 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data;
 using System.Drawing;
 
+
 public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -166,9 +167,9 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
-
         GetStudent();
     }
+
     protected void lnkbtncoursecategory_Click(object sender, EventArgs e)
     {
         DataSet ds = null;
@@ -183,6 +184,7 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
                 lblgrade.Text = ds.Tables[0].Rows[0]["MIN_GRADEPOINT"].ToString();
                 lblobtaincredit.Text = ds.Tables[0].Rows[0]["EARNED_CREDITS"].ToString();
                 lblobtaingarde.Text = ds.Tables[0].Rows[0]["EARNED_GDPOINT"].ToString();
+                btnReport.ToolTip = ds.Tables[0].Rows[0]["IDNO"].ToString();
                 lvcoursecatelist.DataSource = ds.Tables[1];
                 lvcoursecatelist.DataBind();
                 lvcoursecatelist.Visible = true;
@@ -441,7 +443,7 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
         else { lblobtaingarde.ForeColor = Color.Green; }
         foreach (ListViewDataItem item in lvcoursecatelist.Items)
         {
-            Label lblobtaincredit1 = item.FindControl("lblobtaincredit") as Label;
+            Label lblobtaincredit1 = item.FindControl("lblobtaincredit1") as Label;
             Label lblcoursemincredit = item.FindControl("lblcoursemincredit") as Label;
             if (Convert.ToDecimal(lblcoursemincredit.Text.ToString()) > Convert.ToDecimal(lblobtaincredit1.Text.ToString()))
             {
@@ -474,7 +476,6 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
         }
     }
 
-
     protected bool checkboxccheck()
     {
         bool stat = true;
@@ -504,4 +505,42 @@ public partial class ACADEMIC_Degree_Completion_Criteria : System.Web.UI.Page
     }
 
 
+    protected void btnReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string reportTitle = "Student Eligibility Report Course Wise";
+            string rptFileName = "rptDegreeCompletionCourseWise.rpt";
+            string proc_ = "PKG_EXAM_DEGREE_COMPLETION_CRITERIA_REPORT";
+            string para_ = "@IDNO";
+            string value_ = (btnReport.ToolTip).ToString();
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(proc_, para_, value_);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] +
+                    ",@IDNO=" + (btnReport.ToolTip).ToString();
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterStartupScript(this.updstudenteligibility, this.updstudenteligibility.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updstudenteligibility, "Student Eligibility Record Not Found", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMICDegree_Completion_CriteriaConfig.btnReport_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }

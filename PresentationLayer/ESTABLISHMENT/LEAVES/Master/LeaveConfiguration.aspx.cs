@@ -199,6 +199,16 @@ public partial class ESTABLISHMENT_LEAVES_Master_LeaveConfiguration : System.Web
             {
                 ChkValidateLeaveComb.Checked = false;
             }
+            // Added By Piyush Thakre on 20-09-2023
+            Boolean IsNotAllowLeaveinCont = Convert.ToBoolean(ds.Tables[0].Rows[0]["IsNotAllowLeaveinCont"]);
+            if (IsNotAllowLeaveinCont)
+            {
+                chkLeaveincont.Checked = true;
+            }
+            else
+            {
+                chkLeaveincont.Checked = false;
+            }
 
             // Added By Shrikant Bharne on 10/04/2023 
             Boolean ISLWPNOTALLOW = Convert.ToBoolean(ds.Tables[0].Rows[0]["ISLWPNOTALLOW"]);
@@ -415,6 +425,15 @@ public partial class ESTABLISHMENT_LEAVES_Master_LeaveConfiguration : System.Web
             else
             {
                 objLeaves.IsValidatedLeaveComb = false;
+            }
+
+            if (chkLeaveincont.Checked)
+            {
+                objLeaves.IsNotAllowLeaveinCont = true;
+            }
+            else
+            {
+                objLeaves.IsNotAllowLeaveinCont = false;
             }
 
             if (ChkshowLwpLeave.Checked)

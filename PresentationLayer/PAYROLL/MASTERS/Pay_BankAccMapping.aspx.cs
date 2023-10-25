@@ -22,6 +22,7 @@ public partial class PAYROLL_MASTERS_Pay_BankAccMapping : System.Web.UI.Page
     //CREATING OBJECTS OF CLASS FILES COMMON,UAIMS_COMMON,PAYCONTROLLER
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
+	
 
     Payroll objcalpay = new Payroll();
     PayController objpay = new PayController();

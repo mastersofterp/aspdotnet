@@ -355,6 +355,9 @@
                                         <%--   <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select College & Regulation" InitialValue="0" ValidationGroup="report">
                                         </asp:RequiredFieldValidator>--%>
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator60" runat="server" ControlToValidate="ddlClgname"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ER"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
 
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="Ledger"
@@ -623,6 +626,23 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator7" Display="None" runat="server" ControlToValidate="ddlStuType"
                                             InitialValue="-1" ErrorMessage="Please Select Student Type" ValidationGroup="ResultStatistics"></asp:RequiredFieldValidator>
                                     </div>
+
+
+
+                                          <div id="divYear" runat="server" visible="false" class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Year</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlYears" runat="server" AppendDataBoundItems="True" AutoPostBack="true" ValidationGroup="ER" CssClass="form-control threess redborder redborder2 redborder3" data-select2-enable="true"
+                                             TabIndex="1">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator62" runat="server" ControlToValidate="ddlYears" Display="None"
+                                            ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="ER"></asp:RequiredFieldValidator>
+                                       
+                                    </div>
+
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <label>Exam held in Date</label>
@@ -836,6 +856,12 @@
                                 <asp:Button ID="btnLedger" runat="server" Text="Students Ledger Report" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="Ledger" OnClick="btnLedger_Click" />
                                 <asp:Button ID="btnGradeCardIssueRegister" runat="server" Text="Grade Card Issue Register" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCardIssueRegister" OnClick="btnGradeCardIssueRegister_Click" />
 
+                                
+                                <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER" OnClick="btnElibilityReport_Click" />
+
+                                <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"
+                                    ShowMessageBox="True" ShowSummary="False" ValidationGroup="ER" />
+
                                 <asp:ValidationSummary ID="vsSum1" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="ResultExcel" />
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List"
@@ -907,7 +933,7 @@
                                                     <thead class="bg-light-blue">
                                                         <tr>
                                                             <th style="text-align: left;">Select
-                                                           <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" ToolTip='<%# Eval("REGNO") %>' />
+                                                           <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" ToolTip='<%# Eval("REGNO") %>' Checked="false" />
                                                                 <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("REGNO") %>' />
 
                                                             </th>
@@ -976,6 +1002,7 @@
             <asp:PostBackTrigger ControlID="btnufm" />
             <asp:PostBackTrigger ControlID="btngraderange" />
             <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
+             <asp:PostBackTrigger ControlID="btnElibilityReport" />
 
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>
@@ -1002,6 +1029,23 @@
             }
         }
     </script>
+
+      <script language="javascript" type="text/javascript">
+          function totAll1(headchk) {
+              var frm = document.forms[0]
+              for (i = 0; i < document.forms[0].elements.length; i++) {
+                  var e = frm.elements[i];
+                  if (e.type == 'checkbox') {
+                      if (headchk.checked == true)
+                          e.checked = true;
+                      else
+                          e.checked = false;
+                  }
+              }
+          }
+    </script>
+
+
     <%--<script>
         $(document).ready(function () {
             bindDataTable();

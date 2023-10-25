@@ -40,7 +40,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
         if (Session["masterpage"] != null)
             objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
         else
-            objCommon.SetMasterPage(Page, "");
+            objCommon.SetMasterPage(Page, ""); 
 
     }
     protected void Page_Load(object sender, EventArgs e)
@@ -86,7 +86,15 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 trEmp.Visible = true;
                 //lblEmployee.Visible = true;
                 //ddlEmployee.Visible = true;
+                //if (ua_type == 4 || ua_type == 8)
+                //{
+                //  tr1.Visible = trcollege.Visible = false;
+                //  trdept.Visible = true;
+                //}
+                //else
+                //{
                 trdept.Visible = tr1.Visible = trcollege.Visible = false;
+                //}
                 trsearchtype.Visible = false;
                 rblSelect.SelectedValue = "1";
                 string userdeptno = Convert.ToString(Session["userdeptno"]);
@@ -160,7 +168,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
         }
     }
     private void FillCollege()
-    {       
+    {
         objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "CODE");
 
         //if (Session["username"].ToString() != "admin")
@@ -278,9 +286,6 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
     }
 
 
-
-    // Sachin 25 May 2017
-
     protected void FillEmployeeIdno()
     {
         int IDNO = 0; Boolean IsBioAuthorityPerson = false;
@@ -322,14 +327,17 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             //trEmp.Visible = false;
             //trsearchtype.Visible = true;
             // objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO=" + deptno, "SUBDEPT");
-            objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
+
             objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
+            //objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
 
-            if (rblEmpType.SelectedValue == "0")
+            //Added by Sonal Banode on 12-09-2023 
+            DataSet ds = null;
+            // int i;
+            ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+            //int rowCount = ds.Tables[0].Rows.Count;
+            if (ds.Tables[0].Rows.Count > 0)
             {
-
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
-
                 if (rblEmpType.SelectedValue == "0")
                 {
                     //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
@@ -366,9 +374,16 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             }
             else
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ") AND PS.PSTATUS='Y'", "FNAME");
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ") AND PS.PSTATUS='Y'", "FNAME");
+                }
             }
-            ddldept.SelectedValue = deptno.ToString();
+            //ddldept.SelectedValue = deptno.ToString();
         }
         // Added By Shrikant B on 31/0/2023 for Department wise Bio metric Authority.
         else if (IsBioAuthorityPerson == true)
@@ -383,27 +398,71 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             //trEmp.Visible = false;
             //trsearchtype.Visible = true;
             // objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO=" + deptno, "SUBDEPT");
-            objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
-            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
 
-            if (rblEmpType.SelectedValue == "0")
+            //FillDepartmentForHOD();
+            //objCommon.FillDropDownList(ddldept, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "SUBDEPT");
+            objCommon.FillDropDownList(ddlStaffType, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "", "STAFFTYPE");
+            //Added by Sonal Banode on 12-09-2023 
+            DataSet ds = null;
+            // int i;
+            ds = objBioMetric.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+            //int rowCount = ds.Tables[0].Rows.Count;
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
+                else
+                {
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                    DataSet dsEmp = objBioMetric.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), Convert.ToInt32(rblEmpType.SelectedValue));
+                    if (dsEmp.Tables[0].Rows.Count > 0)
+                    {
+                        ddlEmployee.Items.Clear();
+                        ddlEmployee.Items.Add("Please Select");
+                        ddlEmployee.SelectedItem.Value = "0";
+                        ddlEmployee.DataSource = dsEmp;
+                        ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                        ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                        ddlEmployee.DataBind();
+                        ddlEmployee.SelectedIndex = 0;
+                    }
+                }
             }
             else
             {
-                objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                if (rblEmpType.SelectedValue == "0")
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")  AND PS.PSTATUS='Y'", "FNAME");
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EMP INNER JOIN PAYROLL_PAYMAS PS ON (EMP.IDNO=PS.IDNO)", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(deptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=1 AND COLLEGE_NO IN(" + Session["college_nos"] + ")  AND PS.PSTATUS='Y'", "FNAME");
+                }
             }
-            ddldept.SelectedValue = deptno.ToString();
+            // ddldept.SelectedValue = deptno.ToString();
         }
         else
         {
             IDNO = Convert.ToInt32(Session["idno"]);
 
-            if (IDNO == 0 || IDNO==null)
+            if (IDNO == 0 || IDNO == null)
             {
                 MessageBox("Sorry! User is not Authorised");
-                
+
                 return;
             }
             trShiftCategory.Visible = false;
@@ -745,7 +804,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -758,7 +817,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                     {
                         if (ua_type == 8 || (Convert.ToBoolean(ViewState["IsBioAuthorityPerson"])))
                         {
-                            ShowReport("LoginDetailAll", "NewLoginDetail.rpt");
+                            ShowReportForHOD("LoginDetailAll", "NewLoginDetail.rpt");
                         }
                         else
                         {
@@ -1109,7 +1168,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
                 return;
             }
 
-           
+
         }
         catch (Exception ex)
         {
@@ -1210,7 +1269,7 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             IDNO = Convert.ToInt32(Session["idno"]);
         }
 
-        
+
 
         if (Convert.ToDateTime(txtDate.Text) <= System.DateTime.Now)
         {
@@ -1289,8 +1348,8 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             IDNO = Convert.ToInt32(Session["idno"]);
         }
 
-       // int IDNO = Convert.ToInt32(Session["idno"]);
-        
+        // int IDNO = Convert.ToInt32(Session["idno"]);
+
 
         //Check whether entered date must not greater than todays date
         if (Convert.ToDateTime(txtDate.Text) <= System.DateTime.Now)
@@ -1424,5 +1483,110 @@ public partial class Login_details_Time_Interval : System.Web.UI.Page
             ShowMessage("You have entered date beyond todays date. Please enter valid date.");
 
         System.Threading.Thread.Sleep(5000);
+    }
+
+
+    private void ShowReportForHOD(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            //------------------------------------------------------------
+            string time_from, time_to, in_out = string.Empty;
+
+            int userno = Convert.ToInt32(Session["userno"]);
+            string deptno = objCommon.LookUp("User_acc", "UA_DEPTNO", "UA_NO = " + Convert.ToInt32(Session["userno"]));
+            string department = deptno.Replace(",", "/");
+            if (rblTime.SelectedValue == "0")
+            {
+                if (txtInTimeFrom.Text != string.Empty && txtInTimeTo.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter End Intime Range", this);
+                    return;
+                }
+                else if (txtInTimeTo.Text != string.Empty && txtInTimeFrom.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter Start Intime Range", this);
+                    return;
+                }
+                else
+                {
+                    time_from = txtInTimeFrom.Text;
+                    time_to = txtInTimeTo.Text;
+                    in_out = "IN";
+                }
+            }
+            
+            else if (rblTime.SelectedValue == "1")
+            {
+                if (txtOutTimeFrom.Text != string.Empty && txtOutTimeTo.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter End Outtime Range", this);
+                    return;
+                }
+                else if (txtOutTimeTo.Text != string.Empty && txtOutTimeFrom.Text == string.Empty)
+                {
+                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Enter Start Outtime Range", this);
+                    return;
+                }
+                else
+                {
+                    time_from = txtOutTimeFrom.Text;
+                    time_to = txtOutTimeTo.Text;
+                    in_out = "OUT";
+                }
+            }
+            else if (chkGraph.Checked == false)
+            {
+                time_from = "N";
+                time_to = "N";
+                in_out = "N";
+            }
+            else
+            {
+                if (rblTime.SelectedValue == "0" && chkGraph.Checked == true)
+                {
+                    in_out = "IN";
+                    time_from = "N";
+                    time_to = "N";
+                }
+                else if (rblTime.SelectedValue == "1" && chkGraph.Checked == true)
+                {
+                    in_out = "OUT";
+                    time_from = "N";
+                    time_to = "N";
+                }
+                else
+                {
+                    time_from = "N";
+                    time_to = "N";
+                    in_out = "N";
+                }
+
+
+
+            }
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("biometrics")));
+
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
+            int idno = 0;
+            idno = Convert.ToInt32(ddlEmployee.SelectedValue);
+
+            url += "&param=@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy/MM/dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy/MM/dd") + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + department + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_TIME_FROM=" + time_from + ",@P_TIME_TO=" + time_to + ",@P_INOUT=" + in_out + ",@P_STNO=" + Convert.ToInt32(ddlStaff.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + " ";
+
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Login_details_Time_Interval.ShowReport -> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
     }
 }

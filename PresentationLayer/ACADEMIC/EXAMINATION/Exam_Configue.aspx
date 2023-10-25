@@ -90,366 +90,397 @@
                         </div>
 
                         <div class="box-body">
-
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-lg-10 col-md-10 col-12">
-                                        <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span>
+                                            <label for="chk_Reg" style="font-size: small;">Exam Registration</label>
+                                        </span>
+                                    </div>
 
-                                            <div class="form-group col-md-2 ">
-                                                <span>
-                                                    <label for="chk_Reg" style="font-size: small;">Exam Registration</label>
-                                                </span>
-                                            </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Reg">
+                                            <label class="custom-control-label" for="chk_Reg"></label>
+                                            <asp:HiddenField ID="hdfexamregister" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
 
-                                            <div class="form-group col-md-2">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Reg">
-                                                    <label class="custom-control-label" for="chk_Reg"></label>
-                                                    <asp:HiddenField ID="hdfexamregister" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span>
+                                            <label for="chk_GraceRule" style="font-size: small;">Grace Rule</label>
+                                        </span>
 
-                                            <div class="form-group col-md-2 ">
-                                                <span>
-                                                    <label for="chk_GraceRule" style="font-size: small;">Grace Rule</label>
-                                                </span>
-
-                                            </div>
+                                    </div>
 
 
-                                            <div class="form-group col-md-2">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_GraceRule">
-                                                    <label class="custom-control-label" for="chk_GraceRule"></label>
-                                                    <asp:HiddenField ID="hdfgarcerule" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <%--<asp:Panel ID="Panel1" runat="server">--%>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_GraceRule">
+                                            <label class="custom-control-label" for="chk_GraceRule"></label>
+                                            <asp:HiddenField ID="hdfgarcerule" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <%--<asp:Panel ID="Panel1" runat="server">--%>
 
-                                                <span class="pr-5">
-                                                    <label for="chk_ExamRule" style="font-size: small;">Exam Rule</label>
-                                                </span>
-                                            </div>
+                                        <span class="pr-5">
+                                            <label for="chk_ExamRule" style="font-size: small;">Exam Rule</label>
+                                        </span>
+                                    </div>
 
 
-                                            <div class="form-group col-md-2">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_ExamRule">
-                                                    <label class="custom-control-label" for="chk_ExamRule"></label>
-                                                    <asp:HiddenField ID="hdfexamrule" runat="server" ClientIDMode="Static" />
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_ExamRule">
+                                            <label class="custom-control-label" for="chk_ExamRule"></label>
+                                            <asp:HiddenField ID="hdfexamrule" runat="server" ClientIDMode="Static" />
 
-                                                    <asp:Panel runat="server" ID="pnlrule" Visible="false">
-                                                        <div class="form-check-inline">
+                                            <asp:Panel runat="server" ID="pnlrule" Visible="false">
+                                                <div class="form-check-inline">
 
-                                                            <asp:RadioButton ID="rdbfixed" runat="server" Text="Fixed" GroupName="ExRule" />&nbsp;
+                                                    <asp:RadioButton ID="rdbfixed" runat="server" Text="Fixed" GroupName="ExRule" />&nbsp;
                                                                            
                                                             <asp:RadioButton ID="rdbdiff" runat="server" Text="Different" GroupName="ExRule" />
-                                                        </div>
-                                                    </asp:Panel>
                                                 </div>
-
-                                            </div>
-
-
+                                            </asp:Panel>
                                         </div>
 
-                                        <div class="row">
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                    </div>
 
-
-                                                <span class="pr-5">
-                                                    <label for="chk_LateFee" style="font-size: small;">Late Fee</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_LateFee">
-                                                    <label class="custom-control-label" for="chk_LateFee"></label>
-                                                    <asp:HiddenField ID="hdflatefee" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-
-
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-
-
-                                                <span class="pr-5">
-                                                    <label for="chk_Improvement" style="font-size: small;">Improvement</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Improvement">
-                                                    <label class="custom-control-label" for="chk_Improvement"></label>
-                                                    <asp:HiddenField ID="hdfImprovement" runat="server" ClientIDMode="Static" />
-                                                </div>
-
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-
-
-                                                <span class="pr-5">
-                                                    <label for="chk_Condonation" style="font-size: small;">Condonation</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Condonation">
-                                                    <label class="custom-control-label" for="chk_Condonation"></label>
-                                                    <asp:HiddenField ID="hdfcondonation" runat="server" ClientIDMode="Static" />
-
-                                                </div>
-                                            </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="">
+                                            <label for="chk_LateFee" style="font-size: small;">Late Fee</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_LateFee">
+                                            <label class="custom-control-label" for="chk_LateFee"></label>
+                                            <asp:HiddenField ID="hdflatefee" runat="server" ClientIDMode="Static" />
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
+                                    </div>
+                                </div>
 
-
-                                                <span class="pr-5">
-                                                    <label for="chk_ResultPublish" style="font-size: small;">ResultPublish & OTP</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_ResultPublish">
-                                                    <label class="custom-control-label" for="chk_ResultPublish"></label>
-                                                    <asp:HiddenField ID="hdfresultpublish" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-
-
-                                                <span class="pr-5">
-                                                    <label for="chk_ExamPattern" style="font-size: small;">Exam Pattern</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_ExamPattern">
-                                                    <label class="custom-control-label" for="chk_ExamPattern"></label>
-                                                    <asp:HiddenField ID="hdfexampattern" runat="server" ClientIDMode="Static" />
-                                                </div>
-
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-
-
-                                                <span class="pr-5">
-                                                    <label for="chk_Revaluation_Process" style="font-size: small;">Revaluation Process</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Revaluation_Process">
-                                                    <label class="custom-control-label" for="chk_Revaluation_Process"></label>
-                                                    <asp:HiddenField ID="hdfrevaluation" runat="server" ClientIDMode="Static" />
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-
-
-                                                <span class="pr-5">
-                                                    <label for="chk_Decode" style="font-size: small;">Decode Number</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Decode">
-                                                    <label class="custom-control-label" for="chk_Decode"></label>
-                                                    <asp:HiddenField ID="hdfdecodenos" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_SeatNumber" style="font-size: small;">Seat Number</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_SeatNumber">
-                                                    <label class="custom-control-label" for="chk_SeatNumber"></label>
-                                                    <asp:HiddenField ID="hdfSeatno" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_MarkEnrtyExcel" style="font-size: small;">Mark Entry By Excel</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_MarkEnrtyExcel">
-                                                    <label class="custom-control-label" for="chk_MarkEnrtyExcel"></label>
-                                                    <asp:HiddenField ID="hdfmarkentryexcel" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_Improvement" style="font-size: small;">Improvement</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Improvement">
+                                            <label class="custom-control-label" for="chk_Improvement"></label>
+                                            <asp:HiddenField ID="hdfImprovement" runat="server" ClientIDMode="Static" />
                                         </div>
 
-                                        <div class="row">
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_Section" style="font-size: small;">Section Wise Time Table</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Section">
-                                                    <label class="custom-control-label" for="chk_Section"></label>
-                                                    <asp:HiddenField ID="hdfsection" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_Batch" style="font-size: small;">Batch Wise Time Table</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_Batch">
-                                                    <label class="custom-control-label" for="chk_Batch"></label>
-                                                    <asp:HiddenField ID="hdfbatch" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_grade_faculty" style="font-size: small;">Grade Allotment From Faculty End </label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_grade_faculty">
-                                                    <label class="custom-control-label" for="chk_grade_faculty"></label>
-                                                    <asp:HiddenField ID="hdfFacgrade" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="">
+                                            <label for="chk_Condonation" style="font-size: small;">Condonation</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Condonation">
+                                            <label class="custom-control-label" for="chk_Condonation"></label>
+                                            <asp:HiddenField ID="hdfcondonation" runat="server" ClientIDMode="Static" />
 
                                         </div>
-
-                                        <div class="row">
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_grade_admin" style="font-size: small;">Grade Allotment From Admin End</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_grade_admin">
-                                                    <label class="custom-control-label" for="chk_grade_admin"></label>
-                                                    <asp:HiddenField ID="hdfadmingrade" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chkGraph" style="font-size: small;">Graph On Relative Grade Page</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chkGraph">
-                                                    <label class="custom-control-label" for="chkGraph"></label>
-                                                    <asp:HiddenField ID="hdfgraph" runat="server" ClientIDMode="Static" />
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-lg-2 col-md-6 col-12">
-                                                <span class="pr-5">
-                                                    <label for="chk_chgrange" style="font-size: small;">Change Grade Range</label>
-                                                </span>
-                                            </div>
-                                            <div class="form-group  col-md-2 ">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="chk_chgrange">
-                                                    <label class="custom-control-label" for="chk_chgrange"></label>
-                                                    <asp:HiddenField ID="hdfrange" runat="server" ClientIDMode="Static" />
-
-                                                </div>
-                                            </div>
-
-                                              <%-------------------edit---------------------%>
-                                            
-                                                <div class="form-group col-lg-2 col-md-6 col-12 ">
-                                                    <span class="pr-5">
-                                                        <label for="chk_college" style="font-size: small;">College</label>
-                                                    </span>
-                                                </div>
-
-                                                <div class="form-group col-md-2">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="chk_college">
-                                                        <label class="custom-control-label" for="chk_college"></label>
-                                                        <asp:HiddenField ID="hdfcollege" runat="server" ClientIDMode="Static" />
-                                                        
-                                                    </div>
-                                                </div>
-                                                   
-                                                 <div class="form-group col-lg-2 ">
-                                                    <span class="pr-5">
-                                                        <label for="chk_session" style="font-size: small;">Session</label>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="chk_session">
-                                                        <label class="custom-control-label" for="chk_session"></label>
-                                                        <asp:HiddenField ID="hdfsession" runat="server" ClientIDMode="Static" />
-                                                    </div>
-                                                </div>
-
-                                             <div class="form-group col-lg-2 ">
-                                                    <span class="pr-5">
-                                                        <label for="chk_feescollection" style="font-size: small;">Academic Fees Collection</label>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="chk_feescollection">
-                                                        <label class="custom-control-label" for="chk_feescollection"></label>
-                                                        <asp:HiddenField ID="hdffeescollection" runat="server" ClientIDMode="Static" />
-                                                    </div>
-                                                </div>
-
-                                             <div class="form-group col-lg-2 ">
-                                                    <span class="pr-5">
-                                                        <label for="chk_relative" style="font-size: small;">Relative</label>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="chk_relative">
-                                                        <label class="custom-control-label" for="chk_relative"></label>
-                                                        <asp:HiddenField ID="hdfrelative" runat="server" ClientIDMode="Static" />
-                                                    </div>
-                                                </div>
-                                             <div class="form-group col-lg-2 ">
-                                                    <span class="pr-5">
-                                                        <label for="chk_absolute" style="font-size: small;">Absolute</label>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="chk_absolute">
-                                                        <label class="custom-control-label" for="chk_absolute"></label>
-                                                        <asp:HiddenField ID="hdfabsolute" runat="server" ClientIDMode="Static" />
-                                                    </div>
-                                                </div>
-                                                    </div>
-                                              
-                                             
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="">
+                                            <label for="chk_ResultPublish" style="font-size: small;">ResultPublish & OTP</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_ResultPublish">
+                                            <label class="custom-control-label" for="chk_ResultPublish"></label>
+                                            <asp:HiddenField ID="hdfresultpublish" runat="server" ClientIDMode="Static" />
                                         </div>
-                                       
-                                              
-                                          
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="">
+                                            <label for="chk_ExamPattern" style="font-size: small;">Exam Pattern</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_ExamPattern">
+                                            <label class="custom-control-label" for="chk_ExamPattern"></label>
+                                            <asp:HiddenField ID="hdfexampattern" runat="server" ClientIDMode="Static" />
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_Revaluation_Process" style="font-size: small;">Revaluation Process</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Revaluation_Process">
+                                            <label class="custom-control-label" for="chk_Revaluation_Process"></label>
+                                            <asp:HiddenField ID="hdfrevaluation" runat="server" ClientIDMode="Static" />
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_Decode" style="font-size: small;">Decode Number</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Decode">
+                                            <label class="custom-control-label" for="chk_Decode"></label>
+                                            <asp:HiddenField ID="hdfdecodenos" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_SeatNumber" style="font-size: small;">Seat Number</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_SeatNumber">
+                                            <label class="custom-control-label" for="chk_SeatNumber"></label>
+                                            <asp:HiddenField ID="hdfSeatno" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_MarkEnrtyExcel" style="font-size: small;">Mark Entry By Excel</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_MarkEnrtyExcel">
+                                            <label class="custom-control-label" for="chk_MarkEnrtyExcel"></label>
+                                            <asp:HiddenField ID="hdfmarkentryexcel" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-122">
+                                        <span class="pr-5">
+                                            <label for="chk_Section" style="font-size: small;">Section Wise Time Table</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Section">
+                                            <label class="custom-control-label" for="chk_Section"></label>
+                                            <asp:HiddenField ID="hdfsection" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_Batch" style="font-size: small;">Batch Wise Time Table</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_Batch">
+                                            <label class="custom-control-label" for="chk_Batch"></label>
+                                            <asp:HiddenField ID="hdfbatch" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_grade_faculty" style="font-size: small;">Grade Allotment From Faculty End </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_grade_faculty">
+                                            <label class="custom-control-label" for="chk_grade_faculty"></label>
+                                            <asp:HiddenField ID="hdfFacgrade" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_grade_admin" style="font-size: small;">Grade Allotment From Admin End</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_grade_admin">
+                                            <label class="custom-control-label" for="chk_grade_admin"></label>
+                                            <asp:HiddenField ID="hdfadmingrade" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chkGraph" style="font-size: small;">Graph On Relative Grade Page</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chkGraph">
+                                            <label class="custom-control-label" for="chkGraph"></label>
+                                            <asp:HiddenField ID="hdfgraph" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12">
+                                        <span class="pr-5">
+                                            <label for="chk_chgrange" style="font-size: small;">Change Grade Range</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group  col-md-1 ">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_chgrange">
+                                            <label class="custom-control-label" for="chk_chgrange"></label>
+                                            <asp:HiddenField ID="hdfrange" runat="server" ClientIDMode="Static" />
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_college" style="font-size: small;">College</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_college">
+                                            <label class="custom-control-label" for="chk_college"></label>
+                                            <asp:HiddenField ID="hdfcollege" runat="server" ClientIDMode="Static" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_session" style="font-size: small;">Session</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_session">
+                                            <label class="custom-control-label" for="chk_session"></label>
+                                            <asp:HiddenField ID="hdfsession" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_feescollection" style="font-size: small;">Academic Fees Collection</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_feescollection">
+                                            <label class="custom-control-label" for="chk_feescollection"></label>
+                                            <asp:HiddenField ID="hdffeescollection" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_relative" style="font-size: small;">Relative</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_relative">
+                                            <label class="custom-control-label" for="chk_relative"></label>
+                                            <asp:HiddenField ID="hdfrelative" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_absolute" style="font-size: small;">Absolute</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_absolute">
+                                            <label class="custom-control-label" for="chk_absolute"></label>
+                                            <asp:HiddenField ID="hdfabsolute" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_barcode" style="font-size: small;">Barcode Number</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_barcode">
+                                            <label class="custom-control-label" for="chk_barcode"></label>
+                                            <asp:HiddenField ID="hdfbarcode" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_feedback" style="font-size: small;">Student Feedback</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_feedback">
+                                            <label class="custom-control-label" for="chk_feedback"></label>
+                                            <asp:HiddenField ID="hdffeedback" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_attendance" style="font-size: small;">Attendance %</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                    
+                                            <input type="checkbox" class="custom-control-input" id="chk_attendance" >
+                                             <%--<asp:checkbox  type="checkbox" class="custom-control-input" runat="server" id="chk_attendance" />--%>
+                                           
+                                            <label class="custom-control-label" for="chk_attendance"></label>
+                                            <asp:HiddenField ID="hdfattendance" runat="server" ClientIDMode="Static" Value="1" />
+                                               
+                                        </div>
+                                    </div>
+                                    <div class="max_tickets">
+                                        <asp:TextBox ID="txtAttendance"  runat="server"></asp:TextBox>
+                                       <%-- <asp:RegularExpressionValidator runat="server" ID="RegularExpressionValidator1"
+                                            ControlToValidate="txtAttendance"
+                                            ValidationExpression="^\d+$"
+                                            ErrorMessage="Only Numbers Accepted."
+                                            Display="Dynamic" />--%>
 
                                     </div>
                                 </div>
+
                             </div>
+
                             <div class="col-12">
                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                     <ContentTemplate>
@@ -517,16 +548,13 @@
                             </div>
 
                             <div class="col-12 text-center mt-3">
-                                <asp:Button ID="btnSave" runat="server" ToolTip="Submit" Text="Save" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return SetStat(this)" />
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
-                                <%-- <button type="button" class="btn btn-primary">Submit</button>
-                                            <button type="button" class="btn btn-warning">Cancel</button>--%>
+                                <asp:Button ID="btnSave" runat="server" ToolTip="Submit" Text="Save" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="return SetStat(this);" TabIndex="0" />
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="0" />
+
                             </div>
                         </div>
                     </div>
                 </div>
-            
-
         </ContentTemplate>
         <Triggers>
             <%--<asp:AsyncPostBackTrigger ControlID="btnSave" />--%>
@@ -535,7 +563,17 @@
         </Triggers>
 
     </asp:UpdatePanel>
+    <script>
 
+        jQuery(document).ready(function ($) {
+            debugger;
+            $('input.custom-control-input').change(function () {
+                if ($(this).is(':checked')) $('div.max_tickets').show();
+               // else $('div.max_tickets').hide();
+            }).change();
+        });
+    </script>
+     
     <script>
 
 
@@ -583,10 +621,16 @@
             var feescollection = document.getElementById("chk_feescollection");
             var relative = document.getElementById("chk_relative");
             var absolute = document.getElementById("chk_absolute");
+            var barcode = document.getElementById("chk_barcode");
+            var feedback = document.getElementById("chk_feedback");
+            var attendance = document.getElementById("chk_attendance");
 
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
+            }
+            else {
+                $('#hdfexamregister').val(false);
             }
 
             if (examrule.checked) {
@@ -595,90 +639,198 @@
                 // document.getElementById("<%= pnlrule.ClientID %>").style.display = "block";
                 $('#hdfexamrule').val(true);
             }
+            else {
+                $('#hdfexamrule').val(false);
+            }
+
 
             if (gracerule.checked) {
 
                 $('#hdfgarcerule').val(true);
-
             }
+            else {
+                $('#hdfgarcerule').val(false);
+            }
+
             if (latefee.checked) {
 
                 $('#hdflatefee').val(true);
 
+            }
+            else {
+                $('#hdflatefee').val(false);
             }
             if (improvement.checked) {
 
                 $('#hdfImprovement').val(true);
 
             }
+            else {
+                $('#hdfImprovement').val(false);
+            }
+
             if (exampattern.checked) {
 
                 $('#hdfexampattern').val(true);
 
             }
+            else {
+                $('#hdfexampattern').val(false);
+            }
+
             if (revaluation.checked) {
 
                 $('#hdfrevaluation').val(true);
 
             }
+            else {
+                $('#hdfrevaluation').val(false);
+            }
+
             if (result.checked) {
 
                 $('#hdfresultpublish').val(true);
-
-
             }
+            else {
+                $('#hdfresultpublish').val(false);
+            }
+
             if (condonation.checked) {
 
                 $('#hdfcondonation').val(true);
 
             }
+            else {
+                $('#hdfcondonation').val(false);
+            }
+
             if (decode.checked) {
                 $('#hdfdecodenos').val(true);
             }
+            else {
+                $('#hdfdecodenos').val(false);
+            }
 
-            if (gradeadmin.checked) {
+
+            if (gradeadmin.checked) {                      //not working
                 $('#hdfadmingrade').val(true);
             }
+            else {
+                $('#hdfadmingrade').val(false);
+            }
+
 
             if (gradefaculty.checked) {
                 $('#hdfFacgrade').val(true);
             }
+            else {
+                $('#hdfFacgrade').val(false);
+            }
+
 
 
             if (seatno.checked) {
                 $('#hdfSeatno').val(true);
             }
+            else {
+                $('#hdfSeatno').val(false);
+            }
+
             if (excel.checked) {
                 $('#hdfmarkentryexcel').val(true);
             }
+            else {
+                $('#hdfmarkentryexcel').val(false);
+            }
+
             if (section.checked) {
                 $('#hdfsection').val(true);
             }
+            else {
+                $('#hdfsection').val(false);
+            }
+
             if (batch.checked) {
                 $('#hdfbatch').val(true);
             }
+            else {
+                $('#hdfbatch').val(false);
+            }
+
             if (graph.checked) {
                 $('#hdfgraph').val(true);
             }
+            else {
+                $('#hdfgraph').val(false);
+            }
+
             if (GradeRange.checked) {
                 $('#hdfrange').val(true);
             }
-            if (college.checked)
-            {
+            else {
+                $('#hdfrange').val(false);
+            }
+
+            if (college.checked) {
                 $('#hdfcollege').val(true);
             }
+            else {
+                $('#hdfcollege').val(false);
+            }
+
             if (session.checked) {
                 $('#hdfsession').val(true);
             }
+            else {
+                $('#hdfsession').val(false);
+
+            }
+
             if (feescollection.checked) {
                 $('#hdffeescollection').val(true);
             }
+            else {
+                $('#hdffeescollection').val(false);
+
+            }
+
             if (relative.checked) {
                 $('#hdfrelative').val(true)
             }
+            else {
+                $('#hdfrelative').val(false);
+            }
+
             if (absolute.checked) {
                 $('#hdfabsolute').val(true)
             }
+            else {
+                $('#hdfabsolute').val(false);
+            }
+
+            if (barcode.checked) {
+                $('#hdfbarcode').val(true)
+            }
+            else {
+                $('#hdfbarcode').val(false);
+            }
+
+            if (feedback.checked) {
+                $('#hdffeedback').val(true)
+            }
+            else
+            {
+                $('#hdffeedback').val(false)
+            }
+            if (attendance.checked) {
+                $('#hdfattendance').val(true)
+                if ($(this).is(':checked')) $('div.max_tickets').show();
+            }
+            else
+            {
+                $('#hdfattendance').val(false)
+            }
+     
         }
 
 
@@ -691,8 +843,18 @@
         }
         // $('#chk_Reg').prop('checked', true);
     </script>
-    <script>
-      
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
+        })
+
     </script>
+    <%-- <script type="text/javascript">
+            $(document).ready(function () {
+                debugger;
+                chk_Reg.val = false;
+                })
+            </script>--%>
 </asp:Content>
 

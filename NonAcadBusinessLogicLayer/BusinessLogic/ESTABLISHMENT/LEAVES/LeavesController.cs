@@ -692,7 +692,7 @@ namespace IITMS
 
                 #endregion // End Leave Type Master Region
 
-                // Holidays Region
+                // Holidays Region 
                 #region Holidays Master
                 // To insert New Holiday
                 public int AddHoliday(Leaves objLeave)
@@ -8299,7 +8299,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[24];
+                        objParams = new SqlParameter[25];
                         objParams[0] = new SqlParameter("@P_isSMS", objLeaves.isSMS);
                         objParams[1] = new SqlParameter("@P_isEmail", objLeaves.isEmail);
                         objParams[2] = new SqlParameter("@P_ODDAYS", objLeaves.ODDAYS);
@@ -8323,8 +8323,9 @@ namespace IITMS
                         objParams[20] = new SqlParameter("@P_IsShowLWP", objLeaves.IsShowLWP);
                         objParams[21] = new SqlParameter("@P_IsChargeHandedMail", objLeaves.IsChargeMail);
                         objParams[22] = new SqlParameter("@P_IsValidatedLeaveComb", objLeaves.IsValidatedLeaveComb);
-                        objParams[23] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[23].Direction = ParameterDirection.Output;
+                        objParams[23] = new SqlParameter("@P_IsNotAllowLeaveinCont", objLeaves.IsNotAllowLeaveinCont);
+                        objParams[24] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[24].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_LEAVE_CONFIGURATION_UPDATE", objParams, true);
                         if (Convert.ToInt32(ret) == -1)

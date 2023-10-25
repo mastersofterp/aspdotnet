@@ -27,7 +27,6 @@ public partial class Pay_ITCalculation : System.Web.UI.Page
 
     string UsrStatus = string.Empty;
 
-
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage

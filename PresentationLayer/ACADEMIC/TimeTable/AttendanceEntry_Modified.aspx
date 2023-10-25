@@ -5,9 +5,39 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%#Page.ResolveClientUrl("~/fullcalendar/fullcalendar.css")%>" rel="stylesheet" />
 
-    <style>
+    <%--<style>
         #ctl00_ContentPlaceHolder1_pnlAttendenceEntry .dataTables_scrollHeadInner {
             width: max-content !important;
+        }
+    </style>--%>
+
+  <style>
+        .Searchfilter {
+            font-size: 15px !important;
+            padding: 0.375rem 0.75rem !important;
+            display: block !important;
+            width: 100% !important;
+            height: 42px !important;
+            background-color: transparent !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 0.25rem !important;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+            margin-left: -15px !important;
+            margin-bottom: 5px !important;
+        }
+    </style>
+
+ <style>
+        #ctl00_ContentPlaceHolder1_pnlAttendenceEntry .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+
+        .attendancestudent .dataTables_filter {
+            display: none !important;
+        }
+
+        .attendancestudent .dt-buttons {
+            display: none !important;
         }
     </style>
 
@@ -487,10 +517,24 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-12">
+                                                <div class="col-12 attendancestudent" >
                                                     <asp:ListView ID="lvStudent" runat="server" OnItemDataBound="lvStudent_ItemDataBound">
                                                         <LayoutTemplate>
-                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                            <%-- Search Textbox Modified by Gopal M - 18/08/2023--%>
+
+                                                            <div class="col-lg-3 col-md-6">
+                                                                <div class="input-group sea-rch">
+                                                                    <%-- <div class="label-dynamic">
+                                                                           <label>Search</label>
+                                                                      </div>--%>
+                                                                    <input type="text" id="FilterData" onkeyup="SearchFunction()" placeholder="Search" class="Searchfilter" />
+                                                                    <%--  <div class="input-group-addon">
+                                                                           <i class="fa fa-search"></i>
+                                                                     </div>--%>
+                                                                </div>
+                                                            </div>
+                                                            <%-- Search end--%>
+                                                            <table class="table table-striped table-bordered nowrap display" id="tblStudentRecordsnew" style="width: 100%">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
                                                                         <th>
@@ -1315,6 +1359,155 @@
         function OnSuccess(response) {
             alert(response.d);
         }
+    </script>
+    <script>
+
+
+        //Search filter Modified by Rohit M - 03/10/2023 
+        function CheckSelectionCount(chk) {
+
+            var Tcount = 0;
+            var Pcount = 0;
+            var ODcount = 0;
+
+            var txtT = document.getElementById('<%=txtTotalStudent.ClientID %>');
+            var txtP = document.getElementById('<%=txtPresentStudent.ClientID %>');
+            var txtA = document.getElementById('<%=txtAbsentStudent.ClientID %>');
+            var txtOD = document.getElementById('<%=txtODStudent.ClientID %>');
+            var frm = document.forms[0]
+
+            var rows = document.getElementById("tblStudentRecordsnew").getElementsByTagName("tr").length;
+            Tcount = rows - 1;
+
+            for (i = 0; i < rows - 1 ; i++) {
+                var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                if (e != null) {
+                    if (e.checked == true) {
+                        Pcount++;
+                    }
+                    if (e.checked == false && e1.value == 1) {
+                        ODcount++;
+                    }
+                }
+            }
+
+            txtT.value = Tcount;
+            txtP.value = Pcount;
+            txtA.value = (Tcount - Pcount - ODcount);
+            txtOD.value = (ODcount);
+        }
+
+        //New function added by Rohit M - 03/10/2023
+        function SearchFunction() {
+            var input, filter, table, tr, td, i, txtValue, td1, td2;
+            var Tcount = 0;
+            var Pcount = 0;
+            var ODcount = 0;
+            var totalcount = 0;
+            var regnoflag = 0;
+            var rollnoflag = 0;
+            var namefalg = 0;
+
+            //var txtT = document.getElementById('<%=txtTotalStudent.ClientID %>');
+            //var txtP = document.getElementById('<%=txtPresentStudent.ClientID %>');
+            //var txtA = document.getElementById('<%=txtAbsentStudent.ClientID %>');
+            //var txtOD = document.getElementById('<%=txtODStudent.ClientID %>');
+
+            input = document.getElementById("FilterData");
+            filter = input.value.toLowerCase();
+            table = document.getElementById("tblStudentRecordsnew");
+            trRow = table.getElementsByTagName("tr");
+
+            for (i = 0; i < trRow.length; i++) {
+                td = trRow[i].getElementsByTagName("td")[3]; // 3- check name column
+                td1 = trRow[i].getElementsByTagName("td")[1]; // 1- check rrm column
+                td2 = trRow[i].getElementsByTagName("td")[2]; // 2- check roll column
+                if (td) {
+
+                    //Name search
+                    if (regnoflag == 0 && rollnoflag == 0) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            namefalg = 1;
+                            Tcount++;
+                            var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                            var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                            if (e != null) {
+                                if (e.checked == true) {
+                                    Pcount++;
+                                }
+                                if (e.checked == false && e1.value == 1) {
+                                    ODcount++;
+                                }
+                            }
+
+                            trRow[i].style.display = "";
+
+                        }
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+                    }
+
+                    //Regno search
+                    if (namefalg == 0 && rollnoflag == 0) {
+                        txtValue = td1.textContent || td1.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            regnoflag = 1;
+                            Tcount++;
+                            var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                            var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                            if (e != null) {
+                                if (e.checked == true) {
+                                    Pcount++;
+                                }
+                                if (e.checked == false && e1.value == 1) {
+                                    ODcount++;
+                                }
+                            }
+
+                            trRow[i].style.display = "";
+
+                        }
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+                    }
+
+                    //Roll No search
+                    if (namefalg == 0 && regnoflag == 0) {
+                        txtValue = td2.textContent || td2.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            rollnoflag = 1;
+                            Tcount++;
+                            var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                            var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                            if (e != null) {
+                                if (e.checked == true) {
+                                    Pcount++;
+                                }
+                                if (e.checked == false && e1.value == 1) {
+                                    ODcount++;
+                                }
+                            }
+
+                            trRow[i].style.display = "";
+
+                        }
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+                    }
+
+                }
+            }
+
+        }
+        //end search filter code
+
+
+
     </script>
 
 </asp:Content>

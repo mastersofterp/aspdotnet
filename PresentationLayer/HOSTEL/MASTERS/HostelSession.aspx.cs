@@ -117,6 +117,7 @@ public partial class Hostel_Masters_HostelSession : System.Web.UI.Page
         txtSessionName.Text = string.Empty;
         txtSessionStart.Text = string.Empty;
         txtSessionEnd.Text = string.Empty;
+        chkIsShow.Checked = true;
         ViewState["action"] = "add";
     }
 
@@ -154,6 +155,7 @@ public partial class Hostel_Masters_HostelSession : System.Web.UI.Page
             string sessionName = txtSessionName.Text.Trim();
             string collegeCode = Session["colcode"].ToString();
             int active = Convert.ToInt32(rdoActive.SelectedValue);
+            int isshow = Convert.ToInt32(chkIsShow.Checked);
 
             if (sessionEnd < seesionStart)
             {
@@ -175,7 +177,7 @@ public partial class Hostel_Masters_HostelSession : System.Web.UI.Page
                         return;
                     }
 
-                    cs = (CustomStatus)HSController.AddHostelSession(sessionName, seesionStart, sessionEnd, collegeCode, active);
+                    cs = (CustomStatus)HSController.AddHostelSession(sessionName, seesionStart, sessionEnd, collegeCode, active,isshow);
                    
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
@@ -192,7 +194,7 @@ public partial class Hostel_Masters_HostelSession : System.Web.UI.Page
                         objCommon.DisplayMessage("Entry for this Selection Already Done!", this.Page);//Added by Saurabh L on 24/05/2022  CheckDuplicateEntryUpdate() function
                         return;
                     }
-                    cs = (CustomStatus)HSController.UpdateHostelSession(sessionName, seesionStart, sessionEnd, hostelSessionNo, active);
+                    cs = (CustomStatus)HSController.UpdateHostelSession(sessionName, seesionStart, sessionEnd, hostelSessionNo, active, isshow);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ShowMessage("Record Updated Successfully!!!.");
@@ -237,6 +239,7 @@ public partial class Hostel_Masters_HostelSession : System.Web.UI.Page
                 txtSessionStart.Text = dr["START_DATE"] == null ? string.Empty : dr["START_DATE"].ToString();
                 txtSessionEnd.Text = dr["END_DATE"] == null ? string.Empty : dr["END_DATE"].ToString();
                 rdoActive.SelectedValue = dr["FLOCK"].ToString();
+                chkIsShow.Checked = Convert.ToBoolean(dr["IS_SHOW"]);
                 ViewState["action"] = "edit";
                 ViewState["HOSTEL_SESSION_NO"] = dr["HOSTEL_SESSION_NO"].ToString();
             }

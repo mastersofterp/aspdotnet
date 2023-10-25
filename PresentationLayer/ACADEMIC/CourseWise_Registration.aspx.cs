@@ -627,19 +627,19 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     }
     protected void ddlReportType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (ddlReportType.SelectedIndex == 5)
+    if (ddlReportType.SelectedIndex == 5)
         {
-            divPendingCourseType.Visible = true;
-            //chkEnabledEmailSubject.Visible = true;
-            btnSendEmail.Visible = true;
-            btnShow.Visible = true;
+        divPendingCourseType.Visible = true;
+        //chkEnabledEmailSubject.Visible = true;
+        btnSendEmail.Visible = true;
+        btnShow.Visible = true;
         }
-        else
+    else
         {
-            divPendingCourseType.Visible = false;
-            //chkEnabledEmailSubject.Visible = false;
-            btnShow.Visible = false;
-            btnSendEmail.Visible = false;
+        divPendingCourseType.Visible = false;
+        //chkEnabledEmailSubject.Visible = false;
+        btnShow.Visible = false;
+        btnSendEmail.Visible = false;
         }
     }
 
@@ -750,6 +750,42 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                     ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
                 }
             }
+            else if (ddlReportType.SelectedValue == "7")
+                {
+
+                DataSet ds = objCC.GetAllStudentWiseCourseRegistrationSummaryReportExcelData(sessionid, collegenos);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                    ds.Tables[0].TableName = "Core Courses Pending Summary";
+                    if (ds.Tables[0] != null && ds.Tables[0].Rows.Count <= 0)
+                        ds.Tables[0].Rows.Add("No Record Found");
+
+                    using (XLWorkbook wb = new XLWorkbook())
+                        {
+                        foreach (System.Data.DataTable dt in ds.Tables)
+                            wb.Worksheets.Add(dt);    //Add System.Data.DataTable as Worksheet.
+
+                        //Export the Excel file.
+                        Response.Clear();
+                        Response.Buffer = true;
+                        Response.Charset = "";
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.AddHeader("content-disposition", "attachment;filename=StdentWiseCourseSummary.xlsx");
+                        using (MemoryStream MyMemoryStream = new MemoryStream())
+                            {
+                            wb.SaveAs(MyMemoryStream);
+                            MyMemoryStream.WriteTo(Response.OutputStream);
+                            Response.Flush();
+                            Response.End();
+                            }
+
+                        }
+                    }
+                else
+                    {
+                    ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
+                    }
+                }
             else
             {
                 DataSet ds = objCC.GetAllCourseRegistrationReportExcelData(sessionid, collegenos, reporttype);
@@ -932,10 +968,11 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
             }
         }
+        
         else
-        {
+            {
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`No record found.`)", true);
-        }
+            }
     }
 
 }

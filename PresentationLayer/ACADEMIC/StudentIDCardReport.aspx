@@ -89,7 +89,7 @@
                                             <%--<label>Admission Batch</label>--%>
                                             <asp:Label ID="lblDYddlAdmBatch" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlAdmbatch" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True">
+                                        <asp:DropDownList ID="ddlAdmbatch" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True" OnSelectedIndexChanged="ddlAdmbatch_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvAdmission" runat="server" ControlToValidate="ddlAdmbatch"
@@ -170,10 +170,32 @@
                                         </div>
                                     </div>
 
+
+                                     <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label> Range From</label>
+                                        </div>
+
+                                        <asp:TextBox runat="server" ID="txtRangeFrom" TabIndex="10" CssClass="form-control" ToolTip="Please Enter Range From" MaxLength="5"></asp:TextBox>
+                                         <ajaxToolKit:FilteredTextBoxExtender ID="ftetxtTutMarks" runat="server" FilterType="Custom"
+                                                                ValidChars="0123456789." TargetControlID="txtRangeFrom"></ajaxToolKit:FilteredTextBoxExtender>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Range To</label>
+                                        </div>
+                                        <asp:TextBox runat="server" ID="txtRangeTo" TabIndex="10" CssClass="form-control" ToolTip="Please Enter Range To" MaxLength="5"></asp:TextBox>
+                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Custom"
+                                                                ValidChars="0123456789." TargetControlID="txtRangeTo"></ajaxToolKit:FilteredTextBoxExtender>
+                                    </div>
+
                                     <%-- <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Upload Registrar Sign</label>
+                                            <label> Maximum number of generations of ID Cards at a time</label>
                                         </div>
                                         <asp:Image ID="imgCollegeLogo" runat="server" ImageUrl="~/images/nophoto.jpg" BorderColor="#0099FF"
                                             BorderStyle="Solid" BorderWidth="1px" Width="30%" Height="10%"/>
@@ -215,6 +237,13 @@
                                 <asp:HiddenField ID="hftot" runat="server" />
                             </div>
 
+                             <div class="form-group col-lg-6 col-md-12 col-12">
+                                    <div class=" note-div">
+                                        <h5 class="heading">Note</h5>
+                                        <p><i class="fa fa-star" aria-hidden="true"></i><span>Maximum 100  ID cards can be genrate  at a time.</span>  </p>
+                                    </div>
+                                </div>
+
                             <div class="col-12">
                                 <asp:Panel ID="Panel1" runat="server">
                                     <asp:ListView ID="lvStudentRecords" runat="server">
@@ -228,6 +257,9 @@
                                                     <tr>
                                                         <th>
                                                             <asp:CheckBox ID="chkIdentityCard" runat="server" onClick="SelectAll(this);" ToolTip="Select or Deselect All Records" />
+                                                        </th>
+                                                        <th>
+                                                            Sr.No.
                                                         </th>
                                                         <th><asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label>
                                                         </th>
@@ -248,6 +280,9 @@
                                                 <td>
                                                     <asp:CheckBox ID="chkReport" runat="server" onClick="totSubjects(this);" />
                                                     <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' />
+                                                </td>
+                                                <td>
+                                                     <%# Container.DataItemIndex + 1%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("REGNO")%>

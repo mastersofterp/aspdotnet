@@ -236,16 +236,17 @@
                                     <div class="col-12 btn-footer">
                                         <asp:Button ID="btnShow" runat="server" CssClass="btn btn-primary" Font-Bold="True" OnClick="btnShow_Click"
                                             Text="Show" ValidationGroup="show" />
-                                        <asp:Button ID="btnBack" runat="server" OnClick="btnBack_Click" Text="Back" CssClass="btn btn-warning" />
+
                                         <asp:Button ID="btnSave" runat="server" Visible="false" OnClientClick="this.disabled=true;" UseSubmitBehavior="false"
                                             OnClick="btnSave_Click" Text="Save" CssClass="btn btn-primary btnSaveEnabled" ValidationGroup="val" />
                                         <asp:Button ID="btnPublish" runat="server" Visible="false" OnClick="btnPublish_Click" OnClientClick="return showPublishConfirm(this,'val');" Text="Publish" CssClass="btn btn-warning"></asp:Button>
                                         <asp:Button ID="btnLock" runat="server" Visible="false" OnClick="btnLock_Click" OnClientClick="return showLockConfirm(this,'val');" Text="Lock" CssClass="btn btn-warning"></asp:Button>
                                         <asp:Button ID="lnkExcekImport" runat="server" Visible="true" OnClick="lnkExcekImport_Click" Text="Import Mark Entry Excel" OnClientClick="validateField();" CssClass="btn btn-info"></asp:Button>
-                      
+
                                         <asp:Button ID="btnPrintReport" runat="server" OnClick="btnPrintReport_Click" Text="Print" CssClass="btn btn-primary" Visible="False" />
                                         <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="show"
                                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                        <asp:Button ID="btnBack" runat="server" OnClick="btnBack_Click" Text="Back" CssClass="btn btn-warning" />
                                     </div>
                                     <div class="col-12 btn-footer mt-2">
                                         <asp:Label ID="lblStudents" runat="server" Font-Bold="true"></asp:Label>
@@ -333,7 +334,7 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="GRADE" Visible="false" ItemStyle-Width="10%" HeaderStyle-HorizontalAlign="Center">
                                                             <ItemTemplate>
-                                                                <asp:DropDownList ID="ddlgrademarks" runat="server" AppendDataBoundItems="True" CssClass="form-control">
+                                                                <asp:DropDownList ID="ddlgrademarks" runat="server" AppendDataBoundItems="True" CssClass="form-control" CausesValidation="true" TabIndex="1">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 </asp:DropDownList>
                                                             </ItemTemplate>

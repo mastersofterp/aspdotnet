@@ -422,13 +422,13 @@ public partial class ACADEMIC_PaperSetFacultyAllotment : System.Web.UI.Page
             if (cnt_total > 0)
                 objCommon.DisplayMessage(this.updFacAllot, "Paper Setters Allotment Locked", this.Page);
             else
-                objCommon.DisplayMessage(this.updFacAllot, "Please select atleast one paper setter for all courses & then lock!", this.Page);
+                objCommon.DisplayMessage(this.updFacAllot, "Please Allot atleast one paper setter for all courses & then lock!", this.Page);
 
         else
             if (cnt_total > 0)
                 objCommon.DisplayMessage(this.updFacAllot, "Paper Setters Alloted!", this.Page);
             else
-                objCommon.DisplayMessage(this.updFacAllot, "Please select atleast fields for one course to save!", this.Page);
+                objCommon.DisplayMessage(this.updFacAllot, "Please Allot atleast fields for one course to save!", this.Page);
 
     }
 

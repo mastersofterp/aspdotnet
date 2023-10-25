@@ -85,6 +85,7 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
                 BindListView();
                 GetAttachmentSize();
                 BlobDetails();
+                Session["Attachments"] = null;
                 // Used to insert id,date and courseno in Log_History table
                 int log_history = objCourse.AddLogHistory(Convert.ToInt32(Session["idno"]), Convert.ToInt32(PageId), Convert.ToInt32(Session["ICourseNo"]));
 
@@ -768,8 +769,7 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
                 }
                 string contentType = contentType = fuAssign.PostedFile.ContentType;
                 string ext = System.IO.Path.GetExtension(fuAssign.PostedFile.FileName);
-                HttpPostedFile file = fuAssign.PostedFile;
-                int SRNO = Convert.ToInt32(objCommon.LookUp("ACD_IASSIGNMENT_STUDREPLY_ATTACHMENTS", "(ISNULL(MAX(SR_NO),0))+1 AS SR_NO", ""));
+                 int SRNO = Convert.ToInt32(objCommon.LookUp("ACD_IASSIGNMENT_STUDREPLY_ATTACHMENTS", "(ISNULL(MAX(SR_NO),0))+1 AS SR_NO", ""));
 
                 if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
                 {
@@ -848,7 +848,7 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
 
                     if (fuAssign.PostedFile.ContentLength < File_size)
                     {
-                        fuAssign.SaveAs(filePath);
+                        
 
                         if (result == true)
                         {
@@ -863,6 +863,8 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
                         }
                         else
                         {
+                            HttpPostedFile file = fuAssign.PostedFile;
+                            fuAssign.SaveAs(filePath);
                             objAssign.FILEPATH = file_path + "ITLE\\upload_files\\student_assignment_reply\\" + fileName;
                         }
                     }

@@ -262,6 +262,8 @@ namespace IITMS
                 private System.Nullable<bool> _IsChargeMail;
                 private System.Nullable<bool> _IsValidatedLeaveComb;
 
+                //Added on 20-09-2023 by Piyush Thakre
+                private System.Nullable<bool> _IsNotAllowLeaveinCont;
                 //
                 # endregion
 
@@ -3259,6 +3261,22 @@ namespace IITMS
                         if ((this._IsValidatedLeaveComb != value))
                         {
                             this._IsValidatedLeaveComb = value;
+
+                        }
+                    }
+                }
+
+                public System.Nullable<bool> IsNotAllowLeaveinCont
+                {
+                    get
+                    {
+                        return this._IsNotAllowLeaveinCont;
+                    }
+                    set
+                    {
+                        if ((this._IsNotAllowLeaveinCont != value))
+                        {
+                            this._IsNotAllowLeaveinCont = value;
 
                         }
                     }

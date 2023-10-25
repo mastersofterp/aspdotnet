@@ -213,7 +213,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         {
                             categorys += (lvItem.FindControl("txtAdmDate") as TextBox).Text + "$";
                         }
-                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31")
+                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31" || rdbCat.SelectedValue == "32" || rdbCat.SelectedValue == "33")
                         {
                             categorys += (lvItem.FindControl("txtusn") as TextBox).Text + "$";
                         }
@@ -412,7 +412,14 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.MERITNO AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
-
+            else if (rdbCat.SelectedValue == "32")
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO ", "S.REGNO,S.STUDNAME,S.FATHERMOBILE AS COLUMNNAME, S.IDNO AS COLUMNID, '' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
+            else if (rdbCat.SelectedValue == "33")
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME , S.IDNO AS COLUMNID , '' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
             #region studfather
             if (rdbCat.SelectedValue == "24" )
             {
@@ -925,6 +932,28 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MERITNO AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
 
+            else if (rdbCat.SelectedValue == "32") 
+            {
+                txtLAdd.Visible = false;
+                txtUSN.Visible = true;
+                txtemail.Visible = false;
+                txtAdmissionDate.Visible = false;
+                imgCal.Visible = false;
+                ddlcat.Visible = false;
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.FATHERMOBILE AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
+
+            else if (rdbCat.SelectedValue == "33")
+            {
+                txtLAdd.Visible = false;
+                txtUSN.Visible = true;
+                txtemail.Visible = false;
+                txtAdmissionDate.Visible = false;
+                imgCal.Visible = false;
+                ddlcat.Visible = false;
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
+
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (rdbCat.SelectedValue == "8" || rdbCat.SelectedValue == "10")
@@ -1026,6 +1055,32 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtLAdd.Visible = false;
 
                     txtUSN.MaxLength = 7;
+                    txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
+
+                }
+                else if (rdbCat.SelectedValue == "32")  
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+
+                    txtUSN.MaxLength = 13;
+                    txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
+
+                }
+                else if (rdbCat.SelectedValue == "33")  
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+
+                    txtUSN.MaxLength = 13;
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
                 }
