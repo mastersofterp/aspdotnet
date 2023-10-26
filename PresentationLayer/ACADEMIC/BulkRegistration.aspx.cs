@@ -680,7 +680,7 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 2)
             ShowReport("RegistrationSlip", "rptBulkCourseRegslipForCrescent.rpt");
         else
-            ShowReport("RegistrationSlip", "rptBulkCourseRegslip.rpt");
+            ShowReport("RegistrationSlip", "rptBulkCourseRegSlip_01.rpt");
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
@@ -807,8 +807,8 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
             ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipForCrescentStudentWise.rpt");
         else
         {
-            //  ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt"); // commented by vipul T. As per T-49243
-            ShowReportStudentWise(idno, "RegistrationSlip", "rptCourseRegSlip.rpt"); // added by vipul T. As per T-49243
+            //  ShowReportStudentWise(idno, "RegistrationSlip", "rptBulkCourseRegslipStudentwise.rpt"); // commented by vipul T. As per T-49243 on dated 26.10.2023
+            ShowReportStudentWise(idno, "RegistrationSlip", "rptCourseRegSlip.rpt"); // added by vipul T. As per T-49243 on dated 26.10.2023
         }
     }
 
