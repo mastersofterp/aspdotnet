@@ -189,7 +189,7 @@
 
                         <div class="tab-content" id="my-tab-content">
                             <div class="tab-pane active" id="ItmMas">
-                                <div>
+                                <%--<div>
                                     <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updatePanel1"
                                         DynamicLayout="true" DisplayAfter="0">
                                         <ProgressTemplate>
@@ -202,7 +202,7 @@
                                             </div>
                                         </ProgressTemplate>
                                     </asp:UpdateProgress>
-                                </div>
+                                </div>--%>
 
                                 <asp:UpdatePanel ID="updatePanel1" runat="server">
                                     <ContentTemplate>
@@ -454,7 +454,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divsessionlist">
                                                         <thead class="bg-light-blue">
                                                             <tr>
                                                                 <th>Action
