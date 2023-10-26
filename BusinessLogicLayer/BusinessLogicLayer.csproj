@@ -280,6 +280,7 @@
     <Compile Include="BusinessLogic\Academic\BatchController.cs" />
     <Compile Include="BusinessLogic\Academic\BranchController.cs" />
     <Compile Include="BusinessLogic\Academic\CertificateMasterController.cs" />
+    <Compile Include="BusinessLogic\Academic\ClubActivityR.cs" />
     <Compile Include="BusinessLogic\Academic\ClubStudentMappingController.cs" />
     <Compile Include="BusinessLogic\Academic\CollegeController.cs" />
     <Compile Include="BusinessLogic\Academic\ConfigController.cs" />
