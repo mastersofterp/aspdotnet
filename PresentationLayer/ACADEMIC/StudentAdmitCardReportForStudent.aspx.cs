@@ -301,6 +301,10 @@ public partial class ACADEMIC_StudentAdmitCardReportForStudent : System.Web.UI.P
                                         {
                                             ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
                                         }
+                                        else if (Convert.ToInt32(Session["OrgId"]) == 16)//for Maher
+                                        {
+                                            ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_Maher.rpt");
+                                        }
                                         else
                                         {
                                             ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket.rpt");
@@ -431,6 +435,10 @@ public partial class ACADEMIC_StudentAdmitCardReportForStudent : System.Web.UI.P
                                 else if (Convert.ToInt32(Session["OrgId"]) == 2) //for CRESCENT
                                 {
                                     ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
+                                }
+                                else if (Convert.ToInt32(Session["OrgId"]) == 16)//for Maher
+                                {
+                                    ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_Maher.rpt");
                                 }
                                 else
                                 {
