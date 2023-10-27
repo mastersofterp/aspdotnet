@@ -762,8 +762,28 @@ public partial class VEHICLE_MAINTENANCE_Transaction_fuelentry : System.Web.UI.P
                 //lvLastIssue.DataBind();
                 //lvLastIssue.Visible = false;
             }
-
-            DataSet ds1 = objCommon.FillDropDown("VEHICLE_FUELENTRY ", "IsNull( Max(LMREADING),0) as LMREADING", "VIDNO", "VIDNO=" + ddlVehicle.SelectedValue + " AND VEHICLE_CATEGORY ='" + vehCat + "' group by VIDNO", "");
+            // Changes is done acording to crescent ticket 49880 Start Meter Reading need to change Zero because of change vehicle meter 
+            int VehFix=0;
+            DateTime meterchangedate = DateTime.MinValue;
+            DataSet dsConf = objCommon.FillDropDown("VEHICLE_METER_CONFIGURATION ", "IsNull( VEHICLE_ID,0) as VEHICLE_ID", "cast (READING_DATE as date) as READING_DATE", "VEHICLE_ID='" + ddlVehicle.SelectedValue + "'", "");
+            if (dsConf.Tables[0].Rows.Count != 0)
+            {
+                VehFix = Convert.ToInt32(dsConf.Tables[0].Rows[0]["VEHICLE_ID"].ToString());
+                //meterchangedate = Convert.ToDateTime(dsConf.Tables[0].Rows[0]["READING_DATE"]).ToString("yyyy-MM-dd");
+              //  meterchangedate = Convert.ToDateTime(dsConf["READING_DATE"]).ToString("dd/MM/yyyy");
+                if (dsConf.Tables[0].Rows[0]["READING_DATE"].ToString() != "")
+                {
+                    meterchangedate = Convert.ToDateTime(dsConf.Tables[0].Rows[0]["READING_DATE"].ToString());  //04-04-2023
+                }
+            }
+            else
+            {
+                 VehFix = 0;
+                meterchangedate=Convert.ToDateTime("2023-10-17");
+            }
+            
+            //DataSet ds1 = objCommon.FillDropDown("VEHICLE_FUELENTRY ", "IsNull( Max(LMREADING),0) as LMREADING", "VIDNO", "VIDNO=" + ddlVehicle.SelectedValue + " AND VEHICLE_CATEGORY ='" + vehCat + "' group by VIDNO", "");
+            DataSet ds1 = objCommon.FillDropDown("VEHICLE_FUELENTRY ", "LMREADING as LMREADING", "VIDNO", "VIDNO=" + ddlVehicle.SelectedValue + " AND LMREADING=(case when VIDNO=" + VehFix + " then ((SELECT ISNULL(MAX(LMREADING),0) AS LMREADING FROM VEHICLE_FUELENTRY WHERE VEHICLE_CATEGORY ='F' and VIDNO=" + VehFix + " and cast (CREATED_DATE as date) BETWEEN '"+ meterchangedate +"' AND CAST(GETDATE() AS DATE))) else (SELECT ISNULL(MAX(LMREADING),0) AS LMREADING FROM VEHICLE_FUELENTRY WHERE VEHICLE_CATEGORY ='F' and VIDNO=" + ddlVehicle.SelectedValue + ") end)", "");
             if (ds1.Tables[0].Rows.Count > 0)
           {
             EndMreading  =Convert.ToDecimal( ds1.Tables[0].Rows[0]["LMREADING"].ToString());
