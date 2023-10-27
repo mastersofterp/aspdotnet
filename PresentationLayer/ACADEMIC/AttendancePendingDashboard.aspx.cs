@@ -118,7 +118,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSession.SelectedIndex > 0)
             {
-
+                divSingle_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -143,6 +143,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             throw new Exception(Ex.Message);
         }
     }
+
     protected void gvChild_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         try
@@ -182,6 +183,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void gvParent_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         try
@@ -475,6 +477,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             divSingle.Visible = false;
             divBulk.Visible = true;
+            btnSendEmail.Visible = false;
         }
     }
     protected void btnbulkShow_Click(object sender, EventArgs e)
@@ -483,7 +486,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSessionBulk.SelectedIndex > 0)
             {
-
+                btnSendEmail.Visible = true;
+                divBulk_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -673,4 +677,25 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         return body;
     }
 
+    protected void btnClearSingle_Click(object sender, EventArgs e)
+    {
+        ddlSession.SelectedIndex = 0;
+        txtFromDate.Text = string.Empty;
+        txtToDate.Text = string.Empty;
+        gvParent.DataSource = null;
+        gvParent.DataBind();
+        divSingle_List.Visible = false;
+    }
+    protected void btnClearBulk_Click(object sender, EventArgs e)
+    {
+        ddlSessionBulk.SelectedIndex = 0;
+        txtbulkFDate.Text = string.Empty;
+        txtbulkTDate.Text = string.Empty;
+        divBulk_List.Visible = false;
+        btnSendEmail.Visible = false;
+        gvBulkEmail.DataSource = null;
+        gvBulkEmail.DataBind();
+       
+       
+    }
 }
