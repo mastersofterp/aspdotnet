@@ -118,6 +118,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSession.SelectedIndex > 0)
             {
+                divSingle_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -485,6 +486,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSessionBulk.SelectedIndex > 0)
             {
+                btnSendEmail.Visible = true;
+                divBulk_List.Visible = true;
                 DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
