@@ -14638,7 +14638,7 @@ namespace IITMS
                 /// <param name="semesterno"></param>
                 /// <param name="courseno"></param>
                 /// <returns></returns>
-                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, int schemeno, int semesterno, int courseno, int OrgID)
+                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, int schemeno, int semesterno, int courseno, int OrgID,int college_id)
                 {
                     DataSet ds = null;
 
@@ -14646,12 +14646,13 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[5];
+                        objParams = new SqlParameter[6];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[1] = new SqlParameter("@P_SCHEMENO", schemeno);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
                         objParams[3] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[4] = new SqlParameter("@P_ORGANIZATIONID", OrgID);
+                        objParams[5] = new SqlParameter("@P_COLLEGE_ID", college_id);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSEWISE_SECTION_ALLOTMENT_REPORT_EXCEL", objParams);
                     }
                     catch

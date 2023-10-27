@@ -36,6 +36,18 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
+                                            <%--<label>Session</label>--%>
+                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSession" AutoPostBack="true" runat="server" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AppendDataBoundItems="true" TabIndex="1" CssClass="form-control" data-select2-enable="true" Font-Bold="True">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
+                                            Display="None" ErrorMessage="Please Select Session." InitialValue="0" ValidationGroup="course"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
                                             <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlClgname" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control"
@@ -46,18 +58,7 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme." ValidationGroup="course">
                                         </asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--<label>Session</label>--%>
-                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSession" AutoPostBack="true" runat="server" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AppendDataBoundItems="true" TabIndex="1" CssClass="form-control" data-select2-enable="true" Font-Bold="True">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                            Display="None" ErrorMessage="Please Select Session." InitialValue="0" ValidationGroup="course"></asp:RequiredFieldValidator>
-                                    </div>
+
 
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
@@ -139,6 +140,21 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Course." ValidationGroup="course">
                                         </asp:RequiredFieldValidator>
                                     </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <label>Section</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true"
+                                            TabIndex="7" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+
+                                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Section." ValidationGroup="course">
+                                        </asp:RequiredFieldValidator>--%>
+                                    </div>
                                 </div>
                             </div>
 
@@ -157,14 +173,15 @@
 
                             <div class="col-12">
                                 <asp:Panel ID="pnlStudent" runat="server" Visible="false">
-                                    <asp:ListView ID="lvStudents" runat="server" OnItemDataBound="lvStudents_ItemDataBound">
+                                    <asp:ListView ID="lvStudents" runat="server">
+                                        <%-- OnItemDataBound="lvStudents_ItemDataBound"--%>
                                         <LayoutTemplate>
                                             <div class="sub-heading">
                                                 <h5>Students List</h5>
                                             </div>
                                             <div class="row mb-1">
                                                 <div class="col-lg-2 col-md-6 offset-lg-7">
-                                                   <%-- <button type="button" class="btn btn-outline-primary float-lg-right saveAsExcel">Export Excel</button>--%>
+                                                    <%-- <button type="button" class="btn btn-outline-primary float-lg-right saveAsExcel">Export Excel</button>--%>
                                                 </div>
 
                                                 <div class="col-lg-3 col-md-6">
@@ -182,6 +199,9 @@
                                                     <thead class="bg-light-blue" style="position: sticky; top: 0; z-index: 1; background: #fff !important; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                         <tr>
                                                             <th style="text-align: center;">Sr No.
+                                                            </th>
+                                                            <th>
+                                                                <asp:CheckBox ID="cbHead" Text="Select All" runat="server"  onclick="totAllSubjects(this)" ToolTip="Select/Select all" />
                                                             </th>
                                                             <th>Roll No.
                                                             </th>
@@ -203,16 +223,19 @@
                                                     <%#Container.DataItemIndex+1 %>
                                                 </td>
                                                 <td>
-                                                    <asp:CheckBox ID="cbRow" runat="server" onclick="totSubjects(this)" ToolTip='<%# Eval("IDNO")%>' Visible="false" />
+                                                    <asp:CheckBox ID="cbRow" runat="server" onclick="totSubjects(this)" ToolTip='<%# Eval("IDNO")%>' /></td>
+                                                <td>
+
                                                     <%# Eval("REGNO")%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("STUDNAME")%>
                                                 </td>
                                                 <td>
-                                                    <asp:DropDownList ID="ddlsec" runat="server" AppendDataBoundItems="true" TabIndex="8" ToolTip='<%# Eval("SECTIONNO")%>'>
+                                                    <%--<asp:DropDownList ID="ddlsec" runat="server" AppendDataBoundItems="true" TabIndex="8" ToolTip='<%# Eval("SECTIONNO")%>'>
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
+                                                    </asp:DropDownList>--%>
+                                                    <asp:Label ID="lblSectionName" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -310,6 +333,33 @@
         });
         return array;
         }
+
+    </script>
+    <script type="text/javascript" language="javascript">
+        function totAllSubjects(headchk)
+        {
+            var frm = document.forms[0]
+            var count = 0;
+            for (i = 0; i < document.forms[0].elements.length; i++)
+            {
+                // alert("check1");
+                var e = frm.elements[i];
+                if (e.type == 'checkbox') {
+                    if (headchk.checked == true)
+                    {
+                        e.checked = true;
+                        //count++;
+                    }
+                    else
+                        e.checked = false;
+                }
+            }
+            if (headchk.checked == true) {
+                count = $('[id*=tblStudents] td').closest("tr").length;
+            }
+            
+        }
+
 
     </script>
 </asp:Content>
