@@ -303,10 +303,7 @@
                                                         <%--   <asp:LinkButton ID="btnDash" runat="server">--%>
                                                         <%--    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>--%>
                                                         <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />
-<<<<<<< HEAD
-=======
                                                         <span class="text">Dashboard</span>
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                                                     </asp:LinkButton>
                                                 </div>
                                                 

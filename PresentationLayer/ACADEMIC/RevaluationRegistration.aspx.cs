@@ -96,14 +96,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                 IPADDRESS = ip.AddressList[0].ToString();
                 ViewState["ipAddress"] = IPADDRESS;
                 ViewState["idno"] = "0";
-<<<<<<< HEAD
-
-                //Check for Activity On/Off for Reval registration.
-                //if (CheckActivity() == false)
-
-=======
                  
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
                 if (Session["usertype"].ToString() == "2")
                 {
@@ -2454,11 +2447,7 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                     }
                 }
                 else
-<<<<<<< HEAD
-                {
-=======
                 {  
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                     objCommon.DisplayMessage(this.Page,"Payment Gateway not define",this.Page);
                     return;
                 }

@@ -1766,12 +1766,6 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                 {
                     objD.DEPENDENTID = 0;
                     objD.PATIENT_CODE = 'E';
-<<<<<<< HEAD
-
-                    objD.PATIENT_NAME = pNAME[1];
-
-=======
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                     //objD.PATIENT_NAME = pNAME[1];
                     if (pNAME.Length == 1)
                     {

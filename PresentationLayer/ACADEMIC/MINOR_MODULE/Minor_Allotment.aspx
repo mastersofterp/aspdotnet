@@ -257,8 +257,6 @@
                                                                 </asp:DropDownList>--%>
                                                                 <asp:ListBox ID="ddlCourseMinor" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"></asp:ListBox>
                                                                 <asp:RequiredFieldValidator ID="rfvddlCourseMinor" runat="server" Display="None" ControlToValidate="ddlCourseMinor" ErrorMessage="Please Select Minor!!!" InitialValue="" ValidationGroup="submit2"></asp:RequiredFieldValidator>
-<<<<<<< HEAD
-=======
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
@@ -271,7 +269,6 @@
                                                                     <asp:ListItem Value="2">Offered Courses</asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <%--<asp:RequiredFieldValidator ID="rfvddlCourseType" runat="server" Display="None" ControlToValidate="ddlCourseType" ErrorMessage="Please Select Course Type!!!" InitialValue="0" ValidationGroup="submit2"></asp:RequiredFieldValidator>--%>
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                                                             </div>
                                                         </div>
                                                     </div>

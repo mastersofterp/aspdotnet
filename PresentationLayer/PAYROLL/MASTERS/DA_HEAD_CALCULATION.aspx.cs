@@ -237,10 +237,6 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
            
             if (cs == 2)
             {
-<<<<<<< HEAD
-                objCommon.DisplayMessage(updpanel, "Record Updated Successfully", this);
-               Response.Redirect(Request.Url.ToString());
-=======
                 if (ViewState["action"].ToString() == "edit")
                 {
                     objCommon.DisplayMessage(updpanel, "Record Updated Successfully", this);
@@ -253,7 +249,6 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
                     // Response.Redirect(Request.Url.ToString());
                     ClearControl();
                 }
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             }
 
 
@@ -411,12 +406,8 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             ddlDAHRA.SelectedValue = hdnDAHEADiD.Value;
             txtDAper.Text = txtCalPer.Text.Trim();
             txtHRAPer.Text = txtHRAPerr.Text.Trim();
-<<<<<<< HEAD
-            if (hdnDetail.Value == "0")
-=======
 
             if (hdnDetail.Value == "False")
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             {
                 chkYrHRACal.Checked = false;
             }
@@ -424,11 +415,6 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             {
                 chkYrHRACal.Checked = true;
             }
-<<<<<<< HEAD
-           
-=======
-
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             txtEffectDate.Text = txtHeadCalDate.Text.Trim();
 
 

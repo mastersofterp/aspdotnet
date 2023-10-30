@@ -724,15 +724,11 @@ public partial class ACADEMIC_Minor_Allotment : System.Web.UI.Page
             return;
         }
 
-<<<<<<< HEAD
-      
-=======
         if (ddlScheme.SelectedValue == "0")
         {
             objCommon.DisplayMessage(this.updCourse, "Please Select Scheme!!!", this.Page);
             return;
         }
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
         if (ddlSemesterminor.SelectedValue == "0")
         {

@@ -2534,21 +2534,13 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                         Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString() == null ? "1" : ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();  //Added for Hits  
 
                         Response.Redirect(RequestUrl, false);
-<<<<<<< HEAD
-
-=======
                          
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                         //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
                         //Response.Redirect(requesturl, false);
                     }
                 }
                 else
-<<<<<<< HEAD
-                {
-=======
                 {  
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                     objCommon.DisplayMessage(this.Page, "Payment Gateway not define", this.Page);
                     return;
                 } 

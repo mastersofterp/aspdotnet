@@ -1062,11 +1062,7 @@
                                                                 <input type="text" id="FilterData" onkeyup="SearchFunction()" placeholder="Search" class="Searchfilter" />
                                                             </div>
                                                         </div>
-<<<<<<< HEAD
-                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblCourse">
-=======
                                                         <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblCourse">
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                                                             <thead class="bg-light-blue">
                                                                 <tr>
                                                                     <th>
@@ -2290,32 +2286,6 @@
 
                 if (td1) {
                     //Name search                 
-<<<<<<< HEAD
-                    if (namefalg == 0 ) {
-                        txtValue = td1.textContent || td1.innerText;
-
-                        if (txtValue != "") {
-                            if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                                regnoflag = 1;
-                                Tcount++;
-                                var e = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_chkAccept");
-                                var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvCourseTeacher_ctrl" + i + "_hdfCourseteach");
-                                //if (e != null) {
-                                //    if (e.checked == true) {
-                                //        Pcount++;
-                                //    }
-                                //    if (e.checked == false && e1.value == 1) {
-                                //        ODcount++;
-                                //    }
-                                //}
-
-                                trRow[i].style.display = "";
-
-                            }
-                            else {
-                                trRow[i].style.display = "none";
-                            }
-=======
 
                     txtValue = td1.textContent || td1.innerText;
                     // alert(txtValue);
@@ -2330,7 +2300,6 @@
                         }
                         else {
                             trRow[i].style.display = "none";
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                         }
                     }
 
