@@ -1038,6 +1038,53 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         }
         return stat;
     }
+
+    protected void btndatewisereport_Click(object sender, EventArgs e)
+    {
+        this.ShowDatewise("TimeTable_DateWise_Report", "rptTimeTable_DateWise.rpt");
+    }
+
+    private void ShowDatewise(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string procedure = "PKG_ACAD_EXAM_DATE_GET_DATE_COURSEWISE_REPORT_JECRC";
+            string parameter = "@P_SESSIONNO,@P_DEGREENO,@P_SEMESTERNO,@P_SCHEMENO,@P_EXAM_NO,@P_COLLEGE_ID,@P_SUBEXAMNO";
+            string values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," +  Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlExamName.SelectedValue) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(ddlSubExamName.SelectedValue) + "";
+            DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                        ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) +
+                      ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) +
+                     ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) +
+                     ",@P_EXAM_NO=" + Convert.ToInt32(ddlExamName.SelectedValue) +
+                     ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) +
+                     ",@P_SUBEXAMNO=" + Convert.ToInt32(ddlSubExamName.SelectedValue) +
+                     ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+                ScriptManager.RegisterStartupScript(this.updExamdate, this.updExamdate.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updExamdate, "No Time Table Created For the selection", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTERS_ExamDate.ShowDatewise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
     #endregion scheme base Time table code
 
     #region Global Course Time Table Tab

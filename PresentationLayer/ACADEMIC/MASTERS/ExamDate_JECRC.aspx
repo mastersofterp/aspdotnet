@@ -104,6 +104,7 @@
                                                     <asp:RequiredFieldValidator ID="rfvddlCollege" runat="server" ErrorMessage="Please Select Institute" ControlToValidate="ddlCollege" Display="None" SetFocusOnError="True" InitialValue="0" ValidationGroup="Show"></asp:RequiredFieldValidator>
                                                     <asp:RequiredFieldValidator ID="rfccolege" runat="server" ErrorMessage="Please Select Institute" ControlToValidate="ddlCollege" Display="None" SetFocusOnError="True" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                     <asp:RequiredFieldValidator ID="rfccollege" runat="server" ErrorMessage="Please Select Institute" ControlToValidate="ddlCollege" Display="None" SetFocusOnError="True" InitialValue="0" ValidationGroup="Excel"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator15" runat="server" ErrorMessage="Please Select Institute" ControlToValidate="ddlCollege" Display="None" SetFocusOnError="True" InitialValue="0" ValidationGroup="Datewise"></asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -123,6 +124,9 @@
                                                         InitialValue="0" SetFocusOnError="true" />
                                                     <asp:RequiredFieldValidator ID="rfvsession3" runat="server" ControlToValidate="ddlSession"
                                                         ValidationGroup="Excel" Display="None" ErrorMessage="Please Select session"
+                                                        InitialValue="0" SetFocusOnError="true" />
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSession"
+                                                        ValidationGroup="Datewise" Display="None" ErrorMessage="Please Select session"
                                                         InitialValue="0" SetFocusOnError="true" />
                                                 </div>
 
@@ -180,6 +184,9 @@
                                                     <asp:RequiredFieldValidator ID="rfvSem1" runat="server" ControlToValidate="ddlSemester"
                                                         ValidationGroup="submit" Display="None" ErrorMessage="Please Select Semester"
                                                         SetFocusOnError="true" InitialValue="0" />
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ControlToValidate="ddlSemester"
+                                                        ValidationGroup="Datewise" Display="None" ErrorMessage="Please Select Semester"
+                                                        SetFocusOnError="true" InitialValue="0" />
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -197,6 +204,9 @@
                                                     <asp:RequiredFieldValidator ID="rfcsubject" runat="server" ControlToValidate="ddlSubjecttype"
                                                         Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ControlToValidate="ddlSubjecttype"
+                                                        Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
+                                                        ValidationGroup="Datewise"></asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -238,6 +248,9 @@
                                                     <asp:RequiredFieldValidator ID="rfvExam1" runat="server" ControlToValidate="ddlExamName"
                                                         ValidationGroup="submit" Display="None" ErrorMessage="Please Select Exam Name"
                                                         SetFocusOnError="true" InitialValue="0" />
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlExamName"
+                                                        ValidationGroup="Datewise" Display="None" ErrorMessage="Please Select Exam Name"
+                                                        SetFocusOnError="true" InitialValue="0" />
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -258,6 +271,7 @@
                                                         ValidationGroup="Show"
                                                         Display="None" ErrorMessage="Please Select Sub Exam Name"
                                                         SetFocusOnError="true" InitialValue="0" />
+
                                                 </div>
 
                                                 <div class="col-12">
@@ -277,6 +291,7 @@
 
 
                                             <asp:Button ID="btnReport" runat="server" Text="Exam Time Table Report" OnClick="btnReport_Click" ValidationGroup="Show" CssClass="btn btn-info" TabIndex="1" />
+                                            <asp:Button ID="btndatewisereport" runat="server" Text="DateWise Time Table Report" OnClick="btndatewisereport_Click" ValidationGroup="Datewise" CssClass="btn btn-info" TabIndex="1" />
 
                                             <asp:Button ID="btnExcel" runat="server" Text="Exam Time Table Excel" OnClick="btnExcel_Click" CssClass="btn btn-info" TabIndex="1" ValidationGroup="Excel" />
                                             <asp:Button ID="btnViewLogin" runat="server" Text="View On Student Login" CssClass="btn btn-info" OnClick="btnViewLogin_Click" ValidationGroup="Show" TabIndex="1" Visible="false" />
@@ -285,6 +300,7 @@
                                             <asp:ValidationSummary ID="valsum" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="submit" />
                                             <asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Show" />
                                             <asp:ValidationSummary ID="valexcel" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Excel" />
+                                            <asp:ValidationSummary ID="valdatewisereport" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Datewise" />
 
                                         </div>
 
