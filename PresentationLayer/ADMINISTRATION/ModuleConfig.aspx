@@ -2435,7 +2435,9 @@
         } else if (selectedText === "Personal Details") {
             pageName = "PersonalDetails.aspx";
         }
-
+        else if(selectedText === "Admission Details"){
+            pageName = "AdmissionDetails.aspx";
+        }
         // Perform an AJAX request
         $.ajax({
             type: "POST",
