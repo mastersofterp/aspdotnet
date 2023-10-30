@@ -2073,11 +2073,7 @@
                     htmlpage += "</tr></thead><tbody>";
                         
                    
-<<<<<<< HEAD
-                    var output = Jdata.map(i => 
-=======
                     var output = Jdata.map(i =>
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                     "<tr>"+
                     "<td hidden>" + i.STUDCONFIG_ID +  "</td>" +
                     "<td>" + i.CAPTION_NAME + "</td>" + 

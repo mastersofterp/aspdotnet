@@ -813,8 +813,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                             btnRangeLock.Visible = false;
                             btnRangrlock.Visible = false;
                         
-<<<<<<< HEAD
-=======
                         }
                     }
                     else
@@ -852,7 +850,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                             btnRangeLock.Visible = false;
                             btnRangrlock.Visible = false;
                         
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                         }
                     }
             }

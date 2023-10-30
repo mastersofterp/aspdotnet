@@ -186,3 +186,12 @@ D:\New folder (2)\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer
 D:\New folder (2)\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csproj.CopyComplete
 D:\New folder (2)\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
 D:\New folder (2)\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.dll
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\BusinessLogicLayer.pdb
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\System.Net.Http.dll
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\Microsoft.CompilerServices.AsyncTargetingPack.Net4.xml
+D:\New folder\rf-common-code\BusinessLogicLayer\bin\Debug\System.Net.Http.xml
+D:\New folder\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.csprojResolveAssemblyReference.cache
+D:\New folder\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.dll
+D:\New folder\rf-common-code\BusinessLogicLayer\obj\Debug\BusinessLogicLayer.pdb

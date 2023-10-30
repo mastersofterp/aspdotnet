@@ -681,8 +681,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         }
                     }
 
-<<<<<<< HEAD
-=======
 
                     // Added Outsatanding FeeCollection  by Gopal M - 02102023  Ticket-#46419
                     if (ds.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"].ToString() != null && ds.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"].ToString() == "1")
@@ -699,7 +697,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
 
 
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                 }
             }
         }
@@ -885,11 +882,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             bool createprnt = false;
             bool CreateRegno = false;
             bool AttTeaching = false;
-<<<<<<< HEAD
-
-=======
                     
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             if (hfchkcreateusernewstudentry.Value == "true")
             {
                 objMod.NewStudUserCreation = true;
@@ -1090,8 +1083,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             ModAdmInfoUserNos = ModAdmInfoUserNos.TrimEnd(',');
 
-<<<<<<< HEAD
-=======
             // Added by Gopal M 03102023 Ticket #46419
             if (hfchkOutstandingFeeCollection.Value == "true")
             {
@@ -1103,7 +1094,6 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 objMod.OUTSTANDING_FEECOLLECTION = false;
                 objMod.OUTSTANDING_MESSAGE = txtOutstandingMessage.Text;
             }
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
 
             //Check whether to add or update

@@ -36,11 +36,9 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-<<<<<<< HEAD
-                        sqlParams = new SqlParameter[50];
-=======
+
                         sqlParams = new SqlParameter[52];
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
+
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -92,16 +90,12 @@ namespace IITMS
                         sqlParams[47] = new SqlParameter("@P_ALLOW_CURRENT_SEM_FOR_REDO_IMPROVE_CRS_REG", AllowCurrSemForRedoImprovementCrsReg);
 
                         sqlParams[48] = new SqlParameter("@P_AUTHORISED_USERS_FOR_MODIFY_ADMISSION_INFO", ModAdmInfoUserNos);
-<<<<<<< HEAD
-                        sqlParams[49] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[49].Direction = ParameterDirection.Output;
-=======
+
                         // Added by Gopal M 03102023 - Ticket #46419
                         sqlParams[49] = new SqlParameter("@P_OUTSTANDING_FEECOLLECTION", objConfig.OUTSTANDING_FEECOLLECTION);
                         sqlParams[50] = new SqlParameter("@P_OUTSTANDING_MESSAGE", objConfig.OUTSTANDING_MESSAGE);
                         sqlParams[51] = new SqlParameter("@P_OUT", SqlDbType.Int);
                         sqlParams[51].Direction = ParameterDirection.Output;
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);
@@ -140,27 +134,7 @@ namespace IITMS
                 /// Added by SP
                 /// </summary>
                 /// <returns></returns>
-<<<<<<< HEAD
-=======
-                //public DataSet GetStudentConfigData()
-                //{
-                //    DataSet ds = null;
-                //    try
-                //    {
-                //        SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                //        SqlParameter[] objParams = new SqlParameter[2];
-                //        objParams[0] = new SqlParameter("@ORGID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
-                //        objParams[1] = new SqlParameter("@PAGENO", "73");
-                //        ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_GET_STUDENT_CONFIG_DATA", objParams);
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ConfigAffilationTypeController.GetModuleConfigData() --> " + ex.Message + " " + ex.StackTrace);
-                //    }
-                //    return ds;
-                //}
 
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                 public DataSet GetStudentConfigData(int OrgID, string PageNo, string PageName)
                 {
                     DataSet ds = null;

@@ -8470,8 +8470,6 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                     return ds;
                 }
 
-<<<<<<< HEAD
-=======
                 // added by prafull for substitute mark entry on dt:10-10-2023
 
                 public DataSet GetStudentsForMarkEntry_Substitute(int sessiono, int ua_no, string ccode, int sectionno, int subid, int semesterno, string Exam, int COURSENO, string Sub_Exam)
@@ -8608,7 +8606,6 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                     return ds;
                 }
 
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
             }
 

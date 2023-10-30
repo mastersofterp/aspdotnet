@@ -74,3 +74,8 @@ D:\New folder (2)\rf-common-code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
 D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
 D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
 D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\New folder\rf-common-code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\New folder\rf-common-code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\New folder\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
+D:\New folder\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\New folder\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
