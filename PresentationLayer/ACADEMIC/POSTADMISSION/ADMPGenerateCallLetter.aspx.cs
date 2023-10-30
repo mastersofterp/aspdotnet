@@ -157,7 +157,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPGenerateCallLetter : System.Web.
             else
             {
 
-                objCommon.DisplayMessage(updGenerateCallLetter, "No Recored Found.", this.Page);
+                objCommon.DisplayMessage(updGenerateCallLetter, "No Record found.", this.Page);
                 pnlGV1.Visible = false;
                 lvSchedule.Visible = false;
                 lvSchedule.DataSource = null;

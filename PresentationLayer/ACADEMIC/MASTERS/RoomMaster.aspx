@@ -30,8 +30,8 @@
                 scrollCollapse: true,
                 paging: true, // Added by Gaurav for Hide pagination
                 lengthMenu: [
-                [50, 100, 150, 500],
-                 [50, 100, 150, 500, 'All'],
+                [50, 100, 150, 500,1000,2000],
+                 [50, 100, 150, 500,1000,2000,'All'],
                 ],
                 dom: 'lBfrtip',
                 buttons: [
@@ -195,8 +195,8 @@
                     scrollCollapse: true,
                     paging: true, // Added by Gaurav for Hide pagination
                     lengthMenu: [
-            [50, 100, 150, 500],
-              [50, 100,150, 500, 'All'],
+            [50, 100, 150, 500,1000,2000],
+              [50, 100, 150, 500,1000,2000,'All'],
                     ],
                     dom: 'lBfrtip',
                     buttons: [
@@ -456,7 +456,7 @@
                                             <asp:Label ID="lblBlock" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlBlockNo" runat="server" AppendDataBoundItems="true" data-select2-enable="true" AutoPostBack="True"
-                                            TabIndex="3">
+                                            TabIndex="3" OnSelectedIndexChanged="ddlBlockNo_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlBlockNo"
@@ -464,79 +464,65 @@
                                             ValidationGroup="Submit"></asp:RequiredFieldValidator>
                                     </div>
 
-
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--  <label>Block/Room Name</label>--%>
-                                            <asp:Label ID="lblDYtxtBlockroomname" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:TextBox ID="txtRoomName" MaxLength="50" runat="server" TabIndex="4" AppendDataBoundItems="true" AutoCompleteType="Disabled"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ID="rfvRoomName" runat="server" ControlToValidate="txtRoomName"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Select Room Name"
-                                            SetFocusOnError="true" />
-                                        <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
-                                            TargetControlID="txtRoomName">
-                                        </ajaxToolKit:FilteredTextBoxExtender>--%>
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--<label>Block/Room Capacity</label>--%>
-                                            <asp:Label ID="lblDYtxtBlockRoomCapacity" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:TextBox ID="txtRoomCapacity" runat="server" TabIndex="5" MaxLength="3" AutoCompleteType="Disabled" />
-                                        <asp:RequiredFieldValidator ID="rfvRoomCapacity" runat="server" ControlToValidate="txtRoomCapacity"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Room Capacity."
-                                            SetFocusOnError="true" />
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="fteRoomCapacity" runat="server" FilterType="Numbers"
-                                            TargetControlID="txtRoomCapacity">
-                                        </ajaxToolKit:FilteredTextBoxExtender>
-
-                                    </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="row">
-                                            <div class="form-group col-6">
-                                                <div class="label-dynamic">
-                                                    <sup>* </sup>
-                                                    <label>Active Status</label>
-                                                </div>
-                                                <div class="">
-                                                    <asp:CheckBox ID="chkStatus" runat="server" Checked="true" TabIndex="6" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <%-- <div class="form-group col-lg-3 col-md-6 col-12" >
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--<label>Room Sequence</label>--%>
-                                    <%--    <asp:Label ID="lblDYtxtBlockRoomseq" runat="server" Font-Bold="true" Visible="false"></asp:Label>
-                                        </div>
-                                        <asp:TextBox ID="txtSequence" runat="server" TabIndex="6" MaxLength="3" />
-
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Custom" FilterMode="ValidChars" ValidChars="0123456789"
-                                            TargetControlID="txtSequence">
-                                        </ajaxToolKit:FilteredTextBoxExtender>--%>
-
-                                    <%--   <asp:RequiredFieldValidator ID="rfvSequence" runat="server" ControlToValidate="txtSequence"
-                                            ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Sequence No."
-                                            SetFocusOnError="true" />--%>
-                                    <%--   </div>--%>
                                 </div>
 
                             </div>
+                            <div>
+                                <div class="col-12  mt-3">
+                                    <asp:Panel ID="pnlAssessment" runat="server">
+                                            <asp:ListView ID="lvAssessment" runat="server">
+                                                <LayoutTemplate>
+                                                    <div class="table-responsive" style="height: 250px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                        <table class="table table-striped table-bordered nowrap " style="width: 100%;" id="MainLeadTable">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Sr No</th>
+                                                                    <th>Room Name</th>
+                                                                    <th>Room Capacity</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="text-align: center">
+                                                                <%# Container.DataItemIndex + 1 %>
+                                                                <asp:HiddenField ID="hfsrno" runat="server" Value='<%# Container.DataItemIndex + 1 %>' />
+                                                                <asp:HiddenField ID="hfdValue" runat="server" Value="0" />
+                                                            </td>
+                                                            <td>
+                                                                <asp:TextBox ID="txtRoomName" runat="server" CssClass="form-control" Width="300px" placeholder="Please Enter" TabIndex="4"></asp:TextBox></td>
+                                                            <td>
+                                                                <asp:TextBox ID="txtRoomCapacity" runat="server" CssClass="form-control"  Width="200px" placeholder="Please Enter" TabIndex="5"></asp:TextBox></td>
+                                                             <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtRoomCapacity"
+                                                              ValidChars="1234567890" FilterMode="ValidChars" />
+                                                             <td>
+                                                                <asp:CheckBox ID="chkStatus" runat="server" TabIndex="6" /></td>
+
+
+                                                            <%--placeholder="25"--%>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                      
+                                    </asp:Panel>
+                                </div>
+
+
+                            </div>
                             <div class="col-12 btn-footer">
+                                 <asp:Button ID="btnadd" runat="server" Text="Add" CssClass="btn btn-primary" Onclick="btnadd_Click" TabIndex="7" />
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" ValidationGroup="Submit"
-                                    TabIndex="7" OnClick="btnSubmit_Click" />
-
-                                <%-- <asp:Button ID="btnreport" runat="server" Text="Report" CssClass="btn btn-info" ValidationGroup="Report"
-                                    TabIndex="7" OnClick="btnreport_Click" />--%>
-
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="8" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
+                                    TabIndex="8" OnClick="btnSubmit_Click" />
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="9" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Submit" />
 

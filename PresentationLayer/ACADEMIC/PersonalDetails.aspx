@@ -483,7 +483,7 @@
                                                     <asp:DropDownList ID="ddlClaimedcategory" CssClass="form-control" runat="server" AppendDataBoundItems="True"
                                                         ToolTip="Please Select category" TabIndex="13" data-select2-enable="true">
                                                     </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvddlClaimedcategory" runat="server" ControlToValidate="ddlClaimedcategory"
+                                                     <asp:RequiredFieldValidator ID="rfvddlClaimedcategory" runat="server" ControlToValidate="ddlClaimedcategory"
                                                         Display="None" ErrorMessage="Please Select category" SetFocusOnError="True"
                                                         ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>

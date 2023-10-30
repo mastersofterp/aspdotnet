@@ -256,6 +256,10 @@ public partial class PayUOnlinePaymentRequest : System.Web.UI.Page
         {
             result = objFees.InsertInstallmentOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), txnid1, Convert.ToDouble(Session["studAmt"]), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), "-");
         }
+        else if (Session["ReceiptType"].ToString() == "PRF" || Session["ReceiptType"].ToString() == "RF" || Session["ReceiptType"].ToString() == "SEF")
+        {
+            result = objFees.InsertPayment_Log_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Session["semesternos"].ToString(), txnid1, 1, Convert.ToString(Session["ReceiptType"]), "-");
+        }
         else
         {
             result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), txnid1, 1, Convert.ToString(Session["ReceiptType"]), "-");

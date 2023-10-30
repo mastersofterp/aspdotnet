@@ -640,10 +640,10 @@
             text = text.replace(/\s+/g, " ");
 
             // Restrict to only one space
-            if (text.indexOf(" ") !== -1 && text.lastIndexOf(" ") !== text.indexOf(" ")) {
-                var firstSpaceIndex = text.indexOf(" ");
-                text = text.substring(0, firstSpaceIndex) + text.substring(firstSpaceIndex + 1);
-            }
+            //if (text.indexOf(" ") !== -1 && text.lastIndexOf(" ") !== text.indexOf(" ")) {
+            //    var firstSpaceIndex = text.indexOf(" ");
+            //    text = text.substring(0, firstSpaceIndex) + text.substring(firstSpaceIndex + 1);
+            //}
 
             // Update the textbox value
             textbox.value = text;

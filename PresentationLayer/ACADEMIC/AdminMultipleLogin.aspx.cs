@@ -90,7 +90,7 @@ public partial class ACADEMIC_AdminMultipleLogin : System.Web.UI.Page
 
     private void PopulateDropDownList()
     {
-        DataSet dsUser = objCommon.FillDropDown("USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID IN (2,3)", "USERTYPEID");
+        DataSet dsUser = objCommon.FillDropDown("USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (1,6,14)", "USERTYPEID");
         ddlUserType.DataSource = dsUser;
         ddlUserType.DataTextField = dsUser.Tables[0].Columns[1].ToString();
         ddlUserType.DataValueField = dsUser.Tables[0].Columns[0].ToString();

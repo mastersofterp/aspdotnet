@@ -8470,6 +8470,145 @@ new SqlParameter("@P_OP", SqlDbType.Int)
                     return ds;
                 }
 
+<<<<<<< HEAD
+=======
+                // added by prafull for substitute mark entry on dt:10-10-2023
+
+                public DataSet GetStudentsForMarkEntry_Substitute(int sessiono, int ua_no, string ccode, int sectionno, int subid, int semesterno, string Exam, int COURSENO, string Sub_Exam)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[9];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[4] = new SqlParameter("@P_SUBID", subid);
+                        objParams[5] = new SqlParameter("@P_EXAM", Exam);
+                        objParams[6] = new SqlParameter("@P_semesterno", semesterno);
+                        objParams[7] = new SqlParameter("@P_COURSENO", COURSENO);
+                        objParams[8] = new SqlParameter("@P_SUB_EXAM", Sub_Exam);   // ADDED BY ABHINAY LAD [22-07-2019]
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STUD_GET_STUD_FOR_MARKENTRY_CRESCENT_SUBSTITUTE", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetStudentsForMarkEntry-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+                public int UpdateMarkEntryNew_crescent_substitute(int sessionno, int courseno, string ccode, string idnos, string marks, int lock_status, string exam, int th_pr, int ua_no, string ipaddress, string examtype, int FlagReval, string to_email, string from_email, string smsmobile, int flag, string sms_text, string email_text, string subExam_Name, int SemesterNo, int SectionNo)
+                {
+                    int retStatus;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[] 
+                        { 
+                            //Parameters for MARKS
+                            new SqlParameter("@P_SESSIONNO", sessionno),
+
+                            //Added By Abhinay Lad [17-07-2019]
+                            new SqlParameter("@P_COURSENO", courseno),
+
+                            new SqlParameter("@P_CCODE", ccode),
+                            new SqlParameter("@P_STUDIDS", idnos),
+                            //Mark Fields
+                            new SqlParameter("@P_MARKS", marks),
+                            //Parameters for Final Lock 
+                            new SqlParameter("@P_LOCK", lock_status),
+                            new SqlParameter("@P_EXAM", exam),
+                            //Parameters for ACD_LOCKTRAC TABLE 
+                            new SqlParameter("@P_TH_PR", th_pr),
+                            new SqlParameter("@P_UA_NO", ua_no),
+                            new SqlParameter("@P_IPADDRESS", ipaddress),
+                            new SqlParameter("@P_EXAMTYPE", examtype),
+
+                            //Added By Abhinay Lad [17-07-2019]
+                            new SqlParameter("@P_FLAGREVAL", FlagReval),
+
+                            new SqlParameter("@P_TO_EMAIL", to_email),
+                            new SqlParameter("@P_FROM_EMAIL", from_email),
+                            new SqlParameter("@P_SMSMOB", smsmobile),
+                            new SqlParameter("@P_FLAG", flag),
+                            new SqlParameter("@P_SMS_TEXT", sms_text),
+                            new SqlParameter("@P_EMAIL_TEXT", email_text),
+                            new SqlParameter("@P_SUB_EXAM", subExam_Name),
+                            new SqlParameter("@P_SEMESTERNO", SemesterNo),
+                            new SqlParameter("@P_SECTIONNO", SectionNo),
+                            new SqlParameter("@P_OP", SqlDbType.Int)
+                        };
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ////object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUD_INSERT_MARKS", objParams, true);
+                        //retStatus = (int)objSQLHelper.ExecuteNonQuerySP("PKG_STUD_INSERT_MARK_WITH_RULE_abhinay_03092019", objParams, true);
+                        retStatus = (int)objSQLHelper.ExecuteNonQuerySP("PKG_STUD_INSERT_MARK_WITH_RULE_CRESCENT_SUBSTITUTE", objParams, true);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = -99;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.UpdateMarkEntry --> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetCourseForTeacher_Substitute(int sessionno, int ua_no, int subid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_SUBID", subid);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSE_SP_GET_TEACHER_COURSES_SUBSTITUTE_CRESCENT", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetCourseForTeacher-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+                public DataSet GetCourse_MarksEntryStatus_Substitute(int sessionno, int ua_no, int subid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[2] = new SqlParameter("@P_SUBID", subid);
+                        if (subid == 2 || subid == 4) // added by S.Patil
+                        {
+                            ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSE_SP_GET_TEACHER_COURSES_MARKS_ENTRY_STATUS_SUBEXAM_SUBSTITUTE_CRESCENT", objParams);
+                        }
+                        else
+                        {
+                            ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSE_SP_GET_TEACHER_COURSES_MARKS_ENTRY_STATUS_SUBSTITUTE_CRESCENT", objParams);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.MarksEntryController.GetCourseForTeacher-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
             }
 

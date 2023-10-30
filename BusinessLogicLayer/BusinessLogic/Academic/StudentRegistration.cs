@@ -6805,6 +6805,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
+<<<<<<< HEAD
+=======
 
                 //Add New Registered Subject Details
                 objParams = new SqlParameter[14];
@@ -6867,7 +6869,155 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //added by shubham for convocation registration page
+        public int AddConvocationRegistrationDetails(StudentRegist objSR, string Amt, string order_id, int semesterno)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
 
+                //Add New Convocation Registered Details
+                objParams = new SqlParameter[11];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                objParams[3] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[4] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                objParams[5] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[6] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                objParams[7] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[8] = new SqlParameter("@P_FEES", Amt);
+                objParams[9] = new SqlParameter("@P_ORDER_ID", order_id);
+                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
+
+                //Add New Registered Subject Details
+                objParams = new SqlParameter[14];
+
+<<<<<<< HEAD
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_IDNO", objSR.IDNO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNO);
+                objParams[3] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[4] = new SqlParameter("@P_COURSENOS", objSR.COURSENOS);
+                objParams[5] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[6] = new SqlParameter("@P_ROLLNO", objSR.ROLLNO);
+                objParams[7] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[8] = new SqlParameter("@P_UA_N0", objSR.UA_NO);
+                objParams[9] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[10] = new SqlParameter("@P_AUDIT_COURSENOS", objSR.Audit_course);
+                objParams[11] = new SqlParameter("@P_REGISTERED", objSR.EXAM_REGISTERED);
+                objParams[12] = new SqlParameter("@P_SECTIONNOS", objSR.SECTIONNOS);
+                objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[13].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PREREGIST_SP_INS_REGIST_SUBJECTS_AUDIT_ADMIN", objParams, true);
+=======
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_CONVOCATION_REGISTRATION_CREATE_DEMAND_FOR_STUDENT ", objParams, true);
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+<<<<<<< HEAD
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddAddlRegisteredSubjectsAuditTypeCourseAdmin-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
+
+        //added by Shailendra K. n on 14.09.2023
+        public DataSet GetStudentCourseRegistrationSubject(int SESSIONNO, int IDNO, int SEMESTERNO, int SCHEMENO, int COMMANDTYPE, int UA_TYPE)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQL = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[6];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", SESSIONNO);
+                objParams[1] = new SqlParameter("@P_IDNO", IDNO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+                objParams[3] = new SqlParameter("@P_SCHEMENO", SCHEMENO);
+                objParams[4] = new SqlParameter("@P_COMMANDTYPE", COMMANDTYPE);
+                objParams[5] = new SqlParameter("@P_UA_TYPE", UA_TYPE);
+
+                ds = objSQL.ExecuteDataSetSP("PKG_COURSEREGISTRATION_SP_GET_OFFERED_SUBJECTS", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetStudentCourseRegistrationSubject-> " + ex.ToString());
+            }
+            return ds;
+        }
+=======
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
+
+        //added by ROHIT  SUMMER TERM
+        public int AddExamRegistered_Summer(StudentRegist objSR)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                //Add New eXAM Registered Subject Details
+                objParams = new SqlParameter[11];
+
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNOS);
+                objParams[3] = new SqlParameter("@P_BACK_COURSENOS", objSR.COURSENOS);
+                objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[5] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                //objParams[6] = new SqlParameter("@P_PREV_STATUS", Prev_status);
+                objParams[6] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[7] = new SqlParameter("@P_ROLLNO", objSR.ROLLNO);
+                objParams[8] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                objParams[9] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[10].Direction = ParameterDirection.Output;
+
+                //object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_RESULT_FAIL_LIST_BACKLOG_REG", objParams, true);
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_RESULT_INSERT_FAIL_LIST_SUMMER", objParams, true);
+                //PKG_EXAM_RESULT_INSERT_FAIL_LIST_BACKLOG_REG
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
     }
 }
 

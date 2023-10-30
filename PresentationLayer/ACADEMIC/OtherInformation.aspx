@@ -723,6 +723,7 @@
                                             </div>
 
                                             <div class="col-12 btn-footer">
+                                                <asp:Button ID="btnSave" runat="server" class="btn btn-primary" Text="Save" OnClick="btnSave_Click" />
                                                 <asp:Button ID="btnSubmit" runat="server" TabIndex="100" Text="Final Submit" ToolTip="Click to Report" OnClientClick=" return Confirmation();"
                                                     class="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Academic" />
                                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True"

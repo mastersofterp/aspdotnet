@@ -32,7 +32,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             //if (Session["userno"]=="1")
             //        {
-
+            var SessionOrgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
 
             Session["AuthFlag"] = 0;
             objCommon.FillListBox(ddluser, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=5 and UA_STATUS=0", "UA_NO DESC");
@@ -190,7 +190,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
                     else
                     {
-
+                        hfchknewstudentemail.Value = "false";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565645", "NewstudEmailSend(false);", true);
                     }
@@ -203,13 +203,13 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         //  ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'true');", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "paymentmailsend(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src4", "paymentmailsend(true);", true);
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9552511", "docverification(true);", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9552515", "docverification(true);", true);
                     }
                     else
                     {
                         //rdID = "chkAllowDocumentVerification";
-                        //hfchksendpaymentmailstudentry.Value = "false";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9552511", "docverification(false);", false);
+                        hfchkAllowDocumentVerification.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9552515", "docverification(false);", false);
 
                     }
 
@@ -224,23 +224,22 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chksendpaymentmailstudentry";
-                        //hfchkAllowDocumentVerification.Value = "false";
+                        hfchksendpaymentmailstudentry.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
-
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript955662511", "paymentmailsend(false);", false);
                     }
 
                     if (ds.Tables[0].Rows[0]["FEES_COLL_USER_CREATION"].ToString() != null && ds.Tables[0].Rows[0]["FEES_COLL_USER_CREATION"].ToString() == "1")
                     {
                         // rdID = "chkUserCreationonFee"; 
-                        // hfchkUserCreationonFee.Value = "true";
+                         hfchkUserCreationonFee.Value = "true";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript13", "Feescollusercreation(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'true');", true);
                     }
                     else
                     {
                         // rdID = "chkUserCreationonFee";
-                        // hfchkUserCreationonFee.Value = "false";
+                        hfchkUserCreationonFee.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript13", "Feescollusercreation(false);", true);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
                     }
@@ -258,9 +257,9 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfchkcreateusernewstudentry.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7", "newstuduser(false);", false);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7", "newstudentryusercreation(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
                     }
 
@@ -273,6 +272,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
                     else
                     {
+                        hfdchkcreateusernewprntentry.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript786", "newchkcreateusernewprntentry(false);", false);
                     }
 
@@ -284,6 +284,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
                     else
                     {
+                        hfdchkCreateRegno.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript765852654", "newchkCreateRegno(false);", false);
 
                     }
@@ -296,6 +297,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
                     else
                     {
+                        hfdchkAttTeaching.Value = "false";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7366933", "newschkAttTeaching(false);", false);
 
                     }
@@ -309,23 +311,20 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript98", "trisemester(true);", true);
-                        // ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript13", "Feescollusercreation(true);", true);
-                        //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'true');", true);
                     }
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfchksendemailonstudentry.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript98", "trisemester(false);", false);
-                        // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
                     }
 
 
                     if (ds.Tables[0].Rows[0]["CHECK_PREV_SEM_OUTSNADING"].ToString() != null && ds.Tables[0].Rows[0]["CHECK_PREV_SEM_OUTSNADING"].ToString() == "1")
                     {
                         rdID = "hfchkoutstandingfees";
-                        hfchksendemailonstudentry.Value = "true";
+                        hfchkoutstandingfees.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript981", "outstanding(true);", true);
@@ -335,7 +334,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfchkoutstandingfees.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript981", "outstanding(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
@@ -362,8 +361,9 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
                     if (ds.Tables[0].Rows[0]["SEM_ADM_OFF_PAY_BTN"].ToString() != null && ds.Tables[0].Rows[0]["SEM_ADM_OFF_PAY_BTN"].ToString() == "1")
                     {
-                        rdID = "hfchkafteresempromotion";
+                        rdID = "hfchkafteresempromotion";   
                         hfchksendemailonstudentry.Value = "true";
+                        hfSemadmOfflinebtn.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript952511", "semadmofflinebtn(true);", true);
@@ -373,7 +373,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfSemadmOfflinebtn.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript952511", "semadmofflinebtn(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
@@ -382,7 +382,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     if (ds.Tables[0].Rows[0]["SEM_PROM_BEFORE_SEM_ADM"].ToString() != null && ds.Tables[0].Rows[0]["SEM_PROM_BEFORE_SEM_ADM"].ToString() == "1")
                     {
                         rdID = "hfchkbeforesempromotion";
-                        hfchksendemailonstudentry.Value = "true";
+                        hfchkbeforesempromotion.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript511", "semadmbeforepromotion(true);", true);
@@ -392,7 +392,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfchkbeforesempromotion.Value = "true";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript511", "semadmbeforepromotion(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
@@ -400,27 +400,27 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
                     if (ds.Tables[0].Rows[0]["SEM_PROM_AFTER_SEM_ADM"].ToString() != null && ds.Tables[0].Rows[0]["SEM_PROM_AFTER_SEM_ADM"].ToString() == "1")
                     {
-                        rdID = "hfchkafteresempromotion";
-                        hfchksendemailonstudentry.Value = "true";
+                        rdID = "hfchkafteresempromotion"; 
+                        hfchkafteresempromotion.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript95252511", "semadmafterpromotion(true);", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript95252516", "semadmafterpromotion(true);", true);
                         // ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript13", "Feescollusercreation(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'true');", true);
                     }
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfchkafteresempromotion.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript95252511", "semadmafterpromotion(false);", false);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript95252516", "semadmafterpromotion(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
                     }
 
                     if (ds.Tables[0].Rows[0]["REACTIVATION_LATE_FINE_FLAG"].ToString() != null && ds.Tables[0].Rows[0]["REACTIVATION_LATE_FINE_FLAG"].ToString() == "1")
                     {
                         rdID = "hfdchkStdReactivationfee";
-                        hfchksendemailonstudentry.Value = "true";
+                        hfdchkStdReactivationfee.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript98198", "studentReactivationfee(true);", true);
@@ -430,7 +430,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else
                     {
                         //rdID = "chkUserCreationonFee";
-                        //hfchkUserCreationonFee.Value = "false";
+                        hfdchkStdReactivationfee.Value = "false";
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript98198", "studentReactivationfee(false);", false);
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'false');", true);
@@ -440,12 +440,12 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     {
                         hfchksendemailonstudentry.Value = "true";
                         hfdSemAdmWithPayment.Value = "true";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9525251111", "SemAdmWithPayment(true);", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9525251112", "SemAdmWithPayment(true);", true);
                     }
                     else
                     {
                         hfdSemAdmWithPayment.Value = "false";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript95252511111", "SemAdmWithPayment(false);", false);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript9525251112", "SemAdmWithPayment(false);", false);
                     }
 
                     if (ds.Tables[0].Rows[0]["IS_DEPARTMENT_ELECTIVE_CAPACITY_CHECK"].ToString() != null && ds.Tables[0].Rows[0]["IS_DEPARTMENT_ELECTIVE_CAPACITY_CHECK"].ToString() == "1")
@@ -681,6 +681,25 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         }
                     }
 
+<<<<<<< HEAD
+=======
+
+                    // Added Outsatanding FeeCollection  by Gopal M - 02102023  Ticket-#46419
+                    if (ds.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"].ToString() != null && ds.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"].ToString() == "1")
+                    {
+                        rdID = "hfchkOutstandingFeeCollection";
+                        hfchkOutstandingFeeCollection.Value = "true";
+                        OutstandingMessageDiv.Style.Add("display", "");
+                        txtOutstandingMessage.Text = ds.Tables[0].Rows[0]["OUTSTANDING_MESSAGE"].ToString();
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565646", "CheckOnstandingFeeCollection(true);", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565646", "CheckOnstandingFeeCollection(false);", true);
+                    }
+
+
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                 }
             }
         }
@@ -866,7 +885,11 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             bool createprnt = false;
             bool CreateRegno = false;
             bool AttTeaching = false;
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             if (hfchkcreateusernewstudentry.Value == "true")
             {
                 objMod.NewStudUserCreation = true;
@@ -1067,6 +1090,20 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
             ModAdmInfoUserNos = ModAdmInfoUserNos.TrimEnd(',');
 
+<<<<<<< HEAD
+=======
+            // Added by Gopal M 03102023 Ticket #46419
+            if (hfchkOutstandingFeeCollection.Value == "true")
+            {
+                objMod.OUTSTANDING_FEECOLLECTION = true;
+                objMod.OUTSTANDING_MESSAGE = txtOutstandingMessage.Text;
+            }
+            else
+            {
+                objMod.OUTSTANDING_FEECOLLECTION = false;
+                objMod.OUTSTANDING_MESSAGE = txtOutstandingMessage.Text;
+            }
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 
 
             //Check whether to add or update

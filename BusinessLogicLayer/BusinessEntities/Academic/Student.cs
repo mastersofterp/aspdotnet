@@ -2423,7 +2423,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              set { _academicyearno = value; }
          }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
          // Added By Shrikant W. on 23-09-2023
          public string CasteName
          {
@@ -2437,6 +2440,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              get { return _motherAnnualIncome; }
              set { _motherAnnualIncome = value; }
          }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
     }
 }

@@ -30,7 +30,11 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Xml.Linq;
 using IITMS.SQLServer.SQLDAL;
-
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage;
+ 
 public partial class STORES_Transactions_Quotation_Approval_Requisition : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -41,6 +45,10 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
     Str_Purchase_Order_Controller objstrPO = new Str_Purchase_Order_Controller();
     STR_DEPT_REQ_CONTROLLER ObjReq = new STR_DEPT_REQ_CONTROLLER();
     Str_DeptRequest objdeptRequest = new Str_DeptRequest();
+
+    public string Docpath = ConfigurationManager.AppSettings["DirPath"];
+    public string path = string.Empty;
+    BlobController objBlob = new BlobController();
 
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -80,12 +88,46 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
                 pnlDept.Visible = true;
                 FillDepartment();
                 BindGrid();
+                BlobDetails();
                 pnlItemDetail.Visible = false;
 
                 //BindLVLeaveApplPendingList();
             }
         }
         divMsg.InnerHtml = string.Empty;
+    }
+
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "ContainerNamestoresdoctest";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
     private void CheckPageAuthorization()
@@ -542,10 +584,21 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
             lblReqDate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["REQ_DATE"]).ToString("dd/MM/yyyy");
             lblDeptName.Text = ds.Tables[0].Rows[0]["SDNAME"].ToString();
             lblAuthorityName.Text = ds.Tables[0].Rows[0]["NAME"].ToString();
+            lblpurjusti.Text = ds.Tables[0].Rows[0]["REMARK"].ToString(); 
             lblBudgetBalAmt.Text = ds.Tables[0].Rows[0]["BUDGET_BALANCE_AMOUNT"].ToString();
             lblInprocessBudgetAmt.Text = ds.Tables[0].Rows[0]["INPROCESS_BUDGET_AMOUNT"].ToString();
+    
 
-
+            //if (ds.Tables[2].Rows.Count != 0)
+            //{
+            //    lvItemDetails.DataSource = ds.Tables[2];
+            //    lvItemDetails.DataBind();
+            //}
+            //else
+            //{
+            //    lvItemDetails.DataSource = null;
+            //    lvItemDetails.DataBind();
+            //}
 
             if (objCommon.LookUp("STORE_reference", "isnull(IS_BUDGET_HEAD,0)IS_BUDGET_HEAD", "IS_BUDGET_HEAD=1").Trim() == "1")
             {
@@ -581,7 +634,7 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
                 foreach (ListViewDataItem lv in lvitemReq.Items)
                 {
                     HtmlControl tdApproxCost = (HtmlControl)lv.FindControl("tdApproxCost");
-                    tdApproxCost.Visible = false;
+                   // tdApproxCost.Visible = false;
                 }
             }
             else
@@ -965,6 +1018,153 @@ public partial class STORES_Transactions_Quotation_Approval_Requisition : System
             tdpending.Visible = true;
            
             tdapprove.Visible = false;
+        }
+    }
+
+    //For Message Box
+    public void Showmessage(string message)
+    {
+        ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('" + message + "');", true);
+    }
+
+    protected void imgFile_Click(object sender, ImageClickEventArgs e)
+    {
+        //ImageButton btn = sender as ImageButton;
+        //DownloadFile(btn.AlternateText, btn.CommandName, btn.CommandArgument);
+
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    public void DownloadFile(string fileName, string ItemName, string FilePath)
+    {
+        try
+        {
+            if (fileName != "")
+            {
+                if (lblReqSlipNo.Text == "")
+                {
+                   // path = Docpath + "STORES\\REQUISITIONS\\REQ_" + (lblReqSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ItemName.Trim();
+                    path = FilePath + "\\" + fileName;
+                }
+                else
+                {
+                    // path = Docpath + "STORES\\REQUISITIONS\\REQ_" + (lblReqSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\ITEM_" + ItemName.Trim();
+                    // path = Docpath + "STORES\\REQUISITIONS\\REQ_" + (lblReqSlipNo.Text).Replace('/', '_').Replace(' ', '_') + "\\" + ItemName.Trim();
+                    path = FilePath + "\\" + fileName;
+
+                }
+
+
+
+                //FileStream sourceFile = new FileStream((path + "\\" + fileName), FileMode.Open);
+                FileStream sourceFile = new FileStream((path), FileMode.Open);
+
+                long fileSize = sourceFile.Length;
+                byte[] getContent = new byte[(int)fileSize];
+                sourceFile.Read(getContent, 0, (int)sourceFile.Length);
+                sourceFile.Close();
+                sourceFile.Dispose();
+
+                Response.ClearContent();
+                Response.Clear();
+                Response.BinaryWrite(getContent);
+                Response.ContentType = GetResponseType(fileName.Substring(fileName.IndexOf('.')));
+                Response.AddHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.SuppressContent = true;
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
+            }
+            else
+            {
+                Showmessage("File Not Found.");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            //throw;
+            Response.Clear();
+            Response.ContentType = "text/html";
+            Response.Write("Unable to download the attachment.");
+        }
+    }
+
+    private string GetResponseType(string fileExtension)
+    {
+        switch (fileExtension.ToLower())
+        {
+            case ".doc":
+                return "application/vnd.ms-word";
+                break;
+
+            case ".docx":
+                return "application/vnd.ms-word";
+                break;
+
+            case ".xls":
+                return "application/ms-excel";
+                break;
+
+            case ".xlsx":
+                return "application/ms-excel";
+                break;
+
+            case ".pdf":
+                return "application/pdf";
+                break;
+
+            case ".ppt":
+                return "application/vnd.ms-powerpoint";
+                break;
+
+            case ".txt":
+                return "text/plain";
+                break;
+
+            case "":
+                return "";
+                break;
+
+            default:
+                return "";
+                break;
         }
     }
 

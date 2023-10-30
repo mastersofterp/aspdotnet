@@ -100,8 +100,8 @@
                                                 <label>To Date</label>
                                             </div>
                                             <div class="input-group date">
-                                                <div class="input-group-addon" id="Image1">
-                                                    <i class="fa fa-calendar text-blue"></i>
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar text-blue" id="Image1" runat="server"></i>
                                                 </div>
                                                 <asp:TextBox ID="txtTDate" runat="server" CssClass="form-control"> </asp:TextBox>
                                                 <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy" TargetControlID="txtTDate"

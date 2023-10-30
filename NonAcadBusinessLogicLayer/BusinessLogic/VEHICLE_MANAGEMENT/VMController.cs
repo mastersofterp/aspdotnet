@@ -1657,8 +1657,10 @@ namespace IITMS
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_VEH_FUELENTRY_INS_UPD", objParams, true);
                         if (Convert.ToInt32(ret) == -99)
                             retstatus = Convert.ToInt32(CustomStatus.Error);
-                        else
+                        else if (Convert.ToInt32(ret) == 1)
                             retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retstatus = Convert.ToInt32(CustomStatus.RecordExist);
                     }
                     catch (Exception ex)
                     {
@@ -2091,15 +2093,16 @@ namespace IITMS
                 }
 
 
-                public DataSet FillEmployeeName(string prefixText)
+                public DataSet FillEmployeeName(string prefixText, string contextKey)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[3];
                         objParams[0] = new SqlParameter("@P_SEARCHTEXT", prefixText);
                         objParams[1] = new SqlParameter("@P_USER_TYPE", HttpContext.Current.Session["UserType"].ToString());
+                        objParams[2] = new SqlParameter("@P_SEARCH_BY", contextKey);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ADMN_VEH_GET_SEARCH_USER", objParams);
 
                     }

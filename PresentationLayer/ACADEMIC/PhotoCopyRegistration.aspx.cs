@@ -94,6 +94,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 ViewState["action"] = "add";
                 ViewState["idno"] = "0";
 
+                 
 
                 //Check for Activity On/Off for Reval registration.
                 if (Session["usertype"].ToString() == "2")
@@ -119,8 +120,8 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 //{
                 if (Session["usertype"].ToString() == "2")
                 {
-                    if (CheckActivityStudent() == false)
-                        return;
+                    //if (CheckActivityStudent() == false)
+                    //    return;
                     ddlSession.Visible = false;
                     btnShow.Visible = false;
                     btnCancel.Visible = false;
@@ -249,8 +250,11 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             string collegeid = objCommon.LookUp("ACD_STUDENT", "DISTINCT COLLEGE_ID", "BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
             //string semesterno = objCommon.LookUp("ACD_STUDENT", "DISTINCT SEMESTERNO", "SEMESTERNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
 
-            string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS=" + collegeid + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
+            // string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS=" + collegeid + " AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
             string semesterno = objCommon.LookUp("ACD_STUDENT_RESULT_HIST H", "max(semesterno)SEMESTER", "ISNULL(CANCEL,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]) + " GROUP BY SESSIONNO");
+
+
+            string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'" + " AND COLLEGE_IDS LIKE '%" + collegeid + "%' AND DEGREENO LIKE '%" + degreeno + "%' AND BRANCH LIKE '%" + branchno + "%' AND SEMESTER LIKE '%" + semesterno + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
 
             if (sessionno != "")
             {
@@ -526,7 +530,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         try
         {
 
-            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER COLL ON (S.COLLEGE_ID = COLL.COLLEGE_ID) INNER JOIN ACD_SEMESTER SM ON (S.SEMESTERNO = SM.SEMESTERNO) INNER JOIN ACD_ADMBATCH AM ON (S.ADMBATCH = AM.BATCHNO) INNER JOIN ACD_DEGREE DG ON (S.DEGREENO = DG.DEGREENO) LEFT OUTER JOIN ACD_SCHEME SC ON (S.SCHEMENO = SC.SCHEMENO)", "S.IDNO,DG.DEGREENAME", "S.STUDNAME,S.FATHERNAME,S.MOTHERNAME,S.REGNO,S.ENROLLNO,S.SEMESTERNO,ISNULL(S.SCHEMENO,0)SCHEMENO,SM.SEMESTERNAME,B.BRANCHNO,B.LONGNAME,SC.SCHEMENAME,S.PTYPE,S.ADMBATCH,AM.BATCHNAME,S.DEGREENO,(CASE S.PHYSICALLY_HANDICAPPED WHEN '0' THEN 'NO' WHEN '1' THEN 'YES' END) AS PH, COLL.COLLEGE_NAME,S.STUDENTMOBILE", "ISNULL(S.ADMCAN,0)=0 AND S.IDNO = " + ViewState["idno"].ToString(), string.Empty);
+            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_BRANCH B ON (S.BRANCHNO = B.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER COLL ON (S.COLLEGE_ID = COLL.COLLEGE_ID) INNER JOIN ACD_SEMESTER SM ON (S.SEMESTERNO = SM.SEMESTERNO) INNER JOIN ACD_ADMBATCH AM ON (S.ADMBATCH = AM.BATCHNO) INNER JOIN ACD_DEGREE DG ON (S.DEGREENO = DG.DEGREENO) LEFT OUTER JOIN ACD_SCHEME SC ON (S.SCHEMENO = SC.SCHEMENO)", "S.IDNO,DG.DEGREENAME", "S.STUDNAME,S.FATHERNAME,S.MOTHERNAME,S.REGNO,S.ENROLLNO,S.SEMESTERNO,ISNULL(S.SCHEMENO,0)SCHEMENO,SM.SEMESTERNAME,B.BRANCHNO,B.LONGNAME,SC.SCHEMENAME,S.PTYPE,S.ADMBATCH,AM.BATCHNAME,S.DEGREENO,(CASE S.PHYSICALLY_HANDICAPPED WHEN '0' THEN 'NO' WHEN '1' THEN 'YES' END) AS PH, COLL.COLLEGE_NAME,S.STUDENTMOBILE,S.COLLEGE_ID", "ISNULL(S.ADMCAN,0)=0 AND S.IDNO = " + ViewState["idno"].ToString(), string.Empty);
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
                 if (dsStudent.Tables[0].Rows.Count > 0)
@@ -547,6 +551,8 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     lblPH.Text = dsStudent.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
                     lblCollegeName.Text = dsStudent.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
                     hfDegreeNo.Value = dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString();
+
+                    ViewState["college_id"] = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
 
                     tblInfo.Visible = true;
                     divSem.Visible = true;
@@ -1013,7 +1019,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             }
             else if (Session["usertype"].ToString() == "2")
             {
-                result = objSReg.AddPhotoCopyRegisteration(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
+                result = objBackReg.AddPhotoCopyRegisteration_Rcpiper(objSR, "PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));
                 btnChallan.Visible = false;
             }
             else //for admin
@@ -1050,8 +1056,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 //to hide all courses
                 //BindCourseListForPHOTOCOPY();
                 divAllCoursesFromHist.Visible = false;
-
-
+                 
                 /////////////////////////////////////////////
                 divRegCourses.Visible = true;
 
@@ -1082,7 +1087,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 9)   //Added 03112022 for challan report disabled 
                 {
                     btnChallan.Visible = false;
-                }
+                } 
             }
             else
             {
@@ -1239,11 +1244,14 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             {
                 ShowReportPhotoCopyReval("Photo Copy Registration Slip", "rptPhotoRevaluation_Rcpiper.rpt");
             }
-            else
+            else if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 //ShowReport("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");  
                 ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluationCRESCENT.rpt");
-
+            }
+            else
+            {
+                ShowReportNew("Photo Copy Registration Slip", "rptPhotoRevaluation.rpt");
             }
         }
         catch { }
@@ -1271,14 +1279,12 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
-    }
-
+    } 
 
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
-        {
-
+        { 
             int sessionno = Convert.ToInt32(ViewState["sessionno"]);
             int idno = Convert.ToInt32(lblName.ToolTip);
             string semester = objCommon.LookUp("ACD_REVAL_RESULT", "DISTINCT SEMESTERNO", "IDNO=" + idno + "AND APP_TYPE= 'PHOTO COPY' " + "AND SESSIONNO=" + sessionno);
@@ -1888,9 +1894,13 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         {
             PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
-        else
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)     
         {
             BillDeskPaymentGateway();   //BillDesk Payment Gateway   //Crescent
+        }
+        else  
+        {
+            PayUPaymentGateway();   //BillDesk Payment Gateway   
         }
     }
     #endregion
@@ -1915,6 +1925,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         #region "Online Payment"
         try
         {
+            ViewState["SESSIONNO"] = Convert.ToString(ViewState["sessionno"]);
             int ifPaidAlready = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(1) PAY_COUNT", "IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND RECIEPT_CODE = 'PRF' AND RECON = 1 AND ISNULL(CAN,0)=0"));
 
             if (ifPaidAlready > 0)
@@ -1966,9 +1977,15 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             string Schemeno = ViewState["Schemeno"].ToString();
 
 
-            //insert in acd_fees_log
-            result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "PRF", 1); //1 for photo copy
-
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
+            {
+                //insert in acd_fees_log
+                result = ObjFCC.AddPhotoRevalFeeLog(objStudentFees, 1, 1, "PRF", 1); //1 for photo copy
+            }
+            else
+            {
+                result = 1;   //Fees log maintined in other client except crescent 
+            }
             //logStatus = ObjFCC.AddPhotoRevalFeeLogDcrTemp(objStudentFees, Schemeno, Courenos, IPADDRESS, Semesternos, COLLEGE_CODE, UA_NO, Grades, ccodes, "PHOTO COPY", Extermarks, Convert.ToInt32(Session["usertype"]));
             //"PHOTO COPY", EXTERMARKS, Convert.ToInt32(Session["usertype"]));  //Added on 25082022
 
@@ -2381,7 +2398,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             }
             else
             {
-                result = 1;   //Fees log maintined in other client except crescent 
+                result = 1;   //Fees log not maintined in other client except crescent 
             }
 
             if (result > 0)
@@ -2485,6 +2502,11 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
                     Session["PAYID"] = PAYID;
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 18)//rajagiri and rcpiper
+                {
+                    PAYID = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%IOB Pay%'"));
+                    Session["PAYID"] = PAYID;
+                }
                 else
                 {
                     PAYID = 1;               //Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_GATEWAY", "PAYID", "ACTIVE_STATUS=1 AND PAY_GATEWAY_NAME like '%PAYU%'"));
@@ -2509,14 +2531,24 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                         //Session["CHECKSUM_KEY"] = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();     //Added on 21082022
                         Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
-                        Response.Redirect(RequestUrl, false);
+                        Session["ConfigID"] = ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString() == null ? "1" : ds1.Tables[0].Rows[0]["CONFIG_ID"].ToString();  //Added for Hits  
 
+                        Response.Redirect(RequestUrl, false);
+<<<<<<< HEAD
+
+=======
+                         
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                         //string requesturl = System.Configuration.ConfigurationManager.AppSettings["pgPageUrl"].ToString();                //ConfigurationManager.AppSettings["pgPageUrl"].ToString();
                         //Response.Redirect(requesturl, false);
                     }
                 }
                 else
+<<<<<<< HEAD
                 {
+=======
+                {  
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                     objCommon.DisplayMessage(this.Page, "Payment Gateway not define", this.Page);
                     return;
                 } 
@@ -2670,8 +2702,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
                             btnSubmit.Visible = false;
                             btnPrintRegSlip.Visible = false;
-
-
+                             
                             lblTotalAmount.Text = "0";
                             CourseAmt = 0;
                             divTotalCourseAmount.Visible = false;
@@ -2697,9 +2728,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                                 lvCurrentSubjects.DataSource = null;
                                 lvCurrentSubjects.DataBind();
                                 lvCurrentSubjects.Visible = false;
-                            }
-
-
+                            } 
                         }
                         else
                         {
@@ -2955,7 +2984,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
     protected void ReportStatus()
     {
-        if ((Convert.ToInt32(Session["OrgId"]) == 6) && (Session["usertype"].ToString() == "1"))
+        if ((Convert.ToInt32(Session["OrgId"]) != 2) && (Session["usertype"].ToString() == "1"))
         {
             btnSubmit.Visible = false;
             btnChallan.Visible = false;

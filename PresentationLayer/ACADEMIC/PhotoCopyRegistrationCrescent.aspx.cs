@@ -92,12 +92,12 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 ViewState["ipAddress"] = IPADDRESS;
                 ViewState["action"] = "add";
                 ViewState["idno"] = "0";
-                 
+
                 //Check for Activity On/Off for Reval registration.
                 if (Session["usertype"].ToString() == "2")
                 {
                     divRollNo.Visible = false;
-                    if (CheckActivityStudent() == false)
+                    if (CheckRegistrationActivity() == false)   //CheckActivityStudent
                         return;
                     this.ShowPhotoCopyDetails();
                 }
@@ -228,7 +228,6 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 return false;
             }
         }
-
     }
 
 
@@ -284,7 +283,6 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 ret = false;
                 return ret;
             }
-
         }
         catch (Exception ex)
         {
@@ -343,8 +341,21 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 if (!string.IsNullOrEmpty(ViewState["idno"].ToString()))
                 {
                     string TRRESULTLOCK = "0";
-                    TRRESULTLOCK = (objCommon.LookUp("ACD_TRRESULT", "DISTINCT ISNULL(LOCK,0) LOCK", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
-                    if (TRRESULTLOCK == "1")//to check result published or not
+                    //TRRESULTLOCK = (objCommon.LookUp("ACD_TRRESULT", "DISTINCT ISNULL(LOCK,0) LOCK", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
+                    //TRRESULTLOCK = (objCommon.LookUp("RESULT_PUBLISH_DATA P INNER JOIN ACD_TRRESULT T ON (T.IDNO=P.IDNO AND T.SESSIONNO=P.SESSIONNO AND T.SEMESTERNO=P.SEMESTERNO)", "DISTINCT ISNULL(P.IDNO,0) IDNO", "ISNULL(P.CANCEL,0)=0 AND ISNULL(T.LOCK,0)=1 AND P.SESSIONNO=" + Convert.ToString(ViewState["sessionno"]) + " AND P.IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
+
+                    string sp_proc = "PKG_ACD_CHECK_RESULT_DATA";
+                    string sp_para = "@P_UA_NO,@P_SESSIONNO,@P_IDNO,@P_STATUS";
+                    string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Convert.ToString(ViewState["sessionno"]) + "," + Convert.ToInt32(ViewState["idno"]) + "," + 1 + "";   //Status 1 for Photocopy TotAmount
+
+                    DataSet dsEligible = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
+
+                    if (dsEligible.Tables[0].Rows.Count > 0 && dsEligible.Tables != null && dsEligible.Tables[0] != null)
+                    {
+                        TRRESULTLOCK = dsEligible.Tables[0].Rows[0]["LOCK"].ToString();
+                    }
+
+                    if (TRRESULTLOCK != "")//to check result published or not
                     {
                         if (string.IsNullOrEmpty(ViewState["idno"].ToString()) || ViewState["idno"].ToString() == "0")
                         {
@@ -582,7 +593,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
             lvCurrentSubjects.Visible = true;
 
             string RECON = objCommon.LookUp("ACD_DCR", "Distinct isnull(RECON,0) RECON", "SESSIONNO=" + sessionno + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CAN,0)=0 and RECIEPT_CODE='PRF' ");
-
+           
             if (RECON == "1" || RECON == "True")
             {
                 if (Session["usertype"].ToString() == "2")
@@ -606,7 +617,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                     {
                         // string TOTALAMOUNT = objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND IDNO=" + Convert.ToInt32(ViewState["idno"]) + " AND ISNULL(CAN,0)=0 and RECIEPT_CODE='PRF' ");
                         //string TOTALAMOUNT = (objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_REVAL_FEE_DEFINE RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * PHOTOCOPY_FEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + "AND CAST(APP_TYPE AS NVARCHAR)='PHOTO COPY' AND ISNULL(CANCEL,0)=0 GROUP BY PHOTOCOPY_FEE"));
-                        TOTALAMOUNT = (objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + sessionno + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='PHOTO COPY' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
+                        TOTALAMOUNT = (objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND R.SESSIONNO=RF.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + sessionno + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='PHOTO COPY' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
                     }
                     divTotalCourseAmount.Visible = true;
                     lblTotalAmount.Text = TOTALAMOUNT;
@@ -1077,7 +1088,7 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         else
         {
             // RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_DCR", "SUM(TOTAL_AMT)", " IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND SESSIONNO = " + Convert.ToInt32(ddlSession.SelectedValue) + "  AND ISNULL(CAN,0)=0 AND RECIEPT_CODE='PRF'"));
-            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["sessionno"]) + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='PHOTO COPY' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
+            RegTotalAmt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_RESULT R INNER JOIN ACD_SCHEME S ON S.SCHEMENO=R.SCHEMENO INNER JOIN ACD_EXAM_FEE_DEFINATION RF ON RF.DEGREENO = S.DEGREENO AND R.SESSIONNO=RF.SESSIONNO", "(COUNT(COURSENO) * COURSEFEE) TOTAL_AMOUNT", " R.IDNO = " + Convert.ToInt32(ViewState["idno"]) + " AND R.SESSIONNO = " + Convert.ToString(ViewState["sessionno"]) + "AND FEETYPE=" + 4 + "AND RF.DEGREENO=" + hfDegreeNo.Value + "AND CAST(APP_TYPE AS NVARCHAR)='PHOTO COPY' AND ISNULL(RF.CANCEL,0)=0 GROUP BY COURSEFEE"));
         }
         lblTotalAmount.Text = RegTotalAmt.ToString();
         ViewState["Exam_Amout"] = string.Empty;
@@ -1089,13 +1100,13 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
     public void LoadPhotoCopyFeeAmount()
     {
         //to calculate photo copy fee degree wise
-        if (Session["OrgId"] == "2")
+        if (Session["OrgId"].ToString() == "2")
         {
-            PhotoCopy_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_FEE_DEFINE", "PHOTOCOPY_FEE", " DEGREENO = " + hfDegreeNo.Value + ""));
+            PhotoCopy_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_REVAL_FEE_DEFINE", "ISNULL(PHOTOCOPY_FEE,0)", " DEGREENO = " + hfDegreeNo.Value + ""));
         }
         else
         {
-            PhotoCopy_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COURSEFEE", " DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 4 + ""));  //Photocopy Fee
+            PhotoCopy_Amt = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "ISNULL(COURSEFEE,0)", " DEGREENO = " + hfDegreeNo.Value + "AND FEETYPE=" + 4 + ""));  //Photocopy Fee
         }
 
     }
@@ -1426,7 +1437,6 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
     #endregion
 
-
     #region "Registered Subjects For Photo Copy"
 
     private void BindRegisteredCoursesofPHOTOCOPY()
@@ -1454,7 +1464,6 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
     }
     #endregion
-
 
     #region "Print Challan"
     protected void btnChallan_Click(object sender, EventArgs e)
@@ -2337,9 +2346,22 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
 
                 if (!string.IsNullOrEmpty(ViewState["idno"].ToString()))
                 {
-                    int TRRESULTLOCK = 0;
-                    TRRESULTLOCK = Convert.ToInt32(objCommon.LookUp("ACD_TRRESULT", "DISTINCT ISNULL(LOCK,0) LOCK", "SESSIONNO=" + Convert.ToString(ViewState["sessionno"]) + " AND IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
-                    if (TRRESULTLOCK == 1)//to check result published or not
+                    string TRRESULTLOCK = string.Empty;
+                    //TRRESULTLOCK = Convert.ToInt32(objCommon.LookUp("ACD_TRRESULT", "DISTINCT ISNULL(LOCK,0) LOCK", "SESSIONNO=" + Convert.ToString(ViewState["sessionno"]) + " AND IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
+                    //TRRESULTLOCK = (objCommon.LookUp("RESULT_PUBLISH_DATA P INNER JOIN ACD_TRRESULT T ON (T.IDNO=P.IDNO AND T.SESSIONNO=P.SESSIONNO AND T.SEMESTERNO=P.SEMESTERNO)", "DISTINCT ISNULL(P.IDNO,0) IDNO", "ISNULL(P.CANCEL,0)=0 AND ISNULL(T.LOCK,0)=1 AND P.SESSIONNO=" + Convert.ToString(ViewState["sessionno"]) + " AND P.IDNO= " + Convert.ToInt32(ViewState["idno"]) + ""));
+                   
+                    string sp_proc = "PKG_ACD_CHECK_RESULT_DATA";
+                    string sp_para = "@P_UA_NO,@P_SESSIONNO,@P_IDNO,@P_STATUS";
+                    string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Convert.ToString(ViewState["sessionno"]) + "," + Convert.ToInt32(ViewState["idno"]) + "," + 1 + "";   //Status 1 for Photocopy TotAmount
+
+                    DataSet dsEligible = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
+
+                    if (dsEligible.Tables[0].Rows.Count > 0 && dsEligible.Tables != null && dsEligible.Tables[0] != null)
+                    {
+                        TRRESULTLOCK = dsEligible.Tables[0].Rows[0]["LOCK"].ToString();
+                    }
+
+                    if (TRRESULTLOCK != "")//to check result published or not
                     {
                         if (string.IsNullOrEmpty(ViewState["idno"].ToString()) || ViewState["idno"].ToString() == "0")
                         {
@@ -2587,4 +2609,44 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         }
     }
     #endregion
+
+    private bool CheckRegistrationActivity()
+    {
+        try
+        {
+            bool ret = true;
+            string sp_proc = "PKG_ACD_CHECK_REGISTRATION_ACTIVITY";
+            string sp_para = "@P_UA_NO,@P_PAGE_LINK,@P_UA_TYPE";
+            string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Request.QueryString["pageno"].ToString() + "," + Session["usertype"] + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables != null && ds.Tables[0] != null)
+            { 
+                ViewState["sessionno"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
+                ViewState["SESSIONNO"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
+              
+                return ret; 
+            }
+            else
+            {
+                objCommon.DisplayMessage(updDetails, "Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
+                ret = false;
+                return ret;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+            {
+                objCommon.ShowError(Page, "ACADEMIC_PhotoCopyRegistration.CheckActivity() --> " + ex.Message + " " + ex.StackTrace);
+                return false;
+            }
+            else
+            {
+                objCommon.ShowError(Page, "Server Unavailable.");
+                return false;
+            }
+        }
+    }
 }

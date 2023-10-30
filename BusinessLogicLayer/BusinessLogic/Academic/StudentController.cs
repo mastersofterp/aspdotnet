@@ -564,6 +564,44 @@ namespace IITMS
                     }
                     return ds;
                 }
+                 public DataSet GetDetailsOfInternalMarksHeader_Subexam(int idno, int sessionno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_COURSEWISE_GRADE_HEAD_NEW_SUBEXAM_NAME", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetDetailsOfInternalMarks-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                public DataSet GetDetailsOfInternalMarks1_Subexam(int idno, int sessionno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_SUBEXAMNAME_BY_PARTICULATUR_IDNO_Subexam_SUBEXAM_DATA", objParams);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetDetailsOfInternalMarks-> " + ex.ToString());
+                    }
+                    return ds;
+                }
                 public int Insert_update_intake_admission(int intakeid, int degreeno, int branchno, int srcategoryno, string college_jss, string intake)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);

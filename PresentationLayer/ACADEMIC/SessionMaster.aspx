@@ -605,7 +605,11 @@
 
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="submit"
+<<<<<<< HEAD
                                                         OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary"  /> 
+=======
+                                                        OnClick="btnSubmit_Click" TabIndex="9" CssClass="btn btn-primary"  OnClientClick="return validate();"/> 
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                                                    <%-- OnClientClick="return validate();"--%>
                                                     <asp:Button ID="btnReport" runat="server" OnClick="btnReport_Click" Text="Report"
                                                         CssClass="btn btn-info" Style="display: none;" />

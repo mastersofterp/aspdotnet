@@ -4293,13 +4293,49 @@ namespace IITMS
 
 
             // Added By Vinay Mishra on 25/05/2023
-            public int MinorCourseRegistration(string sessionNo, string clgBranch, string admBatch, string sem, string section, string minorlst, int stdTotal, string idno, string courseList, string uaNo, string ipAddress, string mainuaNo)
+            //public int MinorCourseRegistration(string sessionNo, string clgBranch, string admBatch, string sem, string section, string minorlst, int stdTotal, string idno, string courseList, string uaNo, string ipAddress, string mainuaNo)
+            //{
+            //    int status = 0;
+            //    try
+            //    {
+            //        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            //        SqlParameter[] objParams = new SqlParameter[12];
+            //        objParams[0] = new SqlParameter("@P_SESSION_NO", sessionNo);
+            //        objParams[1] = new SqlParameter("@P_COLLEGE_BRANCH", clgBranch);
+            //        objParams[2] = new SqlParameter("@P_ADM_BATCH", admBatch);
+            //        objParams[3] = new SqlParameter("@P_SEMESTER_NO", sem);
+            //        objParams[4] = new SqlParameter("@P_SECTION_NO", section);
+            //        objParams[5] = new SqlParameter("@P_MINOR_LIST", minorlst);
+            //        objParams[6] = new SqlParameter("@P_STUDENT_COUNT", stdTotal);
+            //        objParams[7] = new SqlParameter("@P_IDNO", idno);
+            //        objParams[8] = new SqlParameter("@P_COURSE_LIST", courseList);
+            //        objParams[9] = new SqlParameter("@P_UA_NO", uaNo);
+            //        objParams[10] = new SqlParameter("@P_IPADDRESS", ipAddress);
+            //        objParams[11] = new SqlParameter("@P_MAIN_UA_NO", mainuaNo);
+
+            //        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_MINOR_COURSE_REGISTRATION", objParams, true);
+            //        if (obj != null)
+            //        {
+            //            status = 1;
+            //            return status;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        throw new Exception(ex.Message);
+            //    }
+
+            //    return status;
+            //}
+
+            // Added By Vinay Mishra on 25/05/2023 -- Modified By Vinay Mishra on 19/09/2023
+            public int MinorCourseRegistration(string sessionNo, string clgBranch, string scheme, string admBatch, string sem, string section, string minorlst, int stdTotal, string idno, string courseList, string uaNo, string ipAddress, string mainuaNo)
             {
                 int status = 0;
                 try
                 {
                     SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                    SqlParameter[] objParams = new SqlParameter[12];
+                    SqlParameter[] objParams = new SqlParameter[13];
                     objParams[0] = new SqlParameter("@P_SESSION_NO", sessionNo);
                     objParams[1] = new SqlParameter("@P_COLLEGE_BRANCH", clgBranch);
                     objParams[2] = new SqlParameter("@P_ADM_BATCH", admBatch);
@@ -4312,6 +4348,7 @@ namespace IITMS
                     objParams[9] = new SqlParameter("@P_UA_NO", uaNo);
                     objParams[10] = new SqlParameter("@P_IPADDRESS", ipAddress);
                     objParams[11] = new SqlParameter("@P_MAIN_UA_NO", mainuaNo);
+                    objParams[12] = new SqlParameter("@P_SCHEMENO", scheme);
 
                     object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_MINOR_COURSE_REGISTRATION", objParams, true);
                     if (obj != null)
@@ -4327,7 +4364,6 @@ namespace IITMS
 
                 return status;
             }
-
 
 
 

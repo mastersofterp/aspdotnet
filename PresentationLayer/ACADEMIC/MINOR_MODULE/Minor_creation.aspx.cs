@@ -203,14 +203,16 @@ public partial class ACADEMIC_Minor_creation : System.Web.UI.Page
 
             strViewRecord = objCommon.LookUp("ACD_MINOR_GROUP_MASTER", "MNR_GRP_NO", "MNR_GRP_NAME='" + mnr + "' AND CDB_NO =" + ddlclgid);
             //strViewRecordCollege = objCommon.LookUp("ACD_MINOR_GROUP_MASTER", "MNR_GRP_NO", "CDB_NO =" + ddlclgid);
-            if (strViewRecord != string.Empty)
-            {
-                objCommon.DisplayMessage(this.updMinor, "Record is Already Exists...", this.Page);
-                return;
-            }
+            
 
             if (btnSubmit.Text == "Submit")
             {
+                if (strViewRecord != string.Empty)
+                {
+                    objCommon.DisplayMessage(this.updMinor, "Record is Already Exists...", this.Page);
+                    return;
+                }
+
                 ST = objCommon.Mcreate(ddlclgid, mnr, crdt, sessionuid, IpAddress, msessionuid, mnrgprno);
                 objCommon.DisplayMessage(this.updMinor, "Minor Created Successfully!!!", this.Page);
             }
@@ -400,7 +402,7 @@ public partial class ACADEMIC_Minor_creation : System.Web.UI.Page
     {
         ddlCourses.Items.Clear();
 
-        dss = objCommon.FillDropDown("ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER CM ON (CM.COLLEGE_ID = CDB.COLLEGE_ID) INNER JOIN ACD_SCHEME ACDS ON (ACDS.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COURSE C ON (C.SCHEMENO = ACDS.SCHEMENO)", "C.COURSENO", "C.COURSE_NAME, ACDS.SCHEMENO, ACDS.SCHEMENAME, CM.COLLEGE_ID, CM.COLLEGE_NAME, B.BRANCHNO, B.LONGNAME, CDB.COLLEGE_ID AS CDB_COLLEGE_ID, CDB.BRANCHNO AS CDB_BRANCH_NO, CM.COLLEGE_NAME + '-' + B.LONGNAME AS COLLEGE_PROGRAM, CM.OrganizationId AS CM_ORGID, B.OrganizationId AS B_ORGID, CDB.CDBNO", "CDB.CDBNO > 0 AND C.SCHEMENO > 0 AND CDB.CDBNO =" + degreeBranch + "AND C.SCHEMENO =" + scheme, "C.COURSENO");
+        dss = objCommon.FillDropDown("ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER CM ON (CM.COLLEGE_ID = CDB.COLLEGE_ID) INNER JOIN ACD_SCHEME ACDS ON (ACDS.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COURSE C ON (C.SCHEMENO = ACDS.SCHEMENO)", "C.COURSENO", "C.CCODE + '-' + C.COURSE_NAME, ACDS.SCHEMENO, ACDS.SCHEMENAME, CM.COLLEGE_ID, CM.COLLEGE_NAME, B.BRANCHNO, B.LONGNAME, CDB.COLLEGE_ID AS CDB_COLLEGE_ID, CDB.BRANCHNO AS CDB_BRANCH_NO, CM.COLLEGE_NAME + '-' + B.LONGNAME AS COLLEGE_PROGRAM, CM.OrganizationId AS CM_ORGID, B.OrganizationId AS B_ORGID, CDB.CDBNO", "CDB.CDBNO > 0 AND C.SCHEMENO > 0 AND CDB.CDBNO =" + degreeBranch + "AND C.SCHEMENO =" + scheme, "C.COURSENO");
 
         //dss = objCommon.Get_Minor_List();
 

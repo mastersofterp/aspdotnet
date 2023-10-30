@@ -1523,6 +1523,8 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
     {
         try
         {
+
+
             DataSet ds = objTemplateTypeController.BindListWhatsappttypeview();
             lvWhatsAppTemplate.DataSource = ds;
             lvWhatsAppTemplate.DataBind();

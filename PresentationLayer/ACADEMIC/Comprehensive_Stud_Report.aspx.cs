@@ -95,7 +95,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 {
                     divInternalMarks.Visible = true;
                 }
-                else if (Convert.ToInt32(Session["OrgId"]) == 5)
+                else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
                 {
 
                     divInternalMarks1.Visible = true;
@@ -818,7 +818,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             {
                 getinternalmarks();
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+            else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 getinternalmarks1();
             }
@@ -998,7 +998,17 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         }
         StudentController objSC = new StudentController();
-        DataSet dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        DataSet dsInternal = null;
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+
+            dsInternal = objSC.GetDetailsOfInternalMarksHeader_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
+        else
+        {
+
+             dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
         ViewState["dshead"] = dsInternal;
         DataTable dt = new DataTable();
 
@@ -1038,7 +1048,15 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             lvInter.DataSource = null;
             lvInter.DataBind();
         }
-        DataSet dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        DataSet dsInternal1 = null;
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        {
+            dsInternal1 = objSC.GetDetailsOfInternalMarks1_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
+        else
+        {
+            dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+        }
         if (dsInternal1 != null && dsInternal1.Tables.Count > 0 && dsInternal1.Tables[0].Rows.Count > 0)
         {
             lvInter.DataSource = dsInternal1.Tables[0];
@@ -1500,6 +1518,62 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                     pnlrevalresult.Visible = false;
                     lvRevalDetails.DataSource = null;
                     lvRevalDetails.DataBind();
+                }
+
+            }
+            else if (orgid == 8)
+            {
+                int Count=0;
+                string proc_name = "PKG_CHECK_STATUS_FOR_FEEDBACK_IN_STUDENT_LOGIN";
+                string parameter = "@P_IDNO,@P_SEMESTERNO";
+                string Call_values = "" + idno + "," + Convert.ToInt32(rdolistSemester.SelectedValue) + "";
+                DataSet ds1 = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+                if (ds1.Tables[0].Rows.Count > 0)
+                {
+                    Count = Convert.ToInt32((ds1.Tables[0].Rows[0]["idno"].ToString()));
+                }
+                int schemeno = Convert.ToInt32(objCommon.LookUp("acd_student", "schemeno", "idno=" + idno + ""));
+                int coursecount = Convert.ToInt32(objCommon.LookUp("acd_course", "Count(courseno) ", "schemeno=" + schemeno + " and semesterno=" + Convert.ToInt32(rdolistSemester.SelectedValue) + ""));
+                if (Count == coursecount)
+                {
+                    DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                    DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+
+                        pnlCollege.Visible = true;
+                        lvSession.DataSource = ds;
+                        lvSession.DataBind();
+                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                        pnlCollege.Visible = false;
+                        lvSession.DataSource = null;
+                        lvSession.DataBind();
+
+                    }
+                    if (dsreval.Tables[0].Rows.Count > 0)
+                    {
+                        pnlrevalresult.Visible = true;
+                        lvRevalDetails.DataSource = dsreval;
+                        lvRevalDetails.DataBind();
+                    }
+                    else
+                    {
+                        // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                        pnlrevalresult.Visible = false;
+                        lvRevalDetails.DataSource = null;
+                        lvRevalDetails.DataBind();
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "Feedback Pending!!", this.Page);
+
                 }
 
             }

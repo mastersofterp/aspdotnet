@@ -370,7 +370,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divmilege" runat="server">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
-                                                        <label>Milege</label>
+                                                        <label>Mileage</label>
                                                     </div>
                                                     <asp:TextBox ID="txtMilege" runat="server" TabIndex="11"
                                                         CssClass="form-control" ToolTip="Enter Milege" MaxLength="15" ReadOnly="true" onblur="CalculateAmount();"></asp:TextBox>
@@ -692,7 +692,7 @@
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" ValidationGroup="ScheduleDtl"
                             OnClick="btnSubmit_Click" TabIndex="17" CausesValidation="true" ToolTip="Click here to Submit" 
-                            UseSubmitBehavior="false" OnClientClick="this.disabled='true'; setTimeout('enableButton()', 5000) "/>
+                            UseSubmitBehavior="false" OnClientClick="this.disabled='true'; setTimeout('enableButton()', 10000) "/>
                         <%-- OnClientClick="checkissuedate();"--%>
                         <asp:Button ID="btnReport" runat="server" Text="Report" CssClass="btn btn-info" OnClick="btnReport_Click"
                             TabIndex="19" CausesValidation="false" ToolTip="Click here to Show Report"  Visible="false"/>

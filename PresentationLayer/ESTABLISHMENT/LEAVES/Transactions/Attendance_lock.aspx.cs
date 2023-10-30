@@ -205,16 +205,16 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Attendance_lock : System.
                     //lblerror.Text = null;
                     //lblmsg.Text = "Salary Locked Permanently for" + " " + MonthYear();
                     objCommon.DisplayMessage(UpdatePanel1, "Attendance locked permanently for" + " " + MonthYear(), this);
-                    pnlLockUnlock.Visible = true;
-                    PnlLockPermantely.Visible = false;
-                    BindListViewList();
+                    //pnlLockUnlock.Visible = true;
+                    //PnlLockPermantely.Visible = false;
+                    //BindListViewList();
 
-                    btnLockAttendance.Visible = true;
-                    btnSave.Visible = true;
-                    butLockAttendancePermanently.Visible = false;
-                    butBack.Visible = false;
+                    //btnLockAttendance.Visible = true;
+                    //btnSave.Visible = true;
+                    //butLockAttendancePermanently.Visible = false;
+                    //butBack.Visible = false;
 
-                    txtMonthYear.Text = string.Empty;
+                    //txtMonthYear.Text = string.Empty;
                     ddlCollege.SelectedIndex = 0;
                     ddlstaff.SelectedIndex = 0;
                     

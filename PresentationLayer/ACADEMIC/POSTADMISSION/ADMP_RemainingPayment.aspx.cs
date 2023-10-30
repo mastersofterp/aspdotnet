@@ -189,7 +189,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_RemainingPayment : System.Web.U
             else
             {
 
-                objCommon.DisplayMessage(upRemainingPayment, "No Recored Found.", this.Page);     
+                objCommon.DisplayMessage(upRemainingPayment, "No Record found.", this.Page);     
                
                 lvStudent.DataSource =null;
                 lvStudent.DataBind();

@@ -69,3 +69,8 @@ D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATA
 D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csprojResolveAssemblyReference.cache
 D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
 D:\COMMON_CODE\GIT-RFC-CODE_04092023 SRC\GIT-RFC-CODE_04092023 SRC\rfc-cc-1\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.dll
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\bin\Debug\DataAccessLayer.pdb
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.csproj.CoreCompileInputs.cache
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.dll
+D:\New folder (2)\rf-common-code\DATAACCESSLAYER\obj\Debug\DataAccessLayer.pdb

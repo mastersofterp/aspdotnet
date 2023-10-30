@@ -4,19 +4,26 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <script src="../../includes/prototype.js" type="text/javascript"></script>
+    <%--  <script src="../../includes/prototype.js" type="text/javascript"></script>
     <script src="../../includes/scriptaculous.js" type="text/javascript"></script>
     <script src="../../includes/modalbox.js" type="text/javascript"></script>
     <link href="../../CSS/master.css" rel="stylesheet" />
 
-     <script type="text/javascript">
-         ; debugger
-         function clientShowing(source, args) {
-             source._popupBehavior._element.style.zIndex = 9999999999;
-         }
-    </script>
+    <script type="text/javascript">
+        ; debugger
+        function clientShowing(source, args) {
+            source._popupBehavior._element.style.zIndex = 9999999999;
+        }
+    </script>--%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    <style type="text/css">
+    <link href="../plugins/jQuery/jquery_ui_min/jquery-ui.min.css" rel="stylesheet" />
+    <script src="../plugins/jQuery/jquery_ui_min/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        var jq = $.noConflict();
+
+    </script>
+    <%--    <style type="text/css">
         .style2 {
             width: 100%;
         }
@@ -77,12 +84,29 @@
         .auto-style3 {
             width: 203px;
         }
-    </style>
+    </style>--%>
+    <script type="text/javascript">
 
+        function clientShowing(source, args) {
+            source._popupBehavior._element.style.zIndex = 9999999999;
+        }
+
+        var $ = $.noConflict();
+
+        function ShowpImagePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#ContentPlaceHolder1_imgEmpPhoto').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
     <asp:UpdatePanel ID="updOpdTransaction" runat="server">
         <ContentTemplate>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
@@ -90,122 +114,155 @@
                         </div>
                         <div class="box-body">
                             <div class="col-md-12">
-                                 <b><span style="color: #FF0000">Note:* Marked Is Mandatory !</span></b> 
+                                <%--<b><span style="color: #FF0000">Note:* Marked Is Mandatory !</span></b>--%>
                                 <asp:Panel ID="pnlAdd" runat="server">
-                                    <div class="panel panel-info">
-                                        <div class="panel panel-heading">Search</div>
-                                        <div class="panel panel-body">
-                                            <div class="row">
-                                                <div class="form-group col-md-12">
-                                                    <div class="form-group col-md-2">
-                                                        <label>Search<span style="color: Red">*</span>&nbsp&nbsp:</label>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <asp:RadioButtonList ID="rdbSearchList" runat="server" RepeatDirection="Horizontal" ToolTip="Search Patient">
-                                                            <asp:ListItem Selected="True" Value="0">Staff ID&nbsp;&nbsp;</asp:ListItem>
-                                                            <asp:ListItem Value="1">Admission No.</asp:ListItem>
-                                                        </asp:RadioButtonList>
-                                                    </div>
-
-                                                    <div class="form-group col-md-1">
-                                                        <a href="#" title="Search Patient" data-toggle="modal" data-target="#divdemo2">
-                                                            <asp:Image ID="imgSearch" runat="server" ImageUrl="~/images/search.png" />
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <%--                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Search<span style="color: Red">*</span>&nbsp&nbsp:</label>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <asp:RadioButtonList ID="rdbSearchList" runat="server" RepeatDirection="Horizontal" ToolTip="Search Patient">
+                                                        <asp:ListItem Selected="True" Value="0">Staff ID&nbsp;&nbsp;</asp:ListItem>
+                                                        <asp:ListItem Value="1">Admission No.</asp:ListItem>
+                                                    </asp:RadioButtonList>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <a href="#" title="Search Patient" data-toggle="modal" data-target="#divdemo2">
+                                                        <asp:Image ID="imgSearch" runat="server" ImageUrl="~/images/search.png" />
+                                                    </a>
+                                                </div>
+                                            </div>--%>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Search</label>
+                                                </div>
+                                                <div class="input-group date">
+                                                    <asp:RadioButtonList ID="rdbSearchList" runat="server" RepeatDirection="Horizontal" ToolTip="Search Patient">
+                                                        <asp:ListItem Selected="True" Value="0">Staff ID</asp:ListItem>
+                                                        <asp:ListItem Value="1">Admission No.</asp:ListItem>
+                                                    </asp:RadioButtonList>
+                                                    <div class="input-group-addon" id="Div3">
+                                                        <a href="#" title="Search Patient Details" data-toggle="modal" data-target="#divdemo2">
+                                                            <asp:Image ID="imgSearch" runat="server" ImageUrl="~/images/search.png" TabIndex="1" />
                                                         </a>
                                                     </div>
-                                                </div>
-                                                <%--<div class="form-group col-md-6">--%>
-                                                <%-- <a href="#" onclick="Modalbox.show($('divdemo2'), {title: this.title, width: 600,overlayClose:false});return false;"
-                                                        title="Search Patient ">
-                                                        <asp:Image ID="imgSearch" runat="server" ImageUrl="~/images/search.png" />
-                                                    </a>--%>
-                                                <%-- </div>--%>
-                                                <div class="form-group col-md-12">
-                                                    <div class="form-group col-md-2">
-                                                        <label>Search Patient<span style="color: Red">*</span>&nbsp&nbsp:</label>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <asp:TextBox ID="txtPatientName" runat="server" MaxLength="100" TabIndex="1" CssClass="form-control"></asp:TextBox>
-                                                        <asp:HiddenField ID="hfPatientName" runat="server" />
-                                                        <asp:RequiredFieldValidator ID="rfvPatientName" runat="server" ControlToValidate="txtPatientName" Display="None"
-                                                            ErrorMessage="Please search patient name." SetFocusOnError="true" ValidationGroup="Doctor" />
-                                                    </div>
 
-                                                    <div class="form-group col-md-1">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Search Patient </label>
+                                                </div>
+                                                <div class="input-group date">
+                                                    <asp:TextBox ID="txtPatientName" runat="server" CssClass="form-control" MaxLength="100"
+                                                        TabIndex="3" ToolTip="Search Patient"></asp:TextBox>
+                                                    <asp:HiddenField ID="hfPatientName" runat="server" />
+                                                    <asp:RequiredFieldValidator ID="rfvPatientName" runat="server" ControlToValidate="txtPatientName" Display="None"
+                                                        ErrorMessage="Please search patient name." SetFocusOnError="true" ValidationGroup="Doctor" />
+
+                                                    <div class="input-group-addon" id="Div4" style="border-bottom: 1px solid #fff;">
                                                         <asp:Button ID="btnSearchOnForm" runat="server" OnClick="btnSearchOnForm_Click" TabIndex="2" Text="Search"
                                                             ToolTip="Search Patient" CssClass="btn btn-primary" />
                                                     </div>
-
                                                 </div>
-
                                             </div>
-
+                                        </div>
+                                        <div class="col-12">
                                             <div class="row">
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <asp:Label ID="lblEmp" runat="server" Text="Employee Code" Font-Bold="true"></asp:Label>
                                                     <asp:Label ID="lblDot" runat="server" Text=":"></asp:Label>
                                                     <asp:Label ID="lblEmployeeCode" runat="server" Text=""></asp:Label>
                                                     <asp:Label ID="lblPatientCat" runat="server" Text="" Visible="false" CssClass="form-control"></asp:Label>
                                                 </div>
 
-                                                <div id="trDependent" runat="server" visible="false">
-                                                    <div class="form-group col-md-4">
-                                                        <asp:RadioButtonList ID="rdbPCList" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rdbPCList_SelectedIndexChanged"
-                                                            RepeatDirection="Horizontal" TabIndex="3">
-                                                            <asp:ListItem Selected="True" Value="0">Self</asp:ListItem>
-                                                            <asp:ListItem Value="1">Dependent</asp:ListItem>
-                                                        </asp:RadioButtonList>
-                                                    </div>
+                                                <div id="trDependent" class="col-lg-6" runat="server" visible="false">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-5 col-md-5 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label></label>
 
-                                                    <div class="form-group col-md-4">
-                                                        <label id="FirstDep" runat="server" visible="false">Dependents<span style="color: Red">*</span></label>
-                                                        <label id="SecDep" runat="server" visible="false">:</label>
-                                                        <div id="ThiDep" runat="server" visible="false">
-                                                            <asp:DropDownList ID="ddlDependent" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control"
-                                                                OnSelectedIndexChanged="ddlDependent_SelectedIndexChanged" TabIndex="4" ValidationGroup="Doctor">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="rfvDependent" runat="server" ControlToValidate="ddlDependent" Display="None" ErrorMessage="Please Select Dependent."
-                                                                InitialValue="0" SetFocusOnError="True" ValidationGroup="Doctor"></asp:RequiredFieldValidator>
+                                                            </div>
+                                                            <asp:RadioButtonList ID="rdbPCList" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rdbPCList_SelectedIndexChanged"
+                                                                RepeatDirection="Horizontal" TabIndex="3">
+                                                                <asp:ListItem Selected="True" Value="0">Self &nbsp;&nbsp;</asp:ListItem>
+                                                                <asp:ListItem Value="1">Dependent</asp:ListItem>
+                                                            </asp:RadioButtonList>
+                                                        </div>
 
+                                                        <div class="form-group col-lg-7 col-md-7 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label id="FirstDep" runat="server" visible="false"><sup>*</sup>Dependents</label>
+                                                                <label id="SecDep" runat="server" visible="false"></label>
+                                                            </div>
+                                                            <div id="ThiDep" runat="server" visible="false">
+                                                                <asp:DropDownList ID="ddlDependent" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
+                                                                    OnSelectedIndexChanged="ddlDependent_SelectedIndexChanged" TabIndex="4" ValidationGroup="Doctor">
+                                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                                <asp:RequiredFieldValidator ID="rfvDependent" runat="server" ControlToValidate="ddlDependent" Display="None" ErrorMessage="Please Select Dependent."
+                                                                    InitialValue="0" SetFocusOnError="True" ValidationGroup="Doctor"></asp:RequiredFieldValidator>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
+                                        </div>
 
-                                            <div class="row">
-                                                <div class="form-group col-md-3">
-                                                    <label>Age<span style="color: Red">*</span>&nbsp&nbsp:(yrs)</label>
+                                        <div class="row">
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>*</sup>
+                                                    <label>Age (yrs)</label>
+                                                </div>
+                                                <div class="input-group date">
                                                     <asp:TextBox ID="txtAge" runat="server" MaxLength="20" TabIndex="5" CssClass="form-control"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="rfvAge" runat="server" ControlToValidate="txtAge" Display="None"
                                                         ErrorMessage="Please enter age." SetFocusOnError="true" ValidationGroup="Doctor" />
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group col-md-3">
-                                                    <label>Weight&nbsp&nbsp:(Kg)</label>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Weight (Kg)</label>
+                                                </div>
+                                                <div class="input-group date">
                                                     <asp:TextBox ID="txtWeight" runat="server" MaxLength="3" onkeyup="validateNumeric(this);"
                                                         TabIndex="9" CssClass="form-control"></asp:TextBox>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group col-md-3">
-                                                    <label>Sex&nbsp&nbsp:</label>
-                                                    <br />
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Sex </label>
+                                                </div>
+                                                <%-- <br />--%>
+                                                <div class="input-group date">
                                                     <asp:RadioButton ID="rdbMale" runat="server" Checked="true" GroupName="Sex" TabIndex="7" Text="Male" />
                                                     <asp:RadioButton ID="rdbFemale" runat="server" GroupName="Sex" TabIndex="8" Text="Female" />
                                                 </div>
-                                                <div class="form-group col-md-3" id="divRef" runat="server" visible="false">
-                                                    <label>Reference By&nbsp&nbsp:</label>
+                                            </div>
+                                            <%--</div>
+                                        <div class="row">--%>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="trOtherCategory" runat="server" visible="true">
+                                                <div class="label-dynamic">
+                                                    <label>Complaint </label>
+                                                </div>
+                                                <div class="input-group date">
+                                                    <asp:TextBox ID="txtOtherComplaint" runat="server" MaxLength="100" TextMode="MultiLine" TabIndex="1"
+                                                        CssClass="form-control"></asp:TextBox>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divRef" runat="server" visible="false">
+                                                <label>Reference By&nbsp&nbsp:</label>
+                                                <div class="input-group date">
                                                     <asp:TextBox ID="txtReference" runat="server" MaxLength="50" TabIndex="10" CssClass="form-control"></asp:TextBox>
                                                     <cc1:FilteredTextBoxExtender ID="ftbeCReference" runat="server" FilterType="Custom,LowerCaseLetters,UpperCaseLetters" TargetControlID="txtReference" ValidChars=".  ">
                                                     </cc1:FilteredTextBoxExtender>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-3" id="trOtherCategory" runat="server" visible="true">
-                                                    <label>Complaint&nbsp&nbsp:</label>
-                                                    <asp:TextBox ID="txtOtherComplaint" runat="server" MaxLength="100" TextMode="MultiLine" TabIndex="1"
-                                                        CssClass="form-control"></asp:TextBox>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,52 +271,52 @@
 
                                 <div id="trPatientHist" runat="server">
                                     <asp:Panel ID="pnlPatientHist" runat="server">
-                                        <div class="panel panel-info">
-                                            <div class="panel panel-heading">Patient History</div>
-                                            <div class="panel panel-body">
-                                                <div class="form-group col-md-12">
-                                                    <div class="col-md-12 table-responsive">
-                                                        <asp:Panel ID="pnlPatientHistDetail" runat="server" ScrollBars="Horizontal">
-                                                            <asp:GridView ID="lvPatientHist" runat="server" AutoGenerateColumns="False" HeaderStyle-BackColor="ActiveBorder"
-                                                                AlternatingRowStyle-BackColor="#FFFFAA" CssClass="table table-bordered table-hover">
-                                                                <HeaderStyle CssClass="header" />
-                                                                <AlternatingRowStyle BackColor="#FFFFD2" />
-                                                                <Columns>
-                                                                    <asp:TemplateField HeaderText="View" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
-                                                                        <ItemTemplate>
-                                                                            <%--<asp:Button ID="btnDetails" runat="server" Text="Details" Width="80px" CommandArgument='<%# Eval("OPDID") %>'
+                                        <div class="col-12">
+                                            <div class="sub-heading">
+                                                <h5>Patient History</h5>
+                                            </div>
+                                            <div class="col-12">
+                                                <asp:Panel ID="pnlPatientHistDetail" runat="server" ScrollBars="Horizontal">
+                                                    <div class="col-12">
+                                                        <asp:GridView ID="lvPatientHist" runat="server" AutoGenerateColumns="False" HeaderStyle-BackColor="ActiveBorder"
+                                                            AlternatingRowStyle-BackColor="#FFFFAA" CssClass="table table-bordered table-hover">
+                                                            <HeaderStyle CssClass="header" />
+                                                            <AlternatingRowStyle BackColor="#FFFFD2" />
+                                                            <Columns>
+                                                                <asp:TemplateField HeaderText="View" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
+                                                                    <ItemTemplate>
+                                                                        <%--<asp:Button ID="btnDetails" runat="server" Text="Details" Width="80px" CommandArgument='<%# Eval("OPDID") %>'
                                                             OnClick="btnDetails_Click" />--%>
-                                                                            <asp:ImageButton ID="btnDetails" runat="server" AlternateText="Show Details" CommandArgument='<%# Eval("OPDID") %>' ImageUrl="~/IMAGES/edit.gif"
-                                                                                OnClick="btnDetails_Click" ToolTip="Edit Record" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="Print Presc" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
-                                                                        <ItemTemplate>
-                                                                            <asp:ImageButton ID="btnPrint" runat="server" AlternateText="Print Record" CommandArgument='<%# Eval("OPDID") %>' ImageUrl="~/IMAGES/print.gif" OnClick="btnPrint_Click" ToolTip='<%# Eval("OPDID") %>' />
-                                                                            &nbsp;
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:BoundField DataField="NAME" HeaderText="Patient Name" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="DRNAME" HeaderText="Doctor Name" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:TemplateField HeaderText="OPD Date" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblDate" runat="server" Text='<%#Eval("OPDDATE","{0:d}") %>' />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:BoundField DataField="COMPLAINT" HeaderText="Complaint" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="FINDING" HeaderText="Finding" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="DIAGNOSIS" HeaderText="Diagnosis" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="INSTRUCTION" HeaderText="Instructions" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="HEIGHT" HeaderText="Height(In Inches)" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="WEIGHT" HeaderText="Weight(In KGs)" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="TEMP" HeaderText="Temperature" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="PULSE" HeaderText="Pulse" HeaderStyle-CssClass="bg-light-blue" />
-                                                                    <asp:BoundField DataField="RESP" HeaderText="Respiration" HeaderStyle-CssClass="bg-light-blue" />
-                                                                </Columns>
-                                                            </asp:GridView>
-                                                        </asp:Panel>
+                                                                        <asp:ImageButton ID="btnDetails" runat="server" AlternateText="Show Details" CommandArgument='<%# Eval("OPDID") %>' ImageUrl="~/IMAGES/edit.gif"
+                                                                            OnClick="btnDetails_Click" ToolTip="Edit Record" />
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:TemplateField HeaderText="Print Presc" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
+                                                                    <ItemTemplate>
+                                                                        <asp:ImageButton ID="btnPrint" runat="server" AlternateText="Print Record" CommandArgument='<%# Eval("OPDID") %>' ImageUrl="~/IMAGES/print.gif" OnClick="btnPrint_Click" ToolTip='<%# Eval("OPDID") %>' />
+                                                                        &nbsp;
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:BoundField DataField="NAME" HeaderText="Patient Name" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="DRNAME" HeaderText="Doctor Name" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:TemplateField HeaderText="OPD Date" HeaderStyle-CssClass="bg-light-blue" ItemStyle-CssClass="visible-lg">
+                                                                    <ItemTemplate>
+                                                                        <asp:Label ID="lblDate" runat="server" Text='<%#Eval("OPDDATE","{0:d}") %>' />
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+                                                                <asp:BoundField DataField="COMPLAINT" HeaderText="Complaint" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="FINDING" HeaderText="Finding" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="DIAGNOSIS" HeaderText="Diagnosis" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="INSTRUCTION" HeaderText="Instructions" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="HEIGHT" HeaderText="Height(In Inches)" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="WEIGHT" HeaderText="Weight(In KGs)" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="TEMP" HeaderText="Temperature" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="PULSE" HeaderText="Pulse" HeaderStyle-CssClass="bg-light-blue" />
+                                                                <asp:BoundField DataField="RESP" HeaderText="Respiration" HeaderStyle-CssClass="bg-light-blue" />
+                                                            </Columns>
+                                                        </asp:GridView>
                                                     </div>
-                                                </div>
+                                                </asp:Panel>
                                             </div>
                                         </div>
                                     </asp:Panel>
@@ -267,9 +324,11 @@
 
                                 <div id="trDirectIssueHistory" runat="server" visible="false">
                                     <asp:Panel ID="pnlDMIHis" runat="server">
-                                        <div class="panel panel-info">
-                                            <div class="panel panel-heading">Direct Medicine</div>
-                                            <div class="panel panel-body">
+                                        <div class="col-12">
+                                            <div class="sub-heading">
+                                                <h5>Direct Medicine</h5>
+                                            </div>
+                                            <div class="col-12">
                                                 <asp:Panel ID="Panel3" runat="server" ScrollBars="Horizontal">
                                                     <asp:GridView ID="gridDirectMIssue" runat="server" AlternatingRowStyle-BackColor="#FFFFAA" AutoGenerateColumns="False"
                                                         CssClass="table table-striped table-bordered table-hover" HeaderStyle-BackColor="ActiveBorder">
@@ -305,9 +364,11 @@
                                 </div>
 
                                 <asp:Panel ID="pnlSGrid" runat="server" Visible="false">
-                                    <div class="panel panel-info">
-                                        <div class="panel panel-heading">Prescription List</div>
-                                        <div class="panel panel-body">
+                                    <div class="col-12">
+                                        <div class="sub-heading">
+                                            <h5>Prescription List</h5>
+                                        </div>
+                                        <div class="col-12">
                                             <asp:GridView ID="SecondGrid" runat="server" AlternatingRowStyle-BackColor="#FFFFAA" AutoGenerateColumns="False"
                                                 HeaderStyle-BackColor="ActiveBorder" CssClass="table table-striped table-bordered table-hover">
                                                 <HeaderStyle CssClass="bg-light-blue" />
@@ -331,7 +392,7 @@
                                                     <asp:BoundField DataField="DOSES_ID" HeaderText="Doses" />
                                                     <asp:BoundField DataField="DOSES" HeaderText="DOSES_ID" Visible="false" />
                                                     <asp:BoundField DataField="QTY" HeaderText="Quantity" />
-                                                   <%-- <asp:BoundField DataField="SPINST" HeaderText="Sp.Instruction" />--%>
+                                                    <%-- <asp:BoundField DataField="SPINST" HeaderText="Sp.Instruction" />--%>
                                                     <asp:BoundField DataField="UNIQUE" HeaderText="SRNO" Visible="false" />
                                                     <asp:BoundField DataField="PRESCRIPTION_STATUS_ID" HeaderText="ISSUE_STATUS" Visible="false" />
                                                     <asp:BoundField DataField="PRESCRIPTION_STATUS" HeaderText="Issue Status" Visible="false" />
@@ -343,48 +404,74 @@
 
                                 <div id="trDetails" runat="server" visible="false">
                                     <asp:Panel ID="pnlDetails" runat="server">
-                                        <div class="panel panel-info">
-                                            <div class="panel panel-heading">Patient Complaints</div>
-                                            <div class="panel panel-body">
-                                                <div class="form-group col-md-4">
-                                                    <label>Complaints&nbsp;&nbsp;:</label>
-                                                    <asp:TextBox ID="txtComplaints" runat="server" MaxLength="100" TabIndex="13"
-                                                        TextMode="MultiLine" CssClass="form-control"></asp:TextBox>
-                                                    <%-- <asp:RequiredFieldValidator ID="rfvComp" runat="server" ControlToValidate="txtComplaints" ToolTip="Add Patient Complaints" 
+                                        <div class="col-12">
+                                            <div class="sub-heading">
+                                                <h5>Patient Complaints</h5>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Complaints </label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtComplaints" runat="server" MaxLength="100" TabIndex="13"
+                                                            TextMode="MultiLine" CssClass="form-control"></asp:TextBox>
+                                                        <%-- <asp:RequiredFieldValidator ID="rfvComp" runat="server" ControlToValidate="txtComplaints" ToolTip="Add Patient Complaints" 
                                                         ValidationGroup="Doctor"></asp:RequiredFieldValidator>--%>
+                                                    </div>
                                                 </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>Findings&nbsp;&nbsp;:</label>
-                                                    <asp:TextBox ID="txtFindings" runat="server" MaxLength="100" TabIndex="14" TextMode="MultiLine" CssClass="form-control"></asp:TextBox>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Findings </label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtFindings" runat="server" MaxLength="100" TabIndex="14" TextMode="MultiLine" CssClass="form-control"></asp:TextBox>
+                                                    </div>
                                                 </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>BP&nbsp;&nbsp;:(mmHg)</label>
-                                                    <asp:TextBox ID="txtBP" runat="server" MaxLength="10" TabIndex="17" CssClass="form-control"></asp:TextBox>
-                                                    <cc1:FilteredTextBoxExtender ID="ftbeBP" runat="server" FilterType="Custom, Numbers" TargetControlID="txtBP" ValidChars="/">
-                                                    </cc1:FilteredTextBoxExtender>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>BP (mmHg)</label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtBP" runat="server" MaxLength="10" TabIndex="17" CssClass="form-control"></asp:TextBox>
+                                                        <cc1:FilteredTextBoxExtender ID="ftbeBP" runat="server" FilterType="Custom, Numbers" TargetControlID="txtBP" ValidChars="/">
+                                                        </cc1:FilteredTextBoxExtender>
+                                                    </div>
                                                 </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>Temperature&nbsp;&nbsp;:(degrees C)</label>
-                                                    <asp:TextBox ID="txtTemprature" runat="server" MaxLength="3" onkeyup="validateNumeric(this);" TabIndex="18"
-                                                        CssClass="form-control"></asp:TextBox>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Temperature (degrees C)</label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtTemprature" runat="server" MaxLength="3" onkeyup="validateNumeric(this);" TabIndex="18"
+                                                            CssClass="form-control"></asp:TextBox>
+                                                    </div>
                                                 </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>Pulse Rate&nbsp;&nbsp;:(beats/min)</label>
-                                                    <asp:TextBox ID="txtPulseRate" runat="server" MaxLength="3" TabIndex="19" CssClass="form-control"></asp:TextBox>
-                                                    <cc1:FilteredTextBoxExtender ID="ftbePulseRate" runat="server" FilterType="Numbers" TargetControlID="txtPulseRate"
-                                                        ValidChars=" ">
-                                                    </cc1:FilteredTextBoxExtender>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Pulse Rate (beats/min)</label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtPulseRate" runat="server" MaxLength="3" TabIndex="19" CssClass="form-control"></asp:TextBox>
+                                                        <cc1:FilteredTextBoxExtender ID="ftbePulseRate" runat="server" FilterType="Numbers" TargetControlID="txtPulseRate"
+                                                            ValidChars=" ">
+                                                        </cc1:FilteredTextBoxExtender>
+                                                    </div>
                                                 </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>Respiration&nbsp;&nbsp;:(breaths/min)</label>
-                                                    <asp:TextBox ID="txtRespiration" runat="server" MaxLength="3" TabIndex="20" CssClass="form-control"></asp:TextBox>
-                                                    <cc1:FilteredTextBoxExtender ID="ftbeRespi" runat="server" FilterType="Numbers" TargetControlID="txtRespiration" ValidChars="">
-                                                    </cc1:FilteredTextBoxExtender>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Respiration (breaths/min)</label>
+                                                    </div>
+                                                    <div class="input-group date">
+                                                        <asp:TextBox ID="txtRespiration" runat="server" MaxLength="3" TabIndex="20" CssClass="form-control"></asp:TextBox>
+                                                        <cc1:FilteredTextBoxExtender ID="ftbeRespi" runat="server" FilterType="Numbers" TargetControlID="txtRespiration" ValidChars="">
+                                                        </cc1:FilteredTextBoxExtender>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -392,89 +479,89 @@
                                 </div>
 
                                 <asp:Panel ID="pnlMedicineGrid" runat="server" Visible="false">
-                                    <div class="panel panel-info">
-                                        <div class="panel panel-heading">Medicine Details</div>
-                                        <div class="panel panel-body">
-                                            <asp:GridView ID="lvMedicineissue" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="CancelEdit"
-                                                OnRowEditing="EditCustomer" ShowFooter="true" CssClass="table table-striped table-bordered table-hover">
-                                                <HeaderStyle CssClass="bg-light-blue" />
-                                                <AlternatingRowStyle BackColor="#FFFFAA" />
-                                                <Columns>
-                                                    <asp:TemplateField HeaderStyle-HorizontalAlign="Center" HeaderText="Sr.No" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblSrno" runat="server" Text='<%# Eval("ADMNO")%>' />
-                                                            <%-- <%# Container.DataItemIndex + 1%>--%>
-                                                        </ItemTemplate>
-                                                        <ItemStyle HorizontalAlign="Left" Width="5%" />
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Medicine Name" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtItemname" runat="server" AutoPostBack="true" OnTextChanged="txtItemname_TextChanged" Text='<%# Eval("ITEMNAME")%>' Width="150px" />
-                                                            <asp:HiddenField ID="hfItemName" runat="server" />
-                                                            <cc1:AutoCompleteExtender ID="AutoCompleteExtender1" runat="server" CompletionInterval="100" CompletionSetCount="10" EnableCaching="false" FirstRowSelected="false" MinimumPrefixLength="2" OnClientItemSelected="ItemName" ServiceMethod="GetItemName" TargetControlID="txtItemname">
-                                                            </cc1:AutoCompleteExtender>
-                                                            <asp:Label ID="lblino" runat="server" Text='<%# Eval("INO")%>' Visible="false" />
-                                                        </ItemTemplate>
-                                                        <HeaderStyle HorizontalAlign="Center" />
-                                                        <ItemStyle Width="15%" />
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Doses" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtDoses" runat="server" AutoPostBack="true" OnTextChanged="txtDoses_TextChanged" Text='<%# Eval("DNAME")%>' Width="100px"></asp:TextBox>
-                                                            <asp:HiddenField ID="hfDoses" runat="server" />
-                                                            <cc1:AutoCompleteExtender ID="AutoCompleteExtender2" runat="server" CompletionInterval="100" CompletionSetCount="10" EnableCaching="false" FirstRowSelected="false" MinimumPrefixLength="2" OnClientItemSelected="DoseName" ServiceMethod="GetDoseName" TargetControlID="txtDoses">
-                                                            </cc1:AutoCompleteExtender>
-                                                            <asp:Label ID="lblDno" runat="server" Text='<%# Eval("DOSES")%>' Visible="false" />
-                                                        </ItemTemplate>
-                                                        <EditItemTemplate>
-                                                            <asp:TextBox ID="txtItemDoses" runat="server" onblur="OneTextToother();" Text='<%# Eval("DNAME")%>'></asp:TextBox>
-                                                        </EditItemTemplate>
-                                                        <ItemStyle HorizontalAlign="Center" Width="10%" />
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Issued Quantity" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtQtyMain" runat="server" MaxLength="5" onkeypress="return CheckNumeric(event, this);" Text='<%# Eval("QTY_ISSUE")%>' Width="80px" />
-                                                            <asp:Label ID="lblqty" runat="server" Text='<%# Eval("QTY_ISSUE")%>' Visible="false" />
-                                                        </ItemTemplate>
-                                                        <EditItemTemplate>
-                                                            <asp:TextBox ID="txtItemIssuedQty" runat="server" Text='<%# Eval("QTY_ISSUE")%>'></asp:TextBox>
-                                                        </EditItemTemplate>
-                                                        <ItemStyle HorizontalAlign="Center" Width="10%" />
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Direct Issue Qty." ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtIssueQty" runat="server" MaxLength="5" onkeypress="return CheckNumeric(event, this);" Text='<%# Eval("DIRECT_ISSUE")%>' ToolTip="Enter Direct Issue Quantity" Width="80px" />
-                                                        </ItemTemplate>
-                                                        <EditItemTemplate>
-                                                            <asp:TextBox ID="txtItemIssueQty" runat="server" Width="80px"></asp:TextBox>
-                                                        </EditItemTemplate>
-                                                        <HeaderStyle HorizontalAlign="Center" />
-                                                        <ItemStyle Width="10%" />
-                                                    </asp:TemplateField>
-                                                    <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Available Quantity" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                        <ItemTemplate>
-                                                            <asp:TextBox ID="txtAvailQty" runat="server" Enabled="false" Text='<%# Eval("ITEM_MAX_QTY")%>' Width="80px" />
-                                                        </ItemTemplate>
-                                                        <EditItemTemplate>
-                                                            <asp:TextBox ID="txtItemAvailQty" runat="server" Enabled="false" Text='<%# Eval("ITEM_MAX_QTY")%>' Width="80px"></asp:TextBox>
-                                                        </EditItemTemplate>
-                                                        <FooterTemplate>
-                                                            <asp:Button ID="btnAdd" runat="server" OnClick="AddNewCustomer" Text="Add" Visible="false" />
-                                                        </FooterTemplate>
-                                                        <ItemStyle HorizontalAlign="Center" Width="10%" />
-                                                    </asp:TemplateField>
-                                                    <%--<asp:TemplateField FooterStyle-HorizontalAlign="Center">
+                                    <div class="col-12">
+                                        <div class="sub-heading">
+                                            <h5>Medicine Details</h5>
+                                        </div>
+                                        <asp:GridView ID="lvMedicineissue" runat="server" AutoGenerateColumns="False" OnRowCancelingEdit="CancelEdit"
+                                            OnRowEditing="EditCustomer" ShowFooter="true" CssClass="table table-striped table-bordered table-hover">
+                                            <HeaderStyle CssClass="bg-light-blue" />
+                                            <AlternatingRowStyle BackColor="#FFFFAA" />
+                                            <Columns>
+                                                <asp:TemplateField HeaderStyle-HorizontalAlign="Center" HeaderText="Sr.No" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblSrno" runat="server" Text='<%# Eval("ADMNO")%>' />
+                                                        <%-- <%# Container.DataItemIndex + 1%>--%>
+                                                    </ItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Left" Width="5%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Medicine Name" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:TextBox ID="txtItemname" runat="server" AutoPostBack="true" OnTextChanged="txtItemname_TextChanged" Text='<%# Eval("ITEMNAME")%>' Width="150px" />
+                                                        <asp:HiddenField ID="hfItemName" runat="server" />
+                                                        <cc1:AutoCompleteExtender ID="AutoCompleteExtender1" runat="server" CompletionInterval="100" CompletionSetCount="10" EnableCaching="false" FirstRowSelected="false" MinimumPrefixLength="2" OnClientItemSelected="ItemName" ServiceMethod="GetItemName" TargetControlID="txtItemname">
+                                                        </cc1:AutoCompleteExtender>
+                                                        <asp:Label ID="lblino" runat="server" Text='<%# Eval("INO")%>' Visible="false" />
+                                                    </ItemTemplate>
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle Width="15%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Doses" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:TextBox ID="txtDoses" runat="server" AutoPostBack="true" OnTextChanged="txtDoses_TextChanged" Text='<%# Eval("DNAME")%>' Width="100px"></asp:TextBox>
+                                                        <asp:HiddenField ID="hfDoses" runat="server" />
+                                                        <cc1:AutoCompleteExtender ID="AutoCompleteExtender2" runat="server" CompletionInterval="100" CompletionSetCount="10" EnableCaching="false" FirstRowSelected="false" MinimumPrefixLength="2" OnClientItemSelected="DoseName" ServiceMethod="GetDoseName" TargetControlID="txtDoses">
+                                                        </cc1:AutoCompleteExtender>
+                                                        <asp:Label ID="lblDno" runat="server" Text='<%# Eval("DOSES")%>' Visible="false" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtItemDoses" runat="server" onblur="OneTextToother();" Text='<%# Eval("DNAME")%>'></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Center" Width="10%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Issued Quantity" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:TextBox ID="txtQtyMain" runat="server" MaxLength="5" onkeypress="return CheckNumeric(event, this);" Text='<%# Eval("QTY_ISSUE")%>' Width="80px" />
+                                                        <asp:Label ID="lblqty" runat="server" Text='<%# Eval("QTY_ISSUE")%>' Visible="false" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtItemIssuedQty" runat="server" Text='<%# Eval("QTY_ISSUE")%>'></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Center" Width="10%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Direct Issue Qty." ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:TextBox ID="txtIssueQty" runat="server" MaxLength="5" onkeypress="return CheckNumeric(event, this);" Text='<%# Eval("DIRECT_ISSUE")%>' ToolTip="Enter Direct Issue Quantity" Width="80px" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtItemIssueQty" runat="server" Width="80px"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <HeaderStyle HorizontalAlign="Center" />
+                                                    <ItemStyle Width="10%" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField FooterStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" HeaderText="Available Quantity" ItemStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
+                                                    <ItemTemplate>
+                                                        <asp:TextBox ID="txtAvailQty" runat="server" Enabled="false" Text='<%# Eval("ITEM_MAX_QTY")%>' Width="80px" />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtItemAvailQty" runat="server" Enabled="false" Text='<%# Eval("ITEM_MAX_QTY")%>' Width="80px"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <FooterTemplate>
+                                                        <asp:Button ID="btnAdd" runat="server" OnClick="AddNewCustomer" Text="Add" Visible="false" />
+                                                    </FooterTemplate>
+                                                    <ItemStyle HorizontalAlign="Center" Width="10%" />
+                                                </asp:TemplateField>
+                                                <%--<asp:TemplateField FooterStyle-HorizontalAlign="Center">
                                                           <ItemTemplate>
                                                               <asp:LinkButton ID="lnkRemove" runat="server" CommandArgument='<%# Eval("INO")%>' OnClick="DeleteCustomer" OnClientClick="return confirm('Do you want to delete?')" Text="Delete"></asp:LinkButton>
                                                           </ItemTemplate>
                                                           <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle" />
                                                           <ItemStyle Width="10%" />
                                                       </asp:TemplateField>--%>
-                                                </Columns>
-                                                <EditRowStyle BackColor="#CCCCCC" />
-                                                <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
-                                            </asp:GridView>
-                                        </div>
+                                            </Columns>
+                                            <EditRowStyle BackColor="#CCCCCC" />
+                                            <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+                                        </asp:GridView>
                                     </div>
                                 </asp:Panel>
 
@@ -494,180 +581,174 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <ajaxToolKit:ModalPopupExtender ID="ModalPopupExtender2" runat="server"
+                                <%--<div class="col-md-12">--%>
+                                <%--<ajaxToolKit:ModalPopupExtender ID="ModalPopupExtender2" runat="server"
                                         PopupControlID="Panel4" TargetControlID="btnNewP" BackgroundCssClass="BackgroundReg" BehaviorID="mdlPopupDel">
-                                    </ajaxToolKit:ModalPopupExtender>
+                                    </ajaxToolKit:ModalPopupExtender>--%>
+                                <%--data-backdrop="static"--%>
+                                <div id="divPrescription" class="modal fade" role="dialog">
+                                    <%--data-backdrop="static"--%>
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Add Prescription</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <%--<div class="modal-body clearfix pb-0">--%>
+                                            <div class="modal-body">
+                                                <asp:UpdatePanel ID="UpdatePrescription" runat="server">
+                                                    <ContentTemplate>
+                                                        <%--<asp:Panel ID="Panel4" runat="server" CssClass="modalPopup" Style="display: none; height: auto; width: 60%;">--%>
+                                                        <%--<asp:Panel ID="Panel4" runat="server" CssClass="PopupReg" align="center" Style="display: none; height: 70%; width: 60%;">--%>
+                                                        <%--<div class="panel panel-info">--%>
 
-                                    <asp:Panel ID="Panel4" runat="server" CssClass="PopupReg" Style="display: none; height: auto; width: 60%;">
-                                        <div class="panel panel-info">
-                                            <div class="panel panel-heading">
-                                                Add Prescription
-                                                        <div class="box-tools pull-right">
+                                                        <div class="col-md-12">
                                                             <asp:Button ID="btnCloseP" runat="server" Text="X" Style="font-family: Verdana; font-weight: bold; font-size: 10px"
-                                                                CssClass="btnClosePop"
+                                                                CssClass="btnClosePop" Visible="false"
                                                                 ToolTip="Close Prescription" OnClick="btnCloseP_Click" />
-                                                        </div>
-                                            </div>
-                                            <div class="panel panel-body">
-                                                <div class="form-group col-md-12">
-                                                    <div class="form-group col-md-7">
-                                                        <div class="col-md-4">
-                                                            <label><span style="color: Red">*</span>Item Name:</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:TextBox ID="txtItemName" runat="server" CssClass="form-control" ToolTip="Enter Item Name" Style="z-index: 0"></asp:TextBox>
-                                                            <asp:HiddenField ID="hfItemName" runat="server" />
-                                                            <%--<cc1:AutoCompleteExtender ServiceMethod="GetItemName" MinimumPrefixLength="2" CompletionInterval="100"
-                                                                EnableCaching="false" CompletionSetCount="10" TargetControlID="txtItemName"
-                                                                ID="AutoCompleteExtender1" runat="server" FirstRowSelected="false" OnClientItemSelected="ItemName"
-                                                                CompletionListCssClass="autocomplete_completionListElement" CompletionListItemCssClass="autocomplete_listItem"
-                                                                CompletionListHighlightedItemCssClass="autocomplete_highlightedListItem">
-                                                            </cc1:AutoCompleteExtender>--%>
+                                                            <%--</div>--%>
+                                                            <div class="row">
+                                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>*</sup>
+                                                                        <label>Item Name</label>
+                                                                    </div>
+                                                                    <asp:TextBox ID="txtItemName" runat="server" CssClass="form-control" ToolTip="Enter Item Name"></asp:TextBox>
+                                                                    <asp:HiddenField ID="hfItemName" runat="server" />
+                                                                    <ajaxToolKit:AutoCompleteExtender ID="AutoCompleteExtender1" runat="server"
+                                                                        TargetControlID="txtItemName"
+                                                                        MinimumPrefixLength="1" EnableCaching="true" CompletionSetCount="1" CompletionInterval="100"
+                                                                        ServiceMethod="GetItemName" OnClientShowing="clientShowing" OnClientItemSelected="ItemName">
+                                                                    </ajaxToolKit:AutoCompleteExtender>
+                                                                    <asp:RequiredFieldValidator ID="rfvItem" runat="server" ControlToValidate="txtItemName"
+                                                                        Display="None" ErrorMessage="Please enter item name" ValidationGroup="prescription"
+                                                                        SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                                </div>
 
+                                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>*</sup>
+                                                                        <label>No. of Days</label>
+                                                                    </div>
+                                                                    <asp:TextBox ID="txtNumberofDays" runat="server" CssClass="form-control"
+                                                                        ToolTip="Enter Number Of Days" MaxLength="3"></asp:TextBox>
+                                                                    <ajaxToolKit:FilteredTextBoxExtender ID="ftbeNoOfDays" runat="server" FilterType="Numbers"
+                                                                        TargetControlID="txtNumberofDays" ValidChars="">
+                                                                    </ajaxToolKit:FilteredTextBoxExtender>
+                                                                    <asp:RequiredFieldValidator ID="rfvNoOfdays" runat="server" ControlToValidate="txtNumberofDays"
+                                                                        Display="None" ErrorMessage="Please enter number of days." ValidationGroup="prescription"
+                                                                        SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                                </div>
 
-                                                            <ajaxToolKit:AutoCompleteExtender ID="AutoCompleteExtender1" runat="server"
-                                                                TargetControlID="txtItemName"
-                                                                MinimumPrefixLength="1" EnableCaching="true" CompletionSetCount="1" CompletionInterval="100"
-                                                                ServiceMethod="GetItemName" OnClientShowing="clientShowing" OnClientItemSelected="ItemName">
-                                                            </ajaxToolKit:AutoCompleteExtender>
+                                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <label>Issue Status</label>
+                                                                    </div>
+                                                                    <asp:RadioButton ID="rdbYes" runat="server" Checked="true" GroupName="Status" Text="Issued" />&nbsp;&nbsp;
+                                                                    <asp:RadioButton ID="rdbNo" runat="server" GroupName="Status" Text="Prescribed" />
+                                                                </div>
 
+                                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>*</sup>
+                                                                        <label>Dosage</label>
+                                                                    </div>
+                                                                    <asp:DropDownList ID="ddlDosage" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                                        ToolTip="Select Dosage" data-select2-enable="true">
+                                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                    </asp:DropDownList>
+                                                                    <asp:RequiredFieldValidator ID="rfvDosage" runat="server" ControlToValidate="ddlDosage" InitialValue="0"
+                                                                        Display="None" ErrorMessage="Please select dosages." ValidationGroup="prescription"
+                                                                        SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                                </div>
 
+                                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                                    <div class="label-dynamic">
+                                                                        <sup>*</sup>
+                                                                        <label>Quantity</label>
+                                                                    </div>
+                                                                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="form-control"
+                                                                        ToolTip="Enter Quantity" MaxLength="5"></asp:TextBox>
+                                                                    <ajaxToolKit:FilteredTextBoxExtender ID="ftbeQty" runat="server" FilterType="Numbers"
+                                                                        TargetControlID="txtQuantity" ValidChars="">
+                                                                    </ajaxToolKit:FilteredTextBoxExtender>
+                                                                    <asp:RequiredFieldValidator ID="rfvQty" runat="server" ControlToValidate="txtQuantity"
+                                                                        Display="None" ErrorMessage="Please enter quantity." ValidationGroup="prescription"
+                                                                        SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                                </div>
 
+                                                                <div class="form-group col-lg-6 col-md-6 col-12" id="divSpeInst" runat="server" visible="false">
+                                                                    <div class="label-dynamic">
+                                                                        <sup></sup>
+                                                                        <label>Special Instructions:</label>
+                                                                    </div>
+                                                                    <asp:TextBox ID="txtSpecialInstructions" TextMode="MultiLine" runat="server" CssClass="form-control" ToolTip="Enter Special Instructions" MaxLength="30"></asp:TextBox>
+                                                                </div>
 
-                                                            <asp:RequiredFieldValidator ID="rfvItem" runat="server" ControlToValidate="txtItemName"
-                                                                Display="None" ErrorMessage="Please enter item name" ValidationGroup="prescription"
-                                                                SetFocusOnError="True"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                     <div class="form-group col-md-5">
-                                                        <div class="col-md-4">
-                                                            <label><span style="color: Red">*</span>Dosage :</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:DropDownList ID="ddlDosage" runat="server" AppendDataBoundItems="true" CssClass="form-control"
-                                                                ToolTip="Select Dosage" Style="z-index: 0">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="rfvDosage" runat="server" ControlToValidate="ddlDosage" InitialValue="0"
-                                                                Display="None" ErrorMessage="Please select dosages." ValidationGroup="prescription"
-                                                                SetFocusOnError="True"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
+                                                                <div class="col-12 btn-footer">
+                                                                    <%--<p class="text-center">--%>
+                                                                    <asp:Button ID="btnAddPresc" runat="server" Text="Add Prescription" OnClick="btnAddPrescription_OnClick"
+                                                                        ValidationGroup="prescription" CssClass="btn btn-primary" ToolTip="Click here to Add Prescriptions" />
+                                                                    <asp:ValidationSummary ID="vsPriscription" runat="server" DisplayMode="List" ShowMessageBox="true"
+                                                                        ShowSummary="false" ValidationGroup="prescription" />
+                                                                    <%--</div>--%>
 
-                                                </div>
-                                                <div class="form-group col-md-12">
-                                                    <div class="form-group col-md-7">
-                                                        <div class="col-md-4">
-                                                            <label><span style="color: Red">*</span>No.of Days :</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:TextBox ID="txtNumberofDays" runat="server" CssClass="form-control" Style="z-index: 0" ToolTip="Enter Number Of Days" MaxLength="3"></asp:TextBox>
-                                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbeNoOfDays" runat="server" FilterType="Numbers"
-                                                                TargetControlID="txtNumberofDays" ValidChars="">
-                                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                                            <asp:RequiredFieldValidator ID="rfvNoOfdays" runat="server" ControlToValidate="txtNumberofDays"
-                                                                Display="None" ErrorMessage="Please enter number of days." ValidationGroup="prescription"
-                                                                SetFocusOnError="True"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                      <div class="form-group col-md-5">
-                                                        <div class="col-md-4">
-                                                            <label><span style="color: Red">*</span>Quantity :</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:TextBox ID="txtQuantity" runat="server" CssClass="form-control" Style="z-index: 0"
-                                                                ToolTip="Enter Quantity" MaxLength="5"></asp:TextBox>
-                                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftbeQty" runat="server" FilterType="Numbers"
-                                                                TargetControlID="txtQuantity" ValidChars="">
-                                                            </ajaxToolKit:FilteredTextBoxExtender>
-                                                            <asp:RequiredFieldValidator ID="rfvQty" runat="server" ControlToValidate="txtQuantity"
-                                                                Display="None" ErrorMessage="Please enter quantity." ValidationGroup="prescription"
-                                                                SetFocusOnError="True"></asp:RequiredFieldValidator>
-                                                        </div>
-                                                    </div>
-                                                  
-                                                </div>
+                                                                    <asp:Button ID="btnConfirm" runat="server" Text="Confirm" OnClick="btnConfirm_OnClick"
+                                                                        Visible="false" CssClass="btn btn-primary" ToolTip="Click here to Confirm" />&nbsp;&nbsp;  
+                                                                <asp:Button ID="btnCancelP" runat="server" Text="Cancel" OnClick="btnCancelP_Click" Visible="false" CssClass="btn btn-warning" />
+                                                                    <%--</p>--%>
+                                                                </div>
 
-                                                <div class="form-group col-md-12">
-                                                  
+                                                                <div class="form-group col-md-12 text-center">
+                                                                    <asp:Panel ID="Panel2" runat="server" ScrollBars="Auto">
+                                                                        <asp:GridView ID="gvPrisc" runat="server" AutoGenerateColumns="False"
+                                                                            CssClass="table table-striped table-bordered table-hover"
+                                                                            HeaderStyle-BackColor="ActiveBorder" AlternatingRowStyle-BackColor="#FFFFAA">
+                                                                            <HeaderStyle CssClass="bg-light-blue" />
 
-
-                                                    <div class="form-group col-md-5">
-                                                        <div class="col-md-4">
-                                                            <label>Issue Status :</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:RadioButton ID="rdbYes" runat="server" Checked="true" Style="z-index: 0" GroupName="Status" Text="Issued" />
-                                                            <asp:RadioButton ID="rdbNo" runat="server" GroupName="Status" Style="z-index: 0" Text="Prescribed" />
-
-                                                        </div>
-                                                    </div>
-                                                      <div class="form-group col-md-5">
-                                                        <asp:Button ID="btnAddPresc" runat="server" Text="Add Prescription" OnClick="btnAddPrescription_OnClick"
-                                                            ValidationGroup="prescription" CssClass="btn btn-primary" ToolTip="Click here to Add Prescriptions" />
-                                                        <asp:ValidationSummary ID="vsPriscription" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                                            ShowSummary="false" ValidationGroup="prescription" />
-                                                    </div>
-
-                                                </div>
-                                                <div class="form-group col-md-12"  id="divSpeInst" runat="server" visible="false">
-                                                    <div class="form-group col-md-7">
-                                                        <div class="col-md-4">
-                                                            <label>Special Instructions:</label>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <asp:TextBox ID="txtSpecialInstructions" TextMode="MultiLine" runat="server" Style="z-index: 0"
-                                                                CssClass="form-control" ToolTip="Enter Special Instructions" MaxLength="30"></asp:TextBox>
-                                                        </div>
-                                                    </div>
-
-                                                  
-                                                </div>
-
-                                            </div>
-
-                                            <div class="form-group col-md-12">
-                                                <div class="form-group text-center">
-                                                    <asp:Button ID="btnConfirm" runat="server" Text="Confirm" OnClick="btnConfirm_OnClick"
-                                                        Visible="false" CssClass="btn btn-primary" ToolTip="Click here to Confirm" />&nbsp;&nbsp;  
-                                                        <asp:Button ID="btnCancelP" runat="server" Text="Cancel" OnClick="btnCancelP_Click"
-                                                            Visible="false" CssClass="btn btn-warning" />
-                                                </div>
-
-
-                                                <asp:Panel ID="Panel2" runat="server" ScrollBars="Auto">
-                                                    <asp:GridView ID="gvPrisc" runat="server" AutoGenerateColumns="False" CssClass="table table-striped table-bordered table-hover"
-                                                        HeaderStyle-BackColor="ActiveBorder" AlternatingRowStyle-BackColor="#FFFFAA">
-                                                        <HeaderStyle CssClass="bg-light-blue" />
-                                                        <Columns>
-                                                            <asp:TemplateField HeaderText="Delete" HeaderStyle-CssClass="visible-lg" ItemStyle-CssClass="visible-lg">
-                                                                <ItemTemplate>
-                                                                    <asp:ImageButton ID="btnDelete" AlternateText="Delete Record"
-                                                                        CommandArgument='<%# Eval("UNIQUE") %>'
-                                                                        ToolTip="Delete Record" runat="server" ImageUrl="~/images/delete.gif"
-                                                                        OnClick="btnDelete_Click" />&nbsp;
+                                                                            <Columns>
+                                                                                <asp:TemplateField HeaderText="Delete" ItemStyle-CssClass="item">
+                                                                                    <ItemTemplate>
+                                                                                        <asp:ImageButton ID="btnDelete" AlternateText="Delete Record"
+                                                                                            CommandArgument='<%# Eval("UNIQUE") %>'
+                                                                                            ToolTip="Delete Record" runat="server" ImageUrl="~/images/delete.gif"
+                                                                                            OnClick="btnDelete_Click" />&nbsp;
                                                                                 <asp:HiddenField ID="hdnINO" runat="server" Value='<%# Eval("INO") %>' />
-                                                                    <asp:HiddenField ID="hdnDosesID" runat="server" Value='<%# Eval("DOSES") %>' />
-                                                                    <asp:HiddenField ID="hdnSRNO" runat="server" Value='<%# Eval("UNIQUE") %>' />
-                                                                </ItemTemplate>
-                                                            </asp:TemplateField>
-                                                            <asp:BoundField DataField="INO" HeaderText="ITEM NUMBER" Visible="false" />
-                                                            <asp:BoundField DataField="ITEMNAME" HeaderText="ITEM NAME" />
-                                                            <asp:BoundField DataField="NOOFDAYS" HeaderText="NOOFDAYS" />
-                                                            <asp:BoundField DataField="DOSES_ID" HeaderText="DOSES" />
-                                                            <asp:BoundField DataField="DOSES" HeaderText="DOSES_ID" Visible="false" />
-                                                            <asp:BoundField DataField="QTY" HeaderText="QUANTITY" />
-                                                            <%--<asp:BoundField DataField="SPINST" HeaderText="SPINST" />--%>
-                                                            <asp:BoundField DataField="UNIQUE" HeaderText="SRNO" Visible="false" />
+                                                                                        <asp:HiddenField ID="hdnDosesID" runat="server" Value='<%# Eval("DOSES") %>' />
+                                                                                        <asp:HiddenField ID="hdnSRNO" runat="server" Value='<%# Eval("UNIQUE") %>' />
+                                                                                    </ItemTemplate>
+                                                                                </asp:TemplateField>
+                                                                                <asp:BoundField DataField="INO" HeaderText="ITEM NUMBER" Visible="false" />
+                                                                                <asp:BoundField DataField="ITEMNAME" HeaderText="ITEM NAME" />
+                                                                                <asp:BoundField DataField="NOOFDAYS" HeaderText="NOOFDAYS" />
+                                                                                <asp:BoundField DataField="DOSES_ID" HeaderText="DOSES" />
+                                                                                <asp:BoundField DataField="DOSES" HeaderText="DOSES_ID" Visible="false" />
+                                                                                <asp:BoundField DataField="QTY" HeaderText="QUANTITY" />
+                                                                                <%--<asp:BoundField DataField="SPINST" HeaderText="SPINST" />--%>
+                                                                                <asp:BoundField DataField="UNIQUE" HeaderText="SRNO" Visible="false" />
 
-                                                        </Columns>
-                                                    </asp:GridView>
-                                                </asp:Panel>
+                                                                            </Columns>
+                                                                        </asp:GridView>
+                                                                    </asp:Panel>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <%-- </asp:Panel>--%>
+                                                    </ContentTemplate>
+                                                    <Triggers>
+                                                        <asp:PostBackTrigger ControlID="btnPrescription" />
+                                                        <asp:PostBackTrigger ControlID="btnAddPresc" />
+                                                        <asp:PostBackTrigger ControlID="btnConfirm" />
+                                                        <asp:PostBackTrigger ControlID="btnCancelP" />
+                                                    </Triggers>
+                                                </asp:UpdatePanel>
                                             </div>
                                         </div>
+                                        <div class="modal-footer">
+                                        </div>
+                                    </div>
 
-                                    </asp:Panel>
                                 </div>
                             </div>
                         </div>
@@ -684,8 +765,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Search</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -897,7 +978,14 @@
             this._popup.show();
         }
     </script>
+    <script>
 
+        function Close() {
+            //$("#Details_Veiw").Show();
+            //alert("Close");
+            $("#myModal2").modal('hide');
+        }
+    </script>
 
     <div id="divMsg" runat="server">
     </div>

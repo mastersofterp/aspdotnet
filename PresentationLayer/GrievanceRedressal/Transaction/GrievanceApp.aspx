@@ -3,7 +3,12 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
+    <style type="text/css">
+       
+        #DataTables_Table_0_wrapper.table.dataTable.nowrap th, table.dataTable.nowrap td {
+    white-space: inherit;
+}
+    </style>
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updGrievanceApplication"
             DynamicLayout="true" DisplayAfter="0">
@@ -272,7 +277,7 @@
                                                         <div class="sub-heading">
                                                             <h5>Grievance Application Details</h5>
                                                         </div>
-                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                        <table class="table table-striped table-bordered nowrap  display" id="" style="width:100%">
                                                             <thead class="bg-light-blue">
                                                                 <tr>
                                                                     <th>Edit </th>
@@ -333,5 +338,5 @@
             return del;
         }
     </script>
-
+      
 </asp:Content>

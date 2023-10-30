@@ -466,7 +466,8 @@ public partial class GrievanceRedressal_Transaction_GrievanceRedressalCell : Sys
                                 CustomStatus cs = (CustomStatus)objGrivC.AddUpdateRedressalCell(objGrivE);
                                 if (cs.Equals(CustomStatus.RecordSaved))
                                 {
-                                    BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                                    //BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                                    BindlistView(0);
                                     objCommon.DisplayMessage(this.upCommitteeMember, "Record Saved Successfully.", this.Page);
                                     Clear();
                                 }
@@ -480,7 +481,8 @@ public partial class GrievanceRedressal_Transaction_GrievanceRedressalCell : Sys
                         CustomStatus cs = (CustomStatus)objGrivC.AddUpdateRedressalCell(objGrivE);
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
-                            BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                            //BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                            BindlistView(0);
                             objCommon.DisplayMessage(this.upCommitteeMember, "Record Saved Successfully.", this.Page);
                             Clear();
                         }
@@ -492,7 +494,8 @@ public partial class GrievanceRedressal_Transaction_GrievanceRedressalCell : Sys
                     CustomStatus cs = (CustomStatus)objGrivC.AddUpdateRedressalCell(objGrivE);
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
-                        BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                        //BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+                        BindlistView(0);
                         objCommon.DisplayMessage(this.upCommitteeMember, "Record Updated Successfully.", this.Page);
                         Clear();
                     }
@@ -531,8 +534,11 @@ public partial class GrievanceRedressal_Transaction_GrievanceRedressalCell : Sys
         {
             divDept.Visible = false;
         }
-
-        BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+        if (ddlCommitteeType.SelectedValue != "0")
+        {
+            BindlistView(Convert.ToInt32(ddlCommitteeType.SelectedValue));
+        }
+        else { }
     }
 
     private void BindlistView(int GRCT_ID)
@@ -545,11 +551,13 @@ public partial class GrievanceRedressal_Transaction_GrievanceRedressalCell : Sys
             {
                 lvCommittee.DataSource = ds;
                 lvCommittee.DataBind();
+                lvCommittee.Visible = true;
             }
             else
             {
                 lvCommittee.DataSource = null;
                 lvCommittee.DataBind();
+                lvCommittee.Visible = false;
             }
         }
         catch (Exception ex)

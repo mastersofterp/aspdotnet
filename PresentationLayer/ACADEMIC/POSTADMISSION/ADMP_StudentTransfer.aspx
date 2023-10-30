@@ -68,7 +68,10 @@
                                             <sup>* </sup>
                                             <label>Program/Branch </label>
                                         </div>
-                                        <asp:ListBox ID="lstProgram" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="6" OnSelectedIndexChanged="lstProgram_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
+<%--                                        <asp:ListBox ID="lstProgram" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="6" OnSelectedIndexChanged="lstProgram_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>--%>
+
+                                      <asp:ListBox ID="lstProgram" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" TabIndex="6"></asp:ListBox>
+
                                     </div>                               
 
                                 </div>
@@ -125,7 +128,7 @@
                                             <td><%# Eval("STUDENTNAME") %></td>
                                             <td><%# Eval("DEGREENAME") %></td>
                                             <td><%# Eval("BRANCHNAME") %></td> 
-                                            <td> <asp:Label ID="lblStatus" runat="server" Text='<%#  Convert.ToInt32(Eval("StudentTransfer"))==1 ? "Transfered" : "Pending" %>'                                              
+                                            <td> <asp:Label ID="lblStatus" runat="server" Text='<%#  Convert.ToInt32(Eval("StudentTransfer"))==1 ? "Transferred" : "Pending" %>'                                              
                                                ForeColor='<%# Convert.ToInt32(Eval("StudentTransfer"))==1 ?System.Drawing.Color.Green:System.Drawing.Color.Red %>'></asp:Label></td>
 
                                             <asp:HiddenField ID="hdnUserNo" Visible="false" runat="server" Value='<%# Eval("USERNO") %>' />

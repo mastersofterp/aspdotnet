@@ -1146,7 +1146,8 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
                 string Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
                 string Authority = (lvitem.FindControl("ddlAuthority") as DropDownList).SelectedValue;
 
-
+                string mandatory = (lvitem.FindControl("txtMandatory") as TextBox).Text;
+                string status = (lvitem.FindControl("status") as LinkButton).Text;
                 FileUpload fuStudPhoto = lvitem.FindControl("fuFile") as FileUpload;
                 HiddenField hidstudocno = lvitem.FindControl("HiddenField1") as HiddenField;
                 int no = int.Parse(hidstudocno.Value.TrimStart());
@@ -1183,6 +1184,12 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
 
                     commonSaveUpdate(idno, Convert.ToInt32(hidstudocno.Value), fileTypeFromDB, fileContentTypeFromDB, fileNameFromDB, filePathFromDB, CertificateNo, district, date, Authority, 2, Userno);
 
+                }
+
+                if (mandatory == "Y" && status == "Pending")
+                {
+                    objCommon.DisplayMessage("Please Upload Mandatory Documents!", this.Page);
+                    return;
                 }
             }
 
@@ -1961,130 +1968,135 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
             string studentname = Session["userfullname"].ToString();
            // string IdNo = Session["stuinfoidno"].ToString();
 
+            int selectedDocumentIndex = Convert.ToInt32(Session["SelectedDocumentIndex"]);   // Added By Shrikant W. on 27-09-2023
+
            // string folderPath = WebConfigurationManager.AppSettings["SVCE_STUDENT_DOC"].ToString() + idno + "_" + studentname + "\\";
             foreach (ListViewDataItem lvitem in lvBinddata.Items)
             {
-
-                string CertificateNo = (lvitem.FindControl("txtDocNo") as TextBox).Text;
-                string district = (lvitem.FindControl("txtDistrict") as TextBox).Text;
-                string Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
-                string Authority = (lvitem.FindControl("ddlAuthority") as DropDownList).SelectedValue;
-
-
-                FileUpload fuStudPhoto = lvitem.FindControl("fuFile") as FileUpload;
-                HiddenField hidstudocno = lvitem.FindControl("HiddenField1") as HiddenField;
-                int no = int.Parse(hidstudocno.Value.TrimStart());
-                Button btndocno = lvitem.FindControl("btnSubmit") as Button;
-                int docno = int.Parse(btndocno.CommandArgument);
-                string Docno = btndocno.ToolTip;
-                string FUToll = fuStudPhoto.ToolTip;
-
-                string fileNameFromDB = string.Empty,
-                    fileTypeFromDB = string.Empty,
-                    fileContentTypeFromDB = string.Empty,
-                    filePathFromDB = string.Empty;
-
-                // Convert.ToInt32(Session["stuinfoidno"]) + " " + Convert.ToInt32(Session["idno"])
-                DataSet dsFileName = objCommon.FillDropDown("ACD_ADM_DOCUMENT_LIST", "DOCUMENT_NAME", "DOCTYPE,IMAGES,DOC_PATH", "IDNO=" + idno + " AND DOCUMENTNO=" + hidstudocno.Value, string.Empty);
-                //if (dsFileName.Tables[0].Rows.Count > 0)
-                //{
-                //    fileNameFromDB = dsFileName.Tables[0].Rows[0]["DOCUMENT_NAME"].ToString();
-                //    fileTypeFromDB = dsFileName.Tables[0].Rows[0]["DOCTYPE"].ToString();
-                //    fileContentTypeFromDB = dsFileName.Tables[0].Rows[0]["IMAGES"].ToString();
-                //    filePathFromDB = dsFileName.Tables[0].Rows[0]["DOC_PATH"].ToString();
-                //}
-
-                //bool Flag = false;
-                if (fuStudPhoto.HasFile)
+                if (lvitem.DisplayIndex == selectedDocumentIndex)                            // Added By Shrikant W. on 28-09-2023
                 {
 
-                    //Flag = true;
-                    HttpPostedFile FileSize = fuStudPhoto.PostedFile;
-                    string Fileext = System.IO.Path.GetExtension(fuStudPhoto.FileName);
-                    if (Fileext.ToLower() == ".pdf" || Fileext.ToLower() == ".jpg" || Fileext.ToLower() == ".jpeg") 
+                    string CertificateNo = (lvitem.FindControl("txtDocNo") as TextBox).Text;
+                    string district = (lvitem.FindControl("txtDistrict") as TextBox).Text;
+                    string Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
+                    string Authority = (lvitem.FindControl("ddlAuthority") as DropDownList).SelectedValue;
+
+
+                    FileUpload fuStudPhoto = lvitem.FindControl("fuFile") as FileUpload;
+                    HiddenField hidstudocno = lvitem.FindControl("HiddenField1") as HiddenField;
+                    int no = int.Parse(hidstudocno.Value.TrimStart());
+                    Button btndocno = lvitem.FindControl("btnSubmit") as Button;
+                    int docno = int.Parse(btndocno.CommandArgument);
+                    string Docno = btndocno.ToolTip;
+                    string FUToll = fuStudPhoto.ToolTip;
+
+                    string fileNameFromDB = string.Empty,
+                        fileTypeFromDB = string.Empty,
+                        fileContentTypeFromDB = string.Empty,
+                        filePathFromDB = string.Empty;
+
+                    // Convert.ToInt32(Session["stuinfoidno"]) + " " + Convert.ToInt32(Session["idno"])
+                    DataSet dsFileName = objCommon.FillDropDown("ACD_ADM_DOCUMENT_LIST", "DOCUMENT_NAME", "DOCTYPE,IMAGES,DOC_PATH", "IDNO=" + idno + " AND DOCUMENTNO=" + hidstudocno.Value, string.Empty);
+                    //if (dsFileName.Tables[0].Rows.Count > 0)
+                    //{
+                    //    fileNameFromDB = dsFileName.Tables[0].Rows[0]["DOCUMENT_NAME"].ToString();
+                    //    fileTypeFromDB = dsFileName.Tables[0].Rows[0]["DOCTYPE"].ToString();
+                    //    fileContentTypeFromDB = dsFileName.Tables[0].Rows[0]["IMAGES"].ToString();
+                    //    filePathFromDB = dsFileName.Tables[0].Rows[0]["DOC_PATH"].ToString();
+                    //}
+
+                    //bool Flag = false;
+                    if (fuStudPhoto.HasFile)
                     {
-                        if (FileSize.ContentLength <= 500000)
+
+                        //Flag = true;
+                        HttpPostedFile FileSize = fuStudPhoto.PostedFile;
+                        string Fileext = System.IO.Path.GetExtension(fuStudPhoto.FileName);
+                        if (Fileext.ToLower() == ".pdf" || Fileext.ToLower() == ".jpg" || Fileext.ToLower() == ".jpeg")
                         {
-                            string contentType = contentType = fuStudPhoto.PostedFile.ContentType;
-                            //if (!Directory.Exists(folderPath))
-                            //{
-                            //    Directory.CreateDirectory(folderPath);
-                            //}
-
-                            string ext = System.IO.Path.GetExtension(fuStudPhoto.PostedFile.FileName);
-                            HttpPostedFile file = fuStudPhoto.PostedFile;
-                            string fileDateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-                            string filename = idno + "_doc_" + docno + "_" + fileDateTime + ext;   //Path.GetFileName(fuStudPhoto.PostedFile.FileName);
-
-
-                            if (file.ContentLength <= 524288)// 31457280 before size 524288 40960  //For Allowing 512 Kb Size Files only 
+                            if (FileSize.ContentLength <= 500000)
                             {
-                                //int retval = AL.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_doc_" + hidstudocno.Value + "", fuStudPhoto);
+                                string contentType = contentType = fuStudPhoto.PostedFile.ContentType;
+                                //if (!Directory.Exists(folderPath))
+                                //{
+                                //    Directory.CreateDirectory(folderPath);
+                                //}
 
-                                int retval = Blob_Upload(blob_ConStr, blob_ContainerName, idno + "_doc_" + docno + "_" + fileDateTime + "", fuStudPhoto);
-                                if (retval == 0)
+                                string ext = System.IO.Path.GetExtension(fuStudPhoto.PostedFile.FileName);
+                                HttpPostedFile file = fuStudPhoto.PostedFile;
+                                string fileDateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                string filename = idno + "_doc_" + docno + "_" + fileDateTime + ext;   //Path.GetFileName(fuStudPhoto.PostedFile.FileName);
+
+
+                                if (file.ContentLength <= 524288)// 31457280 before size 524288 40960  //For Allowing 512 Kb Size Files only 
                                 {
-                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
-                                    return;
+                                    //int retval = AL.Blob_Upload(blob_ConStr, blob_ContainerName, IdNo + "_doc_" + hidstudocno.Value + "", fuStudPhoto);
+
+                                    int retval = Blob_Upload(blob_ConStr, blob_ContainerName, idno + "_doc_" + docno + "_" + fileDateTime + "", fuStudPhoto);
+                                    if (retval == 0)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+                                        return;
+                                    }
+
+
+                                    //CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetail(Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage");
+                                    Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
+                                    //string date = Issuedate == string.Empty ? "" : Convert.ToDateTime(Issuedate).ToString("yyyy-MM-dd");
+                                    string date = Issuedate == string.Empty ? "" : Convert.ToString(Issuedate);
+
+
+                                    commonSaveUpdate(idno, Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage", CertificateNo, district, date, Authority, 1, Userno);
+                                    //   return;
+                                    //CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetailNew(idno, Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage", CertificateNo, district, date, Authority);
+                                    ////fuStudPhoto.PostedFile.SaveAs(folderPath + filename);
+                                    //if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
+                                    //{
+                                    //    objCommon.DisplayMessage(this, "Upload Documents Sucessfully.... !", this);
+                                    //    BindDocument();
+                                    //}
+                                    //else
+                                    //{
+                                    //    objCommon.DisplayMessage(this, "Something went wrong ..Please try again !", this);
+                                    //}
+
                                 }
 
+                                else
+                                {
+                                    objCommon.DisplayMessage(this, "Please Upload file Below or Equal to 512 Kb only !", this);
+                                    //lblmessageShow.ForeColor = System.Drawing.Color.Red;
+                                    //lblmessageShow.Text = "Please Upload file Below or Equal to 40 Kb only !";
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
+                                    return;
 
-                                //CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetail(Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage");
-                                Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
-                                //string date = Issuedate == string.Empty ? "" : Convert.ToDateTime(Issuedate).ToString("yyyy-MM-dd");
-                                string date = Issuedate == string.Empty ? "" : Convert.ToString(Issuedate);
-
-
-                                commonSaveUpdate(idno, Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage", CertificateNo, district, date, Authority, 1, Userno);
-                                //   return;
-                                //CustomStatus cs = (CustomStatus)objstud.AddUpdateStudentDocumentsDetailNew(idno, Convert.ToInt32(hidstudocno.Value), ext, contentType, filename, "Blob Storage", CertificateNo, district, date, Authority);
-                                ////fuStudPhoto.PostedFile.SaveAs(folderPath + filename);
-                                //if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
-                                //{
-                                //    objCommon.DisplayMessage(this, "Upload Documents Sucessfully.... !", this);
-                                //    BindDocument();
-                                //}
-                                //else
-                                //{
-                                //    objCommon.DisplayMessage(this, "Something went wrong ..Please try again !", this);
-                                //}
-
+                                }
                             }
 
-                            else
-                            {                              
-                                objCommon.DisplayMessage(this, "Please Upload file Below or Equal to 512 Kb only !", this);
-                                //lblmessageShow.ForeColor = System.Drawing.Color.Red;
-                                //lblmessageShow.Text = "Please Upload file Below or Equal to 40 Kb only !";
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
-                                return;
-
-                            }
                         }
-                        
+
                     }
-                   
-                }
 
-                //else if (true)
-                //{
-                //    objCommon.DisplayMessage(this, "Please Select Atleast One File for Upload !!!", this);
-                //    return;
-                //}
-            
-                else if (dsFileName.Tables[0].Rows.Count > 0)
-                {
-                    fileNameFromDB = dsFileName.Tables[0].Rows[0]["DOCUMENT_NAME"].ToString();
-                    fileTypeFromDB = dsFileName.Tables[0].Rows[0]["DOCTYPE"].ToString();
-                    fileContentTypeFromDB = dsFileName.Tables[0].Rows[0]["IMAGES"].ToString();
-                    filePathFromDB = dsFileName.Tables[0].Rows[0]["DOC_PATH"].ToString();
+                    //else if (true)
+                    //{
+                    //    objCommon.DisplayMessage(this, "Please Select Atleast One File for Upload !!!", this);
+                    //    return;
+                    //}
 
-                    Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
-                    //string date = Issuedate == string.Empty ? "" : Convert.ToDateTime(Issuedate).ToString("yyyy-MM-dd");
-                    string date = Issuedate == string.Empty ? "" : Convert.ToString(Issuedate);
+                    else if (dsFileName.Tables[0].Rows.Count > 0)
+                    {
+                        fileNameFromDB = dsFileName.Tables[0].Rows[0]["DOCUMENT_NAME"].ToString();
+                        fileTypeFromDB = dsFileName.Tables[0].Rows[0]["DOCTYPE"].ToString();
+                        fileContentTypeFromDB = dsFileName.Tables[0].Rows[0]["IMAGES"].ToString();
+                        filePathFromDB = dsFileName.Tables[0].Rows[0]["DOC_PATH"].ToString();
 
-                    commonSaveUpdate(idno, Convert.ToInt32(hidstudocno.Value), fileTypeFromDB, fileContentTypeFromDB, fileNameFromDB, filePathFromDB, CertificateNo, district, date, Authority, 1, Userno);
+                        Issuedate = (lvitem.FindControl("txtIssueDate") as TextBox).Text;
+                        //string date = Issuedate == string.Empty ? "" : Convert.ToDateTime(Issuedate).ToString("yyyy-MM-dd");
+                        string date = Issuedate == string.Empty ? "" : Convert.ToString(Issuedate);
 
+                        commonSaveUpdate(idno, Convert.ToInt32(hidstudocno.Value), fileTypeFromDB, fileContentTypeFromDB, fileNameFromDB, filePathFromDB, CertificateNo, district, date, Authority, 1, Userno);
+
+                    }
                 }
             }
 
@@ -2164,6 +2176,7 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Please Select File To Upload!", this.Page);
             return;
         }
+        Session["SelectedDocumentIndex"] = lvdi.DisplayIndex;       // Added By Shrikant W. on 27-09-2023
         uploadDocument();
     }
 

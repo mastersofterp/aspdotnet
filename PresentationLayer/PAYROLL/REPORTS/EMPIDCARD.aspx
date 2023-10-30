@@ -58,15 +58,16 @@
                                             </div>
                                               <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
+                                                    <sup>* </sup>
                                                     <label>ID Card Type</label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlIDCardType" AppendDataBoundItems="true" runat="server" CssClass="form-control" TabIndex="3" data-select2-enable="true"
                                                     AutoPostBack="true" ToolTip="Select ID Card Type" OnSelectedIndexChanged="ddlIDCardType_SelectedIndexChanged">
                                                     <asp:ListItem Value="-1">Please Select</asp:ListItem>
                                                 </asp:DropDownList>
-                                                <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlIDCardType"
+                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlIDCardType"
                                                   Display="None" ErrorMessage="Please Select ID Card Type" ValidationGroup="payroll"
-                                                 InitialValue="0"></asp:RequiredFieldValidator>--%>
+                                                 InitialValue="0"></asp:RequiredFieldValidator>
                                             </div>
                                             <div class="form-group col-lg-3 col-md-6 col-12" style="visibility:hidden">
                                                 <div class="label-dynamic">

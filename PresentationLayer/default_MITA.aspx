@@ -199,7 +199,7 @@
 
                         <button type="button" id="BtnGoogleLogin" class="form-control btn btn-outline-primary text-white pl-2" onclick="Googlelogin()" value="Continue With Google"><i class="fab fa-google mr-2"></i>Continue With Google</button>
                     </div>
-                     <div class="forget-pass text-center mb-0">
+                    <div class="forget-pass text-center mb-0">
                         <a data-toggle="modal" data-target="#ModelPopUp" id="lbtForgePass" runat="server" style="cursor: pointer; color: #1d72bc;"><span>Forgot Password 
                         </span></a>
                     </div>
@@ -230,7 +230,7 @@
                     <asp:HiddenField ID="hdflastlogout" runat="server" />
                     <asp:HiddenField ID="hdfAllowpopup" runat="server" />
 
-                   
+
 
 
                     <a href="TP_Company_Registration.aspx" id="regCompLink" runat="server" visible="false">TP Company Reg.</a>
@@ -358,7 +358,7 @@
 
                                                 <div class="form-group" runat="server" visible="false" id="divLoginId">
                                                     <asp:Label ID="Label5" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                    <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false"></asp:TextBox>
+                                                    <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false" MaxLength="25"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtusername"
                                                         Display="None" ErrorMessage="Enter User Name"
                                                         ValidationGroup="changePassword"></asp:RequiredFieldValidator>
@@ -395,7 +395,7 @@
                                         </asp:Panel>
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-12 mb-4">
                                         <asp:Panel ID="pnlEmail" runat="server" Visible="false">
                                             <div id="dvEmail">
 
@@ -432,7 +432,7 @@
 
                                                 <div class="form-group" runat="server" visible="false" id="divEloginId">
                                                     <asp:Label ID="Label6" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                    <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false"></asp:TextBox>
+                                                    <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false" MaxLength="25"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="txtEusername"
                                                         Display="None" ErrorMessage="Enter User Name"
                                                         ValidationGroup="EchangePassword"></asp:RequiredFieldValidator>
@@ -459,7 +459,7 @@
 
                                                 <div class="text-center">
                                                     <asp:Button ID="btnSendUsernamePassword" runat="server" Text="Change Password" ValidationGroup="EchangePassword" CausesValidation="false" CssClass="btn btn-outline-info" OnClick="btnSendUsernamePassword_Click" />
-                                                    <asp:Button ID="btnEmailCancel" runat="server" CssClass="btn btn-danger" Text="Cancel" OnClick="btnEmailCancel_Click" />
+                                                    <asp:Button ID="btnEmailCancel" runat="server" CssClass="btn btn-outline-danger" Text="Cancel" OnClick="btnEmailCancel_Click" />
                                                     <asp:ValidationSummary ID="ValidationSummary6" runat="server" ValidationGroup="EchangePassword"
                                                         ShowMessageBox="True" ShowSummary="False" DisplayMode="List" />
                                                 </div>
@@ -467,16 +467,16 @@
                                         </asp:Panel>
 
                                     </div>
-                                    <p>
-                                        &nbsp;<asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="True"
+                                    <div class="col-12">
+                                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="True"
                                             ShowSummary="False" ValidationGroup="Loginotp" DisplayMode="List" />
-                                        <p>
-                                            &nbsp;<asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="logmob" />
-                                            <p>
-                                                &nbsp;<asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="logmail" />
-                                            </p>
-                                        </p>
-                                    </p>
+
+                                        <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="logmob" />
+
+                                        <asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="logmail" />
+
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -591,7 +591,7 @@
 
                         <div>
                             <div>
-                                <asp:Button ID="btnclosepop" runat="server" Text="OK" CssClass="btn btn-primary" OnClick="btnclosepop_Click" />
+                                <asp:Button ID="btnclosepop" runat="server" Text="Ok" CssClass="btn btn-primary" OnClick="btnclosepop_Click" />
 
                             </div>
                         </div>

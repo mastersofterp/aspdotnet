@@ -360,7 +360,7 @@
 
                                                             <div class="form-group" runat="server" visible="false" id="divLoginId">
                                                                 <asp:Label ID="Label5" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                                <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false"></asp:TextBox>
+                                                                <asp:TextBox ID="txtusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false" MaxLength="25"></asp:TextBox>
                                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtusername"
                                                                     Display="None" ErrorMessage="Enter User Name"
                                                                     ValidationGroup="changePassword"></asp:RequiredFieldValidator>
@@ -434,7 +434,7 @@
 
                                                             <div class="form-group" runat="server" visible="false" id="divEloginId">
                                                                 <asp:Label ID="Label6" runat="server" Style="font-weight: 600;">User Name</asp:Label>
-                                                                <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false"></asp:TextBox>
+                                                                <asp:TextBox ID="txtEusername" runat="server" placeholder="Enter User Name" CssClass="form-control mt-1" Enabled="false" MaxLength="25"></asp:TextBox>
                                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="txtEusername"
                                                                     Display="None" ErrorMessage="Enter User Name"
                                                                     ValidationGroup="EchangePassword"></asp:RequiredFieldValidator>

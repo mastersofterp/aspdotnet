@@ -168,7 +168,7 @@ public partial class HOSTEL_ViewRoomStatusAndAllotment : System.Web.UI.Page
                     {                       
                         this.objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "hostel_no", "HOSTEL_NAME", "hostel_no > 0", "HOSTEL_NAME");
                         this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
-                        this.objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR > 0", "YEAR");
+                        this.objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR > 0 AND ACTIVESTATUS=1", "YEAR");
 
                         this.objCommon.FillDropDownList(ddlDemandSem, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0 AND ODD_EVEN=1", "SEMESTERNO");  //ddlDemandSem show for both student and admin usertype
 

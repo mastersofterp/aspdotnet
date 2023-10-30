@@ -1638,6 +1638,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
         lvApproveCourse.DataSource = null;
         lvApproveCourse.DataBind();
         lvApproveCourse.Visible = false;
+        Response.Redirect(Request.Url.ToString());
     }
 
     //public int GetGlobalCoursesAvailableSeats(int sessionno, int semesterno, int schemeno, int COURSNO, int branchNo)
