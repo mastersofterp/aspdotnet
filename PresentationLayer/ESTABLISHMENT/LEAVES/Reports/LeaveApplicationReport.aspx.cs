@@ -650,8 +650,5 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveApplicationReport : Syste
                 objUCommon.ShowError(Page, "Server.UnAvailable");
         }
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
 }

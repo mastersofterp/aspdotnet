@@ -1787,6 +1787,11 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
                         Response.Redirect(RequestUrl, false);
                     }
                 }
+                else
+                {
+                    objCommon.DisplayMessage(updDetails, "Payment Gateway not define", this.Page);
+                    return;
+                }
 
             }
             else
@@ -2517,46 +2522,6 @@ public partial class ACADEMIC_RevaluationRegistration : System.Web.UI.Page
             }
         }
     }
-    private bool CheckRegistrationActivity()
-    {
-        try
-        {
-            bool ret = true;
-            string sp_proc = "PKG_ACD_CHECK_REGISTRATION_ACTIVITY";
-            string sp_para = "@P_UA_NO,@P_PAGE_LINK,@P_UA_TYPE";
-            string sp_cValues = "" + Convert.ToInt32(Session["userno"]) + "," + Request.QueryString["pageno"].ToString() + "," + Session["usertype"] + "";
-
-            DataSet ds = objCommon.DynamicSPCall_Select(sp_proc, sp_para, sp_cValues);
-
-            if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables != null && ds.Tables[0] != null)
-            {
-                ViewState["sessionno"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString() == string.Empty ? "0" : ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
-                ViewState["SESSIONNO"] = ds.Tables[0].Rows[0]["SESSION_NO"].ToString() == string.Empty ? "0" : ds.Tables[0].Rows[0]["SESSION_NO"].ToString();
-
-                return ret;
-            }
-            else
-            {
-                objCommon.DisplayMessage(updDetails, "Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
-                ret = false;
-                return ret;
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-            {
-                objCommon.ShowError(Page, "ACADEMIC_PhotoCopyRegistration.CheckActivity() --> " + ex.Message + " " + ex.StackTrace);
-                return false;
-            }
-            else
-            {
-                objCommon.ShowError(Page, "Server Unavailable.");
-                return false;
-            }
-        }
-    }
-   
 }
 
 
