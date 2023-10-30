@@ -18,7 +18,7 @@ namespace IITMS
             {
                 private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-                public int UpdateAuthApprovalPath(AddHostelGatePassAuthApproval OBJAAP, int STUDTYPE, int DAYS, string APPROVAL_1, string APPROVAL_2, string APPROVAL_3, string APPROVAL_4, string APPROVAL_5)
+                public int UpdateAuthApprovalPath(AddHostelGatePassAuthApproval OBJAAP, int STUDTYPE, int AUTHORITY, string AUTHORITY_NAME, string APPROVAL_1, string APPROVAL_2, string APPROVAL_3, string APPROVAL_4)
                 {
                     int retstatus = 0;
                     try
@@ -27,17 +27,17 @@ namespace IITMS
                         SqlParameter[] objparams = null;
                         objparams = new SqlParameter[11];
                         objparams[0] = new SqlParameter("@P_APP_NO", OBJAAP.APP_NO);
-                        objparams[1] = new SqlParameter("@P_STUDTYPE", STUDTYPE);
-                        objparams[2] = new SqlParameter("@P_DAYS", DAYS);
-                        objparams[3] = new SqlParameter("@P_APPROVAL1", APPROVAL_1);
-                        objparams[4] = new SqlParameter("@P_APPROVAL2", APPROVAL_2);
-                        objparams[5] = new SqlParameter("@P_APPROVAL3", APPROVAL_3);
-                        objparams[6] = new SqlParameter("@P_APPROVAL4", APPROVAL_4);
-                        objparams[7] = new SqlParameter("@P_APPROVAL5", APPROVAL_5);
+                        objparams[1] = new SqlParameter("@P_AUTHORITY", AUTHORITY);
+                        objparams[2] = new SqlParameter("@P_AUTHORITY_NAME", AUTHORITY_NAME);
+                        objparams[3] = new SqlParameter("@P_STUDTYPE", STUDTYPE);
+                        objparams[4] = new SqlParameter("@P_APPROVAL1", APPROVAL_1);
+                        objparams[5] = new SqlParameter("@P_APPROVAL2", APPROVAL_2);
+                        objparams[6] = new SqlParameter("@P_APPROVAL3", APPROVAL_3);
+                        objparams[7] = new SqlParameter("@P_APPROVAL4", APPROVAL_4);
                         objparams[8] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
                         objparams[9] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
                         objparams[10] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objparams[10].Direction = ParameterDirection.Output;
+                        objparams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_Add_APPROVAL_MASTER_UPDATE", objparams, true);
                         if (Convert.ToInt32(ret) == 1)
                             retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
@@ -97,31 +97,31 @@ namespace IITMS
                     }
                     return ds;
                 }
-                public int AddAuthApprovalPath(AddHostelGatePassAuthApproval OBJAAP, int STUDTYPE, int DAYS, string APPROVAL_1, string APPROVAL_2, string APPROVAL_3, string APPROVAL_4, string APPROVAL_5)
+                public int AddAuthApprovalPath(AddHostelGatePassAuthApproval OBJAAP, int STUDTYPE, int AUTHORITY, string AUTHORITY_NAME, string APPROVAL_1, string APPROVAL_2, string APPROVAL_3, string APPROVAL_4)
                 {
                     int retstatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objparams = null;
-                        objparams = new SqlParameter[11];
+                        objparams = new SqlParameter[12];
                         objparams[0] = new SqlParameter("@P_APPNO", OBJAAP.APP_NO);
-                        objparams[1] = new SqlParameter("@P_STUDTYPE", STUDTYPE);
-                        objparams[2] = new SqlParameter("@P_DAYS", DAYS);
-                        objparams[3] = new SqlParameter("@P_APPROVAL1", APPROVAL_1);
-                        objparams[4] = new SqlParameter("@P_APPROVAL2", APPROVAL_2);
-                        objparams[5] = new SqlParameter("@P_APPROVAL3", APPROVAL_3);
-                        objparams[6] = new SqlParameter("@P_APPROVAL4", APPROVAL_4);
-                        objparams[7] = new SqlParameter("@P_APPROVAL5", APPROVAL_5);
+                        objparams[1] = new SqlParameter("@P_AUTHORITY", AUTHORITY);
+                        objparams[2] = new SqlParameter("@P_AUTHORITY_NAME", AUTHORITY_NAME);
+                        objparams[3] = new SqlParameter("@P_STUDTYPE", STUDTYPE);
+                        objparams[4] = new SqlParameter("@P_APPROVAL1", APPROVAL_1);
+                        objparams[5] = new SqlParameter("@P_APPROVAL2", APPROVAL_2);
+                        objparams[6] = new SqlParameter("@P_APPROVAL3", APPROVAL_3);
+                        objparams[7] = new SqlParameter("@P_APPROVAL4", APPROVAL_4);
                         objparams[8] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
                         objparams[9] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
                         objparams[10] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objparams[10].Direction = ParameterDirection.Output;
+                        objparams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_Add_APPROVAL_MASTER_INS", objparams, true);
 
                         if (Convert.ToInt32(ret) == 2627)
                             retstatus = (Convert.ToInt32(ret));
-                        else if (Convert.ToInt32(ret) == 1027)
+                        if (Convert.ToInt32(ret) == 1027)
                             retstatus = (Convert.ToInt32(ret));
                         else if (ret != null && ret.ToString() != "-99" && ret.ToString() != "-1001")
                             retstatus = (Convert.ToInt32(ret));
@@ -138,29 +138,24 @@ namespace IITMS
 
                 //-------------------
 
-                public int UpdateAAPath(AddHostelGatePassAuthApproval OBJAAP, int hostel, int dept)
+                public int UpdateAAPath(AddHostelGatePassAuthApproval OBJAAP, int collegeNo, int dept)
                 {
                     int retstatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objparams = null;
-                        objparams = new SqlParameter[14];
+                        objparams = new SqlParameter[10];
                         objparams[0] = new SqlParameter("@P_APP_NO", OBJAAP.APP_NO);
                         objparams[1] = new SqlParameter("@P_AUTHORITY", OBJAAP.AUTHORITY);
                         objparams[2] = new SqlParameter("@P_AANO1", OBJAAP.APPROVAL_1);
                         objparams[3] = new SqlParameter("@P_AANO2", OBJAAP.APPROVAL_2);
                         objparams[4] = new SqlParameter("@P_AANO3", OBJAAP.APPROVAL_3);
-                        objparams[5] = new SqlParameter("@P_AANO4", OBJAAP.APPROVAL_4);
-                        objparams[6] = new SqlParameter("@P_AANO5", OBJAAP.APPROVAL_5);
-                        objparams[7] = new SqlParameter("@P_STUDTYPE", OBJAAP.STUDTYPE);
-                        objparams[8] = new SqlParameter("@P_DAYS", OBJAAP.DAYS);
-                        objparams[9] = new SqlParameter("@P_AAPATH", OBJAAP.AAPATH);
-                        objparams[10] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
-                        objparams[11] = new SqlParameter("@P_DEPT_NO", dept);
-                        objparams[12] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
-                        objparams[13] = new SqlParameter("@P_HOSTEL", hostel);
-
+                        objparams[5] = new SqlParameter("@P_AAPATH", OBJAAP.AAPATH);
+                        objparams[6] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
+                        objparams[7] = new SqlParameter("@P_DEPT_NO", dept);
+                        objparams[8] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
+                        objparams[9] = new SqlParameter("@P_COLLEGE_NO", collegeNo);
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_AUTHORITY_APPROVAL_MASTER_UPDATE", objparams, true) != null)
                             retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                     }
@@ -193,61 +188,30 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetLabel(AddHostelGatePassAuthApproval OBJAAP)
-                {
-                    DataSet ds = null;
-                    try
-                    {
-                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objparams = new SqlParameter[2];
-                        objparams[0] = new SqlParameter("@P_STUTYPE", OBJAAP.STUDTYPE);
-                        objparams[1] = new SqlParameter("@P_DAYS", OBJAAP.DAYS);
-
-                        ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_AUTHORITY_APPROVAL_LABEL_MASTER", objparams);
-                    }
-                    catch (Exception ex)
-                    {
-                        return ds;
-                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AddHostelGatePassAuthController.GetAllAAMaster->" + ex.ToString());
-                    }
-                    finally
-                    {
-                        ds.Dispose();
-                    }
-                    return ds;
-                }
-
-                public int AddAAPath(AddHostelGatePassAuthApproval OBJAAP, int hostel, int dept)
+                public int AddAAPath(AddHostelGatePassAuthApproval OBJAAP, int collegeNo, int dept)
                 {
                     int retstatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objparams = null;
-                        objparams = new SqlParameter[17];
+                        objparams = new SqlParameter[12];
                         objparams[0] = new SqlParameter("@P_APPNO", OBJAAP.APP_NO);
                         objparams[1] = new SqlParameter("@P_AUTHORITY", OBJAAP.AUTHORITY);
                         objparams[2] = new SqlParameter("@P_AUTHORITY_NAME", OBJAAP.AUTHORITY_NAME);
                         objparams[3] = new SqlParameter("@P_AANO1", OBJAAP.APPROVAL_1);
                         objparams[4] = new SqlParameter("@P_AANO2", OBJAAP.APPROVAL_2);
                         objparams[5] = new SqlParameter("@P_AANO3", OBJAAP.APPROVAL_3);
-                        objparams[6] = new SqlParameter("@P_AANO4", OBJAAP.APPROVAL_4);
-                        objparams[7] = new SqlParameter("@P_AANO5", OBJAAP.APPROVAL_5);
-                        objparams[8] = new SqlParameter("@P_STUDTYPE", OBJAAP.STUDTYPE);
-                        objparams[9] = new SqlParameter("@P_DAYS", OBJAAP.DAYS);
-                        objparams[10] = new SqlParameter("@P_AAPATH", OBJAAP.AAPATH);
-                        objparams[11] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
-                        objparams[12] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
-                        objparams[13] = new SqlParameter("@P_DEPT_NO", dept);
-                        objparams[14] = new SqlParameter("@P_HOSTEL", hostel);
-                        objparams[15] = new SqlParameter("@P_OrganizationId", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
-                        objparams[16] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objparams[16].Direction = ParameterDirection.Output;
+                        objparams[6] = new SqlParameter("@P_AAPATH", OBJAAP.AAPATH);
+                        objparams[7] = new SqlParameter("@P_CREATED_BY", OBJAAP.CREATED_BY);
+                        objparams[8] = new SqlParameter("@P_IP_ADDRESS", OBJAAP.IP_ADDRESS);
+                        objparams[9] = new SqlParameter("@P_DEPT_NO", dept);
+                        objparams[10] = new SqlParameter("@P_COLLEGE_NO", collegeNo);
+                        objparams[11] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objparams[12].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_AUTHORITY_APPROVAL_MASTER_INS", objparams, true);
 
                         if (Convert.ToInt32(ret) == 2627)
-                            retstatus = (Convert.ToInt32(ret));
-                        else if (Convert.ToInt32(ret) == 2323)
                             retstatus = (Convert.ToInt32(ret));
                         else if (ret != null && ret.ToString() != "-99" && ret.ToString() != "-1001")
                             retstatus = (Convert.ToInt32(ret));

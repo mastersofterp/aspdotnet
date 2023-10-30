@@ -14,8 +14,6 @@ namespace IITMS
             {
                 #region Private Members
                 private int _gatepassNo = 0;
-                private int _studtype;
-                private string _apprpath = string.Empty;
                 private int _idno = 0;
                 private DateTime _outDate;
                 private int _outHourFrom = 0;
@@ -30,7 +28,6 @@ namespace IITMS
                 private string _remarks = string.Empty;
                 private string _college_Code = string.Empty;
                 private string _organizationid = string.Empty;
-                private int _adminuano = 0;
                 #endregion
 
                 #region Public Property Fields
@@ -38,16 +35,6 @@ namespace IITMS
                 {
                     get { return _gatepassNo; }
                     set { _gatepassNo = value; }
-                }
-                public int StudType
-                {
-                    get { return this._studtype; }
-                    set { if ((this._studtype != value)) this._studtype = value; }
-                }
-                public string ApprPath
-                {
-                    get { return _apprpath; }
-                    set { _apprpath = value; }
                 }
                 public int IDNO
                 {
@@ -118,11 +105,6 @@ namespace IITMS
                 {
                     get { return _organizationid; }
                     set { _organizationid = value; }
-                }
-                public int Admin_UANO
-                {
-                    get { return _adminuano; }
-                    set { _adminuano = value; }
                 }
                 #endregion
             }
