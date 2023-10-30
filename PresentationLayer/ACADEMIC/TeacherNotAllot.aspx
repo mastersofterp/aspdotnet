@@ -31,30 +31,14 @@
                         <div class="box-body">
                             <div class="col-12">
                                 <div class="row">
-                                    
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--<label>Scheme</label>--%>
-                                            <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlClgScheme" runat="server" AppendDataBoundItems="true" TabIndex="1"
-                                            ValidationGroup="teacherreport" AutoPostBack="True" OnSelectedIndexChanged="ddlClgScheme_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvddlScheme" runat="server" ControlToValidate="ddlClgScheme" SetFocusOnError="true"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="teacherreport">
-                                        </asp:RequiredFieldValidator>
-
-                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <%--<label>Session</label>--%>
                                             <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSession" runat="server" CssClass="form-control" data-select2-enable="true"
-                                            AppendDataBoundItems="true" TabIndex="2">
+                                        <asp:DropDownList ID="ddlSession" runat="server" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
+                                            AppendDataBoundItems="true" TabIndex="2" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" >
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
@@ -62,9 +46,25 @@
                                             ValidationGroup="teacherreport"></asp:RequiredFieldValidator>
                                     </div>
 
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                         <%--   <sup>* </sup>--%>
+                                            <%--<label>Scheme</label>--%>
+                                            <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlClgScheme" runat="server" AppendDataBoundItems="true" TabIndex="1"
+                                            ValidationGroup="teacherreport" AutoPostBack="True" CssClass="form-control" data-select2-enable="true" 
+                                            OnSelectedIndexChanged="ddlClgScheme_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                      <%--  <asp:RequiredFieldValidator ID="rfvddlScheme" runat="server" ControlToValidate="ddlClgScheme" SetFocusOnError="true"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="teacherreport">
+                                        </asp:RequiredFieldValidator>--%>
+
+                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
+                                           <%-- <sup>* </sup>--%>
                                             <%--<label>Degree</label>--%>
                                             <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
@@ -74,13 +74,13 @@
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree" Visible="false"
+                                       <%-- <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree" Visible="false"
                                             Display="None" ErrorMessage="Please Select Degree" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="teacherreport"></asp:RequiredFieldValidator>
 
                                         <asp:RequiredFieldValidator ID="rfvDegree2" runat="server" ControlToValidate="ddlDegree"
                                             Display="None" ErrorMessage="Please Select Degree" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="report"></asp:RequiredFieldValidator>
+                                            ValidationGroup="report"></asp:RequiredFieldValidator>--%>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
@@ -100,7 +100,7 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
+                                           <%-- <sup>* </sup>--%>
                                             <%--<label>Semester</label>--%>
                                             <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
@@ -108,9 +108,9 @@
                                             AppendDataBoundItems="true" TabIndex="4">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSemester"
+                                      <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="teacherreport"></asp:RequiredFieldValidator>
+                                            ValidationGroup="teacherreport"></asp:RequiredFieldValidator>--%>
                                     </div>
                                     <div class="form-group col-12">
                                         <asp:RadioButtonList ID="rblAllotment" runat="server" AppendDataBoundItems="true" CssClass="col-6" RepeatDirection="Horizontal">
@@ -172,10 +172,10 @@
     </div>
     <script>
         function validateRBL() {
-          var selectval=  $("[id*=ctl00_ContentPlaceHolder1_rblAllotment]").val();
-          if (selectval == "0") {
-            
-          }
+            var selectval = $("[id*=ctl00_ContentPlaceHolder1_rblAllotment]").val();
+            if (selectval == "0") {
+
+            }
         }
     </script>
 </asp:Content>
