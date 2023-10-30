@@ -243,7 +243,8 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
         {
             bool ret = true;
             //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
-           
+
+
             string degreeno = objCommon.LookUp("ACD_STUDENT", "DISTINCT DEGREENO", "DEGREENO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
 
             string branchno = objCommon.LookUp("ACD_STUDENT", "DISTINCT BRANCHNO", "BRANCHNO > 0 AND ISNULL(ADMCAN,0)=0 AND IDNO=" + Convert.ToInt32(Session["idno"]));
@@ -2072,7 +2073,6 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                 {
                     if (ds1.Tables[0].Rows.Count > 1)
                     {
-
                     }
                     else
                     {
@@ -2081,6 +2081,11 @@ public partial class ACADEMIC_PhotoCopyRegistration : System.Web.UI.Page
                         string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
                         Response.Redirect(RequestUrl, false);
                     }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updDetails, "Payment Gateway not define", this.Page);
+                    return;
                 }
 
             }
