@@ -134,7 +134,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPDocumentVariefication : System.W
             }
             else
             {
-                objCommon.DisplayMessage(updDocumentVerification, "No Recored Found", this.Page);
+                objCommon.DisplayMessage(updDocumentVerification, "No Record found.", this.Page);
                 pnlGV1.Visible = false;
                 gvDocVerification.Visible = false;
                 gvDocVerification.DataSource = null;

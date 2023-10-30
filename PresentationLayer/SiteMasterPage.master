@@ -303,9 +303,13 @@
                                                         <%--   <asp:LinkButton ID="btnDash" runat="server">--%>
                                                         <%--    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>--%>
                                                         <asp:Image ID="imgDashboard" runat="server" ImageUrl="~/Images/icons/dashboard.png" />
+<<<<<<< HEAD
+=======
+                                                        <span class="text">Dashboard</span>
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
                                                     </asp:LinkButton>
                                                 </div>
-                                                <span class="text">Dashboard</span>
+                                                
                                             </div>
                                         </li>
                                         <!-- item 3-->
@@ -314,8 +318,9 @@
                                                 <div class="icon">
                                                     <%--<i class="fas fa-star-half-alt stars" aria-hidden="true"></i>--%>
                                                     <asp:Image ID="imgFavouriteLink" runat="server" ImageUrl="~/Images/icons/star.png" />
+                                                     <span class="text">Favourite Links</span>
                                                 </div>
-                                                <span class="text">Favourite Links</span>
+                                               
                                             </div>
                                         </li>
                                         <!-- item 4-->

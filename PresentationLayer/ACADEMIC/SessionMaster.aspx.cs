@@ -269,7 +269,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                     {
                         ClearControls();
                         BindListView();
-                        objCommon.DisplayMessage(this.UPDMASTER, "Record Updated sucessfully", this.Page);
+                        objCommon.DisplayMessage(this.UPDMASTER, "Record Updated Successfully", this.Page);
                     }
                 }
                 else
@@ -278,7 +278,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objSC.AddSession_Modified(objSession); //Added Nehal on Dated 20/02/2021
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
-                        objCommon.DisplayMessage(this.UPDMASTER, "Session Added sucessfully", this.Page);
+                        objCommon.DisplayMessage(this.UPDMASTER, "Session Added Successfully", this.Page);
                         ClearControls();
                         BindListView();
                     }
@@ -480,7 +480,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             {
                 ClearControls();
                 BindListView();
-                objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Session Added sucessfully", this.Page);
+                objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Session Added Successfully", this.Page);
             }
             else if (cs.Equals(CustomStatus.RecordExist))
             {
@@ -517,7 +517,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 BindListView();
-                objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Recored Update Sucessfully", this.Page);
+                objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Recored Update Successfully", this.Page);
             }
             else
             {

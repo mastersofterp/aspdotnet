@@ -520,6 +520,29 @@
         });
     </script>
 
+    <style>
+     @keyframes blink {
+            0%, 100% {
+                border: solid 2px #3F06FF;
+            }
+
+            50% {
+                border: solid 2px  #f10a0b;
+            }
+        }
+
+        .blink {
+            border: #f10a0b;
+            color: white;
+            animation: blink 1s linear infinite;
+        }
+    </style>
+     <script>
+         function AddClassTobtnoutfees() {
+             $('#ctl00_ContentPlaceHolder1_btnoutfees').addClass('blink');
+         }
+    </script>
+
     <asp:Panel ID="pnlMarquee" runat="server" Visible="false">
          <div class="container-fluid">        
             <h3>
@@ -583,7 +606,7 @@
                                         <asp:Label ID="lblLastLoginForm" runat="server"></asp:Label></b></small></h3>&nbsp;
                              
                                 <%--<span>Fees Related</span>--%>
-                                <asp:LinkButton ID="btnoutfees" runat="server" CssClass="btn btn-sm btn-outline-primary" Text="Pay" OnClick="btnoutfees_Click"></asp:LinkButton>
+                                <asp:LinkButton ID="btnoutfees" runat="server" CssClass="btn btn-sm btn-outline-primary blink" Text="Pay" OnClick="btnoutfees_Click"></asp:LinkButton>
                             </div>
                         </div>
                     </div>

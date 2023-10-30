@@ -75,16 +75,16 @@
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="trcollege" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <%--<sup>* </sup>--%>
                                                                 <label>College</label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlCollege" AppendDataBoundItems="true" runat="server" data-select2-enable="true"
                                                                 CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged">
                                                             </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlCollege"
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlCollege"
                                                                 Display="None" ErrorMessage="Please Select College" ValidationGroup="Holiday"
                                                                 SetFocusOnError="True" InitialValue="0">
-                                                            </asp:RequiredFieldValidator>
+                                                            </asp:RequiredFieldValidator>--%>
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="tr1" runat="server" visible="false">
                                                             <div class="label-dynamic">

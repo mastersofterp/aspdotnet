@@ -766,7 +766,6 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_ADMOrderNote : System.Web.UI.Pa
         {
             string UserNo = string.Empty;
 
-
             foreach (ListViewDataItem lvItem in lvScheduleNote.Items)
             {
 
@@ -777,7 +776,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_ADMOrderNote : System.Web.UI.Pa
                     UserNo += hdnUserNo.Value + '$';
                     //activitynames += items.Text + ',';
                 }
-            }           
+            }
 
             //branchno.TrimEnd(',').TrimEnd();
             UserNo = UserNo.TrimEnd('$').Trim();
@@ -787,8 +786,11 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_ADMOrderNote : System.Web.UI.Pa
             }
             else
             {
+
                 objCommon.DisplayMessage(upAdmOrder, "Please Select At Least One Student.", this.Page);
+                return;
             }
+
         }
         //ShowReportNew("Student Admit Card Report", "rptAdmitCard.rpt", branchno);
         catch (Exception ex)
@@ -799,6 +801,9 @@ public partial class ACADEMIC_POSTADMISSION_ADMP_ADMOrderNote : System.Web.UI.Pa
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+   
+
 
     private void ShowGeneralReport(string reportTitle, string rptFileName, string UserNo)
     {

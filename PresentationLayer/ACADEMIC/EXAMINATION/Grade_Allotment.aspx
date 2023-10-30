@@ -151,7 +151,7 @@
                                                     ValidationGroup="search"></asp:RequiredFieldValidator>
                                             </div>
 
-                                                 <div class="form-group col-lg-6 col-md-6 col-12" id="divgradetype" runat="server">
+                                                 <div class="form-group col-lg-6 col-md-6 col-12" id="divgradetype" runat="server" visible="false">
                                                 <div class="label-dynamic">
                                                     <sup>*</sup>
                                                     <label>Grade Type</label>
@@ -359,11 +359,11 @@
 
                                                 <tr id="trCurRow" class="item">
                                                     <td>
-                                                        <asp:TextBox ID="txtmin" runat="server" placeholder="" Text='<%# Eval("MINMARK").ToString() %>' Enabled='<%# Session["OrgId"].ToString()=="5"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtmin" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MINMARK").ToString() %>' Enabled='<%# ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fltminmark" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmin" />
                                                     </td>
                                                     <td>
-                                                        <asp:TextBox ID="txtmax" runat="server" placeholder="" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%# Session["OrgId"].ToString()=="5"? true:false %>' CssClass="form-control"></asp:TextBox>
+                                                        <asp:TextBox ID="txtmax" runat="server" placeholder="" MaxLength="5" Text='<%# Eval("MAXMARK").ToString() %>' Enabled='<%#ViewState["RangeChange"].ToString()=="1"? true:false %>' CssClass="form-control"></asp:TextBox>
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="fltmax" runat="server" FilterType="Numbers,Custom" ValidChars="., " TargetControlID="txtmax" />
 
                                                     </td>

@@ -101,6 +101,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                         }
                         if (final_submit == "1")
                         {
+                            btnSave.Visible = false;
                             btnSubmit.Visible = false;
                             btnAddSport.Visible = false;
                             btnadd.Visible = false;
@@ -332,16 +333,44 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     }
                     if (covid_info == "0")
                     {
-                        objCommon.DisplayMessage(this.Page, "Please Submit CovidVaccination Details.... !", this.Page);
+                        objCommon.DisplayMessage(this.Page, "Please Submit Covid Vaccination Details.... !", this.Page);
                         return;
                     }
-                    //if (other_info == "0")
-                    //{
-                    //    objCommon.DisplayMessage(this.Page, "Please Submitted OtherInformation... !", this.Page);
-                    //    return;
-                    //}
+                    if (other_info == "0")
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please Submit Other Information... !", this.Page);
+                        return;
+                    }
 
                 }
+
+                DataSet ds = null;
+                ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
+                    string sign = ds.Tables[0].Rows[0]["SIGN"].ToString();
+
+                    if (photo == string.Empty && sign == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Photo and Signature", this.Page);
+                        return;
+                    }
+
+                    if (photo == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Photo", this.Page);
+                        return;
+                    }
+
+                    if (sign == string.Empty)
+                    {
+                        objCommon.DisplayMessage("Please Upload Signature", this.Page);
+                        return;
+                    }
+                }
+
                 DataSet dscheckdocuments = null;
                 if (ViewState["usertype"].ToString() == "2")
                 {
@@ -355,30 +384,37 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     }
                 }
 
-                int OrganizationId = Convert.ToInt32(Session["OrgId"]);
-                if (OrganizationId != 6)   //Added by crescent sachin 06-12-2022
+                CustomStatus cs = (CustomStatus)objSC.UpdateStudentFinalInformation(objS);
+                if (cs.Equals(CustomStatus.RecordUpdated))
                 {
-                    if (ddlBank.SelectedIndex == 0)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Please select Bank Name!", this.Page);
-                        return;
-                    }
-                    if (txtAccNo.Text == string.Empty)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Please Enter Account No!", this.Page);
-                        return;
-                    }
-                    if (txtIFSC.Text == string.Empty)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Please Enter IFSC Code!", this.Page);
-                        return;
-                    }
-                    if (txtBankAddress.Text == string.Empty)
-                    {
-                        objCommon.DisplayMessage(this.Page, "Please Enter Bank Address!", this.Page);
-                        return;
-                    }
+                    ShowStudentDetails();
                 }
+
+
+                //int OrganizationId = Convert.ToInt32(Session["OrgId"]);
+                //if (OrganizationId != 6)   //Added by crescent sachin 06-12-2022
+                //{
+                //    if (ddlBank.SelectedIndex == 0)
+                //    {
+                //        objCommon.DisplayMessage(this.Page, "Please select Bank Name!", this.Page);
+                //        return;
+                //    }
+                //    if (txtAccNo.Text == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage(this.Page, "Please Enter Account No!", this.Page);
+                //        return;
+                //    }
+                //    if (txtIFSC.Text == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage(this.Page, "Please Enter IFSC Code!", this.Page);
+                //        return;
+                //    }
+                //    if (txtBankAddress.Text == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage(this.Page, "Please Enter Bank Address!", this.Page);
+                //        return;
+                //    }
+                //}
 
 
                 //if (chkAntiRagging.Checked == true)
@@ -390,91 +426,91 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 //    btnSubmit.Enabled = false;
                 //} 
 
-                objS.Anti_Ragging = chkAntiRagging.Checked;                            //Added by sachin on 23-07-2022        
-                if (!txtBirthPlace.Text.Trim().Equals(string.Empty)) objS.BirthPlace = txtBirthPlace.Text.Trim();
-                objS.MToungeNo = Convert.ToInt32(ddlMotherToungeNo.SelectedValue);
-                if (!txtOtherLangauge.Text.Trim().Equals(string.Empty)) objS.OtherLanguage = txtOtherLangauge.Text.Trim();
-                if (!txtBirthVillage.Text.Trim().Equals(string.Empty)) objS.Birthvillage = txtBirthVillage.Text.Trim();
-                if (!txtBirthTaluka.Text.Trim().Equals(string.Empty)) objS.Birthtaluka = txtBirthTaluka.Text.Trim();
-                if (!txtBirthDistrict.Text.Trim().Equals(string.Empty)) objS.Birthdistrict = txtBirthDistrict.Text.Trim();
-                //if (!txtBirthState.Text.Trim().Equals(string.Empty)) objS.Birthdistate = txtBirthState.Text.Trim();
-                objS.Birthdistate = ddlState.SelectedItem.Text;
-                if (ddlState.SelectedIndex == 0)
+                //objS.Anti_Ragging = chkAntiRagging.Checked;                            //Added by sachin on 23-07-2022        
+                //if (!txtBirthPlace.Text.Trim().Equals(string.Empty)) objS.BirthPlace = txtBirthPlace.Text.Trim();
+                //objS.MToungeNo = Convert.ToInt32(ddlMotherToungeNo.SelectedValue);
+                //if (!txtOtherLangauge.Text.Trim().Equals(string.Empty)) objS.OtherLanguage = txtOtherLangauge.Text.Trim();
+                //if (!txtBirthVillage.Text.Trim().Equals(string.Empty)) objS.Birthvillage = txtBirthVillage.Text.Trim();
+                //if (!txtBirthTaluka.Text.Trim().Equals(string.Empty)) objS.Birthtaluka = txtBirthTaluka.Text.Trim();
+                //if (!txtBirthDistrict.Text.Trim().Equals(string.Empty)) objS.Birthdistrict = txtBirthDistrict.Text.Trim();
+                ////if (!txtBirthState.Text.Trim().Equals(string.Empty)) objS.Birthdistate = txtBirthState.Text.Trim();
+                //objS.Birthdistate = ddlState.SelectedItem.Text;
+                //if (ddlState.SelectedIndex == 0)
+                //{
+                //    objS.Birthdistate = "";
+                //}
+                //else
+                //{
+                //    objS.Birthdistate = ddlState.SelectedItem.Text;
+                //}
+                //if (!txtBirthPinCode.Text.Trim().Equals(string.Empty)) objS.BirthPinCode = txtBirthPinCode.Text.Trim();
+                //if (!txtHeight.Text.Trim().Equals(string.Empty)) objS.Height = Convert.ToDecimal(txtHeight.Text.Trim());
+                //if (!txtWeight.Text.Trim().Equals(string.Empty)) objS.Weight = Convert.ToDecimal(txtWeight.Text.Trim());
+                //if (rdobtn_urban.SelectedValue == "Y")//**********
+                //    objS.Urban = true;
+                //else
+                //    objS.Urban = false;
+                //if (!txtIdentiMark.Text.Trim().Equals(string.Empty)) objS.IdentyMark = txtIdentiMark.Text.Trim();
+                //objS.BankNo = Convert.ToInt32(ddlBank.SelectedValue);
+                //if (!txtAccNo.Text.Trim().Equals(string.Empty)) objS.AccNo = txtAccNo.Text.Trim();
+                //if (!txtPassportNo.Text.Trim().Equals(string.Empty)) objS.PassportNo = txtPassportNo.Text.Trim();
+                ////if (!txtCountryDomicile.Text.Trim().Equals(string.Empty)) objS.CountryDomicile = txtCountryDomicile.Text.Trim();
+                //if (!txtworkexp.Text.Trim().Equals(string.Empty)) objS.WorkExp = txtworkexp.Text.Trim();
+                //if (!txtdesignation.Text.Trim().Equals(string.Empty)) objS.Designation = txtdesignation.Text.Trim();
+                //if (!txtorgwork.Text.Trim().Equals(string.Empty)) objS.OrgLastWork = txtorgwork.Text.Trim();
+                //if (!txttotalexp.Text.Trim().Equals(string.Empty)) objS.TotalWorkExp = txttotalexp.Text.Trim();
+                ////Added By Nikhil V.Lambe on 10/02/2021
+                //if (!txtIFSC.Text.ToUpper().Equals(string.Empty)) objS.IfscCode = txtIFSC.Text.Trim();
+                //if (!txtBankAddress.Text.Trim().Equals(string.Empty)) objS.BankAddress = txtBankAddress.Text.Trim();
+
+
+
+                ////-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                //CustomStatus cs = (CustomStatus)objSC.UpdateStudentOtherInformation(objS, Convert.ToInt32(Session["usertype"]));
+                //if (cs.Equals(CustomStatus.RecordUpdated))
+                //{
+                //    ShowStudentDetails();
+
+                //    //  if (ViewState["usertype"].ToString() == "8")
+                //    //  {
+                //    //      divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Other Information Updated Successfully!!'); </script>";
+
+                //    //      //string strScript = "<SCRIPT language='javascript'>window.location='DASAStudentInformation.aspx';</SCRIPT>";
+                //    //      //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
+                //    //      Response.Redirect("~/academic/ApproveAdmission.aspx");
+                //    //  }
+
+                //    ////  divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Other Information Updated Successfully!!'); </script>";
+                //    //  objCommon.DisplayMessage(updotherinformation, "Information Updated Successfully!!", this.Page);
+
+
+
+
+
+
+                if (ViewState["usertype"].ToString() == "1")                  //Added by sachin on 14-07-2022
                 {
-                    objS.Birthdistate = "";
+                    Response.Redirect("~/academic/ApproveAdmission.aspx");
+
                 }
                 else
                 {
-                    objS.Birthdistate = ddlState.SelectedItem.Text;
+                    btnAddSport.Visible = false;
+                    btnSubmit.Visible = false;
+                    divPrintReport.Visible = true;     //Added by sachin on 18-07-2022
+                    chkAntiRagging.Enabled = false;
+
+                    CheckFinalSubmission();
                 }
-                if (!txtBirthPinCode.Text.Trim().Equals(string.Empty)) objS.BirthPinCode = txtBirthPinCode.Text.Trim();
-                if (!txtHeight.Text.Trim().Equals(string.Empty)) objS.Height = Convert.ToDecimal(txtHeight.Text.Trim());
-                if (!txtWeight.Text.Trim().Equals(string.Empty)) objS.Weight = Convert.ToDecimal(txtWeight.Text.Trim());
-                if (rdobtn_urban.SelectedValue == "Y")//**********
-                    objS.Urban = true;
-                else
-                    objS.Urban = false;
-                if (!txtIdentiMark.Text.Trim().Equals(string.Empty)) objS.IdentyMark = txtIdentiMark.Text.Trim();
-                objS.BankNo = Convert.ToInt32(ddlBank.SelectedValue);
-                if (!txtAccNo.Text.Trim().Equals(string.Empty)) objS.AccNo = txtAccNo.Text.Trim();
-                if (!txtPassportNo.Text.Trim().Equals(string.Empty)) objS.PassportNo = txtPassportNo.Text.Trim();
-                //if (!txtCountryDomicile.Text.Trim().Equals(string.Empty)) objS.CountryDomicile = txtCountryDomicile.Text.Trim();
-                if (!txtworkexp.Text.Trim().Equals(string.Empty)) objS.WorkExp = txtworkexp.Text.Trim();
-                if (!txtdesignation.Text.Trim().Equals(string.Empty)) objS.Designation = txtdesignation.Text.Trim();
-                if (!txtorgwork.Text.Trim().Equals(string.Empty)) objS.OrgLastWork = txtorgwork.Text.Trim();
-                if (!txttotalexp.Text.Trim().Equals(string.Empty)) objS.TotalWorkExp = txttotalexp.Text.Trim();
-                //Added By Nikhil V.Lambe on 10/02/2021
-                if (!txtIFSC.Text.ToUpper().Equals(string.Empty)) objS.IfscCode = txtIFSC.Text.Trim();
-                if (!txtBankAddress.Text.Trim().Equals(string.Empty)) objS.BankAddress = txtBankAddress.Text.Trim();
 
 
-
-                //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentOtherInformation(objS, Convert.ToInt32(Session["usertype"]));
-                if (cs.Equals(CustomStatus.RecordUpdated))
-                {
-                    ShowStudentDetails();
-
-                    //  if (ViewState["usertype"].ToString() == "8")
-                    //  {
-                    //      divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Other Information Updated Successfully!!'); </script>";
-
-                    //      //string strScript = "<SCRIPT language='javascript'>window.location='DASAStudentInformation.aspx';</SCRIPT>";
-                    //      //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
-                    //      Response.Redirect("~/academic/ApproveAdmission.aspx");
-                    //  }
-
-                    ////  divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Other Information Updated Successfully!!'); </script>";
-                    //  objCommon.DisplayMessage(updotherinformation, "Information Updated Successfully!!", this.Page);
-
-
-
-
-
-
-                    if (ViewState["usertype"].ToString() == "1")                  //Added by sachin on 14-07-2022
-                    {
-                        Response.Redirect("~/academic/ApproveAdmission.aspx");
-
-                    }
-                    else
-                    {
-                        btnAddSport.Visible = false;
-                        btnSubmit.Visible = false;
-                        divPrintReport.Visible = true;     //Added by sachin on 18-07-2022
-                        chkAntiRagging.Enabled = false;
-
-                        CheckFinalSubmission();
-                    }
-
-
-                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Information Updated Successfully!!');window.location ='ApproveAdmission.aspx';", true);
-                    lnkprintapp.Enabled = true;
-                }
-                else
-                {
-                    objCommon.DisplayMessage(updotherinformation, "Error Occured While Updating Other Information!!", this.Page);
-                }
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Information Updated Successfully!!');window.location ='ApproveAdmission.aspx';", true);
+                //lnkprintapp.Enabled = true;
+                //}
+                //else
+                // {
+                //objCommon.DisplayMessage(updotherinformation, "Error Occured While Updating Other Information!!", this.Page);
+                //}
             }
             else
             {
@@ -933,4 +969,114 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         Response.Redirect("~/academic/CovidVaccinationDetails.aspx");
     }
 
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        StudentController objSC = new StudentController();
+        Student objS = new Student();
+        StudentPhoto objSPhoto = new StudentPhoto();
+        StudentAddress objSAddress = new StudentAddress();
+        StudentQualExm objSQualExam = new StudentQualExm();
+        try
+        {
+            if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
+            {
+                if (ViewState["usertype"].ToString() == "2")
+                {
+                    objS.IdNo = Convert.ToInt32(Session["idno"]);
+                }
+                else
+                {
+                    objS.IdNo = Convert.ToInt32(Session["stuinfoidno"]);
+                }
+
+
+                int OrganizationId = Convert.ToInt32(Session["OrgId"]);
+                if (OrganizationId != 6)   // Added for RCPIPER by Sachin Lohakare 06-12-2022
+                {
+                    if (ddlBank.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please select Bank Name!", this.Page);
+                        return;
+                    }
+                    if (txtAccNo.Text == string.Empty)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please Enter Account No!", this.Page);
+                        return;
+                    }
+                    if (txtIFSC.Text == string.Empty)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please Enter IFSC Code!", this.Page);
+                        return;
+                    }
+                    if (txtBankAddress.Text == string.Empty)
+                    {
+                        objCommon.DisplayMessage(this.Page, "Please Enter Bank Address!", this.Page);
+                        return;
+                    }
+                }
+
+                objS.Anti_Ragging = chkAntiRagging.Checked;                            //Added by sachin on 23-07-2022        
+                if (!txtBirthPlace.Text.Trim().Equals(string.Empty)) objS.BirthPlace = txtBirthPlace.Text.Trim();
+                objS.MToungeNo = Convert.ToInt32(ddlMotherToungeNo.SelectedValue);
+                if (!txtOtherLangauge.Text.Trim().Equals(string.Empty)) objS.OtherLanguage = txtOtherLangauge.Text.Trim();
+                if (!txtBirthVillage.Text.Trim().Equals(string.Empty)) objS.Birthvillage = txtBirthVillage.Text.Trim();
+                if (!txtBirthTaluka.Text.Trim().Equals(string.Empty)) objS.Birthtaluka = txtBirthTaluka.Text.Trim();
+                if (!txtBirthDistrict.Text.Trim().Equals(string.Empty)) objS.Birthdistrict = txtBirthDistrict.Text.Trim();
+                //if (!txtBirthState.Text.Trim().Equals(string.Empty)) objS.Birthdistate = txtBirthState.Text.Trim();
+                objS.Birthdistate = ddlState.SelectedItem.Text;
+                if (ddlState.SelectedIndex == 0)
+                {
+                    objS.Birthdistate = "";
+                }
+                else
+                {
+                    objS.Birthdistate = ddlState.SelectedItem.Text;
+                }
+                if (!txtBirthPinCode.Text.Trim().Equals(string.Empty)) objS.BirthPinCode = txtBirthPinCode.Text.Trim();
+                if (!txtHeight.Text.Trim().Equals(string.Empty)) objS.Height = Convert.ToDecimal(txtHeight.Text.Trim());
+                if (!txtWeight.Text.Trim().Equals(string.Empty)) objS.Weight = Convert.ToDecimal(txtWeight.Text.Trim());
+                if (rdobtn_urban.SelectedValue == "Y")//**********
+                    objS.Urban = true;
+                else
+                    objS.Urban = false;
+                if (!txtIdentiMark.Text.Trim().Equals(string.Empty)) objS.IdentyMark = txtIdentiMark.Text.Trim();
+                objS.BankNo = Convert.ToInt32(ddlBank.SelectedValue);
+                if (!txtAccNo.Text.Trim().Equals(string.Empty)) objS.AccNo = txtAccNo.Text.Trim();
+                if (!txtPassportNo.Text.Trim().Equals(string.Empty)) objS.PassportNo = txtPassportNo.Text.Trim();
+                //if (!txtCountryDomicile.Text.Trim().Equals(string.Empty)) objS.CountryDomicile = txtCountryDomicile.Text.Trim();
+                if (!txtworkexp.Text.Trim().Equals(string.Empty)) objS.WorkExp = txtworkexp.Text.Trim();
+                if (!txtdesignation.Text.Trim().Equals(string.Empty)) objS.Designation = txtdesignation.Text.Trim();
+                if (!txtorgwork.Text.Trim().Equals(string.Empty)) objS.OrgLastWork = txtorgwork.Text.Trim();
+                if (!txttotalexp.Text.Trim().Equals(string.Empty)) objS.TotalWorkExp = txttotalexp.Text.Trim();
+                //Added By Nikhil V.Lambe on 10/02/2021
+                if (!txtIFSC.Text.ToUpper().Equals(string.Empty)) objS.IfscCode = txtIFSC.Text.Trim();
+                if (!txtBankAddress.Text.Trim().Equals(string.Empty)) objS.BankAddress = txtBankAddress.Text.Trim();
+
+
+
+                //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                CustomStatus cs = (CustomStatus)objSC.UpdateStudentOtherInformation(objS, Convert.ToInt32(Session["usertype"]));
+                if (cs.Equals(CustomStatus.RecordUpdated))
+                {
+                    ShowStudentDetails();
+                    objCommon.DisplayMessage(this.Page, "Other Information Saved Successfully!", this.Page);
+                    lnkprintapp.Enabled = true;
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updotherinformation, "Error Occured While Updating Other Information!!", this.Page);
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage("You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
+            }
+        }
+        catch (Exception Ex)
+        {
+            throw;
+        }
+
+
+    }
 }

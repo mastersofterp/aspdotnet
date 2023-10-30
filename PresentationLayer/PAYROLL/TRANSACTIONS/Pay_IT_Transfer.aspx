@@ -50,14 +50,15 @@
                                     <asp:DropDownList ID="ddlorderby" AppendDataBoundItems="true" runat="server" CssClass="form-control" TabIndex="3" data-select2-enable="true"
                                         ToolTip="Select Order By" OnSelectedIndexChanged="ddlorderby_SelectedIndexChanged"
                                         AutoPostBack="true">
-                                        <%--  <asp:ListItem Value="0">Please Select</asp:ListItem>--%>
+                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         <asp:ListItem Value="IDNO">IDNO</asp:ListItem>
                                         <asp:ListItem Value="SEQ_NO">SEQUENCE NO</asp:ListItem>
                                         <asp:ListItem Value="PFILENO">Employee Code</asp:ListItem>
                                         <asp:ListItem Value="EMPNAME">Name</asp:ListItem>
                                     </asp:DropDownList>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlorderby"
-                                        Display="None" ErrorMessage="Select Order" ValidationGroup="payroll" InitialValue="0"></asp:RequiredFieldValidator>
+                                    <asp:RequiredFieldValidator ID="rfvorderby" runat="server" SetFocusOnError="true"
+                                        ControlToValidate="ddlorderby" Display="None" ErrorMessage="Please Select Order By"
+                                        ValidationGroup="Payroll" InitialValue="0"></asp:RequiredFieldValidator>
                                 </div>
                             </div>
                         </div>
@@ -68,6 +69,8 @@
                             ValidationGroup="Payroll" TabIndex="4" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click"
                             ToolTip="Click to Reset" CssClass="btn btn-warning" TabIndex="5" />
+                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Payroll"
+                          ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>
                     <div class="col-12" id="div_ExportToExcel" runat="server">
                         <asp:Panel ID="pnlList" runat="server">

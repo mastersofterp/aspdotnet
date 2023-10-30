@@ -432,6 +432,35 @@
                         <h3 class="box-title">BACKLOG EXAM REGISTRATION</h3>
                     </div>
 
+                    <div id="pnlSearch" runat="server" visible="false">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div id="divenroll" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>PRN No</label>
+                                        </div>
+                                        <asp:TextBox ID="txtEnrollno" runat="server" CssClass="form-control" ToolTip="Enter text to search." TabIndex="1" MaxLength="20"></asp:TextBox>
+                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterType="Numbers, UppercaseLetters, LowercaseLetters" TargetControlID="txtEnrollno" />
+                                        <asp:RequiredFieldValidator ID="valSearchText" runat="server" ControlToValidate="txtEnrollno"
+                                            Display="None" ErrorMessage="Please Enter PRN No." SetFocusOnError="true"
+                                            ValidationGroup="search" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 btn-footer">
+                                <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
+                                    ShowSummary="false" ValidationGroup="search" />
+                                <asp:Button ID="btnSearch" runat="server" Text="Show" ValidationGroup="search" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear" ValidationGroup="Show" TabIndex="1" OnClick="btnClear_Click"
+                                    CssClass="btn btn-warning" />
+                            </div>
+                        </div>
+
+
+
+
                     <asp:UpdatePanel ID="updatepnl" runat="server">
                         <ContentTemplate>
                             <div class="box-body">

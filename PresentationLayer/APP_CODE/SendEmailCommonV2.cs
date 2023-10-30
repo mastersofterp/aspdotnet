@@ -996,7 +996,12 @@ namespace BusinessLogicLayer.BusinessLogic
                         if (providerName.Equals("Aisensy"))
                         {
                             SendAisensy_New(mobileNo, dsCheck, bodys);
+                            
                         }
+                        if (providerName.Equals("Web WPSSMS"))
+                            {
+                            sendwpsms_New(mobileNo, dsCheck, bodys);
+                            }
                     }
                 }
             }
@@ -1040,6 +1045,43 @@ namespace BusinessLogicLayer.BusinessLogic
                 throw;
             }
         }
+
+        private void sendwpsms_New(string mobileNo, DataSet drCred, string bodys)
+            {
+            try
+                {
+                int Mobile_le = mobileNo.Length;
+                if (Mobile_le == 10)
+                    {
+                    mobileNo = "91" + mobileNo.ToString();
+                    }
+                string API_URL = drCred.Tables[0].Rows[0]["WHATSAAP_API_URL"].ToString();
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(API_URL.ToString());
+                httpWebRequest.Method = "POST";                 //httpWebRequest.Headers.Add("aftership-api-key:********fdbfd93980b8c5***");
+                httpWebRequest.ContentType = "application/json";
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                    var body = bodys;
+                    //var bodys = @"{""apiKey"":" + '"' + API_KEY.ToString() + '"' + "," + "\n" +
+                    //   @"""campaignName"":""erpattendance_rcpit""," + "\n" +
+                    //   @"""destination"":" + '"' + mobileNo.ToString() + '"' + "," + "\n" +
+                    //   @"""userName"":" + '"' + UserName.ToString() + '"' + "," + "\n" +
+                    //   @"""templateParams"":[" + '"' + Name.ToString() + '"' + "," + '"' + att.ToString() + '"' + "," + '"' + course.ToString() + '"' + "," + '"' + Dept.ToString() + '"' + "]}";
+                    streamWriter.Write(bodys);
+                    streamWriter.Flush();
+                    streamWriter.Close();
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                        {
+                        var result = streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            catch (Exception)
+                {
+                throw;
+                }
+            }
         #endregion
     }
 }

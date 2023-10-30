@@ -47,7 +47,7 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
-                ViewState["action"] = "add";
+                ViewState["action"] = "Add";
                 BindListView();
                 HRADataTable();
                 OrganizationId = Convert.ToInt32(Session["OrgId"]);
@@ -161,22 +161,37 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
     {
         try
         {
-            int DAHeadId = 0;
-
-            if (ViewState["DAID"].ToString() != "")
+            if (ViewState["action"].ToString() != "edit")
             {
-                 DAHeadId = Convert.ToInt32(ViewState["DAID"].ToString());
+                //Select DA_HEADID from DA_HEAD_CALCULATION where DA_HEADID=4
+                int Daid = Convert.ToInt32(objCommon.LookUp("DA_HEAD_CALCULATION", "isnull(DA_HEADID,0)", "DA_HEADID=" + ddlDAHRA.SelectedValue + ""));
+
+                if (Daid > 0)
+                {
+                    objCommon.DisplayMessage(updpanel, "Selected DA head Already Exists!", this);
+                    return;
+                }
+            }
+
+
+            int DAHeadId = 0;
+            if (ViewState["action"].ToString() == "edit")
+            {
+                if (ViewState["DAID"].ToString() != "")
+                {
+                    DAHeadId = Convert.ToInt32(ViewState["DAID"].ToString());
+                }
             }
             else
             {
-                DAHeadId = 0;
+                DAHeadId = Convert.ToInt32(ddlDAHRA.SelectedValue);
             }
             int HeadCalPer = Convert.ToInt32(txtDAper.Text);
-          
+
             bool Flag = false;
 
             string Fdate = (String.Format("{0:u}", Convert.ToDateTime(txtEffectDate.Text)));
-           Fdate = Fdate.Substring(0, 10);
+            Fdate = Fdate.Substring(0, 10);
 
             DataTable dtResult = new DataTable();
 
@@ -219,15 +234,26 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
 
             // PreviousDate = Convert.ToDateTime(objCommon.LookUp("DA_HEAD_CALCULATION", "isnull(DA_HEAD_CALCULATION_DATE,'')", "DA_HEADID =" + DAHeadId));
             int cs = objStatus.UpdateDAHeadCalculationDetails(DAHeadId, Convert.ToInt32(txtHRAPer.Text), Fdate, 0, Convert.ToInt32(Session["OrgId"]), Convert.ToInt32(Session["userno"]), HeadCalPer, DEHEADTbl, Flag);
-            if (cs == 1)
-            {
-                objCommon.DisplayMessage(updpanel, "Record inserted Successfully", this);
-                Response.Redirect(Request.Url.ToString());
-            }
+           
             if (cs == 2)
             {
+<<<<<<< HEAD
                 objCommon.DisplayMessage(updpanel, "Record Updated Successfully", this);
                Response.Redirect(Request.Url.ToString());
+=======
+                if (ViewState["action"].ToString() == "edit")
+                {
+                    objCommon.DisplayMessage(updpanel, "Record Updated Successfully", this);
+                    //  Response.Redirect(Request.Url.ToString());
+                    ClearControl();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updpanel, "Record inserted Successfully", this);
+                    // Response.Redirect(Request.Url.ToString());
+                    ClearControl();
+                }
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             }
 
 
@@ -268,9 +294,38 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
         }
     }
 
+    private void ClearControl()
+    {
+        try
+        {
+            txtFrYr.Text = string.Empty;
+            txttoyr.Text = string.Empty;
+            txtHraPernew.Text = string.Empty;
+            ddlDAHRA.SelectedValue = "0";
+            txtDAper.Text = string.Empty;
+            txtHRAPer.Text = string.Empty;
+            txtEffectDate.Text = string.Empty;
+            chkYrHRACal.Checked = false;
+            divHracal.Visible = false;
+
+            lstHraList.DataSource = null;
+            lstHraList.DataBind();
+
+            ViewState["HRACal"] = null;
+            ViewState["action"] = "Add";
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Masters_quarterMas.btnEdit_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
     protected void btncancel_Click(object sender, EventArgs e)
     {
-        Response.Redirect(Request.Url.ToString());
+        ClearControl();
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
@@ -284,7 +339,7 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             {
                 HRADataTable();
             }
-         
+
             DataTable dt = (DataTable)ViewState["HRACal"];
 
             DataRow dr = dt.NewRow();
@@ -356,7 +411,12 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             ddlDAHRA.SelectedValue = hdnDAHEADiD.Value;
             txtDAper.Text = txtCalPer.Text.Trim();
             txtHRAPer.Text = txtHRAPerr.Text.Trim();
+<<<<<<< HEAD
             if (hdnDetail.Value == "0")
+=======
+
+            if (hdnDetail.Value == "False")
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             {
                 chkYrHRACal.Checked = false;
             }
@@ -364,7 +424,11 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
             {
                 chkYrHRACal.Checked = true;
             }
+<<<<<<< HEAD
            
+=======
+
+>>>>>>> UAT_TO_MAIN_2023-10-30/06-30PM
             txtEffectDate.Text = txtHeadCalDate.Text.Trim();
 
 

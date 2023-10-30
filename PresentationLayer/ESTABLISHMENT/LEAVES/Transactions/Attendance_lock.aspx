@@ -197,8 +197,8 @@
                                 <asp:ValidationSummary ID="vsSelection" runat="server" ShowMessageBox="true" ShowSummary="false"
                                     DisplayMode="List" ValidationGroup="payroll" />
                                 <asp:HiddenField ID="hidMonYear" runat="server" />
-                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="payroll"
-                                    ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                              <%--  <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="payroll"
+                                    ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />--%>
                             </div>
                             <br />
                         </div>
