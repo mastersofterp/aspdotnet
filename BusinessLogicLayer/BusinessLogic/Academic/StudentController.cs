@@ -7855,7 +7855,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[17];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         //if (objStudent.AdmDate == DateTime.MinValue)
                         //    objParams[1] = new SqlParameter("@P_ADMDATE", DBNull.Value);
@@ -7875,8 +7875,13 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_BATCHNO", objStudent.BatchNo);
                         objParams[9] = new SqlParameter("@P_USER_TYPE", usertype);
                         objParams[10] = new SqlParameter("@P_CLAIM_TYPE", objStudent.ClaimType);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@P_SEAT_TYPE", objStudent.SeatType);
+                        objParams[12] = new SqlParameter("@P_ADMCENTRE", objStudent.AdmissionCentre);
+                        objParams[13] = new SqlParameter("@P_DEFENCEQUOTA", objStudent.DefenceQuota);
+                        objParams[14] = new SqlParameter("@P_MINORITYQUOTA", objStudent.MinorityQuota);
+                        objParams[15] = new SqlParameter("@P_ADMROUNDNO", objStudent.AdmroundNo);
+                        objParams[16] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[16].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADMISSION_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
