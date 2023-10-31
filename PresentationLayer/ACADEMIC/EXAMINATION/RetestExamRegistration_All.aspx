@@ -206,110 +206,110 @@
 
 
         // TEST BACKUP WITHOUT NEW REQUIREMENT CHANGES ON DT 01072022
-  //      function totAllSubjects(headchk) {
-  //          debugger;
-  //          var sum = 0;
-  //          var frm = document.forms[0]
-  //          try {
-  //              for (i = 0; i < document.forms[0].elements.length; i++) {
-  //                  var e = frm.elements[i];
-  //                  if (e.type == 'checkbox') {
-  //                      if (headchk.checked == true) {
-  //                          // SumTotal();
-  //                          // var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
-  //                          //// alert(j);
-  //                          // sum += parseFloat(j);
-  //                          if (e.disabled == false) {
-  //                              e.checked = true;
-  //                          }
-  //                      }
-  //                      else {
-  //                          if (e.disabled == false) {
-  //                              e.checked = false;
-  //                              headchk.checked = false;
-  //                          }
-  //                      }
-  //                      //var x = document.getElementById("<%= lblTotalExamFee.ClientID%>");
-  //                      // x = sum.toString();
-  //                  }
-  //
-  //              }
-  //              if (headchk.checked == true) {
-  //                  SumTotal();
-  //              }
-  //              else {
-  //                  SumTotal();
-  //              }
-  //          }
-  //          catch (err) {
-  //              alert("Error : " + err.message);
-  //          }
-  //      }
-  //
-  //
-  //      function SumTotal() {
-  //          debugger;
-  //
-  //          try{
-  //              var length = $("[id*=tblBacklogSubjects] td").closest("tr").length;
-  //              var Duration = document.getElementById('ctl00_ContentPlaceHolder1_hdfDuration').value;
-  //              var IsFinalSem = document.getElementById('ctl00_ContentPlaceHolder1_hdfSemester').value;          
-  //          
-  //              // dataRowsmark = document.getElementById('tblBacklogSubjects').getElementsByTagName('tr');
-  //              var total = 0;
-  //              for (var i = 0; i < length; i++) {
-  //                  //    MaxMark = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMax').value.trim());
-  //                  var hdfExamRegistered = document.getElementById("ctl00_ContentPlaceHolder1_lvFailCourse_ctrl" + i + "_hdfExamRegistered").value;
-  //                  if (document.getElementById("ctl00_ContentPlaceHolder1_lvFailCourse_ctrl" + i + "_chkAccept").checked && hdfExamRegistered !=1) {
-  //                      var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
-  //                      //  alert(j);
-  //                      total += parseFloat(j);
-  //                  }
-  //              }
-  //              // alert(total);
-  //              debugger;
-  //
-  //              if (Duration == IsFinalSem) {
-  //                  total = total + 1400;
-  //              }
-  //              else {
-  //                  total = total;
-  //              }
-  //          
-  //
-  //              // LATE FEE PATCH ON DT 18062022
-  //          
-  //              var hdfExamLastDate = document.getElementById('ctl00_ContentPlaceHolder1_hdfExamLastDate').value;
-  //              var hdfExamLateFee = document.getElementById('ctl00_ContentPlaceHolder1_hdfExamLateFee').value;
-  //              var today = new Date();
-  //              var yyyy = today.getFullYear();
-  //              var mm = today.getMonth() + 1; // Months start at 0!
-  //              var dd = today.getDate();
-  //
-  //              if (dd < 10) dd = '0' + dd;
-  //              if (mm < 10) mm = '0' + mm;
-  //
-  //              today = dd + '/' + mm + '/' + yyyy;          
-  //
-  //              //Now you can Compare these dates 
-  //              if (today >= hdfExamLastDate) {
-  //                  //alert('late fee');
-  //                  var latefee = parseFloat(hdfExamLateFee);
-  //              } else {
-  //                  var latefee = 0;
-  //                  // alert('no late fee');
-  //              }
-  //
-  //              // LATE FEE PATCH ON DT 18062022
-  //              total = parseFloat(total + latefee);
-  //             // alert(total);
-  //              var lbl = document.getElementById('<%=lblTotalExamFee.ClientID %>');
-  //              $("[id*=ctl00_ContentPlaceHolder1_lblTotalExamFee]").text(total + '.00');
-  //          }
-  //          catch (error) {
-  //              alert('Error:-' + error.message);
-  //          }
-  //      }
+        //      function totAllSubjects(headchk) {
+        //          debugger;
+        //          var sum = 0;
+        //          var frm = document.forms[0]
+        //          try {
+        //              for (i = 0; i < document.forms[0].elements.length; i++) {
+        //                  var e = frm.elements[i];
+        //                  if (e.type == 'checkbox') {
+        //                      if (headchk.checked == true) {
+        //                          // SumTotal();
+        //                          // var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
+        //                          //// alert(j);
+        //                          // sum += parseFloat(j);
+        //                          if (e.disabled == false) {
+        //                              e.checked = true;
+        //                          }
+        //                      }
+        //                      else {
+        //                          if (e.disabled == false) {
+        //                              e.checked = false;
+        //                              headchk.checked = false;
+        //                          }
+        //                      }
+        //                      //var x = document.getElementById("<%= lblTotalExamFee.ClientID%>");
+        //                      // x = sum.toString();
+        //                  }
+        //
+        //              }
+        //              if (headchk.checked == true) {
+        //                  SumTotal();
+        //              }
+        //              else {
+        //                  SumTotal();
+        //              }
+        //          }
+        //          catch (err) {
+        //              alert("Error : " + err.message);
+        //          }
+        //      }
+        //
+        //
+        //      function SumTotal() {
+        //          debugger;
+        //
+        //          try{
+        //              var length = $("[id*=tblBacklogSubjects] td").closest("tr").length;
+        //              var Duration = document.getElementById('ctl00_ContentPlaceHolder1_hdfDuration').value;
+        //              var IsFinalSem = document.getElementById('ctl00_ContentPlaceHolder1_hdfSemester').value;          
+        //          
+        //              // dataRowsmark = document.getElementById('tblBacklogSubjects').getElementsByTagName('tr');
+        //              var total = 0;
+        //              for (var i = 0; i < length; i++) {
+        //                  //    MaxMark = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvGrades_ctrl' + i + '_txtMax').value.trim());
+        //                  var hdfExamRegistered = document.getElementById("ctl00_ContentPlaceHolder1_lvFailCourse_ctrl" + i + "_hdfExamRegistered").value;
+        //                  if (document.getElementById("ctl00_ContentPlaceHolder1_lvFailCourse_ctrl" + i + "_chkAccept").checked && hdfExamRegistered !=1) {
+        //                      var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
+        //                      //  alert(j);
+        //                      total += parseFloat(j);
+        //                  }
+        //              }
+        //              // alert(total);
+        //              debugger;
+        //
+        //              if (Duration == IsFinalSem) {
+        //                  total = total + 1400;
+        //              }
+        //              else {
+        //                  total = total;
+        //              }
+        //          
+        //
+        //              // LATE FEE PATCH ON DT 18062022
+        //          
+        //              var hdfExamLastDate = document.getElementById('ctl00_ContentPlaceHolder1_hdfExamLastDate').value;
+        //              var hdfExamLateFee = document.getElementById('ctl00_ContentPlaceHolder1_hdfExamLateFee').value;
+        //              var today = new Date();
+        //              var yyyy = today.getFullYear();
+        //              var mm = today.getMonth() + 1; // Months start at 0!
+        //              var dd = today.getDate();
+        //
+        //              if (dd < 10) dd = '0' + dd;
+        //              if (mm < 10) mm = '0' + mm;
+        //
+        //              today = dd + '/' + mm + '/' + yyyy;          
+        //
+        //              //Now you can Compare these dates 
+        //              if (today >= hdfExamLastDate) {
+        //                  //alert('late fee');
+        //                  var latefee = parseFloat(hdfExamLateFee);
+        //              } else {
+        //                  var latefee = 0;
+        //                  // alert('no late fee');
+        //              }
+        //
+        //              // LATE FEE PATCH ON DT 18062022
+        //              total = parseFloat(total + latefee);
+        //             // alert(total);
+        //              var lbl = document.getElementById('<%=lblTotalExamFee.ClientID %>');
+        //              $("[id*=ctl00_ContentPlaceHolder1_lblTotalExamFee]").text(total + '.00');
+        //          }
+        //          catch (error) {
+        //              alert('Error:-' + error.message);
+        //          }
+        //      }
 
         // ENDS HERE TEST BACKUP WITHOUT NEW REQUIREMENT CHANGES ON DT 01072022
 
@@ -324,10 +324,10 @@
                     var e = frm.elements[i];
                     if (e.type == 'checkbox') {
                         if (headchk.checked == true) {
-                             SumTotal();
-                             var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
+                            SumTotal();
+                            var j = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + i + '_lblAmt').innerText);
                             //// alert(j);
-                             sum += parseFloat(j);
+                            sum += parseFloat(j);
                             if (e.disabled == false) {
                                 e.checked = true;
                             }
@@ -417,8 +417,8 @@
                 // LATE FEE PATCH ON DT 18062022
                 total = parseFloat(total + latefee);
                 // alert(total);
-              //  var lbl = document.getElementById('<%=lblTotalExamFee.ClientID %>');
-               // $("[id*=ctl00_ContentPlaceHolder1_lblTotalExamFee]").text(total + '.00');
+                //  var lbl = document.getElementById('<%=lblTotalExamFee.ClientID %>');
+                // $("[id*=ctl00_ContentPlaceHolder1_lblTotalExamFee]").text(total + '.00');
             }
             catch (error) {
                 alert('Error:-' + error.message);
@@ -485,8 +485,8 @@
                                             ValidationGroup="search" />
                                     </div>
 
-                                    
-                                       <%--  <div>
+
+                                    <%--  <div>
                                         <asp:DropDownList ID="ddlsessionforabsent" OnSelectedIndexChanged="ddlsessionforabsent_SelectedIndexChanged" runat="server"
                                             AppendDataBoundItems="true" data-select2-enable="true"
                                             AutoPostBack="True">
@@ -496,11 +496,11 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlsessionforabsent"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
-                                --%>
+                                    --%>
 
 
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12 d-none" >
+                                    <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Session Name</label>
@@ -559,10 +559,10 @@
                                         <li class="list-group-item"><b>Total Substitute Exam Fee :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblTotalExamFee" runat="server" Font-Bold="true" /></a>
-                                            <asp:Label ID="lblOrderID" runat="server" CssClass="data_label" Font-Bold="true"  Visible="false">0</asp:Label>
+                                            <asp:Label ID="lblOrderID" runat="server" CssClass="data_label" Font-Bold="true" Visible="false">0</asp:Label>
                                             <asp:HiddenField ID="hdfExamLastDate" runat="server" />
-                                             <asp:HiddenField ID="hdfDuration" runat="server" />
-                                             <asp:HiddenField ID="hdfSemester" runat="server" />
+                                            <asp:HiddenField ID="hdfDuration" runat="server" />
+                                            <asp:HiddenField ID="hdfSemester" runat="server" />
                                             <asp:HiddenField ID="hdfExamLateFee" runat="server" />
                                         </li>
 
@@ -666,45 +666,46 @@
                                     <asp:Panel ID="pnlFailCourse" runat="server">
                                         <%--<span style="color:red" class="pull-right">Note: For Final Year Students Rs.1400/- is added for Certificate Purpose  </span>--%>
 
-                                       <%-- <span id="notefinal" runat="server" visible="false" style="color: red; font-weight: 700; font-size: medium;">Note: For Final Semester Students Rs.1400 is added for the following:<br />
+                                        <%-- <span id="notefinal" runat="server" visible="false" style="color: red; font-weight: 700; font-size: medium;">Note: For Final Semester Students Rs.1400 is added for the following:<br />
                                             Provisional Certificate - Rs. 400/-
                                <br />
                                             Consolidated grade Sheet - Rs. 400/-
                                <br />
                                         <%--    Degree Certificate - Rs. 600/- </span>--%>
-                                       <%-- <div  style= "text-align: center;">
+                                        <%-- <div  style= "text-align: center;">
                                         <asp:Button ID="Button1" runat="server"  Text="Online Pay" CausesValidation="false" OnClick="btnSubmit_Click"
                                         Font-Bold="true" CssClass="btn btn-success" TabIndex="8" visible="false"/>
                                                 </div>--%>
                                         <div class="row">
-                                            
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Exam Name</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlexamnameabsentstudent" runat="server" AppendDataBoundItems="true"
-                                            AutoPostBack="True"  data-select2-enable="true" OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged"> <%--OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged"--%>
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlexamnameabsentstudent"
-                                            Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="report"></asp:RequiredFieldValidator>
-                                    </div>
-                                              <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Sub Exam Name</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlsubexamname" runat="server" AppendDataBoundItems="true"
-                                            AutoPostBack="True"  data-select2-enable="true" OnSelectedIndexChanged="ddlsubexamname_SelectedIndexChanged"> 
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlsubexamname"
-                                            Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="report"></asp:RequiredFieldValidator>
-                                    </div>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                    <label>Exam Name</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlexamnameabsentstudent" runat="server" AppendDataBoundItems="true"
+                                                    AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged">
+                                                    <%--OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged"--%>
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlexamnameabsentstudent"
+                                                    Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" SetFocusOnError="True"
+                                                    ValidationGroup="report"></asp:RequiredFieldValidator>
                                             </div>
+                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                    <label>Sub Exam Name</label>
+                                                </div>
+                                                <asp:DropDownList ID="ddlsubexamname" runat="server" AppendDataBoundItems="true"
+                                                    AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlsubexamname_SelectedIndexChanged">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlsubexamname"
+                                                    Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" SetFocusOnError="True"
+                                                    ValidationGroup="report"></asp:RequiredFieldValidator>
+                                            </div>
+                                        </div>
                                         <asp:ListView ID="lvFailCourse" runat="server">
                                             <LayoutTemplate>
                                                 <div class="sub-heading">
@@ -729,15 +730,15 @@
                                                                 <th style="text-align: center">Course Type
                                                                     <%--Theory/Prac--%>
                                                                 </th>
-                                                               <%-- <th style="text-align: center">Grade
+                                                                <%-- <th style="text-align: center">Grade
                                                                     <%--Theory/Prac--%>
                                                                 <%--</th>--%>
-                                                               <%-- <th style="text-align: center">SUBEXAM NAME
+                                                                <%-- <th style="text-align: center">SUBEXAM NAME
                                                                    
                                                                 </th>--%>
                                                                 <th style="text-align: center">Exam Fees
                                                                     <%--Theory/Prac--%>
-                                                                <%--</th>--%>
+                                                                    <%--</th>--%>
                                                             </tr>
                                                             <tr id="itemPlaceholder" runat="server" />
                                                         </thead>
@@ -749,17 +750,17 @@
                                                     <td>
                                                         <%--<asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("EXAM_REGISTERED").ToString() == "1" ? true : false %>' Enabled='<%# Eval("ACCEPTED").ToString() == "0" ? true : false %>' />--%>
                                                         <%--<asp:CheckBox ID="CheckBox1" runat="server" ToolTip="Click to select this subject for registration" onclick="backlogLvChk(this);" />--%>
-                                                       
-                                                        
-                                                         <%--<asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" 
+
+
+                                                        <%--<asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" 
                                                               Checked='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? true:false %>' Enabled='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? false:true %>'
                                                                     OnCheckedChanged="ChckedTotal_change"/> --%>
 
-                                                        <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" 
-                                                             Checked='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? true:false %>' Enabled='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? false:true %>'
-                                                                    OnCheckedChanged="ChckedTotal_change"/> 
+                                                        <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true"
+                                                            Checked='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? true:false %>' Enabled='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? false:true %>'
+                                                            OnCheckedChanged="ChckedTotal_change" />
                                                         <%-- Checked='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? true:false %>' Enabled='<%# Eval("STUDENT_REQUEST").ToString()=="1" ? false:true %>'--%>
-                                                        
+
                                                         <%--OnCheckedChanged="chkAccept_CheckedChanged"--%><%--Checked='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? true : false)%>' --%>
                                                         <%-- Enabled='<%# Eval("REGISTERED").ToString()=="1" && Eval("EXAMTYPENO").ToString()=="1" && Eval("EXAM_REGISTERED").ToString()=="1"? false : true%>'--%>
                                                         <%--Enabled='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? false : true)%>' onclick="backlogLvChk(this);" OnCheckedChanged="ChckedTotal_change" />--%>
@@ -769,14 +770,14 @@
 
                                                     </td>
                                                     <td>
-                                                       <%-- <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("STUDENT_REQUEST")%>'/>--%>
-                                                          <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("ADMIN_APPROVE")%>'/>
-                                                       <asp:HiddenField ID="hdfstudapplied" Value='<%# Eval("STUDENT_REQUEST") %>' runat="server" />
+                                                        <%-- <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("STUDENT_REQUEST")%>'/>--%>
+                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("ADMIN_APPROVE")%>' />
+                                                        <asp:HiddenField ID="hdfstudapplied" Value='<%# Eval("STUDENT_REQUEST") %>' runat="server" />
                                                         <asp:HiddenField ID="hdfexistMarks" Value='<%# Eval("EXISTS_MARK") %>' runat="server" />
                                                         <asp:HiddenField ID="hdfExamRegistered" runat="server" Value='<%# Eval("EXAM_REGISTERED") %>' />
                                                         <asp:HiddenField ID="hdfStudRegistered" runat="server" Value='<%# Eval("STUD_EXAM_REGISTERED") %>' />
-                                                       
-                                                     
+
+
                                                     </td>
                                                     <td style="text-align: center">
                                                         <asp:Label ID="lblsemester" runat="server" Text=' <%# Eval("SEMESTER") %>' ToolTip='<%# Eval("SEMESTERNO")%>' />
@@ -786,17 +787,17 @@
                                                         <%-- <%# (Eval("SUBID").ToString()) == "1" ? "Theory" : "Practical" %>--%>
                                                         <%# Eval("SUBNAME") %>
                                                     </td>
-                                                  <%--  <td align="center">
+                                                    <%--  <td align="center">
                                                         <%# Eval("SUBEXAMNAME") %>
                                                     </td>--%>
-                                                   <%-- <td align="center">
+                                                    <%-- <td align="center">
                                                         <%--  <%# Eval("EXAMTYPE") %>--%>
-                                                       <%-- <asp:Label ID="lblExamType" runat="server" Text='<%# Eval("EXAMTYPE") %>' ToolTip='<%# Eval("EXAMTYPENO")%>' />
+                                                    <%-- <asp:Label ID="lblExamType" runat="server" Text='<%# Eval("EXAMTYPE") %>' ToolTip='<%# Eval("EXAMTYPENO")%>' />
                                                     </td>--%>
                                                     <td align="center">
-                                                        <asp:Label ID="lblAmt" runat="server" Text='<%#Eval("AMOUNT") %>' ToolTip='<%# Eval("AMOUNT")%>'/>
-                                                   <%--  <%# Eval("AMOUNT") %>--%>
-                                               </td>
+                                                        <asp:Label ID="lblAmt" runat="server" Text='<%#Eval("AMOUNT") %>' ToolTip='<%# Eval("AMOUNT")%>' />
+                                                        <%--  <%# Eval("AMOUNT") %>--%>
+                                                    </td>
                                                 </tr>
                                             </ItemTemplate>
                                             <%--<EmptyDataTemplate>
@@ -856,10 +857,11 @@
                                     </asp:Panel>
                                 </div>
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnsave" runat="server"  Text="Submit" CausesValidation="false"
-                                        Font-Bold="true" CssClass="btn btn-success" TabIndex="7" OnClick="btnsave_Click"/> <%--OnClick="btnsave_Click"--%>
+                                    <asp:Button ID="btnsave" runat="server" Text="Submit" CausesValidation="false"
+                                        Font-Bold="true" CssClass="btn btn-success" TabIndex="7" OnClick="btnsave_Click" />
+                                    <%--OnClick="btnsave_Click"--%>
                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Online Pay" CausesValidation="false"
-                                        Font-Bold="true" CssClass="btn btn-success" TabIndex="8" visible="false"/>
+                                        Font-Bold="true" CssClass="btn btn-success" TabIndex="8" Visible="false" />
                                     <asp:Button ID="btnPrintRegSlip" runat="server" Text="Print Receipt" OnClick="btnPrintRegSlip_Click" CausesValidation="false"
                                         CssClass="btn btn-primary" TabIndex="9" Visible="false" />
                                 </div>
@@ -943,15 +945,15 @@
         //        return backlogCounter;
         //    }
         //}
-       // function backlogLvChk(chk) {
-       //     debugger;
-       //     var count;
-       //     if (document.getElementById('tblBacklogSubjects') != null) {
-       //        dataRows = document.getElementById('tblBacklogSubjects').getElementsByTagName('tr');
-       //         if (dataRows != null) {
-       //             //alert("1")
-       //             count = BacklogCount();
-       //
+        // function backlogLvChk(chk) {
+        //     debugger;
+        //     var count;
+        //     if (document.getElementById('tblBacklogSubjects') != null) {
+        //        dataRows = document.getElementById('tblBacklogSubjects').getElementsByTagName('tr');
+        //         if (dataRows != null) {
+        //             //alert("1")
+        //             count = BacklogCount();
+        //
         //            //if (!isBacklogGreaterThan2) {
         //            if (count <= 2) {
         //                var backlogFineAmt = $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text();
@@ -1021,5 +1023,5 @@
             }
 
         }
-</script>
+    </script>
 </asp:Content>
