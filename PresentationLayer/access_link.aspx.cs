@@ -219,6 +219,7 @@ public partial class access_links : System.Web.UI.Page
                 objAL.MastNo = mastno;
 
                 // Added By Anurag B. on 31-10-2023
+<<<<<<< HEAD
                 if (FilePDF.HasFile)
                 {
                     objAL.Al_PdfName = FilePDF.FileName;
@@ -229,6 +230,15 @@ public partial class access_links : System.Web.UI.Page
                     }
                     FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
                 }
+=======
+                objAL.Al_PdfName = FilePDF.FileName;
+                string directoryPath = Server.MapPath("~/UserManual");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
+>>>>>>> 7631576f ([ENHANCEMENT] [47354] Added Information Panel in the SiteMaster Page)
                 // End Anurag B. on 31-10-2023
 
                 int lev = Convert.ToInt32(ddllevel.SelectedValue);
