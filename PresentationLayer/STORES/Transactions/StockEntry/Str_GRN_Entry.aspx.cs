@@ -771,7 +771,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
             MessageBox("Please Add Item Details");
             return;
         }
-
+       
 
         objGRNEnt.SPID = ddlSecNumber.SelectedValue == "" ? 0 : Convert.ToInt32(ddlSecNumber.SelectedValue);
     
@@ -793,6 +793,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         objGRNEnt.MODIFIED_BY = Convert.ToInt32(Session["userno"]);
         objGRNEnt.GRN_ITEM_TBL = dtItemTable;
         objGRNEnt.GRN_TAX_TBL = ViewState["TaxTable"] as DataTable;
+        
         objGRNEnt.MDNO = Convert.ToInt32(Session["strdeptcode"]);
 
         //foreach (ListViewItem lv in lvItem.Items)
@@ -959,7 +960,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         int GRNID = Convert.ToInt32(btnEdit.CommandArgument);
         if (Convert.ToInt32(objCommon.LookUp("STORE_INVOICE_ITEM", "COUNT(*)", "GRNID=" + GRNID)) > 0)        
         {
-            MessageBox("Invoice Entry Already Submitted For This GRN Number.So,You Can Modify.");
+            MessageBox("Invoice Entry Already Submitted For This GRN Number.So,You Can not Modify.");
             return;
         }
         ClearAll();
