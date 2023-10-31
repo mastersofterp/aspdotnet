@@ -228,8 +228,6 @@ public partial class access_links : System.Web.UI.Page
                 FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
                 // End Anurag B. on 31-10-2023
 
-                
-
                 int lev = Convert.ToInt32(ddllevel.SelectedValue);
 
                 if (Convert.ToInt32(ddllevel.SelectedValue) == -1 && Convert.ToInt32(ddlParentLink.Items.Count) == 0)

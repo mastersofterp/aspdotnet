@@ -404,7 +404,6 @@
         };
     </script>
 
-
     <script type="text/javascript" language="javascript">
         //function totAllSubjects(chklnkstatus) {
         //    var frm = document.forms[0]
