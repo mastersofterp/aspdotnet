@@ -165,7 +165,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = true;
                 btnLedger.Visible = true; // ADDED BY SHUBHM ON 18-08-2023
                 btnGradeCardIssueRegister.Visible = true;
-                divYear.Visible = true;
+               // divYear.Visible = true;
                 btnElibilityReport.Visible = true;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
@@ -1099,7 +1099,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         #endregion
         #region For Crescent
 
-        else if (Convert.ToInt32(Session["OrgId"]) == 2) //Comment for common code test orgid        
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)        
         {
 
             //string ids = string.Empty;
@@ -2114,7 +2114,31 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
         }
         #endregion
+        
+        #region For PCEN Grad Card Added By Tejas Thakre on 30/10/2023
+        else if (Convert.ToInt32(Session["OrgId"]) == 19)
+        {
 
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+            }
+            ids = ids.TrimEnd('.');
+
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_PCEN.rpt", ids);  
+
+        }
+        #endregion
         else
         {
 
@@ -2300,6 +2324,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 18) // HITS added by Tejas Thakre on 04/09/2023
                 {
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 19) // PCEN added by Tejas Thakre on 30/10/2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else
                 {
@@ -2501,8 +2529,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 8)
                 {
-                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_ADMBATCHNO=" + Convert.ToString(stuadmbatch.Value);
-
+                   // url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_ADMBATCHNO=" + Convert.ToString(stuadmbatch.Value);
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_ADMBATCHNO=" + Convert.ToString(ViewState["schemeno"]);//GetIDNOS_NEW
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 5)
                 {
@@ -2562,7 +2590,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
 
-                //   url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCHNO=" + stuadmbatch.Value + ",@P_RESULTDECLAREDDATE=" + txtDeclareDate.Text.ToString() + ",@P_DATE_OF_ISSUE=" + txtDateOfIssue.Text.ToString() + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_PREV_STATUS=" + ddlStuType.SelectedValue;
+
                 if (Convert.ToInt32(Session["OrgId"]) == 1)
                 {
                     //url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCHNO=" + stuadmbatch.Value + ",@P_RESULTDECLAREDDATE=" + txtDeclareDate.Text.ToString() + ",@P_DATE_OF_ISSUE=" + txtDateOfIssue.Text.ToString() + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_PREV_STATUS=" + ddlStuType.SelectedValue;
@@ -2579,7 +2607,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 9)
                 {
                     url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO();//",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
-
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 4) //for CPUH Added By Tejas Thakre on 08-04-2023
                 {
@@ -2600,6 +2627,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 18) //for HITS Added By Tejas Thakre on 04-09-2023
                 {
                     url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW(); // +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 19) // for PCEN Added by Tejas Thakre on 30-10-2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW();
                 }
                 else
                 {
@@ -3884,7 +3915,33 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
             }
         }
-        else
+        // For PCEN REPORT
+        else if (Convert.ToInt32(Session["OrgId"]) == 19)
+        {
+
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+                    //count++;
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+
+            }
+
+            ids = ids.TrimEnd('.');
+
+            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_PCEN_Without_Header.rpt");
+
+        }
+        else 
         {
 
             string ids = string.Empty;
@@ -5376,13 +5433,23 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 3)
         {
+            
+            string grade = objCommon.LookUp("ACD_SCHEME", "DISTINCT GRADEMARKS", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"]);
+
             if (Convert.ToInt32(ViewState["degreeno"]) == 13)
             {
                 ShowPrvisionalDegree("Provisional Degree", "Provisional_Degree_Certificate_CPUKOTA_PHD.rpt");
             }
             else
             {
-                ShowPrvisionalDegree("Provisional Degree", "Provisional_Degree_Certificate_CPUKOTA.rpt");
+                if (grade == "G")
+                {
+                    ShowPrvisionalDegree("Provisional Degree", "Provisional_Degree_Certificate_CPUKOTA.rpt");
+                }
+                else
+                {
+                    ShowPrvisionalDegree("Provisional Degree", "Provisional_Degree_Certificate_CPUKOTA_MARK.rpt");
+                }
             }
 
         }
@@ -5908,7 +5975,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         try
         {
             int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
-            int Yearno = Convert.ToInt32(ddlYears.SelectedValue);
+            int Yearno = Convert.ToInt32(ddlYear.SelectedValue);
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + "Eligibility Report";
