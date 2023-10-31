@@ -225,7 +225,7 @@
                                     ShowMessageBox="True" ShowSummary="False" runat="server"/>
                             </div>
 
-                            <div class="form-group col-lg-3 col-md-6 col-12">
+                            <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                 <div class="label-dynamic">
                                     <label>Total Selected</label>
                                 </div>
@@ -282,7 +282,7 @@
                                                     <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' />
                                                 </td>
                                                 <td>
-                                                     <%# Container.DataItemIndex + 1%>
+                                                     <%# Eval("SRNO")%>
                                                 </td>
                                                 <td>
                                                     <%# Eval("REGNO")%>

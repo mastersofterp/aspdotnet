@@ -303,6 +303,10 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                 {
                     ShowReport_ATLAS(ids, "Student_ID_Card_Report", "rptStudentIdentityCard_HITS.rpt");
                 }
+                else if (orgid == 19)
+                {
+                    ShowReport_ATLAS(ids, "Student_ID_Card_Report", "rpt_IdentityCard_PCEN.rpt");
+                }
                 else
                 {
                     // StudentIDCardFrontNew
