@@ -8,6 +8,7 @@
 //=================================================================================
 
 using System;
+using System.IO;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -17,7 +18,6 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -216,6 +216,17 @@ public partial class access_links : System.Web.UI.Page
                 objAL.SrNo = Convert.ToDecimal(txtSrNo.Text.Trim());
                 objAL.Al_AsNo = int.Parse(ddlDomain.SelectedValue);
                 objAL.MastNo = mastno;
+
+                // Added By Anurag B. on 31-10-2023
+                objAL.Al_PdfName = FilePDF.FileName;
+                string directoryPath = Server.MapPath("~/UserManual");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
+                // End Anurag B. on 31-10-2023
+
                 int lev = Convert.ToInt32(ddllevel.SelectedValue);
 
                 if (Convert.ToInt32(ddllevel.SelectedValue) == -1 && Convert.ToInt32(ddlParentLink.Items.Count) == 0)

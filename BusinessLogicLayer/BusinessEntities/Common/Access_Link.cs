@@ -27,6 +27,7 @@ namespace IITMS
                 private string _Shortcut_key = string.Empty;
                 //Added by Nikhil l. on 24-04-2023 for maintaining flag whether it is transaction page or not.
                 private int _transaction = 0;
+                private string _pdffile = string.Empty;  // Added By Anurag B. on 31-10-2023
                 #endregion
 
                 #region Public Properties
@@ -108,6 +109,12 @@ namespace IITMS
                     {
                         _transaction = value;
                     }
+                }
+
+                public string Al_PdfName              // Added By Anurag B. on 31-10-2023
+                {
+                    get { return _pdffile; }
+                    set { _pdffile = value; }
                 }
 
                 #endregion
