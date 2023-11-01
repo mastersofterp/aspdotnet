@@ -85,29 +85,29 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                    <%--<sup>* </sup>--%>
                                                     <label>College</label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlCollege" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3"
                                                     AutoPostBack="true">
                                                 </asp:DropDownList>
-                                                <asp:RequiredFieldValidator ID="rfvddlCollege" runat="server" ControlToValidate="ddlCollege"
+                                               <%-- <asp:RequiredFieldValidator ID="rfvddlCollege" runat="server" ControlToValidate="ddlCollege"
                                                     Display="None" ErrorMessage="Please Select College" ValidationGroup="payroll" InitialValue="0"
-                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
                                             </div>
 
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
-                                                    <sup>* </sup>
+                                                  <%--  <sup>* </sup>--%>
                                                    <%-- <label>Staff</label>--%>
                                                     <label>Scheme/Staff</label>
                                                 </div>
                                                 <asp:DropDownList ID="ddlStaff" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="4"
                                                     AutoPostBack="true">
                                                 </asp:DropDownList>
-                                                <asp:RequiredFieldValidator ID="rfvddlStaff" runat="server" ControlToValidate="ddlStaff"
+                                                <%--<asp:RequiredFieldValidator ID="rfvddlStaff" runat="server" ControlToValidate="ddlStaff"
                                                     Display="None" ErrorMessage="Please Select Scheme/Staff" ValidationGroup="payroll" InitialValue="0"
-                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                    SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
                                                 <%--  <asp:Button ID="btnShow" runat="server" Text="Show"  Width="80px"
                                                 OnClick="btnShow_Click" />
                                             <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="payroll"
@@ -194,7 +194,9 @@
                 </div>
             </div>
         </ContentTemplate>
-       
+       <Triggers>
+           <asp:PostBackTrigger ControlID="btnSave" />
+       </Triggers>
     </asp:UpdatePanel>
       <div id="divMsg" runat="server">
         </div>

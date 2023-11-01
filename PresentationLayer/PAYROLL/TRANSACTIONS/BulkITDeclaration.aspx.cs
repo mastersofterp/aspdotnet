@@ -170,12 +170,13 @@ public partial class PayRoll_BulkITDeclaration : System.Web.UI.Page
     }
 
 
-  
+  // Updated on 01-11-2023
+
     private void BindEmployee()
     {
         try
         {
-            if (!(Convert.ToInt32(ddlStaff.SelectedIndex) == 0))
+            if ((Convert.ToInt32(ddlStaff.SelectedIndex) == 0) || (!(Convert.ToInt32(ddlStaff.SelectedIndex) == 0)))
             {
                 int status = 0;
                 DataSet ds = ObjCon.GetEmployeesByStaff(Convert.ToInt32(ddlStaff.SelectedValue), Convert.ToInt32(ddlCollege.SelectedValue));
