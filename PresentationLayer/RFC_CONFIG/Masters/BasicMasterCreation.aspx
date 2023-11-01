@@ -595,7 +595,7 @@
                                                     </div>
                                                     <br />
                                                     <div class="col-12 btn-footer">
-                                                        <asp:Button ID="btnSubmitDegMaster" TabIndex="5" OnClick="btnSubmitDegMaster_Click" ToolTip="Submit" ValidationGroup="Submit" OnClientClick="return validateDegMaster1();"
+                                                        <asp:Button ID="btnSubmitDegMaster" TabIndex="5" OnClick="btnSubmitDegMaster_Click" ToolTip="Submit" ValidationGroup="Submit" OnClientClick="return validateDegMaster();"
                                                             CssClass="btn btn-primary" runat="server" Text="Submit" />
                                                         <asp:Button ID="btnCancelDegMaster" TabIndex="6" ToolTip="Cancel" OnClick="btnCancelDegMaster_Click" runat="server" CssClass="btn btn-warning" Text="Cancel" />
                                                         <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true"
@@ -1020,7 +1020,6 @@
         function validateDegMaster() {
 
             $('#hfdStatDegMaster').val($('#rdActiveDegMas').prop('checked'));
-
             var degName = $("[id$=txtDegreeName]").attr("id");
             var degName = document.getElementById(degName);
             if (degName.value == 0) {
