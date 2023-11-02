@@ -154,7 +154,6 @@ public partial class ACADEMIC_AdmissionApproval : System.Web.UI.Page
             {
                 //objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEPTNO = B.DEPTNO)", "DISTINCT (B.DEPTNO)", "D.DEPTNAME", "B.COLLEGE_ID=" + ddlClg.SelectedValue, "B.DEPTNO");
                 objCommon.FillListBox(ddlDepartment, "ACD_DEPARTMENT D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEPTNO = B.DEPTNO) ", "DISTINCT (B.DEPTNO)", "D.DEPTNAME ", "B.COLLEGE_ID=" + ddlClg.SelectedValue, "B.DEPTNO");
-
             }
         }
         else
@@ -162,29 +161,39 @@ public partial class ACADEMIC_AdmissionApproval : System.Web.UI.Page
             ddlDepartment.Focus();
             ddlClg.SelectedIndex = 0;
         }
-
-
-
     }
-    protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
+
+    protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)          // Modified By Shrikant Waghmare on 02-11-2023
     {
         divstudentdetail.Visible = false;
         ddlBranch.SelectedIndex = 0;
         ddlStatus.SelectedIndex = 0;
-        string a = ddlDegree.SelectedValue;
+        string selectedDegree = ddlDegree.SelectedValue;
+
         if (ddlDegree.SelectedIndex > 0)
         {
-            //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + ddlDegree.SelectedValue + " AND B.DEPTNO =" + ddlDepartment.SelectedValue, "A.LONGNAME");
-            //if (Session["usertype"].ToString() != "1")
-            //    objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + ddlDegree.SelectedValue + " AND B.DEPTNO =" + Session["userdeptno"].ToString(), "A.LONGNAME");
-            //else
-            objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + ddlDegree.SelectedValue + "AND B.COLLEGE_ID=" + ddlClg.SelectedValue + " AND B.DEPTNO IN(" + ViewState["dept"].ToString() + ")", "A.LONGNAME");
-            ddlBranch.Focus();
+            string whereClause = "A.BRANCHNO > 0 AND B.DEGREENO = " + selectedDegree;
 
+            if (ViewState["dept"] != null)
+            {
+                string dept = ViewState["dept"].ToString();
+                if (!string.IsNullOrEmpty(dept))
+                {
+                    whereClause += " AND B.COLLEGE_ID=" + ddlClg.SelectedValue + " AND B.DEPTNO IN(" + dept + ")";
+                }
+            }
+
+            string sqlQuery = "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO = B.BRANCHNO)";
+            string distinctColumn = "DISTINCT A.BRANCHNO";
+            string displayColumn = "A.LONGNAME";
+            string condition = whereClause;
+            string orderByColumn = "A.LONGNAME";
+
+            objCommon.FillDropDownList(ddlBranch, sqlQuery, distinctColumn, displayColumn, condition, orderByColumn);
+            ddlBranch.Focus();
         }
         else
         {
-            //ddlBranch.Items.Clear();
             ddlDegree.SelectedIndex = 0;
         }
     }
@@ -195,7 +204,7 @@ public partial class ACADEMIC_AdmissionApproval : System.Web.UI.Page
         ddlStatus.SelectedIndex = 0;
 
     }
-    protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
+    protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)       // Modified By Shrikant Waghmare on 02-11-2023
     {
         divstudentdetail.Visible = false;
         ddlBranch.SelectedIndex = 0;
@@ -216,7 +225,24 @@ public partial class ACADEMIC_AdmissionApproval : System.Web.UI.Page
             if (!dept.ToString().Equals(string.Empty) || !dept.ToString().Equals(""))
                 dept = dept.Remove(dept.Length - 1);
             ViewState["dept"] = dept;
-            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO>0 AND B.COLLEGE_ID=" + ddlClg.SelectedValue + " AND B.DEPTNO IN(" + dept + ")", "D.DEGREENO");
+
+            string whereClause = "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlClg.SelectedValue;
+
+            if (!string.IsNullOrEmpty(dept))
+            {
+                whereClause += " AND B.DEPTNO IN(" + dept + ")";
+            }
+
+            string sqlQuery = "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO = B.DEGREENO)";
+            string distinctColumn = "DISTINCT D.DEGREENO";
+            string displayColumn = "DEGREENAME";
+            string condition = whereClause;
+            string orderByColumn = "D.DEGREENO";
+
+            objCommon.FillDropDownList(ddlDegree, sqlQuery, distinctColumn, displayColumn, condition, orderByColumn);
+
+
+            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO>0 AND B.COLLEGE_ID=" + ddlClg.SelectedValue + " AND B.DEPTNO IN(" + dept + ")", "D.DEGREENO");
 
             //}
             //else
@@ -230,33 +256,30 @@ public partial class ACADEMIC_AdmissionApproval : System.Web.UI.Page
             ddlDepartment.SelectedIndex = 0;
         }
     }
-    private void BindStudentList()
+    private void BindStudentList()     // Modified By Shrikant Waghmare on 02-11-2023
     {
         try
         {
-
             string deptno = string.Empty;
-            //string deptNos = string.Empty;
-            string dept = objCommon.LookUp("ACD_DEPARTMENT D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEPTNO = B.DEPTNO)", "DISTINCT (B.DEPTNO)", "B.COLLEGE_ID=" + ddlClg.SelectedValue + "AND  B.DEPTNO IN(" + Session["userdeptno"].ToString() + ")");
-            if (ddlDepartment.SelectedValue == null || ddlDepartment.SelectedValue == "")
+
+            if (string.IsNullOrEmpty(ddlDepartment.SelectedValue) || ddlDepartment.SelectedValue == "")
             {
-                if (dept.ToString().Equals(string.Empty) || dept.ToString().Equals(""))
+                foreach (ListItem item in ddlDepartment.Items)
                 {
-                    dept = "0";
+                    deptno += item.Value + ',';
                 }
-                deptno = dept;
+                deptno = deptno.Remove(deptno.Length - 1); 
             }
             else
             {
-
-                foreach (ListItem items in ddlDepartment.Items)
+                foreach (ListItem item in ddlDepartment.Items)
                 {
-                    if (items.Selected == true)
+                    if (item.Selected)
                     {
-                        deptno += items.Value + ',';
+                        deptno += item.Value + ',';
                     }
                 }
-                deptno = deptno.Remove(deptno.Length - 1);
+                deptno = deptno.Remove(deptno.Length - 1); 
             }
 
             //DataSet ds = objSC.GetStudentForAdmApprove(Convert.ToInt32(ddlAdmbatch.SelectedValue), Convert.ToInt32(ddlClg.SelectedValue), deptno, Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlStatus.SelectedValue));
