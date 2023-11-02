@@ -48,7 +48,24 @@
 
                                                     <div class="row">
 
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="adminScheme" runat="server">
+                                                      
+
+                                                        <div class="form-group col-lg-4 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <sup>* </sup>
+                                                                <label>Session</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control" data-select2-enable="true"
+                                                                OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" TabIndex="1">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" ValidationGroup="Submit" Display="None"
+                                                                ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="true" />
+                                                            <asp:RequiredFieldValidator ID="rfvSession1" runat="server" ControlToValidate="ddlSession" ValidationGroup="Report" Display="None"
+                                                                ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="true" />
+                                                        </div>
+
+                                                          <div class="form-group col-lg-4 col-md-6 col-12" id="adminScheme" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <%-- <label>Scheme</label>--%>
@@ -67,21 +84,6 @@
                                                             <asp:RequiredFieldValidator ID="rfvddlScheme2" runat="server" ControlToValidate="ddlScheme" Display="None"
                                                                 ErrorMessage="Please Select College & Scheme" InitialValue="0" SetFocusOnError="True" ValidationGroup="Report">
                                                             </asp:RequiredFieldValidator>
-                                                        </div>
-
-                                                        <div class="form-group col-lg-4 col-md-6 col-12">
-                                                            <div class="label-dynamic">
-                                                                <sup>* </sup>
-                                                                <label>Session</label>
-                                                            </div>
-                                                            <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" AutoPostBack="True" CssClass="form-control" data-select2-enable="true"
-                                                                OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" TabIndex="1">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" ValidationGroup="Submit" Display="None"
-                                                                ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="true" />
-                                                            <asp:RequiredFieldValidator ID="rfvSession1" runat="server" ControlToValidate="ddlSession" ValidationGroup="Report" Display="None"
-                                                                ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="true" />
                                                         </div>
 
                                                         <div class="form-group col-lg-4 col-md-6 col-12" style="display: none">
