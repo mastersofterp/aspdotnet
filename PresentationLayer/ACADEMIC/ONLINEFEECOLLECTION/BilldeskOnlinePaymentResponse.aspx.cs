@@ -306,7 +306,9 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
 
     protected void btnReciept_Click(object sender, EventArgs e)
     {
-        string ua_type = objCommon.LookUp("acd_dcr", "RECIEPT_CODE", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'");  //Convert.ToInt32(Session["idno"]));
+        Session["idno"] = Idno;
+        int IDNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "IDNO", "ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'"));
+        string ua_type = objCommon.LookUp("acd_dcr", "RECIEPT_CODE", "IDNO=" + Convert.ToInt32(IDNO) + "AND ORDER_ID='" + Convert.ToString(lblOrderId.Text) + "'");  //Convert.ToInt32(Session["idno"]));  
         if (ua_type == "REF")//added by gaurav for substitute report
         {
             ShowReport("OnlineFeePayment", "rptOnlineReceipt_Retest.rpt");
