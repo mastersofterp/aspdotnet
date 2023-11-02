@@ -40,6 +40,7 @@ namespace IITMS
                 private string _TINNO = string.Empty;
                 private string _PANNO = string.Empty;
                 private string _Work_Nature = string.Empty;
+                public string _GSTNo = string.Empty;
 
                 #endregion
 
@@ -173,6 +174,11 @@ namespace IITMS
                 {
                     get { return _Work_Nature; }
                     set { _Work_Nature = value; }
+                }
+                public string GSTNo
+                {
+                    get { return _GSTNo; }
+                    set { _GSTNo = value; }
                 }
                 #endregion
             }

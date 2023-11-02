@@ -45,7 +45,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //Add New Party
-                        objParams = new SqlParameter[27];
+                        objParams = new SqlParameter[28];
                         //Acc_Party
                         objParams[0] = new SqlParameter("@P_CODE_YEAR", code_year);
                         objParams[1] = new SqlParameter("@P_PARTY_NAME", objParty.Party_Name);
@@ -75,9 +75,14 @@ namespace IITMS
                         //Acc Party
                         objParams[23] = new SqlParameter("@P_TINNO", objParty.TINNO);
                         objParams[24] = new SqlParameter("@P_PANNO", objParty.PANNO);
-                        objParams[25] = new SqlParameter("@P_Work_Nature", objParty.Work_Nature);
-                        objParams[26] = new SqlParameter("@P_PARTY_NO", SqlDbType.Int);
-                        objParams[26].Direction = ParameterDirection.Output;
+
+                        objParams[25] = new SqlParameter("@P_GSTNO", objParty.GSTNo);
+                        //ADDDED BY PAWAN NIKHARE
+                        objParams[26] = new SqlParameter("@P_Work_Nature", objParty.Work_Nature);
+                        objParams[27] = new SqlParameter("@P_PARTY_NO", SqlDbType.Int);
+
+
+                        objParams[27].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACC_SP_INS_PARTY", objParams, true);
                         if (ret != null)
