@@ -7376,7 +7376,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
         }
 
-        //Added By Sakshi M on 25-10-2023
+        //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendance(Attendance Attentdobj)
             {
             int retstatus = 0;
@@ -7384,18 +7384,31 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
-                objparams = new SqlParameter[3];
+                objparams = new SqlParameter[4];
                 objparams[0] = new SqlParameter("@P_STATUS", Attentdobj.Status);
                 objparams[1] = new SqlParameter("@P_FLAG", Attentdobj.Flag);
                 objparams[2] = new SqlParameter("@P_STATUSNO", Attentdobj.StatusNo);
+                objparams[3] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objparams[3].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("ACD_ATTENDANCE_CALCULATE_UPD", objparams, true);
-                if (obj != null)
-                    retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                if (Convert.ToInt32(obj) == 12)
+                    {
+                    retstatus = 12;
+                    }
+                else if (Convert.ToInt32(obj) == 1)
+                    {
+                    retstatus = 1;
+                    }
+                else
+                    {
+                    retstatus = 0;
+                    }
+
                 }
             catch (Exception ex)
                 {
                 retstatus = Convert.ToInt32(CustomStatus.Error);
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.UpdateStatus->" + ex.ToString());
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.UpdateStatus->" + ex.ToString());
                 }
             return retstatus;
             }
@@ -7437,7 +7450,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 }
             }
 
-        //Added By Sakshi M on 25-10-2023
+        //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendanceSubmit(Attendance objAttendanceEntity)
             {
             int retstatus = 0;
@@ -7445,17 +7458,30 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
-                objparams = new SqlParameter[2];
+                objparams = new SqlParameter[3];
                 objparams[0] = new SqlParameter("@P_STATUS", objAttendanceEntity.Status);
                 objparams[1] = new SqlParameter("@P_FLAG", objAttendanceEntity.Flag);
+                objparams[2] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objparams[2].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("ACD_INS_ATTENDANCE_CALCULATE", objparams, true);
-                if (obj != null)
-                    retstatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                if (Convert.ToInt32(obj) == 12)
+                    {
+                    retstatus = 12;
+                    }
+                else if (Convert.ToInt32(obj) == 1)
+                    {
+                    retstatus = 1;
+                    }
+                else
+                    {
+                    retstatus = 0;
+                    }
+
                 }
             catch (Exception ex)
                 {
                 retstatus = Convert.ToInt32(CustomStatus.Error);
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.CalculateAttendanceSubmit->" + ex.ToString());
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.CalculateAttendanceSubmit->" + ex.ToString());
                 }
             return retstatus;
             }

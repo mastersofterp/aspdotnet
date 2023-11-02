@@ -95,71 +95,40 @@ public partial class ACADEMIC_AttendanceCalculate : System.Web.UI.Page
 
     #endregion CheckAuthentication
 
+    //Updated by Sakshi Makwana on date 01/11/2023
     #region Submit Calculate Attendance
 
     protected void btnSubmit_Click(object sender, EventArgs e)
-    {
-        #region Update Attendance Type
-
-        if (Session["edit"] == "Update")
         {
-            if (txtStatusName.Text != null)
-            {
-                objAttendanceEntity.Status = txtStatusName.Text;
-                if (chkcal.Checked)
-                {
-                    objAttendanceEntity.Flag = 1;
-                }
-                else
-                {
-                    objAttendanceEntity.Flag = 0;
-                }
-
-                objAttendanceEntity.StatusNo = Convert.ToInt32(Session["id"].ToString());
-                int results = AttendanceCalLogic.CalculateAttendance(objAttendanceEntity);
-                if (results == 2)
-                {
-                    objCommon.DisplayMessage(this, "Record Updated  Successfully ", this.Page);
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this, "Something went wrong record  not saved ", this.Page);
-                }
-
-                ListBind();
-                txtStatusName.Text = string.Empty;
-                chkcal.Checked = false;
-            }
-            btnSubmit.Text = "Submit";
-            Session["edit"] = "null";
-
-        }
-        #endregion Update Attendance Type
 
         #region Insert Attendance Type
 
-        else if (Session["edit"] == "Submit")
-        {
-            if (txtStatusName.Text != null)
+        if (Session["edit"] == "Submit")
             {
+            if (txtStatusName.Text != null)
+                {
                 objAttendanceEntity.Status = txtStatusName.Text;
                 if (chkcal.Checked)
-                {
+                    {
                     objAttendanceEntity.Flag = 1;
-                }
+                    }
                 else
-                {
+                    {
                     objAttendanceEntity.Flag = 0;
-                }
+                    }
                 int result = AttendanceCalLogic.CalculateAttendanceSubmit(objAttendanceEntity);
                 if (result == 1)
-                {
+                    {
                     objCommon.DisplayMessage(this, "Attendace Added Successfully ", this.Page);
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this, "Something Went Wrong", this.Page);
-                }
+                    }
+                if (result == 12)
+                    {
+                    objCommon.DisplayMessage(this, "Record Already Exists", this.Page);
+                    }
+                // else
+                //{
+                //    objCommon.DisplayMessage(this, "Something Went Wrong", this.Page);
+                //}
 
                 btnSubmit.Text = "Submit";
                 Session["edit"] = "Submit";
@@ -167,24 +136,61 @@ public partial class ACADEMIC_AttendanceCalculate : System.Web.UI.Page
                 ListBind();
                 txtStatusName.Text = string.Empty;
                 chkcal.Checked = false;
-            }
+                }
 
             btnSubmit.Text = "Submit";
             Session["edit"] = "null";
-        }
-
+            Session["edit"] = "Submit";
+            }
         #endregion Insert Attendance Type
-    }
+
+        #region Update Attendance Type
+        else if (Session["edit"] == "Update")
+            {
+            if (txtStatusName.Text != null)
+                {
+                objAttendanceEntity.Status = txtStatusName.Text;
+                if (chkcal.Checked)
+                    {
+                    objAttendanceEntity.Flag = 1;
+                    }
+                else
+                    {
+                    objAttendanceEntity.Flag = 0;
+                    }
+
+                objAttendanceEntity.StatusNo = Convert.ToInt32(Session["id"].ToString());
+                int results = AttendanceCalLogic.CalculateAttendance(objAttendanceEntity);
+                if (results == 1)
+                    {
+                    objCommon.DisplayMessage(this, "Record Updated  Successfully ", this.Page);
+                    }
+                else
+                    {
+                    objCommon.DisplayMessage(this, "Record Already Exists", this.Page);
+                    }
+
+                ListBind();
+                txtStatusName.Text = string.Empty;
+                chkcal.Checked = false;
+                }
+            btnSubmit.Text = "Submit";
+            Session["edit"] = "Submit";
+            
+            }
+        #endregion Update Attendance Type
+
+        }
 
     #region Clear Control
     protected void btnCancel_Click(object sender, EventArgs e)
-    {
+        {
         txtStatusName.Text = string.Empty;
         chkcal.Checked = false;
 
         btnSubmit.Text = "Submit";
         Session["edit"] = "Submit";
-    }
+        }
 
     #endregion Clear Control
 
