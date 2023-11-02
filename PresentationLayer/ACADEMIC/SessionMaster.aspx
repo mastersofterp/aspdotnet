@@ -748,6 +748,7 @@
 
                                                             <asp:ListBox ID="ddlCollege" runat="server" SelectionMode="Multiple" TabIndex="4"
                                                                 CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                                            <asp:HiddenField runat="server" ID="hfdDDLCollege" ClientIDMode="Static" />
 
                                                         </div>
 
@@ -1071,7 +1072,11 @@
                 $(ddlCollege).focus();
                 return false;
             }
-
+            var selectedVal = '';
+            $('#ctl00_ContentPlaceHolder1_ddlCollege :selected').each(function (i, selected) {
+                selectedVal += $(selected).val() + ',';
+                $('#hfdDDLCollege').val(selectedVal);
+            });
         }
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
