@@ -3252,7 +3252,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
             //    new SqlParameter("@P_AL_URL", currentPageName)
             //};
             //ds = objDataAccess.ExecuteDataSetSP("PKG_GET_PDF_NAME", sqlParams);
-            if (currentPageName == "principalHome.aspx" || currentPageName=="Links.aspx")
+            if (currentPageName == "principalHome.aspx" || currentPageName == "homeFaculty.aspx" || currentPageName == "homeNonFaculty.aspx" || currentPageName == "studeHome.aspx" || currentPageName == "Links.aspx")
             {
                 ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_URL='" + currentPageName + "' ", "");
             }
