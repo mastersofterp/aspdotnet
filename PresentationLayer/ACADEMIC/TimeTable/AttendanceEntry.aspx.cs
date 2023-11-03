@@ -141,57 +141,57 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlInstitute, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ")", "");
 
             //objCommon.FillDropDownList(ddlColgSession, "ACD_SESSION_MASTER SM INNER JOIN ACD_COLLEGE_MASTER CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON (SR.SESSIONNO = SM.SESSIONNO)", "SM.SESSIONNO", "COLLEGE_NAME,CONCAT (COLLEGE_NAME ,'-', SESSION_NAME) AS COLLEGE_SESSION", "ISNULL(FLOCK,0)=1 AND ISNULL(IS_ACTIVE,0)=1 AND UA_NO=749", "SESSIONNO DESC");
-            DataSet dsColgSession = objCourse.GetCollegeSessionForAttendance(Convert.ToInt32(Session["userno"]));
-            if (dsColgSession.Tables[0] != null && dsColgSession.Tables[0].Rows.Count > 0)
-            {
-                ddlColgSession.DataSource = dsColgSession.Tables[0];
-                ddlColgSession.DataTextField = dsColgSession.Tables[0].Columns["COLLEGE_SESSION"].ToString();
-                ddlColgSession.DataValueField = dsColgSession.Tables[0].Columns["SESSIONNO"].ToString();
-                ddlColgSession.DataBind();
-                ddlColgSession.SelectedIndex = 1;
+            //DataSet dsColgSession = objCourse.GetCollegeSessionForAttendance(Convert.ToInt32(Session["userno"]));
+            //if (dsColgSession.Tables[0] != null && dsColgSession.Tables[0].Rows.Count > 0)
+            //{
+            //    ddlColgSession.DataSource = dsColgSession.Tables[0];
+            //    ddlColgSession.DataTextField = dsColgSession.Tables[0].Columns["COLLEGE_SESSION"].ToString();
+            //    ddlColgSession.DataValueField = dsColgSession.Tables[0].Columns["SESSIONNO"].ToString();
+            //    ddlColgSession.DataBind();
+            //    ddlColgSession.SelectedIndex = 1;
 
-                int college_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COLLEGE_ID", "SESSIONNO=" + ddlColgSession.SelectedValue + ""));
-                Session["college_id_att"] = college_id.ToString();
-            }
-            else
-            {
-                objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
-                return;
-            }
+            //    int college_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COLLEGE_ID", "SESSIONNO=" + ddlColgSession.SelectedValue + ""));
+            //    Session["college_id_att"] = college_id.ToString();
+            //}
+            //else
+            //{
+            //    objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
+            //    return;
+            //}
         }
         catch
         {
             throw;
         }
     }
-    private bool CheckActivity()
-    {
-        ActivityController objActController = new ActivityController();
-        DataTableReader dtr = objActController.CheckActivity(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
+    //private bool CheckActivity()
+    //{
+    //    ActivityController objActController = new ActivityController();
+    //    DataTableReader dtr = objActController.CheckActivity(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
 
-        if (dtr.Read())
-        {
-            if (dtr["STARTED"].ToString().ToLower().Equals("false"))
-            {
-                objCommon.DisplayMessage(updTeachingPlan, "This Activity has been Stopped. Contact Administrator.!!", this.Page);
-                return false;
-            }
+    //    if (dtr.Read())
+    //    {
+    //        if (dtr["STARTED"].ToString().ToLower().Equals("false"))
+    //        {
+    //            objCommon.DisplayMessage(updTeachingPlan, "This Activity has been Stopped. Contact Administrator.!!", this.Page);
+    //            return false;
+    //        }
 
-            if (dtr["PRE_REQ_ACT"] == DBNull.Value || dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
-                if (dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
-                {
-                    objCommon.DisplayMessage(updTeachingPlan, "Pre-Requisite Activity for this Page is Not Stopped. Contact Administrator.!!", this.Page);
-                    return false;
-                }
-        }
-        else
-        {
-            objCommon.DisplayMessage(updTeachingPlan, "Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Administrator!!.", this.Page);
-            return false;
-        }
-        dtr.Close();
-        return true;
-    }
+    //        if (dtr["PRE_REQ_ACT"] == DBNull.Value || dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
+    //            if (dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
+    //            {
+    //                objCommon.DisplayMessage(updTeachingPlan, "Pre-Requisite Activity for this Page is Not Stopped. Contact Administrator.!!", this.Page);
+    //                return false;
+    //            }
+    //    }
+    //    else
+    //    {
+    //        objCommon.DisplayMessage(updTeachingPlan, "Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Administrator!!.", this.Page);
+    //        return false;
+    //    }
+    //    dtr.Close();
+    //    return true;
+    //}
     #endregion
 
     #region User defined Methods
@@ -324,31 +324,31 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
             int istutorial = rdoTutorial.Checked ? 1 : 0;
             int OrgId = Convert.ToInt32(Session["OrgId"]);
             //=========== get all course of login faculty =====================//
-            DataSet dsCalederCourse = objAttController.GetAllCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
-            ViewState["dsCalederCourse"] = dsCalederCourse;//Insert Data Set in View State
+            //DataSet dsCalederCourse = objAttController.GetAllCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+            //ViewState["dsCalederCourse"] = dsCalederCourse;//Insert Data Set in View State
             //ViewState["SessionNo"] = ddlSession.SelectedValue;
 
             //=========== get all Holiday from master =====================//
-            DataSet dsHDay = objAttController.GetRestrictedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
-            //objCommon.FillDropDown("ACD_HOLIDAY_MASTER", "HOLIDAY_NO", "HOLIDAY_NAME,HOLIDAY_DATE,LOCK", "", "HOLIDAY_NO");
-            ViewState["dsHDay"] = dsHDay;//Insert Data Set in View State          
+            //DataSet dsHDay = objAttController.GetRestrictedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
+            ////objCommon.FillDropDown("ACD_HOLIDAY_MASTER", "HOLIDAY_NO", "HOLIDAY_NAME,HOLIDAY_DATE,LOCK", "", "HOLIDAY_NO");
+            //ViewState["dsHDay"] = dsHDay;//Insert Data Set in View State          
 
             //=========== get all alternate assinged courses to login faculty =====================//
-            DataSet dsAlAtt = objAttController.GetAlternateAllottedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+            //DataSet dsAlAtt = objAttController.GetAlternateAllottedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
             //objCommon.FillDropDown("ACD_ALTERNATE_ATTENDANCE AL INNER JOIN ACD_COURSE C ON C.COURSENO=AL.TAKEN_COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=AL.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON A.SESSIONNO=AL.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=AL.SEMESTERNO",
             //    "DISTINCT (SELECT DATEPART(DW,ATTENDANCE_DATE)-1)AltDayNO", "CCODE,ATTENDANCE_DATE,COURSE_NAME,START_DATE,END_DATE",
             //    "S.SCHEMETYPE=" + _schemeType + " AND ISNULL(CANCEL,0)=0 AND TAKEN_UANO=" + Convert.ToInt32(Session["userno"].ToString()),
             //    "");
-            ViewState["dsAlAtt"] = dsAlAtt;
+            //ViewState["dsAlAtt"] = dsAlAtt;
 
             //=========== get all Lock Holiday from master =====================//
-            DataSet dsLockHDay = objAttController.GetAllHolidays(Convert.ToInt32(ddlColgSession.SelectedValue));
+            //DataSet dsLockHDay = objAttController.GetAllHolidays(Convert.ToInt32(ddlColgSession.SelectedValue));
             //objCommon.FillDropDown("ACD_ACADEMIC_HOLIDAY_MASTER", "HOLIDAY_NO", "ACADEMIC_HOLIDAY_NAME,ACADEMIC_HOLIDAY_STDATE", "SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue), "HOLIDAY_NO");
-            ViewState["dsLockHDay"] = dsLockHDay;//Insert Data Set in View State  
+            //ViewState["dsLockHDay"] = dsLockHDay;//Insert Data Set in View State  
 
-            DataSet dsShiftTT = objAttController.GetAllShiftTTCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+           // DataSet dsShiftTT = objAttController.GetAllShiftTTCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
             //objCommon.FillDropDown("ACD_TIME_TABLE_SHIFT TS INNER JOIN ACD_COURSE C ON C.COURSENO=TS.COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=TS.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON  A.SESSIONNO=TS.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=TS.SEMESTERNO", "DISTINCT (SELECT DATEPART(DW,SHIFT_TT_DATE)-1)ShiftDayNO", "CCODE,TT_DAYNO,SHIFT_TT_DATE,COURSE_NAME,START_DATE,END_DATE", "S.SCHEMETYPE=" + _schemeType + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()), "");
-            ViewState["dsShiftTT"] = dsShiftTT;//Insert Data Set in View State 
+            //ViewState["dsShiftTT"] = dsShiftTT;//Insert Data Set in View State 
         }
         catch
         {
@@ -820,11 +820,11 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
                 ViewState["TPlanYesNo"] = objCommon.LookUp("ACD_ATTENDANCE_CONFIG", "ISNULL(TEACHING_PLAN,0)", " SESSIONNO=" + sessionno + " AND ISNULL(ACTIVE,0)=1 and ISNULL(SCHEMETYPE,0)=" + _schemeType) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE_CONFIG", "ISNULL(TEACHING_PLAN,0)", " SESSIONNO=" + sessionno + " AND ISNULL(ACTIVE,0)=1 AND ISNULL(SCHEMETYPE,0)=" + _schemeType));
                 if (Convert.ToInt32(ViewState["TPlanYesNo"]) == 1)// if(TPlanYesNo=1)THEN attendance base on teaching plan..
                 {
-                    ds = objAttController.GetSubjectForAttendanceModified(sessionno, dayName, Convert.ToInt32(Session["userno"]), Convert.ToDateTime(ViewState["date"]), Convert.ToInt32(ViewState["TPlanYesNo"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
+                    //ds = objAttController.GetSubjectForAttendanceModified(sessionno, dayName, Convert.ToInt32(Session["userno"]), Convert.ToDateTime(ViewState["date"]), Convert.ToInt32(ViewState["TPlanYesNo"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
                 }
                 else
                 {
-                    ds = objAttController.GetSubjectForAttendanceModified(sessionno, dayName, Convert.ToInt32(Session["userno"]), Convert.ToDateTime(ViewState["date"]), Convert.ToInt32(ViewState["TPlanYesNo"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
+                    //ds = objAttController.GetSubjectForAttendanceModified(sessionno, dayName, Convert.ToInt32(Session["userno"]), Convert.ToDateTime(ViewState["date"]), Convert.ToInt32(ViewState["TPlanYesNo"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
                 }
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -1451,12 +1451,12 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
             if (rdoCore.Checked == true)
             {
 
-                cs = (CustomStatus)objAttController.AddAttendance(objAttModel, Convert.ToInt32(Session["OrgId"]));
+                //cs = (CustomStatus)objAttController.AddAttendance(objAttModel, Convert.ToInt32(Session["OrgId"]));
                 result = "Added";
             }
             else if (rdoGlobalElective.Checked == true)
             {
-                cs = (CustomStatus)objAttController.AddAttendanceGlobalElective(objAttModel, Convert.ToInt32(Session["OrgId"]));
+                //cs = (CustomStatus)objAttController.AddAttendanceGlobalElective(objAttModel, Convert.ToInt32(Session["OrgId"]));
                 result = "Added";
             }
 
@@ -1506,7 +1506,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
             DataSet ds = new DataSet();
             if (rdoCore.Checked == true)
             {
-                ds = objAttController.GetStudentFacultywiseAttendanceModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["AttUaNo"]), Convert.ToInt32(altCourseno), Convert.ToDateTime(ViewState["date"]), _schemeType, Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["_slotNo"]), Convert.ToInt32(txtCourse.ToolTip), (Session["college_id_att"]).ToString(), Convert.ToInt32(Session["OrgId"]));
+                //ds = objAttController.GetStudentFacultywiseAttendanceModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["AttUaNo"]), Convert.ToInt32(altCourseno), Convert.ToDateTime(ViewState["date"]), _schemeType, Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["_slotNo"]), Convert.ToInt32(txtCourse.ToolTip), (Session["college_id_att"]).ToString(), Convert.ToInt32(Session["OrgId"]));
             }
             //else if (rdoGlobalElective.Checked == true)
             //{
@@ -2086,8 +2086,8 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
         int ua_no = Convert.ToInt32(HttpContext.Current.Session["userno"]);
         int degreeno = Convert.ToInt32(HttpContext.Current.Session["degreeno"]);
         int batchno = Convert.ToInt32(HttpContext.Current.Session["_batchNo"]);
-
-        DataSet ds = objAttController.GetAttendanceSlot(LectureDate, courseno, ua_no, degreeno, batchno);
+        DataSet ds = null;
+        //DataSet ds = objAttController.GetAttendanceSlot(LectureDate, courseno, ua_no, degreeno, batchno);
         var js = new JavaScriptSerializer() { MaxJsonLength = int.MaxValue };
         JavaScriptSerializer serializer = new JavaScriptSerializer();
         List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
@@ -2137,7 +2137,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
         AcdAttendanceController objAttController = new AcdAttendanceController();
         int outval = 0;
 
-        outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc);
+        //outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc);
 
         if (outval != null || outval != 0)
         {
@@ -2153,24 +2153,24 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
     #region Global Elective
     protected void rdoCore_CheckedChanged(object sender, EventArgs e)
     {
-        divClgSession.Visible = true;
-        DataSet dsColgSession = objCourse.GetCollegeSessionForAttendance(Convert.ToInt32(Session["userno"]));
-        if (dsColgSession.Tables[0] != null && dsColgSession.Tables[0].Rows.Count > 0)
-        {
-            ddlColgSession.DataSource = dsColgSession.Tables[0];
-            ddlColgSession.DataTextField = dsColgSession.Tables[0].Columns["COLLEGE_SESSION"].ToString();
-            ddlColgSession.DataValueField = dsColgSession.Tables[0].Columns["SESSIONNO"].ToString();
-            ddlColgSession.DataBind();
-            ddlColgSession.SelectedIndex = 1;
+        //divClgSession.Visible = true;
+        //DataSet dsColgSession = objCourse.GetCollegeSessionForAttendance(Convert.ToInt32(Session["userno"]));
+        //if (dsColgSession.Tables[0] != null && dsColgSession.Tables[0].Rows.Count > 0)
+        //{
+        //    ddlColgSession.DataSource = dsColgSession.Tables[0];
+        //    ddlColgSession.DataTextField = dsColgSession.Tables[0].Columns["COLLEGE_SESSION"].ToString();
+        //    ddlColgSession.DataValueField = dsColgSession.Tables[0].Columns["SESSIONNO"].ToString();
+        //    ddlColgSession.DataBind();
+        //    ddlColgSession.SelectedIndex = 1;
 
-            int college_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COLLEGE_ID", "SESSIONNO=" + ddlColgSession.SelectedValue + ""));
-            Session["college_id_att"] = college_id.ToString();
-        }
-        else
-        {
-            objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
-            return;
-        }
+        //    int college_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COLLEGE_ID", "SESSIONNO=" + ddlColgSession.SelectedValue + ""));
+        //    Session["college_id_att"] = college_id.ToString();
+        //}
+        //else
+        //{
+        //    objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
+        //    return;
+        //}
     }
     protected void rdoGlobalElective_CheckedChanged(object sender, EventArgs e)
     {
@@ -2211,35 +2211,35 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry1 : System.Web.UI.Page
     {
         try
         {
-            int _schemeType = (rbnNew.Checked ? 1 : 2);
-            int istutorial = rdoTutorial.Checked ? 1 : 0;
-            int OrgId = Convert.ToInt32(Session["OrgId"]);
-            //=========== get all course of login faculty =====================//
-            //DataSet dsCalederCourse = objAttController.GetAllCoursesModifiedGlobalElective(Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
-            //ViewState["dsCalederCourse"] = dsCalederCourse;//Insert Data Set in View State
-            //ViewState["SessionNo"] = ddlSession.SelectedValue;
+            //int _schemeType = (rbnNew.Checked ? 1 : 2);
+            //int istutorial = rdoTutorial.Checked ? 1 : 0;
+            //int OrgId = Convert.ToInt32(Session["OrgId"]);
+            ////=========== get all course of login faculty =====================//
+            ////DataSet dsCalederCourse = objAttController.GetAllCoursesModifiedGlobalElective(Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+            ////ViewState["dsCalederCourse"] = dsCalederCourse;//Insert Data Set in View State
+            ////ViewState["SessionNo"] = ddlSession.SelectedValue;
 
-            //=========== get all Holiday from master =====================//
-            DataSet dsHDay = objAttController.GetRestrictedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
-            //objCommon.FillDropDown("ACD_HOLIDAY_MASTER", "HOLIDAY_NO", "HOLIDAY_NAME,HOLIDAY_DATE,LOCK", "", "HOLIDAY_NO");
-            ViewState["dsHDay"] = dsHDay;//Insert Data Set in View State          
+            ////=========== get all Holiday from master =====================//
+            //DataSet dsHDay = objAttController.GetRestrictedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial);
+            ////objCommon.FillDropDown("ACD_HOLIDAY_MASTER", "HOLIDAY_NO", "HOLIDAY_NAME,HOLIDAY_DATE,LOCK", "", "HOLIDAY_NO");
+            //ViewState["dsHDay"] = dsHDay;//Insert Data Set in View State          
 
-            //=========== get all alternate assinged courses to login faculty =====================//
-            DataSet dsAlAtt = objAttController.GetAlternateAllottedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
-            //objCommon.FillDropDown("ACD_ALTERNATE_ATTENDANCE AL INNER JOIN ACD_COURSE C ON C.COURSENO=AL.TAKEN_COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=AL.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON A.SESSIONNO=AL.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=AL.SEMESTERNO",
-            //    "DISTINCT (SELECT DATEPART(DW,ATTENDANCE_DATE)-1)AltDayNO", "CCODE,ATTENDANCE_DATE,COURSE_NAME,START_DATE,END_DATE",
-            //    "S.SCHEMETYPE=" + _schemeType + " AND ISNULL(CANCEL,0)=0 AND TAKEN_UANO=" + Convert.ToInt32(Session["userno"].ToString()),
-            //    "");
-            ViewState["dsAlAtt"] = dsAlAtt;
+            ////=========== get all alternate assinged courses to login faculty =====================//
+            //DataSet dsAlAtt = objAttController.GetAlternateAllottedCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+            ////objCommon.FillDropDown("ACD_ALTERNATE_ATTENDANCE AL INNER JOIN ACD_COURSE C ON C.COURSENO=AL.TAKEN_COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=AL.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON A.SESSIONNO=AL.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=AL.SEMESTERNO",
+            ////    "DISTINCT (SELECT DATEPART(DW,ATTENDANCE_DATE)-1)AltDayNO", "CCODE,ATTENDANCE_DATE,COURSE_NAME,START_DATE,END_DATE",
+            ////    "S.SCHEMETYPE=" + _schemeType + " AND ISNULL(CANCEL,0)=0 AND TAKEN_UANO=" + Convert.ToInt32(Session["userno"].ToString()),
+            ////    "");
+            //ViewState["dsAlAtt"] = dsAlAtt;
 
-            //=========== get all Lock Holiday from master =====================//
-            DataSet dsLockHDay = objAttController.GetAllHolidays(Convert.ToInt32(ddlColgSession.SelectedValue));
-            //objCommon.FillDropDown("ACD_ACADEMIC_HOLIDAY_MASTER", "HOLIDAY_NO", "ACADEMIC_HOLIDAY_NAME,ACADEMIC_HOLIDAY_STDATE", "SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue), "HOLIDAY_NO");
-            ViewState["dsLockHDay"] = dsLockHDay;//Insert Data Set in View State  
+            ////=========== get all Lock Holiday from master =====================//
+            //DataSet dsLockHDay = objAttController.GetAllHolidays(Convert.ToInt32(ddlColgSession.SelectedValue));
+            ////objCommon.FillDropDown("ACD_ACADEMIC_HOLIDAY_MASTER", "HOLIDAY_NO", "ACADEMIC_HOLIDAY_NAME,ACADEMIC_HOLIDAY_STDATE", "SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue), "HOLIDAY_NO");
+            //ViewState["dsLockHDay"] = dsLockHDay;//Insert Data Set in View State  
 
-            DataSet dsShiftTT = objAttController.GetAllShiftTTCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
-            //objCommon.FillDropDown("ACD_TIME_TABLE_SHIFT TS INNER JOIN ACD_COURSE C ON C.COURSENO=TS.COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=TS.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON  A.SESSIONNO=TS.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=TS.SEMESTERNO", "DISTINCT (SELECT DATEPART(DW,SHIFT_TT_DATE)-1)ShiftDayNO", "CCODE,TT_DAYNO,SHIFT_TT_DATE,COURSE_NAME,START_DATE,END_DATE", "S.SCHEMETYPE=" + _schemeType + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()), "");
-            ViewState["dsShiftTT"] = dsShiftTT;//Insert Data Set in View State 
+            //DataSet dsShiftTT = objAttController.GetAllShiftTTCoursesModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["userno"]), _schemeType, Session["college_id_att"].ToString(), istutorial, OrgId);
+            ////objCommon.FillDropDown("ACD_TIME_TABLE_SHIFT TS INNER JOIN ACD_COURSE C ON C.COURSENO=TS.COURSENO INNER JOIN ACD_SCHEME S ON S.SCHEMENO=TS.SCHEMENO INNER JOIN ACD_ATTENDANCE_CONFIG A ON  A.SESSIONNO=TS.SESSIONNO AND A.DEGREENO=S.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE AND A.SEMESTERNO=TS.SEMESTERNO", "DISTINCT (SELECT DATEPART(DW,SHIFT_TT_DATE)-1)ShiftDayNO", "CCODE,TT_DAYNO,SHIFT_TT_DATE,COURSE_NAME,START_DATE,END_DATE", "S.SCHEMETYPE=" + _schemeType + " AND UA_NO=" + Convert.ToInt32(Session["userno"].ToString()), "");
+            //ViewState["dsShiftTT"] = dsShiftTT;//Insert Data Set in View State 
         }
         catch
         {
