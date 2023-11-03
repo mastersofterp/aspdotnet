@@ -160,5 +160,27 @@ namespace IITMS.NITPRM.BusinessLayer.BusinessLogic
 
 
         }
+         public int SaveQuestionPattern(int QuestionPatternId, string PatternName, string MARKS,int Activestatus)
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+            object ret = 0;
+            try
+            {
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[5];
+                objParams[0] = new SqlParameter("@P_QuestionPatternId", QuestionPatternId);
+                objParams[1] = new SqlParameter("@P_QuestionPatternName", PatternName);
+                objParams[2] = new SqlParameter("@P_MARKS", MARKS);
+                objParams[3] = new SqlParameter("@P_Status", Activestatus);
+                objParams[4] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                objParams[4].Direction = ParameterDirection.Output;
+                ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_PATTERN_INSERT_UPDATE", objParams, true);
+                return Convert.ToInt32(ret);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.POController.SaveQuestionPatternDetails-> " + ex.ToString());
+            }
+        }
     }
 }

@@ -89,11 +89,21 @@
                                             </ajaxToolKit:FilteredTextBoxExtender>
                                             <asp:HiddenField ID="hdUserId" runat="server" Value="0" />
                                         </div>
+
+                                           <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <label>Status</label>
+
+                                        <div class="switch form-inline">
+                                            <input type="checkbox" id="rdActive" name="switch" checked />
+                                            <label data-on="Active" tabindex="5" class="newAddNew Tab" data-off="Inactive" for="rdActive"></label>
+                                             <asp:HiddenField ID="hfStatus" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnSubmitPatten" runat="server" CssClass="btn btn-primary" Text="Submit" OnClick="btnSubmitPatten_Click" TabIndex="16" ValidationGroup="Submit" />
+                                    <asp:Button ID="btnSubmitPatten" runat="server" CssClass="btn btn-primary" Text="Submit" OnClick="btnSubmitPatten_Click" TabIndex="16" ValidationGroup="Submit" OnClientClick="return funStatus();" />
                                     <asp:Button ID="btnCancelPattern" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btnCancel1_Click" TabIndex="17" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
                                         ShowSummary="false" DisplayMode="List" ValidationGroup="Submit" />
@@ -111,6 +121,7 @@
                                                     <th>Configure</th>
                                                     <th>Pattern Name</th>
                                                     <th>Marks</th>
+                                                    <th>Status</th>
 
                                                 </tr>
                                             </thead>
@@ -132,6 +143,10 @@
 
                                                             <td>
                                                                 <asp:Label ID="lblMarks" runat="server" Text='<%# Eval("MARKS") %>' />
+
+                                                            </td>
+                                                              <td>
+                                                                     <asp:Label ID="lblstatus"  Text='<%# Eval("ACTIVESTATUS")%>' ForeColor='<%# Eval("ACTIVESTATUS").ToString().Equals("Active")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' runat="server" />
 
                                                             </td>
                                                         </tr>
@@ -184,7 +199,7 @@
                                                 <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">1st Level</asp:ListItem>
                                                 <asp:ListItem Value="2">2nd Level</asp:ListItem>
-                                                <asp:ListItem Value="3">3rd Level</asp:ListItem>
+                                                <%--<asp:ListItem Value="3">3rd Level</asp:ListItem>--%>
                                             </asp:DropDownList>
                                             <asp:TextBox ID="txtAreaDiscription" runat="server" CssClass="form-control" Visible="false"></asp:TextBox>
                                             <asp:HiddenField ID="hdPatternId" runat="server" />
@@ -365,6 +380,28 @@
         </ContentTemplate>
     </asp:UpdatePanel>
 
+    <script>
+        function setstatus(val) {
+
+            $('#rdActive').prop('checked', val);
+            // $('#hftimeslot').val($('#rdActivetimeslot').prop('checked'));
+        }
+        function funStatus()
+        {
+            $('#hfStatus').val(Number($('#rdActive').prop('checked')));
+        }
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_endRequest(function () {
+            $(function () {
+                $('#btnSubmitPatten').click(function () {
+                    // alert("hi");
+                    funStatus();
+                });
+            });
+        });
+
+
+    </script>
 
     <%--    <script src="Scripts/ObeTransaction/ExamQuestionPaper.js"></script>--%>
 
