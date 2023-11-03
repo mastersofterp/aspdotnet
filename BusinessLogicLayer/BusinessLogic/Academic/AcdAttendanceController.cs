@@ -4930,13 +4930,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
 
-        public DataSet GetStudentFacultywiseAttendanceModified(int session, int uano, int courseno, DateTime date, int schemetype, int schemeno, int sem, int sectionno, int batchno, int slotno, int altCourseNo, string College_id, int OrgId)
+        public DataSet GetStudentFacultywiseAttendanceModified(int session, int uano, int courseno, DateTime date, int schemetype, int schemeno, int sem, int sectionno, int batchno, int slotno, int altCourseNo, string College_id, int OrgId, int is_Tutorial)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                SqlParameter[] objParams = new SqlParameter[13];
+                SqlParameter[] objParams = new SqlParameter[14];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", session);
                 objParams[1] = new SqlParameter("@P_UA_NO", uano);
                 objParams[2] = new SqlParameter("@P_COURSENO", courseno);
@@ -4950,6 +4950,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[10] = new SqlParameter("@P_AltCourseNo", altCourseNo);
                 objParams[11] = new SqlParameter("@P_COLLEGE_ID", College_id);// added by dileep kare on 12.04.2021
                 objParams[12] = new SqlParameter("@P_ORGANIZATIONID", OrgId);
+                objParams[13] = new SqlParameter("@P_IS_TUTORIAL", is_Tutorial);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_GET_STUDENT_FACULTYWISE_SUBJECT_MODIFIED", objParams);
             }
             catch (Exception ex)
