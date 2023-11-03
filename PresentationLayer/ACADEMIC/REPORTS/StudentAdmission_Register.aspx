@@ -166,6 +166,21 @@
                                         <label>Admission Round</label>
                                         <asp:DropDownList ID="ddlAdmRound" runat="server" TabIndex="8" AppendDataBoundItems="true" ssClass="form-control" data-select2-enable="true"/>
                                     </div>
+
+
+                                   <%-- Added By Sakshi Makwana Date:   --%>
+                                      <%--<div class="form-group col-lg-3 col-md-6 col-12" id="DIVADM" runat="server" visible="false">--%>
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="div2" runat="server">
+                                        <label>Sort By</label>
+                                           <asp:DropDownList ID="ddlAdm" runat="server" TabIndex="32" AppendDataBoundItems="true"
+                                                    CssClass="form-control" data-select2-enable="true" ToolTip="Please Select  Mode" AutoPostBack="true">
+                                                    <asp:ListItem Value="0">Please select</asp:ListItem>
+                                                    <asp:ListItem Value="1">Student Name</asp:ListItem>
+                                                    <asp:ListItem Value="2">Email</asp:ListItem>
+                                                    <asp:ListItem Value="3">Mobile</asp:ListItem>
+                                                    <asp:ListItem Value="4">Category</asp:ListItem>
+                                             </asp:DropDownList>
+                                    </div>
                                 </div>
                             </div>
 
@@ -212,6 +227,7 @@
                                 <div class=" note-div">
                                     <h5 class="heading">Note</h5>
                                     <p><i class="fa fa-star" aria-hidden="true"></i><span> Only Academic Year Selection is Mandatory for Excel Report.</span>  </p>
+                                     <p><i class="fa fa-star" aria-hidden="true"></i><span> Sort by Selection is Only for Admission Role List  Report.</span>  </p>
                                 </div>
                             </div>
                         </div>
