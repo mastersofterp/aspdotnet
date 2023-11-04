@@ -234,6 +234,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         lblAlternateMobile.Text = dtr["STUDENTMOBILE_ALTERNATE"] == null ? string.Empty : dtr["STUDENTMOBILE_ALTERNATE"].ToString();
 
                         lblPAdd.Text = dtr["PADDRESS"] == null ? string.Empty : dtr["PADDRESS"].ToString();
+                        //lblHandicap.Text = dtr["PADDRESS"] == null ? string.Empty : dtr["PADDRESS"].ToString();
+                        lblHandicap.Text = dtr["PHYSICALLY_HANDICAPPED"] == null ? string.Empty : dtr["PHYSICALLY_HANDICAPPED"].ToString();
                         lblAadharNumber.Text = dtr["ADDHARCARDNO"] == null ? string.Empty : dtr["ADDHARCARDNO"].ToString();
                         lblEnrollNo.Text = dtr["ENROLLNO"] == null ? string.Empty : dtr["ENROLLNO"].ToString();
                         lblApplicationId.Text = dtr["APPLICATIONID"] == null ? string.Empty : dtr["APPLICATIONID"].ToString();
@@ -821,6 +823,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
             {
                 getinternalmarks1();
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 9)
             {
