@@ -388,7 +388,7 @@ public partial class ACADEMIC_Student_Disciplinary_Action : System.Web.UI.Page
                 GV.DataBind();
                 string filename = ddlSession.SelectedItem.Text.Trim();
                 filename = filename.Replace(" ", "");
-                string attachment = "attachment; filename=disciplinaryaction-" + filename + ".xls";
+                string attachment = "attachment; filename=disciplinaryaction-" + filename + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 //string attachment = "attachment; filename=disciplinaryaction-EVEN201920.xls";
                 //string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
                 Response.ClearContent();

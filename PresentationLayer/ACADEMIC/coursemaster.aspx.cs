@@ -1426,7 +1426,7 @@ public partial class Administration_courseMaster : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadCourseData.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadCourseData_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1955,7 +1955,7 @@ public partial class Administration_courseMaster : System.Web.UI.Page
                     Response.Buffer = true;
                     Response.Charset = "";
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                    Response.AddHeader("content-disposition", "attachment;filename=All_Couse_Details.xlsx");
+                    Response.AddHeader("content-disposition", "attachment;filename=All_Couse_Details_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                     using (MemoryStream MyMemoryStream = new MemoryStream())
                     {
                         wb.SaveAs(MyMemoryStream);

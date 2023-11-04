@@ -125,7 +125,7 @@ public partial class ACADEMIC_REPORTS_NewAdmissionConsolidateReport : System.Web
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment; filename=" + admbatch.Replace(" ", "_") + "_"+ reportName + ".xls";
+                string attachment = "attachment; filename=" + admbatch.Replace(" ", "_") + "_"+ reportName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") +  ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -175,7 +175,7 @@ public partial class ACADEMIC_REPORTS_NewAdmissionConsolidateReport : System.Web
             Response.Buffer = true;
             Response.Charset = "";
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=Overall_Admission_Status.xlsx");
+            Response.AddHeader("content-disposition", "attachment;filename=Overall_Admission_Status- " + System.DateTime.Now.ToString("dd/MM/yyyy-hh:mm tt") + ".xlsx");
             using (MemoryStream MyMemoryStream = new MemoryStream())
             {
                 wb.SaveAs(MyMemoryStream);

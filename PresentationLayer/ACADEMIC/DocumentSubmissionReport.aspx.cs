@@ -136,7 +136,7 @@ public partial class DocumentSubmissionReport : System.Web.UI.Page
             GVDayWiseAtt.DataSource = ds;
             GVDayWiseAtt.DataBind();
 
-            string attachment = "attachment;filename=DocumentSubmissionReport.xls";
+            string attachment = "attachment;filename=DocumentSubmissionReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.MS-excel";

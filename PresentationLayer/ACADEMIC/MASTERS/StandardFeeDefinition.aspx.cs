@@ -1371,7 +1371,7 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string Attachment = "Attachment;filename=StandardFeesReport.xls";
+                string Attachment = "Attachment;filename=StandardFeesReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();

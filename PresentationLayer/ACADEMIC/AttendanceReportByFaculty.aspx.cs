@@ -446,7 +446,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string attachment = "attachment; filename=Attendance_Sem-" + ddlSem.SelectedItem + ".xls";
+                string sem = (Convert.ToInt32(ddlSession.SelectedValue) <= 0) ? "AllSemester" : ddlSem.SelectedItem;
+                string attachment = "attachment; filename=Attendance_Sem-" + sem + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 //string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
@@ -766,15 +767,13 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                 lvAttendence.DataSource = ds;
                 lvAttendence.DataBind();
             }
-
-
-
         }
         catch (Exception ex)
         {
             throw;
         }
     }
+
     private void BindListByPer(int selector)
     {
         try
@@ -1007,7 +1006,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string attachment = "attachment; filename=Attendance_Sem-" + ddlSem.SelectedItem + ".xls";
+                string attachment = "attachment; filename=Attendance_Sem-" + ddlSem.SelectedItem + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") +".xls";
                 //string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
