@@ -932,15 +932,15 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         {
             stafflist = "";
         }
-        else if (count == 1)
-        {
-            stafflist = stafflist.Substring(0, stafflist.Length - 1);
-        }
-        else
-        {
-            ShowMessage("Select Only One Staff Name");
-            return;
-        }
+        //else if (count == 1)
+        //{
+        //    stafflist = stafflist.Substring(0, stafflist.Length - 1);
+        //}
+        //else
+        //{
+        //    ShowMessage("Select Only One Staff Name");
+        //    return;
+        //}
         // new code here
         string colname = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
         string ContentType = string.Empty;
@@ -954,7 +954,7 @@ public partial class PayRoll_Abstract_Salary : System.Web.UI.Page
         if (ds.Tables[0].Rows.Count > 0)
         {
             string collename = objCommon.LookUp("reff with (nolock)", "collegename", string.Empty);
-            string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
+           // string StaffName = objCommon.LookUp("PAYROLL_STAFF", "STAFF", "STAFFNO=" + StaffNo);
             string Month = objCommon.LookUp(monyear, "(CAST( DATENAME(month, MON) AS nvarchar(50) ))", "MON='" + monyear + "'");
             string Year = objCommon.LookUp(monyear, "cast (YEAR( MON) AS nvarchar(50 )) ", "MON='" + monyear + "'");
 
