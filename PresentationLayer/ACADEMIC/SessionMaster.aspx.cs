@@ -244,13 +244,13 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                 objSession.academic_year = txtacadyear.Text.Trim();
                 objSession.sequence_no = Convert.ToInt32(txtSeqNo.Text.Trim()); //Added by Vinay Mishra on Dated 16/06/2023
                 DataSet ds1 = (DataSet)ViewState["GetAllSession"];
-                DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
+                //DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
 
-                if (dr.Length > 0)
-                {
-                    objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
-                    return;
-                }
+                //if (dr.Length > 0)
+                //{
+                //    objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                //    return;
+                //}
 
                 objSession.College_code = Session["colcode"].ToString();
 
@@ -271,6 +271,13 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                 {
                     //Edit 
                     objSession.SessionNo = Convert.ToInt32(Session["sessionno"]);
+                    DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no + " AND SESSIONID <>" + objSession.SessionNo);
+
+                    if (dr.Length > 0)
+                    {
+                        objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objSC.UpdateSession_Modified(objSession); //Added Nehal on Dated 20/02/2021
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
@@ -283,6 +290,13 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                 else
                 {
                     //Add New
+                    DataRow[] dr1 = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
+
+                    if (dr1.Length > 0)
+                    {
+                        objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objSC.AddSession_Modified(objSession); //Added Nehal on Dated 20/02/2021
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
