@@ -446,7 +446,10 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string sem = (Convert.ToInt32(ddlSession.SelectedValue) <= 0) ? "AllSemester" : ddlSem.SelectedItem;
+                string sem = "AllSemester";
+                if (Convert.ToInt32(ddlSession.SelectedValue) > 0)
+                    sem = ddlSem.SelectedItem.Text;
+
                 string attachment = "attachment; filename=Attendance_Sem-" + sem + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 //string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
                 Response.ClearContent();
