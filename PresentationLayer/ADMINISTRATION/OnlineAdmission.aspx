@@ -9,7 +9,9 @@
             width: max-content !important;
         }
 
-        }
+       dataTables_scrollHeadInner {
+width: max-content !important;
+}
     </style>
 
     <%--    <div>
@@ -37,7 +39,7 @@
                             <h3 class="box-title">
                                 <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                         </div>
-
+                        <div id="Tabs" role="tabpanel">
                         <div class="box-body">
                             <div class="nav-tabs-custom">
                                 <ul class="nav nav-tabs" role="tablist">
@@ -238,9 +240,9 @@
                                                             <ajaxToolKit:MaskedEditExtender ID="meEndTime" runat="server" TargetControlID="txtEndTime"
                                                                 Mask="99:99" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" AcceptAMPM="true"
                                                                 MaskType="Time" />
-                                                                <asp:RegularExpressionValidator ID="revendtime" runat="server" ControlToValidate="txtEndTime" Display="None"
-                                                                ValidationGroup="Submit" ErrorMessage="Please Enter Valid End Time" ValidationExpression="(((0[1-9])|(1[0-2])):([0-5])([0-9])\s(A|P)M)">
-                                                            </asp:RegularExpressionValidator>
+                                                                   <%-- <asp:RegularExpressionValidator ID="revendtime" runat="server" ControlToValidate="txtEndTime" Display="None"
+                                                                    ValidationGroup="Submit" ErrorMessage="Please Enter Valid End Time" ValidationExpression="(((0[1-9])|(1[0-2])):([0-5])([0-9])\s(A|P)M)">
+                                                                </asp:RegularExpressionValidator>--%>
                                                             <asp:RequiredFieldValidator ID="rfvEndTime" runat="server" ControlToValidate="txtEndTime"
                                                                 Display="None" ValidationGroup="Submit" ErrorMessage="Please Enter End Time."></asp:RequiredFieldValidator>
                                                         </div>
@@ -553,11 +555,14 @@
                                                                     CultureAMPMPlaceholder="" CultureCurrencySymbolPlaceholder="" CultureDateFormat=""
                                                                     CultureDatePlaceholder="" CultureDecimalPlaceholder="" CultureThousandsPlaceholder=""
                                                                     CultureTimePlaceholder="" Enabled="True" />
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtEndDate_NRI"
+                                                              <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="txtEndDate_NRI"
                                                                     Display="None" ValidationGroup="Submit_NRI" ErrorMessage="Please Enter End Date"></asp:RequiredFieldValidator>
                                                                   <asp:RegularExpressionValidator ID="rfvtxtEndDate_NRI" runat="server" ControlToValidate="txtEndDate_NRI" Display="None"
                                                                 ValidationGroup="Submit_NRI" ErrorMessage="Please Enter Valid End Time" ValidationExpression="(((0[1-9])|(1[0-2])):([0-5])([0-9])\s(A|P)M)">
-                                                            </asp:RegularExpressionValidator>
+                                                            </asp:RegularExpressionValidator>--%>
+                                                          
+
+
                                                             </div>
                                                         </div>
 
@@ -566,7 +571,7 @@
                                                                 <sup>* </sup>
                                                                 <label>End Time</label>
                                                             </div>
-                                                            <asp:TextBox ID="txtEndTime_NRI" runat="server" TabIndex="10" CssClass="form-control" ToolTip="Please Enter End Time."></asp:TextBox>
+                                                            <asp:TextBox ID="txtEndTime_NRI" runat="server" onchange="validateTime(this)" TabIndex="10" CssClass="form-control" ToolTip="Please Enter End Time."  ></asp:TextBox>
                                                             <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" TargetControlID="txtEndTime_NRI"
                                                                 Mask="99:99" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" AcceptAMPM="true"
                                                                 MaskType="Time" />
@@ -701,9 +706,38 @@
                     </div>
                 </div>
             </div>
+                </div>
         </ContentTemplate>
 
     </asp:UpdatePanel>
+
+    <script>
+        function TabShow(tabName) {
+            //alert('hii')
+            //var tabName = "tab_2";
+            $('#Tabs a[href="#' + tabName + '"]').tab('show');
+            $("#Tabs a").click(function () {
+                $("[id*=TabName]").val($(this).attr("href").replace("#", ""));
+            });
+        }
+</script>
+
+   <script type="text/javascript">
+       function validateTime(input) {
+           debugger;
+
+           var inputTime = input.value;
+           var timePattern = /^(0?[1-9]|1[0-2]):[0-5][0-9] [APap][mM]$/;
+
+           if (timePattern.test(inputTime)) {
+               return;
+           }
+
+           alert("Invalid time format. Please use AM/PM format.");
+           input.value = "";
+       }
+</script>
+
 
     <script type="text/javascript">
         function IsNumeric(textbox) {
