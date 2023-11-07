@@ -7373,6 +7373,53 @@ namespace IITMS
                 }
                 #endregion
 
+                #region Added By Sagar Mankar On Date 06112023 For SeatNo Generation
+
+                public int GenerateSeatNumber(int sessionno, int schemeno, int semesterno, int courseno, int numSeriese, int branchno, string ipadd, int uano, string colcode)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        object ret = 0;
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objparams = new SqlParameter[10];
+                        objparams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objparams[1] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objparams[2] = new SqlParameter("@P_SEMESTER", semesterno);
+                        objparams[3] = new SqlParameter("@P_COURSENO", courseno);
+
+                        objparams[4] = new SqlParameter("@P_BRANCHNO", branchno);
+                        objparams[5] = new SqlParameter("@P_IP_ADDRESS", ipadd);
+                        objparams[6] = new SqlParameter("@P_USER_ID ", uano);
+                        objparams[7] = new SqlParameter("@P_COLLEGE_CODE", colcode);
+
+                        objparams[8] = new SqlParameter("@P_FALSE_NUM_SEREIRSE", numSeriese);
+                        objparams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objparams[9].Direction = ParameterDirection.Output;
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_GENERATE_SEAT_NUMBER_CC", objparams, true);
+                        if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else if (Convert.ToInt32(ret) == 2627)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        }
+                        else if (Convert.ToInt32(ret) == -99)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.GenerateFalseNumber->" + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                #endregion
+
             }
         }
     }
