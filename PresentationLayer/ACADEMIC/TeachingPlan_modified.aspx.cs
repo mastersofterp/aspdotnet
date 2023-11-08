@@ -1507,15 +1507,15 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         string filepath = Server.MapPath("~/ExcelData/");
 
         if (ddlDegreeEX.SelectedValue == "1")
-            filename = "tp_Degree.xlsx";
+            filename = "tp_Degree_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "2")
-            filename = "tp_MTECH.xlsx";
+            filename = "tp_MTECH_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "4")
-            filename = "tp_MCA.xlsx";
+            filename = "tp_MCA_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "5")
-            filename = "tp_MBA.xlsx";
+            filename = "tp_MBA_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "6")
-            filename = "tp_ME.xlsx";
+            filename = "tp_ME_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else
         {
             objCommon.DisplayMessage(updTeach, "Please Select Degree!", this);
@@ -1578,7 +1578,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                                 objCommon.DisplayMessage(updTeach, "Please Select Batch.", this);
                                 return;
                             }
-                            string path = MapPath("~/ExcelData/");
+                            string path = MapPath("~/ExcelData/");s
                             if (btnBrowse.HasFile)
                             {
                                 string filename = btnBrowse.FileName.ToString();
@@ -2248,7 +2248,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         Response.Buffer = true;
                         Response.Charset = "";
                         Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                        Response.AddHeader("content-disposition", "attachment;filename=BlankExcelFormat.xlsx");
+                        Response.AddHeader("content-disposition", "attachment;filename=BlankExcelFormat_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                         using (MemoryStream MyMemoryStream = new MemoryStream())
                         {
                             wb.SaveAs(MyMemoryStream);
@@ -3196,7 +3196,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=TeachingPlanExcel_ActualVSProposed.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=TeachingPlanExcel_ActualVSProposed_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);

@@ -130,7 +130,7 @@ public partial class ACADEMIC_RefundReport : System.Web.UI.Page
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment;filename=RefundReports.xls";
+                string attachment = "attachment;filename=RefundReports_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";

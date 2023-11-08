@@ -162,7 +162,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         {
             gv.DataSource = ds;
             gv.DataBind();
-            string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot.xls" : "attachment ; filename=Teacher_Alloted_Report.xls";
+            string attachment = rblAllotment.SelectedValue != "3" ? "attachment ; filename=Teacher_Not_Allot_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls" : "attachment ; filename=Teacher_Alloted_Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/ms-excel";

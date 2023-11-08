@@ -148,7 +148,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=CourseReg_Summary.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=CourseReg_Summary_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);

@@ -74,7 +74,7 @@ public partial class ACADEMIC_Academic_SummeryReport : System.Web.UI.Page
     {
         ViewState["sessionno"] = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue) + " AND SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue));
 
-        string attachment = "attachment; filename=" + "Student_Strength.xls";
+        string attachment = "attachment; filename=" + "Student_Strength_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";

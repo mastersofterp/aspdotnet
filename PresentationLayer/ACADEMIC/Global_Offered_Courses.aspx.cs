@@ -3392,7 +3392,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         if (ds.Tables[0].Rows.Count > 0)
         {
             //this.CallExcelIII();
-            string attachment = "attachment; filename=GlobalElectiveMasterTimetable.xls";
+            string attachment = "attachment; filename=GlobalElectiveMasterTimetable_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);

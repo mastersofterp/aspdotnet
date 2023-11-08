@@ -443,7 +443,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "exporttype=" + exporttype;
-            url += "&filename=" + ddlSemester.SelectedItem.Text + ".xls";
+            url += "&filename=" + ddlSemester.SelectedItem.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             url += "&path=~,Reports,Academic," + rptFileName;
             //if (rdbReport.SelectedValue == "1")
             //    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_RECIEPT_TYPE=" + rectype;
@@ -478,7 +478,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "exporttype=" + exporttype;
-            url += "&filename=" + ddlSemester.SelectedItem.Text + ".xls";
+            url += "&filename=" + ddlSemester.SelectedItem.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             url += "&path=~,Reports,Academic," + rptFileName;
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_RECIEPT_TYPE=" + rectype;
 
@@ -585,7 +585,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void ExportinExcelforFeesCollegeWiseDDList()
     {
-        string attachment = "attachment; filename=" + "forFeesCollegeWiseDDList.xls";
+        string attachment = "attachment; filename=" + "forFeesCollegeWiseDDList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -624,7 +624,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void ExportinExcelforFeesCollegeWiseCashList()
     {
-        string attachment = "attachment; filename=" + "forFeesCollegeWiseCashList.xls";
+        string attachment = "attachment; filename=" + "forFeesCollegeWiseCashList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -661,7 +661,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     }
     private void ExportinExcelforFeesDegreeBranchWise()
     {
-        string attachment = "attachment; filename=" + "DegreeBranchWiseExcel.xls";
+        string attachment = "attachment; filename=" + "DegreeBranchWiseExcel_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -702,7 +702,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     private void ExportinExcelforFeesWithHeads()
     {
-        string attachment = "attachment; filename=" + "FeesPaidStudentsList.xls";
+        string attachment = "attachment; filename=" + "FeesPaidStudentsList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -804,7 +804,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         }
         rectype = rectype.Substring(0, rectype.Length - 1);
 
-        string attachment = "attachment; filename=" + "DemandWiseFeesPaidStudentsList.xls";
+        string attachment = "attachment; filename=" + "DemandWiseFeesPaidStudentsList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -859,7 +859,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         //    ck = objmp.AddDegree(Convert.ToInt32(_degreeNo), Convert.ToInt32(ddlColg.SelectedValue));
         //}
 
-        string attachment = "attachment; filename=" + "StudentWiseFeesPaidist.xls";
+        string attachment = "attachment; filename=" + "StudentWiseFeesPaidist_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -933,7 +933,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= StudentWiseFeesPaidist.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= StudentWiseFeesPaidist_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -970,7 +970,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         //    ck = objmp.AddDegree(Convert.ToInt32(_degreeNo), Convert.ToInt32(ddlColg.SelectedValue));
         //}
 
-        string attachment = "attachment; filename=" + "StudentFeesDetails.xls";
+        string attachment = "attachment; filename=" + "StudentFeesDetails_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -1027,7 +1027,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         //    attachment = "attachment; filename=" + "OS_Future_Sem_Excel.xls";
         //}
 
-        string attachment = "attachment; filename=" + "StudentWiseFees.xls";
+        string attachment = "attachment; filename=" + "StudentWiseFees_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -1067,7 +1067,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             return;
         }
         rectype = rectype.Substring(0, rectype.Length - 1);
-        string attachment = "attachment; filename=" + "FeesPaidStudentsList.xls";
+        string attachment = "attachment; filename=" + "FeesPaidStudentsList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -1106,7 +1106,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             return;
         }
         rectype = rectype.Substring(0, rectype.Length - 1);
-        string attachment = "attachment; filename=" + "ExcessPaymentPaidStudentsList.xls";
+        string attachment = "attachment; filename=" + "ExcessPaymentPaidStudentsList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";
@@ -1159,7 +1159,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
         }
         if (flag == 2)
         {
-            attachment = "attachment; filename=" + "OS_Future_Sem_Excel.xls";
+            attachment = "attachment; filename=" + "OS_Future_Sem_Excel_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
         }
 
         Response.ClearContent();
@@ -1349,7 +1349,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
         if (dsArrears.Tables.Count > 0)
         {
-            string attachment = "attachment; filename=" + "StudentArrearsReport.xls";
+            string attachment = "attachment; filename=" + "StudentArrearsReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -1454,7 +1454,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=StudentLedger_Excel.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=StudentLedger_Excel_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1545,7 +1545,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=StudentLedger_Excel_FormatII.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=StudentLedger_Excel_FormatII_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1668,7 +1668,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
         if (dsArrears.Tables.Count > 0)
         {
-            string attachment = "attachment; filename=" + "StudentArrearsHeadwiseReport.xls";
+            string attachment = "attachment; filename=" + "StudentArrearsHeadwiseReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -1731,7 +1731,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= CurrentStudent & SchoolDetailsFeeReport.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= CurrentStudent & SchoolDetailsFeeReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1770,7 +1770,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
         if (dsfeestud.Tables.Count > 0)
         {
-            string attachment = "attachment; filename=" + "StudentWiseFeesPaidistFormatII.xls";
+            string attachment = "attachment; filename=" + "StudentWiseFeesPaidistFormatII_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -1809,7 +1809,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
          DataGrid dg = new DataGrid();
         if (ds.Tables.Count > 0 && ds != null )
         {
-            string attachment = "attachment; filename=" + "ONLINE_PAYMODE_DCR_REPORT.xls";
+            string attachment = "attachment; filename=" + "ONLINE_PAYMODE_DCR_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/" + "ms-excel";
@@ -1869,7 +1869,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= CurrentStudent & SchoolDetailsFeeReport.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= CurrentStudent & SchoolDetailsFeeReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1925,7 +1925,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= Consolidated Outstanding Report.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= Consolidated Outstanding Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
@@ -1978,7 +1978,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                     Response.Buffer = true;
                     Response.Charset = "";
                     Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                    Response.AddHeader("content-disposition", "attachment;filename= Payment Modification Report.xlsx");
+                    Response.AddHeader("content-disposition", "attachment;filename= Payment Modification Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                     using (MemoryStream MyMemoryStream = new MemoryStream())
                     {
                         wb.SaveAs(MyMemoryStream);
@@ -2041,7 +2041,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= TallyIntegrationReport.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= TallyIntegrationReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);
