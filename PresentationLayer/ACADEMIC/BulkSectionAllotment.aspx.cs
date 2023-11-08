@@ -761,21 +761,21 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
                         break;
                     }
 
-                    regN = objCommon.LookUp("ACD_STUDENT", "DISTINCT REGNO", "REGNO ='" + regnum + "' AND SEMESTERNO =" + semesterno);
-                    if (regN != null && regN != "")
-                    {
-                        secname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_SECTION SEC ON (S.SECTIONNO = SEC.SECTIONNO)", "SECTIONNAME", "REGNO ='" + regnum + "' AND SEMESTERNO =" + semesterno);
-                        if (secname != null && secname != "")
-                        {
-                            flag = true;
-                        }
-                        else
-                        {
-                            flag = false;
-                        }
-                    }
+                    //regN = objCommon.LookUp("ACD_STUDENT", "DISTINCT REGNO", "REGNO ='" + regnum + "' AND SEMESTERNO =" + semesterno);
+                    //if (regN != null && regN != "")
+                    //{
+                        //secname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_SECTION SEC ON (S.SECTIONNO = SEC.SECTIONNO)", "SECTIONNAME", "REGNO ='" + regnum + "' AND SEMESTERNO =" + semesterno);
+                        //if (secname != null && secname != "")
+                        //{
+                           // flag = true;
+                        //}
+                        //else
+                        //{
+                        //    flag = false;
+                        //}
+                    //}
 
-                    if (flag == true && empty_flag == true)
+                    if (empty_flag == true)
                     {
                         SectionAllotDynamicTable(regno, studname, clgname, degname, branchname, semname, sectionname);
                     }
