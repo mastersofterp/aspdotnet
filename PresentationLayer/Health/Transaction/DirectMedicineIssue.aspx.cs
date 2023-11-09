@@ -1769,11 +1769,11 @@ public partial class Health_Transaction_DirectMedicineIssue : System.Web.UI.Page
                     //objD.PATIENT_NAME = pNAME[1];
                     if (pNAME.Length == 1)
                     {
-                        objHelTran.PATIENT_NAME = pNAME[0];
+                        objD.PATIENT_NAME = pNAME[0];
                     }
                     else
                     {
-                        objHelTran.PATIENT_NAME = pNAME[1];
+                        objD.PATIENT_NAME = pNAME[1];
                     }
                 }
                 else
