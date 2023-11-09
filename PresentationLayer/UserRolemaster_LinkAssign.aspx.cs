@@ -462,6 +462,7 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
         ViewState["RoleNo"] = 0;
         ddlMusertype.SelectedIndex = 0;
         ddlMuserrole.SelectedIndex = 0;
+
         BindListView();
         Fill_TreeLinks(tvLinks, string.Empty);
 
@@ -1160,6 +1161,8 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
         chkListRole.SelectedIndex = -1;
         btnBSubmit.Enabled = false;
         DataPager1.Visible = false;
+        pnlBStudent.Visible = false;
+        trBDept.Visible = true;
 
 
         clearListView();//new by arjun 13-01-2023
@@ -1298,7 +1301,8 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
 
                 // ISNULL(USER_TYPE,0)=0 AND commented by rishabh as per umesh sir
             }
-            if (ds.Tables[0].Rows.Count > 0)
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 lvBulkDetail.DataSource = ds;
                 lvBulkDetail.DataBind();
@@ -1317,8 +1321,20 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
             }
         }
     }
-    #endregion
 
+    protected void lvBulkDetail_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+    {
+        DataPager1.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+        BindUserListView();
+    }
+
+    protected void NumberDropDown_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DataPager1.SetPageProperties(0, DataPager1.PageSize, true);
+        DataPager1.PageSize = Convert.ToInt32(NumberDropDown.SelectedValue);
+    }
+
+    #endregion
 
     #region New Code by arjun on 11-01-2023 for Single User Selection in Listview
     protected void chkuano_CheckedChanged(object sender, EventArgs e)
@@ -1484,15 +1500,5 @@ public partial class UserRolemaster_LinkAssign : System.Web.UI.Page
     }
     #endregion
 
-    protected void lvBulkDetail_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
-    {
-        DataPager1.SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
-        BindUserListView();
-    }
-
-    protected void NumberDropDown_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        DataPager1.SetPageProperties(0, DataPager1.PageSize, true);
-        DataPager1.PageSize = Convert.ToInt32(NumberDropDown.SelectedValue);
-    }
+    
 }
