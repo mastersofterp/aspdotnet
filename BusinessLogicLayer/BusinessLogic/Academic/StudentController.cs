@@ -7855,7 +7855,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Update Student Local Address
-                        objParams = new SqlParameter[12];
+                        objParams = new SqlParameter[17];
                         objParams[0] = new SqlParameter("@P_IDNO", objStudent.IdNo);
                         //if (objStudent.AdmDate == DateTime.MinValue)
                         //    objParams[1] = new SqlParameter("@P_ADMDATE", DBNull.Value);
@@ -7875,8 +7875,13 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_BATCHNO", objStudent.BatchNo);
                         objParams[9] = new SqlParameter("@P_USER_TYPE", usertype);
                         objParams[10] = new SqlParameter("@P_CLAIM_TYPE", objStudent.ClaimType);
-                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[11].Direction = ParameterDirection.Output;
+                        objParams[11] = new SqlParameter("@P_SEAT_TYPE", objStudent.SeatType);
+                        objParams[12] = new SqlParameter("@P_ADMCENTRE", objStudent.AdmissionCentre);
+                        objParams[13] = new SqlParameter("@P_DEFENCEQUOTA", objStudent.DefenceQuota);
+                        objParams[14] = new SqlParameter("@P_MINORITYQUOTA", objStudent.MinorityQuota);
+                        objParams[15] = new SqlParameter("@P_ADMROUNDNO", objStudent.AdmroundNo);
+                        objParams[16] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[16].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_STUD_ADMISSION_DETAILS", objParams, true);
 
                         if (Convert.ToInt32(ret) == 1)
@@ -14638,7 +14643,7 @@ namespace IITMS
                 /// <param name="semesterno"></param>
                 /// <param name="courseno"></param>
                 /// <returns></returns>
-                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, int schemeno, int semesterno, int courseno, int OrgID)
+                public DataSet Get_Coursewise_Section_Allotment_Report(int sessionno, int schemeno, int semesterno, int courseno, int OrgID,int college_id)
                 {
                     DataSet ds = null;
 
@@ -14646,12 +14651,13 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[5];
+                        objParams = new SqlParameter[6];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[1] = new SqlParameter("@P_SCHEMENO", schemeno);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
                         objParams[3] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[4] = new SqlParameter("@P_ORGANIZATIONID", OrgID);
+                        objParams[5] = new SqlParameter("@P_COLLEGE_ID", college_id);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_COURSEWISE_SECTION_ALLOTMENT_REPORT_EXCEL", objParams);
                     }
                     catch

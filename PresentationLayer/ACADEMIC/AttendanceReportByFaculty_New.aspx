@@ -357,8 +357,14 @@
                                     OnClick="btnSubjectwiseExpectedExcel_Click" ValidationGroup="SubPercentage" CssClass="btn btn-info">
                                      <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Subject Wise Details Excel</asp:LinkButton>
 
+                                <%-- Added by Vipul T on date 01-11-2023 --%>
+                                  <asp:LinkButton ID="btnSyllabusCoverageReport" runat="server" TabIndex="22"
+                                      OnClick="btnSyllabusCoverageReport_Click" ValidationGroup="SubPercentage" CssClass="btn btn-info" Visible="false">
+                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Syllabus Coverage Report</asp:LinkButton>
+                              <%--   <asp:Button ID="btnSyall" runat="server" Text="Syllabus Coverage Report"  ValidationGroup="SubPercentage"
+                                      CssClass="btn btn-info" Visible="false" OnClick="btnSyllabusCoverageReport_Click" />--%>
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"
-                                    class="btn btn-warning" TabIndex="22" OnClick="btnCancel_Click1" />
+                                    class="btn btn-warning" TabIndex="23" OnClick="btnCancel_Click1" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="SubPercentage" Style="text-align: center" />
 
@@ -389,10 +395,11 @@
             <asp:PostBackTrigger ControlID="btnODExcelReport" />
             <asp:PostBackTrigger ControlID="btnCancel" />
             <asp:PostBackTrigger ControlID="btnSubjectwiseExpectedExcel" />
+            <asp:PostBackTrigger ControlID="btnSyllabusCoverageReport" />
             <%-- <asp:PostBackTrigger ControlID="txtFromDate" />
              <asp:PostBackTrigger ControlID="txtTodate" />--%>
             <%--<asp:PostBackTrigger ControlID="btnPrintChallan" />
-                                    <asp:PostBackTrigger ControlID="btnPrintRegSlip" />--%>
+             <asp:PostBackTrigger ControlID="btnPrintRegSlip" />--%>
         </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">

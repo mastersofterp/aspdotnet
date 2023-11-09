@@ -61,10 +61,10 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     {
         try
         {
-            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
-
+            //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
+            
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND FLOCK=1", "SESSIONNO DESC");
-
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) ", "DISTINCT S.SESSIONID", "S.SESSION_NAME", " ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 ", "S.SESSIONID DESC");
             //objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
             //ddlSession.SelectedIndex = 1;
         }
@@ -193,7 +193,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
         {
             if (Convert.ToInt32(ViewState["schemeno"]) > 0)
             {
-                objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)", "DISTINCT AC.COURSENO", "AC.CCODE+ ' - ' +AC.COURSE_NAME", "SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "AND SR.SEMESTERNO = " + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "AC.COURSENO");
+                objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)", "DISTINCT AC.COURSENO", "AC.CCODE+ ' - ' +AC.COURSE_NAME", "SR.SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID= " + Convert.ToInt32(ViewState["college_id"]) + ") AND ISNULL(AC.ELECT,0)=1 AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "AND SR.SEMESTERNO = " + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "AC.COURSENO");
             }
             else
             {
@@ -238,7 +238,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
         {
             DataSet ds = null;
 
-            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO)", "DISTINCT ST.IDNO", "ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO,SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO", "SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ST.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ST.DEGREENO= " + Convert.ToInt32(ViewState["degreeno"]) + "AND ST.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST.REGNO");
+            ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE AC ON(SR.COURSENO=AC.COURSENO AND SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO) INNER JOIN ACD_STUDENT ST ON(ST.IDNO=SR.IDNO AND ST.SCHEMENO=SR.SCHEMENO) LEFT OUTER JOIN ACD_SECTION SC ON (SR.SECTIONNO = SC.SECTIONNO)", "DISTINCT ST.IDNO", "ST.REGNO,ST.STUDNAME,ISNULL(SR.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,SR.SESSIONNO,SR.SCHEMENO,SR.SEMESTERNO,SR.COURSENO", "SR.SESSIONNO = (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID= " + Convert.ToInt32(ViewState["college_id"]) + ") AND ST.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ST.DEGREENO= " + Convert.ToInt32(ViewState["degreeno"]) + "AND ST.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + "AND SR.REGISTERED=1 AND ISNULL(SR.CANCEL,0)=0", "ST.REGNO");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -295,6 +295,12 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     {
         try
         {
+            if (Convert.ToInt32(ddlSection.SelectedValue) == 0)
+            {
+                objCommon.DisplayMessage(this.updpnlSection, "Please Select Section", this.Page);
+                return;
+            }
+
             StudentController objSC = new StudentController();
             string studids = string.Empty;
             string sections = string.Empty;
@@ -307,15 +313,33 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
             int semesterno = Convert.ToInt32(ddlSem.SelectedValue);
             int courseno = Convert.ToInt32(ddlCourse.SelectedValue);
             int userno = Convert.ToInt32(Session["userno"]);
+            int count = 0;
 
+            foreach (ListViewDataItem lvItem in lvStudents.Items)
+            {
+                   CheckBox chkBox = lvItem.FindControl("cbRow") as CheckBox;
+                   if (chkBox.Checked == true)
+                       count++;
+            }
+
+            if (count  == 0)
+            {
+                objCommon.DisplayMessage(this.updpnlSection, "Please Select Student.", this.Page);
+                return;
+            }
             if (sessiono > 0 && college_id > 0 && degreeno > 0 & branchno > 0 && schemeno > 0 && semesterno > 0 && courseno > 0)
             {
                 foreach (ListViewDataItem lvItem in lvStudents.Items)
                 {
-                    if (Convert.ToInt32((lvItem.FindControl("ddlsec") as DropDownList).SelectedValue) > 0 && (lvItem.FindControl("ddlsec") as DropDownList).Enabled == true)
+                    //if (Convert.ToInt32((lvItem.FindControl("ddlsec") as DropDownList).SelectedValue) > 0 && (lvItem.FindControl("ddlsec") as DropDownList).Enabled == true)
+                    //{
+                    //    studids += (lvItem.FindControl("cbRow") as CheckBox).ToolTip + "$";
+                    //    sections += (lvItem.FindControl("ddlsec") as DropDownList).SelectedValue + "$";
+                    //}
+                    if(Convert.ToInt32(ddlSection.SelectedValue) > 0 && (lvItem.FindControl("cbRow") as CheckBox).Checked==true)
                     {
                         studids += (lvItem.FindControl("cbRow") as CheckBox).ToolTip + "$";
-                        sections += (lvItem.FindControl("ddlsec") as DropDownList).SelectedValue + "$";
+                        sections += ddlSection.SelectedValue + "$";
                     }
                 }
                 if (studids.Length <= 0 && sections.Length <= 0)
@@ -349,6 +373,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
         lvStudents.DataSource = null;
         lvStudents.DataBind();
         btnSubmit.Enabled = false;
+        objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO > 0 AND ACTIVESTATUS=1", "SECTIONNAME");
     }
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -366,9 +391,11 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
                     ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                     ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
                     //objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT_RESULT SR INNER JOIN ACD_SEMESTER S ON (SR.SEMESTERNO = S.SEMESTERNO)", "DISTINCT SR.SEMESTERNO", "S.SEMESTERNAME", "SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " ", "SR.SEMESTERNO");//AND SR.PREV_STATUS = 0
-                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT (SESSIONNO)", "SESSION_NAME", "SESSIONNO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
-                    ddlSession.Focus();
+                    //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT (SESSIONNO)", "SESSION_NAME", "SESSIONNO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
+                    //ddlSession.Focus();
+                    objCommon.FillDropDownList(ddlSem, "ACD_COURSE AC INNER JOIN ACD_SEMESTER S ON (AC.SEMESTERNO = S.SEMESTERNO) INNER JOIN ACD_STUDENT_RESULT SR ON(SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)", "DISTINCT AC.SEMESTERNO", "S.SEMESTERNAME", "SR.SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID= " + Convert.ToInt32(ViewState["college_id"]) + ") AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "", "AC.SEMESTERNO");//AND SR.PREV_STATUS = 0
 
+                    ddlSem.Focus();
                 }
             }
             else
@@ -390,8 +417,10 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
     {
         if (ddlSession.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlSem, "ACD_COURSE AC INNER JOIN ACD_SEMESTER S ON (AC.SEMESTERNO = S.SEMESTERNO) INNER JOIN ACD_STUDENT_RESULT SR ON(SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)", "DISTINCT AC.SEMESTERNO", "S.SEMESTERNAME", "SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "", "AC.SEMESTERNO");//AND SR.PREV_STATUS = 0
-            ddlSem.Focus();
+            objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "CT.SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ")", "SC.COSCHNO");
+            //objCommon.FillDropDownList(ddlSem, "ACD_COURSE AC INNER JOIN ACD_SEMESTER S ON (AC.SEMESTERNO = S.SEMESTERNO) INNER JOIN ACD_STUDENT_RESULT SR ON(SR.SCHEMENO=AC.SCHEMENO AND SR.SEMESTERNO=AC.SEMESTERNO)", "DISTINCT AC.SEMESTERNO", "S.SEMESTERNAME", "SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + "", "AC.SEMESTERNO");//AND SR.PREV_STATUS = 0
+            //ddlSem.Focus();
+            ddlClgname.Focus();
         }
         else
         {
@@ -409,8 +438,9 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
         int Semesterno = Convert.ToInt32(ddlSem.SelectedValue);
         int courseno = Convert.ToInt32(ddlCourse.SelectedValue);
         int OrgId = Convert.ToInt32(Session["OrgId"]);
-        DataSet ds = objSC.Get_Coursewise_Section_Allotment_Report(Sessionno, Schemeno, Semesterno, courseno,OrgId);
-        GridView gv= new GridView();
+        int college_id = Convert.ToInt32(ViewState["college_id"]);
+        DataSet ds = objSC.Get_Coursewise_Section_Allotment_Report(Sessionno, Schemeno, Semesterno, courseno, OrgId, college_id);
+        GridView gv = new GridView();
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
             gv.DataSource = ds;

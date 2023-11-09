@@ -187,7 +187,6 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
 
     private void ClearControls()
     {
-
         lvStudents.Visible = false;
         ddlSem.SelectedIndex = 0;
         ddlSession.SelectedIndex = 0;
@@ -196,12 +195,13 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
         btnReport.Visible = false;
         btnSubmit.Visible = false;
         btnLock.Visible = false;
+
+        ddlClgname.Focus();
     }
 
     protected void btnShowResult_Click(object sender, EventArgs e)
     {
         BindListView();
-
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -432,14 +432,21 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
         btnLock.Visible = false;
         btnSubmit.Visible = false;
         lvStudents.Visible = false;
+
         if (ddlSem.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_STUDENT_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(SR.CCODE + ' - ' + SR.COURSENAME) COURSE_NAME ", "SR.SEMESTERNO = " + ddlSem.SelectedValue + "  AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])+"AND ISNULL(SR.CREDITS,0)=0", "COURSE_NAME"); //Commented By Sagar Mankar On Date 17102023 For CPUH
             objCommon.FillDropDownList(ddlCourse, "ACD_COURSE C INNER JOIN ACD_STUDENT_RESULT SR ON C.COURSENO = SR.COURSENO", "DISTINCT SR.COURSENO", "(SR.CCODE + ' - ' + SR.COURSENAME) COURSE_NAME ", "SR.SEMESTERNO = " + ddlSem.SelectedValue + "  AND SR.SESSIONNO =" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND (ISNULL(C.IS_AUDIT,0)=1 OR ISNULL(SR.IS_AUDIT,0)=1)", "COURSE_NAME"); //Added By Sagar Mankar On Date 17102023 For CPUH
+
+            ddlCourse.Focus();
         }
         else
         {
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add("Please Select");
             ddlCourse.SelectedIndex = 0;
+
+            ddlSem.Focus();
             //lvStudents.Visible = false;
         }
         //  lvStudents.DataSource = null;
@@ -582,43 +589,55 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
 
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
-
+                ddlSession.Focus();
             }
         }
         else
         {
             ddlClgname.Focus();
+
+            ddlSession.Items.Clear();
+            ddlSession.Items.Add("Please Select");
             ddlSession.SelectedIndex = 0;
+
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add("Please Select");
             ddlSem.SelectedIndex = 0;
+
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add("Please Select");
             ddlCourse.SelectedIndex = 0;
             //lvStudents.Visible = false;
-
         }
-
     }
+
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
         btnReport.Visible = false;
         btnLock.Visible = false;
         btnSubmit.Visible = false;
         lvStudents.Visible = false;
+
         if (ddlSession.SelectedIndex > 0)
         {
-
             objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
-
-
+            ddlSem.Focus();
         }
         else
         {
             ddlSession.Focus();
+
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add("Please Select");
             ddlSem.SelectedIndex = 0;
+
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add("Please Select");
             ddlCourse.SelectedIndex = 0;
             //lvStudents.Visible = false;
-
         }
 
-        ddlCourse.SelectedIndex = 0;
+        //ddlCourse.SelectedIndex = 0;
         // lvStudents.Visible = false;
 
     }
@@ -628,5 +647,7 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
         btnLock.Visible = false;
         btnSubmit.Visible = false;
         lvStudents.Visible = false;
+
+        btnShowResult.Focus();
     }
 }

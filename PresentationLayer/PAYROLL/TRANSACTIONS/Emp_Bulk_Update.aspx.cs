@@ -506,23 +506,23 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
                 {
                     TextBox txt = lvitem.FindControl("txtEditField") as TextBox;
 
-                    int rfidnochk = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "COUNT(1)", "RFIDNO=" + Convert.ToInt32(txt.Text) + " AND IDNO<>" + Convert.ToInt32(txt.ToolTip))); 
+                    //int rfidnochk = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "COUNT(1)", "RFIDNO=" + Convert.ToInt32(txt.Text) + " AND IDNO<>" + Convert.ToInt32(txt.ToolTip))); 
 
-                    if (rfidnochk == 0)
-                    {
+                    //if (rfidnochk == 0)
+                    //{ 
                         //Add the item to the ListView Control
                         CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(txt.Text), Convert.ToInt32(txt.ToolTip));
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
                             count = 1;
                         }
-                    }
-                    else
-                    {
-                        //Warn user of duplicate entry...
-                        objCommon.DisplayMessage("RFIDNO = "+Convert.ToString(txt.Text)+" already exists. Duplicate Entry For IDNO=" + Convert.ToInt32(txt.ToolTip), this.Page);
-                        return;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    //Warn user of duplicate entry...
+                    //    objCommon.DisplayMessage("RFIDNO = "+Convert.ToString(txt.Text)+" already exists. Duplicate Entry For IDNO=" + Convert.ToInt32(txt.ToolTip), this.Page);
+                    //    return;
+                    //}
                 }
 
 

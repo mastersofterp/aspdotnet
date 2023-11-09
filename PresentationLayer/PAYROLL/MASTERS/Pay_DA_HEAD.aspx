@@ -30,7 +30,7 @@
                                                 <label>DA HEAD Description</label>
                                             </div>
                                             <asp:TextBox ID="txtdaheaddescription" runat="server" Text="" CssClass="form-control" IsRequired="True" IsValidate="True"
-                                                TabIndex="1" ToolTip="Please Enter Main Department Name" onkeypress="return lettersOnly(event)">
+                                                TabIndex="1" ToolTip="Please Enter Main Department Name" >
                                             </asp:TextBox>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator" ControlToValidate="txtdaheaddescription" runat="server" ErrorMessage="Enter DA Head Description" ValidationGroup="submit" Display="None"></asp:RequiredFieldValidator>
                                         </div>
@@ -136,6 +136,7 @@
         }
         google.setOnLoadCallback(onLoad);
     </script>
+    <%--updated on 01112023--%>
      <script type="text/javascript">
          function lettersOnly() {
              debugger;

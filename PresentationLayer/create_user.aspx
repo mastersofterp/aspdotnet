@@ -195,7 +195,7 @@
                                             <sup>* </sup>
                                             <label>Email</label>
                                         </div>
-                                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" MaxLength="50" TabIndex="9" />
+                                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" MaxLength="100" TabIndex="9" />
                                         <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ErrorMessage="Please Enter Valid Email Id"
                                             ControlToValidate="txtEmail" ValidationExpression="^(?!.*\.{3,})\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"
                                             ValidationGroup="submit"></asp:RegularExpressionValidator>

@@ -489,7 +489,7 @@
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divCaste" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supCaste" runat="server"></sup>
+                                                        <sup id="supCaste" runat="server">* </sup>
                                                         <label>Caste</label>
                                                     </div>
 
@@ -978,7 +978,7 @@
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divMAnnualIncome" runat="server">
                                                     <div class="label-dynamic">
-                                                        <sup id="supMAnnualIncome" runat="server"></sup>
+                                                        <sup id="supMAnnualIncome" runat="server">* </sup>
                                                         <label>Annual Income </label>
                                                     </div>
                                                     <asp:TextBox ID="txtMAnnualIncome" CssClass="form-control" runat="server" TabIndex="30" MaxLength="8" ToolTip="Please Enter Annual Income" placeholder="Enter Annual Income"></asp:TextBox>

@@ -643,8 +643,9 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
                 + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue 
                 + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
                 + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
-                + ",@UserName=" + Session["username"];
-            
+                + ",@UserName=" + Session["username"]
+                + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
+
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
@@ -658,11 +659,44 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Academic_StudentRegistration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+            throw;
         }
+      
+
+
+        //try
+        //{
+        //    string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        //    url += "Reports/CommonReport.aspx?";
+        //    url += "pagetitle=" + reportTitle;
+        //    url += "&path=~,Reports,Academic," + rptFileName;
+        //    url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
+        //        + ",@P_SESSIONNO=" + ddlSession.SelectedValue 
+        //        + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
+        //        + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue 
+        //        + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) 
+        //        + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue 
+        //        + ",@UserName=" + Session["username"]
+    
+            
+        //    //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+        //    //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        //    //divMsg.InnerHtml += " </script>";
+
+        //    //To open new window from Updatepanel
+        //    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        //    string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        //    sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+        //    ScriptManager.RegisterClientScriptBlock(this.updBulkReg, this.updBulkReg.GetType(), "controlJSScript", sb.ToString(), true);
+        //}
+        //catch (Exception ex)
+        //{
+        //    if (Convert.ToBoolean(Session["error"]) == true)
+        //        objUCommon.ShowError(Page, "Academic_StudentRegistration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+        //    else
+        //        objUCommon.ShowError(Page, "Server Unavailable.");
+        //}
     }
 
     protected void ddlScheme_SelectedIndexChanged(object sender, EventArgs e)
@@ -753,7 +787,9 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         {
             ViewState["college_id"] = Convert.ToInt32(ddlCollege.SelectedValue).ToString();
         }
-        ShowReport("RegistrationSlip", "rptBulkCourseRegslipelective.rpt");
+        //Commented by vipul on dated 26.10.2023 as per T-49243
+        //ShowReport("RegistrationSlip", "rptBulkCourseRegslipelective.rpt"); 
+        ShowReport("RegistrationSlip", "rptBulkCourseRegSlip_01.rpt");
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)

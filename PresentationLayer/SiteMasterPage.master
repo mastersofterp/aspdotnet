@@ -195,7 +195,7 @@
                     <!-- Brand -->
                     <a class="navbar-brand ml-1" href="#">
                         <%--<img id="Img1" alt="logo" runat="server" src="Images/nophoto.jpg" />--%>
-                        <asp:ImageButton ID="Img1" CssClass="imglogo" AlternateText="logo" ImageUrl="Images/nophoto.jpg" runat="server" />
+                        <asp:ImageButton ID="Img1" CssClass="imglogo" AlternateText="logo" ImageUrl="Images/nophoto.jpg" runat="server" OnClick="Img1_Click" />
                         <%--OnClick="Img1_Click"--%>
                     </a>
                     <!-- Toggler/collapsibe Button -->

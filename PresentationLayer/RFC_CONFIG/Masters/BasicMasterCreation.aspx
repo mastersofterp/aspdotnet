@@ -3,6 +3,9 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
     <style>
         .Tab:focus {
             outline: none;
@@ -40,7 +43,6 @@
                 scrollX: true,
                 scrollCollapse: true,
                 paging: false,
-
                 dom: 'lBfrtip',
                 buttons: [
                     {
@@ -324,6 +326,62 @@
                                                         </div>
                                                         <p>
                                                         </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
+                                                        <p>
+                                                        </p>
                                                     </p>
 
                                                 </div>
@@ -471,8 +529,9 @@
                                                                     <%--<label>Degree Name</label>--%>
                                                                     <asp:Label ID="lblDYtxtDegree" runat="server" Font-Bold="true"></asp:Label>
                                                                 </div>
+
                                                                 <asp:TextBox ID="txtDegreeName" AutoComplete="off" TabIndex="2" placeholder="Enter Degree Name" runat="server" MaxLength="128" CssClass="form-control"
-                                                                    ToolTip="Please Enter Degree Name" />
+                                                                    ToolTip="Please Enter Degree Name" OnTextChanged="txtDegreeName_TextChanged" AutoPostBack="true" />
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="UppercaseLetters, LowercaseLetters, Custom" ValidChars=".,0123456789+-&() " TargetControlID="txtDegreeName" />
 
                                                             </div>
@@ -486,6 +545,15 @@
                                                                 <asp:TextBox ID="txtDegreeShortName" AutoComplete="off" TabIndex="3" placeholder="Enter Degree Short Name" runat="server" MaxLength="50" CssClass="form-control"
                                                                     ToolTip="Please Enter Degree Short Name" />
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="UppercaseLetters, LowercaseLetters, Custom" ValidChars=".,0123456789+-&() " TargetControlID="txtDegreeShortName" />
+                                                            </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <%--<sup>* </sup>--%>
+                                                                    <%--<label>Degree Type</label>--%>
+                                                                    <asp:Label ID="lblDegreeNameHindi" runat="server" Font-Bold="true">Degree Name Hindi</asp:Label>
+                                                                </div>
+                                                                <asp:TextBox runat="server" ID="txtDegreeNameHindi" CssClass="form-control" placeholder="Degree Name Hindi"></asp:TextBox>
 
                                                             </div>
 
@@ -522,6 +590,7 @@
                                                                     <label data-on="Active" tabindex="5" class="newAddNew Tab" data-off="Inactive" for="rdActiveDegMas"></label>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                     <br />
@@ -550,6 +619,9 @@
                                                                                     <asp:Label ID="lblDYtxtDegree" runat="server" Font-Bold="true"></asp:Label>
                                                                                 </th>
                                                                                 <th>
+                                                                                    <asp:Label ID="lbltxtDegreeNameHindi" runat="server" Font-Bold="true"></asp:Label>
+                                                                                </th>
+                                                                                <th>
                                                                                     <asp:Label ID="lblDYtxtDegShortName" runat="server" Font-Bold="true"></asp:Label>
                                                                                 </th>
                                                                                 <th>
@@ -572,6 +644,7 @@
                                                                         <ContentTemplate>
                                                                             <tr>
                                                                                 <td style="text-align: center;">
+
                                                                                     <asp:ImageButton ID="btnEditDegMaster" class="newAddNew Tab" runat="server" CausesValidation="false" ImageUrl="~/images/edit.png" OnClick="btnEditDegMaster_Click"
                                                                                         CommandArgument='<%# Eval("DEGREENO")%>' AlternateText="Edit Record" ToolTip="Edit Record"
                                                                                         TabIndex="7" />
@@ -581,6 +654,9 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("DEGREENAME")%>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%# Eval("DEGREENAMEHINDI")%>
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("CODE")%>
@@ -638,8 +714,8 @@
                                                                     <asp:Label ID="lblDYtxtBranchName" runat="server" Font-Bold="true"></asp:Label>
                                                                 </div>
                                                                 <%--    onkeyup="return ValidTxtbranchname();"--%>
-                                                                <asp:TextBox ID="txtBranchname" runat="server" CssClass="form-control" TabIndex="2"
-                                                                    ToolTip="Please Enter Branch Name" AutoComplete="OFF" placeholder="Branch Name" ValidationGroup="submit" />
+                                                                <asp:TextBox ID="txtBranchname" runat="server" AutoPostBack="true" CssClass="form-control" TabIndex="2"
+                                                                    ToolTip="Please Enter Branch Name" AutoComplete="OFF" placeholder="Branch Name" OnTextChanged="txtBranchname_TextChanged" ValidationGroup="submit" />
                                                                 <asp:RequiredFieldValidator ID="rfvBranchname" runat="server" ControlToValidate="txtBranchname"
                                                                     Display="None" ErrorMessage="Please Enter Branch Name." ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" FilterType="UppercaseLetters, LowercaseLetters, Custom" ValidChars=".,+-&() " TargetControlID="txtBranchname" />
@@ -656,6 +732,16 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" FilterType="UppercaseLetters, LowercaseLetters, Custom" ValidChars=".-123456789+-&() " TargetControlID="txtBranchshortname" />
 
                                                             </div>
+
+                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                                <div class="label-dynamic">
+                                                                    <%--<sup>* </sup>--%>
+                                                                    <%--<label>Degree Type</label>--%>
+                                                                    <asp:Label ID="lblBranchNameHindi" runat="server" Font-Bold="true">Branch Name Hindi</asp:Label>
+                                                                </div>
+                                                                <asp:TextBox runat="server" ID="txtBranchNameHindi" CssClass="form-control" placeholder="Branch Name Hindi"></asp:TextBox>
+                                                            </div>
+
                                                             <asp:RequiredFieldValidator ID="rfvbranchshortname" runat="server" ErrorMessage="Please Enter Branch Short Name"
                                                                 ControlToValidate="txtBranchshortname" ValidationGroup="submit" Display="None">
                                                             </asp:RequiredFieldValidator>
@@ -690,6 +776,7 @@
                                                                     <label data-on="Active" tabindex="4" class="newAddNew Tab" data-off="Inactive" for="rdActivebranch"></label>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                     <br />
@@ -725,6 +812,8 @@
                                                                                 <th>
                                                                                     <asp:Label ID="lblDYtxtBranchShort" runat="server" Font-Bold="true"></asp:Label>
                                                                                 </th>
+                                                                                <th>Branch in Hindi
+                                                                                </th>
                                                                                 <th>Is Core
                                                                                 </th>
                                                                                 <th>Status
@@ -752,6 +841,10 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("SHORTNAME")%>
+                                                                                </td>
+
+                                                                                <td>
+                                                                                    <%# Eval("BRANCHNAMEINLOCALLANGUAGE")%>
                                                                                 </td>
                                                                                 <td>
                                                                                     <asp:Label ID="Label1" Text='<%# Eval("ISCORESTATUS")%>' ForeColor='<%# Eval("ISCORESTATUS").ToString().Equals("Yes")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' runat="server"></asp:Label>
@@ -927,7 +1020,6 @@
         function validateDegMaster() {
 
             $('#hfdStatDegMaster').val($('#rdActiveDegMas').prop('checked'));
-
             var degName = $("[id$=txtDegreeName]").attr("id");
             var degName = document.getElementById(degName);
             if (degName.value == 0) {
@@ -1080,5 +1172,34 @@
                    .columns.adjust();
         });
     </script>
+
+
+
+
+
+
+
+    <%--<script>
+        function translateToHindi() {
+            // Get the value entered in the first textbox
+            var englishText = document.getElementById('<%= txtDegreeName.ClientID %>').value;
+
+            // Use an API or translation service to translate the text to Hindi
+            // Replace this with the actual translation code or API request
+            var hindiTranslation = translateTextToHindi(englishText);
+
+            // Update the second textbox with the translated text
+            document.getElementById('<%= txtDegreeNameHindi.ClientID %>').value = hindiTranslation;
+}
+
+// Function to translate text to Hindi using an API or other methods
+function translateTextToHindi(text) {
+    // Replace this with your translation logic or API call
+    // For example, you can use Google Translate API, Microsoft Translator, etc.
+    // Be sure to handle the translation and error handling accordingly
+    // This is a placeholder and does not perform actual translation
+    return "Hindi Translation: " + text;
+}
+    </script>--%>
 </asp:Content>
 

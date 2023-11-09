@@ -421,6 +421,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         //Added by Shrikant Waghmare on 26-09-2023
         private int _motherAnnualIncome = 0;
 
+        // Added by Shrikant Waghmare on 23-10-2023
+        private int _seattype = 0;
+        private int _admcentre = 0;
+        private int _defencequota = 0;
+        private int _minorityquota = 0;
+
         //methods
 
       
@@ -2438,5 +2444,30 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              set { _motherAnnualIncome = value; }
          }
 
+         public int SeatType
+         {
+             get { return _seattype; }
+             set { _seattype = value; }
+         }
+
+         public int AdmissionCentre
+         {
+             get { return _admcentre; }
+             set { _admcentre = value; }
+         }
+
+         public int DefenceQuota
+         {
+             get { return _defencequota; }
+             set { _defencequota = value; }
+         }
+
+         public int MinorityQuota
+         {
+             get { return _minorityquota; }
+             set { _minorityquota = value; }
+         }
+        
+        
     }
 }

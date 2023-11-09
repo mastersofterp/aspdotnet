@@ -66,7 +66,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             //Populate the Drop Down Lists
             PopulateDropDown();
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  
-            objCommon.FillListBox(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID>0 AND ActiveStatus=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
+            //  objCommon.FillListBox(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID>0 AND ActiveStatus=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
         }
     }
 
@@ -81,8 +81,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
 
             //Added by Nehal on Dated-20/02/2023
             objCommon.FillDropDownList(ddlSessionCollege, "ACD_SESSION", "SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1", "SESSIONID DESC");
-
-
+            objCommon.FillListBox(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID>0 AND ActiveStatus=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
         }
         catch (Exception ex)
         {
@@ -98,7 +97,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             //Added by Nehal on Dated-20/02/2023
             SessionController objSC = new SessionController();
             DataSet ds = objSC.GetAllSession_Modified();
-
+            ViewState["GetAllSession"] = ds;
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 pnlSession.Visible = true;
@@ -244,6 +243,14 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
 
                 objSession.academic_year = txtacadyear.Text.Trim();
                 objSession.sequence_no = Convert.ToInt32(txtSeqNo.Text.Trim()); //Added by Vinay Mishra on Dated 16/06/2023
+                DataSet ds1 = (DataSet)ViewState["GetAllSession"];
+                //DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
+
+                //if (dr.Length > 0)
+                //{
+                //    objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                //    return;
+                //}
 
                 objSession.College_code = Session["colcode"].ToString();
 
@@ -264,23 +271,39 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                 {
                     //Edit 
                     objSession.SessionNo = Convert.ToInt32(Session["sessionno"]);
+                    DataRow[] dr = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no + " AND SESSIONID <>" + objSession.SessionNo);
+
+                    if (dr.Length > 0)
+                    {
+                        objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objSC.UpdateSession_Modified(objSession); //Added Nehal on Dated 20/02/2021
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         ClearControls();
                         BindListView();
+                        PopulateDropDown();
                         objCommon.DisplayMessage(this.UPDMASTER, "Record Updated Successfully", this.Page);
                     }
                 }
                 else
                 {
                     //Add New
+                    DataRow[] dr1 = ds1.Tables[0].Select("SEQUENCE_NO=" + objSession.sequence_no);
+
+                    if (dr1.Length > 0)
+                    {
+                        objCommon.DisplayMessage(this.UPDMASTER, "Sequence number already exists", this.Page);
+                        return;
+                    }
                     CustomStatus cs = (CustomStatus)objSC.AddSession_Modified(objSession); //Added Nehal on Dated 20/02/2021
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         objCommon.DisplayMessage(this.UPDMASTER, "Session Added Successfully", this.Page);
                         ClearControls();
                         BindListView();
+                        PopulateDropDown();
                     }
                     else if (cs.Equals(CustomStatus.RecordExist))
                     {
@@ -302,7 +325,8 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             //{
             //    objCommon.DisplayMessage(this.updSession, "Server UnAvailable", this.Page);
             //    return;
-            //}       
+            //}
+
         }
         catch (Exception ex)
         {
@@ -471,7 +495,15 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
                     count++;
                 }
             }
-            objSession.College_Id_str = College_Id.Substring(0, College_Id.Length - 1);
+            if (!string.IsNullOrEmpty(hfdDDLCollege.Value))
+                objSession.College_Id_str = hfdDDLCollege.Value.TrimEnd(',');
+            else
+            {
+                objSession.College_Id_str = "0";
+                //objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "college not added in hidden field. ", this.Page);
+                //return;
+            }
+         //   objSession.College_Id_str = College_Id.Substring(0, College_Id.Length - 1);
 
             int Sessionid = Convert.ToInt32(ddlSessionCollege.SelectedValue);
 
@@ -480,6 +512,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             {
                 ClearControls();
                 BindListView();
+                PopulateDropDown();
                 objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Session Added Successfully", this.Page);
             }
             else if (cs.Equals(CustomStatus.RecordExist))
@@ -517,6 +550,7 @@ public partial class Academic_SessionCreate : System.Web.UI.Page
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 BindListView();
+                PopulateDropDown();
                 objCommon.DisplayMessage(this.UPDCOLLEGEMAP, "Recored Update Successfully", this.Page);
             }
             else

@@ -55,7 +55,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             }
             else
             {
-                ViewState["deptno"] = Convert.ToInt32(Session["userdeptno"]);
+
+                ViewState["deptno"] = Session["userdeptno"];
             }
             PopulateDropDownList();
         }
@@ -89,14 +90,15 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0)
             {
-                ddlSession.DataSource = ds;
-                ddlSession.DataValueField = ds.Tables[0].Columns[0].ToString();
-                ddlSession.DataTextField = ds.Tables[0].Columns[4].ToString();
+                DataTable dt =(from r in ds.Tables[0].AsEnumerable() orderby Convert.ToInt32(r["SESSIONNO"]) descending select r).CopyToDataTable();
+                ddlSession.DataSource = dt;
+                ddlSession.DataValueField = dt.Columns[0].ToString();
+                ddlSession.DataTextField = dt.Columns[4].ToString();
                 ddlSession.DataBind();
                 ddlSession.SelectedIndex = 0;
-                ddlSessionBulk.DataSource = ds;
-                ddlSessionBulk.DataValueField = ds.Tables[0].Columns[0].ToString();
-                ddlSessionBulk.DataTextField = ds.Tables[0].Columns[4].ToString();
+                ddlSessionBulk.DataSource = dt;
+                ddlSessionBulk.DataValueField = dt.Columns[0].ToString();
+                ddlSessionBulk.DataTextField = dt.Columns[4].ToString();
                 ddlSessionBulk.DataBind();
                 ddlSessionBulk.SelectedIndex = 0;
             }
@@ -116,8 +118,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSession.SelectedIndex > 0)
             {
-
-                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
+                divSingle_List.Visible = true;
+                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSession.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtToDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvParent.DataSource = ds;
@@ -141,6 +143,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             throw new Exception(Ex.Message);
         }
     }
+
     protected void gvChild_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         try
@@ -156,16 +159,19 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdfSchemeno = e.Row.FindControl("hdfSchemeno") as HiddenField;
                 HiddenField hdnUaNo = e.Row.FindControl("hdnUaNo") as HiddenField;
 
-                DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), Convert.ToInt32(ViewState["deptno"]));
-                if (ds.Tables[0].Rows.Count > 0)
+                DataSet ds = objAttC.GetPendingAttDates(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfCourseno.Value), Convert.ToInt32(hdfSecno.Value), Convert.ToInt32(hdfSemno.Value), Convert.ToInt32(hdfSchemeno.Value), Convert.ToInt32(hdnUaNo.Value), ViewState["deptno"].ToString());
+                if (ds != null)
                 {
-                    gvChildGrid.DataSource = ds;
-                    gvChildGrid.DataBind();
-                }
-                else
-                {
-                    gvChildGrid.DataSource = null;
-                    gvChildGrid.DataBind();
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        gvChildGrid.DataSource = ds;
+                        gvChildGrid.DataBind();
+                    }
+                    else
+                    {
+                        gvChildGrid.DataSource = null;
+                        gvChildGrid.DataBind();
+                    }
                 }
             }
         }
@@ -177,6 +183,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void gvParent_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         try
@@ -189,16 +196,21 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 HiddenField hdfTempExam = e.Row.FindControl("hdfTempExam") as HiddenField;
                 //HtmlGenericControl div = e.Row.FindControl("divcR") as HtmlGenericControl;
                 HiddenField hdfUano = e.Row.FindControl("hdfUano") as HiddenField;
-                DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), Convert.ToInt32(ViewState["deptno"]));
-                if (ds.Tables[0].Rows.Count > 0)
+                DataSet ds = objAttC.GetPendingAttDataCourseWise(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value), ViewState["deptno"].ToString());
+
+                if (ds != null)
                 {
-                    gvChildGrid.DataSource = ds;
-                    gvChildGrid.DataBind();
-                }
-                else
-                {
-                    gvChildGrid.DataSource = null;
-                    gvChildGrid.DataBind();
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        gvChildGrid.DataSource = ds;
+                        gvChildGrid.DataBind();
+                    }
+                    else
+                    {
+                        gvChildGrid.DataSource = null;
+                        gvChildGrid.DataBind();
+                    }
+
                 }
             }
         }
@@ -226,8 +238,6 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             string SENDGRID_APIKEY = string.Empty;
             string CollegeId = string.Empty;
             string SrNo = string.Empty;
-
-
             int SendingEmailStatus = 0;
             string EmailId = string.Empty;
             string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
@@ -239,6 +249,8 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 COMPANY_EMAILSVCID = dsconfig.Tables[0].Rows[0]["COMPANY_EMAILSVCID"].ToString();
                 SENDGRID_APIKEY = dsconfig.Tables[0].Rows[0]["SENDGRID_APIKEY"].ToString();
             }
+
+
             string[] mail = Convert.ToString(Session["ToEmail"]).Split(',');
             DataRow dr = null;
             DataTable dt = new DataTable();
@@ -293,13 +305,16 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
 
 
                 string divname = Convert.ToString(Session["divname"]) != string.Empty ? Convert.ToString(Session["divname"]) : string.Empty;
-                string[] div = divname.Split('-');
-                string divSrNo = div[0];
-                string divCollege = div[1];
-                string divExamName = div[2];
-                string divDept = div[3];
-                string Collegewise = divSrNo + divExamName + divCollege;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                if (divname != string.Empty)
+                {
+                    string[] div = divname.Split('-');
+                    string divSrNo = div[0];
+                    string divCollege = div[1];
+                    string divExamName = div[2];
+                    string divDept = div[3];
+                    string Collegewise = divSrNo + divExamName + divCollege;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                }
             }
             else
             {
@@ -307,13 +322,16 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "View('" + txt_emailid.Text + "','" + txtCc.Text + "');", true);
 
                 string divname = Convert.ToString(Session["divname"]) != string.Empty ? Convert.ToString(Session["divname"]) : string.Empty;
-                string[] div = divname.Split('-');
-                string divSrNo = div[0];
-                string divCollege = div[1];
-                string divExamName = div[2];
-                string divDept = div[3];
-                string Collegewise = divSrNo + divExamName + divCollege;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                if (divname != string.Empty)
+                {
+                    string[] div = divname.Split('-');
+                    string divSrNo = div[0];
+                    string divCollege = div[1];
+                    string divExamName = div[2];
+                    string divDept = div[3];
+                    string Collegewise = divSrNo + divExamName + divCollege;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                }
             }
         }
         catch (Exception ex)
@@ -324,6 +342,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     protected void btnSendDeptMail_Click(object sender, EventArgs e)
     {
         Button btn = sender as Button;
@@ -333,8 +352,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
 
         if (ToEmail != string.Empty)
         {
-            //string Collegewise = divSrNo + divExamName + divCollege;
-
+            Session["ToEmail"] = ToEmail;
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "View('" + ToEmail + "','" + CCMail + "');", true);
             //txtCc.Text = CCMail;
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
@@ -459,6 +477,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             divSingle.Visible = false;
             divBulk.Visible = true;
+            btnSendEmail.Visible = false;
         }
     }
     protected void btnbulkShow_Click(object sender, EventArgs e)
@@ -467,8 +486,9 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         {
             if (ddlSessionBulk.SelectedIndex > 0)
             {
-
-                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
+                btnSendEmail.Visible = true;
+                divBulk_List.Visible = true;
+                DataSet ds = objAttC.GetPendingAttData(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     gvBulkEmail.DataSource = ds;
@@ -494,6 +514,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         }
     }
 
+    //Send Bulk Mail
     protected void btnSendEmail_Click(object sender, EventArgs e)
     {
         try
@@ -503,8 +524,6 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
             string SENDGRID_APIKEY = string.Empty;
             string CollegeId = string.Empty;
             string SrNo = string.Empty;
-
-
             int SendingEmailStatus = 0;
             string EmailId = string.Empty;
             string IPADDRESS = Request.ServerVariables["REMOTE_ADDR"];
@@ -549,7 +568,7 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 string subject = string.Empty;
                 subject = "Incomplete Attendance Mail";
 
-                DataSet dsAtt = objAttC.GetPendingAttDataTimeSlot(Convert.ToInt32(ddlSessionBulk.SelectedValue), Convert.ToInt32(ViewState["deptno"]), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value));
+                DataSet dsAtt = objAttC.GetPendingAttDataTimeSlot(Convert.ToInt32(ddlSessionBulk.SelectedValue), ViewState["deptno"].ToString(), Convert.ToDateTime(txtbulkFDate.Text), Convert.ToDateTime(txtbulkTDate.Text), Convert.ToInt32(hdfTempExam.Value), Convert.ToInt32(hdfUano.Value));
                 string date = string.Empty;
                 string message = string.Empty;
                 //message = "Dear " + UA_FULLNAME.Value + ",\n Kindly mark the incomplete attendance entry. \n It is mandatory to complete the attendance within (Attendance lock by days).\n";
@@ -603,15 +622,17 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 txtBody.Text = string.Empty;
                 txtSubject.Text = string.Empty;
 
-
                 string divname = Convert.ToString(Session["divname"]) != string.Empty ? Convert.ToString(Session["divname"]) : string.Empty;
-                string[] div = divname.Split('-');
-                string divSrNo = div[0];
-                string divCollege = div[1];
-                string divExamName = div[2];
-                string divDept = div[3];
-                string Collegewise = divSrNo + divExamName + divCollege;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                if (divname != string.Empty)
+                {
+                    string[] div = divname.Split('-');
+                    string divSrNo = div[0];
+                    string divCollege = div[1];
+                    string divExamName = div[2];
+                    string divDept = div[3];
+                    string Collegewise = divSrNo + divExamName + divCollege;
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                }
             }
             else
             {
@@ -619,13 +640,16 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "View('" + txt_emailid.Text + "','" + txtCc.Text + "');", true);
 
                 string divname = Convert.ToString(Session["divname"]) != string.Empty ? Convert.ToString(Session["divname"]) : string.Empty;
-                string[] div = divname.Split('-');
-                string divSrNo = div[0];
-                string divCollege = div[1];
-                string divExamName = div[2];
-                string divDept = div[3];
-                string Collegewise = divSrNo + divExamName + divCollege;
-                //ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                if (divname != string.Empty)
+                {
+                    string[] div = divname.Split('-');
+                    string divSrNo = div[0];
+                    string divCollege = div[1];
+                    string divExamName = div[2];
+                    string divDept = div[3];
+                    string Collegewise = divSrNo + divExamName + divCollege;
+                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "divexpandcollapse", "divBackexpandcollapse('div4" + divSrNo + "','div5" + Collegewise + "','div6" + divname + "');", true);
+                }
             }
         }
         catch (Exception ex)
@@ -653,4 +677,25 @@ public partial class ACADEMIC_AttendancePendingDashboard : System.Web.UI.Page
         return body;
     }
 
+    protected void btnClearSingle_Click(object sender, EventArgs e)
+    {
+        ddlSession.SelectedIndex = 0;
+        txtFromDate.Text = string.Empty;
+        txtToDate.Text = string.Empty;
+        gvParent.DataSource = null;
+        gvParent.DataBind();
+        divSingle_List.Visible = false;
+    }
+    protected void btnClearBulk_Click(object sender, EventArgs e)
+    {
+        ddlSessionBulk.SelectedIndex = 0;
+        txtbulkFDate.Text = string.Empty;
+        txtbulkTDate.Text = string.Empty;
+        divBulk_List.Visible = false;
+        btnSendEmail.Visible = false;
+        gvBulkEmail.DataSource = null;
+        gvBulkEmail.DataBind();
+       
+       
+    }
 }

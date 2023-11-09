@@ -65,6 +65,10 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                     {
                         lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
+                    if (Convert.ToInt32(Session["OrgId"]) == 19)
+                    {
+                        btnSyllabusCoverageReport.Visible = true;
+                    }
                     PopulateDropDownList();
                 }
                 objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -  Added By Nikhil L. on 30/01/2022
@@ -193,6 +197,10 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         ddlSubjectType.Items.Add(new ListItem("Please Select", "0"));
         ddlSection.Items.Clear();
         ddlSection.Items.Add(new ListItem("Please Select", "0"));
+        if (Convert.ToInt32(Session["OrgId"]) == 19)
+        {
+            btnSyllabusCoverageReport.Visible = true;
+        }
     }
 
     //on selection of session name reset all the controllers
@@ -606,7 +614,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString()
                 + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
                 + ",username=" + Session["userfullname"].ToString() 
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) 
@@ -921,6 +929,55 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             }
         }
         catch (Exception ex)
+        {
+            throw;
+        }
+
+    }
+    #endregion
+
+    #region Syllabus Coverage Report
+
+    // Added By Vipul Tichakule on dated 01-11-2023
+    protected void btnSyllabusCoverageReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+        if (Convert.ToInt32(Session["OrgId"]) == 19)
+        {
+          string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + "Syllabus Coverage Report";
+                url += "&path=~,Reports,Academic," + "rptPCENAttendance_Format_2.rpt";
+                
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) 
+                    + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
+                    + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
+                    + ",@P_SUBID=" + ddlSubjectType.SelectedValue
+                    + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) 
+                    + ",@P_COURSENO=" + Convert.ToInt32(ddlSubject.SelectedValue) 
+                    + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd") 
+                    + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                    + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
+                    + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
+                    + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"].ToString())
+                    + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
+
+              
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + "Faculty Incomplete Attendance" + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+
+          }
+        
+        catch
         {
             throw;
         }

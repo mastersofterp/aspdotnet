@@ -593,7 +593,7 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
 
                     }
                 }
-                objCommon.FillDropDownList(ddlPattern, "tblQuestionPatternMaster", "QuestionPatternId", "QuestionPatternName", "isnull(ACTIVESTATUS,0)=0 and MARKS=" + txtMaximumMarks.Text + "", "QuestionPatternId");
+                objCommon.FillDropDownList(ddlPattern, "tblQuestionPatternMaster", "QuestionPatternId", "QuestionPatternName", "isnull(ACTIVESTATUS,0)=1 and MARKS=" + txtMaximumMarks.Text + "", "QuestionPatternId");
                 objCommon.FillDropDownList(ddlSection, "tblExamQuestionPaper QP INNER JOIN acd_section S ON (QP.sectionId=S.Sectionno)", "SectionId", "Sectionname", "SchemeSubjectId=" + Convert.ToInt32(hdSchemeSubjectIdDDl.Value) + "AND ISNULL(ISLOCK,0)=1 AND SessionId=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND Createdby=" + Convert.ToInt32(Session["userno"].ToString()) + "AND ExamPatternMappingId=" + ExamPatternMappingId, "SessionId");
                   
             }
@@ -787,7 +787,7 @@ public partial class OBE_AssignSubjectExamQuestionPattern : System.Web.UI.Page
                     
                     if (ddlPattern.SelectedItem != null)
                     {
-                        objCommon.FillDropDownList(ddlPattern, "tblQuestionPatternMaster", "QuestionPatternId", "QuestionPatternName", "isnull(ACTIVESTATUS,0)=0 and MARKS=" + txtMaximumMarks.Text + "", "QuestionPatternId");
+                        objCommon.FillDropDownList(ddlPattern, "tblQuestionPatternMaster", "QuestionPatternId", "QuestionPatternName", "isnull(ACTIVESTATUS,0)=1 and MARKS=" + txtMaximumMarks.Text + "", "QuestionPatternId");
                         ddlPattern.SelectedValue = Convert.ToString(ds3.Tables[0].Rows[0]["QuestionPatternId"]);
                        
                     }

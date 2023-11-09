@@ -522,6 +522,7 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
         string staffno = objCommon.LookUp("payroll_empmas", "staffno", "idno=" + IDNO);
         int emptypeno = Convert.ToInt32(objCommon.LookUp("payroll_empmas", "EMPTYPENO", "idno=" + IDNO));
         int collegeNo =Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "COLLEGE_NO", "IDNO=" + IDNO));
+       // string staffno = objCommon.LookUp("payroll_empmas", "staffno", "idno=" + IDNO);
         DateTime StartDate = Convert.ToDateTime(objCommon.LookUp("Payroll_pay_ref", "EmpPayslipShowFromDate",""));
         try
         {
@@ -535,6 +536,8 @@ public partial class PayRoll_Pay_PaySlip : System.Web.UI.Page
             objCommon.FillDropDownList(ddlStaffNo, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO=" + staffno, "STAFFNO");
             objCommon.FillListBox(ddlStaffNo1, "PAYROLL_STAFF", "STAFFNO", "STAFF", "STAFFNO=" + staffno, "STAFFNO");
 
+            ddlStaffNo1.SelectedValue = staffno;
+            ddlStaffNo1.Enabled = false;
             //FILL EMPLOYEE
             objCommon.FillDropDownList(ddlEmployeeNo, "PAYROLL_EMPMAS ", "IDNO", "'['+ convert(nvarchar(150),EmployeeId) + ']' +' '+ FNAME + ' ' + MNAME + ' ' + LNAME", "IDNO=" + IDNO, "");
 

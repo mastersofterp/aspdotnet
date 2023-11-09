@@ -215,12 +215,15 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                     {
                         objCommon.DisplayMessage(this.updNotify, "End Time Should be Greater than Current time", this.Page);
                         return;
+
                     }
                 }
                 else
                 {
                     objCommon.DisplayMessage(this.updNotify, "End Date should be greater than Start Date", this.Page);
+
                     return;
+
                 }
             }
             if (Convert.ToDateTime(txtStartTime.Text) < dt)
@@ -229,6 +232,8 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage(this.updNotify, "Start Time Should be Greater than Current time", this.Page);
                     return;
+                    
+
                 }
             }
             IITMS.UAIMS.BusinessLayer.BusinessEntities.Config objConfig = new IITMS.UAIMS.BusinessLayer.BusinessEntities.Config();
@@ -310,6 +315,8 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                     objCommon.DisplayMessage(this.updNotify, "Notification Saved Successfully.", this.Page);
                     ClearControls();
                     ViewState["test"] = null;
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab2');</script>", false);
+
                 }
                 else
                 {
@@ -334,6 +341,7 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                     //objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNO DESC");
 
                     ddlAdmBatch.SelectedValue = dr["ADMBATCH"] == null ? "0" : dr["ADMBATCH"].ToString();
+                  
                     objCommon.FillDropDownList(ddlProgramme, "ACD_UA_SECTION C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON CB.UGPGOT=C.UA_SECTION", "DISTINCT UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0", "UA_SECTION");
                     ddlProgramme.SelectedValue = dr["UGPGOT"] == null ? "0" : dr["UGPGOT"].ToString();
                     objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON CB.COLLEGE_ID=C.COLLEGE_ID ", "DISTINCT C.COLLEGE_ID", "C.COLLEGE_NAME", "C.COLLEGE_ID>0  AND UGPGOT=" + Convert.ToInt32(ddlProgramme.SelectedValue), "C.COLLEGE_NAME");
@@ -629,6 +637,7 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                         //tab2.Attributes.Add("class", "tab-pane active");
                         //tab1.Attributes.Add("class", "tab-pane");
                         ClearControls_NRI();
+                        
                     }
                     else
                     {
@@ -647,15 +656,19 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                         objCommon.DisplayMessage(this.Page, "Notification Updated Successfully.", this.Page);
                         BindList_NRI();
                         ClearControls_NRI();
+                        
                     }
                     else
                     {
                         objCommon.DisplayMessage(this.Page, "Failed To Save Record.", this.Page);
                         return;
-                    }
-                }                 
 
+                    }
+                   
+                }
+                
             }
+          
         }
         catch (Exception)
         {
@@ -707,7 +720,7 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                 lvNRI.DataSource = null;
                 lvNRI.DataBind();
                 lvNRI.Visible = false;
-            }
+            }   
         }
         catch (Exception)
         {
@@ -731,7 +744,58 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
             {
                 if (dsEdit.Tables[0].Rows.Count > 0)
                 {
-                    ddlAdmBatch_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString();
+                    //if (dsEdit.Tables.Count > 0 && dsEdit.Tables[0].Rows.Count > 0)
+                    //{
+                    //    string admBatchValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"] as string;
+                    //    if (!string.IsNullOrEmpty(admBatchValue))
+                    //    {
+                    //        ddlAdmBatch_NRI.SelectedValue = admBatchValue;
+                    //    }
+                    //    else
+                    //    {
+                    //        if (ViewState["action_NRI"] == "edit")
+                    //        {
+                    //            ddlAdmBatch_NRI.SelectedValue = "0";
+                    //        }
+                    //        ddlAdmBatch_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString();
+                    //    }
+                    //}
+
+                    if (dsEdit.Tables.Count > 0 && dsEdit.Tables[0].Rows.Count > 0)
+                    {
+                        string admBatchValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"] as string;
+                        if (!string.IsNullOrEmpty(admBatchValue))
+                        {
+                          
+                            if (ddlAdmBatch_NRI.Items.FindByValue(admBatchValue) != null)
+                            {
+                                ddlAdmBatch_NRI.SelectedValue = admBatchValue;
+                            }
+                            else
+                            {
+                               
+                            }
+                        }
+                        else
+                        {
+                            if (ViewState["action_NRI"] == "edit")
+                            {
+                              
+                                ddlAdmBatch_NRI.SelectedValue = "0";
+                            }
+                           
+                            if (ddlAdmBatch_NRI.Items.FindByValue(dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString()) != null)
+                            {
+                                ddlAdmBatch_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString();
+                            }
+                            else
+                            {
+                               
+                            }
+                        }
+                    }
+
+                   // ddlAdmBatch_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString();
                     ddlProgrammeType_NRI.Items.Clear();
                     ddlProgrammeType_NRI.Items.Add(new ListItem("Please Select", "0"));
                     ddlProgrammeType_NRI.DataSource = ViewState["ddlProgrammeType"];
@@ -762,6 +826,9 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                     txtStartDate_NRI.Text = dsEdit.Tables[0].Rows[0]["ADMSTRDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ADMSTRDATE"].ToString()).ToString("dd/MM/yyyy");
                     txtEndDate_NRI.Text = dsEdit.Tables[0].Rows[0]["ADMENDDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ADMENDDATE"].ToString()).ToString("dd/MM/yyyy");
                     txtStartTime_NRI.Text = dsEdit.Tables[0].Rows[0]["STARTTIME"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["STARTTIME"].ToString()).ToString("hh:mm tt");
+
+
+
                     txtEndTime_NRI.Text = dsEdit.Tables[0].Rows[0]["ENDTIME"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ENDTIME"].ToString()).ToString("hh:mm tt");
                     txtRemark_NRI.Text = dsEdit.Tables[0].Rows[0]["DETAILS"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["DETAILS"].ToString();
                     txtAppFee_NRI.Text = dsEdit.Tables[0].Rows[0]["FEES"] == null ? "0" : dsEdit.Tables[0].Rows[0]["FEES"].ToString();
@@ -782,6 +849,7 @@ public partial class ADMINISTRATION_OnlineAdmission : System.Web.UI.Page
                     ddlAdmType_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADM_TYPE"] == null ? "0" : dsEdit.Tables[0].Rows[0]["ADM_TYPE"].ToString();
                 }
             }
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab2');</script>", false);
         }
         catch (Exception)
         {

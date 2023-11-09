@@ -143,7 +143,7 @@ public partial class PAYROLL_REPORTS_Pay_PFESIReport : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
 
             url += "&path=~,Reports,Payroll," + rptFileName;
-            url += "&param=@P_TABNAME=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLL_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",@P_SCHEME_NAME=" + ddlStaffNo.SelectedItem.Text + ",@EMP_TYPE=" + ddlEmployeeType.SelectedItem.Text + ",@COLLEGE_NAME=" + ddlCollege.SelectedItem.Text + ",@P_COLLEGE_CODE=33";
+            url += "&param=@P_TABNAME=" + (ddlMonthYear.SelectedItem.Text) + ",@P_STAFF_NO=" + Convert.ToInt32(ddlStaffNo.SelectedValue) + ",@P_COLL_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_EMPTYPENO=" + Convert.ToInt32(ddlEmployeeType.SelectedValue) + ",@P_SCHEME_NAME=" + ddlStaffNo.SelectedItem.Text + ",@EMP_TYPE=" + ddlEmployeeType.SelectedItem.Text + ",@COLLEGE_NAME=" + ddlCollege.SelectedItem.Text + ",@P_COLLEGE_CODE="+Session["colcode"].ToString();
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

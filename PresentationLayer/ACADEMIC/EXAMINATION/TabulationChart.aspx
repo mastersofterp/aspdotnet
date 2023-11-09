@@ -582,6 +582,9 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear" Display="None"
                                             ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="Summary"></asp:RequiredFieldValidator>
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator61" runat="server" ControlToValidate="ddlYear"
+                                            Display="None" ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="ER"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator45" runat="server" ControlToValidate="ddlYear" Display="None"
                                             ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="Tabulation"></asp:RequiredFieldValidator>
                                         <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator46" runat="server" ControlToValidate="ddlYear" Display="None"

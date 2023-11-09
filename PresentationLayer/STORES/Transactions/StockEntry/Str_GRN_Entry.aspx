@@ -789,6 +789,7 @@
     <script type="text/javascript" language="javascript">
 
         function CalOnGRNQty(crl) {
+            debugger;
             var st = crl.id.split("ctl00_ContentPlaceHolder1_lvItem_ctrl");
             var i = st[1].split("_lblGRNQty");
             var index = i[0];
@@ -827,14 +828,27 @@
             var rate = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblRate').value;
             var discount = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscPer').value;
             var discamt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscAmt').value;
-
-            var Discountamt = (Number(rate).toFixed(2) * Number(discount).toFixed(2) * qty) / 100;
-            var grossAmount = (Number(rate).toFixed(2) * qty) - discamt;
-            var totamount = grossAmount;// + taxamt;
+          //  var taxamt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxAmount').value;
+            var Discountamt = 0;
+            if (Number(discount) == 0 || Number(discount) < 1){
+                Discountamt = Number(discamt);
+            }
+            else {
+                Discountamt = (Number(rate).toFixed(2) * Number(discount).toFixed(2) * qty) / 100;
+            }
+            
+         //   var grossAmount = (Number(rate).toFixed(2) * qty) - discamt;   31/10/2023
+            var grossAmount = (Number(rate).toFixed(2) * qty) - Discountamt;
+            var totamount = grossAmount;//+ taxamt;
 
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxableAmt').value = totamount.toFixed(2);
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblBillAmt').value = totamount.toFixed(2);
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscAmt').value = discamt.toFixed(2);
+            //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscAmt').value = discamt.toFixed(2);  31/10/2023
+            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscAmt').value = Discountamt.toFixed(2); //31/10/2023
+            //if (taxamt > 0) {
+            //    alert('Please Calculate Tax Again.');
+            //}
+            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxAmount').value = 0;//31/10/2023
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_btnAddTax').disabled = true;
 
             var score = 0;
@@ -845,7 +859,7 @@
                 score += Number(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + i + '_lblGRNQty').value);
             }
             document.getElementById('<%= lblItemQtyCount.ClientID %>').innerHTML = score;
-
+            
         }
 
         function CalOnRate(crl) {
@@ -865,13 +879,19 @@
             else
                 Discountamt = (Number(rate).toFixed(2) * Number(discount).toFixed(2) * qty) / 100;
 
-            var grossAmount = (Number(rate).toFixed(2) * qty) - discamt;
+            //var grossAmount = (Number(rate).toFixed(2) * qty) - discamt;
+            var grossAmount = (Number(rate).toFixed(2) * qty) - Discountamt;
             var totamount = Number(grossAmount) + Number(taxamt);
 
 
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxableAmt').value = grossAmount.toFixed(2);
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblBillAmt').value = totamount.toFixed(2);
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscAmt').value = Discountamt.toFixed(2);
+
+            //if (taxamt > 0) {
+            //    a1lert('Please Calculate Tax Again.');
+            //}
+            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxAmount').value = 0;//31/10/2023
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_btnAddTax').disabled = true;
         }
 
@@ -903,6 +923,11 @@
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxableAmt').value = grossAmount.toFixed(2);
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_hdnTaxableAmt').value = totamount.toFixed(2);
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblBillAmt').value = totamount.toFixed(2);
+            //if (taxamt > 0) {
+            //    a1lert('Please Calculate Tax Again.');
+            //}
+            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxAmount').value = 0;//31/10/2023
+             
         }
 
         function CalOnDiscAmount(crl) {
@@ -927,12 +952,16 @@
             }
             else {
                 document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscPer').disabled = true;
-                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscPer').value = 0;
+               // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblDiscPer').value = 0;
             }
 
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxableAmt').value = grossAmount.toFixed(2);
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_hdnTaxableAmt').value = totamount.toFixed(2);
             document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblBillAmt').value = totamount.toFixed(2);
+            if (taxamt > 0) {
+                a1lert('Please Calculate Tax Again.');
+            }
+            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + index + '_lblTaxAmount').value = 0;//31/10/2023
         }
 
         function CalTotTaxAmt(crl) {

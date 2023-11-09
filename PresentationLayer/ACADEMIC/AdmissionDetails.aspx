@@ -227,9 +227,9 @@
 
                                             <div id="divAdmissionDetails" runat="server" style="display: block;">
                                                 <div class="row" id="tbladmission">
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmDate" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supAdmDate" runat="server">* </sup>
                                                             <label>Date of Admission</label>
                                                         </div>
 
@@ -252,9 +252,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSchAdmitted" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supSchAdmitted" runat="server">* </sup>
                                                             <label>School/Institute Admitted </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlSchoolCollege" runat="server" ValidationGroup="Academic" AutoPostBack="true"
@@ -266,9 +266,9 @@
                                                     ValidationGroup="Academic">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divDegree" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supDegree" runat="server">* </sup>
                                                             <label>Degree </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlDegree" runat="server" AutoPostBack="true" AppendDataBoundItems="True"
@@ -279,9 +279,9 @@
                                                     ValidationGroup="Academic">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBranch" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supBranch" runat="server">* </sup>
                                                             <label>Programme/Branch </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlBranch" runat="server" ValidationGroup="Academic"
@@ -294,9 +294,9 @@
                                                     SetFocusOnError="true" InitialValue="0">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmBatch" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supAdmBatch" runat="server">* </sup>
                                                             <label>Admission Batch </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="True"
@@ -307,9 +307,9 @@
                                                     InitialValue="0">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divYear" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supYear" runat="server">* </sup>
                                                             <label>Year </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlYear" runat="server" AppendDataBoundItems="True"
@@ -319,9 +319,9 @@
                                                     Display="None" ErrorMessage="Please Select Year" SetFocusOnError="True" ValidationGroup="Academic"
                                                     InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSemester" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supSemester" runat="server">* </sup>
                                                             <label>Semester </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
@@ -332,9 +332,9 @@
                                                     InitialValue="0">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" div="divAdmCategory" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supAdmCategory" runat="server">* </sup>
                                                             <label>Admission Category </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlclaim" runat="server" CssClass="form-control" data-select2-enable="true"
@@ -347,9 +347,9 @@
                                     </asp:RequiredFieldValidator>--%>
                                                     </div>
 
-                                                       <div class="form-group col-lg-3 col-md-6 col-12">
+                                                       <div class="form-group col-lg-3 col-md-6 col-12" div="divAcademicYear" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supAcademicYear" runat="server">* </sup>
                                                             <label>Academic Year </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlAcademicYear" runat="server" CssClass="form-control" data-select2-enable="true"
@@ -358,6 +358,73 @@
                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
                                                     
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSeatType" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supSeatType" runat="server">* </sup>
+                                                            <label>Seat Type </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlSeatType" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Seat Type"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                        
+                                                        </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmCenter" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supAdmCenter" runat="server">* </sup>
+                                                            <label>Admission Centre </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlAdmCentre" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Admission Centre"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                </asp:DropDownList>
+                                                       
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divDefenceQuota" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supDefenceQuota" runat="server">* </sup>
+                                                            <label>Defence Quota </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlDefenceQuota" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Defence Quota"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                                <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="0">No</asp:ListItem>
+                                                                <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                                </asp:DropDownList>
+
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divMinorityQuota" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supMinorityQuota" runat="server">* </sup>
+                                                            <label>Minority Quota </label>
+                                                        </div>
+                                                            <asp:DropDownList ID="ddlMinorityQuota" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Minority Quota"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                                <asp:ListItem Value="-1">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="0">No</asp:ListItem>
+                                                                <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                                </asp:DropDownList>      
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmRound" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supAdmRound" runat="server">* </sup>
+                                                            <label>Admission Round </label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlAdmRound" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Select Admission Round"
+                                                            ValidationGroup="Academic" Enabled="false">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        </asp:DropDownList>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">

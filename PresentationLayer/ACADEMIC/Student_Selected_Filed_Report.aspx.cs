@@ -356,12 +356,22 @@ public partial class Student_Selected_Filed_Report : System.Web.UI.Page
 
                 if (ds1.Tables[0].Rows[0]["where_condition"].ToString() != "N")
                 {
-                    if (Convert.ToInt32(ddlFilter.SelectedValue) > 0)
+                    if (ds1.Tables[0].Rows[0]["DISPLAY_FIELD_NAME"].ToString() == "ADMCAN")
                     {
                         if (WhereCondition.Length == 0)
                             WhereCondition += ds1.Tables[0].Rows[0]["where_condition"].ToString() + "=" + Convert.ToInt32(ddlFilter.SelectedValue);
                         else
                             WhereCondition += " and " + ds1.Tables[0].Rows[0]["where_condition"].ToString() + "=" + Convert.ToInt32(ddlFilter.SelectedValue);
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(ddlFilter.SelectedValue) > 0)
+                        {
+                            if (WhereCondition.Length == 0)
+                                WhereCondition += ds1.Tables[0].Rows[0]["where_condition"].ToString() + "=" + Convert.ToInt32(ddlFilter.SelectedValue);
+                            else
+                                WhereCondition += " and " + ds1.Tables[0].Rows[0]["where_condition"].ToString() + "=" + Convert.ToInt32(ddlFilter.SelectedValue);
+                        }
                     }
                 }
             }
@@ -404,7 +414,8 @@ public partial class Student_Selected_Filed_Report : System.Web.UI.Page
         }
         else
         {
-            orderBy = null;
+            //orderBy = null;               //COmmented by Amit B. on date 02-11-2023
+            orderBy = " ";
         }
 
         return orderBy;
@@ -423,8 +434,14 @@ public partial class Student_Selected_Filed_Report : System.Web.UI.Page
             DataSet ds1 = objStudContrl.GetSingleSelectedFieldTable(Convert.ToInt32(txtFilter.Text));
             string COLUMNIDNO = ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString().Replace("DISTINCT","");//THIS CONDITION IS FOR WHERE CONDITION & ORDER BY
             //objCommon.FillDropDownList(ddlFilter, ds1.Tables[0].Rows[0]["EXTRA_TABLE_NAME"].ToString(), ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString(), ds1.Tables[0].Rows[0]["COLUMNNAME"].ToString(), ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString() + ">0", ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString());
-            objCommon.FillDropDownList(ddlFilter, ds1.Tables[0].Rows[0]["EXTRA_TABLE_NAME"].ToString(), ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString(), ds1.Tables[0].Rows[0]["COLUMNNAME"].ToString(), COLUMNIDNO + ">0", COLUMNIDNO);
-
+            if (ds1.Tables[0].Rows[0]["DISPLAY_FIELD_NAME"].ToString() == "ADMCAN")
+            {
+                objCommon.FillDropDownList(ddlFilter, ds1.Tables[0].Rows[0]["EXTRA_TABLE_NAME"].ToString(), ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString(), ds1.Tables[0].Rows[0]["COLUMNNAME"].ToString(),"","");
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlFilter, ds1.Tables[0].Rows[0]["EXTRA_TABLE_NAME"].ToString(), ds1.Tables[0].Rows[0]["COLUMNIDNO"].ToString(), ds1.Tables[0].Rows[0]["COLUMNNAME"].ToString(), COLUMNIDNO + ">0", COLUMNIDNO);
+            }
         }
     }
 

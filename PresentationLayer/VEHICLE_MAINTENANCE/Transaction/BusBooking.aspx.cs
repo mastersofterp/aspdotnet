@@ -206,7 +206,7 @@ public partial class VEHICLE_MAINTENANCE_Transaction_BusBooking : System.Web.UI.
             // DateTime sttime = Convert.ToDateTime(StopTime.tostring("hh:mm tt"));
             txtStopStarttime.Text = StopTime.ToString("hh:mm tt");
             div5.Visible = true;
-            string BookingStatus = "Route=" + ' ' + " " + RouteName + " ,Stope=" + ' ' + " " + StopName + " ,Seat=" + ' ' + " " + SeatNo + ",                     Balance Amount=" + ' ' + " " + balancefees;
+            string BookingStatus = "Route=" + ' ' + " " + RouteName + " ,Stop=" + ' ' + " " + StopName + " ,Seat=" + ' ' + " " + SeatNo + ",                     Balance Amount=" + ' ' + " " + balancefees;
             objCommon.DisplayMessage(this.Page, BookingStatus , this.Page);
         }
         }

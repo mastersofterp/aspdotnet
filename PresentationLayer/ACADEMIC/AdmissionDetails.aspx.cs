@@ -7,12 +7,15 @@ using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 using System.Linq;
 
 public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
+    ModuleConfigController objConfig = new ModuleConfigController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -25,6 +28,11 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             ddlYear.Attributes.Add("disabled", "disabled");
             ddlAcademicYear.Attributes.Add("disabled", "disabled");
             ddlSchoolCollege.Attributes.Add("disabled", "disabled");
+            ddlSeatType.Attributes.Add("disabled", "disabled");
+            ddlAdmCentre.Attributes.Add("disabled", "disabled");
+            ddlDefenceQuota.Attributes.Add("disabled", "disabled");
+            ddlMinorityQuota.Attributes.Add("disabled", "disabled");
+            ddlAdmRound.Attributes.Add("disabled", "disabled");
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -36,7 +44,6 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 //Page Authorization
                 //  CheckPageAuthorization();
                 ViewState["usertype"] = Session["usertype"];
-
 
                 if (ViewState["usertype"].ToString() == "2")
                 {
@@ -88,12 +95,118 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 
                 this.FillDropDown();
                 ShowStudentDetails();
-
+                StudentConfiguration();
             }
 
         }
     }
 
+    #region Student Related Configuration
+    protected void StudentConfiguration()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "AdmissionDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string isActive = row["ISACTIVE"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string controlToMandatory = row["CONTROL_TO_MANDATORY"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string divID = string.Empty;
+            Control control = null, control2 = null, control3 = null;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+                divID = values[1].Trim();
+
+            }
+
+            if (values.Length == 2)
+            {
+                control = FindControlRecursive(Page, divID);
+                control3 = FindControlRecursive(Page, controlID);
+            }
+            else
+            {
+                control = FindControlRecursive(Page, controlToHide);
+            }
+
+            control2 = FindControlRecursive(Page, controlToMandatory);
+
+
+            if (control != null)
+            {
+                if (isActive == "checked" && isMandatory == "checked")
+                {
+                    control.Visible = true;
+                    control2.Visible = true;
+
+                }
+                else if (isActive == "checked" && controlToMandatory != null)
+                {
+                    control.Visible = true;
+                    control2.Visible = false;
+                }
+                else
+                {
+                    control.Visible = false;
+                    control2.Visible = false;
+
+                    if (values.Length == 2)
+                    {
+                        ClearControlValue(control3);
+                    }
+
+                }
+            }
+        }
+    }
+    #endregion
+
+    private Control FindControlRecursive(Control parentControl, string controlId)
+    {
+        if (parentControl == null)
+        {
+            return null;
+        }
+
+        Control control = parentControl.FindControl(controlId);
+
+        if (control == null)
+        {
+            foreach (Control childControl in parentControl.Controls)
+            {
+                control = FindControlRecursive(childControl, controlId);
+                if (control != null)
+                {
+                    return control;
+                }
+            }
+        }
+        return control;
+    }
+
+    private void ClearControlValue(Control control)
+    {
+        if (control is TextBox)
+        {
+            ((TextBox)control).Text = string.Empty;
+        }
+        else if (control is DropDownList)
+        {
+            ((DropDownList)control).SelectedIndex = 0;
+        }
+
+    }
 
     private void DocumentRequaired(int payType)
     {
@@ -194,6 +307,13 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 {
                     this.DocumentRequaired(3);
                 }
+
+                // Added By Shrikant W. on 19-10-2023
+                ddlSeatType.SelectedValue = dtr["SEAT_TYPE"] == null ? "0" : dtr["SEAT_TYPE"].ToString();
+                ddlAdmCentre.SelectedValue = dtr["ADMISSION_CENTRE"] == null ? "0" : dtr["ADMISSION_CENTRE"].ToString();
+                ddlDefenceQuota.SelectedValue = dtr["DEFENCE_QUOTA"] == null ? "0" : dtr["DEFENCE_QUOTA"].ToString();
+                ddlMinorityQuota.SelectedValue = dtr["MINORITY_QUOTA"] == null ? "0" : dtr["MINORITY_QUOTA"].ToString();
+                ddlAdmRound.SelectedValue = dtr["ADMROUNDNO"] == null ? "0" : dtr["ADMROUNDNO"].ToString();
             }
         }
        
@@ -213,6 +333,9 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlAdmCaste, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORYNO");
             objCommon.FillDropDownList(ddlclaim, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORY");
             objCommon.FillDropDownList(ddlAcademicYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ISNULL(ACTIVE_STATUS,0) = 1 AND ISNULL(IS_CURRENT_FY,0)=1 ", "ACADEMIC_YEAR_NAME");
+            objCommon.FillDropDownList(ddlSeatType, "ACD_SEAT_TYPE", "SEATNO", "SEAT_TYPE", "SEATNO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "SEATNO");
+            objCommon.FillDropDownList(ddlAdmCentre, "ACD_ADMISSION_CENTRE", "ADM_CENTRENO", "ADM_CENTRENAME", "ADM_CENTRENO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "ADM_CENTRENO");
+            objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
         }
         catch (Exception ex)
         {
@@ -270,6 +393,13 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 objS.SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
                 objS.PType = Convert.ToInt32(ddlPaymentType.SelectedValue);
                 objS.ClaimType = Convert.ToInt32(ddlclaim.SelectedValue);
+
+                // Added By Shrikant W. on 19-10-2023
+                objS.SeatType = Convert.ToInt32(ddlSeatType.SelectedValue);
+                objS.AdmissionCentre = Convert.ToInt32(ddlAdmCentre.SelectedValue);
+                objS.DefenceQuota = Convert.ToInt32(ddlDefenceQuota.SelectedValue);
+                objS.MinorityQuota = Convert.ToInt32(ddlMinorityQuota.SelectedValue);
+                objS.AdmroundNo = Convert.ToInt32(ddlAdmRound.SelectedValue);
                 CustomStatus cs = (CustomStatus)objSC.UpdateStudentAdmissionDetails(objS,Convert.ToInt32(Session["usertype"]));
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {

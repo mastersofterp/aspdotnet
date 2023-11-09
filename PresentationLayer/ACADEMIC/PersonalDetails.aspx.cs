@@ -48,15 +48,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
 
                 // Added By Shrikant W. on 25-09-2023
-                if (orgID == 12)
-                {
-                    divCaste.Visible = true;
-                }
-                else
-                {
-                    divCaste.Visible = false;
-                }
-
+              
                 if (orgID == 8)
                 {
                     divApplicationId.Visible = true;
@@ -66,14 +58,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     divApplicationId.Visible = false;
                 }
 
-                if (orgID == 1)
-                {
-                    divMAnnualIncome.Visible = true;
-                }
-                else
-                {
-                    divMAnnualIncome.Visible = false;
-                }
+
                 if (rdofatheralive.SelectedValue == "1")
                 {
                     MotherSection.Visible = true;
@@ -140,11 +125,30 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                             btnSubmit.Visible = false;
                         }
 
+                        DataSet ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
+
+                        if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
+                        {
+                            string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
+                            string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+
+                            if (photo != string.Empty)
+                            {
+                                fuPhotoUpload.Enabled = false;
+                                btnPhotoUpload.Visible = false;
+                            }
+
+                            if (sign != string.Empty)
+                            {
+                                fuSignUpload.Enabled = false;
+                                btnSignUpload.Visible = false;
+                            }
+                        }
 
                         // Added By Shrikant W. on 08-09-2023 For DAIICT                    
                         if (orgID == 15)
                         {
-                            if (Convert.ToInt32(personal_info) == 1)
+                            if (Convert.ToInt32(final_submit) == 1)
                             {
                                 if (txtDateOfBirth.Text != string.Empty)
                                 {
@@ -166,7 +170,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                                 rdoInternationalStu.Enabled = false;
                                 rdbTransport.Enabled = false;
 
-                                DataSet ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
+                                ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
 
                                 if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
                                 {
@@ -244,7 +248,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             }
         }
     }
-
 
     #region Student Related Configuration
     protected void StudentConfiguration()
@@ -383,7 +386,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     TextBox textBox = (TextBox)control;
                     if (string.IsNullOrEmpty(textBox.Text.Trim()))
                     {
-                        validationErrors.Add(captionName);
+                        validationErrors.Add("Please Enter " + captionName);
                     }
                 }
 
@@ -392,7 +395,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     DropDownList dropdownlist = (DropDownList)control;
                     if (dropdownlist.SelectedIndex == 0)
                     {
-                        validationErrors.Add(captionName);
+                        validationErrors.Add("Please Select " + captionName);
                     }
                 }
             }
@@ -401,12 +404,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
         if (validationErrors.Count > 0)
         {
-            string errorMessage = string.Empty;
-
-            foreach (string errorControlCaption in validationErrors)
-            {
-                errorMessage += "Please Enter " + errorControlCaption + ',';
-            }
+            string errorMessage = string.Join(",", validationErrors);
             return errorMessage;
         }
         return string.Empty;

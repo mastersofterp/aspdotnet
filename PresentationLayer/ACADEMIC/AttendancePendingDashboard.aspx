@@ -129,11 +129,12 @@
 
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="Show" OnClick="btnShow_OnClick" />
+                                     <asp:Button ID="btnClearSingle" runat="server" Text="Cancle" CssClass="btn btn-danger"  OnClick="btnClearSingle_Click" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Show"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12"  id="divSingle_List" runat="server">
                                     <div class="table-responsive">
                                         <asp:GridView ID="gvParent" runat="server" Width="100%"
                                             CssClass="table table-striped table-bordered nowrap" AutoGenerateColumns="false" OnRowDataBound="gvParent_RowDataBound"
@@ -144,8 +145,8 @@
                                             <Columns>
                                                 <asp:BoundField DataField="UA_FULLNAME" HeaderText="Faculty Name" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
-                                                    ItemStyle-HorizontalAlign="Center" />
+                                               <%-- <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
+                                                    ItemStyle-HorizontalAlign="Center" />--%>
                                                 <asp:BoundField DataField="DEPARTMENT" HeaderText="Department" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="SCHOOL" HeaderText="School" HeaderStyle-HorizontalAlign="Center"
@@ -154,7 +155,7 @@
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="UA_MOBILE" HeaderText="Mobile No." HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Subjects"
+                                                <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Subject"
                                                     HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <div id="divcR" runat="server">
@@ -168,7 +169,7 @@
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Send E-Mail" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="15%" HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
-                                                        <asp:Button ID="btnSendDeptMail" OnClick="btnSendDeptMail_Click" CssClass="btn btn-primary btn-sm" ValidationGroup='<%# Eval("UA_EMAIL") %>'
+                                                        <asp:Button ID="btnSendDeptMail" OnClick="btnSendDeptMail_Click" CssClass="btn btn-primary btn-sm" CommandArgument='<%# Eval("UA_EMAIL") %>'  ValidationGroup='<%# Eval("UA_EMAIL") %>'
                                                             Text="Send Mail" runat="server" />
                                                     </ItemTemplate>
                                                     <HeaderStyle HorizontalAlign="Center" />
@@ -177,22 +178,22 @@
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
                                                         <tr>
-                                                            <td colspan="100%">
-                                                                <div id='div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; overflow: auto">
+                                                            <td colspan="7">
+                                                                <div id='div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; right: 30px; overflow: auto">
                                                                     <asp:GridView ID="gvChild" runat="server" DataKeyNames="UA_NO" AutoGenerateColumns="false"
                                                                         CssClass="table table-striped table-bordered nowrap" OnRowDataBound="gvChild_RowDataBound"
-                                                                        Width="95%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
+                                                                        Width="90%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
                                                                         <HeaderStyle CssClass="bg-light-blue" />
                                                                         <FooterStyle Font-Bold="true" ForeColor="White" />
                                                                         <RowStyle />
                                                                         <AlternatingRowStyle BackColor="White" />
                                                                         <HeaderStyle CssClass="bg-light-blue" />
                                                                         <Columns>
-                                                                            <asp:BoundField DataField="SCHEMENAME" ItemStyle-Width="30%" HeaderText="Scheme" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SCHEMENAME" ItemStyle-Width="50%" HeaderText="Scheme" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
-                                                                            <asp:BoundField DataField="SECTION" ItemStyle-Width="40%" HeaderText="SECTION" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SECTION" ItemStyle-Width="10%" HeaderText="SECTION" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
-                                                                            <asp:BoundField DataField="SEMESTER" ItemStyle-Width="40%" HeaderText="SEMESTER" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SEMESTER" ItemStyle-Width="10%" HeaderText="SEMESTER" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
                                                                             <asp:TemplateField ItemStyle-Width="30%" ItemStyle-HorizontalAlign="Center" HeaderText="Attendance Pending Count"
                                                                                 HeaderStyle-HorizontalAlign="Center">
@@ -212,11 +213,11 @@
                                                                             <asp:TemplateField>
                                                                                 <ItemTemplate>
                                                                                     <tr>
-                                                                                        <td colspan="100%">
-                                                                                            <div id='div2<%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; overflow: auto">
+                                                                                        <td colspan="6">
+                                                                                            <div id='div2<%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; right: 30px; overflow: auto">
                                                                                                 <asp:GridView ID="gvChildAttDates" runat="server" AutoGenerateColumns="false"
                                                                                                     CssClass="table table-striped table-bordered nowrap"
-                                                                                                    Width="95%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
+                                                                                                    Width="80%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
                                                                                                     <HeaderStyle CssClass="bg-light-blue" />
                                                                                                     <FooterStyle Font-Bold="true" ForeColor="White" />
                                                                                                     <RowStyle />
@@ -225,9 +226,9 @@
                                                                                                     <Columns>
                                                                                                         <asp:BoundField DataField="ATT_DATE" ItemStyle-Width="30%" HeaderText="DATE" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
-                                                                                                        <asp:BoundField DataField="SLOT" ItemStyle-Width="40%" HeaderText="SLOT" HeaderStyle-HorizontalAlign="Center"
+                                                                                                        <asp:BoundField DataField="SLOT" ItemStyle-Width="35%" HeaderText="SLOT" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
-                                                                                                        <asp:BoundField DataField="TOPIC_COVERED" ItemStyle-Width="40%" HeaderText="TOPIC COVERED" HeaderStyle-HorizontalAlign="Center"
+                                                                                                        <asp:BoundField DataField="TOPIC_COVERED" ItemStyle-Width="35%" HeaderText="TOPIC COVERED" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
 
                                                                                                     </Columns>
@@ -328,6 +329,7 @@
 
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnbulkShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="BulkShow" OnClick="btnbulkShow_Click" />
+                                     <asp:Button ID="btnClearBulk" runat="server" Text="Cancle" CssClass="btn btn-danger" OnClick="btnClearBulk_Click" />
                                     <asp:Button ID="btnSendEmail" runat="server" Text="Send Email" CssClass="btn btn-primary" 
                                         ValidationGroup="BulkShow" OnClick="btnSendEmail_Click" Enabled="false" />
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="BulkShow"
@@ -336,7 +338,7 @@
                                 </div>
 
 
-                                <div class="col-12">
+                                <div class="col-12" id="divBulk_List" runat="server">
                                     <div class="table-responsive">
                                         <asp:GridView ID="gvBulkEmail" runat="server" Width="100%"
                                             CssClass="table table-striped table-bordered nowrap" AutoGenerateColumns="false" OnRowDataBound="gvBulkEmail_RowDataBound"
@@ -354,8 +356,8 @@
                                                 </asp:TemplateField>
                                                 <asp:BoundField DataField="UA_FULLNAME" HeaderText="Faculty Name" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
-                                                    ItemStyle-HorizontalAlign="Center" />
+                                               <%-- <asp:BoundField DataField="SHORTNAME" HeaderText="Program" HeaderStyle-HorizontalAlign="Center"
+                                                    ItemStyle-HorizontalAlign="Center" />--%>
                                                 <asp:BoundField DataField="DEPARTMENT" HeaderText="Department" HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="SCHOOL" HeaderText="School" HeaderStyle-HorizontalAlign="Center"
@@ -364,11 +366,11 @@
                                                     ItemStyle-HorizontalAlign="Center" />
                                                 <asp:BoundField DataField="UA_MOBILE" HeaderText="Mobile No." HeaderStyle-HorizontalAlign="Center"
                                                     ItemStyle-HorizontalAlign="Center" />
-                                                <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Subjects"
+                                                <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Subject"
                                                     HeaderStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
                                                         <div id="divcR" runat="server">
-                                                            <a href="JavaScript:divexpandcollapse('div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>');">
+                                                           <%-- <a href="JavaScript:divexpandcollapse('div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>');">--%>
                                                                 <%--  <img alt='<%# Eval("COURSE_MARKS_PENDING") %>' id='CLOSE<%# Eval("SRNO") %>' border="0" title='<%# Eval("COURSE_MARKS_PENDING") %>' />--%>
                                                                 <asp:Label runat="server" ID="lbl" Text='<%# Eval("CCODE") %>'></asp:Label>
                                                                 <asp:HiddenField ID="hdfTempExam" runat="server" Value='<%# Eval("COURSENO") %>' />
@@ -395,22 +397,22 @@
                                                 <asp:TemplateField>
                                                     <ItemTemplate>
                                                         <tr>
-                                                            <td colspan="100%">
-                                                                <div id='div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; overflow: auto">
+                                                            <td colspan="7">
+                                                                <div id='div1<%# Eval("COURSENO") %><%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; right: 30px;overflow: auto">
                                                                     <asp:GridView ID="gvChild" runat="server" DataKeyNames="UA_NO" AutoGenerateColumns="false"
                                                                         CssClass="table table-striped table-bordered nowrap" OnRowDataBound="gvChild_RowDataBound"
-                                                                        Width="95%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
+                                                                        Width="80%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
                                                                         <HeaderStyle CssClass="bg-light-blue" />
                                                                         <FooterStyle Font-Bold="true" ForeColor="White" />
                                                                         <RowStyle />
                                                                         <AlternatingRowStyle BackColor="White" />
                                                                         <HeaderStyle CssClass="bg-light-blue" />
                                                                         <Columns>
-                                                                            <asp:BoundField DataField="SCHEMENAME" ItemStyle-Width="30%" HeaderText="Scheme" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SCHEMENAME" ItemStyle-Width="50%" HeaderText="Scheme" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
-                                                                            <asp:BoundField DataField="SECTION" ItemStyle-Width="40%" HeaderText="SECTION" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SECTION" ItemStyle-Width="10%" HeaderText="SECTION" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
-                                                                            <asp:BoundField DataField="SEMESTER" ItemStyle-Width="40%" HeaderText="SEMESTER" HeaderStyle-HorizontalAlign="Center"
+                                                                            <asp:BoundField DataField="SEMESTER" ItemStyle-Width="10%" HeaderText="SEMESTER" HeaderStyle-HorizontalAlign="Center"
                                                                                 ItemStyle-HorizontalAlign="Center" />
                                                                             <asp:TemplateField ItemStyle-Width="30%" ItemStyle-HorizontalAlign="Center" HeaderText="Attendance Pending Count"
                                                                                 HeaderStyle-HorizontalAlign="Center">
@@ -430,11 +432,11 @@
                                                                             <asp:TemplateField>
                                                                                 <ItemTemplate>
                                                                                     <tr>
-                                                                                        <td colspan="100%">
-                                                                                            <div id='div2<%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; overflow: auto">
+                                                                                        <td colspan="6">
+                                                                                            <div id='div2<%# Eval("UA_NO") %>' style="display: none; position: relative; left: 30px; right:30px; overflow: auto">
                                                                                                 <asp:GridView ID="gvChildAttDates" runat="server" AutoGenerateColumns="false"
                                                                                                     CssClass="table table-striped table-bordered nowrap"
-                                                                                                    Width="95%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
+                                                                                                    Width="80%" ShowFooter="false" ShowHeaderWhenEmpty="true" EmptyDataText="No data Found">
                                                                                                     <HeaderStyle CssClass="bg-light-blue" />
                                                                                                     <FooterStyle Font-Bold="true" ForeColor="White" />
                                                                                                     <RowStyle />
@@ -443,9 +445,9 @@
                                                                                                     <Columns>
                                                                                                         <asp:BoundField DataField="ATT_DATE" ItemStyle-Width="30%" HeaderText="DATE" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
-                                                                                                        <asp:BoundField DataField="SLOT" ItemStyle-Width="40%" HeaderText="SLOT" HeaderStyle-HorizontalAlign="Center"
+                                                                                                        <asp:BoundField DataField="SLOT" ItemStyle-Width="35%" HeaderText="SLOT" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
-                                                                                                        <asp:BoundField DataField="TOPIC_COVERED" ItemStyle-Width="40%" HeaderText="TOPIC COVERED" HeaderStyle-HorizontalAlign="Center"
+                                                                                                        <asp:BoundField DataField="TOPIC_COVERED" ItemStyle-Width="35%" HeaderText="TOPIC COVERED" HeaderStyle-HorizontalAlign="Center"
                                                                                                             ItemStyle-HorizontalAlign="Center" />
 
                                                                                                     </Columns>

@@ -135,6 +135,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
     {
         txtQuestionPatternName.Text = "";
         txtPatternMarks.Text = "";
+        ViewState["edit"] = null;
         BindPattern(0, 0);
     }
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -161,21 +162,26 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
     {
         try
         {
+            if (ViewState["edit"]==null)
+            {
+                string Chk = objCommon.LookUp("tblQuestionPatternMaster", "COUNT(1)", "QuestionPatternName ='" + txtQuestionPatternName.Text + "' and MARKS = " + txtPatternMarks.Text);
 
-            //string Chk = objCommon.LookUp("tblQuestionPatternMaster", "COUNT(1)", "QuestionPatternName ='" + txtQuestionPatternName.Text  + "'");
+                if ((Chk != null || Chk != string.Empty) && Chk != "0")
+                {
+                    objCommon.DisplayMessage(updEdit, " Record Already Exist..", this.Page);
+                    return;
 
-            //if ((Chk != null || Chk != string.Empty) && Chk != "0")
-            //{
-            //    objCommon.DisplayMessage(updEdit, " Record Already Exist..", this.Page);
-            //    return;  
-
-            //}
-           
+                }
+            }
+            
+            int Activestatus = 0; ;
+            Activestatus = Convert.ToInt32(hfStatus.Value);
+         
             if(hdnPatternId.Value == "")
             {
                 hdnPatternId.Value = "0";
             }
-            int result = ObjQP.SaveQuestionPattern(Convert.ToInt32(hdnPatternId.Value), txtQuestionPatternName.Text, txtPatternMarks.Text);
+            int result = ObjQP.SaveQuestionPattern(Convert.ToInt32(hdnPatternId.Value), txtQuestionPatternName.Text, txtPatternMarks.Text, Activestatus);
 
             if (result == 1)
             {
@@ -183,6 +189,8 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
 
                 dvQuestionPaper.Visible = false;
                 ClearPattern();
+
+
                
             }
             if (result == 2)
@@ -533,6 +541,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
         //    return;
 
         //}
+        ViewState["edit"] = "Edit";
         RepeaterItem item = (sender as LinkButton).NamingContainer as RepeaterItem;
       
         int patternid = Convert.ToInt32((item.FindControl("hdnSchemeSubjectId") as HiddenField).Value);
@@ -551,6 +560,15 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
         txtQuestionPatternName.Text = (item.FindControl("lblSubjectName") as Label).Text;
 
         txtPatternMarks.Text = (item.FindControl("lblMarks") as Label).Text;
+        string lblStatusShow = (item.FindControl("lblStatus") as Label).Text;
+        if (lblStatusShow.ToString() == "Active" || lblStatusShow.ToString() == "ACTIVE")
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "Src", "setstatus(true);", true);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "Src", "setstatus(false);", true);
+        }
     }
 
     protected void lnkView_Click(object sender, EventArgs e)

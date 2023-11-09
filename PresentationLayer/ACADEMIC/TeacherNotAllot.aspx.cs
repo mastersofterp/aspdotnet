@@ -58,7 +58,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 else
                 {
                     //Page Authorization
-                    CheckPageAuthorization();
+                    //CheckPageAuthorization();
 
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -66,13 +66,15 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
 
                     if (Session["usertype"].ToString() != "1")
                     {
-                        objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (SC.DEPTNO IN(" + Session["userdeptno"].ToString() + "))", "COSCHNO");
-                        //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.DEPTNO=" + Session["userdeptno"].ToString() + " AND CD.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "D.DEGREENAME");
+                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1", "SESSIONID DESC"); 
+                       // objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (SC.DEPTNO IN(" + Session["userdeptno"].ToString() + "))", "COSCHNO");
+                       //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.DEPTNO=" + Session["userdeptno"].ToString() + " AND CD.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "D.DEGREENAME");
 
                     }
                     else
                     {
-                        objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
+                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(IS_ACTIVE,0)=1", "SESSIONID DESC"); 
+                       // objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
                        // objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=D.DEGREENO)", "DISTINCT(D.DEGREENO)", "D.DEGREENAME", "D.DEGREENO > 0 AND CD.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "D.DEGREENAME");
                     }
                     objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
@@ -241,27 +243,58 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
 
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        ddlBranch.SelectedIndex = 0;
-        ddlDegree.SelectedIndex = 0;
-        ddlSemester.SelectedIndex = 0;
-        ddlSession.SelectedIndex = 0;
-        ddlClgScheme.SelectedIndex = 0;
-        rblAllotment.SelectedIndex = 0;
+        //ddlBranch.SelectedIndex = 0;
+        //ddlDegree.SelectedIndex = 0;
+        //ddlSemester.SelectedIndex = 0;
+        //ddlSession.SelectedIndex = 0;
+        //ddlClgScheme.SelectedIndex = 0;
+        //rblAllotment.SelectedIndex = 0;
+        Response.Redirect(Request.Url.ToString());
     }
-
     protected void ddlClgScheme_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSemester.SelectedIndex = 0;
         DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgScheme.SelectedValue));
-        //ViewState["degreeno"]
-
-        if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
-        {
-            ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-            ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-            ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-            ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            if (ds != null && ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            
         }
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"])+" AND COLLEGE_ID="+ViewState["college_id"], "SESSIONNO DESC");
-        ddlSession.Focus();
+      //  objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + " AND COLLEGE_ID=" + ViewState["college_id"], "SESSIONNO DESC");
+     //   ddlSession.Focus();
+    }
+    protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ddlClgScheme.SelectedIndex = 0;
+        if (ddlSession.SelectedIndex > 0)
+        {
+          
+            if (Session["usertype"].ToString() == "1")
+            {
+                AcademinDashboardController AcadDash = new AcademinDashboardController(); // add by maithili [07-09-2022]
+                DataSet ds = null;
+                ds = AcadDash.Get_CollegeID_BySession(Convert.ToInt32(ddlSession.SelectedValue));
+
+                if (ds.Tables[1].Rows.Count > 0)
+                {
+                    ddlClgScheme.DataSource = ds.Tables[1];
+                    ddlClgScheme.DataValueField = ds.Tables[1].Columns[0].ToString();
+                    ddlClgScheme.DataTextField = ds.Tables[1].Columns[1].ToString();
+                    ddlClgScheme.DataBind();
+                }
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlClgScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)  INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO)inner join ACD_SESSION_MASTER  CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_SESSION S ON (S.SESSIONID = CM.SESSIONID)", "COSCHNO", "COL_SCHEME_NAME", "S.SESSIONID=" + ddlSession.SelectedValue + "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (SC.DEPTNO IN(" + Session["userdeptno"].ToString() + "))", "COSCHNO");
+            }
+        }
+        else
+        {
+            ddlClgScheme.Items.Clear();
+            ddlClgScheme.Items.Insert(0,"Please Select");
+        }
     }
 }

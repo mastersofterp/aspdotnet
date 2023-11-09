@@ -82,7 +82,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
                 SqlParameter[] sqlParams = null;
-                sqlParams = new SqlParameter[13];
+                sqlParams = new SqlParameter[14];
 
                 sqlParams[0] = new SqlParameter("@BRANCHNO", ObjBranch.BranchNo);
                 sqlParams[1] = new SqlParameter("@LONGNAME", ObjBranch.LongName);
@@ -96,8 +96,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG
                 sqlParams[9] = new SqlParameter("@ACTIVESTATUS", ObjBranch.IsActive);
                 sqlParams[10] = new SqlParameter("@MACADDRESS", System.Web.HttpContext.Current.Session["macAddress"]);
                 sqlParams[11] = new SqlParameter("@ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])); //Added By Rishabh on 07/12/2021
-                sqlParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                sqlParams[12].Direction = ParameterDirection.Output;
+                sqlParams[12] = new SqlParameter("@BRANCHNAMEHINDI", ObjBranch.BranchNameInHindi);  //Added by Sakshi Makwana 18/10/2023
+                sqlParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                sqlParams[13].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_CONFIG_BRANCH_MASTER_INSERT_UPDATE", sqlParams, true);
                 status = Convert.ToInt32(ret);

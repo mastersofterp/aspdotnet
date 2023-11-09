@@ -55,7 +55,7 @@ public partial class PAYROLL_MASTERS_DA_HEAD_CALCULATION : System.Web.UI.Page
                 divHracal.Visible = false;
             }
         }
-    }
+    } 
 
 
     private void HRADataTable()

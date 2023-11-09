@@ -380,8 +380,9 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void btnInternalMarkReg_Click(object sender, EventArgs e)
     {
+        LinkButton lbtn_ConsoReport_Print = FindControl("lbtn_ConsoReport_Print") as LinkButton;
         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#ConsolidatedReportModel').modal('show');</script>", false);
-        updPopUp_6.Update();
+        //updPopUp_6.Update();
     }
 
     protected void btnConsolidatedInternalTestMarkReport_Click(object sender, EventArgs e)
@@ -630,7 +631,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-    
+
     /*
     private void ShowReportBlankTR(string reportTitle, string rptFileName)
     {
@@ -1549,19 +1550,19 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         if (ddlClgname.SelectedIndex == 0)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlColgScheme.Text + "');", true);
-            ddlSem.Focus();
+            ddlClgname.Focus();
             return;
         }
         else if (ddlSession.SelectedIndex == 0)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Session.');", true);
-            ddlSection.Focus();
+            ddlSession.Focus();
             return;
         }
         else if (ddlSem.SelectedIndex == 0)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Semester.');", true);
-            ddlSection.Focus();
+            ddlSem.Focus();
             return;
         }
         //else if (ddlSection.SelectedIndex == 0)
@@ -2822,10 +2823,11 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             int AdmBatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_TRRESULT TR ON (TR.IDNO=S.IDNO) INNER JOIN RESULT_PUBLISH_DATA PD ON (PD.IDNO=TR.IDNO AND TR.SEMESTERNO=PD.SEMESTERNO AND TR.SESSIONNO=PD.SESSIONNO)", "DISTINCT ISNULL(S.ADMBATCH,0)", "S.DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + "AND S.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + "AND TR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
 
             string sp_procedure = "PKG_GET_GPA_CGPA_BATCH_WISE";
-            string sp_parameters = "@P_ADMBATCH,@P_BRANCHNO,@P_SCHEMENO,@P_UA_NO";
-            string sp_callValues = "" + AdmBatch + "," + Convert.ToInt32(ViewState["branchno"]) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(Session["userno"]) + "";
+            //string sp_parameters = "@P_ADMBATCH,@P_BRANCHNO,@P_SCHEMENO,@P_UA_NO";
+            string sp_parameters = "@P_BRANCHNO";
+            //string sp_callValues = "" + AdmBatch + "," + Convert.ToInt32(ViewState["branchno"]) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(Session["userno"]) + "";
 
-
+            string sp_callValues = "" + Convert.ToInt32(ViewState["branchno"]);
 
             DataSet dsMarkchk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
 
@@ -2941,8 +2943,12 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+            //    ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
             url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
-                ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+           ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"] + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
@@ -3001,6 +3007,6 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-  
+
 }
 

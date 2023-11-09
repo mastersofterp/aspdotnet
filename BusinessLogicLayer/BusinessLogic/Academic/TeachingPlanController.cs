@@ -724,20 +724,20 @@ namespace IITMS
                 }
 
                 /// <summary>
-                /// modified by S.Patil- 9 july2019
+                /// modified by Ro-hit M -02-11-2023
                 /// </summary>
                 /// <param name="objExam"></param>
                 /// <returns></returns>
 
                 public int UpdateTeachingPlan(Exam objExam)
-                {
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
 
-                        objParams = new SqlParameter[13];
+                        objParams = new SqlParameter[14];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", objExam.SessionNo);
                         objParams[1] = new SqlParameter("@P_UA_NO", objExam.Ua_No);
                         objParams[2] = new SqlParameter("@P_DATE", objExam.Date);
@@ -750,19 +750,20 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_BATCHNO", objExam.BatchNo);
                         objParams[10] = new SqlParameter("@P_SLOT_NO", objExam.Slot);
                         objParams[11] = new SqlParameter("@P_TP_NO", objExam.TP_NO);
-                        objParams[12] = new SqlParameter("@P_SESSION_PLAN", objExam.sessionPlan);//Added by Rishabh B on 20022023
+                        objParams[12] = new SqlParameter("@P_SESSION_PLAN", objExam.sessionPlan);
+                        objParams[13] = new SqlParameter("@P_COLLEGE_ID", objExam.collegeid);//Added by Rishabh B on 20022023
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_TEACHING_PLAN_UPDATE", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.TeachingPlanController.UpdateTeachingPlan-> " + ex.ToString());
-                    }
+                        }
 
                     return retStatus;
-                }
+                    }
 
                 //public int AddTeachingPlan(Exam objExam, int Istutorial)
                 //{
@@ -1162,13 +1163,14 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetDayTimeSlots(int Sessionno, int Semesterno, int ua_no, int Sectionno, int Courseno, int Subid, int schemeno, string startdate, string enddate, int batchno)
-                {
+                //Added By Ro-hit M on 02_11_2023
+                public DataSet GetDayTimeSlots(int Sessionno, int Semesterno, int ua_no, int Sectionno, int Courseno, int Subid, int schemeno, string startdate, string enddate, int batchno, int College_ID)
+                    {
                     DataSet ds = null;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[10];
+                        SqlParameter[] objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionno);
                         objParams[1] = new SqlParameter("@P_SCHEMENO", schemeno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
@@ -1179,15 +1181,16 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_START_DATE", startdate);
                         objParams[8] = new SqlParameter("@P_END_DATE", enddate);
                         objParams[9] = new SqlParameter("@P_BATCHNO", batchno);
+                        objParams[10] = new SqlParameter("@P_COLLEGE_ID", College_ID);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_DAY_TIME_SLOTS", objParams);
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         return ds;
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.TeachingPlanController.GetDayTimeSlots -> " + ex.ToString());
-                    }
+                        }
                     return ds;
-                }
+                    }
 
                 #endregion
 
@@ -1467,29 +1470,30 @@ namespace IITMS
                 }
 
                 /// <summary>
-                /// Added by Rishabh on 06/01/2023
+                /// Added by Roh-it on 02/11/2023
                 /// </summary>
                 /// <returns></returns>
-                public DataSet FillSectionBatchTeachingPlan(int sessionno, int uano, int courseno, int istutorial)
-                {
+                public DataSet FillSectionBatchTeachingPlan(int sessionno, int uano, int courseno, int istutorial, int College_id)
+                    {
                     DataSet ds = null;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[4];
+                        SqlParameter[] objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[1] = new SqlParameter("@P_UANO", uano);
                         objParams[2] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[3] = new SqlParameter("@P_ISTUTORIAL", istutorial);
+                        objParams[4] = new SqlParameter("@P_COLLEGE_ID", College_id);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_FILL_SECTION_BATCH_TEACHINGPLAN", objParams);
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         return ds;
                         throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetBlankExcelforTeachingPlan -> " + ex.ToString());
-                    }
+                        }
                     return ds;
-                }
+                    }
 
                 /// <summary>
                 /// Added by Rishabh B on 08032023
