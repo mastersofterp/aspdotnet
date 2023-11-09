@@ -97,6 +97,7 @@
     <Compile Include="BusinessLogic\Hostel\AssetController.cs" />
     <Compile Include="BusinessLogic\Hostel\BlockController.cs" />
     <Compile Include="BusinessLogic\Hostel\BonafideController.cs" />
+    <Compile Include="BusinessLogic\Hostel\GatePassRequestController.cs" />
     <Compile Include="BusinessLogic\Hostel\GuestInfoController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelAttendanceController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelConfigurationController.cs" />
