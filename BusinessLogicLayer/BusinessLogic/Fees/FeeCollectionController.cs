@@ -6886,5 +6886,26 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
+
+        public DataSet GetSpecialisationGroupsbyIdno(int idno, int mode)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                { 
+                    new SqlParameter("@P_IDNO", idno),
+                    new SqlParameter("@P_MODE", mode),
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_GET_SPECIALIZATION_GROUP_BY_IDNO", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.GetSpecialisationGroupsbyIdno() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+
+        }
     }
 }

@@ -4397,19 +4397,22 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public DataSet GetCourseRegistrationApprvlListModified(int clgID, int sessionID, int degreeID, int branchID, int filter)
+                public DataSet GetCourseRegistrationApprvlListModified(int clgID, int sessionID, int degreeID, int branchID, int filter, int semesterNo, int studtype)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[5];
+                        SqlParameter[] objParams = new SqlParameter[7];
                         objParams[0] = new SqlParameter("@P_COLLEGE_ID", clgID);
                         objParams[1] = new SqlParameter("@P_SESSIONNO", sessionID);
                         objParams[2] = new SqlParameter("@P_DEGREENO", degreeID);
                         objParams[3] = new SqlParameter("@P_BRANCHNO", branchID);
                         objParams[4] = new SqlParameter("@P_FILTER", filter);
-                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_REG_COURSE_FOR_APPROVAL_MODIFIED", objParams);
+                        objParams[5] = new SqlParameter("@P_SEMESTERNO", semesterNo); // Added by Shailendra K. On Dated 18.10.2023 as per T-46795
+                        objParams[6] = new SqlParameter("@P_STUD_REGD", studtype); // Added by Shailendra K. On Dated 18.10.2023 as per T-46795
+                        // ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_REG_COURSE_FOR_APPROVAL_MODIFIED", objParams); // commented by Shailendra K. On Dated 18.10.2023 as per T-46795
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_STUD_FOR_COURSE_APPROVAL", objParams); // Added by Shailendra K. On Dated 18.10.2023 as per T-46795
                     }
                     catch (Exception ex)
                     {

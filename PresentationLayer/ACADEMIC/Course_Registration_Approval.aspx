@@ -7,18 +7,23 @@
             width: max-content !important;
         }
     </style>
-     <style>
-        #ctl00_ContentPlaceHolder1_pnlCoreStudent .dataTables_scrollHeadInner {
+    <style>
+        #ctl00_ContentPlaceHolder1_pnlCoreSubject .dataTables_scrollHeadInner {
             width: max-content !important;
         }
     </style>
-     <style>
-        #ctl00_ContentPlaceHolder1_pnlElectStudent .dataTables_scrollHeadInner {
+    <style>
+        #ctl00_ContentPlaceHolder1_pnlUniCoreSub .dataTables_scrollHeadInner {
             width: max-content !important;
         }
     </style>
-     <style>
-        #ctl00_ContentPlaceHolder1_pnlGlobalStudent .dataTables_scrollHeadInner {
+    <style>
+        #ctl00_ContentPlaceHolder1_pnlGlobalSubject .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
+    <style>
+        #ctl00_ContentPlaceHolder1_pnlValueAdded .dataTables_scrollHeadInner {
             width: max-content !important;
         }
     </style>
@@ -60,8 +65,7 @@
                                             OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true" ValidationGroup="submit" TabIndex="1">
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvCollege" runat="server" ControlToValidate="ddlCollege"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select College" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                    
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select School/Institute" ValidationGroup="Show"></asp:RequiredFieldValidator>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -74,7 +78,6 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Session" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                        
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -88,7 +91,6 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Degree" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                        
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -101,26 +103,52 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvBranch" runat="server" ControlToValidate="ddlBranch"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Branch" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                       
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                           <%-- <sup>*</sup>--%>
+                                            <asp:Label ID="lblSeme" runat="server" Text="Semester" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" TabIndex="5" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged" AutoPostBack="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSemester"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="Show"></asp:RequiredFieldValidator>--%>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <asp:Label ID="Label11" runat="server" Text="Filter by Registration Status" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlFilter" runat="server" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="True" TabIndex="4" CssClass="form-control"
+                                        <asp:DropDownList ID="ddlFilter" runat="server" OnSelectedIndexChanged="ddlFilter_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control"
                                             data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            <asp:ListItem Value="1">Core Course Registration Done</asp:ListItem>
+                                            <%-- <asp:ListItem Value="1">Core Course Registration Done</asp:ListItem>
                                             <asp:ListItem Value="2">Elective Course Registration Done</asp:ListItem>
                                             <asp:ListItem Value="3">Global Course Registration Done</asp:ListItem>
+                                            <asp:ListItem Value="7">Specialization Course Registration Done</asp:ListItem>
                                             <asp:ListItem Value="4">Core Course Registration Pending</asp:ListItem>
                                             <asp:ListItem Value="5">Elective Course Registration Pending</asp:ListItem>
                                             <asp:ListItem Value="6">Global Course Registration Pending</asp:ListItem>
+                                            <asp:ListItem Value="8">Specialization Course Registration Pending</asp:ListItem>--%>
+
+                                            <asp:ListItem Value="1">Core Course Registration Done</asp:ListItem>
+                                            <asp:ListItem Value="2">Elective Course Registration Done</asp:ListItem>
+                                            <asp:ListItem Value="3">Global Course Registration Done</asp:ListItem>
+                                            <asp:ListItem Value="4">Specialization Course Registration Done</asp:ListItem>
+
+                                            <asp:ListItem Value="5">Core Course Registration Pending</asp:ListItem>
+                                            <asp:ListItem Value="6">Elective Course Registration Pending</asp:ListItem>
+                                            <asp:ListItem Value="7">Global Course Registration Pending</asp:ListItem>
+                                            <asp:ListItem Value="8">Specialization Course Registration Pending</asp:ListItem>
+
+                                            <asp:ListItem Value="9">Core Course Approval Pending</asp:ListItem>
+                                            <asp:ListItem Value="10">Elective Course Approval Pending</asp:ListItem>
+                                            <asp:ListItem Value="11">Global Course Approval Pending</asp:ListItem>
+                                            <asp:ListItem Value="12">Specialization Course Approval Pending</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFilter"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Filter by Registration Status" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                        
                                     </div>
                                     <%--<div class="form-group col-lg-6 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -136,32 +164,27 @@
                                 <asp:Button ID="btnShow" runat="server" Text="Show Students List" TabIndex="5" OnClick="btnShow_Click"
                                     ValidationGroup="Show" CssClass="btn btn-primary" />
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CssClass="btn btn-primary"
-                                    TabIndex="6" ValidationGroup="Show"  />
-                               <%-- "--%>
+                                    TabIndex="6" ValidationGroup="SUBMIT" OnClientClick="return showConfirm();" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Clear" TabIndex="7" OnClick="btnCancel_Click"
                                     CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="valSummery2" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
-                                 
                             </div>
-                            <div class="col-12" id="tblInfo" runat="server">
-                                 <div class="row">
-                                <div class="col-6 mt-3">
-                                    <asp:Panel ID="pnlALLStudent" runat="server">
-                                        <asp:ListView ID="lvApproveCourse" runat="server">
-                                            <LayoutTemplate>
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblApproveCourse">
-                                                    <thead class="bg-light-blue" style="top: -15px !important; height:68px">
-                                                        <tr>
-                                                            <th>Sr.No.</th>
-                                                            <th>
-                                                                <asp:CheckBox ID="cbApproveAll" runat="server" Text="" ToolTip="Approve all" onclick="SelectAll(this,1,'cbApprove');" />
-                                                                Approve all
-                                                            </th>
-                                                            <th>Edit Record</th>
-                                                            <th>PRN No.</th>
-                                                            <th>Student Name</th>
-                                                            <%--   <th>Core Course Registration</th>
+                                            <asp:ListView ID="lvApproveCourse" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblApproveCourse">
+                                                        <thead class="bg-light-blue" style="top: -15px !important; height: 68px">
+                                                            <tr>
+                                                                <th style="width: 5%">Sr.No.</th>
+                                                                <th style="width: 10%">
+                                                                    <asp:CheckBox ID="cbApproveAll" runat="server" Text="" ToolTip="Approve all" onclick="SelectAll(this,1,'cbApprove');" />
+                                                                    Approve all
+                                                                </th>
+                                                                <th style="width: 10%">Edit Record</th>
+                                                                <th style="width: 10%">Semester</th>
+                                                                <th style="width: 20%">PRN No.</th>
+                                                                <th style="width: 55%">Student Name</th>
+                                                                <%--   <th>Core Course Registration</th>
                                                             <th>Core Course Approval</th>
                                                             <th>Elective Course Registration</th>
                                                             <th>Selected Elective Subject</th>
@@ -171,34 +194,35 @@
                                                             <th>Selected Global Subject</th>
                                                             <th>Global Course Approval</th>
                                                             <th>Global Reg. by Student</th>--%>
-                                                            <%--<th>Course Codes</th>--%>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </LayoutTemplate>
-                                            <ItemTemplate>
-                                                <tr id="trCurRow">
-                                                    <td><%# Container.DataItemIndex + 1 %></td>
-                                                    <td>
-                                                        <asp:CheckBox ID="cbApprove" runat="server" Value='<%# Eval("IDNO") %>' ToolTip="Click to select this Course for Approval"
-                                                            onclick="ChkHeader(1,'cbHeadReg','cbApprove');" />
-                                                    </td>
-                                                    <td>
-                                                        <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/images/edit1.gif"
-                                                            CommandArgument='<%# Eval("IDNO")%>' AlternateText="Edit Record" ToolTip='<%# Eval("IDNO")%>'
-                                                            OnClick="btnEdit_Click" />
-                                                        <%--<asp:Image ID="imgEdit" runat="server"  ImageUrl="~/images/edit1.gif" AlternateText="Edit Record" />--%>
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
-                                                    </td>
-                                                    <%-- <td>
+                                                                <%--<th>Course Codes</th>--%>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr id="trCurRow">
+                                                        <td style="width: 5%"><%# Container.DataItemIndex + 1 %></td>
+                                                        <td style="width: 10%">
+                                                            <asp:CheckBox ID="cbApprove" runat="server" Value='<%# Eval("IDNO") %>' Style="Height: 13px !important" ToolTip="Click to select this Course for Approval"
+                                                                onclick="ChkHeader(1,'cbHeadReg','cbApprove');" />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" Style="Height: 13px !important" ImageUrl="~/images/edit1.gif"
+                                                                CommandArgument='<%# Eval("IDNO")%>' AlternateText="Edit Record" ToolTip='<%# Eval("IDNO")%>'
+                                                                OnClick="btnEdit_Click" />
+                                                            <%--<asp:Image ID="imgEdit" runat="server"  ImageUrl="~/images/edit1.gif" AlternateText="Edit Record" />--%>
+                                                        </td>
+                                                        <td style="width: 10%"><%# Eval("SEMESTERNAME") %></td>
+                                                        <td style="width: 20%">
+                                                            <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' Style="Height: 13px !important" ToolTip='<%# Eval("IDNO")%>' />
+                                                        </td>
+                                                        <td style="width: 55%">
+                                                            <asp:Label ID="lblStudentName" runat="server" Style="Height: 13px !important" Text='<%# Eval("STUDNAME") %>' />
+                                                        </td>
+                                                        <%-- <td>
                                                         <asp:Label ID="Label8" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
                                                             Text='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
                                                     </td>
@@ -236,159 +260,206 @@
                                                         <asp:Label ID="Label7" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
                                                             Text='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 1 ?  "Yes" : "No" )%>' />
                                                     </td>--%>
-                                                </tr>
-                                            </ItemTemplate>
-                                        </asp:ListView>
-                                    </asp:Panel>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="col-6 mt-3" id="divCore" runat="server" visible="false">
+                                        <asp:Panel ID="pnlCoreStudent" runat="server">
+                                            <asp:ListView ID="lvStudentCore" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudCore">
+                                                        <thead class="bg-light-blue" style="top: -15px !important; height: 68px">
+                                                            <tr>
+                                                                <th style="width: 5%">Sr.No.</th>
+                                                                <th style="width: 20%">PRN No.</th>
+                                                                <th style="width: 40%">Student Name</th>
+                                                                <th style="width: 15%">Core Course Registration</th>
+                                                                <th style="width: 20%">Core Course Approval</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr id="trCurRow">
+                                                        <td style="width: 5%"><%# Container.DataItemIndex + 1 %></td>
+                                                        <td style="width: 20%">
+                                                            <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
+                                                        </td>
+                                                        <td style="width: 40%">
+                                                            <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                                        </td>
+                                                        <td style="width: 15%">
+                                                            <asp:Label ID="Label8" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
+                                                            <%--CORE_COURSE_REGISTRATION_STATUS--%>
+                                                        </td>
+                                                        <td style="width: 20%">
+                                                            <asp:Label ID="Label3" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("CORE_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("CORE_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
+                                                            <%--CORE_COURSE_APPROVED--%>
+                                                        </td>
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="col-6 mt-3" id="divElect" runat="server" visible="false">
+                                        <asp:Panel ID="pnlElectStudent" runat="server">
+                                            <asp:ListView ID="lvStudentElect" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudElect">
+                                                        <thead class="bg-light-blue" style="top: -15px !important; height: 68px">
+                                                            <tr>
+                                                                <th style="width: 5%">Sr.No.</th>
+                                                                <th style="width: 15%">PRN No.</th>
+                                                                <th style="width: 40%">Student Name</th>
+                                                                <th style="width: 10%">Elective Course Registration</th>
+                                                                <th style="width: 10%">Selected Elective Subject</th>
+                                                                <th style="width: 10%">Elective Course Approval</th>
+                                                                <th style="width: 10%">Elective Reg. by Student</th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr id="trCurRow">
+                                                        <td style="width: 5%"><%# Container.DataItemIndex + 1 %></td>
+                                                        <td style="width: 15%">
+                                                            <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
+                                                        </td>
+                                                        <td style="width: 40%">
+                                                            <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                                        </td>
+
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label9" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("ELECT_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label13" runat="server" Text='<%# Eval("ELECTIVE_COURSENAME") %>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label4" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("ELECT_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label6" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_STUD_REG") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("ELECT_STUD_REG") )== 1 ?  "Yes" : "No" )%>' />
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="col-6 mt-3" id="divGlobal" runat="server" visible="false">
+                                        <asp:Panel ID="pnlGlobalStudent" runat="server">
+                                            <asp:ListView ID="lvStudentGlobal" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudGlobal">
+                                                        <thead class="bg-light-blue" style="top: -15px !important; height: 68px">
+                                                            <tr>
+                                                                <th style="width: 5%">Sr.No.</th>
+                                                                <th style="width: 15%">PRN No.</th>
+                                                                <th style="width: 40%">Student Name</th>
+                                                                <th style="width: 10%">Global Course Registration</th>
+                                                                <th style="width: 10%">Selected Global Subject</th>
+                                                                <th style="width: 10%">Global Course Approval</th>
+                                                                <th style="width: 10%">Global Reg. by Student</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr id="trCurRow">
+                                                        <td style="width: 5%"><%# Container.DataItemIndex + 1 %></td>
+                                                        <td style="width: 15%">
+                                                            <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
+                                                        </td>
+                                                        <td style="width: 40%">
+                                                            <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label10" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label14" runat="server" Text='<%# Eval("GLOBAL_COURSENAME") %>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label5" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label7" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 1 ?  "Yes" : "No" )%>' />
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
+                                    <div class="col-6 mt-3" id="divSpecialization" runat="server" visible="false">
+                                        <asp:Panel ID="Panel1" runat="server">
+                                            <asp:ListView ID="lvSpecialization" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudCore">
+                                                        <thead class="bg-light-blue" style="top: -15px !important; height: 68px">
+                                                            <tr>
+                                                                <th style="width: 5%">Sr.No.</th>
+                                                                <th style="width: 20%">PRN No.</th>
+                                                                <th style="width: 55%">Student Name</th>
+                                                                <th style="width: 55%">Semester Admission Status</th>
+                                                                <th style="width: 10%">Specialization Course Registration</th>
+                                                                <th style="width: 10%">Specialization Course Approval</th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr id="trCurRow">
+                                                        <td style="width: 5%"><%# Container.DataItemIndex + 1 %></td>
+                                                        <td style="width: 20%">
+                                                            <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
+                                                        </td>
+                                                        <td style="width: 55%">
+                                                            <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                                        </td>
+                                                        <td style="width: 55%">
+                                                            <asp:Label ID="Label15" runat="server" Text='<%# (Convert.ToInt32(Eval("SAFLAG") )== 1 ?  "Done" : "Pending" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label8" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("SPECIALIZATION_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("SPECIALIZATION_COURSE_APPROVED") )> 0 ?  "Registered" : "Pending" )%>' />
+                                                        </td>
+                                                        <td style="width: 10%">
+                                                            <asp:Label ID="Label3" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("SPECIALIZATION_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                                Text='<%# (Convert.ToInt32(Eval("SPECIALIZATION_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
+                                                        </td>
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
                                 </div>
-                                <div class="col-6 mt-3" id="divCore" runat="server" visible="false">
-                                    <asp:Panel ID="pnlCoreStudent" runat="server">
-                                        <asp:ListView ID="lvStudentCore" runat="server">
-                                            <LayoutTemplate>
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudCore">
-                                                    <thead class="bg-light-blue" style="top: -15px !important; height:68px">
-                                                        <tr>
-                                                           <th>Sr.No.</th>
-                                                            <th>PRN No.</th>
-                                                            <th>Student Name</th>
-                                                            <th>Core Course Registration</th>
-                                                            <th>Core Course Approval</th>
-                                                          
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </LayoutTemplate>
-                                            <ItemTemplate>
-                                                <tr id="trCurRow">
-                                                    <td><%# Container.DataItemIndex + 1 %></td>
-                                                    <td>
-                                                        <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
-                                                    </td>
-                                                   <td>
-                                                        <asp:Label ID="Label8" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("CORE_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label3" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("CORE_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("CORE_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
-                                                    </td>
-                                                    
-                                                </tr>
-                                            </ItemTemplate>
-                                        </asp:ListView>
-                                    </asp:Panel>
-                                </div>
-                                <div class="col-6 mt-3" id="divElect" runat="server" visible="false">
-                                    <asp:Panel ID="pnlElectStudent" runat="server">
-                                        <asp:ListView ID="lvStudentElect" runat="server">
-                                            <LayoutTemplate>
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudElect">
-                                                    <thead class="bg-light-blue" style="top: -15px !important; height:68px">
-                                                        <tr>
-                                                          <th>Sr.No.</th>
-                                                            <th>PRN No.</th>
-                                                            <th>Student Name</th>
-                                                            <th>Elective Course Registration</th>
-                                                            <th>Selected Elective Subject</th>
-                                                            <th>Elective Course Approval</th>
-                                                            <th>Elective Reg. by Student</th>
-                                                            
-                                                           
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </LayoutTemplate>
-                                            <ItemTemplate>
-                                                <tr id="trCurRow">
-                                                  <td><%# Container.DataItemIndex + 1 %></td>
-                                                    <td>
-                                                        <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
-                                                    </td>
-                                                  
-                                                    <td>
-                                                        <asp:Label ID="Label9" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("ELECT_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label13" runat="server" Text='<%# Eval("ELECTIVE_COURSENAME") %>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label4" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("ELECT_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label6" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("ELECT_STUD_REG") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("ELECT_STUD_REG") )== 1 ?  "Yes" : "No" )%>' />
-                                                    </td>
-                                                 
-                                                </tr>
-                                            </ItemTemplate>
-                                        </asp:ListView>
-                                    </asp:Panel>
-                                </div>
-                                <div class="col-6 mt-3" id="divGlobal" runat="server" visible="false">
-                                    <asp:Panel ID="pnlGlobalStudent" runat="server">
-                                        <asp:ListView ID="lvStudentGlobal" runat="server">
-                                            <LayoutTemplate>
-                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblStudGlobal">
-                                                    <thead class="bg-light-blue" style="top: -15px !important; height:68px">
-                                                        <tr>
-                                                            <th>Sr.No.</th>
-                                                            <th>PRN No.</th>
-                                                            <th>Student Name</th>
-                                                            <th>Global Course Registration</th>
-                                                            <th>Selected Global Subject</th>
-                                                            <th>Global Course Approval</th>
-                                                            <th>Global Reg. by Student</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </LayoutTemplate>
-                                            <ItemTemplate>
-                                                <tr id="trCurRow">
-                                                   <td><%# Container.DataItemIndex + 1 %></td>
-                                                    <td>
-                                                        <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="lblStudentName" runat="server" Text='<%# Eval("STUDNAME") %>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label10" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_REGISTRATION_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_REGISTRATION_STATUS") )> 0 ?  "Registered" : "Pending" )%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label14" runat="server" Text='<%# Eval("GLOBAL_COURSENAME") %>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label5" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_APPROVED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("GLOBAL_COURSE_APPROVED") )== 1 ?  "Approved" : "Not Approved" )%>' />
-                                                    </td>
-                                                    <td>
-                                                        <asp:Label ID="Label7" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                            Text='<%# (Convert.ToInt32(Eval("GLOB_STUD_REG") )== 1 ?  "Yes" : "No" )%>' />
-                                                    </td>
-                                                </tr>
-                                            </ItemTemplate>
-                                        </asp:ListView>
-                                    </asp:Panel>
-                                </div>
-                                     </div>
                                 <div class="col-12 btn-footer">
                                     <asp:Label ID="lblmsg" runat="server" Style="color: Red; font-weight: bold" Text=""></asp:Label>
                                 </div>
@@ -553,305 +624,319 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 table table-responsive">
-                                    <asp:ListView ID="lvCurrentSubjects" runat="server">
-                                        <LayoutTemplate>
-                                            <div>
-                                                <table id="tblCurrentSubjects" class="table table-hover table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="9" style="text-align: left">Core Courses
-                                                            </th>
-                                                        </tr>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Select</th>
-                                                            <th>Course Code
-                                                            </th>
-                                                            <th>Course Name
-                                                            </th>
-                                                            <th>Course Type
-                                                            </th>
-                                                            <th>Credits
-                                                            </th>
-                                                            <th style="display: none">Elective
-                                                            </th>
-                                                            <th style="display: none">Elective Group
-                                                            </th>
-                                                            <th style="display: none">Section
-                                                            </th>
-                                                            <th style="display: none;">Course Teacher
-                                                            </th>
-                                                            <th style="display: none;">Intake
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr id="trCurRow">
-                                                <td>
-                                                    <asp:CheckBox ID="chkAccept" runat="server" Checked='true' Enabled='false'
-                                                        ToolTip='<%# Eval("ELECT") %>' />
-                                                    <%-- OnCheckedChanged="chkCurrentSubjects_OnCheckedChanged" AutoPostBack="false" onclick="electivevalidatation(this);"--%>
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
-                                                    <asp:HiddenField ID="hdnCredits" runat="server" Value='<%# Eval("CREDITS") %>' />
-                                                </td>
-                                                <td style="display: none;">
-                                                    <asp:Label ID="lblElective" runat="server" Text='<%# Convert.ToInt32(Eval("ELECT"))==1 ? "Yes" : "No" %>'></asp:Label>
-                                                    <asp:HiddenField ID="hdfGropupno" runat="server" Value='<%# Eval("GROUPNO") %>' />
-                                                    <asp:HiddenField ID="hdfElectChoice" runat="server" Value='<%# Eval("ELECTIVE_CHOISEFOR") %>' />
-                                                </td>
-                                                <td style="display: none;">
-                                                    <asp:Label ID="lblelectGroup" runat="server" Text='<%# Eval("GROUPNAME") %>'></asp:Label>
-                                                </td>
-                                                <td style="display: none;">
-                                                    <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
-                                                </td>
-                                                <td style="display: none;">
-                                                    <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
-                                                </td>
-                                                <td style="display: none;">
-                                                    <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' />
-                                                </td>
+                                    <asp:Panel ID="pnlCoreSubject" runat="server">
+                                        <asp:ListView ID="lvCurrentSubjects" runat="server">
+                                            <LayoutTemplate>
+                                                <div>
+                                                    <table id="tblCurrentSubjects" class="table table-hover table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" style="text-align: left">Core Courses
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="bg-light-blue">
+                                                                <th>Select</th>
+                                                                <th>Course Code
+                                                                </th>
+                                                                <th>Course Name
+                                                                </th>
+                                                                <th>Course Type
+                                                                </th>
+                                                                <th>Credits
+                                                                </th>
+                                                                <th style="display: none">Elective
+                                                                </th>
+                                                                <th style="display: none">Elective Group
+                                                                </th>
+                                                                <th style="display: none">Section
+                                                                </th>
+                                                                <th style="display: none;">Course Teacher
+                                                                </th>
+                                                                <th style="display: none;">Intake
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr id="trCurRow">
+                                                    <td>
+                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='true' Enabled='false'
+                                                            ToolTip='<%# Eval("ELECT") %>' />
+                                                        <%-- OnCheckedChanged="chkCurrentSubjects_OnCheckedChanged" AutoPostBack="false" onclick="electivevalidatation(this);"--%>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
+                                                        <asp:HiddenField ID="hdnCredits" runat="server" Value='<%# Eval("CREDITS") %>' />
+                                                    </td>
+                                                    <td style="display: none;">
+                                                        <asp:Label ID="lblElective" runat="server" Text='<%# Convert.ToInt32(Eval("ELECT"))==1 ? "Yes" : "No" %>'></asp:Label>
+                                                        <asp:HiddenField ID="hdfGropupno" runat="server" Value='<%# Eval("GROUPNO") %>' />
+                                                        <asp:HiddenField ID="hdfElectChoice" runat="server" Value='<%# Eval("ELECTIVE_CHOISEFOR") %>' />
+                                                    </td>
+                                                    <td style="display: none;">
+                                                        <asp:Label ID="lblelectGroup" runat="server" Text='<%# Eval("GROUPNAME") %>'></asp:Label>
+                                                    </td>
+                                                    <td style="display: none;">
+                                                        <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
+                                                    </td>
+                                                    <td style="display: none;">
+                                                        <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
+                                                    </td>
+                                                    <td style="display: none;">
+                                                        <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' />
+                                                    </td>
 
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </asp:Panel>
                                 </div>
-                                <div class="col-md-12 table table-responsive">
-                                    <asp:ListView ID="lvUniCoreSub" runat="server">
-                                        <LayoutTemplate>
-                                            <div class="vista-grid">
-                                                <table id="tblUniCoreSub" class="table table-hover table-bordered table-striped ">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="9" style="text-align: left;">Elective Courses
-                                                            </th>
-                                                        </tr>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Select
-                                                            </th>
-                                                            <th>Course Code
-                                                            </th>
-                                                            <th>Course Name
-                                                            </th>
-                                                            <th>Course Type
-                                                            </th>
-                                                            <th>Course Group
-                                                            </th>
-                                                            <th style="display: none">Section
-                                                            </th>
-                                                            <th style="display: none">Course Teacher
-                                                            </th>
-                                                            <th style="display: none">Intake
-                                                            </th>
-                                                            <th>Credits
-                                                            </th>
-                                                            <th>Available Seats
-                                                            </th>
-                                                            <th>Exam Registration Status
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr>
-                                                <td>
-                                                    <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" ToolTip='<%#Eval("GROUPNO") %>' Enabled='<%# ( Eval("EXAM_REGISTERED").ToString()=="1") ? false : true %>'
-                                                        Checked='<%# (Eval("STUD_COURSE_REG").ToString() == "1" || Eval("REGISTERED").ToString() == "1") ? true : false %>'
-                                                        OnCheckedChanged="chklvUniCoreSub_OnCheckedChanged" />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblgroupname" runat="server" Font-Bold="true" Text='<%# Eval("GROUPNAME") %>' ToolTip='<%# Eval("GROUPNO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' ToolTip='<%# Eval("CHOICEFOR") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblAvailableSeats" runat="server" Text='<%# Eval("AVAILABLESEATS") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="Label12" runat="server" ToolTip='<%# Eval("EXAM_REGISTERED") %>' ForeColor='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                        Text='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 1 ?  "Done" : "" )%>' />
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
-                                </div>
-                                <div class="col-md-12 table table-responsive">
-                                    <asp:ListView ID="lvGlobalSubjects" runat="server">
-                                        <LayoutTemplate>
-                                            <div>
-                                                <table id="tblGlobalSubjects" class="table table-hover table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="9" style="text-align: left">Global Courses  <%--Breadth/Open Elective/Program Elective Courses--%>
-                                                            </th>
-                                                        </tr>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Select
-                                                            </th>
-                                                            <th>Course Code
-                                                            </th>
-                                                            <th>Course Name
-                                                            </th>
-                                                            <th>Course Type
-                                                            </th>
-                                                            <th style="display: none">Course Group
-                                                            </th>
-                                                            <th style="display: none">Section
-                                                            </th>
-                                                            <th style="display: none">Course Teacher
-                                                            </th>
-                                                            <th style="display: none">Intake
-                                                            </th>
-                                                            <th>Credits
-                                                            </th>
-                                                            <th>Available Seats
-                                                            </th>
-                                                            <th>Exam Registration Status
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr id="trCurRow">
-                                                <td>
-                                                    <asp:CheckBox ID="chkAccept" runat="server" ToolTip='<%#Eval("GROUPNO") %>' Checked='<%# (Eval("STUD_COURSE_REG").ToString() == "1" || Eval("REGISTERED").ToString() == "1") ? true : false %>'
-                                                        Enabled='<%# ( Eval("EXAM_REGISTERED").ToString()=="1") ? false : true %>' OnCheckedChanged="chkGlobalSubjects_OnCheckedChanged" AutoPostBack="true" />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblgroupname" runat="server" Font-Bold="true" Text='<%# Eval("GROUPNAME") %>' ToolTip='<%# Eval("GROUPNO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' ToolTip='<%# Eval("CHOICEFOR") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblAvailableSeats" runat="server" Text='<%# Eval("AvailableSeats") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblExamRegistred" runat="server" ToolTip='<%# Eval("EXAM_REGISTERED") %>' ForeColor='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
-                                                        Text='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 1 ?  "Done" : "" )%>' />
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
-                                </div>
-                                <div class="col-md-12 table table-responsive">
-                                    <asp:ListView ID="lvValueAddedGroup" runat="server">
-                                        <LayoutTemplate>
-                                            <div>
-                                                <table id="tblValueAddedGroup" class="table table-hover table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="9" style="text-align: left">Value Added / Specialization Courses  <%--Breadth/Open Elective/Program Elective Courses--%>
-                                                            </th>
-                                                        </tr>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Select
-                                                            </th>
-                                                            <th>Group Name
-                                                            </th>
-                                                            <th>Course Code
-                                                            </th>
-                                                            <th>Course Name
-                                                            </th>
-                                                            <th>Credits
-                                                            </th>
-                                                            <th style="display: none">Section
-                                                            </th>
+                                <div class="col-md-4" id="divgroups" runat="server" visible="false">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <%--<label>Select Specialization Groups</label>--%>
+                                        <asp:Label Font-Bold="True" ID="lblSpecializationGroup" runat="server"></asp:Label>
+                                    </div>
+                                    <asp:ListBox ID="ddlgroups" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlgroups_SelectedIndexChanged"></asp:ListBox>
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="itemPlaceholder" runat="server" />
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </LayoutTemplate>
-                                        <ItemTemplate>
-                                            <tr id="trCurRow">
-                                                <td>
-                                                    <asp:CheckBox ID="chkValueAddedGroup" runat="server" ToolTip='<%#Eval("GROUPID") %>'
-                                                        OnCheckedChanged="chkValueAddedGroup_CheckedChanged" AutoPostBack="true" Checked="true" Enabled="false" />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("GROUP_NAME") %>' ToolTip='<%# Eval("GROUPID")%>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="Label1" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
-                                                </td>
-                                                <td>
-                                                    <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
-                                                </td>
-                                                <td style="display: none">
-                                                    <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
-                                                </td>
-                                            </tr>
-                                        </ItemTemplate>
-                                    </asp:ListView>
+                                </div>
+                                <div class="col-md-12 table table-responsive">
+                                    <asp:Panel ID="pnlValueAdded" runat="server">
+                                        <asp:ListView ID="lvValueAddedGroup" runat="server">
+                                            <LayoutTemplate>
+                                                <div>
+                                                    <table id="tblValueAddedGroup" class="table table-hover table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" style="text-align: left">Value Added / Specialization Courses  <%--Breadth/Open Elective/Program Elective Courses--%>
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="bg-light-blue">
+                                                                <th>Select
+                                                                </th>
+                                                                <th>Group Name
+                                                                </th>
+                                                                <th>Course Code
+                                                                </th>
+                                                                <th>Course Name
+                                                                </th>
+                                                                <th>Credits
+                                                                </th>
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr id="trCurRow">
+                                                    <td>
+                                                        <asp:CheckBox ID="chkValueAddedGroup" runat="server" ToolTip='<%#Eval("GROUPID") %>'
+                                                            OnCheckedChanged="chkValueAddedGroup_CheckedChanged" AutoPostBack="true" Checked="true" Enabled="false" />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("GROUP_NAME") %>' ToolTip='<%# Eval("GROUPID")%>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCourseno" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
+                                                    </td>
+
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </asp:Panel>
+                                </div>
+                                <div class="col-md-12 table table-responsive">
+                                    <asp:Panel ID="pnlUniCoreSub" runat="server">
+                                        <asp:ListView ID="lvUniCoreSub" runat="server">
+                                            <LayoutTemplate>
+                                                <div class="vista-grid">
+                                                    <table id="tblUniCoreSub" class="table table-hover table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" style="text-align: left;">Elective Courses
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="bg-light-blue">
+                                                                <th>Select
+                                                                </th>
+                                                                <th>Course Code
+                                                                </th>
+                                                                <th>Course Name
+                                                                </th>
+                                                                <th>Course Type
+                                                                </th>
+                                                                <th>Course Group
+                                                                </th>
+                                                                <th style="display: none">Section
+                                                                </th>
+                                                                <th style="display: none">Course Teacher
+                                                                </th>
+                                                                <th style="display: none">Intake
+                                                                </th>
+                                                                <th>Credits
+                                                                </th>
+                                                                <th>Available Seats
+                                                                </th>
+                                                                <th>Exam Registration Status
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" ToolTip='<%#Eval("GROUPNO") %>' Enabled='<%# ( Eval("EXAM_REGISTERED").ToString()=="1") ? false : true %>'
+                                                            Checked='<%# (Eval("STUD_COURSE_REG").ToString() == "1" || Eval("REGISTERED").ToString() == "1") ? true : false %>'
+                                                            OnCheckedChanged="chklvUniCoreSub_OnCheckedChanged" />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblgroupname" runat="server" Font-Bold="true" Text='<%# Eval("GROUPNAME") %>' ToolTip='<%# Eval("GROUPNO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' ToolTip='<%# Eval("CHOICEFOR") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblAvailableSeats" runat="server" Text='<%# Eval("AVAILABLESEATS") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="Label12" runat="server" ToolTip='<%# Eval("EXAM_REGISTERED") %>' ForeColor='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                            Text='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 1 ?  "Done" : "" )%>' />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </asp:Panel>
+                                </div>
+                                <div class="col-md-12 table table-responsive">
+                                    <asp:Panel ID="pnlGlobalSubject" runat="server">
+                                        <asp:ListView ID="lvGlobalSubjects" runat="server">
+                                            <LayoutTemplate>
+                                                <div>
+                                                    <table id="tblGlobalSubjects" class="table table-hover table-bordered table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" style="text-align: left">Global Courses  <%--Breadth/Open Elective/Program Elective Courses--%>
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="bg-light-blue">
+                                                                <th>Select
+                                                                </th>
+                                                                <th>Course Code
+                                                                </th>
+                                                                <th>Course Name
+                                                                </th>
+                                                                <th>Course Type
+                                                                </th>
+                                                                <th style="display: none">Course Group
+                                                                </th>
+                                                                <th style="display: none">Section
+                                                                </th>
+                                                                <th style="display: none">Course Teacher
+                                                                </th>
+                                                                <th style="display: none">Intake
+                                                                </th>
+                                                                <th>Credits
+                                                                </th>
+                                                                <th>Available Seats
+                                                                </th>
+                                                                <th>Exam Registration Status
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tr id="trCurRow">
+                                                    <td>
+                                                        <asp:CheckBox ID="chkAccept" runat="server" ToolTip='<%#Eval("GROUPNO") %>' Checked='<%# (Eval("STUD_COURSE_REG").ToString() == "1" || Eval("REGISTERED").ToString() == "1") ? true : false %>'
+                                                            Enabled='<%# ( Eval("EXAM_REGISTERED").ToString()=="1") ? false : true %>' OnCheckedChanged="chkGlobalSubjects_OnCheckedChanged" AutoPostBack="true" />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblgroupname" runat="server" Font-Bold="true" Text='<%# Eval("GROUPNAME") %>' ToolTip='<%# Eval("GROUPNO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblSection" runat="server" Text='<%# Eval("SECTIONNAME") %>' ToolTip='<%# Eval("SectionNO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblCourseTeacher" runat="server" Text='<%# Eval("UA_FULLNAME") %>' ToolTip='<%# Eval("UA_NO") %>' />
+                                                    </td>
+                                                    <td style="display: none">
+                                                        <asp:Label ID="lblIntake" runat="server" Font-Bold="true" Text='<%# Eval("INTAKE") %>' ToolTip='<%# Eval("CHOICEFOR") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblAvailableSeats" runat="server" Text='<%# Eval("AvailableSeats") %>' />
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblExamRegistred" runat="server" ToolTip='<%# Eval("EXAM_REGISTERED") %>' ForeColor='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                                            Text='<%# (Convert.ToInt32(Eval("EXAM_REGISTERED") )== 1 ?  "Done" : "" )%>' />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </asp:Panel>
                                 </div>
                             </div>
                         </div>
@@ -972,6 +1057,30 @@
             }
             return false;
         }
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multi-select-demo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 200,
+                enableFiltering: true,
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    maxHeight: 200,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                });
+            });
+        });
     </script>
 
 </asp:Content>
