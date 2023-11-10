@@ -82,6 +82,8 @@
     <Compile Include="BusinessEntities\Hostel\Block.cs" />
     <Compile Include="BusinessEntities\Hostel\Bonafide.cs" />
     <Compile Include="BusinessEntities\Hostel\GuestInfo.cs" />
+    <Compile Include="BusinessEntities\Hostel\HostelGatePassRequestApproval.cs" />
+    <Compile Include="BusinessEntities\Hostel\HostelInOutReq.cs" />
     <Compile Include="BusinessEntities\Hostel\HostelRoomCharge.cs" />
     <Compile Include="BusinessEntities\Hostel\HostelStdFee.cs" />
     <Compile Include="BusinessEntities\Hostel\MessAdvance.cs" />
@@ -99,9 +101,12 @@
     <Compile Include="BusinessLogic\Hostel\BonafideController.cs" />
     <Compile Include="BusinessLogic\Hostel\GatePassRequestController.cs" />
     <Compile Include="BusinessLogic\Hostel\GuestInfoController.cs" />
+    <Compile Include="BusinessLogic\Hostel\BulkRoomAllotmentController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelAttendanceController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelConfigurationController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelGatePassRequestApprovalController.cs" />
+    <Compile Include="BusinessLogic\Hostel\HostelInOutRequestsController.cs" />
     <Compile Include="BusinessLogic\Hostel\HostelSessionController.cs" />
     <Compile Include="BusinessLogic\Hostel\MessAdvanceController.cs" />
     <Compile Include="BusinessLogic\Hostel\MessBillController.cs" />
