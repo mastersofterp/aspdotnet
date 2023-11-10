@@ -1013,7 +1013,43 @@
             }
         }
         function showConfirm() {
-            var ret = confirm('Do you Really want to Confirm/Submit this Course for Course Approval?');
+            var ret = false;
+            var msg = '';
+            if ($('#ctl00_ContentPlaceHolder1_ddlCollege').val() <= 0)
+                msg += 'Please Select School/Institute \n';
+            if ($('#ctl00_ContentPlaceHolder1_ddlSession').val() <= 0)
+                msg += 'Please Select Session \n';
+            if ($('#ctl00_ContentPlaceHolder1_ddlDegree').val() <= 0)
+                msg += 'Please Select Degree \n';
+            if ($('#ctl00_ContentPlaceHolder1_ddlBranch').val() <= 0)
+                msg += 'Please Select Branch \n';
+            if ($('#ctl00_ContentPlaceHolder1_ddlFilter').val() <= 0)
+                msg += 'Please Select Filter by Registration Status \n';
+
+            if (msg != '') {
+                alert(msg);
+                return false;
+            }
+
+            tbl = document.getElementById('tblApproveCourse');
+            list = 'lvApproveCourse';
+            var dataRows = tbl.getElementsByTagName('tr');
+            if (dataRows != null) {
+                for (i = 0; i < dataRows.length - 1; i++) {
+                    var chk = $('#ctl00_ContentPlaceHolder1_lvApproveCourse_ctrl' + i + '_cbApprove').prop('checked');
+                    if (chk = true) {
+                        ret = true;
+                        break;
+                    }
+                }
+            }
+
+            if (ret == false) {
+                alert('Please Select at least One Student.');
+                return false;
+            }
+
+            ret = confirm('Do you Really want to Confirm/Submit this Course for Course Approval?');
             if (ret == true)
                 return true;
             else

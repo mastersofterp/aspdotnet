@@ -147,26 +147,22 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                 Response.Redirect("~/default.aspx", false);
             CustomStatus cs = CustomStatus.Error;
 
+            //bool cbChecked = false;
+            //foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
+            //{
+            //    CheckBox cbApprove = (CheckBox)dataitem.FindControl("cbApprove");
+            //    if (cbApprove.Checked)
+            //    {
+            //        cbChecked = true;
+            //        break;
+            //    }
+            //}
 
-            
-
-            bool cbChecked = false;
-            foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
-            {
-                CheckBox cbApprove = (CheckBox)dataitem.FindControl("cbApprove");
-                if (cbApprove.Checked)
-                {
-                    cbChecked = true;
-                    break;
-                }
-            }
-
-            if (!cbChecked)
-            {
-                objCommon.DisplayMessage(uplReg, "Please Select at least One Student.", this.Page);
-                return;
-            }
-
+            //if (!cbChecked)
+            //{
+            //    objCommon.DisplayMessage(uplReg, "Please Select at least One Student.", this.Page);
+            //    return;
+            //}
 
             foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
             {
