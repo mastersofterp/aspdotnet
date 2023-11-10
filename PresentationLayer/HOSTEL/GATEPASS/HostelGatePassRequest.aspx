@@ -11,17 +11,7 @@
                 overflow: auto !important;
             }
         </style>
-    <script src="../../plugins/jQuery/jQuery-2.2.0.min.js"></script>
-    <link href="../../Css/COMMON/Commonstyle.css" rel="stylesheet" />
-    <link href="../../Css/COMMON/FixHeader.css" rel="stylesheet" />
-    <script src="../../Js/COMMON/Validation.js"></script>
-    <link href="../../Css/COMMON/ajaxCalender.css" rel="stylesheet" />
-    <script src="../../Datatable/jquery.dataTables.min.js"></script>
-    <script src="../../Datatable/dataTables.bootstrap.min.js"></script>
-    <script src="../../Datatable/dataTables.responsive.min.js"></script>
-    <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
-    <link href="../../Datatable/dataTables.bootstrap.min.css" rel="stylesheet" />
-    <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+
     <script type="text/javascript">
         //On UpdatePanel Refresh
         var prm = Sys.WebForms.PageRequestManager.getInstance();
@@ -57,140 +47,6 @@
                 input.value = '0' + value;
             }
         }
-   
-        function validate(key) {
-
-            var rbs = $('#<%= rboption.ClientID %> input:checked').val();
-                var keycode = (key.which) ? key.which : key.keyCode;
-                if (rbs == '1') {
-
-                    if (!(keycode == 8 || keycode == 46 || keycode == 32 || keycode == 9) && (keycode < 64 || keycode > 91) && (keycode < 97 || keycode > 122)) {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (rbs == '2') {
-
-                    if (!(keycode == 8 || keycode == 46 || keycode == 9) && (keycode < 48 || keycode > 57)) {
-                        return false;
-                    }
-                }
-
-                else if (rbs == '3') {
-
-                    if (!(keycode == 8 || keycode == 46 || keycode == 9) && (keycode < 48 || keycode > 57)) {
-                        return false;
-                    }
-                }
-
-            }
-        </script>
-
-     <script>
-         var prm = Sys.WebForms.PageRequestManager.getInstance();
-         if (prm != null) {
-             prm.add_endRequest(function (sender, e) {
-                 if (sender._postBackSettings.panelsToUpdate != null) {
-
-                     $("#<%=txtSearch.ClientID %>").autocomplete({
-                            source: function (request, response) {
-                                var obj = {};
-                                obj.prefix = request.term;
-                                obj.type = $('#<%= rboption.ClientID %> input:checked').val()
-                                obj.CollegeId = $("#<%=hdnCollegeId.ClientID%>").val()
-                                obj.SessionId = $("#<%=hdnSessionId.ClientID%>").val()
-
-                                $.ajax({
-
-
-                                    url: '<%=ResolveUrl("WebService.asmx/GetStudentForCancellation") %>',
-                                    data: JSON.stringify(obj),
-                                    dataType: "json",
-                                    type: "POST",
-                                    scroll: true,
-                                    scrollHeight: 180,
-                                    contentType: "application/json; charset=utf-8",
-                                    success: function (data) {
-                                        response($.map(data.d, function (item) {
-                                            return {
-                                                label: item.split('☺')[0],
-                                                val: item.split('☺')[1]
-                                            }
-                                        }))
-                                    },
-                                    error: function (response) {
-                                        alert(response.responseText);
-                                    },
-                                    failure: function (response) {
-                                        alert(response.responseText);
-                                    }
-                                });
-                            },
-
-                            select: function (e, i) {
-                                $("#<%=hdnStudentId.ClientID %>").val(i.item.val);
-                            },
-                            minLength: 1
-                        });
-
-                        }
-                });
-                };
-        </script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
-        <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet" type="text/css" />
-
-
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-
-                $("#<%=txtSearch.ClientID %>").autocomplete({
-                    source: function (request, response) {
-                        var obj = {};
-                        obj.prefix = request.term;
-                        obj.type = $('#<%= rboption.ClientID %> input:checked').val()
-                       obj.CollegeId = $("#<%=hdnCollegeId.ClientID%>").val()
-                       obj.SessionId = $("#<%=hdnSessionId.ClientID%>").val()
-
-                       $.ajax({
-
-
-                           url: '<%=ResolveUrl("WebService.asmx/GetStudentForCancellation") %>',
-                           data: JSON.stringify(obj),
-                           dataType: "json",
-                           type: "POST",
-                           scroll: true,
-                           scrollHeight: 180,
-                           contentType: "application/json; charset=utf-8",
-                           success: function (data) {
-                               response($.map(data.d, function (item) {
-                                   return {
-                                       label: item.split('☺')[0],
-                                       val: item.split('☺')[1]
-                                   }
-                               }))
-                           },
-                           error: function (response) {
-                               alert(response.responseText);
-                           },
-                           failure: function (response) {
-                               alert(response.responseText);
-                           }
-                       });
-                   },
-
-                    select: function (e, i) {
-                        $("#<%=hdnStudentId.ClientID %>").val(i.item.val);
-                   },
-                   minLength: 1
-                });
-
-            });
-
         </script>
 
     <meta charset="UTF-8">
@@ -204,33 +60,14 @@
                 <br /><br /><br />
                 <div class="box-body">
                     <div class="col-12">
-                        <div class="row">
+                        <div class="row" id ="adminsearch" runat="server" Visible="False">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
-                                    <label>Search By</label>
+                                                <asp:Label ID="lblSearch" runat="server" Font-Bold="true">Search Student By Name</asp:Label>
                                 </div>
-                                <div class="col-sm-8">
-                                                <asp:RadioButtonList ID="rboption" onkeydown="return (event.keyCode!=13);" TabIndex="4" runat="server" RepeatDirection="Horizontal" Enabled="True">
-                                                    <asp:ListItem Value="1" Selected="True" Text="Name"></asp:ListItem>
-                                                    <asp:ListItem Value="2" Text="Student Id"></asp:ListItem>
-                                                    <asp:ListItem Value="3" Text="UID"></asp:ListItem>
-                                                </asp:RadioButtonList>
-                                            </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <div class="label-dynamic">
-                                    <label>Search </label>
-                                </div>
-                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" placeholder="Search Student Here" TabIndex="5" MaxLength="64">
-                                                    </asp:TextBox>
-                                </div>
-
-                                <asp:HiddenField ID="hdnStudentId" runat="server" />
-                                                <asp:HiddenField ID="hdnCourseId" runat="server" />
-                                                <asp:HiddenField ID="hdnCollegeId" runat="server" />
-                                                <asp:HiddenField ID="hdnSessionId" runat="server" />
+                                 <asp:DropDownList ID="ddlSearch" runat="server" TabIndex="1" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                     ToolTip="Search Student Name Here" AutoPostBack="True" OnSelectedIndexChanged="ddlSearch_SelectedIndexChanged"/>
+                                 </div>
                         </div>
                           <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">

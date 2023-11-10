@@ -63,6 +63,9 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                 }
+                if (Convert.ToInt16(Session["usertype"]) == 1) adminsearch.Visible = true;
+                
+                objCommon.FillDropDownList(ddlSearch, "ACD_STUDENT", "IDNO", "STUDNAME", "HOSTELER=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "IDNO");
                 objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
                 objCommon.FillDropDownList(ddlStuType, "ACD_HOSTEL_STUDENT_TYPE", "STUDENT_TYPE_ID", "STUDENT_TYPE", "STUDENT_TYPE_ID>0", "STUDENT_TYPE_ID");
                 objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO>0", "HOSTEL_NO");
@@ -103,9 +106,25 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objGatePass.CollegeCode = Session["colcode"].ToString();
             objGatePass.organizationid = Session["OrgId"].ToString();
 
-            /// check form action whether add or update
-            if (ViewState["action"] != null)
+            if (ViewState["action"].ToString().Equals("add"))
             {
+                if (objGatePass.OutDate < System.DateTime.Now)
+                {
+                    objCommon.DisplayMessage("Please select out date greater than today's date.", this.Page);
+                    txtoutDate.Focus();
+                    return;
+                }
+            }
+            
+            if (objGatePass.InDate < objGatePass.OutDate)
+            {
+                objCommon.DisplayMessage("Please select in date greater than out date.", this.Page);
+                txtinDate.Focus();
+                return;
+            }
+
+            /// check form action whether add or update
+
                 if (ViewState["action"].ToString().Equals("add"))
                 {
                     if (CheckDuplicateEntry() == true)
@@ -157,8 +176,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         }
                     }
                 }
-                BindListView();
-            }
+                
+                 BindListView();  
         }
         catch (Exception ex)
         {
@@ -168,7 +187,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable");
         }
     }
-
+    
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
     {
         try
@@ -205,25 +224,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         }
     }
 
-    //protected void ddlStuType_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    if (ddlStuType.SelectedIndex == 1)
-    //    {
-    //        path.InnerText = objCommon.LookUp("ACD_HOSTEL_ADD_AUTH_MASTER", "CONCAT(' --> ', APPROVAL1, ' --> ', APPROVAL2, ' --> ', APPROVAL3, ' --> ', APPROVAL4)", "STUDENT_TYPE_ID = 1");
-    //    }
-    //    else if (ddlStuType.SelectedIndex == 2)
-    //    {
-    //        path.InnerText = objCommon.LookUp("ACD_HOSTEL_ADD_AUTH_MASTER", "CONCAT(' --> ', APPROVAL1, ' --> ', APPROVAL2, ' --> ', APPROVAL3, ' --> ', APPROVAL4)", "STUDENT_TYPE_ID = 2");
-    //    }
-    //    else if (ddlStuType.SelectedIndex == 3)
-    //    {
-    //        path.InnerText = objCommon.LookUp("ACD_HOSTEL_ADD_AUTH_MASTER", "CONCAT(' --> ', APPROVAL1, ' --> ', APPROVAL2, ' --> ', APPROVAL3, ' --> ', APPROVAL4)", "STUDENT_TYPE_ID = 3");
-    //    }
-    //    else
-    //    {
-    //        path.InnerText = "Please Select Student Type";
-    //    }
-    //}
+    protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        Session["idno"] = ddlSearch.SelectedValue;
+    }
+
+
     #endregion Action
 
     #region Private Methods
@@ -280,6 +286,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         txtRemark.Text = string.Empty;
         ddlStuType.SelectedIndex = 0;
         ddlHostel.SelectedIndex = 0;
+        ddlSearch.SelectedIndex = 0;
     }
 
     private void BindListView()
@@ -323,7 +330,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 txtOther.Text = dr["PURPOSE_OTHER"] == null ? string.Empty : dr["PURPOSE_OTHER"].ToString();
                 txtRemark.Text = dr["REMARKS"] == null ? string.Empty : dr["REMARKS"].ToString();          
         }
-       
     }
 
     private DataSet getModuleConfig()
@@ -407,4 +413,5 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     }
 
     #endregion Private Methods
+    
 }
