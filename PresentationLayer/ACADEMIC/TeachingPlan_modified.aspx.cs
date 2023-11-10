@@ -1578,7 +1578,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                                 objCommon.DisplayMessage(updTeach, "Please Select Batch.", this);
                                 return;
                             }
-                            string path = MapPath("~/ExcelData/");s
+                            string path = MapPath("~/ExcelData/");
                             if (btnBrowse.HasFile)
                             {
                                 string filename = btnBrowse.FileName.ToString();
@@ -1973,8 +1973,9 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         objExam.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
 
                     objExam.Ua_No = Convert.ToInt16(Session["userno"].ToString());
-                    int Istutorial = ddlTutorial.SelectedValue == "2" ? 1 : 0;
-                    int OrgId = Convert.ToInt32(Session["OrgId"]);
+					//int Istutorial = ddlTutorial.SelectedValue == "2" ? 1 : 0;
+					int Istutorial = ddlTutorial.SelectedValue == "2" || (Convert.ToInt32(ViewState["IS_TUTORIAL"]) > 0 && Convert.ToInt32(ViewState["IS_PRACTICAL"]) == 0 && Convert.ToInt32(ViewState["IS_THEORY"]) == 0) ? 1 : 0;
+					int OrgId = Convert.ToInt32(Session["OrgId"]);
                     objExam.collegeid = Convert.ToInt32(ViewState["college_id"].ToString());//Added by Dileep on 12.04.2021
 
                     if (CheckDuplicateUploadEntry(objExam.UnitNo, objExam.Lecture_No, objExam.Sectionno, objExam.BatchNo, objExam.Slot) == true)
