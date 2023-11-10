@@ -17,7 +17,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     UAIMS_Common objUCommon = new IITMS.UAIMS_Common();
     PhdController objPhdC = new PhdController();
     string ua_dept = string.Empty;
-
+    string UANO = string.Empty;
     #region Page Load
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -180,15 +180,15 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
         {
             this.objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "ACTIVESTATUS = 1", "BATCHNO"); //added on 27/03/23
 
-            objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
             this.objCommon.FillDropDownList(ddlSearch, "ACD_SEARCH_CRITERIA_PHD", "ID", "CRITERIANAME", "ID > 0 AND IS_FEE_RELATED = 0", "SRNO");
-            objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
-            objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
-            objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
-            objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
+            objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
+            objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
+            objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
             objCommon.FillDropDownList(ddlCommittee, "ACD_PHD_COMMITTEE", "COMMITTEE_ID", "COMMITTEE_NAME", "isnull(ACTIVESTATUS,0)=1 and isnull(COMMITTEE_STATUS,0)=1 ", "COMMITTEE_ID");
-            objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (2,3)", "ua_fullname");
-            objCommon.FillDropDownList(ddlDRCChairman, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (2,3)", "ua_fullname");
+            objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
+            objCommon.FillDropDownList(ddlDRCChairman, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
         }
         catch (Exception ex)
         {
@@ -488,8 +488,8 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                // ddlStatusCat.SelectedValue = dtr["COURSEWORK_STATUS"].ToString();
                 if (dtr["SUPERVISOR_EXT_UANO"].ToString() == "0")
                 {
-                    CheckBox1.Checked = false;                 
-                    objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                    CheckBox1.Checked = false;
+                    objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                    // ddlSupervisor.SelectedValue = dtr["SUPERVISOR_UANO"].ToString();
                     ddlSupervisor.SelectedValue = dtr["SUPERVISOR_UANO"].ToString() == "0" ? "0" : dtr["SUPERVISOR_UANO"].ToString();
                     if (ViewState["usertype"].ToString() == "2")
@@ -557,7 +557,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 if (dtr["JOINTSUPERVISOR1_EXT_UANO"].ToString() == "0")
                 {
                     CheckBox2.Checked = false;
-                    objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                    objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                     objCommon.FillDropDownList(ddlMember1, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + dtr["COMMITTENO"].ToString(), "PD.DESIG_ID");
                     ddlJointSupervisor.SelectedValue = dtr["JOINTSUPERVISOR1_UANO"].ToString() == "0" ? "0" : dtr["JOINTSUPERVISOR1_UANO"].ToString();
                     ddlMember1.SelectedValue = dtr["JOINSUPERVISOR1_DISGNNO"].ToString() == "0" ? "0" : dtr["JOINSUPERVISOR1_DISGNNO"].ToString();
@@ -574,7 +574,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 {
                     CheckBox4.Checked = false;
                     //objCommon.FillDropDownList(ddlInstFac, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
-                    objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                    objCommon.FillDropDownList(ddlInstFac ,"USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                     objCommon.FillDropDownList(ddlMember2, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + dtr["COMMITTENO"].ToString(),"PD.DESIG_ID");
                     ddlMember2.SelectedValue=dtr["INSTITUTEFAC_DISGNNO"].ToString()== "0" ? "0" : dtr["INSTITUTEFAC_DISGNNO"].ToString();
                     ddlInstFac.SelectedValue=dtr["INSTITUTEFACULTY_UANO"].ToString()== "0" ? "0" : dtr["INSTITUTEFACULTY_UANO"].ToString();
@@ -590,7 +590,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 if (dtr["JOINTSUPERVISOR2_EXT_UANO"].ToString() == "0")
                 {
                     CheckBox6.Checked = false;
-                    objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                    objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                     objCommon.FillDropDownList(ddlMember5, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + dtr["COMMITTENO"].ToString(), "PD.DESIG_ID");
                     ddlMember5.SelectedValue=dtr["JOINSUPERVISOR2_DISGNNO"].ToString()== "0" ? "0" : dtr["JOINSUPERVISOR2_DISGNNO"].ToString();
                     ddlJointSupervisorSecond.SelectedValue=dtr["JOINTSUPERVISOR2_UANO"].ToString()== "0" ? "0" : dtr["JOINTSUPERVISOR2_UANO"].ToString();
@@ -606,7 +606,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 if (dtr["DRC_EXT_UANO"].ToString() == "0")
                 {
                     CheckBox5.Checked = false;
-                    objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (2,3)", "ua_fullname");
+                    objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                     objCommon.FillDropDownList(ddlMember3, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + dtr["COMMITTENO"].ToString(), "PD.DESIG_ID");
                     ddlMember3.SelectedValue = dtr["DRC_DISGNNO"].ToString() == "0" ? "0" : dtr["DRC_DISGNNO"].ToString();
                     ddlDRC.SelectedValue = dtr["DRC_UANO"].ToString() == "0" ? "0" : dtr["DRC_UANO"].ToString();
@@ -641,7 +641,8 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
             else
             {
-                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "DESIGNATIONNO IN (1,3) and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
+                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
+                // objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "DESIGNATIONNO IN (1,3) and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
                 ddlDGCSupervisor.Focus();
                // ddlDGCSupervisor.SelectedIndex = 1;
                 ddlDGCSupervisor.SelectedValue = ddlSupervisor.SelectedValue;
@@ -711,14 +712,14 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
             else
             {
-                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                 objCommon.FillDropDownList(ddlMember, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
             }
         }
 
         else
         {
-            objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
             CheckBox3.Checked = false;
             ddlDGCSupervisor.SelectedIndex = 0;
             ddlDGCSupervisor.Focus();
@@ -730,7 +731,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
             else
             {
-                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
                 objCommon.FillDropDownList(ddlMember, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
             }
         }
@@ -753,13 +754,15 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
             else
             {
-                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "DESIGNATIONNO IN (1,3) and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
+                objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
+               // objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "DESIGNATIONNO IN (1,3) and ua_no=" + ddlSupervisor.SelectedValue, "ua_fullname");
                 ddlDGCSupervisor.Focus();
                 ddlDGCSupervisor.SelectedIndex = 1;
                 ddlDGCSupervisor.Enabled = false;
                 CheckBox3.Enabled = false;
                 CheckBox3.Checked = false;
             }
+            FillDropDownNotIN();
         }
         else
         {
@@ -775,11 +778,12 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 CheckBox3.Enabled = false;
                 CheckBox3.Checked = false;
             }
+            FillDropDownNotIN();
         }
         //ddlSupervisorrole.SelectedIndex = 0;
     }
 
-    #region not used
+    #region DDL
     protected void txtSecondSupervisorOutside_SelectedIndexChanged(object sender, EventArgs e)
     {
 
@@ -790,7 +794,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     }
     protected void ddlJointSupervisorSecond_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        FillDropDownNotIN();
     }
     protected void ddlMember1_SelectedIndexChanged1(object sender, EventArgs e)
     {
@@ -798,14 +802,25 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     }
     protected void ddlJointSupervisor_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        FillDropDownNotIN();
     }
-
-
+    protected void ddlDRCChairman_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        FillDropDownNotIN();
+    }
+    protected void ddlInstFac_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        FillDropDownNotIN();
+    }
+    protected void ddlDRC_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        FillDropDownNotIN();
+    }
     protected void ddlMember3_SelectedIndexChanged(object sender, EventArgs e)
     {
 
     }
+
     #endregion
 
     protected void CheckBox3_CheckedChanged(object sender, EventArgs e)
@@ -818,12 +833,13 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
         else
         {
-            objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            objCommon.FillDropDownList(ddlDGCSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
             objCommon.FillDropDownList(ddlMember, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
         }
     }
     protected void CheckBox2_CheckedChanged(object sender, EventArgs e)
     {
+        string NOTIN = string.Empty;
         if (CheckBox2.Checked)
         {
             objCommon.FillDropDownList(ddlJointSupervisor, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
@@ -832,12 +848,16 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
         else
         {
-            objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            NotIn();
+            NOTIN = Session[UANO].ToString();
+            objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
             objCommon.FillDropDownList(ddlMember1, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
+            Session[UANO] = null;
         }
     }
     protected void CheckBox4_CheckedChanged(object sender, EventArgs e)
     {
+        string NOTIN = string.Empty;
         if (CheckBox4.Checked)
         {
             objCommon.FillDropDownList(ddlInstFac, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
@@ -846,12 +866,16 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
         else
         {
-            objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            NotIn();
+            NOTIN = Session[UANO].ToString();
+            objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
             objCommon.FillDropDownList(ddlMember2, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
+            Session[UANO] = null;
         }
     }
     protected void CheckBox6_CheckedChanged(object sender, EventArgs e)
     {
+        string NOTIN = string.Empty;
         if (CheckBox6.Checked)
         {
             objCommon.FillDropDownList(ddlJointSupervisorSecond, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
@@ -860,8 +884,11 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
         else
         {
-            objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
+            NotIn();
+            NOTIN = Session[UANO].ToString();
+            objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
             objCommon.FillDropDownList(ddlMember5, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
+            Session[UANO] = null;
         }
 
     }
@@ -894,7 +921,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     }
     protected void CheckBox5_CheckedChanged(object sender, EventArgs e)
     {
-
+        string NOTIN = string.Empty;
         if (CheckBox5.Checked)
         {
             objCommon.FillDropDownList(ddlDRC, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
@@ -903,9 +930,110 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
 
         else
         {
-            objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (2,3)", "ua_fullname");
+            NotIn();
+            NOTIN = Session[UANO].ToString();
+            objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
             objCommon.FillDropDownList(ddlMember3, "ACD_COMMITTEE_MAPPING cm inner join ACD_PHDCOMMITTEE_DESIGNATION PD ON(CM.DESIG_ID=PD.DESIG_ID)", "PD.DESIG_ID", "PD.DESIGNATION", "PD.EXTERNALSTATUS=0 and COMMITTEE_ID=" + ddlCommittee.SelectedValue, "PD.DESIG_ID");
+            Session[UANO] = null;
         }
+    }
+
+    private void NotIn()
+    {
+        if (ddlSupervisor.SelectedIndex > 0)
+        {
+            if (CheckBox1.Checked)
+            {
+            }
+            else
+            {
+                UANO += ddlSupervisor.SelectedValue;
+            }
+        }
+        if (ddlDGCSupervisor.SelectedIndex > 0)
+        {
+            if (CheckBox3.Checked)
+            {
+            }
+            else
+            {
+                UANO += "," + ddlDGCSupervisor.SelectedValue;
+            }
+        }
+        if (ddlJointSupervisor.SelectedIndex > 0)
+        {
+            if (CheckBox2.Checked)
+            {
+            }
+            else
+            {
+                UANO += "," + ddlJointSupervisor.SelectedValue;
+            }
+        }
+        if (ddlInstFac.SelectedIndex > 0)
+        {
+            if (CheckBox4.Checked)
+            {
+            }
+            else
+            {
+                UANO += "," + ddlInstFac.SelectedValue;
+            }
+        }
+        if (ddlJointSupervisorSecond.SelectedIndex > 0)
+        {
+            if (CheckBox6.Checked)
+            {
+            }
+            else
+            {
+                UANO += "," + ddlJointSupervisorSecond.SelectedValue;
+            }
+        }
+        if (ddlDRC.SelectedIndex > 0)
+        {
+            if (CheckBox5.Checked)
+            {
+            }
+            else
+            {
+                UANO += "," + ddlDRC.SelectedValue;
+            }
+        }
+        if (ddlDRCChairman.SelectedIndex > 0)
+        {
+            UANO += ddlDRCChairman.SelectedValue;
+        }
+        Session[UANO] = UANO.Trim();
+    }
+
+    private void FillDropDownNotIN()
+    {
+        string NOTIN = string.Empty;
+        NotIn();
+        NOTIN = Session[UANO].ToString();
+        if (ddlJointSupervisor.SelectedIndex == 0)
+        {
+            objCommon.FillDropDownList(ddlJointSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN +")", "ua_fullname");
+        }
+        if (ddlJointSupervisorSecond.SelectedIndex == 0)
+        {
+            objCommon.FillDropDownList(ddlJointSupervisorSecond, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
+        }
+        if (ddlInstFac.SelectedIndex == 0)
+        {
+            objCommon.FillDropDownList(ddlInstFac, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
+        }
+        if (ddlDRC.SelectedIndex == 0)
+        {
+            objCommon.FillDropDownList(ddlDRC, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
+        }
+        if (ddlDRCChairman.SelectedIndex == 0)
+        {
+            objCommon.FillDropDownList(ddlDRCChairman, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0 AND UA_NO NOT IN (" + NOTIN + ")", "ua_fullname");
+        }
+        Session[UANO] = null;
+
     }
     #endregion
 
@@ -935,6 +1063,34 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     {
         try
         {
+
+            //added by Vipul Tichakule on date 07-11-2023
+            if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisor.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisorSecond.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlJointSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRC.SelectedValue == ddlSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+
             PhdController objPhdC = new PhdController();
 
             Phd objS = new Phd();
@@ -1014,7 +1170,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
             else
             {
                 if (output != "1")
-                {                  
+                {
                     objCommon.DisplayMessage("Student Information Update Successfully!!", this.Page);
 
                     this.ShowStudentDetails();
@@ -1103,4 +1259,6 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
         divCriteria.Visible = false;
         divpanel.Visible = false;
     }
+
+  
 }
