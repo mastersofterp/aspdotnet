@@ -697,6 +697,55 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
 
 
+                    // Added Fee Head Group  by Gopal M - 01112023  Ticket-#50097
+                    if (ds.Tables[0].Rows[0]["FEE_HEAD_GROUP"].ToString() != null && ds.Tables[0].Rows[0]["FEE_HEAD_GROUP"].ToString() == "1")
+                    {
+                        rdID = "hfchkFeeHeadGroup";
+                        hfchkFeeHeadGroup.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565647", "CheckFeeHeadGroup(true);", true);
+                    }
+                    else
+                    {
+                        hfchkFeeHeadGroup.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565647", "CheckFeeHeadGroup(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_SINGLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_SINGLE"].ToString() == "1")
+                    {
+                        rdID = "hfchkFeeReceiptSingle";
+                        hfchkFeeReceiptSingle.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(true);", true);
+                    }
+                    else
+                    {
+                        hfchkFeeReceiptSingle.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_DOUBLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_DOUBLE"].ToString() == "1")
+                    {
+                        rdID = "hfchkFeeReceiptDouble";
+                        hfchkFeeReceiptDouble.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565649", "CheckFeeReceiptDouble(true);", true);
+                    }
+                    else
+                    {
+                        hfchkFeeReceiptDouble.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565649", "CheckFeeReceiptDouble(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_TRIPLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_TRIPLE"].ToString() == "1")
+                    {
+                        rdID = "hfchkFeeReceiptTriple";
+                        hfchkFeeReceiptTriple.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565650", "CheckFeeReceiptTriple(true);", true);
+                    }
+                    else
+                    {
+                        hfchkFeeReceiptTriple.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565650", "CheckFeeReceiptTriple(false);", true);
+                    }
+
                 }
             }
         }
@@ -1093,6 +1142,24 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             {
                 objMod.OUTSTANDING_FEECOLLECTION = false;
                 objMod.OUTSTANDING_MESSAGE = txtOutstandingMessage.Text;
+            }
+
+            // Added Fee Head Group by Gopal M 01112023 Ticket #50097
+            if (hfchkFeeHeadGroup.Value == "true")
+            {
+                objMod.FEE_HEAD_GROUP = true;
+            }
+            if (hfchkFeeReceiptSingle.Value == "true")
+            {
+                objMod.FEE_RECEIPT_SINGLE = true;
+            }
+            if (hfchkFeeReceiptDouble.Value == "true")
+            {
+                objMod.FEE_RECEIPT_DOUBLE = true;
+            }
+            if (hfchkFeeReceiptTriple.Value == "true")
+            {
+                objMod.FEE_RECEIPT_TRIPLE = true;
             }
 
 

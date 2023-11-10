@@ -36,7 +36,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[52];
+                        sqlParams = new SqlParameter[56];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -91,8 +91,13 @@ namespace IITMS
                         // Added by Gopal M 03102023 - Ticket #46419
                         sqlParams[49] = new SqlParameter("@P_OUTSTANDING_FEECOLLECTION", objConfig.OUTSTANDING_FEECOLLECTION);
                         sqlParams[50] = new SqlParameter("@P_OUTSTANDING_MESSAGE", objConfig.OUTSTANDING_MESSAGE);
-                        sqlParams[51] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[51].Direction = ParameterDirection.Output;
+                        // Added by Gopal M 01112023 - Ticket #50097
+                        sqlParams[51] = new SqlParameter("@P_FEE_HEAD_GROUP", objConfig.FEE_HEAD_GROUP);
+                        sqlParams[52] = new SqlParameter("@P_FEE_RECEIPT_SINGLE", objConfig.FEE_RECEIPT_SINGLE);
+                        sqlParams[53] = new SqlParameter("@P_FEE_RECEIPT_DOUBLE", objConfig.FEE_RECEIPT_DOUBLE);
+                        sqlParams[54] = new SqlParameter("@P_FEE_RECEIPT_TRIPLE", objConfig.FEE_RECEIPT_TRIPLE);
+                        sqlParams[55] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[55].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);

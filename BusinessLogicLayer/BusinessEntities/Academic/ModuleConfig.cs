@@ -140,6 +140,29 @@ namespace IITMS
                         _OUTSTANDING_MESSAGE = value;
                     }
                 }
+
+                // Added by Gopal M 01112023
+                public bool FEE_HEAD_GROUP
+                {
+                    get;
+                    set;
+                }
+                public bool FEE_RECEIPT_SINGLE
+                {
+                    get;
+                    set;
+                }
+                public bool FEE_RECEIPT_DOUBLE
+                {
+                    get;
+                    set;
+                }
+                public bool FEE_RECEIPT_TRIPLE
+                {
+                    get;
+                    set;
+                }
+
             }
         }
     }

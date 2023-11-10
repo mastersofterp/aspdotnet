@@ -317,6 +317,18 @@
                                                         </div>
                                                     </div>
 
+                                                     <%-- New code Fee Head Groups added by -Gopal M 01112023--%>
+                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label31" runat="server" Font-Bold="true">Yes,If Allow to show Receipt Head Group on Fees Receipt.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkFessHeadGroup" name="chkFessHeadGroup" />
+                                                            <label data-on="Yes" tabindex="9" data-off="No" for="chkFessHeadGroup"></label>
+                                                        </div>
+                                                    </div>
+
                                                     <%-- New code added by -Gopal M 02102023--%>
 
                                                      <div class="col-12">
@@ -396,6 +408,44 @@
                                                             <label data-on="Yes" tabindex="10" data-off="No" for="chkStdReactivationfee"></label>
                                                         </div>
                                                     </div>
+
+                                                      <%-- Show Single, Duplicate Triplicate receipt added by -Gopal M 01112023--%>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label32" runat="server" Font-Bold="true">Yes,If Allow to show Single Fee Receipt on Fee Collection.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkFeeReceiptSingle" name="chkFeeReceiptSingle" />
+                                                            <label data-on="Yes" tabindex="9" data-off="No" for="chkFeeReceiptSingle"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label33" runat="server" Font-Bold="true">Yes,If Allow to show Duplicate Fee Receipt on Fee Collection.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkFeeReceiptDouble" name="chkFeeReceiptDouble" />
+                                                            <label data-on="Yes" tabindex="9" data-off="No" for="chkFeeReceiptDouble"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label34" runat="server" Font-Bold="true">Yes,If Allow to show Triplicate Fee Receipt on Fee Collection.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkFeeReceiptTriple" name="chkFeeReceiptTriple" />
+                                                            <label data-on="Yes" tabindex="9" data-off="No" for="chkFeeReceiptTriple"></label>
+                                                        </div>
+                                                    </div>
+
+
+
+
 
                                                     <div class="col-12">
                                                         <div class="sub-heading">
@@ -1248,6 +1298,10 @@
                 <asp:HiddenField ID="hfdchkcreateusernewprntentry" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdRedoImprovementCourseRegFlag" runat="server" ClientIDMode="Static" />
                  <asp:HiddenField ID="hfchkOutstandingFeeCollection" runat="server" ClientIDMode="Static" />
+                 <asp:HiddenField ID="hfchkFeeHeadGroup" runat="server" ClientIDMode="Static" />
+                 <asp:HiddenField ID="hfchkFeeReceiptSingle" runat="server" ClientIDMode="Static" />
+                 <asp:HiddenField ID="hfchkFeeReceiptDouble" runat="server" ClientIDMode="Static" />
+                 <asp:HiddenField ID="hfchkFeeReceiptTriple" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -2267,8 +2321,22 @@
             $('[id*=chkRedoImprovementCourseRegFlag]').prop('checked', val);       
         }
 
+        //Added by Gopal M
         function CheckOnstandingFeeCollection(val) {
             $('[id*=chkOutstandingFeeCollection]').prop('checked', val);
+        }
+      
+        function CheckFeeHeadGroup(val) {
+            $('[id*=chkFessHeadGroup]').prop('checked', val);
+        }
+        function CheckFeeReceiptSingle(val) {
+            $('[id*=chkFeeReceiptSingle]').prop('checked', val);
+        }
+        function CheckFeeReceiptDouble(val) {
+            $('[id*=chkFeeReceiptDouble]').prop('checked', val);
+        }
+        function CheckFeeReceiptTriple(val) {
+            $('[id*=chkFeeReceiptTriple]').prop('checked', val);
         }
 
         //
@@ -2306,8 +2374,12 @@
             $('#hfdchkAttTeaching').val($('#chkAttTeaching').prop('checked'));
             $('#hfdchkcreateusernewprntentry').val($('#chkcreateusernewprntentry').prop('checked'));
             $('#hfdRedoImprovementCourseRegFlag').val($('#chkRedoImprovementCourseRegFlag').prop('checked'));
-
+            // Added by Gopal M.
             $('#hfchkOutstandingFeeCollection').val($('#chkOutstandingFeeCollection').prop('checked'));
+            $('#hfchkFeeHeadGroup').val($('#chkFessHeadGroup').prop('checked'));
+            $('#hfchkFeeReceiptSingle').val($('#chkFeeReceiptSingle').prop('checked'));
+            $('#hfchkFeeReceiptDouble').val($('#chkFeeReceiptDouble').prop('checked'));
+            $('#hfchkFeeReceiptTriple').val($('#chkFeeReceiptTriple').prop('checked'));
         }
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
@@ -2321,7 +2393,7 @@
         function validate1(){
             $('#hfchknewstudentemail').val();
             var chkSelectClg= $('#chkSelectCollege').prop('checked');
-            $('#hfSelectCollege').val($('#chkGlobalCTAllotment').prop('checked'));
+            $('#hfSelectCollege').val(chkSelectClg);
             var ddlcolg =$('#ctl00_ContentPlaceHolder1_ddlCollege').val();
             if(chkSelectClg===true && ddlcolg==='0')
             { 
