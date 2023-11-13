@@ -54,6 +54,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 this.PopulateDropDown();
                 divbatch.Visible = false;
                 divMsg.InnerHtml = string.Empty;
+                ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
             }
         }
     }
@@ -226,7 +227,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     string ccode = (dataitem.FindControl("lblCourseno") as Label).Text;  //JECRC NEW REQUIREMENT
                     objExam.Examdate = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
 
-                    CustomStatus cs = (CustomStatus)objExamController.AddExamDay1(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
+                    //CustomStatus cs = (CustomStatus)objExamController.AddExamDay1(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
+                    CustomStatus cs = (CustomStatus)objExamController.AddExamDay1(objExam, OrgID, Modeexam, ccode, sessionid, subexamno, sectionno, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         objCommon.DisplayMessage(updExamdate, "Exam Day(s) Saved Successfully!", this.Page);
@@ -481,7 +483,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             btnSubmit.Visible = false;
             lvCourse.DataSource = ds;
             lvCourse.DataBind();
-            objCommon.DisplayMessage("Courses Not Found", this.Page);
+            objCommon.DisplayMessage(this.updExamdate, "Courses Not Found", this.Page);
         }
     }
 
@@ -646,7 +648,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 {
 
                     ImageButton ibtnEvalDelete = sender as ImageButton;
-                    int IDNO = int.Parse(ibtnEvalDelete.CommandArgument);
+                    int courseno = int.Parse(ibtnEvalDelete.CommandArgument);
                     //ds = objCommon.FillDropDown("ACD_EXAM_DATE", "CCODE,EXAM_TT_TYPE", "SUBEXAMNO,SUBID", "EXDTNO=" + IDNO + "", "");
                     //if (ds.Tables[0].Rows.Count > 0)
                     //{
@@ -660,7 +662,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     //}
                     //ds = objCommon.FillDropDown("ACD_EXAM_DATE", "EXDTNO", "", "CCODE='" + ccode + "' AND EXAM_TT_TYPE=" + EXAM_TT_TYPE + "AND SUBEXAMNO=" + SUBEXAMNO + "AND SUBID=" + SUBID + "", "");
 
-                    ccode = objCommon.LookUp("ACD_COURSE", "DISTINCT CCODE", "COURSENO=" + IDNO);
+                    ccode = objCommon.LookUp("ACD_COURSE", "DISTINCT CCODE", "COURSENO=" + courseno);
                     EXAM_TT_TYPE = Convert.ToInt32(ddlExamName.SelectedValue);
                     SUBEXAMNO = Convert.ToInt32(ddlSubExamName.SelectedValue);
                     SUBID = Convert.ToInt32(ddlSubjecttype.SelectedValue);
@@ -673,8 +675,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     }
                     allexdtno = allexdtno.TrimEnd(',');
 
-                    int retStatus = objExamController.DeleteTimeTable_JECRC(allexdtno);
-
+                    //int retStatus = objExamController.DeleteTimeTable_JECRC(allexdtno);
+                    int retStatus = objExamController.DeleteTimeTable_JECRC(allexdtno, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
                     if ((retStatus == 1) && (chkBox.Checked))
                     {
                         objCommon.DisplayMessage(this.updExamdate, "Time Table Cancelled Successfully", this.Page);
@@ -1050,7 +1052,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         {
             string procedure = "PKG_ACAD_EXAM_DATE_GET_DATE_COURSEWISE_REPORT_JECRC";
             string parameter = "@P_SESSIONNO,@P_DEGREENO,@P_SEMESTERNO,@P_SCHEMENO,@P_EXAM_NO,@P_COLLEGE_ID,@P_SUBEXAMNO";
-            string values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," +  Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlExamName.SelectedValue) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(ddlSubExamName.SelectedValue) + "";
+            string values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlExamName.SelectedValue) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(ddlSubExamName.SelectedValue) + "";
             DataSet ds = objCommon.DynamicSPCall_Select(procedure, parameter, values);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1193,7 +1195,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                         int sessionid = Convert.ToInt32(ddlSession1.SelectedValue);
                         objExam.Examdate = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
                         //return;   //Injamam Break point for testing
-                        CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
+                        //CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
+                        CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
                         if (cs.Equals(CustomStatus.RecordSaved))
                         {
                             objCommon.DisplayMessage(updglobal, "Exam Day(s) Saved Successfully!", this.Page);
@@ -1523,7 +1526,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
                     ImageButton ibtnEvalDelete1 = sender as ImageButton;
                     string ccode = (ibtnEvalDelete1.CommandArgument).ToString();
-                    int retStatus = Convert.ToInt32(objExamController.DeleteTimeTableElectiv(ccode, sessionid, subexamno));
+                    //int retStatus = Convert.ToInt32(objExamController.DeleteTimeTableElectiv(ccode, sessionid, subexamno));
+                    int retStatus = Convert.ToInt32(objExamController.DeleteTimeTableElectiv(ccode, sessionid, subexamno, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString()));
                     if ((retStatus == 1) && (chkBox.Checked))
                     {
                         objCommon.DisplayMessage(this.updglobal, "Time Table Cancelled Successfully", this.Page);
@@ -1698,7 +1702,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 string ccode = ddlcommoncourse.SelectedValue.ToString();
                 objExam.Examdate = Convert.ToDateTime(txtExamDate1.Text.ToString());
                 objExam.Slot = Convert.ToInt32(ddlSlot1.SelectedValue);
-                cs = (CustomStatus)objExamController.AddCommonCourseTimeTable(objExam, orgid, ccode, sessionid, subexamno, subid, schemes);
+                //cs = (CustomStatus)objExamController.AddCommonCourseTimeTable(objExam, orgid, ccode, sessionid, subexamno, subid, schemes);
+                cs = (CustomStatus)objExamController.AddCommonCourseTimeTable(objExam, orgid, ccode, sessionid, subexamno, subid, schemes, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
             }
             if (cs.Equals(CustomStatus.RecordSaved))
             {
@@ -2159,7 +2164,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         HiddenField hdn_schemeno = (HiddenField)lvtimetable.Items[rowIndex].FindControl("hdn_schemeno");
         HiddenField hdf_slotno1 = (HiddenField)lvtimetable.Items[rowIndex].FindControl("hdf_slotno1");
         Label txtExamDate1 = (Label)lvtimetable.Items[rowIndex].FindControl("txtExamDate1");
-        int stat = objExamController.DeleteTimeTableCommonCourses(hdf_course.Value, Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(ddlSubexamname2.SelectedValue), Convert.ToInt32(ddlSubjecttype2.SelectedValue), hdn_schemeno.Value, Convert.ToDateTime(txtExamDate1.Text), Convert.ToInt32(hdf_slotno1.Value));
+        //int stat = objExamController.DeleteTimeTableCommonCourses(hdf_course.Value, Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(ddlSubexamname2.SelectedValue), Convert.ToInt32(ddlSubjecttype2.SelectedValue), hdn_schemeno.Value, Convert.ToDateTime(txtExamDate1.Text), Convert.ToInt32(hdf_slotno1.Value));
+        int stat = objExamController.DeleteTimeTableCommonCourses(hdf_course.Value, Convert.ToInt32(ddlSession2.SelectedValue), Convert.ToInt32(ddlSubexamname2.SelectedValue), Convert.ToInt32(ddlSubjecttype2.SelectedValue), hdn_schemeno.Value, Convert.ToDateTime(txtExamDate1.Text), Convert.ToInt32(hdf_slotno1.Value), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
         if (stat == 1)
         {
             objCommon.DisplayMessage(updcommon, "Exam Time Table Cancel Successfully", this.Page);

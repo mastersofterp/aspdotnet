@@ -6,7 +6,6 @@
     <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css") %>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.js")%>"></script>
 
-
     <style>
         .dataTables_scrollHeadInner {
             width: max-content!important;
@@ -20,6 +19,29 @@
             width: 230px !important;
         }
 
+        #ctl00_ContentPlaceHolder1_Panel3 .select2.select2-container, #ctl00_ContentPlaceHolder1_Panel3 .btn-group {
+            width: 300px !important;
+        }
+
+        #ctl00_ContentPlaceHolder1_lvtimetable_ctrl0_txtExamDate1 {
+            width: 100px !important;
+        }
+
+
+        @media (max-width: 1200px) {
+            .tbl-panel2 {
+                width: 100%;
+                overflow-x: scroll;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .tbl-panel3 {
+                width: 100%;
+                overflow-x: scroll;
+            }
+        }
+
         /*#gridrow2 .dataTables_scrollBody {
             overflow: inherit !important;
         }*/
@@ -31,14 +53,8 @@
             #gridrow2 .dataTables_scrollBody .select2-container {
                 width: 250px !important;
             }*/
-
-        @media (max-width: 1200px) {
-            .tbl-panel2 {
-                width: 100%;
-                overflow-x: scroll;
-            }
-        }
     </style>
+
 
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updExamdate"
@@ -712,6 +728,9 @@
                                                 <asp:ListView ID="lvcommoncourse" runat="server">
                                                     <LayoutTemplate>
                                                         <div class="tbl-panel2">
+                                                            <div class="sub-heading">
+                                                                <h5>Course List</h5>
+                                                            </div>
                                                             <table class="table table-bordered table-striped" style="width: 100%">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
@@ -784,7 +803,10 @@
                                                 <asp:ListView ID="lvtimetable" runat="server">
                                                     <LayoutTemplate>
                                                         <div class="tbl-panel3">
-                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblTim">
+                                                            <div class="sub-heading">
+                                                                <h5>Time Table List</h5>
+                                                            </div>
+                                                            <table class="table table-striped table-bordered" style="width: 100%" id="tblTim">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
                                                                         <th>Edit</th>
@@ -1011,69 +1033,6 @@
         }
     </script>
 
-    <%-- <script>
-        function submitConfirm() {
-            debugger
-
-            var msg = '';
-            var bool = true;
-            var ddlCollege = document.getElementById("<%=ddlCollege.ClientID%>");
-            if (ddlCollege.value == 0) {
-                msg += 'Please Select College \n';
-                bool = false;
-            }
-            var ddlSession = document.getElementById("<%=ddlSession.ClientID%>");
-            if (ddlSession.value == 0) {
-                msg += 'Please Select Session \n';
-                bool = false;
-            }
-            var ddlSemester = document.getElementById("<%=ddlSemester.ClientID%>");
-            if (ddlSemester.value == 0) {
-                msg += 'Please Select Semester \n';
-                bool = false;
-            }
-            var ddlSubjecttype = document.getElementById("<%=ddlSubjecttype.ClientID%>");
-            if (ddlSubjecttype.value == 0) {
-                msg += 'Please Select Subject Type \n';
-                bool = false;
-            }
-            var ddlExamName = document.getElementById("<%=ddlExamName.ClientID%>");
-            if (ddlExamName.value == 0) {
-                msg += 'Please Select Exam Name \n';
-                bool = false;
-            }
-            var ddlSubExamName = document.getElementById("<%=ddlSubExamName.ClientID%>");
-            if (ddlSubExamName.value == 0) {
-                msg += 'Please Select Subexam Name \n';
-                bool = false;
-            }
-
-            if (checklistView() == false) {
-                return false;
-            }
-
-            if (bool == false) {
-                alert(msg, 'Warning!');
-                return false;
-            }
-            if (submitConfirm1() == false) {
-                return false;
-            }
-
-        }
-
-
-
-        function submitConfirm1() {
-            var ret = confirm('Same Date and Same Slot Exists Do you really want to Continue?');
-            if (ret == true) {
-                validate = true;
-            }
-            else
-                validate = false;
-            return validate;
-        }
-    </script>--%>
 
     <script>
         function checkDate(sender, args) {
