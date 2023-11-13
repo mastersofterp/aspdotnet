@@ -4038,7 +4038,26 @@ namespace IITMS
                 /// <param name="mode"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetGlobalOfferedCourseList(int sessionno, int courseno, int ua_no, int mode, int sectionno)
+                public DataSet GetGlobalOfferedCourseList(int sessionno, int courseno, int ua_no, int mode)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[3] = new SqlParameter("@P_MODE", mode);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_GLOBAL_COURSE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetGlobalOfferedCourseList-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                public DataSet GetGlobalOfferedCourseList_Section(int sessionno, int courseno, int ua_no, int mode, int sectionno)
                 {
                     DataSet ds = null;
                     try
@@ -4050,7 +4069,7 @@ namespace IITMS
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[3] = new SqlParameter("@P_MODE", mode);
                         objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
-                        ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_GLOBAL_COURSE", objParams);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_GLOBAL_COURSE_SECTION", objParams);
                     }
                     catch (Exception ex)
                     {

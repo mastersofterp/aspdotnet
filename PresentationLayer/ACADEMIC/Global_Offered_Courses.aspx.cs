@@ -1007,7 +1007,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             ddlSubjectAT.Items.Clear();
             ddlSubjectAT.Items.Add(new ListItem("Please Select", "0"));
             int SessionNo = Convert.ToInt32(ddlCollegeSession.SelectedValue);
-            DataSet ds = objCC.GetGlobalOfferedCourseList(SessionNo, 0, 0, 1, 0);
+            DataSet ds = objCC.GetGlobalOfferedCourseList_Section(SessionNo, 0, 0, 1, 0);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 // ddlSession.SelectedValue = "";
@@ -1609,7 +1609,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
 
     public void BindCourseDropdown(int Schemeno)
     {
-        DataSet ds1 = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(ViewState["schemeno"]), 0, 0, 3, 0);
+        DataSet ds1 = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ViewState["schemeno"]), 0, 0, 3, 0);
         if (ds1.Tables[0].Rows.Count > 0)
         {
             // ddlSession.SelectedValue = "";
@@ -2253,7 +2253,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             ddlSubjectAT.Items.Clear();
             ddlSubjectAT.Items.Add(new ListItem("Please Select", "0"));
             int SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
-            DataSet ds = objCC.GetGlobalOfferedCourseList(SessionNo, 0, 0, 5, 0);
+            DataSet ds = objCC.GetGlobalOfferedCourseList_Section(SessionNo, 0, 0, 5, 0);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 // ddlSession.SelectedValue = "";
@@ -2343,7 +2343,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
 
     public void BindCourseDropdownTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 7, Convert.ToInt32(ddlTTSection.SelectedValue));
+        DataSet ds1 = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(SessionNo), 0, 0, 7, Convert.ToInt32(ddlTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             // ddlSession.SelectedValue = "";
@@ -2390,7 +2390,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             ddlMainTeacherCT.Items.Add(new ListItem("Please Select", "0"));
             lstAdditionalTeacherCT.ClearSelection();
             //ddlGlobalElectiveGroup.SelectedIndex = 1;
-            DataSet ds = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6, 0);
+            DataSet ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6, 0);
             if (ds.Tables[0].Rows.Count > 0)
             {
 
@@ -2432,7 +2432,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
                 lstAdditionalTeacherCT.ClearSelection();
                 //ddlGlobalElectiveGroup.SelectedIndex = 1;
                 int SessionNo = Convert.ToInt32(ddlSessionCT.SelectedValue);
-                DataSet ds = objCC.GetGlobalOfferedCourseList(SessionNo, 0, 0, 5, 0);
+                DataSet ds = objCC.GetGlobalOfferedCourseList_Section(SessionNo, 0, 0, 5, 0);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     // ddlSession.SelectedValue = "";
@@ -2674,7 +2674,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     public void BindCourseDropdownCancelTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlCancelTTSection.SelectedValue));
+        DataSet ds1 = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlCancelTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             ddlCourseCancelTT.Items.Clear();
@@ -2872,7 +2872,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     public void BindCourseDropdownRevisedTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlRevisedTTSection.SelectedValue));
+        DataSet ds1 = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlRevisedTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             // ddlSession.SelectedValue = "";
@@ -3485,11 +3485,11 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         {
             if (Convert.ToInt32(ViewState["globalElectiveCTAllotment"]) == 1)
             {
-                ds = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 9, Convert.ToInt32(ddlsection.SelectedValue));
+                ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 9, Convert.ToInt32(ddlsection.SelectedValue));
             }
             else
             {
-                ds = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 6, 0);
+                ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 6, 0);
             }
             if (ds.Tables[0].Rows.Count > 0)
             {
