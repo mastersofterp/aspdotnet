@@ -1270,8 +1270,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                             new SqlParameter("@P_SCHEMEID",objs.SchemeNo),
                             new SqlParameter("@P_CHKREGNO",ChkRegno),
                             new SqlParameter("@P_IP_ADDRESS",IpAddress),
-                            new SqlParameter("@P_OUT", SqlDbType.Int),
-                        
+                            //Added P_BRANCHNO,P_DEGREENO,P_COLLEGE_ID And P_PAYMENTTYPE Parameter by Gopal M 13112023 Ticket#50417
+                            new SqlParameter("@P_BRANCHNO", objs.NewBranchNo),
+                            new SqlParameter("@P_DEGREENO", objs.NewDegreeNo),
+                            new SqlParameter("@P_COLLEGE_ID", objs.NewCollege_ID),
+                            new SqlParameter("@P_PAYMENTTYPE", objs.NewPayTypeNO),
+                            new SqlParameter("@P_OUT", SqlDbType.Int),                       
                           };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
 
