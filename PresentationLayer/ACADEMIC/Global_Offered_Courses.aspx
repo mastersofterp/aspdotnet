@@ -97,6 +97,10 @@
         #ctl00_ContentPlaceHolder1_Panel3 .dataTables_scrollHeadInner {
             width: max-content !important;
         }
+
+        #ctl00_ContentPlaceHolder1_Panel1 .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
     </style>
 
 
@@ -137,7 +141,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tab_6" tabindex="7">Cancel Time Table</a>
                             </li>
-                              <li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tab_8" tabindex="8">TT Report</a>
                             </li>
                         </ul>
@@ -235,7 +239,7 @@
                                                                         <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME")%>' />
                                                                         <%-- <%# Eval("COURSE_NAME")%>--%>
                                                                     </td>
-                                                                     <td>
+                                                                    <td>
                                                                         <asp:Label ID="Label6" runat="server" Text='<%# Eval("GROUPNAME")%>' />
                                                                         <%-- <%# Eval("COURSE_NAME")%>--%>
                                                                     </td>
@@ -444,7 +448,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
-                                                        <label>Group</label>
+                                                        <label>Group / Section</label>
 
                                                     </div>
                                                     <asp:DropDownList ID="ddlGlobalElectiveGroup" runat="server" TabIndex="5" AppendDataBoundItems="true" ValidationGroup="courseteacher" OnSelectedIndexChanged="ddlGlobalElectiveGroup_SelectedIndexChanged"
@@ -452,7 +456,7 @@
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlCourseCT"
-                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Group" ValidationGroup="courseteacher">
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Group / Section" ValidationGroup="courseteacher">
                                                     </asp:RequiredFieldValidator>
 
                                                 </div>
@@ -510,7 +514,7 @@
                                                                         <th>
                                                                             <asp:Label ID="lblDYlvCourse" runat="server" Font-Bold="true"></asp:Label>
                                                                         </th>
-                                                                        <th>Group
+                                                                        <th>Group / Section
                                                                         </th>
                                                                         <th>Main Teacher
                                                                         </th>
@@ -537,7 +541,7 @@
                                                                     <%# Eval("COURSE_NAME")%>
                                                                 </td>
                                                                 <td>
-                                                                    <%# Eval("GROUP_NAME")%>
+                                                                    <%# Eval("SECTIONNAME")%>
                                                                 </td>
                                                                 <td>
                                                                     <%# Eval("UA_FULLNAME")%>
@@ -660,6 +664,18 @@
 
                                             <div class="col-12">
                                                 <div class="row">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>* </sup>
+                                                            <label>Section</label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlsection" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlsection_SelectedIndexChanged"
+                                                            ValidationGroup="teacherallot" AutoPostBack="True">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlsection"
+                                                            Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="teacherallot"></asp:RequiredFieldValidator>
+                                                    </div>
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
@@ -1060,6 +1076,18 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSessionTimeTable"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>
                                                 </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="teacherallot" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ControlToValidate="ddlTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="timetable"></asp:RequiredFieldValidator>
+                                                </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -1245,12 +1273,14 @@
                                                                     <td style="text-align: center; width: 5%">
                                                                     Show
                                                                     </th>
-                                                                    <th style="text-align: center; width: 20%">
+                                                                    <th style="text-align: center; width: 10%">
                                                                         <%--<asp:Label ID="lblDYddlColgScheme_Tab2" runat="server" Font-Bold="true"></asp:Label>--%>
                                                                         Session
                                                                     </th>
                                                                     <th style="text-align: center; width: 45%">
                                                                         <asp:Label ID="lblDYtxtCourseName" runat="server" Font-Bold="true"></asp:Label>
+                                                                    </th>
+                                                                    <th style="text-align: center; width: 10%">Section
                                                                     </th>
                                                                     <th style="text-align: center; width: 10%">Slot Type
                                                                     </th>
@@ -1281,11 +1311,14 @@
                                                                                 <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
                                                                             </asp:Panel>
                                                                         </td>
-                                                                        <td style="white-space: normal; width: 20%">
+                                                                        <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SESSION_NAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 45%">
                                                                             <%# Eval("COURSE_NAME")%>
+                                                                        </td>
+                                                                        <td style="white-space: normal; width: 10%">
+                                                                            <%# Eval("SECTIONNAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SLOTTYPE_NAME")%>
@@ -1397,6 +1430,19 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlSessionCancelTT"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Canceltimetable"></asp:RequiredFieldValidator>
                                                 </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlCancelTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                        data-select2-enable="true" OnSelectedIndexChanged="ddlCancelTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="Canceltimetable" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ControlToValidate="ddlCancelTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="Canceltimetable"></asp:RequiredFieldValidator>
+                                                </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -1478,8 +1524,21 @@
                                                             ControlToValidate="txtCancelTTEndDate" Display="None"
                                                             ValidationGroup="Canceltimetable" />
                                                     </div>
+
                                                 </div>
-                                                 <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Cancellation Type</label>
+                                                    </div>
+                                                    <asp:RadioButtonList ID="rdoCancelType" runat="server" OnSelectedIndexChanged="rdoCancelType_SelectedIndexChanged"
+                                                        AutoPostBack="true" RepeatDirection="Horizontal" TabIndex="12">
+                                                        <asp:ListItem Selected="True" Value="0">Time Table &nbsp;</asp:ListItem>
+                                                        <asp:ListItem Value="1">Attendance &nbsp;</asp:ListItem>
+                                                        <asp:ListItem Value="2">Both &nbsp;</asp:ListItem>
+                                                    </asp:RadioButtonList>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup></sup>
                                                         <label>Remark </label>
@@ -1531,8 +1590,11 @@
                                                             <td><%#Eval("SLOTNAME")%></td>
                                                             <td><%#Eval("ATT_STATUS")%></td>
                                                             <td>
-                                                                <asp:Button ID="btnInActiveCancelTT" Enabled='<%# (Convert.ToInt32(Eval("ATT_NO") ) == 0 ?  true : false )%>' runat="server" Text='In-Active' CssClass="btn btn-warning"
+                                                               <%-- <asp:Button ID="btnInActiveCancelTT" Enabled='<%# (Convert.ToInt32(Eval("ATT_NO") ) == 0 ?  true : false )%>' runat="server" Text='In-Active' CssClass="btn btn-warning"
+                                                                    OnClick="btnInActiveCancelTT_Click" OnClientClick="return confirm('Do you want to In-Active the record ? ');" CommandArgument='<%# Eval("TIME_TABLE_DATE")%>' ToolTip='<%# Eval("SLOTNO")%>' />--%>
+                                                                 <asp:Button ID="btnInActiveCancelTT"  runat="server" Text='In-Active' CssClass="btn btn-warning"
                                                                     OnClick="btnInActiveCancelTT_Click" OnClientClick="return confirm('Do you want to In-Active the record ? ');" CommandArgument='<%# Eval("TIME_TABLE_DATE")%>' ToolTip='<%# Eval("SLOTNO")%>' />
+                                                                <asp:HiddenField ID="hdnAttno" runat="server" Value='<%# Convert.ToInt32(Eval("ATT_NO") ) %>' />
                                                             </td>
                                                         </tr>
                                                     </ItemTemplate>
@@ -1574,6 +1636,19 @@
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSessionRevisedTimeTable"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig6"></asp:RequiredFieldValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlRevisedTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                        data-select2-enable="true" OnSelectedIndexChanged="ddlRevisedTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="timetable6" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ControlToValidate="ddlRevisedTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="timetable6"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1818,12 +1893,14 @@
                                                                     <td style="text-align: center; width: 5%">
                                                                     Show
                                                                     </th>
-                                                                    <th style="text-align: center; width: 20%">
+                                                                    <th style="text-align: center; width: 10%">
                                                                         <%--<asp:Label ID="lblDYddlColgScheme_Tab2" runat="server" Font-Bold="true"></asp:Label>--%>
                                                                         Session
                                                                     </th>
                                                                     <th style="text-align: center; width: 45%">
                                                                         <asp:Label ID="lblDYtxtCourseName6" runat="server" Font-Bold="true"></asp:Label>
+                                                                    </th>
+                                                                    <th style="text-align: center; width: 10%">Section
                                                                     </th>
                                                                     <th style="text-align: center; width: 10%">Slot Type
                                                                     </th>
@@ -1858,11 +1935,14 @@
                                                                                 <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
                                                                             </asp:Panel>
                                                                         </td>
-                                                                        <td style="white-space: normal; width: 20%">
+                                                                        <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SESSION_NAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 45%">
                                                                             <%# Eval("COURSE_NAME")%>
+                                                                        </td>
+                                                                        <td style="white-space: normal; width: 10%">
+                                                                            <%# Eval("SECTIONNAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SLOTTYPE_NAME")%>
@@ -1970,7 +2050,7 @@
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ControlToValidate="ddlSessionReport"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="report1"></asp:RequiredFieldValidator>
-                                                      <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlSessionReport"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlSessionReport"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="excelrpt"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -2048,11 +2128,11 @@
                                                         </ajaxToolKit:CalendarExtender>
                                                         <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" Mask="99/99/9999" MaskType="Date"
                                                             OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtTodateReport" />
-                                                       <ajaxToolKit:MaskedEditValidator ID="mvToDate" runat="server" ControlExtender="meToDate"
+                                                        <ajaxToolKit:MaskedEditValidator ID="mvToDate" runat="server" ControlExtender="meToDate"
                                                             ControlToValidate="txtTodateReport" Display="None" EmptyValueMessage="Please Enter To Date"
                                                             ErrorMessage="Please Enter To Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Date is invalid"
                                                             IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="report1" />
-                                                       
+
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ControlToValidate="txtTodateReport"
                                                             Display="None" ErrorMessage="Please Enter To Date" ValidationGroup="report1"></asp:RequiredFieldValidator>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ControlToValidate="txtTodateReport"
@@ -2067,7 +2147,7 @@
                                                 <asp:Button ID="btnCancelReport" runat="server" Text="Cancel" CausesValidation="false" OnClick="btnCancelReport_Click" CssClass="btn btn-warning"></asp:Button>
                                                 <asp:ValidationSummary ID="ValidationSummary10" runat="server" ValidationGroup="report1"
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                                 <asp:ValidationSummary ID="ValidationSummary11" runat="server" ValidationGroup="excelrpt"
+                                                <asp:ValidationSummary ID="ValidationSummary11" runat="server" ValidationGroup="excelrpt"
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                             </div>
                                         </div>
