@@ -9,6 +9,21 @@
 
     <script type="text/javascript" language="javascript">
 
+        function totAllSubjects(headchk) {
+            var frm = document.forms[0]
+            for (i = 0; i < document.forms[0].elements.length; i++) {
+                var e = frm.elements[i];
+                if (e.name.endsWith('chkSelect')) {
+                    if (e.type == 'checkbox') {
+                        if (headchk.checked == true)
+                            e.checked = true;
+                        else
+                            e.checked = false;
+                    }
+                }
+            }
+        }
+
         function CheckNumeric(event, obj) {
             var k = (window.event) ? event.keyCode : event.which;
             //alert(k);
@@ -218,7 +233,7 @@
                                         <label>College</label>
                                     </div>
                                     <asp:DropDownList ID="ddlCollege" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
-                                        TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged">
+                                        TabIndex="2" AutoPostBack="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged">
                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                     </asp:DropDownList>
 
@@ -233,7 +248,7 @@
                                         <label>Incharge Name</label>
                                     </div>
                                     <asp:DropDownList ID="ddlIncharge" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
-                                        TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlIncharge_SelectedIndexChanged">
+                                        TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlIncharge_SelectedIndexChanged">
                                         <%--OnSelectedIndexChanged="ddlIncharge_SelectedIndexChanged"--%>
                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                     </asp:DropDownList>
@@ -242,6 +257,16 @@
                                         Display="None" ErrorMessage="Please Select Incharge Name" ValidationGroup="Incharge"
                                         SetFocusOnError="True" InitialValue="0">
                                     </asp:RequiredFieldValidator>
+                                </div>
+                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <sup></sup>
+                                        <label>Assign Shift Name</label>
+                                    </div>
+                                    <asp:DropDownList ID="ddlshiftbulk" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
+                                        TabIndex="4" AutoPostBack="true">
+                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                    </asp:DropDownList>
                                 </div>
 
                             </div>
@@ -291,9 +316,16 @@
                                                             <p>
                                                                 <i class="fa fa-star" aria-hidden="true"></i><span>(Holiday):-To Make Eligible For Comp-Off Against Holiday, Select Working Shift from Dropdown"
                                                             </p>
+                                                            <p>
+                                                                <i class="fa fa-star" aria-hidden="true"></i><span>If Common shift for Below List Date Then Not Select Any shift from List"
+                                                            </p>
                                                         </div>
                                                 </tr>
                                                 <tr>
+                                                    <th>
+                                                        <asp:CheckBox ID="cbAl" runat="server" onclick="totAllSubjects(this)" />
+                                                        Select
+                                                    </th>
                                                     <th>Employee Name                                             
                                                     </th>
                                                     <th>
@@ -330,17 +362,21 @@
                                     <tr class="">
                                         <%--<td style="width:15% ;border:solid 1px #347D9F;text-align:center">--%>
                                         <td>
+                                            <asp:CheckBox ID="chkSelect" runat="server" ToolTip='<%# Eval("EMPLOYEEIDNO") %>' />
+                                            <asp:HiddenField ID="hidEmployeeNo" runat="server" Value='<%# Eval("EMPLOYEEIDNO") %>' />
+                                        </td>
+                                        <td>
                                             <asp:Label ID="lblEmp" runat="server" Text='<%# Eval("NAME")%>' ToolTip='<%# Eval("EMPLOYEEIDNO")%>'></asp:Label>
                                             <asp:HiddenField ID="hdnLock" runat="server" Value='<%#Eval("LOCK")%>' />
                                             <%--Checked='<%# Eval("WorkShiftId").ToString() == "0" ? false : true %>' --%>
                                         </td>
                                         <td>
-                                            <asp:DropDownList ID="ddlDay1" runat="server"  AppendDataBoundItems="True" onchange="return ColorChange1(this);">
+                                            <asp:DropDownList ID="ddlDay1" runat="server" AppendDataBoundItems="True" onchange="return ColorChange1(this);">
                                                 <%--onblur  onselect onchange--%>
                                                 <%--<asp:ListItem  Value="0">Select</asp:ListItem>--%> <%--Enabled='<%# Eval("LOCK").ToString() == "N" ? false : true %>' --%>
                                             </asp:DropDownList>
                                             <asp:HiddenField ID="hdnday1" runat="server" Value='<%#Eval("SHIFT1")%>' />
-                                            <asp:DropDownList ID="ddlDayOff1" runat="server"  AppendDataBoundItems="True" onchange="return DAYOFFColorChange1(this);">
+                                            <asp:DropDownList ID="ddlDayOff1" runat="server" AppendDataBoundItems="True" onchange="return DAYOFFColorChange1(this);">
                                                 <asp:ListItem Value="0">Select</asp:ListItem>
                                                 <asp:ListItem Value="1">D/O</asp:ListItem>
                                             </asp:DropDownList>
