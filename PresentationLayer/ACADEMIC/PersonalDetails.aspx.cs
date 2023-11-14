@@ -127,7 +127,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                         DataSet ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
 
-                        if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
+                        if (ds != null && ds.Tables[0].Rows.Count > 0 && final_submit == "1")
                         {
                             string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
                             string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();
@@ -172,7 +172,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                                 ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
 
-                                if (dsinfo != null && dsinfo.Tables[0].Rows.Count > 0)
+                                if (ds != null && ds.Tables[0].Rows.Count > 0)
                                 {
                                     string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
                                     string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();

@@ -126,6 +126,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 }
                 else if (ViewState["usertype"].ToString() == "8") //HOD
                 {
+                    btnSave.Visible = false;
                     divadmissiondetailstreeview.Visible = false;
                     divAdmissionApprove.Visible = true;
                     divhome.Visible = true;
@@ -168,6 +169,8 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         int allowprocess = Convert.ToInt32(dsallowprocess.Tables[0].Rows[0]["COUNTPROCESS"].ToString());
         if (finalsubmit == "1" && Convert.ToInt32(Session["usertype"].ToString()) == 2 && allowprocess > 0)
         {
+            chkAntiRagging.Enabled = true;
+            btnSave.Visible = true;
             btnSubmit.Visible = true;
             btnAddSport.Visible = true;
             btnadd.Visible = true;
@@ -252,9 +255,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                     {
                         rdobtn_urban.SelectedValue = "N";
                     }
-                }
-
-                //}           
+                }       
             }
         }
     }
@@ -495,6 +496,7 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 }
                 else
                 {
+                    btnSave.Visible = false;
                     btnAddSport.Visible = false;
                     btnSubmit.Visible = false;
                     divPrintReport.Visible = true;     //Added by sachin on 18-07-2022
