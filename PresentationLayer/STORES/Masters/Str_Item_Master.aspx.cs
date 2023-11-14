@@ -1188,10 +1188,10 @@ public partial class Stores_Masters_Str_Item_Master : System.Web.UI.Page
             ds = objCommon.FillDropDown("STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO IN ( SELECT MIGNO FROM STORE_MAIN_ITEM_GROUP WHERE ITEM_TYPE='F') AND MISGNO=" + Convert.ToInt32(ddlItemSubGroup.SelectedValue), "");
             if (ds.Tables[0].Rows.Count > 0)
             {
-                divOB.Visible = false;
-                divOBValue.Visible = false;
-                txtOpeningBalanceQuantity.Text = "0";
-                txtOpeningBalanceValue.Text = "0";
+                //divOB.Visible = false;
+                //divOBValue.Visible = false;
+                //txtOpeningBalanceQuantity.Text = "0";
+                //txtOpeningBalanceValue.Text = "0";
             }
             else
             {
