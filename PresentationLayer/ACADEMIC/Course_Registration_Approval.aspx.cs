@@ -810,7 +810,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                         int ret1 = objSReg.UpdateSpecailizationGroupForStudent(Convert.ToInt32(objSR.IDNO), Convert.ToInt32(objSR.SESSIONNO), Convert.ToInt32(objSR.SEMESTERNO), Groups);
                     }
                 }
-                 BindListView();
+                //BindListView();
                 dvStudentInfo.Visible = false;
                 btnSubmit.Enabled = true;
                 btnPrintChallan.Enabled = true;
