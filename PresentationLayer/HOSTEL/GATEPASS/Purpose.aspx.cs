@@ -41,7 +41,7 @@ public partial class HOSTEL_GATEPASS_Purpose : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();

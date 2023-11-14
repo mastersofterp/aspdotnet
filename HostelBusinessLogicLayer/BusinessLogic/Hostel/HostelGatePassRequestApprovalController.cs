@@ -16,13 +16,14 @@ namespace HostelBusinessLogicLayer.BusinessLogic.Hostel
     {
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-        public DataSet GetAllRequests()  // commet for merge cs proj 10/11/2023
+        public DataSet GetAllRequests(int uano)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                SqlParameter[] objParams = new SqlParameter[0];
+                SqlParameter[] objParams = new SqlParameter[1];
+                objParams[0] = new SqlParameter("@P_UA_NO", uano);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_APPROVAL_REQUEST", objParams);
             }
             catch (Exception ex)
@@ -32,14 +33,16 @@ namespace HostelBusinessLogicLayer.BusinessLogic.Hostel
             return ds;
         }
 
-        public DataSet ShowStudentRequestDetails(int HGPID)
+        public DataSet ShowStudentRequestDetails(int hgpid,int uano,int orgid)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                SqlParameter[] objParams = new SqlParameter[1];
-                objParams[0] = new SqlParameter("@P_HGPID", HGPID);
+                SqlParameter[] objParams = new SqlParameter[3];
+                objParams[0] = new SqlParameter("@P_HGPID", hgpid);
+                objParams[1] = new SqlParameter("@P_UANO", uano);
+                objParams[2] = new SqlParameter("@P_ORGID", orgid);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_SHOW_REQUEST_DETAILS", objParams);
             }
             catch (Exception ex)
@@ -49,20 +52,23 @@ namespace HostelBusinessLogicLayer.BusinessLogic.Hostel
             return ds;
         }
 
-        public int AddParentApproval(int Idno,String AttachmentPath,String AttachmentName,int HgpId)
+        public int ApproveGatepass(int Idno, string AttachmentPath, string AttachmentName, int HgpId, string Status, int orgid,int uano)
         {
             int status = 0;
 
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(connectionString);
-                SqlParameter[] sqlParams = new SqlParameter[5];
+                SqlParameter[] sqlParams = new SqlParameter[8];
                    sqlParams[0]= new SqlParameter("@P_IDNO", Idno);
                    sqlParams[1]= new SqlParameter("@P_ATTACHMENT", AttachmentPath);
                    sqlParams[2]= new SqlParameter("@P_ATTACHMENT_NAME", AttachmentName);
-                   sqlParams[3] = new SqlParameter("@P_HGPID", HgpId);
-                   sqlParams[4] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                   sqlParams[4].Direction = ParameterDirection.Output;
+                   sqlParams[3] = new SqlParameter("@P_STATUS", Status);
+                   sqlParams[4] = new SqlParameter("@P_ORGID", orgid);
+                   sqlParams[5] = new SqlParameter("@P_UANO", uano); 
+                   sqlParams[6] = new SqlParameter("@P_HGPID", HgpId);
+                   sqlParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                   sqlParams[7].Direction = ParameterDirection.Output;
 
 
                 object obj = objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_GATEPASS_PARENT_APPROVAL", sqlParams, true);

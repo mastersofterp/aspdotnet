@@ -7,7 +7,26 @@
 
         
 
+        .text-center {}
+
+        
+
+        .custom-file-input {}
+
+        
+
     </style>
+    <script src="../../plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <link href="../../Css/COMMON/Commonstyle.css" rel="stylesheet" />
+    <link href="../../Css/COMMON/FixHeader.css" rel="stylesheet" />
+    <script src="../../Js/COMMON/Validation.js"></script>
+    <link href="../../Css/COMMON/ajaxCalender.css" rel="stylesheet" />
+    <script src="../../Datatable/jquery.dataTables.min.js"></script>
+    <script src="../../Datatable/dataTables.bootstrap.min.js"></script>
+    <script src="../../Datatable/dataTables.responsive.min.js"></script>
+    <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Datatable/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
     <div class="row" runat="server" id="DivShowRequest">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -87,7 +106,6 @@
                 <div class="box-body">
                     <div id="divStudent" runat="server">
                         <div class="col-12">
-
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul class="list-group list-group-unbordered">
@@ -111,20 +129,13 @@
                                                 <asp:Label ID="lblRoomName" Font-Bold="true" runat="server" />
                                             </a>
                                         </li>
-                                        <li class="list-group-item"><b>Passing Path :</b>
-                                            <a class="sub-label">
-                                                <asp:Label ID="lblPassingpath" Font-Bold="true" runat="server" />
-                                                <asp:HiddenField ID="hdnidno" runat="server" />
-                                                <asp:HiddenField ID="hdnhgpid" runat="server" />
-                                                <asp:HiddenField ID="hdnAttachmenturl" runat="server" />
-                                            </a>
-                                        </li>
+                                        
                                         <li class="list-group-item"><b>Upload File:</b>
                                             <a class="sub-label">
                                                 <div class="input-group">
                                                     <div class="custom-file"  >
-                                                        <asp:FileUpload ID="FileAttach" runat="server" CssClass="custom-file-input" Width="275px"  />
-                                                        <label class="custom-file-label" for="FileAttach">Choose file</label>
+                                                        <asp:FileUpload ID="FileAttach" runat="server" CssClass="custom-file-input" Width="291px"  />
+                                                        <label class="custom-file-label" for="FileAttach">&nbsp;Choose file</label>
                                                     </div>
                                                 </div>
                                             </a>
@@ -155,14 +166,10 @@
                                                 <asp:Label ID="lblapplydate" Font-Bold="true" runat="server" />
                                             </a>
                                         </li>
-                                        <li class="list-group-item"><b>Remark :</b>
-                                            <a class="sub-label">
-                                                <asp:Label ID="lblRemark" Font-Bold="true" runat="server" />
-                                            </a>
-                                        </li>
+                                        
                                         <li class="list-group-item"><b>View Attachment :</b>
                                             <a class="sub-label">
-                                                <asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="64px"  />
+                                                <asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="76px"  />
                                             </a>
                                         </li>
                                     </ul>
@@ -171,25 +178,49 @@
                         </div>
                         <div class="col-12">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-12">
+                                <div class="col-lg-12 col-md-6 col-12">
                                     <ul class="list-group list-group-unbordered">
-                                        
-                                        <li class="list-group-item"><b>Status:</b>
+                                        <li class="list-group-item"><b>Remark :</b>
                                             <a class="sub-label">
-                                                <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" Height="18px" Width="138px" >
-                                                    <asp:ListItem Value="0" Text="Please Select"></asp:ListItem>
-                                                    <asp:ListItem Value="A" Text="Approved"></asp:ListItem>
-                                                    <asp:ListItem Value="R" Text="Reject"></asp:ListItem>
-                                                </asp:DropDownList>
-                                                <asp:RequiredFieldValidator ID="rfvvalstatus" InitialValue="0" ControlToValidate="ddlStatus" ErrorMessage="Please Select Status" runat="server" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                <asp:Label ID="lblRemark" Font-Bold="true" runat="server" />
                                             </a>
                                         </li>
-                                         
+                                        <li class="list-group-item"><b>Passing Path :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblPassingpath" Font-Bold="true" runat="server" />
+                                                <asp:HiddenField ID="hdnidno" runat="server" />
+                                                <asp:HiddenField ID="hdnhgpid" runat="server" />
+                                                <asp:HiddenField ID="hdnAttachmenturl" runat="server" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item"><b>Approver  :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblApprover" Font-Bold="true" runat="server" />
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <ul class="list-group list-group-unbordered">
-                                        
+                                        <li class="list-group-item"><b>Status:</b>
+                                            <a class="sub-label">
+                                                <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" Height="18px" Width="138px" >
+                                                    <asp:ListItem Value="0" Text="Please Select"></asp:ListItem>
+                                                    <asp:ListItem Value="Y" Text="Approved"></asp:ListItem>
+                                                    <asp:ListItem Value="N" Text="Reject"></asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="rfvvalstatus" InitialValue="0" ControlToValidate="ddlStatus" ErrorMessage="Please Select Status" runat="server" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                            </a>
+                                        </li>
                                         
                                     </ul>
                                 </div><br />
@@ -198,6 +229,50 @@
                                 </div>
                             </div>
                         </div>
+                         <div class="col-12">
+                        <asp:Repeater ID="lvShowApprovalStatus" runat="server">
+                            <HeaderTemplate>
+                                <div class="sub-heading">
+                                    <h5>Approval Status</h5>
+                                </div>
+                                <table id="table2" class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                    <thead class="bg-light-blue">
+                                        <tr>
+                                            <th>First Approval
+                                            </th>
+                                            <th>Second Approval
+                                            </th>
+                                            <th>Third Approval
+                                            </th>
+                                            <th>Fourth Approval
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr>
+                                    <td>
+                                         <asp:Label ID="lblFirstApproval" runat="server" ForeColor='<%# Eval("FIRST_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FIRST_APPROVAL_STATUS") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblSecondApproval" runat="server" ForeColor='<%# Eval("SECOND_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("SECOND_APPROVAL_STATUS") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblThirdApproval" runat="server" ForeColor='<%# Eval("THIRD_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("THIRD_APPROVAL_STATUS") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblFourthApproval" runat="server" ForeColor='<%# Eval("FOURTH_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FOURTH_APPROVAL_STATUS") %>'></asp:Label>
+                                    </td>
+                                   
+                                    
+                                </tr>
+                            </ItemTemplate>
+                            <FooterTemplate>
+                                </tbody></table>
+                            </FooterTemplate>
+                        </asp:Repeater>
+                    </div>
                     </div>
                 </div>
                 <div class="box-footer">

@@ -17,6 +17,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     HostelGatePassRequestApprovalController Hgp =new HostelGatePassRequestApprovalController();
     HostelGatePassRequestApproval ObjHgp=new HostelGatePassRequestApproval();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         try
@@ -32,7 +33,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                   // this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -56,11 +57,37 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+    private void CheckPageAuthorization()
+    {
+        if (Request.QueryString["pageno"] != null)
+        {
+            // Check user's authrity for Page
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+            {
+                Response.Redirect("~/notauthorized.aspx?page=HostelGatePassRequestApproval.aspx");
+            }
+        }
+        else
+        {
+            // Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=HostelGatePassRequestApproval.aspx");
+        }
+    }
+
     private void BindListView()
     {
         try
         {
-            DataSet ds = Hgp.GetAllRequests();
+            DataSet ds = null;
+            if (Convert.ToInt32(Session["usertype"]) == 1)
+            {
+                 ds = Hgp.GetAllRequests(0);
+            }
+            else
+            {
+                 ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]));
+            }
             lvReq.DataSource = ds;
             lvReq.DataBind();
         }
@@ -81,7 +108,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             int hgpid = Convert.ToInt32(btn.CommandArgument);
             DataSet ds = null;
             int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-            ds = Hgp.ShowStudentRequestDetails(hgpid);
+            ds = Hgp.ShowStudentRequestDetails(hgpid, Convert.ToInt32(Session["userno"]), OrganizationId);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 DivShowRequestDetails.Visible = true;
@@ -99,7 +126,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 hdnhgpid.Value = ds.Tables[0].Rows[0]["HGP_ID"].ToString();
                 lblapplydate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["APPLY_DATE"].ToString()).ToString("dd-MMM-yyyy");
                 hdnAttachmenturl.Value = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT"].ToString();
+                lblApprover.Text = ds.Tables[0].Rows[0]["APPROVER"].ToString();
+                lvShowApprovalStatus.DataSource = ds;
+                lvShowApprovalStatus.DataBind();
             }
+            
+
         }
         catch (Exception ex)
         {
@@ -121,6 +153,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             {
                 int Idno=Convert.ToInt32(hdnidno.Value);
                 int Hgpid = Convert.ToInt32(hdnhgpid.Value);
+                int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+                string status=ddlStatus.SelectedValue;
                 string fileName = Path.GetFileName(FileAttach.FileName);
                 string fileExtension = Path.GetExtension(fileName).ToLower(); // Convert extension to lowercase
 
@@ -145,7 +179,28 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                         // Store the file URL in your database (you should replace this with your actual database logic)
                         string fileUrl = "GATEPASSATTCHMENT/" + pathToStore;
 
-                        Hgp.AddParentApproval(Idno, fileUrl, fileName,Hgpid);
+                        int output =Hgp.ApproveGatepass(Idno, fileUrl, fileName, Hgpid, status, OrganizationId, Convert.ToInt32(Session["userno"]));
+                        if (output == 1)
+                        {
+                            objCommon.ConfirmMessage(this, "Record Saved SuccessFully.", this);
+                        }
+                        else if (output == 2)
+                        {
+                            objCommon.ConfirmMessage(this, "Please Wait for First Approvar forword", this);
+                        }
+                        else if (output == 3)
+                        {
+                            objCommon.ConfirmMessage(this, "Please Wait for First and Second Approvar forword", this);
+                        }
+                        else if (output == 4)
+                        {
+                            objCommon.ConfirmMessage(this, "Please Wait for First second and Third Approvar forword", this);
+                        }
+                        else if (output == 5)
+                        {
+                            objCommon.ConfirmMessage(this, "Record not found for this approval.", this);
+                        }
+                        
                     }
                     else
                     {
@@ -170,6 +225,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
         }
     }
+
     protected void btnShowAttachment_Click(object sender, EventArgs e)
     {
        // string imageUrl = hdnAttachmenturl.Value;
@@ -184,7 +240,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                objCommon.ConfirmMessage(this, "Url not Found.", this);
         }
     }
-
 
     protected void btnBack_Click(object sender, EventArgs e)
     {

@@ -95,6 +95,9 @@
     <Compile Include="BusinessEntities\Hostel\RoomAsset.cs" />
     <Compile Include="BusinessEntities\Hostel\SeatQuota.cs" />
     <Compile Include="BusinessLogic\FeeCollection\HostelFeeCollectionController.cs" />
+    <Compile Include="BusinessLogic\Hostel\AddHostelGatePassAuthController.cs" />
+    <Compile Include="BusinessLogic\Hostel\AddHostelGatePassController.cs" />
+    <Compile Include="BusinessLogic\Hostel\AdminApprovalController.cs" />
     <Compile Include="BusinessLogic\Hostel\AssetAllotmentController.cs" />
     <Compile Include="BusinessLogic\Hostel\AssetController.cs" />
     <Compile Include="BusinessLogic\Hostel\BlockController.cs" />

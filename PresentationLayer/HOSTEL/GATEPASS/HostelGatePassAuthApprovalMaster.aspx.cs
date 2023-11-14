@@ -41,7 +41,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
             }
             else
             {
-                ////CheckPageAuthorization();
+                this.CheckPageAuthorization();
+
                 Page.Title = Session["coll_name"].ToString();
                 pnlAdd.Visible = false;
                 pnlauthority.Visible = false;
@@ -69,6 +70,24 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
     #endregion Page Events
 
     #region Action
+
+    private void CheckPageAuthorization()
+    {
+        if (Request.QueryString["pageno"] != null)
+        {
+            // Check user's authrity for Page
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+            {
+                Response.Redirect("~/notauthorized.aspx?page=HostelGatePassAuthApprovalMaster.aspx");
+            }
+        }
+        else
+        {
+            // Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=HostelGatePassAuthApprovalMaster.aspx");
+        }
+    }
+
     protected void btnaddauthority_Click(object sender, EventArgs e)
     {
         clearnew();

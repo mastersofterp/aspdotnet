@@ -52,7 +52,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                   // this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -66,9 +66,35 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 if (Convert.ToInt16(Session["usertype"]) == 1) adminsearch.Visible = true;
                 
                 objCommon.FillDropDownList(ddlSearch, "ACD_STUDENT", "IDNO", "STUDNAME", "HOSTELER=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "IDNO");
-                objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
+               string HostelNo = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
+
+
+
                 objCommon.FillDropDownList(ddlStuType, "ACD_HOSTEL_STUDENT_TYPE", "STUDENT_TYPE_ID", "STUDENT_TYPE", "STUDENT_TYPE_ID>0", "STUDENT_TYPE_ID");
-                objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO>0", "HOSTEL_NO");
+
+                if (Session["usertype"].ToString().Equals("2"))
+                {
+                    string HostelNum = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
+
+                    if (HostelNum == null || HostelNum == "")
+                    {
+                        objCommon.DisplayMessage("Room Alloted not found in current Hostel Session. Due to that reason You are not eligible for Hostel Gate Pass.", this.Page);
+                        btnSubmit.Enabled = false;
+                    }
+                    else
+                    {
+                        objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO = " + Convert.ToInt32(HostelNum) + " AND HOSTEL_NO>0", "HOSTEL_NO");
+                        ddlHostel.SelectedValue = HostelNum;
+                        ddlHostel.Enabled = false;
+                    }
+
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO>0", "HOSTEL_NO");
+                }
+
+               
                 PopulateDropDownList();
                 BindListView();
                 ViewState["action"] = "add";
@@ -85,6 +111,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     #endregion Page Events
 
     #region Action
+
+
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
@@ -108,9 +136,9 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (ViewState["action"].ToString().Equals("add"))
             {
-                if (objGatePass.OutDate < System.DateTime.Now)
+                if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1) )   //  DateTime.Now.ToString("MM/dd/yyyy h:mm tt")
                 {
-                    objCommon.DisplayMessage("Please select out date greater than today's date.", this.Page);
+                    objCommon.DisplayMessage("Please select out date Today OR greater than today's date.", this.Page);
                     txtoutDate.Focus();
                     return;
                 }
@@ -233,6 +261,24 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     #endregion Action
 
     #region Private Methods
+
+    private void CheckPageAuthorization()
+    {
+        if (Request.QueryString["pageno"] != null)
+        {
+            // Check user's authrity for Page
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
+            {
+                Response.Redirect("~/notauthorized.aspx?page=HostelGatePassRequest.aspx");
+            }
+        }
+        else
+        {
+            // Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=HostelGatePassRequest.aspx");
+        }
+    }
+
     protected void PopulateDropDownList()
     {
         try
