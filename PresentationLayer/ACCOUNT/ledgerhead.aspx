@@ -285,6 +285,20 @@
                                     </div>
                                     <br />
                                     <div id="Div6" class="row" runat="server">
+                                            <%--Started  Pawan Nikhare : 27/10/2023--%>
+                                         <div class="col-md-2">
+                                            <label>GST No. : </label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtGSTtNo" runat="server" MaxLength="15"
+                                                TabIndex="4" ToolTip="Please Enter GST No." CssClass="form-control"></asp:TextBox>
+                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterMode="ValidChars"
+                                                TargetControlID="txtGSTtNo" ValidChars="0123456789">
+                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                        </div>
+                                         <%--Ended  Pawan Nikhare : 27/10/2023--%>
+
+
                                         <div class="col-md-2">
                                             <label>Contact No. : </label>
                                         </div>
@@ -295,6 +309,11 @@
                                                 TargetControlID="txtContactNo" ValidChars="0123456789">
                                             </ajaxToolKit:FilteredTextBoxExtender>
                                         </div>
+                                       
+                                    </div>
+                                    <br />
+                                    <div id="Div1" class="row" runat="server">
+                                        
                                         <div class="col-md-2">
                                             <label>Opening Balance  </label>
                                         </div>

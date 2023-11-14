@@ -389,6 +389,10 @@ public partial class Account_ledgerhead : System.Web.UI.Page
             objParty.College_Code = Session["colcode"].ToString();
             objParty.PANNO = txtPanNo.Text;
             objParty.TINNO = txtTinNo.Text;
+            //Added by Pawan Nikhare
+            objParty.GSTNo = txtGSTtNo.Text;
+
+            
 
             if (chkDefault.Checked)
                 objParty.SetDefault = 1;
@@ -405,6 +409,9 @@ public partial class Account_ledgerhead : System.Web.UI.Page
                     return;
                 }
             }
+
+
+
 
             objTrans.Tran = ddlDrCr.SelectedValue.ToString().Trim();
 
@@ -821,9 +828,6 @@ public partial class Account_ledgerhead : System.Web.UI.Page
     {
         try
         {
-
-
-
             //objCommon.FillDropDownList(ddlType, "ACC_PAYMENT_TYPE_" + Session["comp_code"].ToString() + "_" + Session["fin_yr"], "PAYMENT_TYPE_NO", "UPPER(PAYMENT_TYPE_NAME) AS PAYMENT_TYPE_", "PAYMENT_TYPE_NO > 0", "PAYMENT_TYPE_NAME");
             //objCommon.FillDropDownList(ddlFAGroup, Session["DataBase"].ToString()+ "."+"ACC_" + Session["comp_code"].ToString() + "_" + "MAIN_GROUP", "MGRP_NO", "UPPER(MGRP_NAME) AS MGRP_NAME", "MGRP_NO > 0", "MGRP_NAME");
             objCommon.FillDropDownList(ddlFAGroup, "ACC_" + Session["comp_code"].ToString() + "_" + "MAIN_GROUP", "MGRP_NO", "UPPER(MGRP_NAME) AS MGRP_NAME", "MGRP_NO > 0", "MGRP_NAME");
