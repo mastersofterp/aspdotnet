@@ -4799,7 +4799,7 @@ ul.light-dark {
         background: rgba(53, 60, 72, 0) !important;
     }
 
-@media (min-width: 1024px) {
+/*@media (min-width: 1024px) {
     .main-header ul.level2.dropdown-menu {
         max-height: 85vh;
         overflow-x: scroll;
@@ -4815,4 +4815,4 @@ ul.light-dark {
         .level3 li {
             background: #eee;
         }
-}
+}*/
