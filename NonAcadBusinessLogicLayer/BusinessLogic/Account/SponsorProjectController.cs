@@ -122,7 +122,7 @@ namespace IITMS
                          SqlParameter[] objParams = null;
 
                          //Add New MainGroup Group
-                         objParams = new SqlParameter[13];
+                         objParams = new SqlParameter[20];
                          objParams[0] = new SqlParameter("@P_PROJECTID", objSpoProj.ProjectId);
                          objParams[1] = new SqlParameter("@P_PROJECTSHORTNAME", objSpoProj.ProjectShortName);
                          objParams[2] = new SqlParameter("@P_PROJECTNAME", objSpoProj.ProjectName);
@@ -136,8 +136,16 @@ namespace IITMS
                          objParams[9] = new SqlParameter("@P_SANCTIONLETTER", objSpoProj.SanctionLetter);
                          objParams[10] = new SqlParameter("@P_DATE", objSpoProj.Date);
                          objParams[11] = new SqlParameter("@P_PARTYNO", objSpoProj.Party_No);
-                         objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                         objParams[12].Direction = ParameterDirection.Output;
+                         //ADDED BY PAWAN NIKHARE
+                         objParams[12] = new SqlParameter("@P_FUNDINGAGENCY", objSpoProj.FundingAgency);
+                         objParams[13] = new SqlParameter("@P_PROJECTDURATION", objSpoProj.ProjectDuration);
+                         objParams[14] = new SqlParameter("@P_PROJECTSTARTDATE", objSpoProj.ProjectStartDate);
+                         objParams[15] = new SqlParameter("@P_PROJECTENDDATE", objSpoProj.ProjectEndDate);
+                         objParams[16] = new SqlParameter("@P_AMOUNTRECEIVEDRECURRING", objSpoProj.AmountReceivedRecurring);
+                         objParams[17] = new SqlParameter("@P_AMOUNTRECEIVEDNONRECURRING", objSpoProj.AmountReceivedNonRecurring);
+                         objParams[18] = new SqlParameter("@P_SANCTIONDATE", objSpoProj.SanctionDate);
+                         objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                         objParams[19].Direction = ParameterDirection.Output;
 
                          object ret = objSQLHelper.ExecuteNonQuerySP("ACC_PROJECT_NAME_INS_UPD", objParams, true);
                          if (ret != null)
