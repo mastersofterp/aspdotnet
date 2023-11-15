@@ -91,6 +91,7 @@
     <Compile Include="BusinessEntities\Account\FeeLedgerHeadMaping.cs" />
     <Compile Include="BusinessEntities\Account\FinCashBook.cs" />
     <Compile Include="BusinessEntities\Account\FixedDepositeClass.cs" />
+    <Compile Include="BusinessEntities\Account\Funding_Agency_Entity.cs" />
     <Compile Include="BusinessEntities\Account\Grid_Entity.cs" />
     <Compile Include="BusinessEntities\Account\IncomeExpenBalanceSheet.cs" />
     <Compile Include="BusinessEntities\Account\MainGroup.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="BusinessLogic\Account\AccountTransactionController.cs" />
     <Compile Include="BusinessLogic\Account\Acc_BudgetDetailsEnrty_Controller.cs" />
     <Compile Include="BusinessLogic\Account\Acc_BudgetHead_newController.cs" />
+    <Compile Include="BusinessLogic\Account\Acc_Funding_Agency_Controller.cs" />
     <Compile Include="BusinessLogic\Account\AutoCompleteController.cs" />
     <Compile Include="BusinessLogic\Account\budgetHeadController.cs" />
     <Compile Include="BusinessLogic\Account\CashBankGroupController.cs" />
