@@ -95,7 +95,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 {
                     divInternalMarks.Visible = true;
                 }
-                else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
+                else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 10)
                 {
 
                     divInternalMarks1.Visible = true;
@@ -107,7 +107,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 {
                     myModal2.Visible = false;
                     //ddlSession.SelectedIndex = 1;
-                    this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["idno"]), "R.SESSIONNO DESC");
+                    this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + Convert.ToInt32(Session["idno"]), "R.SESSIONNO DESC");
                     if (ddlSession.Items.Count > 1)
                     {
                         ddlSession.SelectedIndex = 1;
@@ -327,7 +327,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         //string sessionno = Session["currentsession"].ToString();
                         int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
                         //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "IS_ACTIVE=1 AND FLOCK=1 AND COLLEGE_ID=" + college_id + "");
-                        string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", "ISNULL(CANCEL,0)=0 AND  IDNO=" + idno + "");
+                        string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
                         //string sessionno = ddlSession.SelectedValue;
                         dsAttendance = objSC.RetrieveStudentAttendanceDetails(Convert.ToInt32(sessionno), Convert.ToInt32(schemeno), Convert.ToInt32(semesterno), idno);
 
@@ -822,7 +822,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             {
                 getinternalmarks();
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2)
+            else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 10)
             {
                 getinternalmarks1();
                 ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
@@ -1539,7 +1539,52 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
                 int schemeno = Convert.ToInt32(objCommon.LookUp("acd_student", "schemeno", "idno=" + idno + ""));
                 int coursecount = Convert.ToInt32(objCommon.LookUp("acd_course", "Count(courseno) ", "schemeno=" + schemeno + " and semesterno=" + Convert.ToInt32(rdolistSemester.SelectedValue) + ""));
-                if (Count == coursecount)
+                int countfeedback = Convert.ToInt32(objCommon.LookUp("acd_online_feedback", "count(*)", "sessionno=" + Convert.ToInt32(ddlSession.SelectedValue)+ ""));
+                if (countfeedback > 0)
+                {
+                    if (Count == coursecount)
+                    {
+                        DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                        DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+
+
+                            pnlCollege.Visible = true;
+                            lvSession.DataSource = ds;
+                            lvSession.DataBind();
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                            pnlCollege.Visible = false;
+                            lvSession.DataSource = null;
+                            lvSession.DataBind();
+
+                        }
+                        if (dsreval.Tables[0].Rows.Count > 0)
+                        {
+                            pnlrevalresult.Visible = true;
+                            lvRevalDetails.DataSource = dsreval;
+                            lvRevalDetails.DataBind();
+                        }
+                        else
+                        {
+                            // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                            pnlrevalresult.Visible = false;
+                            lvRevalDetails.DataSource = null;
+                            lvRevalDetails.DataBind();
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updStudentInfo, "Feedback Pending!!", this.Page);
+
+                    }
+                }
+                else
                 {
                     DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
                     DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
@@ -1550,7 +1595,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         pnlCollege.Visible = true;
                         lvSession.DataSource = ds;
                         lvSession.DataBind();
-                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
 
                     }
                     else
@@ -1574,10 +1619,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         lvRevalDetails.DataSource = null;
                         lvRevalDetails.DataBind();
                     }
-                }
-                else
-                {
-                    objCommon.DisplayMessage(updStudentInfo, "Feedback Pending!!", this.Page);
+
 
                 }
 
@@ -2013,7 +2055,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         }
 
-        this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["stuinfoidno"]), "R.SESSIONNO DESC");
+        this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + Convert.ToInt32(Session["stuinfoidno"]), "R.SESSIONNO DESC");
         if (ddlSession.Items.Count > 1)
         {
             ddlSession.SelectedIndex = 1;
@@ -2348,7 +2390,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         int cid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
         int scheme = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno + " "));
         int branch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + idno + " "));
-        int studtype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT PREV_STATUS", "ISNULL(CANCEL,0)=0 AND  SESSIONNO=" + Convert.ToInt32(session) + " AND IDNO=" + idno + " "));
+        int studtype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT PREV_STATUS", " SESSIONNO=" + Convert.ToInt32(session) + " AND IDNO=" + idno + " "));
         int sem = Convert.ToInt32(rdolistSemester.SelectedValue);//Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + idno + " "));
         //int session = Convert.ToInt32(objCommon.LookUp("ACD_TRRESULT", "MAX(SESSIONNO)", "IDNO=" + idno + " AND SEMESTERNO=" + rdolistSemester.SelectedValue));
 
