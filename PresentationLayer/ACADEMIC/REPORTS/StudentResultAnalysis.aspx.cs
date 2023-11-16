@@ -3016,16 +3016,28 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
     {
         try
         {
+            string proc_ = "PKG_INTERNAL_MARKS_REPORT_CRESCENT  ";
+            string para_ = "@P_COURSENO ,@P_SESSIONNO,@P_SCHEMENO";
+            string value = "" + Convert.ToInt32(ddlcourse.SelectedValue) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]);
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
 
-            string reportTitle = "MarksListReport";
-            string rptFileName = "rptInternalMark_Crescent.rpt";
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
-            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                string reportTitle = "MarksListReport";
+                string rptFileName = "rptInternalMark_Crescent.rpt";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
+            }
         }
         catch (Exception ex)
         {
