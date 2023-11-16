@@ -75,7 +75,7 @@
                     </div>
                     <br /><br />
                     <div class="col-12 btn-footer">
-                        <asp:Button ID="btnApprove" runat="server" Text="Approve" TabIndex="2"
+                        <asp:Button ID="btnApprove" runat="server" Text="Approve" TabIndex="2" ValidationGroup="submit"
                             CssClass="btn btn-primary" OnClick="btnApprove_Click"/>
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="3"
                              CssClass="btn btn-warning" OnClick="btnCancel_Click" />
@@ -94,7 +94,7 @@
                                     <thead class="bg-light-blue">
                                         <tr>
                                             <th>
-                                                <asp:CheckBox ID="chkAll" runat="server" onclick="return totAll(this);" /> Check
+                                                <asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" /> Check All
                                             </th>
                                             <th>Student Name
                                             </th>
@@ -161,47 +161,29 @@
     <div id="divMsg" runat="server">
     </div>
 
-    <script language="javascript" type="text/javascript">
-        //function totAll(headchk) {
-        //    var frm = document.forms[0]
-        //    for (i = 0; i < document.forms[0].elements.length; i++) {
-        //        var e = frm.elements[i];
+        <script type="text/javascript" language="javascript">
 
-        //        if (e.type == 'checkbox') {
-        //            ostr = e.name
-        //            var myChkName = ostr.split("$");
-        //            if (myChkName[4] == 'chkSelect' && (e.type == 'checkbox') && (!e.disabled)) {
-        //                if (headchk.checked == true) {
-        //                    e.checked = true;
-        //                }
-        //                else {
-        //                    e.checked = false;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+            function CheckAll(headchk) {
 
-        function totAll(headchk) {
-            var frm = document.forms[0]
-            for (i = 0; i < document.forms[0].elements.length; i++) {
-                var e = frm.elements[i];
-
-                if (e.type == 'checkbox') {
-                    ostr = e.name
-                    var myChkName = ostr.split("$");
-                    if (myChkName[4] == 'chkstarted' && (e.type == 'checkbox') && (!e.disabled)) {
+                var frm = document.forms[0]
+                for (i = 0; i < document.forms[0].elements.length; i++) {
+                    var e = frm.elements[i];
+                    if (e.type == 'checkbox') {
                         if (headchk.checked == true) {
                             e.checked = true;
+                            headchk.checked == true;
+                            document.getElementById('ctl00_ContentPlaceHolder1_lvGatePass_chkAll').checked = true;
                         }
                         else {
                             e.checked = false;
+                            headchk.checked == false;
+                            document.getElementById('ctl00_ContentPlaceHolder1_lvGatePass_chkAll').checked = false;
+
                         }
                     }
                 }
             }
-        }
-     </script>
+    </script>
 
 </asp:Content>
 

@@ -41,8 +41,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
             }
             else
             {
-                this.CheckPageAuthorization();
-
+                ////CheckPageAuthorization();
                 Page.Title = Session["coll_name"].ToString();
                 pnlAdd.Visible = false;
                 pnlauthority.Visible = false;
@@ -70,24 +69,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
     #endregion Page Events
 
     #region Action
-
-    private void CheckPageAuthorization()
-    {
-        if (Request.QueryString["pageno"] != null)
-        {
-            // Check user's authrity for Page
-            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
-            {
-                Response.Redirect("~/notauthorized.aspx?page=HostelGatePassAuthApprovalMaster.aspx");
-            }
-        }
-        else
-        {
-            // Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=HostelGatePassAuthApprovalMaster.aspx");
-        }
-    }
-
     protected void btnaddauthority_Click(object sender, EventArgs e)
     {
         clearnew();
@@ -856,7 +837,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                         ddlAA3.SelectedIndex = 0;
                         ddlAA3.Enabled = true;
                         string swhere = "ua_type not in(1,2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
-                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "UA_DESIG +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "UA_DESIG +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
                     }
                     else
                     {
@@ -932,6 +913,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
         lblApprover3.Text = "Approval 3";
         lblApprover4.Text = "Approval 4";
         lblApprover5.Text = "Approval 5";
+        ddlAA1parent.Visible = false;  //Added By Himanshu Tamrakar on date 16-NOV-2023
+        ddlAA2Parent.Visible = false;
+        ddlAA1.Enabled = true;
+        ddlAA2.Enabled = true;
+        ddlAA1.Visible = true;
+        ddlAA2.Visible = true;
 
     }
     
@@ -948,6 +935,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
         ViewState["APP_NO"] = null;
         ddlStuTypeAuth.Enabled = true;
         ddlDaysAuth.Enabled = true;
+       
+        
     }
 
     protected void BindListViewAuthApprovalMaster()
@@ -1048,8 +1037,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ViewState["APP_NO"] = APP_NO;
-
-                objCommon.FillDropDownList(ddlApp, "ACD_HOSTEL_AUTHORITY_APPROVAL_MASTER", "APP_NO", "AUTHORITY_TYPE", "APP_NO= APP_NO", "APP_NO");
+//                objCommon.FillDropDownList(ddlApp, "ACD_HOSTEL_AUTHORITY_APPROVAL_MASTER", "APP_NO", "AUTHORITY_TYPE", "APP_NO= APP_NO", "APP_NO");
+                objCommon.FillDropDownList(ddlApp, "ACD_HOSTEL_AUTH_APPROVAL_TYPE_MASTER", "AUTHORITY_APPROVAL_NO", "AUTHORITY_APPROVAL_TYPE", "AUTHORITY_APPROVAL_NO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "AUTHORITY_APPROVAL_NO");
                 ddlApp.SelectedValue = ds.Tables[0].Rows[0]["AUTHORITY_TYPE_NO"].ToString();
 
                 //ddlCollege.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_NO"].ToString().Trim().Equals(string.Empty) || ds.Tables[0].Rows[0]["COLLEGE_NO"].ToString().Trim().Equals(string.Empty) ? "0" : ds.Tables[0].Rows[0]["COLLEGE_NO"].ToString().Trim();

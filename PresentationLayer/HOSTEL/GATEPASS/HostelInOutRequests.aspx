@@ -157,10 +157,10 @@
                             <th style="width:5%;">REQUESTED DATE</th>
                             <th style="width:7%;">STATUS</th>
                             <th style="width:7%;">CONFIRM WITH PARENTS</th>
-                            <th style="width:6%;">APPROVED STATUS</th>
+                            <%--<th style="width:6%;">APPROVED STATUS</th>--%>
                             <%--<th style="width:5%;">COMMENT</th>--%>
                             <th style="width:5%;">GATE PASS</th>
-                            <th style="width:5%;">BULK APPROVE AND REJECT</th>
+                            <th style="width:5%;">More Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -204,9 +204,9 @@
                     </asp:DropDownList>
                     <asp:HiddenField ID="HdnFirstApproval" runat="server" Value='<%# Eval("FIRST_APPROVAL_STATUS") %>' />
                 </td>
-                <td>
+                <%--<td>
                     <%# Eval("PURPOSE_NAME") %>
-                </td>
+                </td>--%>
                 <%--<td>
                     <textarea id="txtComment" runat="server" wrap="soft"></textarea>
                 </td>--%>
@@ -257,7 +257,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Hostel In Mate Contact Details</h4>
+                <h4 class="modal-title">Parents/Guardian Contact Details</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 

@@ -119,7 +119,8 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             }
             if (cs.Equals(CustomStatus.RecordSaved))
             {
-                objCommon.DisplayMessage("Direct Approval for Hostel Gate Pass Successfully.", this.Page);
+                objCommon.DisplayMessage("Direct approval for hostel gate pass done successfully.", this.Page);
+                BindListView();
                 Clear();
             }
         }

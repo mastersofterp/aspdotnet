@@ -90,10 +90,11 @@
                                             <asp:DropDownList ID="ddlAA1" runat="server" ToolTip="Please Select Approval_1" TabIndex="6" CssClass="form-control"  AppendDataBoundItems="true" 
                                                 AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA1_SelectedIndexChanged" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="14">Parent</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvapprovalauth1" runat="server" ControlToValidate="ddlAA1"
                                                 Display="None" ErrorMessage="Please Select  Approval 1" SetFocusOnError="true"
-                                                ValidationGroup="AAPath" InitialValue="0">
+                                                ValidationGroup="AAPath" InitialValue="14">
                                             </asp:RequiredFieldValidator>
                                             <asp:DropDownList ID="ddlAA1parent" runat="server" AppendDataBoundItems="true" TabIndex="7" ToolTip="Please Select Approval 2" CssClass="form-control"
                                                 Enabled="false" AutoPostBack="True" data-select2-enable="true" Visible="false"  >

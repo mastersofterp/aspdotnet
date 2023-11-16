@@ -50,7 +50,7 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -83,13 +83,13 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
             //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
-                Response.Redirect("~/notauthorized.aspx?page=BlockInfo.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=HostelInOutRequests.aspx");
             }
         }
         else
         {
             //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=BlockInfo.aspx");
+            Response.Redirect("~/notauthorized.aspx?page=HostelInOutRequests.aspx");
         }
     }
     private void BindListView()
@@ -227,7 +227,7 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
 
         objHR.InsertAttachedDocuments(data);
 
-        return "Data Saved Successfully";
+        return "Data Saved Successfully.";
     }
     //protected void btnupload_Click(object sender, EventArgs e)
     //{

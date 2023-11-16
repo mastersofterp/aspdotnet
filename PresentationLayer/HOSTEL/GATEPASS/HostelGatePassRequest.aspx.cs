@@ -25,7 +25,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     GatePassRequest objGatePass = new GatePassRequest();
     GatePassRequestController objGPR = new GatePassRequestController();
-    //SendEmailCommon objSendEmail = new SendEmailCommon();
+    SendEmailCommon objSendEmail = new SendEmailCommon();
 
     #region Page Events
     protected void Page_PreInit(object sender, EventArgs e)
@@ -52,7 +52,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                   // this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -63,8 +63,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                 }
-                if (Convert.ToInt16(Session["usertype"]) == 1) adminsearch.Visible = true;
-                
+                if (Convert.ToInt16(Session["usertype"]) == 1)
+                {
+                    adminsearch.Visible = true;
+                    pnlStudentHGPRequestDetails.Visible = false;
+                    pnlbuttons.Visible = false;
+                }
                 objCommon.FillDropDownList(ddlSearch, "ACD_STUDENT", "IDNO", "STUDNAME", "HOSTELER=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "IDNO");
                string HostelNo = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
 
@@ -120,12 +124,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objGatePass.StudType = Convert.ToInt32(ddlStuType.SelectedValue);
             //objGatePass.ApprPath = path.InnerText;
             objGatePass.OutDate = DateTime.Parse(txtoutDate.Text.Trim());
-            objGatePass.OutHourFrom = Convert.ToInt32(txtoutHourFrom.Text);
-            objGatePass.OutMinFrom = Convert.ToInt32(txtoutMinFrom.Text.Trim());
+            objGatePass.OutHourFrom = Convert.ToInt32(ddloutHourFrom.SelectedValue);
+            objGatePass.OutMinFrom = Convert.ToInt32(ddloutMinFrom.SelectedValue);
             objGatePass.OutAMPM = ddlAM_PM1.SelectedValue;
             objGatePass.InDate = DateTime.Parse(txtinDate.Text.Trim());
-            objGatePass.InHourFrom = Convert.ToInt32(txtinHourFrom.Text.Trim());
-            objGatePass.InMinFrom = Convert.ToInt32(txtinMinFrom.Text.Trim());
+            objGatePass.InHourFrom = Convert.ToInt32(ddlinHourFrom.SelectedValue);
+            objGatePass.InMinFrom = Convert.ToInt32(ddlinMinFrom.SelectedValue);
             objGatePass.InAMPM = ddlAM_PM2.SelectedValue;
             objGatePass.PurposeID = Convert.ToInt32(ddlPurpose.SelectedValue);
             objGatePass.PurposeOther = txtOther.Text.Trim();
@@ -144,14 +148,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 }
             }
             
-            if (objGatePass.InDate < objGatePass.OutDate)
-            {
-                objCommon.DisplayMessage("Please select in date greater than out date.", this.Page);
-                txtinDate.Focus();
-                return;
-            }
-
-            /// check form action whether add or update
+            //if (objGatePass.InDate < objGatePass.OutDate)
+            //{
+            //    objCommon.DisplayMessage("Please select in date greater than out date.", this.Page);
+            //    txtinDate.Focus();
+            //    return;
+            //}
 
                 if (ViewState["action"].ToString().Equals("add"))
                 {
@@ -255,13 +257,73 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
     {
         Session["idno"] = ddlSearch.SelectedValue;
+
+        if (ddlSearch.SelectedValue != null && ddlSearch.SelectedValue != "")
+        {
+            pnlStudentHGPRequestDetails.Visible = true;
+            pnlbuttons.Visible = true;
+        }
+        if (ddlSearch.SelectedIndex == 0)
+        {
+            pnlStudentHGPRequestDetails.Visible = false;
+            pnlbuttons.Visible = false;
+        }
     }
 
+    protected void txtoutDate_TextChanged(object sender, EventArgs e)
+    {
+        if (txtinDate.Text != string.Empty && txtoutDate.Text != string.Empty)
+        {
+            if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
+            {
+                objCommon.DisplayMessage("Out Date should be lower than In Date.", this.Page);
+                txtinDate.Text = string.Empty;
+                txtinDate.Focus();
+                return;
+            }
+        }
 
+        if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1))
+        {
+            objCommon.DisplayMessage("Please select out date today OR greater than today's date.", this.Page);
+            txtoutDate.Focus();
+            return;
+        }
+    }
+
+    protected void txtinDate_TextChanged(object sender, EventArgs e)
+    {
+        DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
+        DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+        bool res = DateTime.Equals(OutDate, InDate);
+        if (res)
+        {
+            if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue && ddlAM_PM1.SelectedIndex != 0 && ddlAM_PM2.SelectedIndex != 0)
+            {
+                if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                {
+                    objCommon.DisplayMessage("Hour From should not be greater than Hour To.", this.Page);
+                    ddloutHourFrom.Focus();
+                    return;
+                }
+            }
+        }
+        else
+        {
+            if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
+            {
+                objCommon.DisplayMessage("In Date should be greater than Out Date.", this.Page);
+                txtinDate.Text = string.Empty;
+                txtinDate.Focus();
+                return;
+            }
+        }
+
+    }
     #endregion Action
 
     #region Private Methods
-
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
@@ -320,11 +382,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         btnSubmit.Text = "Submit";
 
         txtoutDate.Text = string.Empty;
-        txtoutHourFrom.Text = string.Empty;
-        txtoutMinFrom.Text = string.Empty;       
+        ddloutHourFrom.SelectedIndex = 0;
+        ddloutMinFrom.SelectedIndex = 0;       
         txtinDate.Text = string.Empty;
-        txtinHourFrom.Text = string.Empty;
-        txtinMinFrom.Text = string.Empty;
+        ddlinHourFrom.SelectedIndex = 0;
+        ddlinMinFrom.SelectedIndex = 0;
         ddlAM_PM1.SelectedIndex = 0;
         ddlAM_PM2.SelectedIndex = 0;
         ddlPurpose.SelectedIndex = 0;
@@ -332,7 +394,24 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         txtRemark.Text = string.Empty;
         ddlStuType.SelectedIndex = 0;
         ddlHostel.SelectedIndex = 0;
-        ddlSearch.SelectedIndex = 0;
+
+        if (Session["usertype"].ToString().Equals("2"))
+        {
+            string HostelNum = objCommon.LookUp("ACD_HOSTEL_ROOM_ALLOTMENT", "HOSTEL_NO", "RESIDENT_NO=" + Convert.ToInt32(Session["idno"]) + " and  CAN=0 AND HOSTEL_SESSION_NO=" + Convert.ToInt32(Session["hostel_session"]));
+
+            if (HostelNum == null || HostelNum == "")
+            {
+                objCommon.DisplayMessage("Room Alloted not found in current Hostel Session. Due to that reason You are not eligible for Hostel Gate Pass.", this.Page);
+                btnSubmit.Enabled = false;
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL", "HOSTEL_NO", "HOSTEL_NAME", "HOSTEL_NO = " + Convert.ToInt32(HostelNum) + " AND HOSTEL_NO>0", "HOSTEL_NO");
+                ddlHostel.SelectedValue = HostelNum;
+                ddlHostel.Enabled = false;
+            }
+
+        }
     }
 
     private void BindListView()
@@ -365,12 +444,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 ddlStuType.SelectedValue = dr["STUDENT_TYPE"] == null ? string.Empty : dr["STUDENT_TYPE"].ToString();
                 ddlHostel.SelectedValue = dr["HOSTEL_NO"] == null ? string.Empty : dr["HOSTEL_NO"].ToString();
                 txtoutDate.Text = dr["OUTDATE"] == null ? string.Empty : dr["OUTDATE"].ToString();
-                txtoutHourFrom.Text = dr["OUT_HOUR_FROM"] == null ? string.Empty : dr["OUT_HOUR_FROM"].ToString();
-                txtoutMinFrom.Text = dr["OUT_MIN_FROM"] == null ? string.Empty : dr["OUT_MIN_FROM"].ToString();
+                ddloutHourFrom.SelectedValue = dr["OUT_HOUR_FROM"] == null ? string.Empty : dr["OUT_HOUR_FROM"].ToString();
+                ddloutMinFrom.SelectedValue = dr["OUT_MIN_FROM"] == null ? string.Empty : dr["OUT_MIN_FROM"].ToString();
                 ddlAM_PM1.SelectedValue = dr["OUT_AM_PM"] == null ? string.Empty : dr["OUT_AM_PM"].ToString();
                 txtinDate.Text = dr["INDATE"] == null ? string.Empty : dr["INDATE"].ToString();
-                txtinHourFrom.Text = dr["IN_HOUR_FROM"] == null ? string.Empty : dr["IN_HOUR_FROM"].ToString();
-                txtinMinFrom.Text = dr["IN_MIN_FROM"] == null ? string.Empty : dr["IN_MIN_FROM"].ToString();
+                ddlinHourFrom.SelectedValue = dr["IN_HOUR_FROM"] == null ? string.Empty : dr["IN_HOUR_FROM"].ToString();
+                ddlinMinFrom.SelectedValue = dr["IN_MIN_FROM"] == null ? string.Empty : dr["IN_MIN_FROM"].ToString();
                 ddlAM_PM2.SelectedValue = dr["IN_AM_PM"] == null ? string.Empty : dr["IN_AM_PM"].ToString();
                 ddlPurpose.SelectedValue = dr["PURPOSE_ID"] == null ? string.Empty : dr["PURPOSE_ID"].ToString();
                 txtOther.Text = dr["PURPOSE_OTHER"] == null ? string.Empty : dr["PURPOSE_OTHER"].ToString();
@@ -440,14 +519,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 message += "<p>We appreciate your understanding and cooperation in this matter.</p>";
                 message += "<p>Thank you.</p>";
 
-                //status = objSendEmail.SendEmail(FatherID, message, subject, EmailID , " ");
-                status = objCommon.sendEmail(message, FatherID, subject);
+                status = objSendEmail.SendEmail(FatherID, message, subject);  
+               
+                // status = objCommon.sendEmail(message, FatherID, subject);
             }
         }
 
         if (status == 1) 
         {
-            objCommon.DisplayMessage(this.Page, "Email Sent Successfully.", this.Page);
+            objCommon.DisplayMessage(this.Page, "Email sent Successfully.", this.Page);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
         }
         else
@@ -459,5 +539,24 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     }
 
     #endregion Private Methods
-    
+    protected void ddlAM_PM2_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
+        DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+        bool res = DateTime.Equals(OutDate, InDate);
+        if (res)
+        {
+            if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
+            {
+                if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                {
+                    objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                    ddlAM_PM2.SelectedValue = "0";
+                    ddlinHourFrom.Focus();
+                    return;
+                }
+            }
+        }
+    }
 }
