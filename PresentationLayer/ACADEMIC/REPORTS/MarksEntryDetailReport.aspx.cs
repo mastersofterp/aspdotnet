@@ -653,9 +653,6 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
-
-
-
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -675,7 +672,6 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-
                 string reportTitle = "SubjectWiseMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_Coursewise_CPU_RCPIPER.rpt"; // SM
@@ -690,8 +686,22 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 10) // Added By Sagar Mankar On Date 17112023 For PRMITR
+            {
+                string reportTitle = "SubjectWiseMarksListReport";
+                // string rptFileName = "rptMarksList_Examwise.rpt";
+                string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_Coursewise_PRMITR.rpt";
+                //string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_SECTIONNO=0,@P_SUBID=" + ddlCourseType.SelectedValue + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + "";
+                // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
 
-
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
             }
             else
             {
@@ -708,15 +718,12 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
-
-
             }
         }
         else
         {
             if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)//Added by lalit Dt 03-01-2023
             {
-
                 string reportTitle = "SubjectWiseMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_Coursewise_CPU.rpt";
@@ -731,11 +738,9 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
-
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
-
                 string reportTitle = "SubjectWiseMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_Coursewise.rpt";
@@ -753,7 +758,6 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
-
                 string reportTitle = "SubjectWiseMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_Coursewise_CPU_REPIPER.rpt";
@@ -768,8 +772,6 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
-
-
             }
             else
             {
@@ -787,14 +789,8 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "key", Print_Val, true);
-
-
             }
-
         }
-
-
-
     }
     protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1176,7 +1172,7 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
             string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourseType.SelectedValue) + "," + Convert.ToInt32(ddlcourse.SelectedValue) + "";
             ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
             //if (ds.Tables[0].Rows.Count > 0)
-            if (ds.Tables.Count >0 )
+            if (ds.Tables.Count > 0)
             {
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();

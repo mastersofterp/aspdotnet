@@ -258,8 +258,9 @@
                                                     <ItemTemplate>
                                                         <div id="divcR" runat="server">
                                                             <a href="JavaScript:divexpandcollapse('div4<%# Eval("COLLEGE_ID") %>');">
-                                                                <img alt="View Course Detail" id='CLOSE<%# Eval("SRNO") %>' border="0" title="VIEW COURSE DETAILS" src="~/Images/action_down.png" />
+                                                                <%--<img alt="View Course Detail" id='CLOSE<%# Eval("SRNO") %>' border="0" title="VIEW COURSE DETAILS" src="~/Images/action_down.png" />--%>
                                                                 <%--<asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />--%>
+                                                                <asp:Image ID='CLOSE' runat="server" ImageUrl="~/Images/action_down.png" AlternateText="View Details" ToolTip="VIEW COURSE DETAILS" />
                                                         </div>
                                                         <asp:HiddenField ID="hdfCollegeId" runat="server" Value='<%# Eval("COLLEGE_ID") %>' />
                                                     </ItemTemplate>
@@ -292,8 +293,9 @@
                                                                                 <ItemTemplate>
                                                                                     <div id="divcR" runat="server">
                                                                                         <a href="JavaScript:divexpandcollapse('div5<%# Eval("SRNO") %>');">
-                                                                                            <img alt="View Student's Mark Detail" id='CLOSE<%# Eval("SRNO") %>' border="0" title="VIEW STUDENT MARKS DETAIL" src="~/Images/action_down.png" />
+                                                                                            <%--<img alt="View Student's Mark Detail" id='CLOSE<%# Eval("SRNO") %>' border="0" title="VIEW STUDENT MARKS DETAIL" src="~/Images/action_down.png" />--%>
                                                                                             <%--<asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />--%>
+                                                                                            <asp:Image ID='CLOSE' runat="server" ImageUrl="~/Images/action_down.png" AlternateText="View Details" ToolTip="VIEW STUDENT MARKS DETAIL" />
                                                                                     </div>
                                                                                     <%--  <asp:HiddenField ID="childhdfCollegeId" runat="server" Value='<%# Eval("COLLEGE_ID") %>' />--%>
                                                                                     <asp:HiddenField ID="hdfCollegeId" runat="server" Value='<%# Eval("COLLEGE_ID") %>' />

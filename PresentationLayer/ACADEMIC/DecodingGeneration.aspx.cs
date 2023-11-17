@@ -529,7 +529,9 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
             }
             else if (ddlNumType.SelectedValue == "2")
             {
-                ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
+                //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
+                //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO)", " distinct SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME,SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,null EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO"); INT
+                ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_SESSION_MASTER SM ON (SR.SESSIONNO=SM.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SR.SCHEMENO=SC.SCHEMENO) INNER JOIN ACD_DEGREE D ON (SC.DEGREENO= D.DEGREENO) INNER JOIN ACD_BRANCH BR ON (SC.BRANCHNO=BR.BRANCHNO)", "DISTINCT SR.IDNO", "(D.DEGREENAME +' - '+ BR.LONGNAME) COURSENAME,SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,NULL EXTERMARK,SM.SESSION_PNAME,D.DEGREENAME,SC.SCHEMENAME,BR.LONGNAME", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BR.BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
             }
             else if (ddlNumType.SelectedValue == "3")
             {
@@ -557,6 +559,15 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 Label lblHead = lvDecodeNo.FindControl("lblHead") as Label;
                 lblHead.Text = ddlNumType.SelectedItem.ToString();
 
+                Label lblHeadBCD = lvDecodeNo.FindControl("lblHeadBCD") as Label;
+
+                if (ddlNumType.SelectedValue == "2")
+                {
+                    lblHeadBCD.Text = "Degree - Branch";
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide(); $('#tdfalseno td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide();$('#tdfalseno td:nth-child(3)').hide(); });", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide();$('td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide();$('td:nth-child(3)').hide();});", true);
+                }
+
                 for (int i = 0; i < lvDecodeNo.Items.Count; i++)
                 {
                     if (ddlNumType.SelectedValue == "1")
@@ -568,6 +579,8 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                     {
                         Label lblCode = (Label)lvDecodeNo.Items[i].FindControl("lblCode");
                         lblCode.Text = ds.Tables[0].Rows[i]["SEATNO"].ToString();
+
+                        // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide(); $('.tbl-panel2 table td:nth-child(3)').hide();$('#tdfalseno').hide(); $('.tbl-panel3 table td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide(); $('.tbl-panel2 table td:nth-child(3)').hide();$('#tdfalseno').hide(); $('.tbl-panel3 table td:nth-child(3)').hide();});", true);
                     }
                     else if (ddlNumType.SelectedValue == "3")
                     {

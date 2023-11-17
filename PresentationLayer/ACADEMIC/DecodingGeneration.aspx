@@ -234,7 +234,9 @@
                                                             <%--False No.--%>
                                                             Seat No
                                                         </th>
-                                                        <th id="thCourse">Course 
+                                                        <th>
+                                                            <%--<th id="thCourse">Course --%>
+                                                            <asp:Label ID="lblHeadBCD" runat="server" Text="Course"></asp:Label>
                                                         </th>
 
                                                     </tr>
