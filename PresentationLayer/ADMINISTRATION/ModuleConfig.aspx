@@ -22,6 +22,7 @@
             </ProgressTemplate>
         </asp:UpdateProgress>
     </div>
+
     <style>
         #divStudentConfig {
             height: 400px;
@@ -57,6 +58,7 @@
             padding: 5px 11px;
         }
     </style>
+
     <asp:UpdatePanel ID="updpnl_details" runat="server">
         <ContentTemplate>
             <div class="row">
@@ -317,8 +319,8 @@
                                                         </div>
                                                     </div>
 
-                                                     <%-- New code Fee Head Groups added by -Gopal M 01112023--%>
-                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <%-- New code Fee Head Groups added by -Gopal M 01112023--%>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="Label31" runat="server" Font-Bold="true">Yes,If Allow to show Receipt Head Group on Fees Receipt.</asp:Label>
@@ -331,13 +333,13 @@
 
                                                     <%-- New code added by -Gopal M 02102023--%>
 
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Related to Outstanding Fee Collection</h5>
                                                         </div>
                                                     </div>
 
-                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="lblOutstandingFeeCollection" runat="server" Font-Bold="true">Yes,If Allow to Outstanding Fee Collection on Student Entry Page.</asp:Label>
@@ -348,14 +350,14 @@
                                                         </div>
                                                     </div>
 
-                                                     <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="OutstandingMessageDiv" style="display:none">
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="OutstandingMessageDiv" style="display: none">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="lblOutstandingMessage" runat="server" Font-Bold="true">Outstanding Message</asp:Label>
                                                         </div>
                                                         <div class="switch form-inline">
-                                                             <asp:TextBox ID="txtOutstandingMessage" runat="server" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
-                                                           <%-- <input type="text" id="txtOutstandingMessage" class="form-control" placeholder="Enter Outstanding Message"  />--%>
+                                                            <asp:TextBox ID="txtOutstandingMessage" runat="server" CssClass="form-control" TextMode="MultiLine"></asp:TextBox>
+                                                            <%-- <input type="text" id="txtOutstandingMessage" class="form-control" placeholder="Enter Outstanding Message"  />--%>
                                                         </div>
                                                     </div>
 
@@ -409,8 +411,34 @@
                                                         </div>
                                                     </div>
 
-                                                      <%-- Show Single, Duplicate Triplicate receipt added by -Gopal M 01112023--%>
+                                                    <%-- Show Single, Duplicate Triplicate receipt added by -Gopal M 01112023--%>
                                                     <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label35" runat="server" Font-Bold="true">Yes,If Allow to show Single, Double And Triple Fee Receipt on Fee Collection.</asp:Label>
+                                                        </div>
+                                                        <div class="form-inline">
+                                                            <asp:TextBox ID="txtFeeReceiptCopies" MaxLength="1" runat="server" CssClass="form-control"> </asp:TextBox>
+                                                            <label style="color: red">Note: Allows only 1, 2 and 3 numbers</label>
+                                                            <asp:RangeValidator ID="rvtxtFeeReceiptCopies" runat="server" ErrorMessage="Enter only in 1, 2 and 3 numbers" ForeColor="Red" ControlToValidate="txtFeeReceiptCopies" ValidationGroup="Submit" MinimumValue="1" MaximumValue="3"  Type="Integer" SetFocusOnError="True"></asp:RangeValidator>
+                                                           <ajaxToolKit:FilteredTextBoxExtender ID="ftext" runat="server"  TargetControlID="txtFeeReceiptCopies" FilterType="Numbers" ValidChars="123" FilterMode="ValidChars">
+                                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label32" runat="server" Font-Bold="true">Yes,If Allow to show Scholarship/ Concession Adjustment fees for Student Login.</asp:Label>
+                                                        </div>
+                                                        <div class="switch form-inline">
+                                                            <input type="checkbox" id="chkScholarshipConAdj" name="chkScholarshipConAdj" />
+                                                            <label data-on="Yes" tabindex="9" data-off="No" for="chkScholarshipConAdj"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <%--  <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
                                                             <asp:Label ID="Label32" runat="server" Font-Bold="true">Yes,If Allow to show Single Fee Receipt on Fee Collection.</asp:Label>
@@ -441,7 +469,7 @@
                                                             <input type="checkbox" id="chkFeeReceiptTriple" name="chkFeeReceiptTriple" />
                                                             <label data-on="Yes" tabindex="9" data-off="No" for="chkFeeReceiptTriple"></label>
                                                         </div>
-                                                    </div>
+                                                    </div>--%>
 
 
 
@@ -752,7 +780,7 @@
                                                         </div>
                                                     </div>
 
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <div class="sub-heading">
                                                             <h5>Related to Modify Admission Info</h5>
                                                         </div>
@@ -782,33 +810,33 @@
                                         Faculty
                                     </div>--%>
                                     <div class="tab-pane" id="tab_3">
-                                                <div class="col-12">
-                                                    <div id="demo-grid">
-                                                        <div class="sub-heading mt-4">
-                                                            <h5>Student Configuration</h5>
-                                                        </div>
+                                        <div class="col-12">
+                                            <div id="demo-grid">
+                                                <div class="sub-heading mt-4">
+                                                    <h5>Student Configuration</h5>
+                                                </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic">
-                                                                <label>Page Name </label>
-                                                            </div>
-                                                            <asp:UpdatePanel ID="updStudentC" runat="server">
-    <ContentTemplate>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <label>Page Name </label>
+                                                    </div>
+                                                    <asp:UpdatePanel ID="updStudentC" runat="server">
+                                                        <ContentTemplate>
                                                             <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false" onchange="handleDropDownChange();">
-<%--                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlPageName_SelectedIndexChanged">--%>
+                                                                <%--                                                            <asp:DropDownList ID="ddlPageName" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlPageName_SelectedIndexChanged">--%>
                                                                 <asp:ListItem Value="0">Add Student</asp:ListItem>
                                                                 <asp:ListItem Value="1">Personal Details</asp:ListItem>
                                                             </asp:DropDownList>
                                                         </ContentTemplate>
-    <Triggers>
-        <asp:AsyncPostBackTrigger ControlID="ddlPageName" EventName="SelectedIndexChanged" />
-    </Triggers>
-</asp:UpdatePanel>
-                                                        </div>
+                                                        <Triggers>
+                                                            <asp:AsyncPostBackTrigger ControlID="ddlPageName" EventName="SelectedIndexChanged" />
+                                                        </Triggers>
+                                                    </asp:UpdatePanel>
+                                                </div>
 
-                                                        <div id="divStudentConfig" class="mt-3">
-                                                        </div>
-                                                        <%-- <table class="table table-striped table-bordered nowrap display" id="StudentConfig">
+                                                <div id="divStudentConfig" class="mt-3">
+                                                </div>
+                                                <%-- <table class="table table-striped table-bordered nowrap display" id="StudentConfig">
                                                     <thead>
                                                         <tr>
                                                             <th hidden>STUDCONFIG_ID
@@ -830,12 +858,12 @@
                                                     <tbody>
                                                     </tbody>
                                                 </table>--%>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 btn-footer">
-                                                    <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" runat="server"  />
-                                                    <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
-                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 btn-footer">
+                                            <input type="button" value="Submit" id="btnStudentSubmit" class="btn btn-primary" runat="server" />
+                                            <input type="button" value="Reset" id="btnReset" class="btn btn-warning" />
+                                        </div>
 
                                     </div>
 
@@ -1297,11 +1325,10 @@
                 <asp:HiddenField ID="hfdchkCreateRegno" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdchkcreateusernewprntentry" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfdRedoImprovementCourseRegFlag" runat="server" ClientIDMode="Static" />
-                 <asp:HiddenField ID="hfchkOutstandingFeeCollection" runat="server" ClientIDMode="Static" />
-                 <asp:HiddenField ID="hfchkFeeHeadGroup" runat="server" ClientIDMode="Static" />
-                 <asp:HiddenField ID="hfchkFeeReceiptSingle" runat="server" ClientIDMode="Static" />
-                 <asp:HiddenField ID="hfchkFeeReceiptDouble" runat="server" ClientIDMode="Static" />
-                 <asp:HiddenField ID="hfchkFeeReceiptTriple" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkOutstandingFeeCollection" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkFeeHeadGroup" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hftxtFeeReceiptCopies" runat="server" ClientIDMode="Static" />
+                <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />            
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -1311,6 +1338,7 @@
 
         </Triggers>
     </asp:UpdatePanel>
+
     <div id="popup" runat="server">
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
             <ContentTemplate>
@@ -1351,49 +1379,50 @@
             </Triggers>
         </asp:UpdatePanel>
     </div>
-        <script type="text/javascript">
-            $("#ctl00_ContentPlaceHolder1_btnStudentSubmit").click(function(){
-                //function submit(){
-                debugger;
-                var arrItems = [];
-                $('#StudentConfig').find('tr').each(function () {
-                    var objArray= {};
-                    var row = $(this);
-                    var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_organization_id,_page_no,_page_name;
 
-                    _studconfig_id = row.find('td').eq(0).text();
-                    _caption_name = row.find('td').eq(1).text();
-                    _field_name = row.find('td').eq(2).text();
-                    _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
-                    _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                    _organization_id = row.find('td').eq(4).text();
-                    _page_no = row.find('td').eq(5).text();
-                    _page_name = row.find('td').eq(6).text();
+    <script type="text/javascript">
+        $("#ctl00_ContentPlaceHolder1_btnStudentSubmit").click(function(){
+            //function submit(){
+            debugger;
+            var arrItems = [];
+            $('#StudentConfig').find('tr').each(function () {
+                var objArray= {};
+                var row = $(this);
+                var _studconfig_id,_caption_name,_field_name,_isactive,_ismandatory,_organization_id,_page_no,_page_name;
 
-                    if (_studconfig_id != '') {
-                        objArray["studconfig_id"] = _studconfig_id;
-                        objArray["caption_name"] = _caption_name;
-                        objArray["isactive"] = _isactive;
-                        objArray["ismandatory"] = _ismandatory;
-                        objArray["organization_id"] = _organization_id;
-                        objArray["page_no"] = _page_no;
-                        objArray["pagename"] = _page_name;
-                        //var item =  row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
-                        arrItems.push(objArray);
-                    }
-                });
-                SaveUpdateStudentConfig(arrItems);
-                //}
+                _studconfig_id = row.find('td').eq(0).text();
+                _caption_name = row.find('td').eq(1).text();
+                _field_name = row.find('td').eq(2).text();
+                _isactive = row.find("#rdISACTIVE" + row.find('td').eq(0).text()).is(":checked")
+                _ismandatory = row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
+                _organization_id = row.find('td').eq(4).text();
+                _page_no = row.find('td').eq(5).text();
+                _page_name = row.find('td').eq(6).text();
+
+                if (_studconfig_id != '') {
+                    objArray["studconfig_id"] = _studconfig_id;
+                    objArray["caption_name"] = _caption_name;
+                    objArray["isactive"] = _isactive;
+                    objArray["ismandatory"] = _ismandatory;
+                    objArray["organization_id"] = _organization_id;
+                    objArray["page_no"] = _page_no;
+                    objArray["pagename"] = _page_name;
+                    //var item =  row.find("#rdISMANDATORY" + row.find('td').eq(0).text()).is(":checked")
+                    arrItems.push(objArray);
+                }
             });
+            SaveUpdateStudentConfig(arrItems);
+            //}
+        });
 
-            function SaveUpdateStudentConfig(_studentConfig)
-            {
-                debugger;
-                var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
-                //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
-                $.ajax({
-                    type: "POST",
-                    url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
+        function SaveUpdateStudentConfig(_studentConfig)
+        {
+            debugger;
+            var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+            //var JData = '{StudentConfig: ' + JSON.stringify(_studentConfig) +'}'
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
                     data: JData,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -2329,17 +2358,11 @@
         function CheckFeeHeadGroup(val) {
             $('[id*=chkFessHeadGroup]').prop('checked', val);
         }
-        function CheckFeeReceiptSingle(val) {
-            $('[id*=chkFeeReceiptSingle]').prop('checked', val);
+        
+        function CheckScholarshipConAdj(val) {
+            $('[id*=chkScholarshipConAdj]').prop('checked', val);
         }
-        function CheckFeeReceiptDouble(val) {
-            $('[id*=chkFeeReceiptDouble]').prop('checked', val);
-        }
-        function CheckFeeReceiptTriple(val) {
-            $('[id*=chkFeeReceiptTriple]').prop('checked', val);
-        }
-
-        //
+       
         function validate() {
             $('#hfchknewstudentemail').val($('#chknewstudentemail').prop('checked'));
             $('#hfOnlinePaymentbtn').val($('#rdonlinepaymentbtn').prop('checked'));
@@ -2377,9 +2400,14 @@
             // Added by Gopal M.
             $('#hfchkOutstandingFeeCollection').val($('#chkOutstandingFeeCollection').prop('checked'));
             $('#hfchkFeeHeadGroup').val($('#chkFessHeadGroup').prop('checked'));
-            $('#hfchkFeeReceiptSingle').val($('#chkFeeReceiptSingle').prop('checked'));
-            $('#hfchkFeeReceiptDouble').val($('#chkFeeReceiptDouble').prop('checked'));
-            $('#hfchkFeeReceiptTriple').val($('#chkFeeReceiptTriple').prop('checked'));
+            $('#hfchkScholarshipConAdj').val($('#chkScholarshipConAdj').prop('checked'));
+            var numCopies =document.getElementById("<%=txtFeeReceiptCopies.ClientID %>").value;
+            if(numCopies > 3 || numCopies == 0)
+            {
+                alert("Allow only 1,2 and 3 numbers");
+                return false;
+            }
+          
         }
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
@@ -2438,8 +2466,7 @@
     </script>
 
     <script>
-      
-
+     
         function validateSemesterAdm() {
             var payMode="";
             var holderName="";
@@ -2480,7 +2507,6 @@
     </script>
 
     <script>
-
         function TabShow(tabName) {
             //alert('hii')
             //var tabName = "tab_2";
@@ -2493,10 +2519,10 @@
 
     <input type="hidden" id="orgId" value="<%= Session["OrgId"] %>" />
 
-<script type="text/javascript">
-    function handleDropDownChange() {
-        debugger;
-        var selectedText = document.getElementById('<%= ddlPageName.ClientID %>').options[document.getElementById('<%= ddlPageName.ClientID %>').selectedIndex].text.trim();
+    <script type="text/javascript">
+        function handleDropDownChange() {
+            debugger;
+            var selectedText = document.getElementById('<%= ddlPageName.ClientID %>').options[document.getElementById('<%= ddlPageName.ClientID %>').selectedIndex].text.trim();
 
         var orgID = '<%= Session["OrgId"] %>';
         var pageNo = "";
@@ -2577,10 +2603,7 @@
             $("[id*=-]").val($(this).attr("href").replace("#", ""));
         });
     }
-</script>
-
-
-
+    </script>
 
     <script>
 

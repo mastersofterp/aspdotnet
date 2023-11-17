@@ -710,40 +710,30 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565647", "CheckFeeHeadGroup(false);", true);
                     }
 
-                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_SINGLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_SINGLE"].ToString() == "1")
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString() != "1")
                     {
-                        rdID = "hfchkFeeReceiptSingle";
-                        hfchkFeeReceiptSingle.Value = "true";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(true);", true);
+                        rdID = "hfchkFeeReceiptSDT";
+                        hftxtFeeReceiptCopies.Value = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        txtFeeReceiptCopies.Text = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(true);", true);
                     }
                     else
                     {
-                        hfchkFeeReceiptSingle.Value = "false";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(false);", true);
+                        hftxtFeeReceiptCopies.Value = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        txtFeeReceiptCopies.Text = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(false);", true);
                     }
 
-                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_DOUBLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_DOUBLE"].ToString() == "1")
+                    if (ds.Tables[0].Rows[0]["TOSHOW_FEEREC_STUDLOGIN"].ToString() != null && ds.Tables[0].Rows[0]["TOSHOW_FEEREC_STUDLOGIN"].ToString() == "1")
                     {
-                        rdID = "hfchkFeeReceiptDouble";
-                        hfchkFeeReceiptDouble.Value = "true";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565649", "CheckFeeReceiptDouble(true);", true);
+                        rdID = "hfchkScholarshipConAdj";
+                        hfchkScholarshipConAdj.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckScholarshipConAdj(true);", true);
                     }
                     else
                     {
-                        hfchkFeeReceiptDouble.Value = "false";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565649", "CheckFeeReceiptDouble(false);", true);
-                    }
-
-                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_TRIPLE"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_TRIPLE"].ToString() == "1")
-                    {
-                        rdID = "hfchkFeeReceiptTriple";
-                        hfchkFeeReceiptTriple.Value = "true";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565650", "CheckFeeReceiptTriple(true);", true);
-                    }
-                    else
-                    {
-                        hfchkFeeReceiptTriple.Value = "false";
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565650", "CheckFeeReceiptTriple(false);", true);
+                        hfchkScholarshipConAdj.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckScholarshipConAdj(false);", true);
                     }
 
                 }
@@ -1149,19 +1139,20 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             {
                 objMod.FEE_HEAD_GROUP = true;
             }
-            if (hfchkFeeReceiptSingle.Value == "true")
+
+            if (txtFeeReceiptCopies.Text == "" || txtFeeReceiptCopies.Text == "0")
             {
-                objMod.FEE_RECEIPT_SINGLE = true;
+                objMod.FEE_RECEIPT_COPIES = 1;
             }
-            if (hfchkFeeReceiptDouble.Value == "true")
+            else 
             {
-                objMod.FEE_RECEIPT_DOUBLE = true;
-            }
-            if (hfchkFeeReceiptTriple.Value == "true")
-            {
-                objMod.FEE_RECEIPT_TRIPLE = true;
+                objMod.FEE_RECEIPT_COPIES = Convert.ToInt32(txtFeeReceiptCopies.Text);
             }
 
+            if (hfchkScholarshipConAdj.Value == "true")
+            {
+                objMod.TOSHOW_FEEREC_STUDLOGIN = true;
+            }
 
             //Check whether to add or update
             if (ViewState["action"] != null)

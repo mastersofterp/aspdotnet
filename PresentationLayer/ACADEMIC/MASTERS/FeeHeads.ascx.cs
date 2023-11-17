@@ -198,6 +198,8 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                 lvFeesHead.DataSource = ds;
                 lvFeesHead.DataBind();
 
+
+                
                 //Hide ISSchlorship column except 'TF'-----START
                 Control ctrHeader = lvFeesHead.FindControl("thScholarship");
                 if (ddlRecType.SelectedValue == "TF")
@@ -251,6 +253,7 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                     CheckBox chkIsReactivateStudent = itm.FindControl("chkIsReactivateStudent") as CheckBox;
                     CheckBox ChkIsCautionMoney = itm.FindControl("ChkIsCautionMoney") as CheckBox;                 
                     DropDownList ddlRptShw = itm.FindControl("ddlReceiptShow") as DropDownList;
+                    objCommon.FillDropDownList(ddlRptShw, "ACD_RECIEPT_HEAD_MASTER", "RECIEPTHEADNO", "RHNAME", "ACTIVESTATUS=1", "RECIEPTHEADNO");
 
                     
                     if (ddlRecType.SelectedValue == "TF")
@@ -262,7 +265,7 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                             {
                                 txtLName.Enabled = false;
                                 txtSName.Enabled = false;
-                                ddlRptShw.Enabled = false; 
+                               // ddlRptShw.Enabled = false; 
                             }
                         }
 
@@ -273,7 +276,7 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                             {
                                 txtLName.Enabled = false;
                                 txtSName.Enabled = false;
-                                ddlRptShw.Enabled = false;
+                               // ddlRptShw.Enabled = false;
                             }
                         }
 
@@ -285,7 +288,7 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                             {
                                 txtLName.Enabled = false;
                                 txtSName.Enabled = false;
-                                ddlRptShw.Enabled = false;
+                              //  ddlRptShw.Enabled = false;
                             }
                         }
 
@@ -319,7 +322,7 @@ public partial class Academic_Masters_FeeHeads : System.Web.UI.UserControl
                     {
                         txtLName.Enabled = false;
                         txtSName.Enabled = false;
-                        ddlRptShw.Enabled = false;
+                       // ddlRptShw.Enabled = false;
                     }                      
                 }
 

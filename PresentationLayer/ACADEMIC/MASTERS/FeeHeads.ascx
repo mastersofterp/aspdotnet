@@ -496,16 +496,16 @@
 
                                     <td>
                                         <asp:TextBox ID="txtLName" MaxLength="30" runat="server" Text='<%#Eval("FEE_LONGNAME")%>'
-                                            CssClass="form-control" />
-                                        <asp:CustomValidator ClientValidationFunction="ValidateShortName" ControlToValidate="txtLName"
-                                            Display="None" EnableClientScript="true" ErrorMessage="Please Enter Short Name as well."
-                                            ID="valShortName" runat="server" ValidateEmptyText="false" ValidationGroup="Fees" />
+                                            CssClass="form-control" onchange="return FeeheadValidation(this);" />                                       
 
                                     </td>
 
                                     <td>
                                         <asp:TextBox ID="txtSName" MaxLength="8" runat="server" Text='<%#Eval("FEE_SHORTNAME")%>'
-                                            CssClass="form-control" />
+                                            CssClass="form-control" onchange="return FeeheadShortNameValidation(this);" />
+                                         <asp:CustomValidator ClientValidationFunction="ValidateShortName" ControlToValidate="txtLName"
+                                            Display="None" EnableClientScript="true" ErrorMessage="Please Enter Short Name as well."
+                                            ID="valShortName" runat="server" ValidateEmptyText="false" ValidationGroup="Fees" />
                                     </td>
 
                                     <td>
@@ -565,6 +565,60 @@
             alert("Error: " + e.description);
         }
     }
+
+    //ctl00_ContentPlaceHolder1_ucFeeshead_lvFeesHead_ctrl1_txtHead
+
+
+    function FeeheadValidation(txt) {
+        try {
+            debugger;
+           // alert('A');
+            var count = $("[id*=tblFeeHead] td").closest('tr').length;
+
+            for (var i = 0; i < count; i++) {
+                var txtvalue = document.getElementById('ctl00_ContentPlaceHolder1_ucFeeshead_lvFeesHead_ctrl' + i + '_txtLName').value;
+                //alert(txtvalue);
+                var id = 'ctl00_ContentPlaceHolder1_ucFeeshead_lvFeesHead_ctrl' + i + '_txtLName';
+                if (txt.value.toUpperCase().trim() == txtvalue.toUpperCase().trim() && txt.id != id) {
+                    alert(txtvalue + ' Long Name Already Exists.');
+                    txt.value = '';
+                    txt.focus();
+                    return false;
+                }
+            }
+        }
+        catch (err) {
+            alert("Error Messege : " + err.message);
+        }
+    }
+
+
+    function FeeheadShortNameValidation(txt) {
+        try {
+            debugger;
+            // alert('A');
+            var count = $("[id*=tblFeeHead] td").closest('tr').length;
+
+            for (var i = 0; i < count; i++) {
+
+                var txtvalue = document.getElementById('ctl00_ContentPlaceHolder1_ucFeeshead_lvFeesHead_ctrl' + i + '_txtSName').value;
+               // txtvalue = txtvalue.toUpperCase();
+                //alert(txtvalue);
+                var id = 'ctl00_ContentPlaceHolder1_ucFeeshead_lvFeesHead_ctrl' + i + '_txtSName';
+                if (txt.value.toUpperCase().trim() == txtvalue.toUpperCase().trim() && txt.id != id) {
+                    alert(txtvalue + ' Short Name Already Exists.');
+                    txt.value = '';
+                    txt.focus();
+                    return false;
+                }
+            }
+        }
+        catch (err) {
+            alert("Error Messege : " + err.message);
+        }
+    }
+
+
 </script>
 
 <%--<script type="text/javascript" language="javascript">
