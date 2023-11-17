@@ -129,9 +129,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
 
-                //divYear.Visible = true;
-                //btnElibilityReport.Visible = true;
-
+                divprint.Visible = true;    //Added on 07112023
+                btnCertificate.Visible = true; //Added on 07112023
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -1655,297 +1654,94 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         else if (Convert.ToInt32(Session["OrgId"]) == 3)
         {
 
+            int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DISTINCT ADMBATCH", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"]));
 
-            if (Convert.ToInt32(ViewState["degreeno"]) == 55)
+            string grade = objCommon.LookUp("ACD_SCHEME", "DISTINCT GRADEMARKS", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"] + "AND ADMBATCH=" + admbatch);
+
+
+            if (grade == "M")
             {
 
-                string ids = string.Empty;
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+                int DurationCheck = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
                 foreach (ListViewDataItem item in lvStudent.Items)
                 {
+                    CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                    CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
                     CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                     Label lblStudname = item.FindControl("lblStudname") as Label;
 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                    }
-                }
-                ids = ids.TrimEnd('.');
-
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_First_Year", ids);
-
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 20 || Convert.ToInt32(ViewState["degreeno"]) == 27 || Convert.ToInt32(ViewState["degreeno"]) == 52)  //Added for Tejas Thakre for Second Year Grade Card 14_06_2023
-            {
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                    }
-                }
-                ids = ids.TrimEnd('.');
-
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Second_Year.rpt", ids);
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 13)  //Added for Tejas Thakre for Third Year Grade Card 14_06_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                    }
-                }
-                ids = ids.TrimEnd('.');
-
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card.rpt", ids);
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 60 || Convert.ToInt32(ViewState["degreeno"]) == 63)  //Added for Tejas Thakre for Fourth Year Grade Card 14_06_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                    }
-                }
-                ids = ids.TrimEnd('.');
-
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Four_Year.rpt", ids);
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 24) // LLM Grade Card Added By Tejas Thakre on 18_08_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                    }
-                }
-                ids = ids.TrimEnd('.');
-
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_LLM.rpt", ids);
-
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 23) // B.A Grade Card Added by Tejas Thakre on 19_08_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
+                    //if (chk.Checked == true)
                     //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
+                    //    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    //    cntlength++;
                     //}
-                    //else
-                    //{
-                    this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_BA.rpt", ids);
-                    // }
-                }
-
-            }
-
-            //else if (Convert.ToInt32(ViewState["degreeno"]) == 63)  //Added for Tejas Thakre for Fifth Year Grade Card 14_06_2023
-            //{
-
-            //    string ids = string.Empty;
-            //    foreach (ListViewDataItem item in lvStudent.Items)
-            //    {
-            //        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-            //        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-            //        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-            //        if (chk.Checked)
-            //        {
-            //            ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-            //            //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-            //        }
-            //    }
-            //    ids = ids.TrimEnd('.');
-
-            //    this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Fifth_Year.rpt", ids);
-
-            //}
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 40) //D.pharm Condition added by Tejas Thakre 18/07_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
                     string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                    if (chk.Checked)
-                    {
-                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
 
-                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    if (ddlStuType.SelectedIndex < 0)
+                    {
+                        objCommon.DisplayMessage("Please Select Student Type", this.Page);
                     }
-                }
-                ids = ids.TrimEnd('.');
 
-                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Dpharm.rpt", ids);
 
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 5 || Convert.ToInt32(ViewState["degreeno"]) == 21)
-            {
-                if (Convert.ToInt32(ViewState["schemeno"]) == 46 || Convert.ToInt32(ViewState["schemeno"]) == 47 || Convert.ToInt32(ViewState["schemeno"]) == 48 || Convert.ToInt32(ViewState["schemeno"]) == 49 || Convert.ToInt32(ViewState["schemeno"]) == 50 || Convert.ToInt32(ViewState["schemeno"]) == 51)
-                {
-
-                    if (Convert.ToInt32(ViewState["schemeno"]) == 50)
+                    if (DurationCheck == 5)
                     {
-                        string ids = string.Empty;
-                        foreach (ListViewDataItem item in lvStudent.Items)
-                        {
-                            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                            Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                            string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                            if (chk.Checked)
-                            {
-                                ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                                //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                            }
-                        }
-                        ids = ids.TrimEnd('.');
-
-                        this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Msc_Phy.rpt", ids);
-
+                        //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_New.rpt"); //added on 070922 for only show 10 semester
+                        this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Fifth_Year.rpt", ids);
                     }
-                    else
+                    else if (DurationCheck == 2)
                     {
-
-                        string ids = string.Empty;
-                        foreach (ListViewDataItem item in lvStudent.Items)
+                        if (Convert.ToInt32(ViewState["degreeno"]) == 40)
                         {
-                            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                            Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                            string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                            if (chk.Checked)
-                            {
-                                ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                                //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                            }
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Dpharm.rpt", ids);
                         }
-                        ids = ids.TrimEnd('.');
-
+                        else if (Convert.ToInt32(ViewState["degreeno"]) == 5)
+                        {
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Msc_Phy.rpt", ids);
+                        }
+                        else if (Convert.ToInt32(ViewState["degreeno"]) == 24)
+                        {
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_LLM.rpt", ids);
+                        }
+                        else
+                        {
+                            //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_II.rpt"); //added on 070922  for only show 4 semester
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Second_Year.rpt", ids);
+                        }
+                    }
+                    else if (DurationCheck == 3)
+                    {
+                        if (Convert.ToInt32(ViewState["degreeno"]) == 23)
+                        {
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_BA.rpt", ids);
+                        }
+                        else
+                        {
+                            //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_III.rpt"); //added on 070922 for only show 6 semester
+                            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card.rpt", ids);
+                        }
+                    }
+                    else if (DurationCheck == 2)
+                    {
+                        //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_IV.rpt"); //added on 070922 for only show 8 semester
                         this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Second_Year.rpt", ids);
+
                     }
-                }
-                else if (Convert.ToInt32(ViewState["schemeno"]) == 44 || Convert.ToInt32(ViewState["schemeno"]) == 45)
-                {
-                    string ids = string.Empty;
-                    foreach (ListViewDataItem item in lvStudent.Items)
+                    else if (DurationCheck == 4)
                     {
-                        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                        if (chk.Checked)
-                        {
-                            ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                            //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                        }
+                        this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Four_Year.rpt", ids);
                     }
-                    ids = ids.TrimEnd('.');
-
-                    this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card.rpt", ids);
                 }
-                else
-                {
-                    string ids = string.Empty;
-                    foreach (ListViewDataItem item in lvStudent.Items)
-                    {
-                        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                        if (chk.Checked)
-                        {
-                            ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                            //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                        }
-                    }
-                    ids = ids.TrimEnd('.');
-
-                    this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA.rpt", ids);
-                }
-
             }
             else
             {
@@ -1966,9 +1762,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 ids = ids.TrimEnd('.');
 
                 this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_CPUKOTA.rpt", ids);
+
             }
-
-
         }
 
         #endregion
@@ -2136,7 +1931,28 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             ids = ids.TrimEnd('.');
 
             this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_PCEN.rpt", ids);  
+        }
+        #endregion
+        #region For JLOCE Grad Card Added By Tejas Thakre on 17/11/2023
+        else if (Convert.ToInt32(Session["OrgId"]) == 20)
+        {
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
 
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+            }
+            ids = ids.TrimEnd('.');
+
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_JLOCE.rpt", ids);
         }
         #endregion
         else
@@ -2326,6 +2142,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 19) // PCEN added by Tejas Thakre on 30/10/2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 20) //JLOCE added by Tejas Thakre on 17/11/2023
                 {
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
@@ -2629,6 +2449,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW(); // +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 19) // for PCEN Added by Tejas Thakre on 30-10-2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 20) // for JLOCE Added by Tejas Thakre on 17-11-2023
                 {
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW();
                 }
@@ -3194,193 +3018,97 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         else if (Convert.ToInt32(Session["OrgId"]) == 3)
         {
 
-            if (Convert.ToInt32(ViewState["degreeno"]) == 55)
+            int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DISTINCT ADMBATCH", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"]));
+
+            string grade = objCommon.LookUp("ACD_SCHEME", "DISTINCT GRADEMARKS", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"] + "AND ADMBATCH=" + admbatch);
+
+
+            if (grade == "M")
             {
 
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+                int DurationCheck = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
 
-                string ids = string.Empty;
                 foreach (ListViewDataItem item in lvStudent.Items)
                 {
+                    CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                    CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
                     CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                     Label lblStudname = item.FindControl("lblStudname") as Label;
 
-                    //string 
+                    //if (chk.Checked == true)
+                    //{
+                    //    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    //    cntlength++;
+                    //}
                     string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
 
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
+                    if (ddlStuType.SelectedIndex < 0)
+                    {
+                        objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                    }
 
 
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                    if (DurationCheck == 5)
+                    {
+                        //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_New.rpt"); //added on 070922 for only show 10 semester
+                        this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Fifth_Year.rpt");
+                    }
+                    else if (DurationCheck == 2)
+                    {
+                        if (Convert.ToInt32(ViewState["degreeno"]) == 40)
+                        {
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Dpharm.rpt");
+                        }
+                        else if (Convert.ToInt32(ViewState["degreeno"]) == 5)
+                        {
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_Msc_Phy.rpt");
+                        }
+                        else if (Convert.ToInt32(ViewState["degreeno"]) == 24)
+                        {
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_LLM.rpt");
+                        }
+                        else
+                        {
+                            //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_II.rpt"); //added on 070922  for only show 4 semester
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Second_Year.rpt");
+                        }
+                    }
+                    else if (DurationCheck == 3)
+                    {
+                        if (Convert.ToInt32(ViewState["degreeno"]) == 23)
+                        {
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_BA.rpt");
+                        }
+                        else
+                        {
+                            //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_III.rpt"); //added on 070922 for only show 6 semester
+                            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header.rpt");
+                        }
+                    }
+                    else if (DurationCheck == 2)
+                    {
+                        //this.ShowGradeCard("Grade_Card", "rptGradeCardReportPG_NEW_IV.rpt"); //added on 070922 for only show 8 semester
+                        this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Second_Year.rpt");
 
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_First_Year.rpt");
-                    // }
-                }
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 20 || Convert.ToInt32(ViewState["degreeno"]) == 27 || Convert.ToInt32(ViewState["degreeno"]) == 52)  //Added for Tejas Thakre for Second Year Grade Card 14_06_2023
-            {
-
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Second_Year.rpt");
-                    // }
-                }
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 13)  //Added for Tejas Thakre for Third Year Grade Card 14_06_2023
-            {
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header.rpt");
-                    // }
+                    }
+                    else if (DurationCheck == 4)
+                    {
+                        this.ShowGradeCardWithoutHeader("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Four_Year.rpt");
+                    }
                 }
             }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 60 || Convert.ToInt32(ViewState["degreeno"]) == 63)  //Added for Tejas Thakre for Fourth Year Grade Card 14_06_2023
+            else
             {
-
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Four_Year.rpt");
-                    // }
-                }
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 24)  // LLM Grade Card Added By Tejas Thakre on 18_08_2023
-            {
-
                 string ids = string.Empty;
                 foreach (ListViewDataItem item in lvStudent.Items)
                 {
@@ -3397,283 +3125,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 ids = ids.TrimEnd('.');
 
-                this.ShowGradeCardWithoutHeader("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_LLM.rpt");
-
-
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 23) // B.A Grade Card Added by Tejas Thakre on 19_08_2023
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_BA.rpt");
-                    // }
-                }
+                this.ShowGradeCardWithoutHeader("Grade Card", "rptGradeCardReport_CPUKOTA_Without_Header.rpt");
 
             }
 
-            //else if (Convert.ToInt32(ViewState["degreeno"]) == 63)  //Added for Tejas Thakre for Fifth Year Grade Card 14_06_2023
-            //{
-
-            //    string ids = string.Empty;
-            //    foreach (ListViewDataItem item in lvStudent.Items)
-            //    {
-            //        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-            //        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-            //        string 
-            //        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-            //    }
-            //    if (ids != string.Empty)
-            //        GenerateQrCode(ids);
-
-            //    if (ddlStuType.SelectedValue == "-1")
-            //    {
-            //        objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-            //    }
-            //    else
-            //    {
-
-
-            //        MarksEntryController objMarkEntry = new MarksEntryController();
-            //        int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-            //        int College_id = Convert.ToInt32(ViewState["college_id"]);
-            //        int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-            //        int Branchno = Convert.ToInt32(ViewState["branchno"]);
-            //        int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-            //        int ua_no = Convert.ToInt32(Session["userno"].ToString());
-            //        string idnos = GetIDNOFGenerateGradeNo();
-            //        objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-            //        int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-            //        if (duration == Semesterno)
-            //        {
-            //            this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-            //        }
-            //        else
-            //        {
-            //        this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Fifth_Year.rpt");
-            //         }
-            //    }
-
-            //}
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 40) // D.pharm Grade Card Added by Tejas Thakre 18_07_2023
-            {
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Dpharm.rpt");
-                    // }
-                }
-            }
-            else if (Convert.ToInt32(ViewState["degreeno"]) == 5 || Convert.ToInt32(ViewState["degreeno"]) == 21)
-            {
-                if (Convert.ToInt32(ViewState["schemeno"]) == 46 || Convert.ToInt32(ViewState["schemeno"]) == 47 || Convert.ToInt32(ViewState["schemeno"]) == 48 || Convert.ToInt32(ViewState["schemeno"]) == 49 || Convert.ToInt32(ViewState["schemeno"]) == 50 || Convert.ToInt32(ViewState["schemeno"]) == 51)
-                {
-
-                    if (Convert.ToInt32(ViewState["schemeno"]) == 50) // Msc.Phy Grade card added by Tejas Thakre 21_08_2023
-                    {
-                        string ids = string.Empty;
-                        foreach (ListViewDataItem item in lvStudent.Items)
-                        {
-                            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                            Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                            string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                            if (chk.Checked)
-                            {
-                                ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                                //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                            }
-                        }
-                        ids = ids.TrimEnd('.');
-
-                        this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Without_Header_Msc_Phy.rpt");
-
-                    }
-                    else
-                    {
-
-                        string ids = string.Empty;
-                        foreach (ListViewDataItem item in lvStudent.Items)
-                        {
-                            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                            Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                            string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                            if (chk.Checked)
-                            {
-                                ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                                //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                            }
-                        }
-                        ids = ids.TrimEnd('.');
-
-                        this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header_Second_Year.rpt");
-                    }
-
-                }
-                else if (Convert.ToInt32(ViewState["schemeno"]) == 44 || Convert.ToInt32(ViewState["schemeno"]) == 45)
-                {
-                    string ids = string.Empty;
-                    foreach (ListViewDataItem item in lvStudent.Items)
-                    {
-                        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                        if (chk.Checked)
-                        {
-                            ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                            //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                        }
-                    }
-                    ids = ids.TrimEnd('.');
-
-                    this.ShowGradeCardWithoutHeader("Grade Card", "rptGradeCardReport_CPUKOTA_Annual_Card_Card_Without_Header.rpt");
-                }
-                else
-                {
-                    string ids = string.Empty;
-                    foreach (ListViewDataItem item in lvStudent.Items)
-                    {
-                        CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                        Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                        if (chk.Checked)
-                        {
-                            ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                            //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
-                        }
-                    }
-                    ids = ids.TrimEnd('.');
-
-                    this.ShowGradeCardWithoutHeader("Grade Card", "rptGradeCardReport_CPUKOTA_Without_Header.rpt");
-                }
-
-            }
-            else
-            {
-
-                string ids = string.Empty;
-                foreach (ListViewDataItem item in lvStudent.Items)
-                {
-                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                    Label lblStudname = item.FindControl("lblStudname") as Label;
-
-                    //string 
-                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-
-                }
-                //if (ids != string.Empty)
-                //    GenerateQrCode(ids);
-
-                if (ddlStuType.SelectedValue == "-1")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
-                }
-                else
-                {
-
-
-                    MarksEntryController objMarkEntry = new MarksEntryController();
-                    int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-                    int College_id = Convert.ToInt32(ViewState["college_id"]);
-                    int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
-                    int Branchno = Convert.ToInt32(ViewState["branchno"]);
-                    int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
-                    int ua_no = Convert.ToInt32(Session["userno"].ToString());
-                    string idnos = GetIDNOFGenerateGradeNo();
-                    objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
-
-                    int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
-                    //if (duration == Semesterno)
-                    //{
-                    //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
-                    //}
-                    //else
-                    //{
-                    this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_CPUKOTA_Without_Header.rpt");
-                    // }
-                }
-            }
         }
         // For RCIPIPER REPORT  
         else if (Convert.ToInt32(Session["OrgId"]) == 6)
@@ -3941,7 +3396,31 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_PCEN_Without_Header.rpt");
 
         }
-        else 
+        // For JLOCE REPORT
+        else if (Convert.ToInt32(Session["OrgId"]) == 20)
+        {
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+                    //count++;
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+
+            }
+
+            ids = ids.TrimEnd('.');
+
+            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_JLOCE_Without_Header.rpt");
+        }
+        else
         {
 
             string ids = string.Empty;
@@ -5433,8 +4912,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     {
         if (Convert.ToInt32(Session["OrgId"]) == 3)
         {
-            
-            string grade = objCommon.LookUp("ACD_SCHEME", "DISTINCT GRADEMARKS", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"]);
+
+            int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "DISTINCT ADMBATCH", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"]));
+
+            string grade = objCommon.LookUp("ACD_SCHEME", "DISTINCT GRADEMARKS", "BRANCHNO=" + ViewState["branchno"] + "AND DEGREENO=" + ViewState["degreeno"] + "AND ADMBATCH=" + admbatch);
 
             if (Convert.ToInt32(ViewState["degreeno"]) == 13)
             {
@@ -6016,5 +5497,52 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
 
     }
+    #region For Crescent Various Degree Certificate 
+    protected void btnCertificate_Click(object sender, EventArgs e)
+    {
+    
+        try
+        {
+            string idno = GetIDNO();
+            if (idno == "" || idno=="0")
+            {
+                objCommon.DisplayMessage(updpnlExam, "Please Select At least one Student!!", this.Page);
+                return;
+            }
+            int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
+            string date3 = Convert.ToDateTime(txtprint.Text).ToString("MM/dd/yyyy");
+            string date4 = Convert.ToDateTime(txtprint.Text).ToString("dd/MM/yyyy"); 
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + "Degree Certificate";
+            if ( ViewState["degreeno"]=="2" ||ViewState["degreeno"]=="4" ||ViewState["degreeno"]=="6"||ViewState["degreeno"]=="7"||ViewState["degreeno"]=="11"||ViewState["degreeno"]=="17"||ViewState["degreeno"]=="19"||ViewState["degreeno"]=="19"||ViewState["degreeno"]=="20")
+            {
+                url += "&path=~,Reports,Academic," + "rptDegreeCertificate.rpt";//as per ticket number 49655 (Template 1)
+            }
+            else if (ViewState["degreeno"] == "5" || ViewState["degreeno"] == "8" || ViewState["degreeno"] == "9")
+            {
+                url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Three.rpt";//as per ticket number 49655 (Template 3)
+            }
+            else
+            {
+                url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Two.rpt";//as per ticket number 49655 (Template 2)
+            }
+            url += "&param=@P_SCHEMENO=" + schemeno + ",@P_DATE=" + date3 + ",@P_IDNO=" + GetIDNO() + ",@V_DATE=" + date4;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
 
+          
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_CourseRegistration.btnCertificate_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
+    }
+    #endregion
 }

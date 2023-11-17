@@ -357,6 +357,10 @@
                                         </asp:RequiredFieldValidator>--%>
                                          <asp:RequiredFieldValidator ID="RequiredFieldValidator60" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ER"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator> 
+
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator64" runat="server" ControlToValidate="ddlClgname"
+                                            Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="CPD"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
 
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlClgname"
@@ -422,8 +426,10 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Summary"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>  
+                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator65" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="CPD"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
-
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator56" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Ledger"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
@@ -714,6 +720,31 @@
 
                                         </div>
                                     </div>
+
+
+                                  <div class="form-group col-lg-3 col-md-6 col-12" id="divprint" runat="server" visible="false">
+                                        <div class="label-dynamic">
+                                            <label>Date Of Convocation</label>
+                                        </div>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon" id="imgPrint">
+                                                <i class="fa fa-calendar text-blue"></i>
+                                            </div>
+                                            <asp:TextBox runat="server" ID="txtprint" TabIndex="1" ToolTip="Please Enter Date" CssClass="form-control" Style="width: 71%;"></asp:TextBox>
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="True" Format="dd/MM/yyyy"
+                                                PopupButtonID="imgPrint" TargetControlID="txtprint" />
+                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server"
+                                                TargetControlID="txtprint" Mask="99/99/9999" MessageValidatorTip="true"
+                                                MaskType="Date" DisplayMoney="Left" AcceptNegative="Left"
+                                                ErrorTooltipEnabled="True" />
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator63" runat="server" ControlToValidate="txtprint"
+                                                ErrorMessage="Please Select Date" ValidationGroup="CPD"></asp:RequiredFieldValidator>
+
+                                        </div>
+                                    </div>
+
+
+
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
                                             <label>Grade Card For</label>
@@ -860,8 +891,12 @@
                                 <asp:Button ID="btnGradeCardIssueRegister" runat="server" Text="Grade Card Issue Register" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCardIssueRegister" OnClick="btnGradeCardIssueRegister_Click" />
 
                                 
-                                <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER" OnClick="btnElibilityReport_Click" />
+                                <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER"  />
 
+                                <asp:Button ID="btnCertificate" Text="Degree Certificate" runat="server" TabIndex="1" CssClass="btn btn-info"
+                                    Visible="false" ValidationGroup="CPD" OnClick="btnCertificate_Click" />
+                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
+                                    ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />
                                 <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="ER" />
 
@@ -1005,7 +1040,8 @@
             <asp:PostBackTrigger ControlID="btnufm" />
             <asp:PostBackTrigger ControlID="btngraderange" />
             <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
-             <asp:PostBackTrigger ControlID="btnElibilityReport" />
+             <asp:PostBackTrigger ControlID="btnElibilityReport" /> 
+             <asp:PostBackTrigger ControlID="btnCertificate" />
 
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>
