@@ -129,7 +129,7 @@
 
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="Show" OnClick="btnShow_OnClick" />
-                                     <asp:Button ID="btnClearSingle" runat="server" Text="Cancle" CssClass="btn btn-danger"  OnClick="btnClearSingle_Click" />
+                                     <asp:Button ID="btnClearSingle" runat="server" Text="Cancel" CssClass="btn btn-danger"  OnClick="btnClearSingle_Click" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Show"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </div>
@@ -329,7 +329,7 @@
 
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnbulkShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="BulkShow" OnClick="btnbulkShow_Click" />
-                                     <asp:Button ID="btnClearBulk" runat="server" Text="Cancle" CssClass="btn btn-danger" OnClick="btnClearBulk_Click" />
+                                     <asp:Button ID="btnClearBulk" runat="server" Text="Cancel" CssClass="btn btn-danger" OnClick="btnClearBulk_Click" />
                                     <asp:Button ID="btnSendEmail" runat="server" Text="Send Email" CssClass="btn btn-primary" 
                                         ValidationGroup="BulkShow" OnClick="btnSendEmail_Click" Enabled="false" />
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="BulkShow"
