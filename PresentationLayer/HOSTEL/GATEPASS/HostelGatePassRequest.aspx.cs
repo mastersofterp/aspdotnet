@@ -8,7 +8,6 @@ using System.Web.UI.WebControls;
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
-using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
 using SendGrid;
@@ -138,15 +137,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objGatePass.CollegeCode = Session["colcode"].ToString();
             objGatePass.organizationid = Session["OrgId"].ToString();
 
-            if (ViewState["action"].ToString().Equals("add"))
-            {
-                if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1) )   //  DateTime.Now.ToString("MM/dd/yyyy h:mm tt")
-                {
-                    objCommon.DisplayMessage("Please select out date Today OR greater than today's date.", this.Page);
-                    txtoutDate.Focus();
-                    return;
-                }
-            }
+            //if (ViewState["action"].ToString().Equals("add"))
+            //{
+            //    if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1) )   //  DateTime.Now.ToString("MM/dd/yyyy h:mm tt")
+            //    {
+            //        objCommon.DisplayMessage("Please select out date Today OR greater than today's date.", this.Page);
+            //        txtoutDate.Focus();
+            //        return;
+            //    }
+            //}
             
             //if (objGatePass.InDate < objGatePass.OutDate)
             //{
@@ -171,9 +170,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         Clear();
                         Sendmail();
                     }
+                    if (cs == 4)
+                    {
+                        objCommon.DisplayMessage("Parent Login Not Found. Contact to Administrator.", this.Page);
+                        ViewState["action"] = "add";
+                    }
+
                     else if (cs == -99)
                     {
-                        objCommon.DisplayMessage("Passing path Not found.Contact to Administrator.", this.Page);
+                        objCommon.DisplayMessage("Passing path Not found. Contact to Administrator.", this.Page);
                         ViewState["action"] = "add";
                         Clear();
                     }
@@ -272,7 +277,18 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
     protected void txtoutDate_TextChanged(object sender, EventArgs e)
     {
-        if (txtinDate.Text != string.Empty && txtoutDate.Text != string.Empty)
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty)
+        {
+            if (Convert.ToDateTime(txtoutDate.Text) < System.DateTime.Now.AddDays(-1))
+            {
+                objCommon.DisplayMessage("Please select out date today or greater than today's date.", this.Page);
+                txtoutDate.Text = string.Empty;
+                txtoutDate.Focus();               
+                return;
+            }
+        }
+
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
             if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
             {
@@ -283,43 +299,42 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             }
         }
 
-        if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1))
-        {
-            objCommon.DisplayMessage("Please select out date today OR greater than today's date.", this.Page);
-            txtoutDate.Focus();
-            return;
-        }
+        
     }
 
     protected void txtinDate_TextChanged(object sender, EventArgs e)
     {
-        DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
-        DateTime InDate = Convert.ToDateTime(txtinDate.Text);
-
-        bool res = DateTime.Equals(OutDate, InDate);
-        if (res)
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
-            if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue && ddlAM_PM1.SelectedIndex != 0 && ddlAM_PM2.SelectedIndex != 0)
+            DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
+            DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+            bool res = DateTime.Equals(OutDate, InDate);
+            if (res)
             {
-                if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue && ddlAM_PM1.SelectedIndex != 0 && ddlAM_PM2.SelectedIndex != 0)
                 {
-                    objCommon.DisplayMessage("Hour From should not be greater than Hour To.", this.Page);
-                    ddloutHourFrom.Focus();
+                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) > Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                    {
+                        objCommon.DisplayMessage("Hour From should not be greater than Hour To.", this.Page);
+                        ddloutHourFrom.Focus();
+                        ddloutHourFrom.SelectedValue = "0";
+                        txtinDate.Text = string.Empty;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
+                {
+                    objCommon.DisplayMessage("In Date should be greater than Out Date.", this.Page);
+                    txtinDate.Text = string.Empty;
+                    txtinDate.Focus();
                     return;
                 }
             }
         }
-        else
-        {
-            if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
-            {
-                objCommon.DisplayMessage("In Date should be greater than Out Date.", this.Page);
-                txtinDate.Text = string.Empty;
-                txtinDate.Focus();
-                return;
-            }
-        }
-
     }
     #endregion Action
 
@@ -541,20 +556,46 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     #endregion Private Methods
     protected void ddlAM_PM2_SelectedIndexChanged(object sender, EventArgs e)
     {
-        DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
-        DateTime InDate = Convert.ToDateTime(txtinDate.Text);
-
-        bool res = DateTime.Equals(OutDate, InDate);
-        if (res)
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
-            if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
+            DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
+            DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+            bool res = DateTime.Equals(OutDate, InDate);
+            if (res)
             {
-                if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
                 {
-                    objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
-                    ddlAM_PM2.SelectedValue = "0";
-                    ddlinHourFrom.Focus();
-                    return;
+                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                    {
+                        objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                        ddlAM_PM2.SelectedValue = "0";
+                        ddlinHourFrom.Focus();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    protected void ddlinHourFrom_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
+        {
+            DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
+            DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+            bool res = DateTime.Equals(OutDate, InDate);
+            if (res)
+            {
+                if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
+                {
+                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                    {
+                        objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                        ddlinHourFrom.SelectedIndex = 0 ; 
+                        ddlinHourFrom.Focus();
+                        return;
+                    }
                 }
             }
         }

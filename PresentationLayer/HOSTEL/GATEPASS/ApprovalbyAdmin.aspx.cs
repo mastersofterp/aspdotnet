@@ -95,38 +95,62 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
     {
         try
         {
-            int Approve = 0;
-            int recid = 0;
-            CustomStatus cs = new CustomStatus();
+            bool isChecked = false;
             foreach (ListViewDataItem item in lvGatePass.Items)
             {
-                CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
-                HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
-
-                if (chkApprove.Checked)
+                CheckBox Ischeck = item.FindControl("chkApprove") as CheckBox;
+                if (Ischeck.Checked)
                 {
-                    Approve = 1;
+                    isChecked = true;
+                    break;
                 }
-                else
-                {
-                    Approve = 0;
-                }
-
-                string Remark = txtRemark.Text;
-
-                recid = Convert.ToInt16(hidrecid.Value);
-                cs = (CustomStatus)objAAC.UpdateApproval(recid, Approve, Remark);
             }
-            if (cs.Equals(CustomStatus.RecordSaved))
+
+            if (isChecked)
             {
-                objCommon.DisplayMessage("Direct approval for hostel gate pass done successfully.", this.Page);
-                BindListView();
-                Clear();
+                ViewState["action"] = "checked";
+            }
+            else
+            {
+                objCommon.DisplayMessage("Please select at least one record.", this.Page);
+                ViewState["action"] = "not_checked";
+            }
+
+            if (ViewState["action"] == "checked")
+            {
+                int Approve = 0;
+                int recid = 0;
+                CustomStatus cs = new CustomStatus();
+                foreach (ListViewDataItem item in lvGatePass.Items)
+                {
+                    CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
+                    HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
+
+                    if (chkApprove.Checked)
+                    {
+                        Approve = 1;
+                    }
+                    else
+                    {
+                        Approve = 0;
+                    }
+
+                    string Remark = txtRemark.Text;
+
+                    recid = Convert.ToInt16(hidrecid.Value);
+                    cs = (CustomStatus)objAAC.UpdateApproval(recid, Approve, Remark);
+                }
+
+                if (cs.Equals(CustomStatus.RecordSaved))
+                {
+                    objCommon.DisplayMessage("Direct Approval for Hostel Gate Pass Successfully.", this.Page);
+                    Clear();
+                }
             }
         }
         catch (Exception ex)
         {
-
+            throw ex;
         }
     }
 

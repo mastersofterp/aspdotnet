@@ -106,9 +106,13 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                 lblRoom.Text = dr["ROOM_NO"].ToString();
                 lblvalFrom.Text = dr["OUTDATE"].ToString();
                 lblvalTo.Text = dr["INDATE"].ToString();
+                lblapproval1.Text = dr["FIRST_APPROVER"].ToString();
+                lblapproval2.Text = dr["SECOND_APPROVER"].ToString();
+                lblapproval3.Text = dr["THIRD_APPROVER"].ToString();
+                lblapproval4.Text = dr["FOURTH_APPROVER"].ToString();
 
                 //if (dr["PHOTO"].ToString() != "")
-                    imgPhoto.ImageUrl = "~/showimage.aspx?id=" + Session["idno"].ToString() + "&type=STUDENT";
+                imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dr["IDNO"].ToString() + "&type=STUDENT";
 
                 pnlinfo.Visible = true;
                 btnReport.Visible = true;

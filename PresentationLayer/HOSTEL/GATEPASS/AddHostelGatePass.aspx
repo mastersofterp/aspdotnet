@@ -119,7 +119,10 @@
                              <div class="label-dynamic">
                                     <label style="font-size:medium;"><b>Approved By & Date</b></label>
                                 </div>
-                                <asp:Label ID="lblapproval" runat="server" Text="Label"></asp:Label>
+                                <asp:Label ID="lblapproval1" runat="server" Text="Label"></asp:Label><br />
+                                <asp:Label ID="lblapproval2" runat="server" Text="Label"></asp:Label><br />
+                                <asp:Label ID="lblapproval3" runat="server" Text="Label"></asp:Label><br />
+                                <asp:Label ID="lblapproval4" runat="server" Text="Label"></asp:Label><br />
                          </div>
                     </div>
                 </div>

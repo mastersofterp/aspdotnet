@@ -186,15 +186,15 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                         }
                         else if (output == 2)
                         {
-                            objCommon.ConfirmMessage(this, "Please Wait for First Approvar forword", this);
+                            objCommon.ConfirmMessage(this, "Please Wait for First Approval.", this);
                         }
                         else if (output == 3)
                         {
-                            objCommon.ConfirmMessage(this, "Please Wait for First and Second Approvar forword", this);
+                            objCommon.ConfirmMessage(this, "Please Wait for First and Second Approval.", this);
                         }
                         else if (output == 4)
                         {
-                            objCommon.ConfirmMessage(this, "Please Wait for First second and Third Approvar forword", this);
+                            objCommon.ConfirmMessage(this, "Please Wait for First, Second and Third Approval.", this);
                         }
                         else if (output == 5)
                         {
@@ -237,7 +237,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         }
         else
         {
-               objCommon.ConfirmMessage(this, "Url not Found.", this);
+               objCommon.ConfirmMessage(this, "File not Found.", this);
         }
     }
 
