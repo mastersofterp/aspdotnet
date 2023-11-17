@@ -1087,7 +1087,7 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
         string Reqtype = rdbReqFor.SelectedValue == "I" ? "ISSUE" : "PUR";
 
         ds = objDeptReqController.GenrateReq(mdno, Convert.ToInt32(Session["OrgId"]), Reqtype);  //09-03-2022 g
-        if (ds.Tables[0].Rows.Count > 0)
+        if (ds!=null && ds.Tables[0].Rows.Count > 0)
         {
             txtIndentSlipNo.Text = Convert.ToString(ds.Tables[0].Rows[0]["REQNO"].ToString());
         }
