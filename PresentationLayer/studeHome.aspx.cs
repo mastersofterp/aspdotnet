@@ -123,15 +123,11 @@ public partial class StudeHome : System.Web.UI.Page
                         pnlMarquee.Visible = false;
                     }
 
-
-                    // Added by Gopal Mandaogade 04102023 Ticket #
+                    // Added by Gopal Mandaogade 04102023 Ticket #46419
                     DataSet ds1 = objCommon.FillDropDown("ACD_MODULE_CONFIG", "ISNULL(OUTSTANDING_FEECOLLECTION,0) OUTSTANDING_FEECOLLECTION", "OUTSTANDING_MESSAGE", "", "");
-                   // int Outstanding_FeeCollection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(OUTSTANDING_FEECOLLECTION,0)", ""));
-                    if ( Convert.ToInt32(ds1.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"]) == 1)
+                    if (Convert.ToInt32(ds1.Tables[0].Rows[0]["OUTSTANDING_FEECOLLECTION"]) == 1)
                     {
                         string Outstanding_Message = ds1.Tables[0].Rows[0]["OUTSTANDING_MESSAGE"].ToString();
-
-                        divoutstanding.Visible = true;
                         string spName = "PKG_ACD_TOTAL_OUTSTANDING_FEES";
                         string spParameters = "@P_IDNO";
                         string spValue = "" + Convert.ToInt32(Session["idno"].ToString());
@@ -140,11 +136,15 @@ public partial class StudeHome : System.Web.UI.Page
                         dsoutstaning = objCommon.DynamicSPCall_Select(spName, spParameters, spValue);
                         if (dsoutstaning.Tables.Count > 0 && dsoutstaning != null && dsoutstaning.Tables[0] != null && dsoutstaning.Tables[0].Rows.Count > 0)
                         {
-                            lblLastLoginTime.Text = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
-                            var amt = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
-                            var msg = Outstanding_Message.Replace(@"[Amount]", amt.ToString() + " Rs.");
-                            objCommon.DisplayMessage(msg, this.Page);
-                            ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7", "AddClassTobtnoutfees();", true);
+                            if (Convert.ToInt32(dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"]) > 0)
+                            {
+                                divoutstanding.Visible = true;
+                                lblLastLoginTime.Text = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
+                                var amt = dsoutstaning.Tables[0].Rows[0]["TOTAL_OUTSTANDING"].ToString();
+                                var msg = Outstanding_Message.Replace(@"[Amount]", amt.ToString() + " Rs.");
+                                objCommon.DisplayMessage(msg, this.Page);
+                                ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript7", "AddClassTobtnoutfees();", true);
+                            }
                         }
                        
                     }
