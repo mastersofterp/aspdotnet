@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="CommonFeedbackReport.aspx.cs" Inherits="ACADEMIC_CommonFeedbackReport" 
-    ViewStateEncryptionMode="Always" EnableViewStateMac="true"%>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="CommonFeedbackReport.aspx.cs" Inherits="ACADEMIC_CommonFeedbackReport"
+    ViewStateEncryptionMode="Always" EnableViewStateMac="true" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -46,6 +46,28 @@
                                     </asp:RadioButtonList>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-12" id="dvFeedbackReport" runat="server" visible="false">
+                            <div class="row">
+                              
+                                    <div class="form-group col-lg-4 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>Feedback Report Type : </label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlFeedbackReportType" AppendDataBoundItems="true" ToolTip="Please Select Feedback Type" runat="server" data-select2-enable="true"
+                                            CssClass="form-control" OnSelectedIndexChanged="ddlFeedbackReportType_SelectedIndexChanged" AutoPostBack="true">
+                                            <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
+                                            <asp:ListItem Selected="false" Value="1">Faculty Feedback Report</asp:ListItem>
+                                            <%--<asp:ListItem Selected="false" Value="2">Faculty Feedback Report Percentage Wise</asp:ListItem>--%>
+                                            <asp:ListItem Selected="false" Value="3">HOD Feedback Report</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFeedbackType"
+                                        Display="None" ErrorMessage="Please select Feedback Type." SetFocusOnError="true"
+                                        ValidationGroup="Report" InitialValue="0" />--%>
+                                    </div>
+                                </div>
+                            
                         </div>
                         <div class="col-lg-12 col-md-12 col-12" id="dvFaculttyFeedback" runat="server" visible="false">
                             <div class="box-body">
@@ -129,12 +151,18 @@
                                 </div>
 
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6"
+                                    <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6" Visible="false"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReport_Click" CssClass="btn btn-primary" />
+
+                                   <%-- <asp:Button ID="btnFacultyFeedbackReportPercentageWise" runat="server" Text="Faculty Feedback Report Percentage Wise" TabIndex="6"
+                                        ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReportPercentageWise_Click" CssClass="btn btn-primary" Visible="false"/>--%>
+                                    <asp:Button ID="btnHODFeedbackReport" runat="server" Text="HOD Feedback Report" TabIndex="6" Visible="false"
+                                        ValidationGroup="FeedbackFaculty" OnClick="btnHODFeedbackReport_Click" CssClass="btn btn-primary" />
+
                                     <asp:Button ID="btnEvalutionReport" runat="server" Text="Student Feedback Evalution Report" TabIndex="6"
-                                        ValidationGroup="FeedbackFaculty" OnClick="Button1_Click" CssClass="btn btn-primary" Visible="false"/>
+                                        ValidationGroup="FeedbackFaculty" OnClick="Button1_Click" CssClass="btn btn-primary" Visible="false" />
                                     <asp:Button ID="btnCommentReport" runat="server" Text="Feedback Comments Report" TabIndex="7"
-                                        ValidationGroup="FeedbackFaculty" OnClick="btnCommentReport_Click" CssClass="btn btn-primary" Visible="false"  />
+                                        ValidationGroup="FeedbackFaculty" OnClick="btnCommentReport_Click" CssClass="btn btn-primary" Visible="false" />
                                     <asp:Button ID="btnCancelReport" runat="server" Text="Cancel" TabIndex="8"
                                         OnClick="btnCancelReport_Click" CssClass="btn btn-warning" />
                                     <%-- <asp:Button ID="Btnbackfeedback" runat="server" TabIndex="11" Text="Back" ToolTip="Click here to go back to previous" CausesValidation="false" 
@@ -150,6 +178,8 @@
                             </div>
                         </div>
                         <%--   <div  class="col-lg-12 col-md-12 col-12" id="dvallfeedback" runat="server" visible="false">--%>
+
+
                         <div class="col-12" id="dvallfeedback" runat="server" visible="false">
                             <div class="row">
                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -223,6 +253,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="btnreport" />
             <asp:PostBackTrigger ControlID="btnCommentReport" />
+            <asp:PostBackTrigger ControlID="btnHODFeedbackReport" />
         </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">
