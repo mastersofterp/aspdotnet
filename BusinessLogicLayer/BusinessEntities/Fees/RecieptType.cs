@@ -28,6 +28,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         bool _isLinked = false;
         string _collegeCode = string.Empty;
         int _isadmission = 0;
+        int _isLateFine = 0;
 
 
         #endregion
@@ -110,6 +111,12 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         {
             get { return _isadmission; }
             set { _isadmission = value; }
+        }
+
+        public int IsLateFine
+        {
+            get { return _isLateFine; }
+            set { _isLateFine = value; }
         }
         #endregion
     }

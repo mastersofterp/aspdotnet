@@ -123,7 +123,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_CNAME", recieptType.CompanyName),
                     new SqlParameter("@P_LINKED", recieptType.IsLinked),
                     new SqlParameter("@P_COLLEGE_CODE", recieptType.CollegeCode),
-                    new SqlParameter("@P_ISADDMISSION", recieptType.isadmission)
+                    new SqlParameter("@P_ISADDMISSION", recieptType.isadmission),
+                    new SqlParameter("@P_ISLATEFINE", recieptType.IsLateFine)
                 };
                 object obj = dataAccess.ExecuteNonQuerySP("PKG_ACAD_INS_RECIEPT_TYPE", sqlParams, true);
 
@@ -162,7 +163,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_CNAME", recieptType.CompanyName),
                     new SqlParameter("@P_LINKED", recieptType.IsLinked),
                     new SqlParameter("@P_COLLEGE_CODE", recieptType.CollegeCode),
-                    new SqlParameter("@P_ISADDMISSION", recieptType.isadmission)
+                    new SqlParameter("@P_ISADDMISSION", recieptType.isadmission),
+                    new SqlParameter("@P_ISLATEFINE", recieptType.IsLateFine)
                 };
 
                 object obj = dataAccess.ExecuteNonQuerySP("PKG_ACAD_UPD_RECIEPT_TYPE", sqlParams, true);
