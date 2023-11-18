@@ -373,7 +373,6 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         ddlSubject.Focus();
     }
 
-
     //on select of Subject reset Section name , From date and To date , percentage
     protected void ddlSubject_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -790,13 +789,10 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                 divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 divMsg.InnerHtml += " window.open('" + url + "','" + "Faculty Incomplete Attendance" + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 divMsg.InnerHtml += " </script>";
-
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
-
                 ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
-
                 // ",@P_COLLEGE_ID="+ Convert.ToInt32(ddlInstitute.SelectedValue) +
             }
             else
@@ -886,6 +882,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
         }
     }
+
     #region Subject Wise Details Excel Report
 
     //added by jay takalkhede on dated 21042023 for tkt 41327
@@ -936,9 +933,9 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
     }
     #endregion
 
-    #region Syllabus Coverage Report
+    #region Syllabus Coverage Report For PCEN
 
-    // Added By Vipul Tichakule on dated 01-11-2023
+    // Added By Vipul Tichakule on dated 01-11-2023 TktNo. 49404
     protected void btnSyllabusCoverageReport_Click(object sender, EventArgs e)
     {
         try
@@ -974,9 +971,53 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
 
                 ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
             }
+          }       
+        catch
+        {
+            throw;
+        }
 
-          }
-        
+    }
+    #endregion
+
+    #region Attendance Report For PCEN
+
+    // Added By Sakshi M. on dated 18-11-2023 TktNo. 49404
+    protected void btnAttReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            if (Convert.ToInt32(Session["OrgId"]) == 19)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + "Syllabus Coverage Report";
+                url += "&path=~,Reports,Academic," + "rptAttendance_Attendance_Report.rpt";
+
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
+                    + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
+                    + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
+                    + ",@P_SUBID=" + ddlSubjectType.SelectedValue
+                    + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
+                    + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
+                    + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                    + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
+                    + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
+                    + ",@P_COURSENO=" + Convert.ToInt32(ddlSubject.SelectedValue)
+                    + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
+
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + "Faculty Incomplete Attendance" + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+                ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+        }
+
+
         catch
         {
             throw;
