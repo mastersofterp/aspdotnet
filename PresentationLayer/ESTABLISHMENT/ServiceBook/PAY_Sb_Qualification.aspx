@@ -269,7 +269,7 @@
                                                              SetFocusOnError="True">
                                                 </asp:RequiredFieldValidator>--%>
                                         </div>
-                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
                                             <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
                                             <asp:HiddenField ID="hdnBlobCon" runat="server" />
                                             <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
