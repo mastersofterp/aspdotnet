@@ -455,7 +455,7 @@
                                                         AutoPostBack="True" CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlCourseCT"
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlGlobalElectiveGroup"
                                                         Display="None" InitialValue="0" ErrorMessage="Please Select Group / Section" ValidationGroup="courseteacher">
                                                     </asp:RequiredFieldValidator>
 
@@ -1074,7 +1074,7 @@
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSessionTimeTable"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="timetable"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">

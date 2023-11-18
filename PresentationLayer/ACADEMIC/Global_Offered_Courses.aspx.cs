@@ -1103,7 +1103,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         }
         int OrgId = Convert.ToInt32(Session["OrgId"].ToString());
         if (objSC.UpdateStudent_TeachAllotForGlobalElective_Modified(objStudent, OrgId, Convert.ToInt32(ddlsection.SelectedValue)) == Convert.ToInt32(CustomStatus.RecordUpdated))
-            objCommon.DisplayMessage(this.UpdatePanel1, "Teacher Alloted Sucessfully..", this.Page);
+            objCommon.DisplayMessage(this.UpdatePanel1, "Teacher Alloted Successfully..", this.Page);
         else
             objCommon.DisplayMessage(this.UpdatePanel1, "Server Error", this.Page);
 
@@ -2476,12 +2476,14 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             DataSet dsData = objSC.GetGlobalCourseTeacherAllotment(Convert.ToInt16(ddlSessionCT.SelectedValue));
             if (dsData != null & dsData.Tables.Count > 0 && dsData.Tables[0].Rows.Count > 0)
             {
+                lvGlobalCourseTeacher.Visible = true;
                 lvGlobalCourseTeacher.DataSource = dsData;
                 lvGlobalCourseTeacher.DataBind();
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvGlobalCourseTeacher);//Set label - 
             }
             else
             {
+                lvGlobalCourseTeacher.Visible = false;
                 lvGlobalCourseTeacher.DataSource = null;
                 lvGlobalCourseTeacher.DataBind();
                 objCommon.DisplayMessage(this.UpdatePanel1, "No Data Found.", this.Page);
@@ -2602,7 +2604,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         lstAdditionalTeacherCT.ClearSelection();
         lvGlobalCourseTeacher.DataSource = null;
         lvGlobalCourseTeacher.DataBind();
-        ddlGlobalElectiveGroup.SelectedIndex = 1;
+        ddlGlobalElectiveGroup.SelectedIndex = 0;
     }
     protected void btnInActiveCT_Click(object sender, EventArgs e)
     {
@@ -3393,7 +3395,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["college_nos"]) + ""
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ""
                    + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSessionReport.SelectedValue)
                    + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"])
                    + ",@P_SLOTTYPE=" + ddlSlotTypeReport.SelectedValue + ",@P_FROMDATE=" + txtFromDateReport.Text + ",@P_TODATE=" + txtTodateReport.Text;
