@@ -366,7 +366,7 @@
                                     
                                 <%-- Added by Sakshi M on date 01-11-2023 --%>
                                 <asp:LinkButton ID="btnAttReport" runat="server" TabIndex="23"
-                                       ValidationGroup="SubPercentage" CssClass="btn btn-info" Visible="true" OnClick="btnAttReport_Click">
+                                       ValidationGroup="SubPercentage" CssClass="btn btn-info" Visible="false" OnClick="btnAttReport_Click">
                                      <i class="fa fa-file-pdf-o" aria-hidden="true"></i>Attendance Report</asp:LinkButton>
 
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"

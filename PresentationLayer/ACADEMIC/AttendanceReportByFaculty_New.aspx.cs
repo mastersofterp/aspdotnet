@@ -68,6 +68,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                     if (Convert.ToInt32(Session["OrgId"]) == 19)
                     {
                         btnSyllabusCoverageReport.Visible = true;
+                        btnAttReport.visible = true;
                     }
                     PopulateDropDownList();
                 }
@@ -200,6 +201,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 19)
         {
             btnSyllabusCoverageReport.Visible = true;
+            btnAttReport.visible = true;
         }
     }
 
