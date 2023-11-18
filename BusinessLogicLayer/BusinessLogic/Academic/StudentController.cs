@@ -17826,13 +17826,14 @@ namespace IITMS
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudent-> " + ex.ToString());
                     }
                 }
-                public int UpdateStudentSectionBulk(string studids, string sectionnos, int ua_no, string admbatchno, int degreeno, int branchno, string ipaddress)
+                public int UpdateStudentSectionBulk(string studids, string sectionnos, int ua_no, string admbatchno, int degreeno, int branchno, string ipaddress, string batchNos)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[8];
+                        SqlParameter[] objParams = new SqlParameter[9];
+
                         objParams[0] = new SqlParameter("@P_STUDID", studids);
                         objParams[1] = new SqlParameter("@P_SECTIONNO", sectionnos);
                         //objParams[2] = new SqlParameter("@P_ROLLNOS", rollnos);
@@ -17842,10 +17843,11 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_BRANCHNO", branchno);
                         objParams[6] = new SqlParameter("@P_IPADDRESS", ipaddress);
                         //objParams[8] = new SqlParameter("@P_ROLL", roll);//Added by Nidhi Gour 18102019
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_STUD_BATCHNO", batchNos);  // Added by Gopal M 25-09-2023
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = ParameterDirection.Output;
 
-                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BULK_SECTION_ALLOTMENT", objParams, false);
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BULK_SECTION_ALLOTMENT_TEST", objParams, false);
                         if (ret != null)
                             if (ret.ToString() != "-99")
                                 retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);

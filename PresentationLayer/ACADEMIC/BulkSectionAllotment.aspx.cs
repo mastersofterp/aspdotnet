@@ -161,12 +161,12 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
             if (rbAll.Checked)
             {
                 // ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_SECTION SC WITH (NOLOCK) ON (S.SECTIONNO = SC.SECTIONNO) LEFT JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(SM.SEMESTERNO=S.SEMESTERNO)", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.IDNO", "S.REGNO,S.ENROLLNO,S.ADMBATCH, S.STUDNAME,SM.SEMESTERNAME, ISNULL(S.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,S.ROLLNO,CONVERT(VARCHAR(12),ADMDATE,103)ADMDATE,S.MERITNO", "S.COLLEGE_ID=" + ddlInsName.SelectedValue + " AND S.DEGREENO = " + ddlDegree.SelectedValue + " AND ISNULL(S.ENROLLNO,'')<>'' AND (S.SEMESTERNO=" + ddlSemester.SelectedValue + " OR  " + ddlSemester.SelectedValue + " = 0) " + (rbRemaining.Checked == true ? " AND (ISNULL(S.SECTIONNO,0) = 0 or ROLLNO IS NULL or ROLLNO='')" : string.Empty) + " AND (ADMBATCH=" + ddlAdmBatch.SelectedValue + " OR " + ddlAdmBatch.SelectedValue + " =0) AND isnull(ADMCAN,0)=0 AND isnull(CAN,0)=0 AND BRANCHNO=" + ddlBranch.SelectedValue, (rbRegNo.Checked == true ? "S.REGNO" : (rbStudName.Checked == true ? "S.STUDNAME" : (rbAdmDate.Checked == true ? "S.ADMDATE" : (rbmeritno.Checked == true ? "S.MERITNO" : "S.SEMESTERNO,S.ENROLLNO")))));
-                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_SECTION SC WITH (NOLOCK) ON (S.SECTIONNO = SC.SECTIONNO) LEFT JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(SM.SEMESTERNO=S.SEMESTERNO)", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.IDNO", "S.REGNO,S.ENROLLNO,S.ADMBATCH, S.STUDNAME,SM.SEMESTERNAME, ISNULL(S.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,S.ROLLNO,CONVERT(VARCHAR(12),ADMDATE,103)ADMDATE,S.MERITNO", "S.COLLEGE_ID=" + ddlInsName.SelectedValue + "AND (S.SECTIONNO=" + ddlClassSection.SelectedValue + " OR  " + ddlClassSection.SelectedValue + " = 0) AND S.DEGREENO = " + ddlDegree.SelectedValue + " AND (S.SEMESTERNO=" + ddlSemester.SelectedValue + " OR  " + ddlSemester.SelectedValue + " = 0) " + (rbRemaining.Checked == true ? " AND (ISNULL(S.SECTIONNO,0) = 0 or ROLLNO IS NULL or ROLLNO='')" : string.Empty) + "AND (ACADEMIC_YEAR_ID=" + ddlAcdYear.SelectedValue + " OR " + ddlAcdYear.SelectedValue + " =0) AND (ADMBATCH=" + ddlAdmBatch.SelectedValue + " OR " + ddlAdmBatch.SelectedValue + " =0) AND isnull(ADMCAN,0)=0 AND isnull(CAN,0)=0 AND BRANCHNO=" + ddlBranch.SelectedValue, (rbRegNo.Checked == true ? "S.REGNO" : (rbStudName.Checked == true ? "S.STUDNAME" : (rbAdmDate.Checked == true ? "S.ADMDATE" : (rbmeritno.Checked == true ? "S.MERITNO" : "S.SEMESTERNO,S.ENROLLNO")))));
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_SECTION SC WITH (NOLOCK) ON (S.SECTIONNO = SC.SECTIONNO) LEFT JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(SM.SEMESTERNO=S.SEMESTERNO) LEFT JOIN ACD_BATCH BH WITH (NOLOCK) ON(S.STUD_BATCHNO=BH.BATCHNO)", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.IDNO", "S.REGNO,S.ENROLLNO,S.ADMBATCH, S.STUDNAME,SM.SEMESTERNAME, ISNULL(S.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,S.ROLLNO,CONVERT(VARCHAR(12),ADMDATE,103)ADMDATE,S.MERITNO,BH.BATCHNAME", "S.COLLEGE_ID=" + ddlInsName.SelectedValue + "AND (S.SECTIONNO=" + ddlClassSection.SelectedValue + " OR  " + ddlClassSection.SelectedValue + " = 0) AND S.DEGREENO = " + ddlDegree.SelectedValue + " AND (S.SEMESTERNO=" + ddlSemester.SelectedValue + " OR  " + ddlSemester.SelectedValue + " = 0) " + (rbRemaining.Checked == true ? " AND (ISNULL(S.SECTIONNO,0) = 0 or ROLLNO IS NULL or ROLLNO='')" : string.Empty) + "AND (ACADEMIC_YEAR_ID=" + ddlAcdYear.SelectedValue + " OR " + ddlAcdYear.SelectedValue + " =0) AND (ADMBATCH=" + ddlAdmBatch.SelectedValue + " OR " + ddlAdmBatch.SelectedValue + " =0) AND isnull(ADMCAN,0)=0 AND isnull(CAN,0)=0 AND BRANCHNO=" + ddlBranch.SelectedValue, (rbRegNo.Checked == true ? "S.REGNO" : (rbStudName.Checked == true ? "S.STUDNAME" : (rbAdmDate.Checked == true ? "S.ADMDATE" : (rbmeritno.Checked == true ? "S.MERITNO" : "S.SEMESTERNO,S.ENROLLNO")))));
 
             }
             else if (rbRemaining.Checked)
             {
-                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_SECTION SC WITH (NOLOCK) ON (S.SECTIONNO = SC.SECTIONNO) LEFT JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(SM.SEMESTERNO=S.SEMESTERNO)", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.IDNO", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.REGNO,S.ENROLLNO,S.ADMBATCH, S.STUDNAME,SM.SEMESTERNAME, ISNULL(S.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,S.ROLLNO,CONVERT(VARCHAR(12),ADMDATE,103)ADMDATE,S.MERITNO", "S.COLLEGE_ID=" + ddlInsName.SelectedValue + "AND (S.SECTIONNO=" + ddlClassSection.SelectedValue + " OR  " + ddlClassSection.SelectedValue + " = 0) AND S.DEGREENO = " + ddlDegree.SelectedValue + " AND (S.SEMESTERNO=" + ddlSemester.SelectedValue + " OR  " + ddlSemester.SelectedValue + " = 0)  AND (ACADEMIC_YEAR_ID=" + ddlAcdYear.SelectedValue + " OR " + ddlAcdYear.SelectedValue + " =0) AND (ADMBATCH=" + ddlAdmBatch.SelectedValue + " OR " + ddlAdmBatch.SelectedValue + " =0) AND isnull(ADMCAN,0)=0 AND isnull(CAN,0)=0 AND BRANCHNO=" + ddlBranch.SelectedValue + " AND (S.REGNO  is null OR S.REGNO ='')", (rbRegNo.Checked == true ? "S.SECTIONNO,S.IDNO" : (rbStudName.Checked == true ? "S.SECTIONNO,S.STUDNAME" : (rbAdmDate.Checked == true ? "S.SECTIONNO,S.ADMDATE" : (rbmeritno.Checked == true ? "S.MERITNO" : "S.SECTIONNO,S.IDNO")))));
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK) LEFT OUTER JOIN ACD_SECTION SC WITH (NOLOCK) ON (S.SECTIONNO = SC.SECTIONNO) LEFT JOIN ACD_SEMESTER SM WITH (NOLOCK) ON(SM.SEMESTERNO=S.SEMESTERNO) LEFT JOIN ACD_BATCH BH WITH (NOLOCK) ON(S.STUD_BATCHNO=BH.BATCHNO)", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.IDNO", "ROW_NUMBER() OVER (ORDER BY  S.IDNO)SRNO,S.REGNO,S.ENROLLNO,S.ADMBATCH, S.STUDNAME,SM.SEMESTERNAME, ISNULL(S.SECTIONNO,0)SECTIONNO,SC.SECTIONNAME,S.ROLLNO,CONVERT(VARCHAR(12),ADMDATE,103)ADMDATE,S.MERITNO,BH.BATCHNAME", "S.COLLEGE_ID=" + ddlInsName.SelectedValue + "AND (S.SECTIONNO=" + ddlClassSection.SelectedValue + " OR  " + ddlClassSection.SelectedValue + " = 0) AND S.DEGREENO = " + ddlDegree.SelectedValue + " AND (S.SEMESTERNO=" + ddlSemester.SelectedValue + " OR  " + ddlSemester.SelectedValue + " = 0)  AND (ACADEMIC_YEAR_ID=" + ddlAcdYear.SelectedValue + " OR " + ddlAcdYear.SelectedValue + " =0) AND (ADMBATCH=" + ddlAdmBatch.SelectedValue + " OR " + ddlAdmBatch.SelectedValue + " =0) AND isnull(ADMCAN,0)=0 AND isnull(CAN,0)=0 AND BRANCHNO=" + ddlBranch.SelectedValue + " AND (S.REGNO  is null OR S.REGNO ='')", (rbRegNo.Checked == true ? "S.SECTIONNO,S.IDNO" : (rbStudName.Checked == true ? "S.SECTIONNO,S.STUDNAME" : (rbAdmDate.Checked == true ? "S.SECTIONNO,S.ADMDATE" : (rbmeritno.Checked == true ? "S.MERITNO" : "S.SECTIONNO,S.IDNO")))));
             }
 
             if (ds != null && ds.Tables.Count > 0)
@@ -226,6 +226,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
         ddlDegree.SelectedIndex = 0;
         ddlBranch.SelectedIndex = 0;
         ddlSemester.SelectedIndex = 0;
+        ddlBatch.SelectedIndex = 0;
         txtTotStud.Text = "0";
         hdfTot.Value = "0";
         lvStudents.DataSource = null;
@@ -257,45 +258,97 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
             int degreeNo = 0;
             int branchNo = 0;
             string admbatch = "";
-            foreach (ListViewDataItem lvItem in lvStudents.Items)
+            string batchNos = string.Empty;
+
+            if (ddlInsName.SelectedValue != "0" && ddlInsName.SelectedValue != null)
             {
-                CheckBox chkBox = lvItem.FindControl("chkrow") as CheckBox;
-                if (chkBox.Checked)
+                if (ddlDegree.SelectedValue != "0" && ddlDegree.SelectedValue != null)
                 {
-                    studID += chkBox.ToolTip + "$";
-                    rollNos += (lvItem.FindControl("lblprnno") as HiddenField).Value + "$";
-                    roll += (lvItem.FindControl("hdfRollNO") as HiddenField).Value + "$";
-                    classSections += ddlClassSection.SelectedValue + "$";
-                    admbatch += (lvItem.FindControl("hdfAdm") as HiddenField).Value + ",";
+                    if (ddlBranch.SelectedValue != "0" && ddlBranch.SelectedValue != null)
+                    {
+                        if (ddlSemester.SelectedValue != "0" && ddlSemester.SelectedValue != null)
+                        {
+                            if (ddlClassSection.SelectedValue != "0" && ddlClassSection.SelectedValue != null)
+                            {
+                                //if (ddlBatch.SelectedValue != "0" && ddlBatch.SelectedValue != null)
+                                //{
+
+                                foreach (ListViewDataItem lvItem in lvStudents.Items)
+                                {
+                                    CheckBox chkBox = lvItem.FindControl("chkrow") as CheckBox;
+                                    if (chkBox.Checked)
+                                    {
+                                        studID += chkBox.ToolTip + "$";
+                                        rollNos += (lvItem.FindControl("lblprnno") as HiddenField).Value + "$";
+                                        roll += (lvItem.FindControl("hdfRollNO") as HiddenField).Value + "$";
+                                        classSections += ddlClassSection.SelectedValue + "$";
+                                        batchNos += ddlBatch.SelectedValue + "$";
+                                        admbatch += (lvItem.FindControl("hdfAdm") as HiddenField).Value + ",";
+                                    }
+                                }
+                                if (string.IsNullOrEmpty(studID))
+                                {
+                                    objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Student/Section", this.Page);
+                                    //objCommon.DisplayMessage(this.updSection, "Please Select Student/Section", this.Page);
+                                }
+                                if (Convert.ToInt32(ddlAdmBatch.SelectedValue) > 0)
+                                {
+                                    admBatchNo = (ddlAdmBatch.SelectedValue).ToString() + ",";
+                                }
+                                else
+                                {
+                                    admBatchNo = admbatch;
+                                }
+                                degreeNo = Convert.ToInt32(ddlDegree.SelectedValue);
+                                branchNo = Convert.ToInt32(ddlBranch.SelectedValue);
+
+                                if (objSC.UpdateStudentSectionBulk(studID, classSections, Convert.ToInt32(Session["userno"]), admBatchNo, degreeNo, branchNo, (string.IsNullOrEmpty(ViewState["ipAddress"].ToString()) ? "" : ViewState["ipAddress"].ToString()), batchNos) == Convert.ToInt32(CustomStatus.RecordUpdated))
+                                {
+                                    this.BindListView();
+                                    objCommon.DisplayMessage(this.updBulkSectionA, "Record Updated Successfully!!!", this.Page);
+                                    //objCommon.DisplayMessage(this.updSection, "Record Updated Successfully!!!", this.Page);
+                                    lvStudents.Visible = true;
+                                }
+                                else
+                                    objCommon.DisplayMessage(this.updBulkSectionA, "Server Error....", this.Page);
+
+                                //}
+                                //else
+                                //{
+                                //    objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Batch!", this.Page);
+                                //    return;
+                                //}
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Section!", this.Page);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Semester!", this.Page);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Programme/Branch!", this.Page);
+                        return;
+                    }
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Degree!", this.Page);
+                    return;
                 }
             }
-            if (string.IsNullOrEmpty(studID))
-            {
-                objCommon.DisplayMessage(this.updBulkSectionA, "Please Select Student/Section", this.Page);
-                //objCommon.DisplayMessage(this.updSection, "Please Select Student/Section", this.Page);
-            }
-            if (Convert.ToInt32(ddlAdmBatch.SelectedValue) > 0)
-            {
-                admBatchNo = (ddlAdmBatch.SelectedValue).ToString() + ",";
-            }
             else
             {
-                admBatchNo = admbatch;
+                objCommon.DisplayMessage(this.updBulkSectionA, "Please Select School/Institute Name!", this.Page);
+                return;
             }
-            degreeNo = Convert.ToInt32(ddlDegree.SelectedValue);
-            branchNo = Convert.ToInt32(ddlBranch.SelectedValue);
 
-
-            if (objSC.UpdateStudentSectionBulk(studID, classSections, Convert.ToInt32(Session["userno"]), admBatchNo, degreeNo, branchNo, (string.IsNullOrEmpty(ViewState["ipAddress"].ToString()) ? "" : ViewState["ipAddress"].ToString())) == Convert.ToInt32(CustomStatus.RecordUpdated))
-            {
-                this.BindListView();
-                objCommon.DisplayMessage(this.updBulkSectionA, "Record Updated Successfully!!!", this.Page);
-                //objCommon.DisplayMessage(this.updSection, "Record Updated Successfully!!!", this.Page);
-                lvStudents.Visible = true;
-            }
-            else
-                objCommon.DisplayMessage(this.updBulkSectionA, "Server Error....", this.Page);
-                //objCommon.DisplayMessage(this.updSection, "Server Error....", this.Page);
         }
         catch (Exception ex)
         {
@@ -354,7 +407,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlInsName_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+        //lvStudents.Visible = false;
         try
         {
             if (ddlInsName.SelectedIndex > 0)
@@ -362,10 +415,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
                 if (Session["usertype"].ToString() != "1")
                 {
                     string dec = objCommon.LookUp("USER_ACC WITH (NOLOCK)", "UA_DEC", "UA_NO=" + Session["userno"].ToString());
-
-
                     objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO>0 AND B.COLLEGE_ID=" + ddlInsName.SelectedValue + " AND B.DEPTNO IN (" + Session["userdeptno"].ToString() + ") AND ISNULL(D.ACTIVESTATUS,0)=1", "D.DEGREENO");
-
                 }
                 else
                 {
@@ -403,12 +453,25 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlClassSection_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+        //lvStudents.Visible = false;
+        //new added- gopal
+        // objCommon.FillDropDownList(ddlBatch, "ACD_BATCH A WITH (NOLOCK) INNER JOIN ACD_SECTION B WITH (NOLOCK) ON (A.SECTIONNO = B.SECTIONNO)", "DISTINCT (A.BATCHNO)", "A.BATCHNAME", "B.SECTIONNO > 0 AND A.SECTIONNO =" + ddlClassSection.SelectedValue + " AND ISNULL(A.ACTIVESTATUS,0)=1 ", "A.BATCHNO");
+        if (ddlClassSection.SelectedIndex > 0)
+        {
+            this.objCommon.FillDropDownList(ddlBatch, "ACD_BATCH A WITH (NOLOCK) INNER JOIN ACD_SECTION B WITH (NOLOCK) ON (A.SECTIONNO = B.SECTIONNO)", "DISTINCT (A.BATCHNO)", "A.BATCHNAME", "B.SECTIONNO > 0 AND A.SECTIONNO =" + ddlClassSection.SelectedValue + " AND ISNULL(A.ACTIVESTATUS,0)=1 ", "A.BATCHNO");
+            ddlBatch.Enabled = true;
+        }
+        else
+        {
+            ddlBatch.Items.Clear();
+            ddlBatch.Items.Add(new ListItem("Please Select", "0"));
+            ddlBatch.SelectedIndex = 0;
+        }
     }
 
     protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+        //lvStudents.Visible = false;
         if (ddlSemester.SelectedIndex > 0)
         {
             this.objCommon.FillDropDownList(ddlClassSection, "ACD_SECTION WITH (NOLOCK)", "SECTIONNO", "SECTIONNAME", "SECTIONNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "SECTIONNAME");
@@ -914,6 +977,69 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
         ddlSchool.SelectedIndex = 0;
     }
     #endregion "Tab2_ImportSectionAllotment"
+
+    // New method created by Gopal M, 26092023 - Ticket #48539
+    public class SessionList
+    {
+        public int SECTIONNO { get; set; }
+        public string SECTIONNAME { get; set; }
+        public List<string> BATCHNAME { get; set; }
+    }
+
+    protected void btnDownloadIncurrect_Click(object sender, EventArgs e)
+    {
+        if (ddlSchool.SelectedIndex > 0)
+        {
+            DataTable dt2 = (DataTable)Session["IncurrectData"];
+            if (dt2 != null && dt2.Rows.Count > 0)
+            {
+                dt2 = (from fw in dt2.AsEnumerable() where Convert.ToInt32(fw["STATUS"]) == 0 select fw).CopyToDataTable();
+                dt2.Columns.Remove("STATUS");
+                DataSet ds = new DataSet();
+                ds.Tables.Add(dt2);
+                ds.Tables[0].TableName = "Student Details";
+                if (ds.Tables[0] != null && ds.Tables[0].Rows.Count <= 0)
+                {
+                    ds.Tables[0].Rows.Add("No Record Found");
+                }
+                else
+                {
+
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        foreach (System.Data.DataTable dt in ds.Tables)
+                            wb.Worksheets.Add(dt);    //Add System.Data.DataTable as Worksheet.
+
+                        //Export the Excel file.
+                        Response.Clear();
+                        Response.Buffer = true;
+                        Response.Charset = "";
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.AddHeader("content-disposition", "attachment;filename=BulkSectionAllotmentIncurrect.xlsx");
+                        using (MemoryStream MyMemoryStream = new MemoryStream())
+                        {
+                            wb.SaveAs(MyMemoryStream);
+                            MyMemoryStream.WriteTo(Response.OutputStream);
+                            Response.Flush();
+                            Response.End();
+                        }
+                    }
+                }
+                ddlSchool.SelectedIndex = 0;
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updBulkSectionI, "Doesn't Found Any Incurrect Data!", this);
+                return;
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.updBulkSectionI, "Please Select School/Institute!!!", this);
+            return;
+        }
+    }
+
 } //End of partial class
 
 
