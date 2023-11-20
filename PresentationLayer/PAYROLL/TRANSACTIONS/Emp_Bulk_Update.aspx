@@ -204,6 +204,9 @@
                                             <asp:HiddenField ID="hdnDesignation" runat="server" Value='<%#Eval("SUBDESIGNO")%>' />
                                             <asp:HiddenField ID="hdnDesignature" runat="server" Value='<%#Eval("DESIGNATURENO")%>' />
                                             <asp:HiddenField ID="hdnmaindept" runat="server" Value='<%#Eval("MAINDEPTNO")%>' />
+
+                                              <asp:HiddenField ID="hdnSex" runat="server" Value='<%#Eval("SEX")%>' />
+                                              <asp:HiddenField ID="hdnTitle" runat="server" Value='<%#Eval("TITLE")%>' />
                                         </td>
                                     </tr>
                                 </ItemTemplate>

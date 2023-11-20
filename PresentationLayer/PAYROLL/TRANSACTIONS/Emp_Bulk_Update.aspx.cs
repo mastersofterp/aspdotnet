@@ -111,6 +111,10 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
             HiddenField hdnmaindept = (HiddenField)e.Item.FindControl("hdnmaindept");
             //HiddenField hdnStafftype = (HiddenField)e.Item.FindControl("hdnStafftype");
 
+             HiddenField hdnSex = (HiddenField)e.Item.FindControl("hdnSex");
+             HiddenField hdnTitle = (HiddenField)e.Item.FindControl("hdnTitle");
+
+
 
             if (ddlPayhead. SelectedItem. Text. Equals("PAYRULE"))
             {
@@ -152,6 +156,46 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
                 ddleditfield.Visible = true;
                 objCommon.FillDropDownList(ddleditfield, "DA_HEAD", "DA_HEADID", "DA_HEAD_DESCRIPTION", "DA_HEADID > 0", "DA_HEADID");
                 ddleditfield.SelectedValue = hdneditfield.Value;
+
+
+            }
+            else if (ddlPayhead.SelectedItem.Text.Equals("GENDER"))
+            {
+                txtEiditfiled.Visible = false;
+                txtEditFieldDT.Visible = false;
+                ddlScale.Visible = false;
+                ddlScale.Visible = false;
+                ddlAppointment.Visible = false;
+                ddleditfield.Visible = true;
+               // objCommon.FillDropDownList(ddleditfield, "DA_HEAD", "DA_HEADID", "DA_HEAD_DESCRIPTION", "DA_HEADID > 0", "DA_HEADID");
+                ddleditfield.Items.Clear();
+
+                // Add items using the Items.Insert method
+                ddleditfield.Items.Insert(0, new ListItem("Please Select", "Please Select"));
+                ddleditfield.Items.Insert(1, new ListItem("M", "M"));
+                ddleditfield.Items.Insert(2, new ListItem("F", "F"));
+
+                if (hdnSex.Value == "M")
+                {
+                    ddleditfield.SelectedItem.Text = "M";
+                }
+                else
+                {
+                    ddleditfield.SelectedItem.Text = "F";
+                }
+
+            }
+
+            else if (ddlPayhead.SelectedItem.Text.Equals("TITLE"))
+            {
+                txtEiditfiled.Visible = false;
+                txtEditFieldDT.Visible = false;
+                ddlScale.Visible = false;
+                ddlScale.Visible = false;
+                ddlAppointment.Visible = false;
+                ddleditfield.Visible = true;
+                objCommon.FillDropDownList(ddleditfield, "PAYROLL_TITLE", "TITLENO", "TITLE", "TITLENO > 0", "TITLE");
+                ddleditfield.SelectedItem.Text = hdnTitle.Value;
 
 
             }
@@ -583,6 +627,30 @@ public partial class PAYROLL_TRANSACTIONS_Emp_Bulk_Update : System.Web.UI.Page
                     DropDownList ddl = lvitem.FindControl("ddleditfield") as DropDownList;
 
                     CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(ddl.SelectedValue), Convert.ToInt32(txt.ToolTip));
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        count = 1;
+                    }
+                }
+                else if (ddlPayhead.SelectedItem.Text.Equals("GENDER"))
+                {
+                    TextBox txt = lvitem.FindControl("txtEditFieldDT") as TextBox;
+
+                    DropDownList ddl = lvitem.FindControl("ddleditfield") as DropDownList;
+
+                    CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(ddl.SelectedItem.Text), Convert.ToInt32(txt.ToolTip));
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        count = 1;
+                    }
+                }
+                else if (ddlPayhead.SelectedItem.Text.Equals("TITLE"))
+                {
+                    TextBox txt = lvitem.FindControl("txtEditFieldDT") as TextBox;
+
+                    DropDownList ddl = lvitem.FindControl("ddleditfield") as DropDownList;
+
+                    CustomStatus cs = (CustomStatus)ObjChangeMstFile.UpdatePayEmpmasFields(ddlPayhead.SelectedItem.Text, Convert.ToString(ddl.SelectedItem.Text), Convert.ToInt32(txt.ToolTip));
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         count = 1;
