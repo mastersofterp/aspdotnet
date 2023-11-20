@@ -1526,7 +1526,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
-            else if (orgid == 8)
+            else if (orgid == 8)  //Added by lalit on dated 
             {
                 int Count=0;
                 string proc_name = "PKG_CHECK_STATUS_FOR_FEEDBACK_IN_STUDENT_LOGIN";
@@ -1618,6 +1618,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         pnlrevalresult.Visible = false;
                         lvRevalDetails.DataSource = null;
                         lvRevalDetails.DataBind();
+                        //pnlrevalresult.Visible = true;
                     }
 
 
