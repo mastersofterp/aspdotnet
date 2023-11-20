@@ -69,6 +69,7 @@
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
+                                                <%-- <label>Course</label>--%>
                                                 <label>Course</label>
                                             </div>
                                             <asp:DropDownList ID="ddlcourse" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"

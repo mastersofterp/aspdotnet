@@ -2982,7 +2982,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                         txtmarks.Text = dsMarks.Tables[0].Rows[a]["MARKS"].ToString();
                         a++;
                         txtmarks.Enabled = false;
-
+                        //txtmarks.Enabled = true;
                     }
 
                 }
