@@ -26,12 +26,29 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = new SqlParameter[1];
                         objParams[0] = new SqlParameter("@P_GATEPASSNO", gatepassno);
-
+                        //objParams[1] = new SqlParameter("@P_IDNO", Convert.ToInt32(System.Web.HttpContext.Current.Session["idno"]));
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_INFO_SEARCH", objParams);
                     }
                     catch (Exception ex)
                     {
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AddHostelGatePassController.GetHostelGatePassInfo() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllGatePass()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GET_ALL_GATEPASS", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelPurposeController.GetAllPurpose() --> " + ex.Message + " " + ex.StackTrace);
                     }
                     return ds;
                 }

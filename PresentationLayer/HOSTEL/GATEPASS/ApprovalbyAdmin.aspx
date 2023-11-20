@@ -142,7 +142,8 @@
                                         <%# Eval("REMARKS") %>
                                     </td>
                                     <td>
-                                        <%# Eval("STATUS") %>
+                                        <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("STATUS") %>' ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:System.Drawing.Color.Red %>'></asp:Label>
+
                                     </td>
                                 </tr>
                             </ItemTemplate>

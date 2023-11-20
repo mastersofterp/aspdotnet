@@ -137,22 +137,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objGatePass.CollegeCode = Session["colcode"].ToString();
             objGatePass.organizationid = Session["OrgId"].ToString();
 
-            //if (ViewState["action"].ToString().Equals("add"))
-            //{
-            //    if (objGatePass.OutDate < System.DateTime.Now.AddDays(-1) )   //  DateTime.Now.ToString("MM/dd/yyyy h:mm tt")
-            //    {
-            //        objCommon.DisplayMessage("Please select out date Today OR greater than today's date.", this.Page);
-            //        txtoutDate.Focus();
-            //        return;
-            //    }
-            //}
-            
-            //if (objGatePass.InDate < objGatePass.OutDate)
-            //{
-            //    objCommon.DisplayMessage("Please select in date greater than out date.", this.Page);
-            //    txtinDate.Focus();
-            //    return;
-            //}
 
                 if (ViewState["action"].ToString().Equals("add"))
                 {
@@ -175,7 +159,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         objCommon.DisplayMessage("Parent Login Not Found. Contact to Administrator.", this.Page);
                         ViewState["action"] = "add";
                     }
-
                     else if (cs == -99)
                     {
                         objCommon.DisplayMessage("Passing path Not found. Contact to Administrator.", this.Page);
@@ -293,8 +276,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
             {
                 objCommon.DisplayMessage("Out Date should be lower than In Date.", this.Page);
-                txtinDate.Text = string.Empty;
-                txtinDate.Focus();
+                txtoutDate.Text = string.Empty;
+                txtoutDate.Focus();
                 return;
             }
         }

@@ -135,7 +135,12 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                  <asp:Button ID="btnSearch" runat="server" Text="Search" Width="50%" OnClick="btnSearch_Click" 
                                  CssClass="btn btn-primary" />
+                                </div> 
+                             <div class="form-group col-lg-3 col-md-6 col-12">
+                                 <asp:Button ID="btnBack" runat="server" Text="Back" Width="50%" OnClick="btnBack_Click" 
+                                 CssClass="btn btn-danger" />
                                 </div>  
+                            </div> 
                             </div>
                         </div>
 

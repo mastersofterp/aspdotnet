@@ -33,7 +33,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 else
                 {
                     // Check User Authority 
-                    this.CheckPageAuthorization();
+                    //this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -129,6 +129,14 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 lblApprover.Text = ds.Tables[0].Rows[0]["APPROVER"].ToString();
                 lvShowApprovalStatus.DataSource = ds;
                 lvShowApprovalStatus.DataBind();
+                if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
+                {
+                    liFileAttach.Visible = true;
+                }
+                else
+                {
+                    liFileAttach.Visible = false;
+                }
             }
             
 
@@ -145,84 +153,98 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        int len = 0;
-        int getPos = 0;
-        if (FileAttach.HasFile)
+        try
         {
-            try
+            int Idno = Convert.ToInt32(hdnidno.Value);
+            int Hgpid = Convert.ToInt32(hdnhgpid.Value);
+            int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+            string status = ddlStatus.SelectedValue;
+            string fileName = Path.GetFileName(FileAttach.FileName);
+            string fileExtension = Path.GetExtension(fileName).ToLower(); // Convert extension to lowercase
+            int len = 0;
+            int getPos = 0;
+            string fileUrl=string.Empty;
+            if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
             {
-                int Idno=Convert.ToInt32(hdnidno.Value);
-                int Hgpid = Convert.ToInt32(hdnhgpid.Value);
-                int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
-                string status=ddlStatus.SelectedValue;
-                string fileName = Path.GetFileName(FileAttach.FileName);
-                string fileExtension = Path.GetExtension(fileName).ToLower(); // Convert extension to lowercase
-
-                // Check if the file extension is allowed
-                if (fileExtension == ".jpg" || fileExtension == ".pdf" || fileExtension == ".png")
+                if (FileAttach.HasFile)
                 {
-                    long fileSize = FileAttach.PostedFile.ContentLength;
-
-                    // Check if the file size is less than 500KB (500 * 1024 bytes)
-                    if (fileSize <= 500 * 1024)
+                    // Check if the file extension is allowed
+                    if (fileExtension == ".jpg" || fileExtension == ".pdf" || fileExtension == ".png")
                     {
-                        // Define the folder path where you want to save the uploaded files
-                        string filePath = Server.MapPath("GATEPASSATTCHMENT/" + System.Guid.NewGuid() + fileName); // Change the path as needed
-                        //string filePath = Path.Combine(uploadFolder, fileName);
+                        long fileSize = FileAttach.PostedFile.ContentLength;
 
-                        // Save the file to the specified folder
-                        FileAttach.SaveAs(filePath);
-                        getPos = filePath.LastIndexOf("\\");
-                        len = filePath.Length;
-                        string getPath = filePath.Substring(getPos, len - getPos);
-                        string pathToStore = getPath.Remove(0, 1);
-                        // Store the file URL in your database (you should replace this with your actual database logic)
-                        string fileUrl = "GATEPASSATTCHMENT/" + pathToStore;
+                        // Check if the file size is less than 500KB (500 * 1024 bytes)
+                        if (fileSize <= 500 * 1024)
+                        {
+                            // Define the folder path where you want to save the uploaded files
+                            string filePath = Server.MapPath("GATEPASSATTCHMENT/" + System.Guid.NewGuid() + fileName); // Change the path as needed
+                            //string filePath = Path.Combine(uploadFolder, fileName);
 
-                        int output =Hgp.ApproveGatepass(Idno, fileUrl, fileName, Hgpid, status, OrganizationId, Convert.ToInt32(Session["userno"]));
-                        if (output == 1)
-                        {
-                            objCommon.ConfirmMessage(this, "Record Saved SuccessFully.", this);
+                            // Save the file to the specified folder
+                            FileAttach.SaveAs(filePath);
+                            getPos = filePath.LastIndexOf("\\");
+                            len = filePath.Length;
+                            string getPath = filePath.Substring(getPos, len - getPos);
+                            string pathToStore = getPath.Remove(0, 1);
+                            // Store the file URL in your database (you should replace this with your actual database logic)
+                            fileUrl = "GATEPASSATTCHMENT/" + pathToStore;
                         }
-                        else if (output == 2)
+                        else
                         {
-                            objCommon.ConfirmMessage(this, "Please Wait for First Approval.", this);
+                            objCommon.ConfirmMessage(this, "File size exceeds the limit (500KB). Please choose a smaller file.", this);
+                            return;
                         }
-                        else if (output == 3)
-                        {
-                            objCommon.ConfirmMessage(this, "Please Wait for First and Second Approval.", this);
-                        }
-                        else if (output == 4)
-                        {
-                            objCommon.ConfirmMessage(this, "Please Wait for First, Second and Third Approval.", this);
-                        }
-                        else if (output == 5)
-                        {
-                            objCommon.ConfirmMessage(this, "Record not found for this approval.", this);
-                        }
-                        
                     }
                     else
                     {
-                        objCommon.ConfirmMessage(this, "File size exceeds the limit (500KB). Please choose a smaller file.", this);
+                        objCommon.ConfirmMessage(this, "Only .jpg ,.png and .pdf files are allowed.", this);
+                        return;
                     }
                 }
                 else
                 {
-                    objCommon.ConfirmMessage(this, "Only .jpg and .pdf files are allowed.", this);
+                    objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
+                    return;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_HostelInOutRequests.btnSubmit_Click --> " + ex.Message + " " + ex.StackTrace);
-                else
-                    objUaimsCommon.ShowError(Page, "Server UnAvailable");
+                fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
+                fileName = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT_NAME", "HGP_ID=" + Hgpid);
             }
+            int output = Hgp.ApproveGatepass(Idno, fileUrl, fileName, Hgpid, status, OrganizationId, Convert.ToInt32(Session["userno"]));
+            if (output == 1)
+            {
+                objCommon.ConfirmMessage(this, "Record Saved SuccessFully.", this);
+            }
+            else if (output == 2)
+            {
+                objCommon.ConfirmMessage(this, "Please Wait for First Approvar forword", this);
+            }
+            else if (output == 3)
+            {
+                objCommon.ConfirmMessage(this, "Please Wait for First and Second Approvar forword", this);
+            }
+            else if (output == 4)
+            {
+                objCommon.ConfirmMessage(this, "Please Wait for First second and Third Approvar forword", this);
+            }
+            else if (output == 5)
+            {
+                objCommon.ConfirmMessage(this, "Record not found for this approval.", this);
+            }
+
+
+
+
+
         }
-        else
+        catch (Exception ex)
         {
-            objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_HostelInOutRequests.btnSubmit_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 

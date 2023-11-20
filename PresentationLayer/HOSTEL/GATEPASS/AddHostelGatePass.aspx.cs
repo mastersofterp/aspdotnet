@@ -53,6 +53,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
                 }
+                BindListView();
             }
         }
         catch (Exception ex)
@@ -74,6 +75,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         if (gatepassno == "")
         {
             objCommon.DisplayMessage("Record Not Found", this.Page);
+            pnlList.Visible = true;
             pnlinfo.Visible = false;
             btnReport.Visible = false;
         }
@@ -97,6 +99,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
             ds = objHGP.GetHostelGatePassInfo(gatepassno);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
+                pnlList.Visible = false;
                 DataRow dr = ds.Tables[0].Rows[0];
                 /// show student information
 
@@ -112,7 +115,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                 lblapproval4.Text = dr["FOURTH_APPROVER"].ToString();
 
                 //if (dr["PHOTO"].ToString() != "")
-                imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dr["IDNO"].ToString() + "&type=STUDENT";
+                imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dr["IDNO"].ToString() +"&type=STUDENT";
 
                 pnlinfo.Visible = true;
                 btnReport.Visible = true;
@@ -166,6 +169,23 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         {
             // Even if PageNo is Null then, don't show the page
             Response.Redirect("~/notauthorized.aspx?page=AddHostelGatePass.aspx");
+        }
+    }
+
+    private void BindListView()
+    {
+        try
+        {
+            DataSet ds = objHGP.GetAllGatePass();
+            lvPurpose.DataSource = ds;
+            lvPurpose.DataBind();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "Hostel_GATEPASS_AddHostelGatePass.BindListView --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     #endregion Private Methods

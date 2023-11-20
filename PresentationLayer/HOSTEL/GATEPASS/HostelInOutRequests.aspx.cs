@@ -136,6 +136,18 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
             DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq);
             lvRequests.DataSource = ds;
             lvRequests.DataBind();
+            foreach (ListViewDataItem lv in lvRequests.Items)
+            {
+                HiddenField hdnStatus = lv.FindControl("HdnStatus") as HiddenField;
+                HiddenField hdnFirstApproval = lv.FindControl("HdnFirstApproval") as HiddenField;
+                DropDownList ddlFirstApproval = lv.FindControl("ddlparentapproval") as DropDownList;
+                DropDownList DdlStatus = lv.FindControl("ddlStatus") as DropDownList;
+                ddlFirstApproval.SelectedValue = Convert.ToString(hdnFirstApproval.Value);
+                ddlStatus.SelectedValue = Convert.ToString(hdnStatus.Value);
+                ddlFirstApproval.Enabled = false;
+                DdlStatus.Enabled = false;
+
+            }
         }
         catch (Exception ex)
         {
@@ -265,4 +277,8 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     //        }
     //    }
     //}
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
 }

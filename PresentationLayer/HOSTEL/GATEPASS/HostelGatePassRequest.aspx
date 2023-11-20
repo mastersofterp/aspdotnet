@@ -437,6 +437,8 @@
                                             </th>
                                             <th>Remarks
                                             </th>
+                                            <th>Gate Pass No
+                                            </th>
                                             <th>
                                                 Status
                                             </th>
@@ -471,7 +473,10 @@
                                         <%# Eval("REMARKS") %>
                                     </td>
                                     <td>
-                                        <%# Eval("STATUS") %>
+                                        <asp:Label ID="lblGatepassnno" runat="server" Text='<%# (Eval("HOSTEL_GATE_PASS_NO").ToString())=="" ? "..." : Eval("HOSTEL_GATE_PASS_NO") %>'></asp:Label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblstatus" runat="server" ForeColor='<%# Eval("STATUS").Equals("APPROVED")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("STATUS") %>'></asp:Label>
                                     </td>
                                 </tr>
                             </ItemTemplate>

@@ -239,7 +239,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 {
                     
                     BindListViewAAMaster();
-                    objCommon.DisplayMessage(this.Page, "Record Updated sucessfully", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record Updated successfully.", this.Page);
                     ViewState["edit"] = null;
                     Session["action"] = null;
                     clearnew();
@@ -247,7 +247,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 if (cs.Equals(CustomStatus.DuplicateRecord))
                 {
 
-                    objCommon.DisplayMessage(this.Page, "Record already exist", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record already exist.", this.Page);
                     ViewState["edit"] = null;
                     Session["action"] = null;
                     clearnew();
@@ -259,7 +259,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 idno = objHGPA.AddAAPath(OBJHGPAA, Convert.ToInt32(ddlHostel.SelectedValue), Convert.ToInt32(ddldepartment.SelectedValue));
                 if (idno == 2627)
                 {
-                    objCommon.DisplayMessage(this.Page, "Record already exist", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record already exist.", this.Page);
                 }
                 else if (idno == 2323)
                 {
@@ -270,7 +270,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 else if (idno != 2727)
                 {
                     BindListViewAAMaster();
-                    objCommon.DisplayMessage(this.Page, "Record added successfully", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record added successfully.", this.Page);
                     clearnew();
                 }
                 else
@@ -311,7 +311,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 {
                     
                     BindListViewAuthApprovalMaster();
-                    objCommon.DisplayMessage(this.Page, "Record Updated sucessfully", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record Updated successfully.", this.Page);
                     ViewState["editauth"] = null;
                     Session["actionauth"] = null;
                     clearnewAuthApproval();
@@ -321,7 +321,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 }
                 if (cs.Equals(CustomStatus.DuplicateRecord))
                 {
-                    objCommon.DisplayMessage(this.Page, "Record already exist", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record already exist.", this.Page);
                     ViewState["editauth"] = null;
                     Session["actionauth"] = null;
                     clearnewAuthApproval();
@@ -334,7 +334,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 idno = objHGPA.AddAuthApprovalPath(OBJHGPAA, STUDENTTYPE, DAYS_TYPE, APPROVAL1, APPROVAL2, APPROVAL3, APPROVAL4, APPROVAL5);
                 if (idno == 2627)
                 {
-                    objCommon.DisplayMessage(this.Page, "Record already exist", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record already exist.", this.Page);
                 }
                 if (idno == 1027)
                 {
@@ -343,7 +343,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 else if (idno != 2727)
                 {
                     BindListViewAuthApprovalMaster();
-                    objCommon.DisplayMessage(this.Page, "Record added successfully", this.Page);
+                    objCommon.DisplayMessage(this.Page, "Record added successfully.", this.Page);
                     clearnewAuthApproval();
                 }
                 else

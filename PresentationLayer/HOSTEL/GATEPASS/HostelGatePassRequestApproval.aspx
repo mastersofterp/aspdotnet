@@ -130,16 +130,7 @@
                                             </a>
                                         </li>
                                         
-                                        <li class="list-group-item"><b>Upload File:</b>
-                                            <a class="sub-label">
-                                                <div class="input-group">
-                                                    <div class="custom-file"  >
-                                                        <asp:FileUpload ID="FileAttach" runat="server" CssClass="custom-file-input" Width="291px"  />
-                                                        <label class="custom-file-label" for="FileAttach">&nbsp;Choose file</label>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
+                                        
                                        
                                         
                                     </ul>
@@ -167,11 +158,7 @@
                                             </a>
                                         </li>
                                         
-                                        <li class="list-group-item"><b>View Attachment :</b>
-                                            <a class="sub-label">
-                                                <asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="76px"  />
-                                            </a>
-                                        </li>
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -207,21 +194,34 @@
                                                 <asp:Label ID="lblApprover" Font-Bold="true" runat="server" />
                                             </a>
                                         </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item"><b>Status:</b>
                                             <a class="sub-label">
-                                                <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" Height="18px" Width="138px" >
+                                                <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control"  Width="138px" >
                                                     <asp:ListItem Value="0" Text="Please Select"></asp:ListItem>
                                                     <asp:ListItem Value="Y" Text="Approved"></asp:ListItem>
                                                     <asp:ListItem Value="N" Text="Reject"></asp:ListItem>
                                                 </asp:DropDownList>
-                                                <asp:RequiredFieldValidator ID="rfvvalstatus" InitialValue="0" ControlToValidate="ddlStatus" ErrorMessage="Please Select Status" runat="server" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                             </a>
                                         </li>
-                                        
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item" id="liFileAttach" runat="server" ><b>Upload File:</b>
+                                            <a class="sub-label">
+                                                <div class="input-group">
+                                                    <div class="custom-file"  >
+                                                        <asp:FileUpload ID="FileAttach" runat="server" CssClass="custom-file-input" Width="291px"  />
+                                                        <label class="custom-file-label" for="FileAttach">&nbsp;Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item"><b>View Attachment :</b>
+                                            <a class="sub-label">
+                                                <asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="76px"  />
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div><br />
                                 <div class="col-lg-12 col-md-6 col-12 text-center"  >
@@ -235,7 +235,7 @@
                                 <div class="sub-heading">
                                     <h5>Approval Status</h5>
                                 </div>
-                                <table id="table2" class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                <table id="table2" class="table table-striped table-bordered nowrap " style="width: 100%">
                                     <thead class="bg-light-blue">
                                         <tr>
                                             <th>First Approval
@@ -277,9 +277,13 @@
                 </div>
                 <div class="box-footer">
                     <p class="text-center">
-                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" OnClick="btnSubmit_Click" ></asp:Button>
+                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="submit" ></asp:Button>
                      <asp:Button ID="btnBack" runat="server" Text="Back" CssClass="btn btn-danger" OnClick="btnBack_Click" Width="65px" />
-                     <asp:ValidationSummary ID="VsSubmit" runat="server" Visible="false" ValidationGroup="submit"   DisplayMode="List" ShowValidationErrors="true"   />
+                     <asp:ValidationSummary ID="VsSubmit" runat="server" ValidationGroup="submit"
+                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                     <p>
+                     <asp:RequiredFieldValidator ID="rfvvalstatus" InitialValue="0" ControlToValidate="ddlStatus" ErrorMessage="Please Select Status" runat="server" ValidationGroup="submit"></asp:RequiredFieldValidator>
+    </p>
                 </div>
             </div>
         </div>

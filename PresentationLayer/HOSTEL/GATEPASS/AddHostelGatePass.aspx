@@ -46,7 +46,7 @@
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
                 <div class="box-header with-border">
-                    <h3 class="box-title">ADD E-GATE PASS</h3>
+                    <h3 class="box-title">GENERATE HOSTEL GATE PASS</h3>
                 </div>
                 <br />
                 <div class="box-body">
@@ -129,6 +129,57 @@
                 </div>
             </div>
            </asp:Panel>
+
+            <asp:Panel ID="pnlList" runat="server">
+                <div class="box box-primary">
+                
+                        <asp:Repeater ID="lvPurpose" runat="server">
+                            <HeaderTemplate>
+                                <div class="sub-heading">
+                                    <h5>List of Students</h5>
+                                </div>
+                                <table id="table2" class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                    <thead class="bg-light-blue">
+                                        <tr>
+                                            <th>RRN Number
+                                            </th>
+                                            <th>Student Name
+                                            </th>
+                                            <th>Gatepass No
+                                            </th>
+                                            <th>Out Date
+                                            </th>
+                                            <th>In Date
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr>
+                                    <td>
+                                        <%# Eval("REGNO") %>
+                                    </td>
+                                    <td>
+                                         <%# Eval("STUDNAME") %>
+                                    </td>
+                                    <td>
+                                        <%# Eval("GATEPASSNO") %>
+                                    </td>
+                                    <td>
+                                        <%# Eval("OUTDETAILS","{0:dd/MM/yyyy hh:mm tt}") %>
+                                    </td>
+                                    <td>
+                                        <%# Eval("INDETAILS","{0:dd/MM/yyyy hh:mm tt}") %>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                            <FooterTemplate>
+                                </tbody></table>
+                            </FooterTemplate>
+                        </asp:Repeater>
+                </div>
+            </asp:Panel>
         </div>
     </div>
     <div id="divMsg" runat="server">
