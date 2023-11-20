@@ -2977,8 +2977,8 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             int CTNO = Convert.ToInt32(chk1.ToolTip);
             if (chk1.Checked)
             {
-     
-                _count = objCommon.LookUp("ACD_ATTENDANCE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)"));
+
+                _count = objCommon.LookUp("ACD_ATTENDANCE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0) AND ISNULL(CANCEL,0)=0"));
                 if (Convert.ToInt32(_count) > 0)
                 {
                     objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, as this faculty has already taken attendance for subject - " + cName, this.Page);
@@ -2986,7 +2986,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
                     return;
                 }
 
-                TimeTableCount = Convert.ToInt32(objCommon.LookUp("ACD_TIME_TABLE_CONFIG WITH (NOLOCK)", "COUNT(1)", "CTNO=" + CTNO));
+                TimeTableCount = Convert.ToInt32(objCommon.LookUp("ACD_TIME_TABLE_CONFIG WITH (NOLOCK)", "COUNT(1)", "ISNULL(CANCEL,0)=0 AND CTNO=" + CTNO));
                 if (Convert.ToInt32(TimeTableCount) > 0)
                 {
                     objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, TimeTable is already created for this Faculty.", this.Page);
