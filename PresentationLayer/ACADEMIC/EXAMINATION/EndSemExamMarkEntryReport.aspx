@@ -232,14 +232,15 @@
                                     <asp:Button ID="btnReport" TabIndex="15" runat="server" Font-Bold="true" Text="Report" CssClass="btn btn-info"
                                         OnClick="btnReport_Click" Enabled="false" Visible="true" />
 
-                                    <asp:Button ID="btnMarksModifyReport" TabIndex="15" runat="server" Font-Bold="true" ValidationGroup="MarksModifyReport" 
+                                    <asp:Button ID="btnMarksModifyReport" TabIndex="15" runat="server" Font-Bold="true"  ValidationGroup="show" 
                                         Text="Marks Entry Report" CssClass="btn btn-info" OnClick="btnMarksModifyReport_Click" Visible="true" />
+                                   <%-- ValidationGroup="MarksModifyReport" --%>
 
                                     <asp:Button ID="btnfinalmarkentry" TabIndex="16" runat="server" Font-Bold="true" ValidationGroup="MarksModifyReport" 
                                         Text="Final TH/PR Marks Entry Report" CssClass="btn btn-info" OnClick="btnfinalmarkentry_Click" Visible="false" />
-                                        <asp:Button ID="btnmarkexcel" TabIndex="17" runat="server" Font-Bold="true" ValidationGroup="MarksModifyReport" 
+                                        <asp:Button ID="btnmarkexcel" TabIndex="17" runat="server" Font-Bold="true" ValidationGroup="show"  
                                         Text="Marks Entry Report Excel" CssClass="btn btn-info" OnClick="btnmarkexcel_Click" Visible="true" />
-
+                                   <%-- ValidationGroup="MarksModifyReport" --%>
                                     <asp:Button ID="btnCancel2" runat="server" TabIndex="17" Font-Bold="true" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" />
                                     <br />
