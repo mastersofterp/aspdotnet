@@ -10,6 +10,8 @@ namespace IITMS
         {
             public class Access_Link
             {
+
+
                 #region Private Members
                 private int _al_no = 0;
                 private string _al_link = string.Empty;

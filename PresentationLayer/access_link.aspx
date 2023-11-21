@@ -405,6 +405,7 @@
         };
     </script>
 
+
     <script type="text/javascript" language="javascript">
         //function totAllSubjects(chklnkstatus) {
         //    var frm = document.forms[0]
@@ -459,7 +460,9 @@
             });
         });
 
+
         //Added By Hemanth G
+
 
     </script>
     <script>
