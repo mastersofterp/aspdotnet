@@ -148,7 +148,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         // Added By Shrikant W. on 08-09-2023 For DAIICT                    
                         if (orgID == 15)
                         {
-                            if (Convert.ToInt32(final_submit) == 1)
+                            if (final_submit == "1")
                             {
                                 if (txtDateOfBirth.Text != string.Empty)
                                 {

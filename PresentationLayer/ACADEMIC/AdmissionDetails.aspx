@@ -332,14 +332,30 @@
                                                     InitialValue="0">
                                                 </asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12" div="divAdmCategory" runat="server">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divCasteCategory" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup id="supAdmCategory" runat="server">* </sup>
+                                                            <sup id="supCasteCategory" runat="server">* </sup>
                                                             <label>Admission Category </label>
                                                         </div>
                                                         <asp:DropDownList ID="ddlclaim" runat="server" CssClass="form-control" data-select2-enable="true"
                                                             AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Enter Caste Category"
                                                             ValidationGroup="Academic" Enabled="False">
+                                                        </asp:DropDownList>
+                                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlclaim"
+                                        Display="None" SetFocusOnError="True" ErrorMessage="Please Select Admission Category" ValidationGroup="Academic"
+                                        InitialValue="0">
+                                    </asp:RequiredFieldValidator>--%>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divAdmCategory" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supAdmCategory" runat="server">* </sup>
+                                                            <label>Admission Category </label>
+                                                        </div>
+                                                        <asp:DropDownList ID="ddlAdmCategory" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                            AppendDataBoundItems="True" TabIndex="8" ToolTip="Please Enter Caste Category"
+                                                            ValidationGroup="Academic" Enabled="False">
+                                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                         </asp:DropDownList>
                                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlclaim"
                                         Display="None" SetFocusOnError="True" ErrorMessage="Please Select Admission Category" ValidationGroup="Academic"
