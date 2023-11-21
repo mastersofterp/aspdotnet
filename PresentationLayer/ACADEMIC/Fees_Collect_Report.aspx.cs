@@ -163,7 +163,6 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
             DataSet dsChekList = feeCntrl.GetReceiptTypeforFeeReport();
 
-
             if (dsChekList.Tables[0].Rows.Count > 0)
             {
                 lvAdTeacher.DataSource = dsChekList;
@@ -194,7 +193,6 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     {
         try
         {
-
             string rectype = this.GetRecType();
             if (string.IsNullOrEmpty(rectype))//GetDegreeNew()
             {
@@ -267,7 +265,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             if (CName == "btnShow")
             {
                 string paymode = ddlPaymentMode.SelectedValue == "0" ? "" : ddlPaymentMode.SelectedValue;
-                DataSet dssem = feeCntrl.GetFeeDetails_Fees_Report(Convert.ToInt32(ddlSemester.SelectedValue), rectype, paymode);
+                DataSet dssem = feeCntrl.GetFeeDetails_Fees_Report(Convert.ToInt32(ddlSemester.SelectedValue), rectype, paymode,Convert.ToInt32(ddlAcdYear.SelectedValue),Convert.ToInt32(ddlDegree.SelectedValue),Convert.ToInt32(ddlBranch.SelectedValue),Convert.ToInt32(ddlYear.SelectedValue));
                 if (dssem.Tables.Count > 0)
                 {
                     if (dssem.Tables[0].Rows.Count > 0)
@@ -341,7 +339,7 @@ public partial class CourseWise_Registration : System.Web.UI.Page
 
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lblStatus.Text = string.Empty;
+        divlvSemester.Visible = false;
     }
     private void ShowSBICollectStudentReport(string reportTitle, string rptFileName)
     {
@@ -1235,6 +1233,9 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     }
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
+        lvSemesterFee.DataSource = null;
+        lvSemesterFee.DataBind();
+        divlvSemester.Visible = false;
         if (ddlDegree.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH B INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON B.BRANCHNO=CB.BRANCHNO", "DISTINCT B.BRANCHNO", " B.LONGNAME", "ISNULL(B.ACTIVESTATUS,0) = 1 AND  CB.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "LONGNAME");
@@ -2062,6 +2063,18 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     protected void btnCancelrecieptsummary_Click(object sender, EventArgs e)
     {
         Show_Summary_Report("Cancelled_Receipt_Summary_Report", "Canceled_receipt_summary_report.rpt");
+    }
+    protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+
+        lvSemesterFee.DataSource = null;
+        lvSemesterFee.DataBind();
+    }
+    protected void ddlYear_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        lvSemesterFee.DataSource = null;
+        lvSemesterFee.DataBind();
     }
 }
 

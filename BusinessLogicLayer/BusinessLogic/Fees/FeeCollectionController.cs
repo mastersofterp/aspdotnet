@@ -3402,8 +3402,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// </summary>
         /// <param name="sem"></param>
         /// <param name="rectype"></param>
-        /// <returns></returns>
-        public DataSet GetFeeDetails_Fees_Report(int sem, string rectype, string pay_type)
+        /// //Updated by Sakshi M in 17112023 
+        public DataSet GetFeeDetails_Fees_Report(int sem, string rectype, string pay_type, int admbatch, int degree, int branch, int year)
         {
             DataSet ds = null;
             try
@@ -3414,6 +3414,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_SEMESTERNO", sem),
                     new SqlParameter("@P_RECIEPT_TYPE", rectype),
                     new SqlParameter("@P_PAY_TYPE_CODE", pay_type),
+                    new SqlParameter("@P_ACDBATCH", admbatch),
+                    new SqlParameter("@P_DEGREENO", degree),
+                    new SqlParameter("@P_BRANCHNO", branch),
+                    new SqlParameter("@P_YEAR", year),
                   
                 };
                 ds = objDataAccess.ExecuteDataSetSP("PKG_SHOW_SEMESTERWISE_FEE_DETAILS", sqlParams);
@@ -3424,6 +3428,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
 
         /// <summary>
         /// Added By S.Patil - 18082020
