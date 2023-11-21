@@ -52,7 +52,7 @@ namespace IITMS
                             new SqlParameter("@P_OUTPUT", SqlDbType.Int)                        
                             };
                         param[param.Length - 1].Direction = ParameterDirection.Output;
-                        object ret = objSqlHelper.ExecuteNonQuerySP("PKG_GATEPASS_REQUEST_APPROVE_BY_ADMIN", param, true);
+                        object ret = objSqlHelper.ExecuteNonQuerySP("PKG_HOSTEL_GATEPASS_REQUEST_APPROVE_BY_ADMIN", param, true);
                         if (ret != null)
                             if (ret.ToString() != "-99")
                                 retStatus = Convert.ToInt32(CustomStatus.RecordSaved);

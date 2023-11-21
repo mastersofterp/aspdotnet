@@ -52,6 +52,44 @@ namespace IITMS
                     }
                     return ds;
                 }
+
+                //Added by Saurabh L on 21 Nov 2023 
+                public int UpdateColumnData(string TableName, string columnname, string Wherecondition)
+                {
+                    int ret;
+                    try
+                    {
+                        SQLHelper objsqlhelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_TABLENAME", TableName);
+                        objParams[1] = new SqlParameter("@P_COLUMNNAME", columnname);
+
+                        if (!Wherecondition.Equals(string.Empty))
+                            objParams[2] = new SqlParameter("@P_WHERECONDITION", Wherecondition);
+                        else
+                            objParams[2] = new SqlParameter("@P_WHERECONDITION", DBNull.Value);
+
+                        objParams[3] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[3].Direction = ParameterDirection.Output;
+
+                        object obj = objsqlhelper.ExecuteNonQuerySP("PKG_UTILS_SP_UPDATE", objParams, true);
+
+                        if (obj != null && obj.ToString().Equals("-1"))
+                        {
+                            ret = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        }
+                        else
+                        {
+                            ret = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    return ret;
+                }
             }
         }
     }

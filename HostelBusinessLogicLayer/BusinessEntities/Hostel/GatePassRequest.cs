@@ -30,6 +30,7 @@ namespace IITMS
                 private string _remarks = string.Empty;
                 private string _college_Code = string.Empty;
                 private string _organizationid = string.Empty;
+                private int _adminuano = 0;
                 #endregion
 
                 #region Public Property Fields
@@ -117,6 +118,11 @@ namespace IITMS
                 {
                     get { return _organizationid; }
                     set { _organizationid = value; }
+                }
+                public int Admin_UANO
+                {
+                    get { return _adminuano; }
+                    set { _adminuano = value; }
                 }
                 #endregion
             }

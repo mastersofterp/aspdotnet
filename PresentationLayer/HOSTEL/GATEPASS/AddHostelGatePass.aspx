@@ -54,19 +54,19 @@
                         <div class="form-group col-lg-8 col-md-4 col-12">
                              <div class="label-dynamic">
                                     <sup>* </sup>
-                                    <label>Pass Number</label>
+                                    <label>Gate Pass Number</label>
                                 </div>
-                                <asp:TextBox ID="txtPass" runat="server" CssClass="form-control"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvPass" runat="server" ErrorMessage="Please Enter Pass Number"
+                                <asp:TextBox ID="txtPass" runat="server" CssClass="form-control" TabIndex="1"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="rfvPass" runat="server" ErrorMessage="Please Enter Hostel Gate Pass Number."
                                     Display="None" ControlToValidate="txtPass" SetFocusOnError="True" ValidationGroup="submit"></asp:RequiredFieldValidator>
                          </div>
                     </div>
                     <br />
                     <div class="col-12 btn-footer">
-                        <asp:Button ID="btnSearch" runat="server" Text="Search" ValidationGroup="submit" TabIndex="12"
+                        <asp:Button ID="btnSearch" runat="server" Text="Search" ValidationGroup="submit" TabIndex="2"
                             CssClass="btn btn-primary" OnClick="btnSearch_Click" />
-                        <asp:Button ID="btnReport" runat="server" Text="Gate Pass Report" ValidationGroup="submit" TabIndex="12"
-                            CssClass="btn btn-primary" Visible="false" OnClick="btnReport_Click"/>
+                        <asp:Button ID="btnReport" runat="server" Text="Gate Pass Report" ValidationGroup="submit" TabIndex="3"
+                            CssClass="btn btn-outline-success" Visible="false" OnClick="btnReport_Click"/>
                         &nbsp;<asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true"
                             ShowSummary="false" ValidationGroup="submit" />
                     </div>
@@ -84,7 +84,8 @@
                 <br />
                 <div class="container">
                 <div class="box-body">
-                    <div class="col-6">
+                    <div class="row">
+                   <div class="col-6 col-md-6 col-lg-6">  <%--<div class="col-6">  --%>
                         <div class="form-group col-lg-8 col-md-4 col-12">
                              <div class="label-dynamic">
                                     <label style="font-size:medium;"><b>Admission Number</b></label>
@@ -125,6 +126,15 @@
                                 <asp:Label ID="lblapproval4" runat="server" Text="Label"></asp:Label><br />
                          </div>
                     </div>
+
+                    <div class="col-6 col-md-6 col-lg-6" style="text-align:center;padding:2px;">
+
+                          <asp:Button ID="btnInTimeEntry" runat="server" Text="IN TIME ENTRY"  TabIndex="4"
+                            CssClass="btn btn-primary" OnClick="btnInTimeEntry_Click" />
+
+                    </div>
+
+                        </div>
                 </div>
                 </div>
             </div>
@@ -145,7 +155,7 @@
                                             </th>
                                             <th>Student Name
                                             </th>
-                                            <th>Gatepass No
+                                            <th>Gate Pass No
                                             </th>
                                             <th>Out Date
                                             </th>

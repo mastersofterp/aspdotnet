@@ -253,16 +253,16 @@
                             <ItemTemplate>
                                 <tr>
                                     <td>
-                                         <asp:Label ID="lblFirstApproval" runat="server" ForeColor='<%# Eval("FIRST_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FIRST_APPROVAL_STATUS") %>'></asp:Label>
+                                         <asp:Label ID="lblFirstApproval" runat="server" ForeColor='<%# Eval("FIRST_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("SECOND_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FIRST_APPROVAL_STATUS") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="lblSecondApproval" runat="server" ForeColor='<%# Eval("SECOND_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("SECOND_APPROVAL_STATUS") %>'></asp:Label>
+                                        <asp:Label ID="lblSecondApproval" runat="server" ForeColor='<%# Eval("SECOND_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("SECOND_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("SECOND_APPROVAL_STATUS") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="lblThirdApproval" runat="server" ForeColor='<%# Eval("THIRD_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("THIRD_APPROVAL_STATUS") %>'></asp:Label>
+                                        <asp:Label ID="lblThirdApproval" runat="server" ForeColor='<%# Eval("THIRD_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("SECOND_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("THIRD_APPROVAL_STATUS") %>'></asp:Label>
                                     </td>
                                     <td>
-                                        <asp:Label ID="lblFourthApproval" runat="server" ForeColor='<%# Eval("FOURTH_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FOURTH_APPROVAL_STATUS") %>'></asp:Label>
+                                        <asp:Label ID="lblFourthApproval" runat="server" ForeColor='<%# Eval("FOURTH_APPROVAL_STATUS").Equals("Approved")?System.Drawing.Color.Green:Eval("SECOND_APPROVAL_STATUS").Equals("Direct Approved By Admin")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' Text='<%# Eval("FOURTH_APPROVAL_STATUS") %>'></asp:Label>
                                     </td>
                                    
                                     

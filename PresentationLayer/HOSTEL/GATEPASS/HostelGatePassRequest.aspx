@@ -5,12 +5,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
     <style>
-            ul.ui-autocomplete
-            {
-                max-height: 180px !important;
-                overflow: auto !important;
-            }
-        </style>
+         ul.ui-autocomplete
+         {
+             max-height: 180px !important;
+             overflow: auto !important;
+         }
+    </style>
 
     <script type="text/javascript">
         //On UpdatePanel Refresh
@@ -47,7 +47,7 @@
                 input.value = '0' + value;
             }
         }
-        </script>
+    </script>
 
     <meta charset="UTF-8">
     <div class="row">
@@ -399,11 +399,11 @@
                              <div class="label-dynamic">
                                     <%--<sup>* </sup>--%>
                                     <label>Remark</label>
-                                </div>
+                             </div>
                                 <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TextMode="MultiLine" TabIndex="14" Rows="1" Height="74px"></asp:TextBox>
                                 <%--<asp:RequiredFieldValidator ID="rfvtxtRemark" runat="server" ErrorMessage="Please Enter Remark"
                                     Display="None" ControlToValidate="txtRemark" SetFocusOnError="True" ValidationGroup="submit"></asp:RequiredFieldValidator>--%>
-                         </div>
+                        </div>
                         </div>
                     </div>
                     <br /><br />

@@ -137,6 +137,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objGatePass.CollegeCode = Session["colcode"].ToString();
             objGatePass.organizationid = Session["OrgId"].ToString();
 
+            if (Convert.ToInt32(Session["usertype"]) == 1)
+            {
+                objGatePass.Admin_UANO = Convert.ToInt32(Session["userno"]);
+            }
 
                 if (ViewState["action"].ToString().Equals("add"))
                 {
@@ -154,11 +158,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         Clear();
                         Sendmail();
                     }
-                    if (cs == 4)
-                    {
-                        objCommon.DisplayMessage("Parent Login Not Found. Contact to Administrator.", this.Page);
-                        ViewState["action"] = "add";
-                    }
+                    //if (cs == 4)
+                    //{
+                    //    objCommon.DisplayMessage("Parent Login Not Found. Contact to Administrator.", this.Page);
+                    //    ViewState["action"] = "add";
+                    //}
                     else if (cs == -99)
                     {
                         objCommon.DisplayMessage("Passing path Not found. Contact to Administrator.", this.Page);
@@ -210,11 +214,28 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     {
         try
         {
+            Clear();
+            if (Session["usertype"].ToString().Equals("1"))
+            {
+                pnlStudentHGPRequestDetails.Visible = false;
+            }
             btnSubmit.Text = "Update";
             ImageButton btnEdit = sender as ImageButton;
             int gatepass_no = int.Parse(btnEdit.CommandArgument);
-            ShowDetail(gatepass_no);
-            ViewState["action"] = "edit";
+
+            string IsApprove = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "HOSTEL_GATE_PASS_NO", "FINAL_STATUS = 'A' AND HGP_ID=" + gatepass_no);
+
+            if (!string.IsNullOrEmpty(IsApprove))
+            {
+                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
+                Response.Redirect(Request.RawUrl);
+            }
+            else
+            {
+                ShowDetail(gatepass_no);
+                pnlStudentHGPRequestDetails.Visible = true;
+                ViewState["action"] = "edit";
+            }
         }
         catch (Exception ex)
         {
@@ -264,7 +285,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtoutDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                objCommon.DisplayMessage("Please select out date today or greater than today's date.", this.Page);
+                objCommon.DisplayMessage("Please select out date current date or greater than today's date.", this.Page);
                 txtoutDate.Text = string.Empty;
                 txtoutDate.Focus();               
                 return;
@@ -289,6 +310,14 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     {
         if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
+            if (Convert.ToDateTime(txtinDate.Text) < System.DateTime.Now.AddDays(-1))
+            {
+                objCommon.DisplayMessage("Please select In date current date or greater than today's date.", this.Page);
+                txtinDate.Text = string.Empty;
+                txtinDate.Focus();
+                return;
+            }
+
             DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
             DateTime InDate = Convert.ToDateTime(txtinDate.Text);
 
@@ -392,6 +421,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         txtRemark.Text = string.Empty;
         ddlStuType.SelectedIndex = 0;
         ddlHostel.SelectedIndex = 0;
+        ddlSearch.SelectedIndex = 0; 
 
         if (Session["usertype"].ToString().Equals("2"))
         {
@@ -451,7 +481,9 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 ddlAM_PM2.SelectedValue = dr["IN_AM_PM"] == null ? string.Empty : dr["IN_AM_PM"].ToString();
                 ddlPurpose.SelectedValue = dr["PURPOSE_ID"] == null ? string.Empty : dr["PURPOSE_ID"].ToString();
                 txtOther.Text = dr["PURPOSE_OTHER"] == null ? string.Empty : dr["PURPOSE_OTHER"].ToString();
-                txtRemark.Text = dr["REMARKS"] == null ? string.Empty : dr["REMARKS"].ToString();          
+                txtRemark.Text = dr["REMARKS"] == null ? string.Empty : dr["REMARKS"].ToString();
+                //ddlSearch.SelectedValue = dr["STUDNAME"] == null ? string.Empty : dr["STUDNAME"].ToString();
+                ddlSearch.SelectedItem.Text = dr["STUDNAME"] == null ? string.Empty : dr["STUDNAME"].ToString();
         }
     }
 

@@ -64,6 +64,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
     #endregion Page Events
 
     #region Action
@@ -188,5 +189,18 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
     #endregion Private Methods
+
+    protected void btnInTimeEntry_Click(object sender, EventArgs e)
+    {
+        string GatePassNo = txtPass.Text.Trim();
+
+        CustomStatus cs = (CustomStatus)objHGP.UpdateColumnData("ACD_HOSTEL_GATEPASS_DETAILS", "IN_TIME_ENTRY=GETDATE()", "HOSTEL_GATE_PASS_NO='" + GatePassNo + "'");
+
+        if (cs.Equals(CustomStatus.RecordUpdated))
+        {
+            objCommon.DisplayMessage("In Time updated successfully.", this.Page);
+        }
+    }
 }

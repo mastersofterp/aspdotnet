@@ -33,7 +33,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
