@@ -654,7 +654,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += ddlSupervisor.SelectedValue ;
+                UANO += ddlSupervisor.SelectedValue + ",";
             }
         }
         if (ddlDGCSupervisor.SelectedIndex > 0)
@@ -664,7 +664,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += "," +  ddlDGCSupervisor.SelectedValue;
+                UANO += ddlDGCSupervisor.SelectedValue + ",";
             }
         }
         if (ddlJointSupervisor.SelectedIndex > 0)
@@ -674,7 +674,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += "," + ddlJointSupervisor.SelectedValue;
+                UANO += ddlJointSupervisor.SelectedValue + ",";
             }
         }
         if (ddlInstFac.SelectedIndex > 0)
@@ -684,7 +684,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += "," +  ddlInstFac.SelectedValue ;
+                UANO += ddlInstFac.SelectedValue + ",";
             }
         }
         if (ddlJointSupervisorSecond.SelectedIndex > 0)
@@ -694,7 +694,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += "," +  ddlJointSupervisorSecond.SelectedValue ;
+                UANO += ddlJointSupervisorSecond.SelectedValue + ",";
             }
         }
         if (ddlDRC.SelectedIndex > 0)
@@ -704,14 +704,18 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
             }
             else
             {
-                UANO += "," + ddlDRC.SelectedValue ;
+                UANO += ddlDRC.SelectedValue + ",";
             }
         }
         if (ddlDRCChairman.SelectedIndex > 0)
         {
-            UANO += ddlDRCChairman.SelectedValue ;
+            UANO += ddlDRCChairman.SelectedValue;
         }
-        Session[UANO] = UANO.Trim();
+        if (UANO == "")
+        {
+            UANO = "0";
+        }
+        Session[UANO] = UANO.TrimEnd(',');
     }
 
     private void FillDropDownNotIN()
@@ -953,7 +957,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                 objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
                 return;
             }
-            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRCChairman.SelectedValue)
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRC.SelectedValue)
             {
                 objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
                 return;
