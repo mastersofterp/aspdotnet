@@ -445,7 +445,12 @@ public partial class ACADEMIC_CheckStudentInfo : System.Web.UI.Page
                             //imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dtr["IDNO"].ToString() + "&type=student";
 
                             //Students Fees Details
-                            dsFees = objSC.RetrieveStudentFeesDetails(idno);
+                            //dsFees = objSC.RetrieveStudentFeesDetails(idno);
+
+                            int uano = Convert.ToInt32(Session["userno"]);
+
+                            dsFees = objSC.RetrieveStudentFeesDetails(idno, uano);
+
                             if (dsFees.Tables[0].Rows.Count > 0)
                             {
                                 lvFees.DataSource = dsFees;
