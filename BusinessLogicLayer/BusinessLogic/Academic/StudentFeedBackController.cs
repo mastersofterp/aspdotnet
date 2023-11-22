@@ -1182,7 +1182,81 @@ namespace IITMS
                     return status;
                 }
 
+                //Added by Shubham B  on dated 22112023
+                public int AddConvocationQuestion(StudentFeedBack SFB)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_QUESTIONNAME", SFB.QuestionName);
+                        objParams[1] = new SqlParameter("@P_ANS_OPTIONS", SFB.AnsOptions);
+                        objParams[2] = new SqlParameter("@P_ANS_VALUE", SFB.Value);
+                        objParams[3] = new SqlParameter("@P_COLL_CODE", SFB.CollegeCode);
+                        objParams[4] = new SqlParameter("@P_ISCOMMAND", SFB.ActiveStatus);
+                        objParams[5] = new SqlParameter("@P_OUT", SFB.Out);
+                        objParams[5].Direction = ParameterDirection.Output;
+                        object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_CONVOCATION_FEEDBACK_QUESTION", objParams, true));
+                        if (ret.ToString() == "1" && ret != null)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (ret.ToString() == "-1001" && ret != null)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        }
+                        else if (ret.ToString() == "-99")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedBackController.AddConvocationQuestion-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
 
+                //Added by Shubham B  on dated 22112023
+                public int UpdateConvocationQuestion(StudentFeedBack SFB)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_QUESTIONNAME", SFB.QuestionName);
+                        objParams[1] = new SqlParameter("@P_QUESTIONID", SFB.QuestionId);
+                        objParams[2] = new SqlParameter("@P_ANS_OPTIONS", SFB.AnsOptions);
+                        objParams[3] = new SqlParameter("@P_ANS_VALUES", SFB.Value);
+                        objParams[4] = new SqlParameter("@P_ISCOMMAND", SFB.ActiveStatus);
+                        objParams[5] = new SqlParameter("@P_OUT", SFB.Out);
+                        objParams[5].Direction = ParameterDirection.Output;
+                        object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_CONVOCATION_UPD_QUESTION", objParams, true));
+                        if (ret.ToString() == "2" && ret != null)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                        else if (ret.ToString() == "-1001" && ret != null)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        }
+                        else if (ret.ToString() == "-99")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedBackController.AddConvocationQuestion-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
             }
         }
     }
