@@ -1368,12 +1368,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                                             if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
                                                             {
 
-                                                                if(ViewState["Faculty_grade"].ToString()=="1")
+                                                                if(ViewState["Faculty_grade"]=="1")
                                                                 {
                                                                   btnReGrade.Enabled = true;
                                                                   btnReGrade.Visible = true;
                                                                 }
-                                                                else if (ViewState["admin_grade"].ToString() == "1")
+                                                                else if (ViewState["admin_grade"] == "1")
                                                                 {
                                                                     btnReGrade.Enabled = true;
                                                                     btnReGrade.Visible = true;
@@ -1392,12 +1392,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                                                 btnReGrade.Enabled = false;
                                                                 btnReGrade.Visible = false;
 
-                                                                if (ViewState["Faculty_grade"].ToString() == "1")
+                                                                if (ViewState["Faculty_grade"] == "1")
                                                                 {
                                                                     btnGrade.Enabled = true;
                                                                     btnGrade.Visible = true;
                                                                 }
-                                                                else if (ViewState["admin_grade"].ToString() == "1")
+                                                                else if (ViewState["admin_grade"] == "1")
                                                                 {
                                                                     btnGrade.Enabled = true;
                                                                     btnGrade.Visible = true;
@@ -2623,13 +2623,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
                         if (count > 0)
                         {
+                            
+                              //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
+                           // ddlSession.Focus();
 
                             objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
                             ddlSession.Focus();
-
-                            //string examno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT EXAMNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
-                            //ViewState["Exam_Activity"] = examno.ToString();
-                            
                         }
                         else
                         {

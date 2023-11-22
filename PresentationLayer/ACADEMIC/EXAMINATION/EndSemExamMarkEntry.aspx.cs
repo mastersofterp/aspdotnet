@@ -2424,7 +2424,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
-            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 and SHOW_STATUS =1 and DEGREENO LIKE '%" + ddldegree.SelectedValue + "%' and BRANCH LIKE '%" + ddlbranch.SelectedValue + "%' and UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and  PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
+            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 and SHOW_STATUS =1 and UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and  PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
             if (ddlscheme.SelectedIndex > 0)
             {
                 //objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT SR, ACD_SEMESTER S", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "  SR.COLLEGEID = " + ddlCollege.SelectedValue + " AND SR.SEMESTERNO=S.SEMESTERNO AND S.SEMESTERNO > 0", "S.SEMESTERNO");
