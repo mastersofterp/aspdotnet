@@ -864,6 +864,8 @@
                                 </div>
 
                                 <div class="col-12 btn-footer">
+
+                                    <asp:Button ID="btnIntEntRpt" Text="Internal Mark Entry Report" runat="server" TabIndex="1" ValidationGroup="CourseWiseExamRegistartion" CssClass="btn btn-info" OnClick="btnIntEntRpt_Click" Visible="false" />
                                     <asp:Button ID="btnsubtituteexamexcel" Text="Substitute Registration Excel" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnsubtituteexamexcel_Click" ValidationGroup="schemesession" />
                                     <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
                                     <asp:ValidationSummary ID="valsumschemesession" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="schemesession" CausesValidation="false" />
