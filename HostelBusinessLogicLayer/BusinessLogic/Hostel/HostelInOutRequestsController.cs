@@ -18,25 +18,25 @@ namespace IITMS
             public class HostelInOutRequestsController
             {
                 private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
-                public DataSet GetAllRequestsBySearch(HostelInOutReq ObjHReq)
+                public DataSet GetAllRequestsBySearch(HostelInOutReq ObjHReq,string applydate,string indate,string outdate)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = new SqlParameter[6];
-                        objParams[0] = new SqlParameter("@P_APPLYDATE", ObjHReq.Applydate);
+                        objParams[0] = new SqlParameter("@P_APPLYDATE", applydate);
                         objParams[1] = new SqlParameter("@P_PURPOSE", ObjHReq.Purpose);
                         objParams[2] = new SqlParameter("@P_GATEPASSCODE", ObjHReq.Gatepassno);
-                        objParams[3] = new SqlParameter("@P_INDATE", ObjHReq.Indate);
-                        objParams[4] = new SqlParameter("@P_OUTDATE", ObjHReq.Outdate);
+                        objParams[3] = new SqlParameter("@P_INDATE", indate);
+                        objParams[4] = new SqlParameter("@P_OUTDATE", outdate);
                         objParams[5] = new SqlParameter("@P_STATUS", ObjHReq.Status);
                         
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_GET_REQUESTS_BY_SEARCH", objParams);
                     }
                     catch (Exception ex)
                     {
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelGatePassController.GetAllRequestsBySearch() --> " + ex.Message + " " + ex.StackTrace);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelInOutRequestsController.GetAllRequestsBySearch() --> " + ex.Message + " " + ex.StackTrace);
                     }
                     return ds;
                 }
@@ -55,7 +55,7 @@ namespace IITMS
                     }
                     catch (Exception ex)
                     {
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelGatePassController.GetMoreDetails() --> " + ex.Message + " " + ex.StackTrace);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelInOutRequestsController.GetMoreDetails() --> " + ex.Message + " " + ex.StackTrace);
                     }
                     return dr;
                 }
@@ -73,7 +73,7 @@ namespace IITMS
                     }
                     catch (Exception ex)
                     {
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.HostelGatePassController.GetInMateDetails() --> " + ex.Message + " " + ex.StackTrace);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Hostel.HostelInOutRequestsController.GetInMateDetails() --> " + ex.Message + " " + ex.StackTrace);
                     }
                     return dr;
                 }
@@ -103,9 +103,30 @@ namespace IITMS
                      }
                      catch (Exception ex)
                      {
-                         throw new IITMSException("IITMS.UAIMS.HostelBusinessLogicLayer.BusinessEntities.HostelFeeCollectionController.InsertOnlinePaymentlog() --> " + ex.Message + " " + ex.StackTrace);
+                         throw new IITMSException("IITMS.UAIMS.HostelBusinessLogicLayer.HostelInOutRequestsController.InsertAttachedDocuments() --> " + ex.Message + " " + ex.StackTrace);
                      }
                  }
+                public int ChangeParentApprovalStatus(int hgpid,char pa_status)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSqlhelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] sqlParams = null;
+                        {
+                            sqlParams = new SqlParameter[2];
+                            sqlParams[0] = new SqlParameter("@P_HGPID", hgpid);
+                            sqlParams[1] = new SqlParameter("@P_PA_STATUS", pa_status);
+                        };
+                        if (objSqlhelper.ExecuteNonQuerySP("PKG_HOSTEL_GATEPASS_CHANGE_PARENT_APPROVAL_STATUS", sqlParams, true) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.HostelBusinessLogicLayer.HostelInOutRequestsController.ChangeParentApprovalStatus() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return retStatus;
+                }
 
              }
         }

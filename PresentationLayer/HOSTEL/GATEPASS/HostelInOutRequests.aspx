@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="HostelInOutRequests.aspx.cs" Inherits="HOSTEL_GATEPASS_HostelInOutRequests"  %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="HostelInOutRequests.aspx.cs" Inherits="HOSTEL_GATEPASS_HostelInOutRequests" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -6,25 +6,31 @@
 
 </script>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-   <style>
-       .custom-modal-dialog {
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <style>
+        .custom-modal-dialog {
             max-width: 800px; /* Set the desired width here */
         }
-   </style>
+        .btn-primary {
+            margin-left: 21px;
+        }
+        .btn-danger {
+            margin-left: 19px;
+        }
+    </style>
 
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div id="div1" runat="server"></div>
-                <div class="box-header with-border" style="display:flex;">
+                <div class="box-header with-border" style="display: flex;">
                     <h3 class="box-title">Hostel In/Out Request(s)</h3>
-<%--                    <asp:Button ID="btnAddGatepass" runat="server" Text="Add Gate Pass" Height="20%" />--%>
+                    <%--                    <asp:Button ID="btnAddGatepass" runat="server" Text="Add Gate Pass" Height="20%" />--%>
                 </div>
 
                 <div class="box-body">
                     <div class="col-12">
-                        <div class="row" >
+                        <div class="row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <label>Apply Date </label>
@@ -58,16 +64,16 @@
                                 <div class="label-dynamic">
                                     <label>Purpose </label>
                                 </div>
-                                <asp:DropDownList ID="ddlPurpose" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"  AutoPostBack="True" />
+                                <asp:DropDownList ID="ddlPurpose" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" />
                                 <asp:RequiredFieldValidator ID="rfvHostel" runat="server" ControlToValidate="ddlPurpose"
                                     Display="None" ErrorMessage="Please Select Purpose" ValidationGroup="Show" SetFocusOnError="True"
                                     InitialValue="0" />
 
                             </div>
-                            
+
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                             <div class="label-dynamic">
-                                    
+                                <div class="label-dynamic">
+
                                     <label>Gate Pass Code</label>
                                 </div>
                                 <asp:TextBox ID="txtGatePassCode" runat="server" TabIndex="4" ToolTip="Enter Gate Pass Code" AutoPostBack="true" CssClass="form-control" />
@@ -97,190 +103,202 @@
                         </div>
                         <div class="row" runat="server">
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                    <div class="label-dynamic">
-                                        <label>In Date </label>
+                                <div class="label-dynamic">
+                                    <label>In Date </label>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
                                     </div>
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <asp:TextBox ID="txtInDate" runat="server" TabIndex="5" ToolTip="Enter Out Date" AutoPostBack="true" CssClass="form-control" />
-                                        <%--<asp:Image ID="imgFromDate" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />--%>
-                                        <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Format="dd/MM/yyyy"
-                                            TargetControlID="txtInDate" PopupButtonID="imgFromDate" Enabled="true" />
-                                        <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtInDate"
-                                            Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
-                                            MaskType="Date" ErrorTooltipEnabled="false" />
-                                        <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please enter In Date."
-                                            ControlExtender="MaskedEditExtender1" ControlToValidate="txtInDate" IsValidEmpty="false"
-                                            InvalidValueMessage="In Date  is invalid" Display="None" TooltipMessage="Input a In Date"
-                                            ErrorMessage="Please Select In Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
-                                            ValidationGroup="submit" SetFocusOnError="true" />
+                                    <asp:TextBox ID="txtInDate" runat="server" TabIndex="5" ToolTip="Enter Out Date" AutoPostBack="true" CssClass="form-control" />
+                                    <%--<asp:Image ID="imgFromDate" runat="server" ImageUrl="~/images/calendar.png" Width="16px" />--%>
+                                    <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Format="dd/MM/yyyy"
+                                        TargetControlID="txtInDate" PopupButtonID="imgFromDate" Enabled="true" />
+                                    <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" TargetControlID="txtInDate"
+                                        Mask="99/99/9999" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate"
+                                        MaskType="Date" ErrorTooltipEnabled="false" />
+                                    <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator4" runat="server" EmptyValueMessage="Please enter In Date."
+                                        ControlExtender="MaskedEditExtender1" ControlToValidate="txtInDate" IsValidEmpty="false"
+                                        InvalidValueMessage="In Date  is invalid" Display="None" TooltipMessage="Input a In Date"
+                                        ErrorMessage="Please Select In Date" EmptyValueBlurredText="*" InvalidValueBlurredMessage="*"
+                                        ValidationGroup="submit" SetFocusOnError="true" />
                                 </div>
-                                </div>
+                            </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic ">
                                     <label>Status </label>
                                 </div>
-                                <asp:DropDownList ID="ddlStatus" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"  AutoPostBack="True" >
-                                    <asp:ListItem Value=" "   Text="Please Select"></asp:ListItem>
-                                    <asp:ListItem Value="A" Text="Accept"></asp:ListItem>
+                                <asp:DropDownList ID="ddlStatus" runat="server" TabIndex="3" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true" AutoPostBack="True">
+                                    <asp:ListItem Value="0" Text="Please Select"></asp:ListItem>
+                                    <asp:ListItem Value="A" Text="Approve"></asp:ListItem>
                                     <asp:ListItem Value="R" Text="Reject"></asp:ListItem>
                                     <asp:ListItem Value="P" Text="Pending"></asp:ListItem>
                                 </asp:DropDownList>
-                                <asp:RequiredFieldValidator ID="RfvStatus" runat="server" ControlToValidate="ddlStatus" 
-                                    Display="None" ValidationGroup="Show" 
+                                <asp:RequiredFieldValidator ID="RfvStatus" runat="server" ControlToValidate="ddlStatus"
+                                    Display="None" ValidationGroup="Show"
                                     InitialValue="0" />
-                              </div>
+                            </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                 <asp:Button ID="btnSearch" runat="server" Text="Search" Width="50%" OnClick="btnSearch_Click" 
-                                 CssClass="btn btn-primary" />
-                                </div> 
-                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                 <asp:Button ID="btnBack" runat="server" Text="Back" Width="50%" OnClick="btnBack_Click" 
-                                 CssClass="btn btn-danger" />
-                                </div>  
-                            </div> 
+                                <div class="row">
+                                <asp:Button ID="btnSearch" runat="server" Text="Search" Width="30%" OnClick="btnSearch_Click"
+                                    CssClass="btn btn-primary" />
+                                <asp:Button ID="btnBack" runat="server" Text="Back" Width="30%" OnClick="btnBack_Click"
+                                    CssClass="btn btn-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                
                             </div>
                         </div>
-
                     </div>
-<div class="col-12">
-    <asp:ListView ID="lvRequests" runat="server">
-        <LayoutTemplate>
-            <div id="demo-grid">
-                <div class="sub-heading">
-                    <h5>Requests List</h5>
-                </div>
-                <table class="table table-striped table-bordered nowrap dt-responsive " style="width: 100%">
-                    <thead class="bg-light-blue">
+                                <div class="col-12">
+                <asp:ListView ID="lvRequests" runat="server">
+                    <LayoutTemplate>
+                        <div id="demo-grid">
+                            <div class="sub-heading">
+                                <h5>Requests List</h5>
+                            </div>
+                            <table class="table table-striped table-bordered nowrap dt-responsive " style="width: 100%">
+                                <thead class="bg-light-blue">
+                                    <tr>
+                                        <th style="width: 2%;">
+                                            <%--<asp:CheckBox ID="chkAll" runat="server" onclick="return SelectAll(this);" />--%>
+                                            SELECT</th>
+                                        <th style="width: 10%;">STUDENT NAME</th>
+                                        <th style="width: 5%;">PURPOSE</th>
+                                        <th style="width: 5%;">OUT DATE</th>
+                                        <th style="width: 5%;">IN DATE</th>
+                                        <th style="width: 5%;">REQUESTED DATE</th>
+                                        <th style="width: 7%;">FINAL STATUS</th>
+                                        <th style="width: 7%;">CONFIRM WITH PARENTS</th>
+                                        <th style="width:6%;">NEXT APPROVAL</th>
+                                        <%--<th style="width:5%;">COMMENT</th>--%>
+                                        <th style="width: 5%;">GATE PASS</th>
+                                        <th style="width: 5%;">More Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="itemPlaceholder" runat="server" />
+                                </tbody>
+                            </table>
+                        </div>
+                    </LayoutTemplate>
+                    <ItemTemplate>
                         <tr>
-                            <th style="width:10%;">NAME</th>
-                            <th style="width:5%;">PURPOSE</th>
-                            <th style="width:5%;">OUT</th>
-                            <th style="width:5%;">IN</th>
-                            <th style="width:5%;">REQUESTED DATE</th>
-                            <th style="width:7%;">STATUS</th>
-                            <th style="width:7%;">CONFIRM WITH PARENTS</th>
-                            <%--<th style="width:6%;">APPROVED STATUS</th>--%>
-                            <%--<th style="width:5%;">COMMENT</th>--%>
-                            <th style="width:5%;">GATE PASS</th>
-                            <th style="width:5%;">More Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="itemPlaceholder" runat="server" />
-                    </tbody>
-                </table>
-            </div>
-        </LayoutTemplate>
-        <ItemTemplate>
-            <tr>
-                <td>
-                    <asp:Label ID="lblname" runat="server" Text='<%# Eval("REGNO")+" - "+Eval("STUDNAME") %>'></asp:Label>
-                    <asp:HiddenField ID="hdnidno" runat="server" Value='<%# Eval("IDNO") %>' />
-                    <asp:HiddenField ID="hdnhgpid" runat="server" Value='<%# Eval("HGP_ID") %>' />
-                </td>
-                <td>
-                    <%# Eval("PURPOSE_NAME") %>
-                </td>
-                <td>
-                    <%# Eval("OUT_TIME","{0:dd/MM/yyyy hh:mm tt}") %>
-                </td>
-                <td>
-                    <%# Eval("IN_TIME","{0:dd/MM/yyyy hh:mm tt}") %>
-                </td>
-                <td>
-                    <%# Eval("APPLY_DATE") %>
-                </td>
-                <td>
-                    <asp:DropDownList ID="ddlStatus" runat="server">
-                        <asp:ListItem Value="P">Pending</asp:ListItem>
-                        <asp:ListItem Value="A">Approved</asp:ListItem>
-                        <asp:ListItem Value="R">Reject</asp:ListItem>
-                    </asp:DropDownList>
-                    <asp:HiddenField ID="HdnStatus" runat="server" Value='<%# Eval("FINAL_STATUS") %>' />
+                            <td>
+                                <asp:CheckBox ID="chkApprove" runat="server" OnCheckedChanged="chkApprove_CheckedChanged" AutoPostBack="true"  />
+                            </td>
+                            <td>
+                                <asp:Label ID="lblname" runat="server" Text='<%# Eval("REGNO")+" - "+Eval("STUDNAME") %>'></asp:Label>
+                                <asp:HiddenField ID="hdnidno" runat="server" Value='<%# Eval("IDNO") %>' />
+                                <asp:HiddenField ID="hdnhgpid" runat="server" Value='<%# Eval("HGP_ID") %>' />
+                            </td>
+                            <td>
+                                <%# Eval("PURPOSE_NAME") %>
+                            </td>
+                            <td>
+                                <%# Eval("OUT_TIME","{0:dd/MM/yyyy hh:mm tt}") %>
+                            </td>
+                            <td>
+                                <%# Eval("IN_TIME","{0:dd/MM/yyyy hh:mm tt}") %>
+                            </td>
+                            <td>
+                                <%# Eval("APPLY_DATE","{0:dd/MM/yyyy hh:mm tt}") %>
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="ddlStatus" runat="server">
+                                    <asp:ListItem Value="P">Pending</asp:ListItem>
+                                    <asp:ListItem Value="A">Approved</asp:ListItem>
+                                    <asp:ListItem Value="R">Reject</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:HiddenField ID="HdnStatus" runat="server" Value='<%# Eval("FINAL_STATUS") %>' />
 
-                </td>
-                <td>
-                    <asp:DropDownList ID="ddlparentapproval" runat="server">
-                        <asp:ListItem Value="Y">Yes</asp:ListItem>
-                        <asp:ListItem Value="N">No</asp:ListItem>
-                    </asp:DropDownList>
-                    <asp:HiddenField ID="HdnFirstApproval" runat="server" Value='<%# Eval("FIRST_APPROVAL_STATUS") %>' />
-                </td>
-                <%--<td>
-                    <%# Eval("PURPOSE_NAME") %>
-                </td>--%>
-                <%--<td>
+                            </td>
+                            <td>
+                                <asp:DropDownList ID="ddlparentapproval" runat="server">
+                                    <asp:ListItem Value="Y">Yes</asp:ListItem>
+                                    <asp:ListItem Value="N">No</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:HiddenField ID="HdnFirstApproval" runat="server" Value='<%# Eval("FIRST_APPROVAL_STATUS") %>' />
+                            </td>
+                            <td>
+                                <%# Eval("NEXT_APPROVAL") %>
+                            </td>
+                            <%--<td>
                     <textarea id="txtComment" runat="server" wrap="soft"></textarea>
                 </td>--%>
-                <td>
-                    <%# Eval("HOSTEL_GATE_PASS_NO") %>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <asp:Button ID="btnmore" runat="server" class="btn dropdown-toggle" data-toggle="dropdown" Text="More" CommandArgument='<%# Eval("IDNO") %>' />
-                        <div class="dropdown-menu">
-                            <a ID="btnViewDetails" class="dropdown-item" Style="font-size: 10px" data-toggle="modal" data-target="#myModal3" onclick='<%# "return fetchDataFromServer(" + Eval("IDNO") + "," + Eval("HGP_ID") + ");" %>'>View Details</a>
-                            <a ID="btnInmate" class="dropdown-item" Style="font-size: 10px" data-toggle="modal" data-target="#myModal1" onclick='<%# "return fetchInMateData(" + Eval("IDNO") + ");" %>'>Contact Details</a>
+                            <td>
+                                <asp:Label ID="lblGatepassnno" runat="server" Text='<%# (Eval("HOSTEL_GATE_PASS_NO").ToString())=="" ? "..." : Eval("HOSTEL_GATE_PASS_NO") %>'></asp:Label>   
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <asp:Button ID="btnmore" runat="server" class="btn dropdown-toggle" data-toggle="dropdown" Text="More" CommandArgument='<%# Eval("IDNO") %>' />
+                                    <div class="dropdown-menu">
+                                        <a id="btnViewDetails" class="dropdown-item" style="font-size: 10px" data-toggle="modal" data-target="#myModal3" onclick='<%# "return fetchDataFromServer(" + Eval("IDNO") + "," + Eval("HGP_ID") + ");" %>'>View Details</a>
+                                        <a id="btnInmate" class="dropdown-item" style="font-size: 10px" data-toggle="modal" data-target="#myModal1" onclick='<%# "return fetchInMateData(" + Eval("IDNO") + ");" %>'>Contact Details</a>
 
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </ItemTemplate>
-    </asp:ListView>
-</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                </asp:ListView>
+                <div class="text-center" >
+                    <asp:Button ID="btnParentSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" Visible="false" OnClick="btnParentSubmit_Click"  />
                 </div>
             </div>
+
+                </div>
+
+            </div>
         </div>
+    </div>
         <div class="modal fade" id="myModal3" data-backdrop="static">
-            <div class="modal-dialog custom-modal-dialog"> <!-- Add the custom class 'custom-modal-dialog' -->
+            <div class="modal-dialog custom-modal-dialog">
+                <!-- Add the custom class 'custom-modal-dialog' -->
                 <div class="modal-content">
-        
+
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Hostel Gate Pass Request List Details.</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div id="MoreDetails" class="modal-body MoreDetails">
-        
                     </div>
-        
+
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
-        
+
                 </div>
             </div>
         </div>
     <div class="modal fade" id="myModal1" data-backdrop="static">
-    <div class="modal-dialog custom-modal-dialog"> <!-- Add the custom class 'custom-modal-dialog' -->
-        <div class="modal-content">
+        <div class="modal-dialog custom-modal-dialog">
+            <!-- Add the custom class 'custom-modal-dialog' -->
+            <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Parents/Guardian Contact Details</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Parents/Guardian Contact Details</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="Inmatedetails" class="modal-body Inmatedetails">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
             </div>
-
-            <!-- Modal body -->
-            <div id="Inmatedetails" class="modal-body Inmatedetails">
-
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
-
         </div>
     </div>
-</div>
 
-<%--<div class="modal fade" id="myModal2" data-backdrop="static">
+    <%--<div class="modal fade" id="myModal2" data-backdrop="static">
     <div class="modal-dialog custom-modal-dialog"> <!-- Add the custom class 'custom-modal-dialog' -->
         <div class="modal-content">
 
@@ -323,9 +341,10 @@
         </div>
     </div>
 </div>--%>
-    
+
     <div id="divMsg" runat="server">
     </div>
+    
     <script type="text/javascript" language="javascript">
         function SelectAll(headchk) {
             var frm = document.forms[0]
@@ -340,16 +359,16 @@
             }
         }
     </script>
-<script type="text/javascript">
-    function fetchDataFromServer(idno, hgpid) {
-        var ObjHReq = {
-            Idno: idno,
-            Hgpid: hgpid
-        };
+    <script type="text/javascript">
+        function fetchDataFromServer(idno, hgpid) {
+            var ObjHReq = {
+                Idno: idno,
+                Hgpid: hgpid
+            };
 
-        $.ajax({
-            type: "POST",
-            url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/GetData") %>',
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/GetData") %>',
             data: JSON.stringify({ ObjHReq: ObjHReq }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -370,7 +389,7 @@
                     }
                     return date;
                 };
-                
+
 
                 var html = "<p style='font-size:15px;'><b>Request Details</b></p><table class='table table-striped table-bordered'><thead><tr><th>Apply Date</th><th>Remark</th><th>Mode</th><th>Infrom to</th></tr></thead><tbody>";
 
@@ -413,7 +432,7 @@
                     html += "</tbody></table>";
                 }
 
-                
+
 
 
                 // Update the inner HTML of the "MoreDetails" element
@@ -425,12 +444,12 @@
             }
         });
     }
-</script>
-<script type="text/javascript">
-    function fetchInMateData(idno) {
-        $.ajax({
-            type: "POST",
-            url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/GetInMate") %>',
+    </script>
+    <script type="text/javascript">
+        function fetchInMateData(idno) {
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/GetInMate") %>',
             data: JSON.stringify({ idno: idno }), // Pass the idno as an object
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -455,8 +474,8 @@
             }
         });
     }
-</script>
-<%--<%--<script type="text/javascript">
+    </script>
+    <%--<%--<script type="text/javascript">
     $(document).ready(function () {
         $("#uploadButton").click(function () {
             var fileInput = document.getElementById("imageFile");
@@ -522,41 +541,41 @@
         }
     });
 </script>--%>
-<script type="text/javascript">
-    $(function () {
-        var reader = new FileReader();
-        var fileName;
-        var contentType;
-        $('#fileInput').change(function () {
-            if (typeof (FileReader) != "undefined") {
-                var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png)$/;
-                $($(this)[0].files).each(function () {
-                    var file = $(this);
-                    if (regex.test(file[0].name.toLowerCase())) {
-                        fileName = file[0].name;
-                        contentType = file[0].type;
-                        reader.readAsDataURL(file[0]);
-                    } else {
-                        alert(file[0].name + " is not a valid image file.");
-                        return false;
-                    }
-                });
-            } else {
-                alert("This browser does not support HTML5 FileReader.");
-            }
-        });
+    <script type="text/javascript">
+        $(function () {
+            var reader = new FileReader();
+            var fileName;
+            var contentType;
+            $('#fileInput').change(function () {
+                if (typeof (FileReader) != "undefined") {
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png)$/;
+                    $($(this)[0].files).each(function () {
+                        var file = $(this);
+                        if (regex.test(file[0].name.toLowerCase())) {
+                            fileName = file[0].name;
+                            contentType = file[0].type;
+                            reader.readAsDataURL(file[0]);
+                        } else {
+                            alert(file[0].name + " is not a valid image file.");
+                            return false;
+                        }
+                    });
+                } else {
+                    alert("This browser does not support HTML5 FileReader.");
+                }
+            });
 
-        function UploadFile(Idno,Hgpid) {
-            var byteData = reader.result;
-            byteData = byteData.split(';')[1].replace("base64,", "");
-            var obj = {};
-            obj.idno=Idno;
-            obj.hgpid=Hgpid;
-            obj.Data = byteData;
-            obj.Name = fileName;
-            $.ajax({
-                type: "POST",
-                url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/SaveImage") %>',
+            function UploadFile(Idno, Hgpid) {
+                var byteData = reader.result;
+                byteData = byteData.split(';')[1].replace("base64,", "");
+                var obj = {};
+                obj.idno = Idno;
+                obj.hgpid = Hgpid;
+                obj.Data = byteData;
+                obj.Name = fileName;
+                $.ajax({
+                    type: "POST",
+                    url: '<%= ResolveUrl("~/HOSTEL/GATEPASS/HostelInOutRequests.aspx/SaveImage") %>',
                 data: '{data : ' + JSON.stringify(obj) + ' }',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -574,8 +593,8 @@
         };
     });
     </script>
-    
-   
+
+
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>

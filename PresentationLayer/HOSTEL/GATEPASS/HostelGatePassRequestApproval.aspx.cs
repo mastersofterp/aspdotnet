@@ -33,7 +33,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 else
                 {
                     // Check User Authority 
-                    this.CheckPageAuthorization();
+                    //this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -129,6 +129,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 lblApprover.Text = ds.Tables[0].Rows[0]["APPROVER"].ToString();
                 lvShowApprovalStatus.DataSource = ds;
                 lvShowApprovalStatus.DataBind();
+
                 if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
                 {
                     liFileAttach.Visible = true;
@@ -163,7 +164,13 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             string fileExtension = Path.GetExtension(fileName).ToLower(); // Convert extension to lowercase
             int len = 0;
             int getPos = 0;
-            string fileUrl=string.Empty;
+            string fileUrl = string.Empty;
+            string f_status = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "DIRECT_APPROVAL_UANO IS NOT NULL AND HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
+            if (f_status=="A")
+            {
+                objCommon.DisplayMessage(this, "Gate Pass Already Approved By Admin.", this);
+                return;
+            }
             if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
             {
                 if (FileAttach.HasFile)
@@ -203,8 +210,19 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 }
                 else
                 {
-                    objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
-                    return;
+                    if (Convert.ToInt32(Session["usertype"]) == 14)
+                    {
+                        fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
+                        if (fileUrl == string.Empty)
+                        {
+                            objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
+                            return;
+                        }
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
             else
@@ -234,9 +252,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 objCommon.ConfirmMessage(this, "Record not found for this approval.", this);
             }
 
+            DataSet ds = null;
 
+            ds = Hgp.ShowStudentRequestDetails(Hgpid, Convert.ToInt32(Session["userno"]), OrganizationId);
 
-
+            lvShowApprovalStatus.DataSource = ds;
+            lvShowApprovalStatus.DataBind();
 
         }
         catch (Exception ex)
@@ -265,6 +286,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 
     protected void btnBack_Click(object sender, EventArgs e)
     {
+        this.BindListView();   //Added By Himanshu tamrakar 22-11-2023
         DivShowRequestDetails.Visible = false;
         DivShowRequest.Visible = true;
     }

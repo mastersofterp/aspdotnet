@@ -96,7 +96,10 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq);
+            string applydate = null;
+            string indate = null;
+            string outdate = null;
+            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq, applydate, indate, outdate);
             lvRequests.DataSource = ds;
             lvRequests.DataBind();
             foreach (ListViewDataItem lv in lvRequests.Items)
@@ -105,7 +108,11 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
                 HiddenField hdnFirstApproval = lv.FindControl("HdnFirstApproval") as HiddenField;
                 DropDownList ddlFirstApproval = lv.FindControl("ddlparentapproval") as DropDownList;
                 DropDownList ddlStatus = lv.FindControl("ddlStatus") as DropDownList;
-
+                CheckBox chkselect = lv.FindControl("chkApprove") as CheckBox;
+                if (hdnStatus.Value == "A")
+                {
+                    chkselect.Enabled = false;
+                }
                 ddlFirstApproval.SelectedValue = Convert.ToString(hdnFirstApproval.Value);
                 ddlStatus.SelectedValue = Convert.ToString(hdnStatus.Value);
                 ddlFirstApproval.Enabled = false;
@@ -127,27 +134,47 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     {
         try
         {
-            ObjHReq.Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? (DateTime?)null : Convert.ToDateTime(txtApplyDate.Text);
+            //string applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : txtApplyDate.Text;
+            //ObjHReq.Purpose = ddlPurpose.SelectedValue;
+            //ObjHReq.Gatepassno = txtGatePassCode.Text;
+            //string indate = string.IsNullOrEmpty(txtInDate.Text) ? null : txtInDate.Text;
+            //string outdate = string.IsNullOrEmpty(txtOutDate.Text) ? null : txtOutDate.Text;
+            //ObjHReq.Status = ddlStatus.SelectedValue;
+            string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? null : DateTime.Parse(txtApplyDate.Text).ToString("yyyy-MM-dd");
             ObjHReq.Purpose = ddlPurpose.SelectedValue;
             ObjHReq.Gatepassno = txtGatePassCode.Text;
-            ObjHReq.Indate = string.IsNullOrEmpty(txtInDate.Text) ? (DateTime?)null : Convert.ToDateTime(txtInDate.Text);
-            ObjHReq.Outdate = string.IsNullOrEmpty(txtOutDate.Text) ? (DateTime?)null : Convert.ToDateTime(txtOutDate.Text);
-            ObjHReq.Status = ddlStatus.SelectedValue;
-            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq);
-            lvRequests.DataSource = ds;
-            lvRequests.DataBind();
-            foreach (ListViewDataItem lv in lvRequests.Items)
+            string Indate = string.IsNullOrEmpty(txtInDate.Text) ? null : DateTime.Parse(txtInDate.Text).ToString("yyyy-MM-dd");
+            string Outdate = string.IsNullOrEmpty(txtOutDate.Text) ? null : DateTime.Parse(txtOutDate.Text).ToString("yyyy-MM-dd");
+            ObjHReq.Status = string.IsNullOrEmpty(ddlStatus.SelectedValue) ? null : ddlStatus.SelectedValue;
+            DataSet ds = ObjInOut.GetAllRequestsBySearch(ObjHReq, Applydate, Indate, Outdate);
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)   //Added By Himanshu tamrakar 22/11/2023
             {
-                HiddenField hdnStatus = lv.FindControl("HdnStatus") as HiddenField;
-                HiddenField hdnFirstApproval = lv.FindControl("HdnFirstApproval") as HiddenField;
-                DropDownList ddlFirstApproval = lv.FindControl("ddlparentapproval") as DropDownList;
-                DropDownList DdlStatus = lv.FindControl("ddlStatus") as DropDownList;
-                ddlFirstApproval.SelectedValue = Convert.ToString(hdnFirstApproval.Value);
-                ddlStatus.SelectedValue = Convert.ToString(hdnStatus.Value);
-                ddlFirstApproval.Enabled = false;
-                DdlStatus.Enabled = false;
+                lvRequests.DataSource = ds;
+                lvRequests.DataBind();
+                foreach (ListViewDataItem lv in lvRequests.Items)
+                {
+                    HiddenField hdnStatus = lv.FindControl("HdnStatus") as HiddenField;
+                    HiddenField hdnFirstApproval = lv.FindControl("HdnFirstApproval") as HiddenField;
+                    DropDownList ddlFirstApproval = lv.FindControl("ddlparentapproval") as DropDownList;
+                    DropDownList DdlStatus = lv.FindControl("ddlStatus") as DropDownList;
+                    CheckBox chkselect = lv.FindControl("chkApprove") as CheckBox;
+                    if (hdnStatus.Value == "A")
+                    {
+                        chkselect.Enabled = false;
+                    }
+                    ddlFirstApproval.SelectedValue = Convert.ToString(hdnFirstApproval.Value);
+                    DdlStatus.SelectedValue = Convert.ToString(hdnStatus.Value);
+                    ddlFirstApproval.Enabled = false;
+                    DdlStatus.Enabled = false;
 
+                }
             }
+            else
+            {
+                objCommon.DisplayMessage("Records not Found.", this.Page);
+                return;
+            }
+            
         }
         catch (Exception ex)
         {
@@ -223,24 +250,24 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
         return ListData;
     }
 
-    [WebMethod]
-    public string SaveImage(HostelInOutReq data)
-    {
-        HostelInOutRequestsController objHR = new HostelInOutRequestsController();
+    //[WebMethod]
+    //public string SaveImage(HostelInOutReq data)
+    //{
+    //    HostelInOutRequestsController objHR = new HostelInOutRequestsController();
 
-        string filePath = Server.MapPath("~/LeaveUploadDocuments/");
-        if (!Directory.Exists(filePath))
-        {
-            Directory.CreateDirectory(filePath);
-        }
-        string name = Path.GetFileName(data.UploadedfileName);
-        byte[] bytes = Convert.FromBase64String(data.UploadedFile);
-        File.WriteAllBytes(filePath + name, bytes);
+    //    string filePath = Server.MapPath("~/LeaveUploadDocuments/");
+    //    if (!Directory.Exists(filePath))
+    //    {
+    //        Directory.CreateDirectory(filePath);
+    //    }
+    //    string name = Path.GetFileName(data.UploadedfileName);
+    //    byte[] bytes = Convert.FromBase64String(data.UploadedFile);
+    //    File.WriteAllBytes(filePath + name, bytes);
 
-        objHR.InsertAttachedDocuments(data);
+    //    objHR.InsertAttachedDocuments(data);
 
-        return "Data Saved Successfully.";
-    }
+    //    return "Data Saved Successfully.";
+    //}
     //protected void btnupload_Click(object sender, EventArgs e)
     //{
     //    HostelInOutRequestsController objHR = new HostelInOutRequestsController();
@@ -280,5 +307,79 @@ public partial class HOSTEL_GATEPASS_HostelInOutRequests : System.Web.UI.Page
     protected void btnBack_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
+    }
+    protected void chkApprove_CheckedChanged(object sender, EventArgs e)   //Added By Himanshu tamrakar On date 21-11-2023
+    {
+        try
+        {
+            int i=0;
+            foreach (ListViewDataItem lv in lvRequests.Items)
+            {
+                HiddenField hdnStatus = lv.FindControl("HdnStatus") as HiddenField;
+                HiddenField hdnFirstApproval = lv.FindControl("HdnFirstApproval") as HiddenField;
+                DropDownList ddlFirstApproval = lv.FindControl("ddlparentapproval") as DropDownList;
+                DropDownList DdlStatus = lv.FindControl("ddlStatus") as DropDownList;
+                CheckBox chkselect = lv.FindControl("chkApprove") as CheckBox;
+                if (chkselect.Checked)
+                {
+                    ddlFirstApproval.Enabled = true;
+                    i++;
+                }
+                else
+                {
+                    ddlFirstApproval.Enabled = false;
+                }
+            }
+            if (i > 0)
+            {
+                btnParentSubmit.Visible = true;
+            }
+            else
+            {
+                btnParentSubmit.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_HostelInOutRequests.chkApprove_CheckedChanged --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void btnParentSubmit_Click(object sender, EventArgs e) //Added By Himanshu tamrakar on date 21-11-2023
+    {
+        try
+        {
+            int i=0;
+            foreach (ListViewDataItem lv in lvRequests.Items)
+            {
+                CheckBox chkselect = lv.FindControl("chkApprove") as CheckBox;
+                if (chkselect.Checked)
+                {
+                    HiddenField hdnhgpid = lv.FindControl("hdnhgpid") as HiddenField;
+                    DropDownList DdlPAStatus = lv.FindControl("ddlparentapproval") as DropDownList;
+                    
+                    i=ObjInOut.ChangeParentApprovalStatus(Convert.ToInt32(hdnhgpid.Value), Convert.ToChar(DdlPAStatus.SelectedValue));
+                    i++;
+                }
+            }
+            if (i >= 2)
+            {
+                objCommon.DisplayMessage("Records Updated Sucessfully.", this.Page);
+                this.BindListView();
+            }
+            else
+            {
+                objCommon.DisplayMessage("Please Select Atleast One Record.", this.Page);
+            }
+        }
+        catch(Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_HostelInOutRequests.btnParentSubmit_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
     }
 }

@@ -188,4 +188,23 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             }
         }
     }
+
+    protected void lvGatePass_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListViewItemType.DataItem)
+        {
+            // Find the controls within the ListViewItem
+            CheckBox chkApprove = (CheckBox)e.Item.FindControl("chkApprove");
+            Label lblStatus = (Label)e.Item.FindControl("lblStatus");
+
+            if (lblStatus != null && lblStatus.Text == "APPROVED")
+            {
+                chkApprove.Enabled = false;
+            }
+            else
+            {
+                chkApprove.Enabled = true;
+            }
+        }
+    }
 }

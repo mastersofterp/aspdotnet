@@ -285,7 +285,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtoutDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                objCommon.DisplayMessage("Please select out date current date or greater than today's date.", this.Page);
+                objCommon.DisplayMessage("Please select out date current date or greater than today date.", this.Page);
                 txtoutDate.Text = string.Empty;
                 txtoutDate.Focus();               
                 return;
@@ -308,16 +308,19 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
     protected void txtinDate_TextChanged(object sender, EventArgs e)
     {
-        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
+        if (txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
             if (Convert.ToDateTime(txtinDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                objCommon.DisplayMessage("Please select In date current date or greater than today's date.", this.Page);
-                txtinDate.Text = string.Empty;
-                txtinDate.Focus();
+                objCommon.DisplayMessage("Please select In date current date or greater than today date.", this.Page);
+                txtoutDate.Text = string.Empty;
+                txtoutDate.Focus();
                 return;
             }
+        }
 
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
+        {
             DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
             DateTime InDate = Convert.ToDateTime(txtinDate.Text);
 
@@ -611,6 +614,43 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                         ddlinHourFrom.Focus();
                         return;
                     }
+                }
+            }
+        }
+    }
+    protected void ddloutHourFrom_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty)
+        {
+            string currentDate = System.DateTime.Now.ToString("dd/MM/yyyy");
+
+            if (Convert.ToDateTime(txtoutDate.Text) == Convert.ToDateTime(currentDate))
+            {
+                if (ddlAM_PM1.SelectedValue == "0")
+                {
+                    objCommon.DisplayMessage("For today date entry before Hour From select, please select AM/PM of Out Date.", this.Page);
+                    ddlAM_PM1.Focus();
+                    return;
+                }
+
+                DateTime current = Convert.ToDateTime(txtoutDate.Text);
+
+                current = current.AddHours(Convert.ToDouble(ddloutHourFrom.SelectedValue));
+
+                if (ddlAM_PM1.SelectedValue == "PM")
+                {
+                    current = current.AddHours(12);
+                }
+
+                if (current > System.DateTime.Now)
+                {
+                }
+                else
+                {
+                    objCommon.DisplayMessage("Hour From should be greater than today Hour.", this.Page);
+                    ddloutHourFrom.Focus();
+                    ddloutHourFrom.SelectedIndex = 0;
+                    return;
                 }
             }
         }

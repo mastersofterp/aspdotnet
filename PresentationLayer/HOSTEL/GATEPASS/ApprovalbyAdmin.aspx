@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="col-12">
-                        <asp:ListView  ID="lvGatePass" runat="server">
+                        <asp:ListView  ID="lvGatePass" runat="server" OnItemDataBound="lvGatePass_ItemDataBound">
                             <LayoutTemplate>
                                 <div class="sub-heading">
                                     <h5>List of Hostel Purposes</h5>
@@ -94,7 +94,7 @@
                                     <thead class="bg-light-blue">
                                         <tr>
                                             <th>
-                                                <asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" /> Check All
+                                                <%--<asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" />--%> Check 
                                             </th>
                                             <th>Student Name
                                             </th>

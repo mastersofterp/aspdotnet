@@ -139,7 +139,7 @@
                                     <label>Hour From</label>
                                 </div>
                                 <%--<asp:TextBox ID="txtoutHourFrom" oninput="formatNumber(this)" CssClass="form-control" runat="server" TabIndex="5" TextMode="Number" Min="1" Max="12"/>--%>
-                                <asp:DropDownList ID="ddloutHourFrom" AppendDataBoundItems="true" runat="server" TabIndex="5" CssClass="form-control" data-select2-enable="true">
+                                <asp:DropDownList ID="ddloutHourFrom" AppendDataBoundItems="true" runat="server" TabIndex="5" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddloutHourFrom_SelectedIndexChanged">
                                     <asp:ListItem Value="0" Selected="True">00</asp:ListItem>
                                     <asp:ListItem Value="1" >01</asp:ListItem>
                                     <asp:ListItem Value="2">02</asp:ListItem>
