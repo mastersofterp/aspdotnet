@@ -9,14 +9,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Web.UI.HtmlControls;
 using System.Web.Services;
-
+using IITMS.SQLServer.SQLDAL;
+using System.Data.SqlClient;
 public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     {
     Common objCommon = new Common();
@@ -66,6 +66,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     DisplayInformation(IDNO1);
                     DisplayStudentInfo(IDNO1);
                     PopulateDropDown();
+                    //divamount.Visible = false;
                     }
                 else
                     {
@@ -147,126 +148,151 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         //        //}
         //    }
         //}
+
+       // lbltotals.Visible = false;
+       // divamount.Visible = false;
         }
 
     protected void ddlSemester_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-        btnPayment.Visible = false;
-        divMSG.Visible = false;
 
-        int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
-
-        if (HostelTypeSelection == 1)
-            {
-            divHostelTransport.Visible = true;
-            }
-        else
-            {
-            divHostelTransport.Visible = false;
-            }
-        //div_Studentdetail.Visible = false;
-        DataSet ds = null;
-        int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
-        ViewState["StudId"] = IDNO;
-        int exam_type = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(EXAM_PTYPE,0)EXAM_PTYPE", "IDNO=" + IDNO));
-        ViewState["Exam_Type"] = exam_type;
-        int ptype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(PTYPE,0)PTYPE", "IDNO=" + IDNO));
-        int Hosteltype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(HOSTEL_STATUS,0)HOSTEL_STATUS", "IDNO=" + IDNO));
-        ViewState["pType"] = ptype;
 
         if (ddlSemester.SelectedIndex > 0)
             {
-            int count = Convert.ToInt32(objCommon.LookUp("ACD_FEES_INSTALLMENT", "count(*)", "IDNO =" + IDNO + " AND SEMESTERNO =" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND RECIPTCODE = '" + Convert.ToString(ddlReceiptType.SelectedValue) + "'" + "AND ISNULL(INSTAL_CANCEL,0)=0"));
+            btnPayment.Visible = false;
+            divMSG.Visible = false;          
+            int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
 
-            if (count > 0)
+            if (HostelTypeSelection == 1)
                 {
-
-                divHostelTransport.Visible = false;
-
-
-                divInstallmentPayment.Visible = true;
-                divDirectPayment.Visible = false;
-                ds = objFee.GetStudentInstallmentDetails(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
-                    lblRegno.Text = ds.Tables[0].Rows[0]["REGNO"].ToString();
-                    lblName.Text = ds.Tables[0].Rows[0]["STUDNAME"].ToString();
-                    lblRollNo.Text = ds.Tables[0].Rows[0]["ROLLNO"].ToString();
-                    lblCollegeName.Text = ds.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
-                    lblDegreeName.Text = ds.Tables[0].Rows[0]["DEGREENAME"].ToString();
-                    lblBranchName.Text = ds.Tables[0].Rows[0]["BRANCH_NAME"].ToString();
-                    lblMobile.Text = ds.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
-                    lblTotalAmount.Text = ds.Tables[0].Rows[0]["TOTAL_AMOUNT"].ToString();
-                    lblEmailID.Text = ds.Tables[0].Rows[0]["EMAILID"].ToString();
-                    lblTotalInstallment.Text = ds.Tables[0].Rows[0]["TOTAL_INSTALMENT"].ToString();
-
-                    lvInstallment.DataSource = ds;
-                    lvInstallment.DataBind();
-                    }
+                divHostelTransport.Visible = true;
                 }
             else
                 {
+                divHostelTransport.Visible = false;
+                }
+            //div_Studentdetail.Visible = false;
+            DataSet ds = null;
+            int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
+            ViewState["StudId"] = IDNO;
+            int exam_type = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(EXAM_PTYPE,0)EXAM_PTYPE", "IDNO=" + IDNO));
+            ViewState["Exam_Type"] = exam_type;
+            int ptype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(PTYPE,0)PTYPE", "IDNO=" + IDNO));
+            int Hosteltype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ISNULL(HOSTEL_STATUS,0)HOSTEL_STATUS", "IDNO=" + IDNO));
+            ViewState["pType"] = ptype;
 
+            if (ddlSemester.SelectedIndex > 0)
+                {
+                int count = Convert.ToInt32(objCommon.LookUp("ACD_FEES_INSTALLMENT", "count(*)", "IDNO =" + IDNO + " AND SEMESTERNO =" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND RECIPTCODE = '" + Convert.ToString(ddlReceiptType.SelectedValue) + "'" + "AND ISNULL(INSTAL_CANCEL,0)=0"));
 
-                if (Hosteltype == 0)
+                if (count > 0)
                     {
-                    if (HostelTypeSelection == 1)
+
+                    divHostelTransport.Visible = false;
+
+
+                    divInstallmentPayment.Visible = true;
+                    divDirectPayment.Visible = false;
+                    ds = objFee.GetStudentInstallmentDetails(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
+                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
-                        divHostelTransport.Visible = true;
+                        lblRegno.Text = ds.Tables[0].Rows[0]["REGNO"].ToString();
+                        lblName.Text = ds.Tables[0].Rows[0]["STUDNAME"].ToString();
+                        lblRollNo.Text = ds.Tables[0].Rows[0]["ROLLNO"].ToString();
+                        lblCollegeName.Text = ds.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
+                        lblDegreeName.Text = ds.Tables[0].Rows[0]["DEGREENAME"].ToString();
+                        lblBranchName.Text = ds.Tables[0].Rows[0]["BRANCH_NAME"].ToString();
+                        lblMobile.Text = ds.Tables[0].Rows[0]["STUDENTMOBILE"].ToString();
+                        lblTotalAmount.Text = ds.Tables[0].Rows[0]["TOTAL_AMOUNT"].ToString();
+                        lblEmailID.Text = ds.Tables[0].Rows[0]["EMAILID"].ToString();
+                        lblTotalInstallment.Text = ds.Tables[0].Rows[0]["TOTAL_INSTALMENT"].ToString();
+
+                        lvInstallment.DataSource = ds;
+                        lvInstallment.DataBind();
+                        }
+                    }
+                else
+                    {
+
+
+                    if (Hosteltype == 0)
+                        {
+                        if (HostelTypeSelection == 1)
+                            {
+                            divHostelTransport.Visible = true;
+                            }
+                        else
+                            {
+                            divHostelTransport.Visible = false;
+                            }
+
                         }
                     else
                         {
                         divHostelTransport.Visible = false;
+                        divhosteltype.Visible = true;
+                        this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
+                        ddlhosteltype.SelectedValue = Hosteltype.ToString();
+                        ddlhosteltype.Enabled = false;
                         }
+                    divInstallmentPayment.Visible = false;
+                    divDirectPayment.Visible = true;
 
-                    }
-                else
-                    {
-                    divHostelTransport.Visible = false;
-                    divhosteltype.Visible = true;
-                    this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
-                    ddlhosteltype.SelectedValue = Hosteltype.ToString();
-                    ddlhosteltype.Enabled = false;
-                    }
-                divInstallmentPayment.Visible = false;
-                divDirectPayment.Visible = true;
+                    int checkprevsemoutstanding = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CHECK_PREV_SEM_OUTSNADING,0)", "ConfigNo>0"));
 
-                int checkprevsemoutstanding = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CHECK_PREV_SEM_OUTSNADING,0)", "ConfigNo>0"));
-
-                if (checkprevsemoutstanding == 1)
-                    {
-                    // DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 AND PAY_MODE_CODE<>'SA' AND ISNULL(SCH_ADJ_AMT,0)=0 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
-                    DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
-                    if (dsDueFee.Tables[0].Rows.Count > 0)
+                    if (checkprevsemoutstanding == 1)
                         {
-                        for (int i = 0; i < dsDueFee.Tables[0].Rows.Count; i++)
+                        // DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 AND PAY_MODE_CODE<>'SA' AND ISNULL(SCH_ADJ_AMT,0)=0 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
+                        DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
+                        if (dsDueFee.Tables[0].Rows.Count > 0)
                             {
-                            if (Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DRTOTAL_AMT"].ToString()) < Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DTOTAL_AMT"].ToString()))
+                            for (int i = 0; i < dsDueFee.Tables[0].Rows.Count; i++)
                                 {
-                                objCommon.DisplayMessage(this.Page, " Please Pay the Fees of " + dsDueFee.Tables[0].Rows[i]["FEE_TITLE"].ToString() + " Semester " + dsDueFee.Tables[0].Rows[i]["SEMESTERNAME"].ToString(), this.Page);
-                                return;
-                                }
-                            else
-                                {
+                                if (Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DRTOTAL_AMT"].ToString()) < Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DTOTAL_AMT"].ToString()))
+                                    {
+                                    objCommon.DisplayMessage(this.Page, " Please Pay the Fees of " + dsDueFee.Tables[0].Rows[i]["FEE_TITLE"].ToString() + " Semester " + dsDueFee.Tables[0].Rows[i]["SEMESTERNAME"].ToString(), this.Page);
+                                    return;
+                                    }
+                                else
+                                    {
 
+                                    }
                                 }
                             }
-                        }
-                    else
-                        {
+                        else
+                            {
 
+                            }
                         }
+                    SemesterWiseFees();
                     }
-                SemesterWiseFees();
+                }
+            else
+                {
+                divInstallmentPayment.Visible = false;
+                divDirectPayment.Visible = true;
+                btnCancel.Visible = true;
+                divHostelTransport.Visible = false;
+                }
+
+            ds = GetFeeItems_Data(IDNO,  Convert.ToInt32(ddlSemester.SelectedValue),Convert.ToString(ddlReceiptType.SelectedValue));
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                DataTable dt = ds.Tables[0];
+                lvfeehead.DataSource = ds;
+                lvfeehead.DataBind();
+                lvfeehead.Visible = true;
+                }
+            else
+                {
+                lvFeeItems.DataSource = null;
+                lvFeeItems.DataBind();
+                lvfeehead.Visible = false;
                 }
             }
-        else
-            {
-            divInstallmentPayment.Visible = false;
-            divDirectPayment.Visible = true;
-            btnCancel.Visible = true;
-            divHostelTransport.Visible = false;
-            }
+
+
+        
         }
 
     public void DisplayStudentInfo(int idno)
@@ -1641,6 +1667,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         lvStudent.Visible = false;
         lvStudent.DataSource = null;
         lblNoRecords.Visible = false;
+        lvfeehead.Visible = false;
 
 
         }
@@ -1910,4 +1937,36 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         }
 
     #endregion
+
+
+
+
+
+    public DataSet GetFeeItems_Data(int studentId, int semesterNo,string receiptType)
+        {
+        DataSet ds = null;
+        int status = 0;
+        try
+            {
+            string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objDataAccess = new SQLHelper(_connectionString);
+            SqlParameter[] sqlParams = new SqlParameter[] 
+                {
+                   
+                    new SqlParameter("@P_IDNO", studentId),
+                    new SqlParameter("@P_SEMESTERNO", semesterNo),
+                    new SqlParameter("@P_RECEIPT_CODE", receiptType),
+                     // ADDED BY SHAILENDRA K. ON DATED 29.04.2023 AS PER DR. MANOJ SIR SUGGESTION CALCULATING LATE FINE ON TRANS DATE.
+                    new SqlParameter("@P_OUT", status)
+                };
+            sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
+            ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_ONLINEPAYMENT", sqlParams);
+            //ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_SRK_29042023", sqlParams); // ADDED BY SHAILENDRA K. ON DATED 29.04.2023 AS PER DR. MANOJ SIR SUGGESTION CALCULATING LATE FINE ON TRANS DATE.
+            }
+        catch (Exception ex)
+            {
+            throw new IITMSException("Academic_FeeCollection.GetFeeItems_Data() --> " + ex.Message + " " + ex.StackTrace);
+            }
+        return ds;
+        }
     }

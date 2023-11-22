@@ -222,137 +222,255 @@
                             <div id="divDirectPayment" runat="server">
                                 <div class="col-12" id="div_Studentdetail" runat="server" visible="false">
                                     <div class="row mb-3">
-                                        <div class="col-lg-4 col-md-6 col-12">
-                                            <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item"><b>Student Name :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblStudName" runat="server" Font-Bold="True"></asp:Label>
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item"><b>
-                                                    <asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label>
-                                                    :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblRegno" runat="server" Font-Bold="True"></asp:Label>
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item d-none"><b>Roll No :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblStudRollNo" runat="server" Font-Bold="True"></asp:Label></a>
-                                                </li>
-                                                <li class="list-group-item"><b>
-                                                    <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label>
-                                                    :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblStudClg" runat="server" Font-Bold="True"></asp:Label></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6 col-12">
-                                            <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item"><b>
-                                                    <asp:Label ID="lblDYtxtDegree" runat="server" Font-Bold="true"></asp:Label>
-                                                    :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblStudDegree" runat="server" Font-Bold="True"></asp:Label>
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item"><b>
-                                                    <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
-                                                    :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblStudBranch" runat="server" Font-Bold="True"></asp:Label></a>
-                                                </li>
-                                                <li class="list-group-item"><b>Mobile No. :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblMobileNo" runat="server" Font-Bold="True"></asp:Label></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-6 col-12">
-                                            <ul class="list-group list-group-unbordered">
-                                                <li class="list-group-item"><b>Total Amount :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblAmount" runat="server" Font-Bold="True" Style="color: green"></asp:Label>
-                                                        <asp:HiddenField ID="hdfCity" runat="server" />
-                                                        <asp:HiddenField ID="hdfState" runat="server" />
-                                                        <asp:HiddenField ID="hdfZipCode" runat="server" />
-                                                        <asp:HiddenField ID="hdfIdno" runat="server" />
-                                                        <asp:HiddenField ID="hdfAmount" runat="server" />
-                                                        <asp:HiddenField ID="hdfName" runat="server" />
-                                                        <asp:HiddenField ID="hdfEmailId" runat="server" />
-                                                        <asp:HiddenField ID="hdfMobileNo" runat="server" />
-                                                        <asp:HiddenField ID="hdfSessioNo" runat="server" />
-                                                    </a>
-                                                </li>
-                                                <li class="list-group-item"><b>E-Mail ID :</b>
-                                                    <a class="sub-label">
-                                                        <asp:Label ID="lblMailId" runat="server" Font-Bold="True"></asp:Label></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-6 col-12" runat="server" id="divReceiptType">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>Receipt Type</label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlReceiptType" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlReceiptType_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvddlReceiptType" runat="server" ControlToValidate="ddlReceiptType"
-                                                Display="None" ErrorMessage="Please Select Receipt Type" InitialValue="0" SetFocusOnError="true"
-                                                ValidationGroup="Payment" />
-                                        </div>
+                                        <div class="col-lg-8 col-md-6 col-12">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-12">
+                                                    <ul class="list-group list-group-unbordered">
+                                                        <li class="list-group-item"><b>Student Name :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblStudName" runat="server" Font-Bold="True"></asp:Label>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>
+                                                            <asp:Label ID="lblDYRRNo" runat="server" Font-Bold="true"></asp:Label>
+                                                            :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblRegno" runat="server" Font-Bold="True"></asp:Label>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-group-item d-none"><b>Roll No :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblStudRollNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>
+                                                            <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label>
+                                                            :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblStudClg" runat="server" Font-Bold="True"></asp:Label></a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>E-Mail ID :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblMailId" runat="server" Font-Bold="True"></asp:Label></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-12">
+                                                    <ul class="list-group list-group-unbordered">
+                                                        <li class="list-group-item"><b>
+                                                            <asp:Label ID="lblDYtxtDegree" runat="server" Font-Bold="true"></asp:Label>
+                                                            :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblStudDegree" runat="server" Font-Bold="True"></asp:Label>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>
+                                                            <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
+                                                            :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblStudBranch" runat="server" Font-Bold="True"></asp:Label></a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>Mobile No. :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblMobileNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                        </li>
+                                                        <li class="list-group-item"><b>Total Amount :</b>
+                                                            <a class="sub-label">
+                                                                <asp:Label ID="lblAmount" runat="server" Font-Bold="True" Style="color: green"></asp:Label>
+                                                                <asp:HiddenField ID="hdfCity" runat="server" />
+                                                                <asp:HiddenField ID="hdfState" runat="server" />
+                                                                <asp:HiddenField ID="hdfZipCode" runat="server" />
+                                                                <asp:HiddenField ID="hdfIdno" runat="server" />
+                                                                <asp:HiddenField ID="hdfAmount" runat="server" />
+                                                                <asp:HiddenField ID="hdfName" runat="server" />
+                                                                <asp:HiddenField ID="hdfEmailId" runat="server" />
+                                                                <asp:HiddenField ID="hdfMobileNo" runat="server" />
+                                                                <asp:HiddenField ID="hdfSessioNo" runat="server" />
+                                                            </a>
+                                                        </li>
 
-                                        <div class="form-group col-lg-4 col-md-6 col-12" runat="server" id="divStudSemester">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <%--<label>Semester</label>--%>
-                                                <asp:Label ID="lblDYddlSemester_Tab" runat="server" Font-Bold="true"></asp:Label>
-                                            </div>
-                                            <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" OnSelectedIndexChanged="ddlSemester_OnSelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvddlSemester" runat="server" ErrorMessage="Please Select Semester" SetFocusOnError="true"
-                                                Display="None" ControlToValidate="ddlSemester" InitialValue="0" ValidationGroup="Payment"></asp:RequiredFieldValidator>
-                                        </div>
+                                                    </ul>
+                                                </div>
 
-                                        <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divHostelTransport" visible="false" style="margin-top: 30px; font-size: 14px;">
-                                            <asp:LinkButton ID="btnHostel" Text="Click Here to Select Hostel" runat="server" ForeColor="Green" OnClick="btnHostel_Click"></asp:LinkButton>
-                                            <div style="font-size: 12px; color: red; margin-top: -20px; margin-left: 180px;">
-                                                <asp:Label ID="Label1" Text="(Optional)" runat="server"></asp:Label>
                                             </div>
-                                            <br />
-                                            <div style="font-size: 12px; color: red; margin-top: -15px;">
-                                                <asp:Label ID="lblhostel" Text="(Selecting Hostel Will Add up to Your Payable Fees)" runat="server"></asp:Label>
-                                            </div>
-                                        </div>
-                                        <%--<div  class="form-group col-lg-1 col-md-6 col-12">
+                                            <div class="row mb-3 mt-4">
+                                                <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divReceiptType">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Receipt Type</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlReceiptType" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlReceiptType_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="rfvddlReceiptType" runat="server" ControlToValidate="ddlReceiptType"
+                                                        Display="None" ErrorMessage="Please Select Receipt Type" InitialValue="0" SetFocusOnError="true"
+                                                        ValidationGroup="Payment" />
+                                                </div>
+
+                                                <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divStudSemester">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <%--<label>Semester</label>--%>
+                                                        <asp:Label ID="lblDYddlSemester_Tab" runat="server" Font-Bold="true"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" OnSelectedIndexChanged="ddlSemester_OnSelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="rfvddlSemester" runat="server" ErrorMessage="Please Select Semester" SetFocusOnError="true"
+                                                        Display="None" ControlToValidate="ddlSemester" InitialValue="0" ValidationGroup="Payment"></asp:RequiredFieldValidator>
+                                                </div>
+
+                                                <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divHostelTransport" visible="false" style="margin-top: 30px; font-size: 14px;">
+                                                    <asp:LinkButton ID="btnHostel" Text="Click Here to Select Hostel" runat="server" ForeColor="Green" OnClick="btnHostel_Click"></asp:LinkButton>
+                                                    <div style="font-size: 12px; color: red; margin-top: -20px; margin-left: 180px;">
+                                                        <asp:Label ID="Label1" Text="(Optional)" runat="server"></asp:Label>
+                                                    </div>
+                                                    <br />
+                                                    <div style="font-size: 12px; color: red; margin-top: -15px;">
+                                                        <asp:Label ID="lblhostel" Text="(Selecting Hostel Will Add up to Your Payable Fees)" runat="server"></asp:Label>
+                                                    </div>
+                                                </div>
+                                                <%--<div  class="form-group col-lg-1 col-md-6 col-12">
                                          <asp:Label ID="Label2" Text="(Optional)" runat="server" ></asp:Label>
                                          </div>--%>
-                                        <div class="form-group col-lg-4 col-md-6 col-12" runat="server" id="divhottrsansport" visible="false" style="display: none">
-                                            <asp:RadioButtonList ID="rblhottransport" runat="server" AppendDataBoundItems="true" class="radiobuttonlist" AutoPostBack="true"
-                                                RepeatDirection="Horizontal" Width="100%" OnSelectedIndexChanged="rblhottransport_SelectedIndexChanged">
-                                                <asp:ListItem Value="1"><span style="font-size: 13px;font-weight:bold"> Choose Hostel </span></asp:ListItem>
-                                                <%--<asp:ListItem Value="2"><span style="font-size: 13px;font-weight:bold"> Choose Transport</span></asp:ListItem>--%>
-                                            </asp:RadioButtonList>
-                                            <%-- <asp:RadioButton ID="rdbhostel" runat="server" Text="Hostel" GroupName="hottransp" OnCheckedChanged="rdbhostel_CheckedChanged"/>
+                                                <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divhottrsansport" visible="false" style="display: none">
+                                                    <asp:RadioButtonList ID="rblhottransport" runat="server" AppendDataBoundItems="true" class="radiobuttonlist" AutoPostBack="true"
+                                                        RepeatDirection="Horizontal" Width="100%" OnSelectedIndexChanged="rblhottransport_SelectedIndexChanged">
+                                                        <asp:ListItem Value="1"><span style="font-size: 13px;font-weight:bold"> Choose Hostel </span></asp:ListItem>
+                                                        <%--<asp:ListItem Value="2"><span style="font-size: 13px;font-weight:bold"> Choose Transport</span></asp:ListItem>--%>
+                                                    </asp:RadioButtonList>
+                                                    <%-- <asp:RadioButton ID="rdbhostel" runat="server" Text="Hostel" GroupName="hottransp" OnCheckedChanged="rdbhostel_CheckedChanged"/>
                                             <asp:RadioButton ID="rdbtransport" runat="server" Text="Transport" GroupName="hottransp" />--%>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-6 col-12" runat="server" id="divhosteltype" visible="false">
-                                            <div class="label-dynamic">
-                                                <sup>* </sup>
-                                                <label>Hostel Type</label>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-12" runat="server" id="divhosteltype" visible="false">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Hostel Type</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlhosteltype" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlhosteltype_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlhosteltype"
+                                                        Display="None" ErrorMessage="Please Select Hostel Type" InitialValue="0" SetFocusOnError="true"
+                                                        ValidationGroup="Payment" />
+
+                                                </div>
+
+
                                             </div>
-                                            <asp:DropDownList ID="ddlhosteltype" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlhosteltype_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                            </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlhosteltype"
-                                                Display="None" ErrorMessage="Please Select Hostel Type" InitialValue="0" SetFocusOnError="true"
-                                                ValidationGroup="Payment" />
-
                                         </div>
 
+                                        <div class="col-lg-4 col-md-6 col-12">
+                                            <asp:ListView ID="lvfeehead" runat="server">
+                                                <LayoutTemplate>
+                                                    <div id="divlvFeeItems">
+                                                        <div class="sub-heading">
+                                                            <h5>Applicable Fees</h5>
+                                                        </div>
+                                                        <%--Available Fee Items--%>
+                                                        <div class="table-responsive" style="height: 200px; overflow: auto; border-top: 1px solid #e5e5e5;">
+                                                            <table id="tblFeeItems" runat="server" class="table table-striped table-bordered nowrap " style="width: 100%">
+                                                                <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; background: #fff !important;">
+                                                                    <tr>
+                                                                        <th>Sr. No. </th>
+                                                                        <th>Fee Heads </th>
+                                                                        <th>Applicable Amount </th>
+                                                                        <th>Paid Amount </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:Label ID="lblFeeHeadSrNo" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
+                                                            <%# Container.DataItemIndex + 1%></td>
+                                                        <td><%# Eval("FEE_LONGNAME")%>
+                                                            <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
+                                                            <asp:HiddenField ID="hfFee_hd" runat="server" Value='<%# Eval("FEE_HEAD")%>' />
+                                                        </td>
+                                                        <td>
+                                                            <asp:Label ID="lblTotaldemandamt" runat="server" Text='<%# Eval("total_demand") %>' />
+                                                            <%-- <%# Eval("total_demand")%>--%></td>
+                                                        <td>
+                                                            <asp:Label ID="lblTotaldcramt" runat="server" Text='<%# Eval("total_dcr") %>' />
+                                                            <%-- <%# Eval("total_dcr")%>--%></td>
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </div>
+
+                                    </div>
+
+
+                                    <%--     <div class="col-md-12">
+                                        <div class="row">
+                                            <asp:Panel ID="pnlfeedetails" runat="server">
+                                                <div class="form-group col-lg-12 col-md-12 col-12 pl-lg-0" id="feedetails" runat="server">
+                                                    <asp:ListView ID="lvfeehead" runat="server">
+                                                        <LayoutTemplate>
+                                                            <div class="sub-heading">
+                                                                <h5>Fees Details</h5>
+                                                            </div>
+                                                            <table class="table table-striped table-bordered nowrap mb-0" style="width: 100%" id="tblHead">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr class="header">
+                                                                        <th>Sr No.</th>
+                                                                        <th>Fees Head
+                                                                        </th>
+                                                                        <th style="text-align: right">Amount
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+
+                                                            </table>
+                                                        </LayoutTemplate>
+                                                        <ItemTemplate>
+                                                            <tr>
+                                                                <td>
+                                                                    <asp:Label ID="lblsrnumb" runat="server" Text='<%# Container.DataItemIndex+1%>'></asp:Label>
+                                                                </td>
+                                                                <td>
+                                                                    <%# Eval("FEE_LONGNAME") %> 
+                                                                       
+                                                    
+                                                                </td>
+                                                                <td style="text-align: right">
+                                                                    <%# Eval("SEMESTER") %>
+                                                                            
+                                                                </td>
+
+                                                            </tr>
+                                                        </ItemTemplate>
+                                                    </asp:ListView>
+                                                    <div id="divamount" runat="server">
+                                                        <table id="tblamt" class="table table-striped table-bordered nowrap" style="width: 70%">
+                                                            <tr style="background-color: #eee !important;">
+                                                                <th style="text-align: center">
+                                                                    <asp:Label ID="lbltotals" runat="server" Style="font-weight: bold;" Text="Total :"></asp:Label>
+                                                                </th>
+                                                                <td style="text-align: right">
+                                                                    <asp:Label ID="lbltotalfeehead" runat="server" Enabled="false" Style="font-weight: bold; text-align: right;"></asp:Label>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </asp:Panel>
+
+                                        </div>
+                                    </div>--%>
+
+                                    <div class="col-12">
+                                        <%--<div class="sub-heading"><h5>Fee Items</h5></div>--%>
                                     </div>
 
                                     <div class="col-12 mb-4" id="divFeeItems" runat="server" visible="false">
