@@ -239,6 +239,8 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
         txtEnrollFrom.Enabled = false;
         txtEnrollTo.Text = string.Empty;
         txtEnrollTo.Enabled = false;
+        lvStudents.Visible = false;
+        btnSubmit.Enabled = false;
     }
     #endregion Cancel
 
@@ -360,7 +362,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
     #region DropDownList
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+        //lvStudents.Visible = false;
         if (ddlDegree.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT(A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO > 0 AND B.DEGREENO = " + ddlDegree.SelectedValue + " AND ISNULL(A.ACTIVESTATUS,0)=1", "A.LONGNAME");
@@ -380,7 +382,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+       // lvStudents.Visible = false;
         try
         {
             if (ddlBranch.SelectedIndex > 0)
@@ -407,7 +409,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlInsName_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //lvStudents.Visible = false;
+        lvStudents.Visible = false;
         try
         {
             if (ddlInsName.SelectedIndex > 0)
@@ -453,7 +455,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlClassSection_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //lvStudents.Visible = false;
+        lvStudents.Visible = false;
         //new added- gopal
         // objCommon.FillDropDownList(ddlBatch, "ACD_BATCH A WITH (NOLOCK) INNER JOIN ACD_SECTION B WITH (NOLOCK) ON (A.SECTIONNO = B.SECTIONNO)", "DISTINCT (A.BATCHNO)", "A.BATCHNAME", "B.SECTIONNO > 0 AND A.SECTIONNO =" + ddlClassSection.SelectedValue + " AND ISNULL(A.ACTIVESTATUS,0)=1 ", "A.BATCHNO");
         if (ddlClassSection.SelectedIndex > 0)
@@ -487,7 +489,7 @@ public partial class ACADEMIC_BulkSectionAllotment : System.Web.UI.Page
 
     protected void ddlAcdYear_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvStudents.Visible = false;
+        //lvStudents.Visible = false;
         lvStudents.DataSource = null;
         lvStudents.DataBind();
     }

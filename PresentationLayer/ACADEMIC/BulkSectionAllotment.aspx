@@ -146,7 +146,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                        <%--<sup>* </sup>--%>
+                                                        <sup>* </sup>
                                                         <%--<label>Programme/Branch</label>--%>
                                                         <asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
@@ -173,33 +173,7 @@
                                                             </asp:RequiredFieldValidator>--%>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <%--<label>Section</label>--%>
-                                                        <asp:Label ID="lblDYddlSection" runat="server" Font-Bold="true"></asp:Label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlClassSection" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="6" OnSelectedIndexChanged="ddlClassSection_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvClassSection" runat="server" ControlToValidate="ddlClassSection"
-                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Section" ValidationGroup="sectionVal">
-                                                    </asp:RequiredFieldValidator>
-                                                </div>
-
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <%--<label>Section</label>--%>
-                                                        <asp:Label ID="lblDYddlBatch" runat="server" Font-Bold="true">Batch</asp:Label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" TabIndex="6" CssClass="form-control" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <%-- <asp:RequiredFieldValidator ID="rfvddlBatch" runat="server" ControlToValidate="ddlBatch"
-                                                                Display="None" InitialValue="0" ErrorMessage="Please Select Batch" ValidationGroup="sectionVal">
-                                                            </asp:RequiredFieldValidator>--%>
-                                                </div>
+                                              
 
                                                 <div class="form-group col-lg-6 col-md-12 col-12">
                                                     <div class="label-dynamic">
@@ -280,6 +254,38 @@
                                                     <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                  <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <%--<label>Section</label>--%>
+                                                        <asp:Label ID="lblDYddlSection" runat="server" Font-Bold="true"></asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlClassSection" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="6" OnSelectedIndexChanged="ddlClassSection_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="rfvClassSection" runat="server" ControlToValidate="ddlClassSection"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Section" ValidationGroup="sectionVal">
+                                                    </asp:RequiredFieldValidator>
+                                                </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                       <%-- <sup>* </sup>--%>
+                                                        <%--<label>Batch</label>--%>
+                                                        <asp:Label ID="lblDYddlBatch" runat="server" Font-Bold="true">Batch</asp:Label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" TabIndex="6" CssClass="form-control" data-select2-enable="true">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <%-- <asp:RequiredFieldValidator ID="rfvddlBatch" runat="server" ControlToValidate="ddlBatch"
+                                                                Display="None" InitialValue="0" ErrorMessage="Please Select Batch" ValidationGroup="sectionVal">
+                                                            </asp:RequiredFieldValidator>--%>
                                                 </div>
                                             </div>
                                         </div>
