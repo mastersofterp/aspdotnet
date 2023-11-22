@@ -1410,7 +1410,16 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                         break;
                 }
 
-                conString = String.Format(conString, path);
+                if (extension == ".xls")
+                {
+
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;";
+                }
+                else
+                {
+                    conString = String.Format(conString, path);
+                }
+                //conString = String.Format(conString, path);
                 //conString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0 Xml;HDR=YES;IMEX=1;", path);
 
 
