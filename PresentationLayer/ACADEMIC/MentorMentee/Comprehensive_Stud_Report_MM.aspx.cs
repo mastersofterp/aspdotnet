@@ -200,6 +200,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
         }
 
         Session["stuinfoidno"] = idno;
+        int uano = Convert.ToInt32(Session["userno"]);
         try
         {
             if (idno > 0)
@@ -407,7 +408,9 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
 
                         //Students Fees Details
 
-                        dsFees = objSC.RetrieveStudentFeesDetails(idno);
+                        //dsFees = objSC.RetrieveStudentFeesDetails(idno);
+                        dsFees = objSC.RetrieveStudentFeesDetails(idno, uano);
+
                         if (dsFees.Tables[0].Rows.Count > 0)
                         {
                             lvFees.DataSource = dsFees;

@@ -184,6 +184,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         try
         {
+            int uano = Convert.ToInt32(Session["userno"]);
+
             if (idno > 0)
             {
                 DataTableReader dtr = objSC.GetStudentCompleteDetails(idno);
@@ -382,7 +384,9 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
                         //Students Fees Details
 
-                        dsFees = objSC.RetrieveStudentFeesDetails(idno);
+                        //dsFees = objSC.RetrieveStudentFeesDetails(idno);
+                        dsFees = objSC.RetrieveStudentFeesDetails(idno, uano);
+
                         if (dsFees.Tables[0].Rows.Count > 0)
                         {
                             lvFees.DataSource = dsFees;
