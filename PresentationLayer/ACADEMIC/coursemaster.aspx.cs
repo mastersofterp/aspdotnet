@@ -1736,6 +1736,10 @@ public partial class Administration_courseMaster : System.Web.UI.Page
                             return;
                         }
                     }
+                    else
+                    {
+                        objC.Electivegrpno = 0;
+                    }
 
 
                     if (!(dtNew.Rows[i]["MINMARK_I"]).ToString().Equals(string.Empty)) // Min Marks Internal
