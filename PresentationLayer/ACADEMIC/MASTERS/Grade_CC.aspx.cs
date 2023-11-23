@@ -578,56 +578,81 @@ public partial class ACADEMIC_MASTERS_Grade_CC : System.Web.UI.Page
                 int SubType = Convert.ToInt32(ddlSubType.SelectedValue);
                 int CollegeId = College_id;//added gaurav
 
-
-
-                if ((decimal.Parse(MaxMark.Text) >= decimal.Parse(MinMark.Text)) && decimal.Parse(MaxMark.Text)>0)
+                if (Convert.ToInt32(Session["OrgId"]) == 18)
                 {
 
-                    //if (decimal.Parse(MaxMark.Text) > decimal.Parse(MinMark.Text))
-                    //{
-                    //  CustomStatus cs=(CustomStatus)objGEC.AddGradeEntry(objGradeEntry,OrgID, 
+                    CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, SubType, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
+                    if (cs.Equals(CustomStatus.RecordSaved))
+                    {
+                        //ViewState["action"] = "add";
 
-                    //}
+                        objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
+                        //this.LoadGrade();
+                        this.BindListView();
 
-                    //if (ViewState["action"] != null)
-                    //{
-                    //    if (ViewState["action"].ToString().Equals("add"))
-                    //    {
-                    CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, SubType, CollegeId, MaxMarks, MinMarks,DegreeNo, Schemeno);
-                            if (cs.Equals(CustomStatus.RecordSaved))
-                            {
-                                //ViewState["action"] = "add";
+                    }
+                    else if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
+                        this.BindListView();
 
-                                objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
-                                //this.LoadGrade();
-                                this.BindListView();
-
-                            }
-                            else if (cs.Equals(CustomStatus.RecordUpdated))
-                            {
-                                objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
-                                this.BindListView();
-
-                            }
-                          
+                    }
 
 
-                       // }
-                        
-                   // }
-                }
-                else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
-                {
 
-                }
-
-                else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
-                {
-                    
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+
+                    if ((decimal.Parse(MaxMark.Text) >= decimal.Parse(MinMark.Text)) && decimal.Parse(MaxMark.Text) > 0)
+                    {
+
+                        //if (decimal.Parse(MaxMark.Text) > decimal.Parse(MinMark.Text))
+                        //{
+                        //  CustomStatus cs=(CustomStatus)objGEC.AddGradeEntry(objGradeEntry,OrgID, 
+
+                        //}
+
+                        //if (ViewState["action"] != null)
+                        //{
+                        //    if (ViewState["action"].ToString().Equals("add"))
+                        //    {
+                        CustomStatus cs = (CustomStatus)objGEC.AddGradeEntry(objGradeEntry, OrgID, ObjE.ActiveStatus, Gradeno_New, SubType, CollegeId, MaxMarks, MinMarks, DegreeNo, Schemeno);
+                        if (cs.Equals(CustomStatus.RecordSaved))
+                        {
+                            //ViewState["action"] = "add";
+
+                            objCommon.DisplayMessage(this.updGradeEntry, "Record Saved Successfully!", this.Page);
+                            //this.LoadGrade();
+                            this.BindListView();
+
+                        }
+                        else if (cs.Equals(CustomStatus.RecordUpdated))
+                        {
+                            objCommon.DisplayMessage(this.updGradeEntry, "Record Update successfully!", this.Page);
+                            this.BindListView();
+
+                        }
+
+
+
+                        // }
+
+                        // }
+                    }
+                    else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
+                    {
+                       // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                    }
+
+                    else if (decimal.Parse(MaxMark.Text) == 0 && decimal.Parse(MinMark.Text) == 0)
+                    {
+                       // objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this, "Min Mark Not Greater Than Max Mark", this.Page);
+                    }
                 }
 
 
