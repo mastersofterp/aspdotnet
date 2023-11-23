@@ -171,6 +171,10 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
         {
             AbIGEntry = "I";
         }
+        else
+        {
+            AbIGEntry = "UFM";
+        }
 
 
         DataSet ds = objExamC.GetStudentByExam(Schemeno, Session, Semester, Courseno, AbIGEntry);
@@ -200,11 +204,13 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
         {
             CheckBox chk_AbGrade = (CheckBox)item.FindControl("chk_AbGrade");
             CheckBox chk_Igrade = (CheckBox)item.FindControl("IGrade");
+            CheckBox chk_Ufmgrade = (CheckBox)item.FindControl("UfmGrade");
 
             if (ddlAbIgEntry.SelectedValue == "1")
             {
                 chk_AbGrade.Visible = true;
                 chk_Igrade.Visible = false;
+                chk_Ufmgrade.Visible = false;
                 //lblGrade.Text = "AbGrade";
 
             }
@@ -212,8 +218,18 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
             {
                 chk_Igrade.Visible = true;
                 chk_AbGrade.Visible = false;
+                chk_Ufmgrade.Visible = false;
                 //lblGrade.Text = "IGrade";
             }
+            else if (ddlAbIgEntry.SelectedValue == "3")
+            {
+                chk_Igrade.Visible = false;
+                chk_AbGrade.Visible = false;
+                chk_Ufmgrade.Visible = true;
+                //lblGrade.Text = "IGrade";
+            }
+
+
         }
         if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
         {
@@ -240,6 +256,7 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
         string hfd_IDNO = "";
         string ABgrade = "";
         string IGrdae = "";
+        string UFMGrdae = "";
         string NewGrade = string.Empty;
         string OldGrade = string.Empty;
         int Semsterno = Convert.ToInt32(ViewState["SEMESTERNO"]);
@@ -249,6 +266,7 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
         {
             CheckBox chk_AbGrade = (CheckBox)item.FindControl("chk_AbGrade");
             CheckBox chk_Igrade = (CheckBox)item.FindControl("IGrade");
+            CheckBox UfmGrade = (CheckBox)item.FindControl("UfmGrade");
             hfd_IDNO = ((HiddenField)item.FindControl("hdf_IDNO")).Value;
 
             if (chk_AbGrade.Checked == false && chk_AbGrade.Enabled == true)
@@ -260,6 +278,49 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
             else
             {
                 ABgrade += "0" + ',';
+            }
+            else if (ddlAbIgEntry.SelectedValue == "3")
+            {
+                if (UfmGrade.Checked == false)
+                {
+
+                    if (UfmGrade.Checked == false && UfmGrade.Enabled == true)
+                    {
+                        ABgrade += "1" + ",";
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        ABgrade += "0" + ',';
+                    }
+
+                    if (chk_Igrade.Checked == false && chk_Igrade.Enabled == true)
+                    {
+                        IGrdae += "1" + ',';
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        IGrdae += "0" + ',';
+                    }
+
+
+                    if (UfmGrade.Checked == false && UfmGrade.Enabled == true)
+                    {
+                        UFMGrdae += "1" + ",";
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        UFMGrdae += "0" + ',';
+                    }
+
+                    OldGrade += ViewState["grade"] + ",";
+                    idno += hfd_IDNO + ",";
+                }
             }
 
             if (chk_Igrade.Checked == false && chk_Igrade.Enabled == true)
@@ -276,9 +337,12 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
             idno += hfd_IDNO + ",";
 
         }
-        CustomStatus cs = (CustomStatus)objExamC.UpdateStudentByGrade(Schemeno, Session, Semester, Courseno, Ccode, idno, ABgrade, IGrdae, OldGrade, Convert.ToInt32(ViewState["userno"]));
+       // return;
+
+        CustomStatus cs = (CustomStatus)objExamC.UpdateStudentByGrade(Schemeno, Session, Semester, Courseno, Ccode, idno, ABgrade, IGrdae, UFMGrdae, OldGrade, Convert.ToInt32(ViewState["userno"]));
 
         if (cs.Equals(CustomStatus.RecordUpdated))
+        //if (1==1)
         {
             objCommon.DisplayMessage(updGradeRemove, "Grade Removed Successfully!", this.Page);
         }

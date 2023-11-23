@@ -108,6 +108,7 @@
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Absent Entry</asp:ListItem>
                                                 <asp:ListItem Value="2">IGrade Entry</asp:ListItem>
+                                                 <asp:ListItem Value="3">UFM Entry</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvAbIgEntry" runat="server" ControlToValidate="ddlAbIgEntry"
                                                 Display="None" ErrorMessage="Please Select Absent Entry/IGrade Entry Grade" ValidationGroup="submit" InitialValue="0"
@@ -143,8 +144,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class=" col-12 btn-footer">
                                     <asp:Button ID="btnShow" runat="server" CssClass="btn btn-info" Font-Bold="True" TabIndex="6" OnClick="btnShow_Click" Text="Show" ValidationGroup="submit" Style="margin-top: 20px" />
                                     <asp:Button ID="btnSave" runat="server" Font-Bold="true" Text="Save" OnClick="btnSave_Click" TabIndex="7" CssClass="btn btn-success btnSaveEnabled" ValidationGroup="submit" Style="margin-top: 20px" />
@@ -187,6 +186,7 @@
                                                     <td>
                                                         <asp:CheckBox ID="chk_AbGrade" runat="server" class="chk_AbGrade" Checked='<%# Eval("EXTERMARK").ToString().Equals("902.00") ? true:false %>' Enabled='<%# Eval("EXTERMARK").ToString().Equals("902.00")? true:false %>' />
                                                         <asp:CheckBox ID="IGrade" runat="server" class="chk_Igrade" Checked='<%# Eval("GRADE").ToString().Equals("I") ? true:false %>' Enabled='<%# Eval("GRADE").ToString().Equals("I")? true:false %>' />
+                                                          <asp:CheckBox ID="UfmGrade" runat="server" class="chk_Ufmgrade" Checked='<%# Eval("EXTERMARK").ToString().Equals("903.00") ? true:false %>' Enabled='<%# Eval("EXTERMARK").ToString().Equals("903.00")? true:false %>'  />
                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
