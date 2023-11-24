@@ -198,7 +198,16 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                         lblDropdown.Text = ddlSearch.SelectedItem.Text;
 
 
-                        objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, "UGPGOT=3", column1);
+                        if (tablename == "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON(B.BRANCHNO= CDB.BRANCHNO)" || tablename == "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_DEGREE D ON(D.DEGREENO= CDB.DEGREENO)")
+                        {
+
+                            objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, "UGPGOT=3", column1);
+                        }
+                        else
+                        {
+
+                            objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, "" + column1 + ">0", column1);
+                        }
 
                     }
                     else
@@ -319,7 +328,6 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                 //{
                 ControlActivityOFF_STUDENT();
                 //   }
-
                 lblidno.Text = dtr["IDNO"].ToString();
                 lblenrollmentnos.Text = dtr["ENROLLNO"].ToString();
                 lbladmbatch.Text = dtr["ADMBATCHNAME"].ToString();
@@ -327,6 +335,10 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                 lblfathername.Text = dtr["FATHERNAME"] == null ? string.Empty : dtr["FATHERNAME"].ToString().ToUpper();
                 lbljoiningdate.Text = dtr["ADMDATE"] == DBNull.Value ? "" : Convert.ToDateTime(dtr["ADMDATE"]).ToString("dd/MM/yyyy");
                 lblDepartment.Text = dtr["BRANCHNAME"].ToString();
+                lblModeOfStudy.Text = dtr["PHD_MODE"] == null ? string.Empty : dtr["PHD_MODE"].ToString();
+                lblEmailID.Text = dtr["EMAILID"] == null ? string.Empty : dtr["EMAILID"].ToString();
+                lblSession.Text = dtr["ADMISSION_SESSION_NAME"] == null ? string.Empty : dtr["ADMISSION_SESSION_NAME"].ToString();
+                lblMobileNo.Text = dtr["STUDENTMOBILE"].ToString();
                 string SEMESTERNO = objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
                 int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO =" + Convert.ToInt32(Session["idno"]) + "AND SEMESTERNO =" + Convert.ToInt16(SEMESTERNO) + "AND ISNULL(CANCEL,0)=0"));
                 if (count > 0)

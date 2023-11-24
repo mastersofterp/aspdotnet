@@ -179,22 +179,37 @@
                                         <span class="title">General Information</span>
                                         <span class="accicon"><i class="fa fa-angle-down rotate-icon"></i></span>
                                     </div>
-                                    <div id="collapseOne" class="collapse show">
+                                     <div id="collapseOne" class="collapse show">
                                         <div class="card-body">
                                             <div class="col-12" id="DivGenInfo" runat="server" visible="true">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-md-6 col-12">
                                                         <ul class="list-group list-group-unbordered">
+                                                            <%--    <li class="list-group-item"><b>RRN No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblRrnno" runat="server" Font-Bold="True"></asp:Label>
+                                                                </a>
+                                                            </li>--%>
+                                                            <li class="list-group-item"><b>RRN No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblenrollmentnos" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
                                                             <li class="list-group-item"><b>ID No. :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblidno" runat="server" Font-Bold="True"></asp:Label>
                                                                 </a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Enrollment No. :</b>
+
+                                                            <li class="list-group-item"><b>Admitted Session :</b>
                                                                 <a class="sub-label">
-                                                                    <asp:Label ID="lblenrollmentnos" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                    <asp:Label ID="lblSession" runat="server" Font-Bold="True"></asp:Label></a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Date of Joining :</b>
+
+                                                            <li class="list-group-item"><b>Mode Of Study :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblModeOfStudy" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Provisional Date of Joining :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lbljoiningdate" runat="server" Font-Bold="True"></asp:Label>
                                                                     <asp:HiddenField ID="hfdegreenos" runat="server" />
@@ -208,26 +223,39 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-12">
                                                         <ul class="list-group list-group-unbordered">
-                                                            <li class="list-group-item"><b>Student Name :</b>
+                                                            <li class="list-group-item"><b>Scholar Name :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblnames" runat="server" Font-Bold="True"></asp:Label>
                                                                 </a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Father Name :</b>
+                                                            <li class="list-group-item"><b>Father/ Spouse Name :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblfathername" runat="server" Font-Bold="True"></asp:Label>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item"><b>Department :</b>
-                                                                <a class="sub-label">
-                                                                    <asp:Label ID="lblDepartment" runat="server" Font-Bold="true"></asp:Label>
-                                                                    <asp:HiddenField ID="hfDepartment" runat="server" />
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item"><b>Admission Batch :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lbladmbatch" runat="server" Font-Bold="True"></asp:Label>
-                                                                    <asp:HiddenField ID="hfadmbatch" runat="server" />
+
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Department :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblDepartment" runat="server" Font-Bold="true"></asp:Label>
+
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Mobile No :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMobileNo" runat="server" Font-Bold="true"></asp:Label>
+
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="list-group-item"><b>Email ID :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblEmailID" runat="server" Font-Bold="true"></asp:Label>
+
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -265,6 +293,7 @@
                                                     </div>
 
 
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
@@ -277,7 +306,8 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="nodgc" runat="server">
+                                                    <%--"d-none" Added By Vipul Tichakule on dated 20-11-2023 as per TicketNo ---%>
+                                                    <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="nodgc" runat="server">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label>No.of DGC Member</label>
