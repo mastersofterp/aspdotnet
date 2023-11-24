@@ -7061,6 +7061,27 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+
+        public DataSet GetAvailableCourseListForModified(int schemeNo, int semesterNo, int sessionNo)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQL = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[3];
+                objParams[0] = new SqlParameter("@P_SCHEMENO", schemeNo);
+                objParams[1] = new SqlParameter("@P_SEMESTERNO", semesterNo);
+                objParams[2] = new SqlParameter("@P_SESSIONNO", sessionNo);
+                ds = objSQL.ExecuteDataSetSP("PKG_ACD_COURSE_MODIFICATION_LIST", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetAvailableCourseListForModified-> " + ex.ToString());
+            }
+            return ds;
+        }
     }
 }
 
