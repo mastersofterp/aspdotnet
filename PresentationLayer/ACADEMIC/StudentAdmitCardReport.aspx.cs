@@ -272,7 +272,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             }
             else
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
 
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
