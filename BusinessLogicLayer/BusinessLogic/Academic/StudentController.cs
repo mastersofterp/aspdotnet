@@ -8438,13 +8438,13 @@ namespace IITMS
                 }
 
                 // add by hemant on 28-12-2018
-                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, int schemeno, int semesterno, int courseno, string studids, string sectionnos, int userno)
+                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, int schemeno, int semesterno, int courseno, string studids, string sectionnos, int userno, string batchnos, string tutbatchnos)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[11];
+                        SqlParameter[] objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
                         objParams[1] = new SqlParameter("@P_COLLEGE_ID", college_id);
                         objParams[2] = new SqlParameter("@P_DEGREENO", degreeno);
@@ -8455,8 +8455,10 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_STUDIDS", studids);
                         objParams[8] = new SqlParameter("@P_SECTIONNO", sectionnos);
                         objParams[9] = new SqlParameter("@P_UA_NO", userno);
-                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[10] = new SqlParameter("@P_BATCHNO", batchnos);                    // Added by Gopal M 21/11/2023 Ticket #49030
+                        objParams[11] = new SqlParameter("@P_TUTORIALBATCHNO", tutbatchnos); // Added by Gopal M 21/11/2023 Ticket #49030
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_UPDATE_COURSE_WISE_SECTION_ALLOTMENT", objParams, false);
                         if (ret != null)
                             if (ret.ToString() != "-99")
@@ -8469,6 +8471,7 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
 
                 /// <summary>
                 /// Added by Rita munde - 06042019
