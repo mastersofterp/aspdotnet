@@ -17847,7 +17847,7 @@ namespace IITMS
                         objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
                         objParams[8].Direction = ParameterDirection.Output;
 
-                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BULK_SECTION_ALLOTMENT_TEST", objParams, false);
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BULK_SECTION_ALLOTMENT", objParams, false);
                         if (ret != null)
                             if (ret.ToString() != "-99")
                                 retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);

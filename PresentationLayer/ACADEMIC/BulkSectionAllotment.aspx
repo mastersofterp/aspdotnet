@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="BulkSectionAllotment.aspx.cs" Inherits="ACADEMIC_BulkSectionAllotment" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="BulkSectionAllotment.aspx.cs" Inherits="ACADEMIC_BulkSectionAllotment"  ViewStateEncryptionMode="Always" EnableViewStateMac="true"  %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
 
-      <style>
+    <style>
         .Searchfilter {
             font-size: 15px !important;
             padding: 0.375rem 0.75rem !important;
@@ -161,7 +161,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                        <sup>* </sup>
+                                                       <%-- <sup>* </sup>--%>
                                                         <%--<label>Semester</label>--%>
                                                         <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
@@ -171,30 +171,6 @@
                                                     <%--     <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
                                                                 Display="None" InitialValue="0" ErrorMessage="Please Select Semester" ValidationGroup="teacherallot">
                                                             </asp:RequiredFieldValidator>--%>
-                                                </div>
-
-                                              
-
-                                                <div class="form-group col-lg-6 col-md-12 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <label>Range From</label>
-                                                    </div>
-                                                    <div class="form-inline">
-                                                        <asp:TextBox ID="txtEnrollFrom" runat="server" CssClass="form-control" ValidationGroup="EnrollText" Enabled="false" TabIndex="7" />
-                                                        <asp:RequiredFieldValidator ID="rfvEnrollFrom" runat="server" ControlToValidate="txtEnrollFrom"
-                                                            Display="None" ErrorMessage="Please Select Registration No From Range" ValidationGroup="EnrollText"></asp:RequiredFieldValidator>
-
-                                                        &nbsp;&nbsp;
-                                                                <label>To</label>
-                                                        &nbsp;&nbsp;
-
-                                                                <asp:TextBox ID="txtEnrollTo" runat="server" CssClass="form-control" ValidationGroup="EnrollText" Enabled="false" TabIndex="8" />
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtEnrollTo"
-                                                            Display="None" ErrorMessage="Please Select Registration No To Range" ValidationGroup="EnrollText"></asp:RequiredFieldValidator>&nbsp;&nbsp;
-
-                                                                <asp:Button ID="btnConfirm" runat="server" TabIndex="9" CssClass="btn btn-primary" Text="Confirm Students" OnClick="btnConfirm_Click" ValidationGroup="EnrollText" />
-                                                    </div>
                                                 </div>
 
                                                 <div class="form-group col-lg-8 col-md-12 col-12">
@@ -258,9 +234,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-12" id="DivSectionTab" runat="server" visible="false">
                                             <div class="row">
-                                                  <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <%--<label>Section</label>--%>
@@ -276,7 +252,7 @@
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
-                                                       <%-- <sup>* </sup>--%>
+                                                        <%-- <sup>* </sup>--%>
                                                         <%--<label>Batch</label>--%>
                                                         <asp:Label ID="lblDYddlBatch" runat="server" Font-Bold="true">Batch</asp:Label>
                                                     </div>
@@ -287,6 +263,31 @@
                                                                 Display="None" InitialValue="0" ErrorMessage="Please Select Batch" ValidationGroup="sectionVal">
                                                             </asp:RequiredFieldValidator>--%>
                                                 </div>
+
+                                                <div class="form-group col-lg-6 col-md-12 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Range From</label>
+                                                    </div>
+                                                    <div class="form-inline">
+                                                        <asp:TextBox ID="txtEnrollFrom" runat="server" CssClass="form-control" ValidationGroup="EnrollText" Enabled="false" TabIndex="7" MaxLength="3" />
+                                                        <asp:RequiredFieldValidator ID="rfvEnrollFrom" runat="server" ControlToValidate="txtEnrollFrom"
+                                                            Display="None" ErrorMessage="Please Select Registration No From Range" ValidationGroup="EnrollText" ></asp:RequiredFieldValidator>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="ftbetxtEnrollFrom" runat="server" TargetControlID="txtEnrollFrom" FilterType="Numbers, Custom" ValidChars="123" FilterMode="ValidChars">
+</ajaxToolKit:FilteredTextBoxExtender>
+                                                        &nbsp;&nbsp;
+                                                                <label>To</label>
+                                                        &nbsp;&nbsp;  
+
+                                                                <asp:TextBox ID="txtEnrollTo" runat="server" CssClass="form-control" ValidationGroup="EnrollText" Enabled="false" TabIndex="8" MaxLength="3" />
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtEnrollTo"
+                                                            Display="None" ErrorMessage="Please Select Registration No To Range" ValidationGroup="EnrollText"></asp:RequiredFieldValidator>&nbsp;&nbsp;
+                                                          <ajaxToolKit:FilteredTextBoxExtender ID="ftbetxtEnrollTo" runat="server" TargetControlID="txtEnrollTo" FilterType="Numbers, Custom" ValidChars="123" FilterMode="ValidChars">
+</ajaxToolKit:FilteredTextBoxExtender>
+                                                                <asp:Button ID="btnConfirm" runat="server" TabIndex="9" CssClass="btn btn-primary" Text="Confirm Students" OnClick="btnConfirm_Click" ValidationGroup="EnrollText" />
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 
@@ -338,7 +339,7 @@
                                                                                 <asp:Label ID="lblDYddlSemester_Tab" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th>
                                                                                 <asp:Label ID="lblDYddlSection_Tab" runat="server" Font-Bold="true"></asp:Label></th>
-                                                                              <th>Batch</th>
+                                                                            <th>Batch</th>
                                                                             <th>Admission Date </th>
                                                                             <th>Merit No. </th>
                                                                         </tr>
@@ -371,7 +372,7 @@
                                                             <td><%# Eval("STUDNAME")%></td>
                                                             <td><%# Eval("SEMESTERNAME")%></td>
                                                             <td><%# Eval("SECTIONNAME")%></td>
-                                                             <td><%# Eval("BATCHNAME")%></td>
+                                                            <td><%# Eval("BATCHNAME")%></td>
                                                             <td><%# Eval("ADMDATE")%></td>
                                                             <td><%# Eval("MERITNO")%></td>
                                                         </tr>
@@ -379,6 +380,7 @@
                                                 </asp:ListView>
                                             </asp:Panel>
                                         </div>
+
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
@@ -448,7 +450,7 @@
                                                 <div class="col-12 btn-footer">
                                                     <asp:Button ID="btnDownload" runat="server" Text="Download Blank Excel Format" ToolTip="Click To Download Blank Excel Format" OnClick="btnDownload_Click" CssClass="btn btn-primary" />
                                                     <asp:Button ID="btnUpload" runat="server" Text="Upload Excel" ToolTip="Click To Upload" CssClass="btn btn-primary" OnClick="btnUpload_Click" ValidationGroup="Submit" />
-                                                     <asp:Button ID="btnDownloadIncurrect" runat="server" Text="Download Incurrect Excel Data" ToolTip="Click ToDownload Incurrect Excel Data" OnClick="btnDownloadIncurrect_Click"  CssClass="btn btn-primary" Visible="false"/>
+                                                    <asp:Button ID="btnDownloadIncurrect" runat="server" Text="Download Incurrect Excel Data" ToolTip="Click ToDownload Incurrect Excel Data" OnClick="btnDownloadIncurrect_Click" CssClass="btn btn-primary" Visible="false" />
                                                     <asp:Button ID="btnCancel_SectionImport" runat="server" Text="Cancel" ToolTip="Click To Reset" CssClass="btn btn-warning" OnClick="btnCancel_SectionImport_Click" />
 
                                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" DisplayMode="List" ShowSummary="false" ValidationGroup="Submit" />
@@ -461,7 +463,7 @@
                                     <Triggers>
                                         <asp:PostBackTrigger ControlID="btnDownload" />
                                         <asp:PostBackTrigger ControlID="btnUpload" />
-                                          <asp:PostBackTrigger ControlID="btnDownloadIncurrect" />
+                                        <asp:PostBackTrigger ControlID="btnDownloadIncurrect" />
 
                                     </Triggers>
                                 </asp:UpdatePanel>
