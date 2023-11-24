@@ -107,17 +107,17 @@
                                             </asp:RequiredFieldValidator>
                                             <br /><br /><br />
                                             <div class="label-dynamic">
-                                                <sup>* </sup>
+                                                <%--<sup>* </sup>--%>
                                                 <asp:Label ID="lblApprover4" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlAA4" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="9" ToolTip="Please Select Approval 4"
                                                 Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA4_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvapprovalauth4" runat="server" ControlToValidate="ddlAA4"
+                                            <%--<asp:RequiredFieldValidator ID="rfvapprovalauth4" runat="server" ControlToValidate="ddlAA4"
                                                 Display="None" ErrorMessage="Please Select  Approval 4" SetFocusOnError="true"
                                                 ValidationGroup="AAPath" InitialValue="0">
-                                            </asp:RequiredFieldValidator>
+                                            </asp:RequiredFieldValidator>--%>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
@@ -129,8 +129,8 @@
                                             <asp:DropDownList ID="ddlApp" runat="server" TabIndex="2"
                                                 ToolTip="Please Select  Authority Approval Type" AppendDataBoundItems="true"
                                                 AutoPostBack="true" 
-                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlApp_SelectedIndexChanged">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlApp_SelectedIndexChanged" Enabled="False">
+                                                <%--<asp:ListItem Value="0">Please Select</asp:ListItem>--%>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvApp" runat="server" ControlToValidate="ddlApp"
                                                 Display="None" ErrorMessage="Please Select Authority Approval Type." SetFocusOnError="true"
@@ -279,11 +279,11 @@
                                               </div>
 
                                             <div class="form-group col-lg-4 col-md-6 col-12">
-                                               <sup>* </sup>
+                                               <%--<sup>* </sup>--%>
                                              <label>Approval 4</label>
                                               <asp:TextBox ID="txtauthapproval4" runat="server"  CssClass="form-control"  AutoPostBack="true" />
-                                                <asp:RequiredFieldValidator ID="rfvapproval4" runat="server" ControlToValidate="txtauthapproval4"
-                                                                        Display="None" ErrorMessage="Please Enter Approval 4" ValidationGroup="AAPath" />
+                                                <%--<asp:RequiredFieldValidator ID="rfvapproval4" runat="server" ControlToValidate="txtauthapproval4"
+                                                                        Display="None" ErrorMessage="Please Enter Approval 4" ValidationGroup="AAPath" />--%>
                                               </div>
                                             <div class="form-group col-lg-4 col-md-6 col-12">
                                                <sup></sup>

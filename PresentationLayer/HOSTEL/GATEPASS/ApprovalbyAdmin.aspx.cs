@@ -59,9 +59,9 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                     {
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                     }
+                    BindListView();
+
                 }
-                
-                BindListView();
             }
         }
         catch (Exception ex)
@@ -144,6 +144,7 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage("Direct approval for hostel gate pass done successfully.", this.Page);
+                    this.BindListView(); //Added by Himanshu Tamrakar 24/11/2023 for bug id 169646
                     Clear();
                 }
             }
@@ -177,7 +178,16 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
 
     private void Clear()
     {
+        changeApproval.Visible = false;
+        finalAproval.Visible = true;
         txtRemark.Text = string.Empty;
+        txtName.Text = string.Empty;
+        txtAAPath.Text = string.Empty;
+        ddlAA1.SelectedIndex = 0;
+        ddlAA2.SelectedIndex = 0;
+        ddlAA3.SelectedIndex = 0;
+        ddlAA4.SelectedIndex = 0;
+        btnApprove.Visible = true;
 
         foreach (ListViewItem item in lvGatePass.Items)
         {
@@ -186,6 +196,360 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             {
                 chkApprove.Checked = false;
             }
+        }
+    }
+    protected void btnChangeApproval_Click(object sender, EventArgs e)
+    {
+        int recid = 0;
+        int Checked = 0;
+        foreach (ListViewDataItem item in lvGatePass.Items)
+        {
+            CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
+            HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
+
+            if (chkApprove.Checked)
+            {
+                Checked++;
+                recid = Convert.ToInt16(hidrecid.Value);
+            }
+        }
+        if (Checked == 0)
+        {
+            objCommon.DisplayMessage(this, "Please select one record to change approval", this);
+            return;
+        }
+        CustomStatus cs = new CustomStatus();
+        if (changeApproval.Visible == false)
+        {
+            btnApprove.Visible = false;
+            finalAproval.Visible = false;
+            changeApproval.Visible = true;
+
+            
+            if (Checked == 1)
+            {
+                //Added by Himanshu Tamrakar 24/11/2023
+                txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
+                string p_path = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "APPROVAL_PASSING_PATH", "HGP_ID=" + recid);
+                // Split the path using the '/' character
+                string[] pathParts = p_path.Split(new string[] { "->" }, StringSplitOptions.None);
+
+                // Ensure there are at least 4 parts
+                if (pathParts.Length >= 4)
+                {
+                    objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                    objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                    // Assign values to variables
+                    ddlAA1.SelectedItem.Text = Convert.ToString(pathParts[0]);
+                    ddlAA2.SelectedItem.Text = Convert.ToString(pathParts[1]);
+                    ddlAA3.SelectedItem.Text = Convert.ToString(pathParts[2]);
+                    ddlAA4.SelectedItem.Text = Convert.ToString(pathParts[3]);
+                }
+
+                //Commented By Himanshu Tamrakar 24/11/2023
+                //ddlAA1.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FIRST_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +'-  '+ UA.UA_NAME ", "HGD.HGP_ID=" + recid);
+                //ddlAA2.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.SECOND_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
+                //ddlAA3.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.THIRD_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG +' - '+ UA.UA_NAME", "HGD.HGP_ID=" + recid);
+                //ddlAA4.SelectedItem.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN USER_ACC UA ON (HGD.FOURTH_APPROVAL_UANO = UA.UA_NO)", "UA.UA_DESIG+'  -'+  UA.UA_NAME", "HGD.HGP_ID=" + recid);
+                txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                if ((ddlAA1.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA1.SelectedItem.Text).ToUpper() == "PARENTS")
+                {
+                    ddlAA1.Enabled = false;
+                    ddlAA2.Enabled = true;
+
+                }
+                else if ((ddlAA2.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA2.SelectedItem.Text).ToUpper() == "PARENTS")
+                {
+                    ddlAA1.Enabled = true;
+                    ddlAA2.Enabled = false;
+                }
+                //End By Himanshu tamrakar
+            }
+            if (Checked < 0 || Checked > 1)
+            {
+                objCommon.DisplayMessage("Please select only one record to change approval", this.Page);
+                finalAproval.Visible = true;
+                changeApproval.Visible = false;
+                btnApprove.Visible = true;
+            }
+
+        }
+
+        else
+        {
+            int AA1 = 0;
+            int AA2 = 0;
+            int AA3 = 0;
+            int AA4 = 0;
+
+            foreach (ListViewDataItem item in lvGatePass.Items)
+            {
+
+                CheckBox chkApprove = item.FindControl("chkApprove") as CheckBox;
+                HiddenField hidrecid = item.FindControl("hidrecid") as HiddenField;
+
+                if (chkApprove.Checked)
+                {
+                    Checked++;
+                    recid = Convert.ToInt16(hidrecid.Value);
+                }
+            }
+            if (Checked == 1)
+            {
+                //Commented By Himanshu Tamrakar 24/11/2023
+                //AA1 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_NO", "UA_NAME='" + ddlAA1.SelectedItem.Text + "' OR UA_FULLNAME='" + ddlAA1.SelectedItem.Text + "'"));
+                //AA2 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_NO", "UA_NAME='" + ddlAA2.SelectedItem.Text + "' OR UA_FULLNAME='" + ddlAA2.SelectedItem.Text + "'"));
+                //AA3 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_NO", "UA_NAME='" + ddlAA3.SelectedItem.Text + "' OR UA_FULLNAME='" + ddlAA3.SelectedItem.Text + "'"));
+                //AA4 = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_NO", "UA_NAME='" + ddlAA4.SelectedItem.Text + "' OR UA_FULLNAME='" + ddlAA4.SelectedItem.Text + "'"));
+
+                //Added by Himanshu Tamrakar 24/11/2023
+                AA1 = Convert.ToInt32(ddlAA1.SelectedValue);
+                AA2 = Convert.ToInt32(ddlAA2.SelectedValue);
+                AA3 = Convert.ToInt32(ddlAA3.SelectedValue);
+                AA4 = Convert.ToInt32(ddlAA4.SelectedValue);
+
+                if ((ddlAA1.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA1.SelectedItem.Text).ToUpper() == "PARENTS")
+                {
+                    AA1 = 14;
+                }
+                else if ((ddlAA2.SelectedItem.Text).ToUpper() == "PARENT" || (ddlAA2.SelectedItem.Text).ToUpper() == "PARENTS")
+                {
+                    AA2 = 14;
+                }
+                //End By Himanshu Tamrakar
+                cs = (CustomStatus)objAAC.UpdateApprovalsAndPath(recid, AA1, AA2, AA3, AA4, txtAAPath.Text);
+            }
+
+            if (cs.Equals(CustomStatus.RecordSaved))
+            {
+                objCommon.DisplayMessage("Record Saved Successfully!!!", this.Page);
+                ViewState["action"] = "add";
+                Clear();
+            }
+
+            if (Checked < 0 || Checked > 1)
+            {
+                objCommon.DisplayMessage("Please select only one record to change approval", this.Page);
+                finalAproval.Visible = true;
+                changeApproval.Visible = false;
+                btnApprove.Visible = true;
+            }
+
+        }
+
+    }
+
+    //(ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS") condition Added by Himanshu Tamrakar 24/11/2023
+    private void EnableDisable(int index)
+    {
+        switch (index)
+        {
+            case 1:
+                if (ddlAA1.SelectedIndex == 0)
+                {
+
+                    if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS") //Added by Himanshu Tamrakar 24/11/2023
+                    {
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = true;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = false;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                    }
+
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA3.Enabled = true;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        ddlAA3.SelectedIndex = 0;
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                        ddlAA2.SelectedItem.Text = "Parent";
+                    }
+                    else
+                    {
+                        ddlAA2.Enabled = true;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString();
+                    }
+                }
+
+                break;
+
+            case 2:
+                if (ddlAA2.SelectedIndex == 0)
+                {
+                    if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA3.Enabled = true;
+                        ddlAA3.SelectedIndex = 0;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        ddlAA2.SelectedIndex = 0;
+                        ddlAA2.Enabled = false;
+                        ddlAA3.SelectedIndex = 0;
+                        ddlAA3.Enabled = false;
+                        string swhere = "ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                    }
+
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA3.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                    }
+
+                    else
+                    {
+                        ddlAA3.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(2)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString();
+                    }
+
+
+                }
+                break;
+
+            case 3:
+                if (ddlAA3.SelectedIndex == 0)
+                {
+                    ddlAA4.SelectedIndex = 0;
+                    ddlAA4.Enabled = false;
+                    string swhere = "ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                    objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", swhere, "UA_NO");
+                    txtAAPath.Text = ddlAA1.SelectedItem.ToString();
+                }
+                else
+                {
+                    if (ddlAA2.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA2.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+                    else if (ddlAA1.SelectedItem.Text.ToUpper() == "PARENT" || ddlAA1.SelectedItem.Text.ToUpper() == "PARENTS")
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+                    else
+                    {
+                        ddlAA4.Enabled = true;
+                        string swhere = "organizationid=" + Session["OrgId"].ToString() + "and ua_type not in(3)" + " and UA_NO NOT IN (" + ddlAA1.SelectedValue + "," + ddlAA2.SelectedValue + "," + ddlAA3.SelectedValue + ")";
+                        objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME COLLATE DATABASE_DEFAULT AS UANAME", swhere, "UA_NO");
+                        txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString();
+                    }
+
+                }
+                break;
+
+            case 4:
+                if (ddlAA4.SelectedIndex != 0)
+                {
+                    txtAAPath.Text = ddlAA1.SelectedItem.ToString() + "->" + ddlAA2.SelectedItem.ToString() + "->" + ddlAA3.SelectedItem.ToString() + "->" + ddlAA4.SelectedItem.ToString();
+                }
+                break;
+        }
+    }
+
+    protected void ddlAA1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            this.EnableDisable(1);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "HostelGatePassAuthApprovalMaster.ddlAA1_click ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void ddlAA2_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            this.EnableDisable(2);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "HostelGatePassAuthApprovalMaster.ddlAA12_SelectedIndexChanged ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void ddlAA3_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            this.EnableDisable(3);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "HostelGatePassAuthApprovalMaster.ddlAA3_SelectedIndexChanged ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void ddlAA4_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            this.EnableDisable(4);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "HostelGatePassAuthApprovalMaster.ddlAA4_SelectedIndexChanged ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+    protected void ddlAA5_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            this.EnableDisable(5);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "HostelGatePassAuthApprovalMaster.ddlAA5_SelectedIndexChanged ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -207,4 +571,5 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
             }
         }
     }
+
 }

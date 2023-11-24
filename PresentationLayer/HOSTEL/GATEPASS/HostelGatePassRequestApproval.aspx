@@ -3,19 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <style>
-
-        
-
-        .text-center {}
-
-        
-
-        .custom-file-input {}
-
-        
-
-    </style>
+    
     <script src="../../plugins/jQuery/jQuery-2.2.0.min.js"></script>
     <link href="../../Css/COMMON/Commonstyle.css" rel="stylesheet" />
     <link href="../../Css/COMMON/FixHeader.css" rel="stylesheet" />
@@ -27,6 +15,19 @@
     <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
     <link href="../../Datatable/dataTables.bootstrap.min.css" rel="stylesheet" />
     <link href="../../Datatable/responsive.bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript">
+        function openImageWindow() {
+            // Get the image URL from the hidden field
+            var imageUrl = document.getElementById('<%= hdnAttachmenturl.ClientID %>').value;
+
+        // Open a new window with the image URL
+        window.open(imageUrl, '_blank');
+
+        // Prevent the default behavior of the button click
+        return false;
+    }
+</script>
+
     <div class="row" runat="server" id="DivShowRequest">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -80,7 +81,7 @@
                                     <%# Eval("IN_TIME","{0:dd/MM/yyyy hh:mm tt}") %>
                                 </td>
                                 <td>
-                                    <%# Eval("APPLY_DATE") %>
+                                    <%# Eval("APPLY_DATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                 </td>
                                 <td>
                                     <asp:Label ID="lblStatus" runat="server" Text=' <%# Eval("FINAL_STATUS") %>'></asp:Label>

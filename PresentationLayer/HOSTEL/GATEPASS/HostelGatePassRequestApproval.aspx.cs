@@ -15,8 +15,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 {
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
-    HostelGatePassRequestApprovalController Hgp =new HostelGatePassRequestApprovalController();
-    HostelGatePassRequestApproval ObjHgp=new HostelGatePassRequestApproval();
+    HostelGatePassRequestApprovalController Hgp = new HostelGatePassRequestApprovalController();
+    HostelGatePassRequestApproval ObjHgp = new HostelGatePassRequestApproval();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -33,7 +33,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 else
                 {
                     // Check User Authority 
-                    //this.CheckPageAuthorization();
+                    this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -47,7 +47,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 BindListView();
                 //MoreDetails();
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -82,11 +82,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             DataSet ds = null;
             if (Convert.ToInt32(Session["usertype"]) == 1)
             {
-                 ds = Hgp.GetAllRequests(0);
+                ds = Hgp.GetAllRequests(0);
             }
             else
             {
-                 ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]));
+                ds = Hgp.GetAllRequests(Convert.ToInt32(Session["userno"]));
             }
             lvReq.DataSource = ds;
             lvReq.DataBind();
@@ -130,16 +130,16 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 lvShowApprovalStatus.DataSource = ds;
                 lvShowApprovalStatus.DataBind();
 
-                if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
-                {
-                    liFileAttach.Visible = true;
-                }
-                else
-                {
-                    liFileAttach.Visible = false;
-                }
+                //if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1) //Commented By Himanshu Tamrakar 23/11/2023
+                //{
+                //    liFileAttach.Visible = true;
+                //}
+                //else
+                //{
+                //    liFileAttach.Visible = false;
+                //}
             }
-            
+
 
         }
         catch (Exception ex)
@@ -166,66 +166,79 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             int getPos = 0;
             string fileUrl = string.Empty;
             string f_status = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "DIRECT_APPROVAL_UANO IS NOT NULL AND HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
-            if (f_status=="A")
+            string f_status1 = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
+
+            if (f_status == "A")
             {
                 objCommon.DisplayMessage(this, "Gate Pass Already Approved By Admin.", this);
                 return;
             }
-            if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)
+            else if (f_status1 == "A")
             {
-                if (FileAttach.HasFile)
+                objCommon.DisplayMessage(this, "Gate Pass Generated.You Can Not Modify Status.", this);
+                return;
+            }
+            //if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)    //commented  By Himanshu Tamrakar 23/11/2023
+            //{
+            if (FileAttach.HasFile)
+            {
+                // Check if the file extension is allowed
+                if (fileExtension == ".jpg" || fileExtension == ".pdf" || fileExtension == ".png")
                 {
-                    // Check if the file extension is allowed
-                    if (fileExtension == ".jpg" || fileExtension == ".pdf" || fileExtension == ".png")
+                    long fileSize = FileAttach.PostedFile.ContentLength;
+
+                    // Check if the file size is less than 500KB (500 * 1024 bytes)
+                    if (fileSize <= 500 * 1024)
                     {
-                        long fileSize = FileAttach.PostedFile.ContentLength;
+                        // Define the folder path where you want to save the uploaded files
+                        string filePath = Server.MapPath("GATEPASSATTCHMENT/" + System.Guid.NewGuid() + fileName); // Change the path as needed
+                        //string filePath = Path.Combine(uploadFolder, fileName);
 
-                        // Check if the file size is less than 500KB (500 * 1024 bytes)
-                        if (fileSize <= 500 * 1024)
-                        {
-                            // Define the folder path where you want to save the uploaded files
-                            string filePath = Server.MapPath("GATEPASSATTCHMENT/" + System.Guid.NewGuid() + fileName); // Change the path as needed
-                            //string filePath = Path.Combine(uploadFolder, fileName);
-
-                            // Save the file to the specified folder
-                            FileAttach.SaveAs(filePath);
-                            getPos = filePath.LastIndexOf("\\");
-                            len = filePath.Length;
-                            string getPath = filePath.Substring(getPos, len - getPos);
-                            string pathToStore = getPath.Remove(0, 1);
-                            // Store the file URL in your database (you should replace this with your actual database logic)
-                            fileUrl = "GATEPASSATTCHMENT/" + pathToStore;
-                        }
-                        else
-                        {
-                            objCommon.ConfirmMessage(this, "File size exceeds the limit (500KB). Please choose a smaller file.", this);
-                            return;
-                        }
+                        // Save the file to the specified folder
+                        FileAttach.SaveAs(filePath);
+                        getPos = filePath.LastIndexOf("\\");
+                        len = filePath.Length;
+                        string getPath = filePath.Substring(getPos, len - getPos);
+                        string pathToStore = getPath.Remove(0, 1);
+                        // Store the file URL in your database (you should replace this with your actual database logic)
+                        fileUrl = "GATEPASSATTCHMENT/" + pathToStore;
                     }
                     else
                     {
-                        objCommon.ConfirmMessage(this, "Only .jpg ,.png and .pdf files are allowed.", this);
+                        objCommon.ConfirmMessage(this, "File size exceeds the limit (500KB). Please choose a smaller file.", this);
                         return;
                     }
                 }
                 else
                 {
-                    if (Convert.ToInt32(Session["usertype"]) == 14)
-                    {
-                        fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
-                        if (fileUrl == string.Empty)
-                        {
-                            objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
-                            return;
-                        }
-                    }
-                    else
-                    {
-
-                    }
+                    objCommon.ConfirmMessage(this, "Only .jpg ,.png and .pdf files are allowed.", this);
+                    return;
                 }
             }
-            else
+            //commented  By Himanshu Tamrakar 23/11/2023
+            //    else
+            //    {
+            //        if (Convert.ToInt32(Session["usertype"]) == 14)
+            //        {
+            //            fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
+            //            if (fileUrl == string.Empty)
+            //            {
+            //                objCommon.ConfirmMessage(this, "Please select a file to upload.", this);
+            //                return;
+            //            }
+            //        }
+            //        else
+            //        {
+
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
+            //    fileName = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT_NAME", "HGP_ID=" + Hgpid);
+            //}
+            if (string.IsNullOrEmpty(fileUrl)) //Added By Himanshu Tamrakar 23/11/2023
             {
                 fileUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + Hgpid);
                 fileName = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT_NAME", "HGP_ID=" + Hgpid);
@@ -271,8 +284,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 
     protected void btnShowAttachment_Click(object sender, EventArgs e)
     {
-       // string imageUrl = hdnAttachmenturl.Value;
-        string imageUrl=objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + hdnhgpid.Value);
+        // string imageUrl = hdnAttachmenturl.Value;
+        string imageUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + hdnhgpid.Value);
         if (!string.IsNullOrEmpty(imageUrl))
         {
             // Use Process.Start to open the file in the default application
@@ -280,7 +293,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
         }
         else
         {
-               objCommon.ConfirmMessage(this, "File not Found.", this);
+            objCommon.ConfirmMessage(this, "File not Found.", this);
         }
     }
 

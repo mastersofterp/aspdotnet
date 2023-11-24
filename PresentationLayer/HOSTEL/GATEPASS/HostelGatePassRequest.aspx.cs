@@ -227,8 +227,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(IsApprove))
             {
-                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
-                Response.Redirect(Request.RawUrl);
+                string message = "You can't able to edit approved gate pass request record.";
+                string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
+                ddlSearch.SelectedItem.Text = "Please Select";
+                return;
             }
             else
             {
@@ -285,9 +288,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtoutDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                objCommon.DisplayMessage("Please select out date current date or greater than today date.", this.Page);
+                string message = "Please Select 'Out Date' as Current Date or Greater than Today's Date.";
+                string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
                 txtoutDate.Text = string.Empty;
-                txtoutDate.Focus();               
+                txtoutDate.Focus();
                 return;
             }
         }
@@ -301,9 +306,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 txtoutDate.Focus();
                 return;
             }
-        }
-
-        
+        }       
     }
 
     protected void txtinDate_TextChanged(object sender, EventArgs e)
@@ -312,9 +315,11 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtinDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                objCommon.DisplayMessage("Please select In date current date or greater than today date.", this.Page);
-                txtoutDate.Text = string.Empty;
-                txtoutDate.Focus();
+                string message = "Please select 'In Date' as Current Date or Greater than Today's Date.";
+                string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
+                txtinDate.Text = string.Empty;
+                txtinDate.Focus();
                 return;
             }
         }
@@ -628,7 +633,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 if (ddlAM_PM1.SelectedValue == "0")
                 {
-                    objCommon.DisplayMessage("For today date entry before Hour From select, please select AM/PM of Out Date.", this.Page);
+                    string message = "For Today's Date entry before select Hour From, please select AM/PM of Out Date.";
+                    string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
+                    ddloutHourFrom.SelectedIndex = 0;
                     ddlAM_PM1.Focus();
                     return;
                 }

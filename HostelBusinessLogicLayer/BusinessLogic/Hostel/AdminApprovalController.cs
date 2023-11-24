@@ -63,6 +63,35 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
+                public int UpdateApprovalsAndPath(int recid, int AA1, int AA2, int AA3, int AA4, string PATH)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] param = new SqlParameter[]
+                            {                         
+                            new SqlParameter("@P_RECORDID",recid),
+                            new SqlParameter("@P_AA1",AA1),
+                            new SqlParameter("@P_AA2",AA2),
+                            new SqlParameter("@P_AA3",AA3),
+                            new SqlParameter("@P_AA4",AA4),
+                            new SqlParameter("@P_PATH",PATH),
+                            new SqlParameter("@P_OUTPUT", SqlDbType.Int)                        
+                            };
+                        param[param.Length - 1].Direction = ParameterDirection.Output;
+                        object ret = objSqlHelper.ExecuteNonQuerySP("PKG_HOSTEL_UPDATE_APRROVALS_PATH_BY_ADMIN", param, true);
+                        if (ret != null)
+                            if (ret.ToString() != "-99")
+                                retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.PrepareData-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
             }
         }
     }

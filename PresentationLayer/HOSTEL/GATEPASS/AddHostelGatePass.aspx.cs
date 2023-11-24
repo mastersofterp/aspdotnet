@@ -3,11 +3,13 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
-using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
+using System.IO;
 
 public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
 {
@@ -59,7 +61,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objUaimsCommon.ShowError(Page, "Hostel_Master_GatePassMaster.Page_Load() --> " + ex.Message + " " + ex.StackTrace);
+                objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_AddHostelGatePass.Page_Load() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
@@ -84,12 +86,27 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         {
             // FillInformation();
             DisplayInfo(Convert.ToInt32(gatepassno));
+
+            string OutEntryPresent = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "ISNULL(CONVERT(varchar, OUT_DATETIME_ENTRY, 103),'') OUT_DATETIME_ENTRY", "HOSTEL_GATE_PASS_NO = '" + gatepassno + "' ");
+
+            if (OutEntryPresent == "")
+            {
+                btnOutEntry.Visible = true;
+                btnInTimeEntry.Visible = false;               
+            }
+            else
+            {
+                btnOutEntry.Visible = false;
+                btnInTimeEntry.Visible = true;  
+            }
         }
     }
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        ShowReport("Hostel Gate Pass Report", "HostelGatePassReport.rpt");
+       // ShowReport("Hostel Gate Pass Report", "HostelGatePassReport.rpt");
+
+        ShowGeneralReport("~,Reports,Hostel,HostelGatePassReport.rpt", "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_GATEPASSNO=" + Convert.ToInt32(txtPass.Text));
     }
 
     private void DisplayInfo(int gatepassno)
@@ -134,6 +151,79 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
     #endregion Action
 
     #region Private Methods
+    /// For Crystal Report 
+    ReportDocument customReport;
+    private void ShowGeneralReport(string path, string paramString)
+    {
+        /// Set Report
+        customReport = new ReportDocument();
+        string reportPath = Server.MapPath(path.Replace(",", "\\"));
+        customReport.Load(reportPath);
+
+        /// Assign parameters to report document        
+        char ch = ',';
+        string[] val = paramString.Split(ch);
+        if (customReport.ParameterFields.Count > 0)
+        {
+            for (int i = 0; i < val.Length; i++)
+            {
+                int indexOfEql = val[i].IndexOf('=');
+                int indexOfStar = val[i].IndexOf('*');
+
+                string paramName = string.Empty;
+                string value = string.Empty;
+                string reportName = "MainRpt";
+
+                paramName = val[i].Substring(0, indexOfEql);
+
+                /// if report name is not passed with the parameter(means indexOfSlash will be -1) then 
+                /// handle the scenario to work properly.
+                if (indexOfStar > 0)
+                {
+                    value = val[i].Substring(indexOfEql + 1, ((indexOfStar - 1) - indexOfEql));
+                    reportName = val[i].Substring(indexOfStar + 1);
+                }
+                else
+                {
+                    value = val[i].Substring(indexOfEql + 1);
+                }
+
+                if (reportName == "MainRpt")
+                {
+                    if (value == "null")
+                    {
+                        customReport.SetParameterValue(paramName, null);
+                    }
+                    else
+                        customReport.SetParameterValue(paramName, value);
+                }
+                else
+                    customReport.SetParameterValue(paramName, value, reportName);
+            }
+        }
+
+        /// set login details & db details for report document
+        this.ConfigureCrystalReports(customReport);
+
+        /// set login details & db details for each subreport 
+        /// inside main report document.
+        for (int i = 0; i < customReport.Subreports.Count; i++)
+        {
+            ConfigureCrystalReports(customReport.Subreports[i]);
+        }
+
+        ////Export to PDF
+        customReport.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, "HostelGatePass");
+    }
+
+    private void ConfigureCrystalReports(ReportDocument customReport)
+    {
+        ////SET Login Details & DB DETAILS
+        ConnectionInfo connectionInfo = Common.GetCrystalConnection();
+        Common.SetDBLogonForReport(connectionInfo, customReport);
+    }
+    
+
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
@@ -200,7 +290,18 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
 
         if (cs.Equals(CustomStatus.RecordUpdated))
         {
-            objCommon.DisplayMessage("In Time updated successfully.", this.Page);
+            objCommon.DisplayMessage("Student In Entry updated successfully.", this.Page);
+        }
+    }
+    protected void btnOutEntry_Click(object sender, EventArgs e)
+    {
+        string GatePassNo = txtPass.Text.Trim();
+
+        CustomStatus cs = (CustomStatus)objHGP.UpdateColumnData("ACD_HOSTEL_GATEPASS_DETAILS", "OUT_DATETIME_ENTRY=GETDATE()", "HOSTEL_GATE_PASS_NO='" + GatePassNo + "'");
+
+        if (cs.Equals(CustomStatus.RecordUpdated))
+        {
+            objCommon.DisplayMessage("Student Out Entry updated successfully.", this.Page);
         }
     }
 }

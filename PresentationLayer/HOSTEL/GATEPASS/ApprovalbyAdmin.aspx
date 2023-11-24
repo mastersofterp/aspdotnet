@@ -59,8 +59,7 @@
                 </div>
                 <br />
                 <div class="box-body">
-                    <div class="col-12">
-
+                    <div class="col-12" id="finalAproval" runat="server">
                         <div class="row">
                         <div class="form-group col-lg-8 col-md-4 col-12">
                              <div class="label-dynamic">
@@ -73,15 +72,91 @@
                          </div>
                         </div>
                     </div>
+
+                    <div class="col-12" id="changeApproval" runat="server" visible="false">
+                        <div class="row">
+                        <div class="form-group col-lg-6 col-md-4 col-12">
+                             <div class="label-dynamic">
+                                    <label>Student Name</label>
+                                </div>
+                                <asp:TextBox ID="txtName" runat="server" CssClass="form-control" TabIndex="2" Enabled="False"></asp:TextBox>
+                         </div>
+                        </div>
+
+                        <div class="row">
+
+                        <div class="form-group col-lg-4 col-md-4 col-12">
+                             <div class="label-dynamic">
+                                 <sup>* </sup>
+                                    <label>First Approval</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAA1" AppendDataBoundItems="true" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAA1_SelectedIndexChanged" >
+                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                            <asp:RequiredFieldValidator ID="rfvAA1" runat="server" ErrorMessage="Please Select First Approval"
+                                    Display="None" ControlToValidate="ddlAA1" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>
+                         </div>
+
+                        <div class="form-group col-lg-4 col-md-4 col-12">
+                             <div class="label-dynamic">
+                                 <sup>* </sup>
+                                    <label>Second Approval</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAA2" AppendDataBoundItems="true" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAA2_SelectedIndexChanged" >
+                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                            <asp:RequiredFieldValidator ID="rfvAA2" runat="server" ErrorMessage="Please Select Second Approval"
+                                    Display="None" ControlToValidate="ddlAA2" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>
+                         </div>
+
+                        <div class="form-group col-lg-4 col-md-4 col-12">
+                             <div class="label-dynamic">
+                                 <sup>* </sup>
+                                    <label>Third Approval</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAA3" AppendDataBoundItems="true" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAA3_SelectedIndexChanged" >
+                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvAA3" runat="server" ErrorMessage="Please Select Third Approval"
+                                    Display="None" ControlToValidate="ddlAA3" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>
+                         </div>
+
+                        </div>
+
+                        <div class="row">
+                        <div class="form-group col-lg-4 col-md-4 col-12">
+                             <div class="label-dynamic">
+                                 <sup>* </sup>
+                                    <label>Fourth Approval</label>
+                                </div>
+                                <asp:DropDownList ID="ddlAA4" AppendDataBoundItems="true" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAA4_SelectedIndexChanged" >
+                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:RequiredFieldValidator ID="rfvAA4" runat="server" ErrorMessage="Please Select Fourth Approval"
+                                    Display="None" ControlToValidate="ddlAA4" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>
+                         </div>
+
+                        <div class="form-group col-lg-4 col-md-4 col-12">
+                            <label>Path</label>
+                        <asp:TextBox ID="txtAAPath" runat="server" ReadOnly="true" TextMode="MultiLine"
+                                                Rows="1" TabIndex="7" ToolTip="Path" Height="67px"></asp:TextBox>
+                        </div>
+                        </div>
+                    </div>
+
                     <br /><br />
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnApprove" runat="server" Text="Approve" TabIndex="2" ValidationGroup="submit"
                             CssClass="btn btn-primary" OnClick="btnApprove_Click"/>
+                        <asp:Button ID="btnChangeApproval" runat="server" Text="Change Approval" ValidationGroup="AA" 
+                            CssClass="btn btn-outline-success" OnClick="btnChangeApproval_Click" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="3"
                              CssClass="btn btn-warning" OnClick="btnCancel_Click" />
 
                         <asp:ValidationSummary ID="valSummary" runat="server" DisplayMode="List" ShowMessageBox="true"
                             ShowSummary="false" ValidationGroup="submit" />
+                        <asp:ValidationSummary ID="valAA" runat="server" DisplayMode="List" ShowMessageBox="true"
+                            ShowSummary="false" ValidationGroup="AA" />
                     </div>
 
                     <div class="col-12">
@@ -94,7 +169,7 @@
                                     <thead class="bg-light-blue">
                                         <tr>
                                             <th>
-                                                <%--<asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" />--%> Check 
+                                                <asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" /> Check All
                                             </th>
                                             <th>Student Name
                                             </th>
@@ -130,10 +205,10 @@
                                         
                                     </td>
                                     <td>
-                                        <%# Eval("OUTDATE ") %>
+                                        <%# Eval("OUTDATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                     </td>
                                     <td>
-                                        <%# Eval("INDATE ") %>
+                                        <%# Eval("INDATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                     </td>
                                     <td>
                                         <%# Eval("PURPOSE_NAME") %>
@@ -162,7 +237,7 @@
     <div id="divMsg" runat="server">
     </div>
 
-        <script type="text/javascript" language="javascript">
+        <script type="text/javascript">
 
             function CheckAll(headchk) {
 
@@ -179,7 +254,6 @@
                             e.checked = false;
                             headchk.checked == false;
                             document.getElementById('ctl00_ContentPlaceHolder1_lvGatePass_chkAll').checked = false;
-
                         }
                     }
                 }

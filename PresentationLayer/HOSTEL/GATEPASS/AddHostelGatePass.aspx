@@ -15,30 +15,26 @@
             });
         };
 
-        onkeypress = "return CheckAlphabet(event,this);"
-        function CheckAlphabet(event, obj) {
+        function CheckNumeric(event, obj) {
             var k = (window.event) ? event.keyCode : event.which;
-            if (k == 8 || k == 9 || k == 43 || k == 95 || k == 0 || k == 32 || k == 46 || k == 13) {
+            //alert(k);
+            if (k == 8 || k == 9 || k == 43 || k == 95 || k == 0) {
                 obj.style.backgroundColor = "White";
                 return true;
             }
-            if (k >= 65 && k <= 90 || k >= 97 && k <= 122) {
+            if (k > 45 && k < 58) {
                 obj.style.backgroundColor = "White";
                 return true;
+
             }
             else {
-                alert('Please Enter Alphabets Only!');
+                alert('Please Enter numeric Value');
                 obj.focus();
             }
             return false;
         }
 
-        function formatNumber(input) {
-            var value = input.value;
-            if (value < 10) {
-                input.value = '0' + value;
-            }
-        }
+
     </script>
 
     <div class="row">
@@ -56,7 +52,7 @@
                                     <sup>* </sup>
                                     <label>Gate Pass Number</label>
                                 </div>
-                                <asp:TextBox ID="txtPass" runat="server" CssClass="form-control" TabIndex="1"></asp:TextBox>
+                                <asp:TextBox ID="txtPass" runat="server" CssClass="form-control" TabIndex="1" onkeypress="return CheckNumeric(event,this);" MaxLength="8" ></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvPass" runat="server" ErrorMessage="Please Enter Hostel Gate Pass Number."
                                     Display="None" ControlToValidate="txtPass" SetFocusOnError="True" ValidationGroup="submit"></asp:RequiredFieldValidator>
                          </div>
@@ -131,6 +127,9 @@
 
                           <asp:Button ID="btnInTimeEntry" runat="server" Text="IN TIME ENTRY"  TabIndex="4"
                             CssClass="btn btn-primary" OnClick="btnInTimeEntry_Click" />
+
+                          &nbsp;&nbsp;
+                          <asp:Button ID="btnOutEntry" runat="server" CssClass="btn btn-primary"  TabIndex="5" Text="OUT ENTRY" OnClick="btnOutEntry_Click" />
 
                     </div>
 

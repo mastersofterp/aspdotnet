@@ -51,6 +51,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 pnlList.Visible = true;
                 //FillAAuthority();
                 //GetDays();
+                Labels();
                 BindListViewAAMaster();
                 objCommon.FillDropDownList(ddlDays, "ACD_HOSTEL_DAYS", "DAY_TYPE_NO", "DAY_TYPE_NAME", "DAY_TYPE_NO>0", "DAY_TYPE_NO");
                 objCommon.FillDropDownList(ddlDaysAuth, "ACD_HOSTEL_DAYS", "DAY_TYPE_NO", "DAY_TYPE_NAME", "DAY_TYPE_NO>0", "DAY_TYPE_NO");
@@ -61,6 +62,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
 
                 objCommon.FillDropDownList(ddlApp, "ACD_HOSTEL_AUTH_APPROVAL_TYPE_MASTER", "AUTHORITY_APPROVAL_NO", "AUTHORITY_APPROVAL_TYPE", "AUTHORITY_APPROVAL_NO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "AUTHORITY_APPROVAL_NO");
                 ddlApp.SelectedIndex = 1;
+
                 ViewState["edit"] = "add";
                 Session["action"] = "add";
             }
@@ -94,20 +96,6 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
         ViewState["action"] = "add";
         pnlAAPaList.Visible = false;
         pnlauthority.Visible = false;
-
-        DataSet dsStudent = objCommon.FillDropDown("ACD_HOSTEL_ADD_AUTH_MASTER", "APPROVAL1,APPROVAL2", "APPROVAL3,APPROVAL4,APPROVAL5", "", "");
-        if (dsStudent.Tables[0].Rows.Count > 0)
-        {
-            lblApprover1.Text = lblApprover1.Text + " (" + dsStudent.Tables[0].Rows[0]["APPROVAL1"].ToString() + ")";
-            lblApprover2.Text = lblApprover2.Text + " (" + dsStudent.Tables[0].Rows[0]["APPROVAL2"].ToString() + ")";
-            lblApprover3.Text = lblApprover3.Text + " (" + dsStudent.Tables[0].Rows[0]["APPROVAL3"].ToString() + ")";
-            lblApprover4.Text = lblApprover4.Text + " (" + dsStudent.Tables[0].Rows[0]["APPROVAL4"].ToString() + ")";
-            lblApprover5.Text = lblApprover5.Text + " (" + dsStudent.Tables[0].Rows[0]["APPROVAL5"].ToString() + ")";
-        }
-        else
-        {
-            //objCommon.DisplayMessage(this.Page, "Enter Appprovals", this.Page);
-        }
     }
 
     protected void btnBack_Click(object sender, EventArgs e)
@@ -314,6 +302,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                     objCommon.DisplayMessage(this.Page, "Record Updated successfully.", this.Page);
                     ViewState["editauth"] = null;
                     Session["actionauth"] = null;
+                    BindListViewAuthApprovalMaster();
                     clearnewAuthApproval();
 
                     ddlStuTypeAuth.Enabled = true;
@@ -344,6 +333,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                 {
                     BindListViewAuthApprovalMaster();
                     objCommon.DisplayMessage(this.Page, "Record added successfully.", this.Page);
+                    BindListViewAuthApprovalMaster();
                     clearnewAuthApproval();
                 }
                 else
@@ -511,20 +501,20 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
     {
         OBJHGPAA.STUDTYPE = ddlStuType.SelectedIndex;
         OBJHGPAA.DAYS = ddlDays.SelectedIndex.ToString();
+
+        Labels();
+
         DataSet ds = objHGPA.GetLabel(OBJHGPAA);
 
         if (ds.Tables[0].Rows.Count > 0)
         {
-            lblApprover1.Text = "APPROVAL1" + " (" + (ds.Tables[0].Rows[0]["APPROVAL1"].ToString()) + ")";
-
-            lblApprover2.Text = "APPROVAL2" + " (" + (ds.Tables[0].Rows[0]["APPROVAL2"].ToString()) + ")";
-
-            lblApprover3.Text = "APPROVAL3" + " (" + (ds.Tables[0].Rows[0]["APPROVAL3"].ToString()) + ")";
-
-            lblApprover4.Text = "APPROVAL4" + " (" + (ds.Tables[0].Rows[0]["APPROVAL4"].ToString()) + ")";
-
-            lblApprover5.Text = "APPROVAL5" + " (" + (ds.Tables[0].Rows[0]["APPROVAL5"].ToString()) + ")";
+            lblApprover1.Text = lblApprover1.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL1"].ToString()) + ")";
+            lblApprover2.Text = lblApprover2.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL2"].ToString()) + ")";
+            lblApprover3.Text = lblApprover3.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL3"].ToString()) + ")";
+            lblApprover4.Text = lblApprover4.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL4"].ToString()) + ")";
+            lblApprover5.Text = lblApprover5.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL5"].ToString()) + ")";
         }
+
         if ((ds.Tables[0].Rows[0]["APPROVAL1"].ToString().ToUpper() == "PARENT") || (ds.Tables[0].Rows[0]["APPROVAL1"].ToString().ToUpper() == "PARENTS"))
         {
             ddlAA1parent.Visible = true;
@@ -561,19 +551,18 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
     {
         OBJHGPAA.STUDTYPE = ddlStuType.SelectedIndex;
         OBJHGPAA.DAYS = ddlDays.SelectedIndex.ToString();
+
+        Labels();
+
         DataSet ds = objHGPA.GetLabel(OBJHGPAA);
 
         if (ds.Tables[0].Rows.Count > 0)
         {
-            lblApprover1.Text = "APPROVAL1" + " (" + (ds.Tables[0].Rows[0]["APPROVAL1"].ToString()) + ")";
-
-            lblApprover2.Text = "APPROVAL2" + " (" + (ds.Tables[0].Rows[0]["APPROVAL2"].ToString()) + ")";
-
-            lblApprover3.Text = "APPROVAL3" + " (" + (ds.Tables[0].Rows[0]["APPROVAL3"].ToString()) + ")";
-
-            lblApprover4.Text = "APPROVAL4" + " (" + (ds.Tables[0].Rows[0]["APPROVAL4"].ToString()) + ")";
-
-            lblApprover5.Text = "APPROVAL5" + " (" + (ds.Tables[0].Rows[0]["APPROVAL5"].ToString()) + ")";
+            lblApprover1.Text = lblApprover1.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL1"].ToString()) + ")";
+            lblApprover2.Text = lblApprover2.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL2"].ToString()) + ")";
+            lblApprover3.Text = lblApprover3.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL3"].ToString()) + ")";
+            lblApprover4.Text = lblApprover4.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL4"].ToString()) + ")";
+            lblApprover5.Text = lblApprover5.Text + " (" + (ds.Tables[0].Rows[0]["APPROVAL5"].ToString()) + ")";
         }
         if ((ds.Tables[0].Rows[0]["APPROVAL1"].ToString().ToUpper() == "PARENT") || (ds.Tables[0].Rows[0]["APPROVAL1"].ToString().ToUpper() == "PARENTS"))
         {
@@ -894,9 +883,17 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
     //    }
     //}
 
+    private void Labels()
+    {
+        lblApprover1.Text = "Approval 1";
+        lblApprover2.Text = "Approval 2";
+        lblApprover3.Text = "Approval 3";
+        lblApprover4.Text = "Approval 4";
+        lblApprover5.Text = " Approval 5";
+    }
+
     private void clearnew()
     {
-        ddlApp.SelectedIndex = 0;
         ddldepartment.SelectedIndex = 0;
         ddlHostel.SelectedIndex = 0;
         ddlAA1.SelectedIndex = 0;
@@ -908,11 +905,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
         //chkDays.Checked = false;
         ddlStuType.SelectedIndex = 0;
         txtAAPath.Text = string.Empty;
-        lblApprover1.Text = "Approval 1";
-        lblApprover2.Text = "Approval 2";
-        lblApprover3.Text = "Approval 3";
-        lblApprover4.Text = "Approval 4";
-        lblApprover5.Text = "Approval 5";
+        Labels();
         ddlAA1parent.Visible = false;  //Added By Himanshu Tamrakar on date 16-NOV-2023
         ddlAA2Parent.Visible = false;
         ddlAA1.Enabled = true;
@@ -1107,6 +1100,17 @@ public partial class HOSTEL_GATEPASS_HostelGatePassAuthApprovalMaster : System.W
                     this.EnableDisable(5);
                     ddlAA5.Enabled = true;
                 }
+
+                DataSet dsStudent = objCommon.FillDropDown("ACD_HOSTEL_ADD_AUTH_MASTER AUTH INNER JOIN ACD_HOSTEL_AUTHORITY_APPROVAL_MASTER APPR ON (AUTH.STUDENT_TYPE_ID = APPR.STUDENT_TYPE_ID AND AUTH.DAYS_TYPE_ID = APPR.DAYS)", "APPROVAL1,APPROVAL2", "APPROVAL3,APPROVAL4,APPROVAL5", "AUTH.STUDENT_TYPE_ID =" + Convert.ToInt32(ddlStuType.SelectedValue) + " AND AUTH.DAYS_TYPE_ID =" + Convert.ToInt32(ddlDays.SelectedValue) , "");
+                if (dsStudent.Tables[0].Rows.Count > 0)
+                {
+                    lblApprover1.Text = lblApprover1.Text + " (" + (dsStudent.Tables[0].Rows[0]["APPROVAL1"].ToString()) + ")";
+                    lblApprover2.Text = lblApprover2.Text + " (" + (dsStudent.Tables[0].Rows[0]["APPROVAL2"].ToString()) + ")";
+                    lblApprover3.Text = lblApprover3.Text + " (" + (dsStudent.Tables[0].Rows[0]["APPROVAL3"].ToString()) + ")";
+                    lblApprover4.Text = lblApprover4.Text + " (" + (dsStudent.Tables[0].Rows[0]["APPROVAL4"].ToString()) + ")";
+                    lblApprover5.Text = lblApprover5.Text + " (" + (dsStudent.Tables[0].Rows[0]["APPROVAL5"].ToString()) + ")";
+                }
+
             }
         }
         catch (Exception ex)
