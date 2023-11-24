@@ -1733,7 +1733,7 @@ public partial class ADMINISTRATION_Bulk_User_Id_Creation_Employees : System.Web
             System.Data.DataTable dtemployeedata = new System.Data.DataTable();
             dtemployeedata.Columns.Add(new DataColumn("Society Name", typeof(string)));
             dtemployeedata.Columns.Add(new DataColumn("College Name", typeof(string)));
-            dtemployeedata.Columns.Add(new DataColumn("Employee Id", typeof(int)));
+            dtemployeedata.Columns.Add(new DataColumn("Employee Id", typeof(string)));  // Convert int to string
             dtemployeedata.Columns.Add(new DataColumn("RFIDNO", typeof(int)));
             dtemployeedata.Columns.Add(new DataColumn("Title", typeof(string)));
             dtemployeedata.Columns.Add(new DataColumn("First Name", typeof(string)));
