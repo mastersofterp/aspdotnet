@@ -209,7 +209,9 @@ namespace IITMS
                     }
                     return ds;
                 }
-                public int AddClubRegistration(int idno, int sessionno, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description, string File)
+
+                //Updated by Sakshi M 22112023
+                public int AddClubRegistration(int idno, int sessionno, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description, string File, int weightage, int campus, int count)
                 {
                     int status = 0;
                     try
@@ -217,7 +219,7 @@ namespace IITMS
 
                         SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[11];
+                        objParams = new SqlParameter[14];
                         objParams[0] = new SqlParameter("@P_IDNO", idno);
                         objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[2] = new SqlParameter("@P_CLUBACTIVITY_TYPE", Subuser);
@@ -228,9 +230,12 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_DURATION", Duration);
                         objParams[8] = new SqlParameter("@P_DESCRIPTION_OF_EVENT", Description);
                         objParams[9] = new SqlParameter("@P_UPLOAD_DOCUMENT", File);
+                        objParams[10] = new SqlParameter("@P_WEIGHTAGE", weightage);
+                        objParams[11] = new SqlParameter("@P_CAMPUS", campus);
+                        objParams[12] = new SqlParameter("@P_COUNT", count);
                         //objParams[10] = new SqlParameter("@P_COLLEGEID", collegeid);
-                        objParams[10] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[13] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
 
                         object obj = objSqlHelper.ExecuteNonQuerySP("PKG_SP_INS_ACD_CLUB_ACTIVITY_REGISTRATION", objParams, true);
 
@@ -252,14 +257,15 @@ namespace IITMS
                 }
 
 
-                public int UpdateClubRegistration(int club_no, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description,string File)
+                //Updated By Sakshi M. ON 20112023
+                public int UpdateClubRegistration(int club_no, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description, string File, int weightage, int campus, int count)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_CLUB_NO", club_no);
                         //objParams[1] = new SqlParameter("@P_IDNO", idno);
                         //objParams[2] = new SqlParameter("@P_SESSIONNO", sessionno);
@@ -271,8 +277,12 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_DURATION", Duration);
                         objParams[7] = new SqlParameter("@P_DESCRIPTION_OF_EVENT", Description);
                         objParams[8] = new SqlParameter("@P_UPLOAD_DOCUMENT", File);
-                        objParams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[9] = new SqlParameter("@P_WEIGHTAGE", weightage);
+                        objParams[10] = new SqlParameter("@P_CAMPUS", campus);
+                        objParams[11] = new SqlParameter("@P_COUNT", count);
+                        //objParams[10] = new SqlParameter("@P_COLLEGEID", collegeid);
+                        objParams[12] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
 
                         object obj = objSqlHelper.ExecuteNonQuerySP("PKG_SP_UPD_ACD_CLUB_ACTIVITY_REGISTRATION", objParams, true);
 
@@ -292,6 +302,7 @@ namespace IITMS
                     }
                     return status;
                 }
+
 
                 public DataSet GetClubActivityRegistrationDetails(int idno)
                 {
@@ -550,6 +561,181 @@ namespace IITMS
                         throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.CheckReferMasterTable-> " + ex.ToString());
                     }
                     return retStatus;
+                }
+
+                ///  Added by Sakshi Makwana on 20112023
+                public int InsertUpdatePhdHrWeightage(string weightage, int Status, string ipaddress, int createdby, int op, int weightno)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[7];
+                        objParams[0] = new SqlParameter("@P_WEIGHTAGE_NO", weightno);
+                        objParams[1] = new SqlParameter("@P_WIEGHTAGE", weightage);
+                        objParams[2] = new SqlParameter("@P_ACTIVE_STATUS", Status);
+                        objParams[3] = new SqlParameter("@P_IPADDRESS", ipaddress);
+                        objParams[4] = new SqlParameter("@P_CREATEDBY", createdby);
+                        objParams[5] = new SqlParameter("@P_OPERATION", op);
+                        objParams[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
+
+                        object obj = objSqlHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_CLUB_WEIGHTAGE", objParams, true);
+
+                        if (obj != null && obj.ToString() == "1")
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString() == "5")
+                            status = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        else if (obj.ToString() == "2")
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdatePhdHrWeightage --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+
+                ///  Added by Sakshi Makwana on 20112023
+                public int InsertUpdateCourseDeatils(string campus, int Status, string ipaddress, int createdby, int op, int campusno)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[7];
+                        objParams[0] = new SqlParameter("@P_CAMPUS_NO", campusno);
+                        objParams[1] = new SqlParameter("@P_CAMPUS", campus);
+                        objParams[2] = new SqlParameter("@P_ACTIVE_STATUS", Status);
+                        objParams[3] = new SqlParameter("@P_IPADDRESS", ipaddress);
+                        objParams[4] = new SqlParameter("@P_CREATEDBY", createdby);
+                        objParams[5] = new SqlParameter("@P_OPERATION", op);
+                        objParams[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
+
+                        object obj = objSqlHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_CLUB_CAMPUS_DETAILS", objParams, true);
+
+                        if (obj != null && obj.ToString() == "1")
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString() == "5")
+                            status = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        else if (obj.ToString() == "2")
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdateCourseDeatils --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+
+                ///  Added by Sakshi Makwana on 20112023
+                public DataSet PointMapping(int dynamicid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_DYNAMICNO", dynamicid);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_CLUB_POINTMAPPING_MASTER_DETAIL", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.studentController.GetClubActivityByNo->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                ///  Added by Sakshi Makwana on 20112023
+                public int InsertUpdateHoursCountDeatils(string count, int Status, string IPADDRESS, int createdby, int op, int countno)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[7];
+                        objParams[0] = new SqlParameter("@P_HC_NO", countno);
+                        objParams[1] = new SqlParameter("@P_COUNT", count);
+                        objParams[2] = new SqlParameter("@P_ACTIVE_STATUS", Status);
+                        objParams[3] = new SqlParameter("@P_IPADDRESS", IPADDRESS);
+                        objParams[4] = new SqlParameter("@P_CREATEDBY", createdby);
+                        objParams[5] = new SqlParameter("@P_OPERATION", op);
+                        objParams[6] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
+
+                        object obj = objSqlHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_CLUB_HOURS_COUNT", objParams, true);
+
+                        if (obj != null && obj.ToString() == "1")
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString() == "5")
+                            status = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        else if (obj.ToString() == "2")
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdateCourseDeatils --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+
+                ///  Added by Sakshi Makwana on 20112023
+                public int InsertUpdate_WeightageCampusHours_Mapping(int weightno, int campusno, int countno, int points, int Status, string IPADDRESS, int createdby, int op, int wccno)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objSqlHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[10];
+                        objParams[0] = new SqlParameter("@P_WCCNO", wccno);
+                        objParams[1] = new SqlParameter("@P_WEIGHTNO", weightno);
+                        objParams[2] = new SqlParameter("@P_CAMPUSNO", campusno);
+                        objParams[3] = new SqlParameter("@P_COUNTNO", countno);
+                        objParams[4] = new SqlParameter("@P_POINTS", points);
+                        objParams[5] = new SqlParameter("@P_ACTIVE_STATUS", Status);
+                        objParams[6] = new SqlParameter("@P_IPADDRESS", IPADDRESS);
+                        objParams[7] = new SqlParameter("@P_CREATEDBY", createdby);
+                        objParams[8] = new SqlParameter("@P_OPERATION", op);
+                        objParams[9] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
+
+                        object obj = objSqlHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_UPDATE_CLUB_HOURS_MAPPING_DETAILS", objParams, true);
+
+                        if (obj != null && obj.ToString() == "1")
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString() == "5")
+                            status = Convert.ToInt32(CustomStatus.DuplicateRecord);
+                        else if (obj.ToString() == "2")
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdateCourseDeatils --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
                 }
               
             }
