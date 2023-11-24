@@ -966,6 +966,17 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 ShowReportDailyAttendenceCresent("Student_Daily_Attendence_Report", "rptDailyAttendanceSheet_HITS.rpt");
             }
+            else if ((Convert.ToInt32(Session["OrgId"]) == 16)) // For Maher Added By TEJAS THAKRE 
+            {
+                if (ddlbatch.Visible == true)
+                {
+                    ShowReportDailyAttendenceMaher("Student_Daily_Attendence_Report", "rptAttendancesheet_MAHER.rpt");
+                }
+                else
+                {
+                    ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet.rpt");
+                }
+            }
             else
             {
                 ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet.rpt");
@@ -1273,6 +1284,67 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     ",@P_PREV_STATUS=" + Convert.ToInt32(0) +
                     ",@P_SUBID=" + SubId +
                     ",@P_COLLEGE_ID=" + ViewState["college_id"] + "";
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterStartupScript(this.updExamdate, this.updExamdate.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updExamdate, "For Attendance Sheet Time Table Should be Created", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Hostel_StudentHostelIdentityCard.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    private void ShowReportDailyAttendenceMaher(string reportTitle, string rptFileName) //Added By Tejas Thakre on 27_02_2023
+    {
+        try
+        {
+
+            int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+            int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+            //int Courseno = Convert.ToInt32(ddlCourse.SelectedValue);
+            //int College_Id = Convert.ToInt32(ddlCollege.SelectedValue);
+            int SubId = Convert.ToInt32(ddlSubjecttype.SelectedValue);
+            int Sectionno = Convert.ToInt32(ddlSection.SelectedValue);
+            string proc_ = "PKG_ATTENDANCE_CPUKA";
+            string para_ = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_EXAM_NO,@P_SCHEMENO,@P_SECTIONNO,@P_PREV_STATUS,@P_SUBID,@P_COLLEGE_ID";
+            string value_ = Convert.ToInt32(Sessionno) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," + Convert.ToInt32(ViewState["branchno"]) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlExamName.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Sectionno + "," + Convert.ToInt32(0) + "," + SubId + "," + ViewState["college_id"];
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(proc_, para_, value_);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] +
+                    ",@P_SESSIONNO=" + Convert.ToInt32(Sessionno) +
+                    ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) +
+                    ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) +
+                    ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) +
+                    //",@P_COURSENO=" + Courseno +
+                    ",@P_EXAM_NO=" + Convert.ToInt32(ddlExamName.SelectedValue) +
+                    //",@P_EXAM_NO=" + Convert.ToInt32(ddlsubexamname.SelectedValue) + //Added by Injamam for Subexamvise // commented on 15-06-2023 by Injamam
+                    ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) +
+                    ",@P_SECTIONNO=" + Sectionno +
+                    ",@P_PREV_STATUS=" + Convert.ToInt32(0) +
+                    ",@P_SUBID=" + SubId +
+                    ",@P_COLLEGE_ID=" + ViewState["college_id"] +  ",@P_BATCHNO=" + Convert.ToInt32(ddlbatch.SelectedValue);
+                   
                 //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 //divMsg.InnerHtml += " </script>";
