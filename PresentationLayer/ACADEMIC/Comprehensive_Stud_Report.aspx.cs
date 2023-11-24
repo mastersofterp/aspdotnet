@@ -325,7 +325,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         string semesterno = dtr["SEMESTERNO"].ToString();
                         string schemeno = dtr["SCHEMENO"].ToString();
                         //string sessionno = Session["currentsession"].ToString();
-                        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "ISNULL(CANCEL,0)=0 AND  IDNO=" + idno + ""));
+                        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
                         //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "IS_ACTIVE=1 AND FLOCK=1 AND COLLEGE_ID=" + college_id + "");
                         string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
                         //string sessionno = ddlSession.SelectedValue;
