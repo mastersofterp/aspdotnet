@@ -156,7 +156,6 @@
                                         </div>
                                        <asp:RadioButton runat="server" Checked="true" GroupName="course" Text="Course Registration Done by Student" AutoPostBack="true" ID="rdoCourseRegDone" OnCheckedChanged="rdoCourseRegDone_CheckedChanged"/>
                                        <asp:RadioButton runat="server" GroupName="course" Text="Course Registration Not Done by Student" ID="rdoCoursePending" OnCheckedChanged="rdoCoursePending_CheckedChanged" />
-
                                     </div>--%>
                                 </div>
                             </div>
@@ -170,6 +169,10 @@
                                 <asp:ValidationSummary ID="valSummery2" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
                             </div>
+                            <div class="col-12" id="tblInfo" runat="server">
+                                <div class="row">
+                                    <div class="col-6 mt-3">
+                                        <asp:Panel ID="pnlALLStudent" runat="server">
                                             <asp:ListView ID="lvApproveCourse" runat="server">
                                                 <LayoutTemplate>
                                                     <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblApproveCourse">
