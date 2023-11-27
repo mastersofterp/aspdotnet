@@ -854,8 +854,7 @@
                                     <asp:Button ID="btnBranchWiseResultAnalysis" runat="server" TabIndex="1" Text="Branch Wise Result Analysis" CssClass="btn btn-info" ValidationGroup="Branch" OnClick="btnBranchWiseResultAnalysis_Click" />
                                     <asp:Button ID="btnCourseWiseExamRegistartion" Text="Course Wise Exam Registration" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourseWiseExamRegistartion_Click" ValidationGroup="CourseWiseExamRegistartion" />
                                     <asp:Button ID="btnSubjectWiseResultanalysisReport" Text="Subject Wise Result Analysis Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSubjectWiseResultanalysisReport_Click" ValidationGroup="SubjectWiseResultanalysisReport" />
-                                    <asp:Button ID="btnIntEntRpt" Text="Internal Mark Entry Report" runat="server" TabIndex="19" ValidationGroup="AnalysisReport" CssClass="btn btn-info" CausesValidation="false" OnClick="btnIntEntRpt_Click" Visible ="false" />
-
+                                   
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Branch" CausesValidation="false" />
                                     <asp:ValidationSummary ID="ValidationSummary8" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseFailStudList" CausesValidation="false" />
                                     <asp:ValidationSummary ID="ValidationSummary9" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseExamRegistartion" CausesValidation="false" />
