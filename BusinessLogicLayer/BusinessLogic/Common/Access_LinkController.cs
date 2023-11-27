@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Web;
-
 using IITMS;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer;
@@ -192,7 +191,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //Add New Access Link
-                        objParams = new SqlParameter[8]; //Added By Hemanth G
+                        objParams = new SqlParameter[9]; //Added By Hemanth G
                         objParams[0] = new SqlParameter("@P_AL_LINK", objAL.Al_Link);
                         if (objAL.Al_Url != string.Empty)
                             objParams[1] = new SqlParameter("@P_AL_URL", objAL.Al_Url);
@@ -204,6 +203,7 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_LEVELNO", objAL.levelno);
                         objParams[6] = new SqlParameter("@P_STATUS", objAL.chklinkstatus);//Added By Hemanth G
                         objParams[7] = new SqlParameter("@P_TRANS", objAL.chkTrans);//Added By Nikhil l. on 24/04/2023
+                        objParams[8] = new SqlParameter("@P_PDFNAME", objAL.Al_PdfName); // Added By Anurag B. on 31-10-2023
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_ACCESS_LINK_SP_INS_LINK", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -226,7 +226,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //UpdateFaculty Access Link
-                        objParams = new SqlParameter[9]; //Added By Hemanth G
+                        objParams = new SqlParameter[10]; //Added By Hemanth G
                         objParams[0] = new SqlParameter("@P_AL_NO", objAL.Al_No);
                         objParams[1] = new SqlParameter("@P_AL_LINK", objAL.Al_Link);
                         objParams[2] = new SqlParameter("@P_AL_URL", objAL.Al_Url);
@@ -236,6 +236,7 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_LEVELNO", objAL.levelno);
                         objParams[7] = new SqlParameter("@P_STATUS", objAL.chklinkstatus);//Added By Hemanth G
                         objParams[8] = new SqlParameter("@P_TRANS", objAL.chkTrans);//Added By Nikhil L. on 24/04/2023
+                        objParams[9] = new SqlParameter("@P_PDFNAME", objAL.Al_PdfName); // Added By Anurag B. on 31-10-2023
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_ACCESS_LINK_SP_UPD_LINK", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 

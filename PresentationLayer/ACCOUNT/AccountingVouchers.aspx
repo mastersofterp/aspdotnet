@@ -586,6 +586,7 @@ function calTdsOnIGstAmount() {
                                         <h5>Against Account Entry</h5>
                                     </div>
 
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-2">
@@ -683,7 +684,7 @@ function calTdsOnIGstAmount() {
                                     </div>
                                     <div class="col-md-2">
                                         Remaining amount:
-                                                               <asp:Label ID="lblRemainAmt" runat="server" Font-Bold="true"></asp:Label>
+                                          <asp:Label ID="lblRemainAmt" runat="server" Font-Bold="true"></asp:Label>
                                     </div>
                                     <%--  </div>--%>
                                 </div>
@@ -821,7 +822,7 @@ function calTdsOnIGstAmount() {
                                             <asp:ListItem>Dr</asp:ListItem>
                                             <asp:ListItem>Cr</asp:ListItem>
                                         </asp:DropDownList>
-                                    </div>
+                                    </div>trSposor
                                     <div id="Div5" class="col-md-1" runat="server" visible="false">
                                         <asp:TextBox ID="txtChqNo1" runat="server" ToolTip="Please Enter Account Name" Width="70%"
                                             Visible="False"></asp:TextBox>
@@ -839,6 +840,9 @@ function calTdsOnIGstAmount() {
                                             Enabled="True">
                                         </ajaxToolKit:MaskedEditExtender>
                                     </div>
+
+
+
                                     <div>
                                         <asp:CheckBox ID="chkTDSApplicable" runat="server" Text="TDS (Y/N)" AutoPostBack="true"
                                             OnCheckedChanged="chkTDSApplicable_CheckedChanged" />
@@ -1772,6 +1776,17 @@ function calTdsOnIGstAmount() {
                                     </div>
 
                                 </div>
+                                <%-- started --%>
+                                  <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup></sup>
+                                                <label>
+                                                    <asp:Label ID="lblSearch" runat="server" Text=""></asp:Label></label>
+                                            </div>
+
+                                        </div>
+                                     <%-- ended --%>
+
 
                                 <br />
                                 <div class="row">
@@ -1844,7 +1859,7 @@ function calTdsOnIGstAmount() {
                                     </div>
                                     <div class="col-md-2">
                                         <asp:TextBox ID="txtinvoiceNo" runat="server" AutoPostBack="false" ToolTip="Please Enter Invoice No."
-                                            MaxLength="6" CssClass="form-control" ReadOnly="false"></asp:TextBox>
+                                            MaxLength="20" CssClass="form-control" ReadOnly="false"></asp:TextBox>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="input-group date">
@@ -1884,7 +1899,7 @@ function calTdsOnIGstAmount() {
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup></sup>     
                                                             <label>Bill Name</label>
                                                         </div>
                                                         <asp:TextBox ID="txtBillName" runat="server" ToolTip="Enter Bill Name" CssClass="form-control"
@@ -1915,7 +1930,7 @@ function calTdsOnIGstAmount() {
 
                                                             <asp:ListView ID="lvNewBills" runat="server">
                                                                 <LayoutTemplate>
-                                                                    <div id="lgv1">
+                                                                    <div id="lgv1"> 
                                                                         <div class="sub-heading">
                                                                             <h5>Uploaded Bill List</h5>
                                                                         </div>

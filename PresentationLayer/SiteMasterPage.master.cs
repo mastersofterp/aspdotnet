@@ -14,6 +14,8 @@ using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
 using System.Web.UI.HtmlControls;
+using Newtonsoft.Json;
+using System.IO;
 
 
 public partial class SiteMasterPage : System.Web.UI.MasterPage
@@ -319,6 +321,12 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         {
             throw new Exception(Ex.Message);
         }
+
+        //Get the Current Page Name.
+        string currentPageName = Request.Url.Segments[Request.Url.Segments.Length - 1];
+        //Response.Write("Current Page: " + currentPageName);
+        //objCommon.DisplayMessage("Current Page: " + currentPageName, this.Page);
+        GetPdfPath();
         
     }
     public class Packet
@@ -326,6 +334,17 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         public string res { get; set; }
         public string msg { get; set; }
         public string data { get; set; }
+    }
+
+    // Added By Anurag B. on 31-10-2023
+    protected void downloadpdf_click(object sender, EventArgs e)
+    {
+        DataSet pdfpath = GetPdfPath();
+        Response.ContentType = "Application/pdf";
+        Response.AppendHeader("Content-Disposition", "ONLINESPORTSDOC; filename=" + pdfpath.Tables[0].Rows[0]["MANUAL_UPLOAD_FILENAME"].ToString() + "");
+        Response.TransmitFile(Server.MapPath("~/UserManual/" + pdfpath.Tables[0].Rows[0]["MANUAL_UPLOAD_FILENAME"].ToString() + ""));
+        Response.End();
+        objCommon.DisplayMessage("~/UserManual/" + pdfpath.Tables[0].Rows[0]["MANUAL_UPLOAD_FILENAME"].ToString() + "", this.Page);
     }
     //[WebMethod]
     ////[ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
@@ -3215,5 +3234,62 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         {
             Response.Redirect("~/principalHome.aspx");
         }
+    }
+
+
+
+    protected DataSet GetPdfPath()  // Added By Anurag B. on 31-10-2023
+    { 
+        string currentPageName = Request.Url.Segments[Request.Url.Segments.Length - 1];
+        //string AL_No = Request.QueryString["pageno"].ToString().Trim();
+        DataSet ds = new DataSet();
+        //DataSet ds = null;
+        try
+        {
+            // SQLHelper objDataAccess = new SQLHelper(System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString);
+            //SqlParameter[] sqlParams = new SqlParameter[]
+            //{
+            //    new SqlParameter("@P_AL_URL", currentPageName)
+            //};
+            //ds = objDataAccess.ExecuteDataSetSP("PKG_GET_PDF_NAME", sqlParams);
+            if (currentPageName == "principalHome.aspx" || currentPageName=="Links.aspx")
+            {
+                ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_URL='" + currentPageName + "' ", "");
+            }
+            else
+            {
+                string AL_No = Request.QueryString["pageno"].ToString().Trim();
+                ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_No='" + AL_No + "' ", "");
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+        if (ds != null && ds.Tables[0].Rows.Count > 0 )
+        {
+            string path = ds.Tables[0].Rows[0]["MANUAL_UPLOAD_FILENAME"].ToString();
+            string folderpath = Server.MapPath("~/UserManual/") + path; // Use Server.MapPath to get the physical path
+            if (!File.Exists(folderpath))
+            {
+                //pdfViewer.Src = "UserManual/Help Document Not.pdf" + "#toolbar=0&navpanes=0&scrollbar=0";
+                string textToDisplay = "<div style='text-align: center; font-size: 24px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Help Information for " + ds.Tables[0].Rows[0]["AL_Link"].ToString() + " Not Found.</div>";
+                pdfViewer.Attributes["srcdoc"] = textToDisplay;
+                btndownload.Visible = false;
+            }
+            else
+            {
+                pdfViewer.Src = ResolveUrl("~/UserManual/") + path + "#toolbar=0&navpanes=0&scrollbar=0";
+            }
+            informationid.InnerText = "Help - " + ds.Tables[0].Rows[0]["AL_Link"].ToString() + "";
+        }
+        else
+        {
+            //pdfViewer.Src = "UserManual/Help Document Not.pdf" + "#toolbar=0&navpanes=0&scrollbar=0";
+            string textToDisplay = "<div style='text-align: center; font-size: 24px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Information Not Found.</div>";
+            pdfViewer.Attributes["srcdoc"] = textToDisplay;
+            btndownload.Visible = false;
+            informationid.InnerText = "Help - Information";
+        }
+        return ds;
     }
 }
