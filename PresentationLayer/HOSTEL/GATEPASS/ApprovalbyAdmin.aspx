@@ -150,6 +150,8 @@
                             CssClass="btn btn-primary" OnClick="btnApprove_Click"/>
                         <asp:Button ID="btnChangeApproval" runat="server" Text="Change Approval" ValidationGroup="AA" 
                             CssClass="btn btn-outline-success" OnClick="btnChangeApproval_Click" />
+                        <asp:Button ID="btnUpdatePath" runat="server" Text="Update Approval" ValidationGroup="AA" Visible="false"  
+                            CssClass="btn btn-outline-success" OnClick="btnUpdatePath_Click" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" TabIndex="3"
                              CssClass="btn btn-warning" OnClick="btnCancel_Click" />
 

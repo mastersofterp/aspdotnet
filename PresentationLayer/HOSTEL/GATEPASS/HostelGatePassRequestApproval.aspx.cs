@@ -125,8 +125,9 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
                 hdnidno.Value = ds.Tables[0].Rows[0]["IDNO"].ToString();
                 hdnhgpid.Value = ds.Tables[0].Rows[0]["HGP_ID"].ToString();
                 lblapplydate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["APPLY_DATE"].ToString()).ToString("dd-MMM-yyyy");
-                hdnAttachmenturl.Value = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT"].ToString();
+                Imageurl.Value = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT"].ToString();
                 lblApprover.Text = ds.Tables[0].Rows[0]["APPROVER"].ToString();
+                lblAttachmentName.Text = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT_NAME"].ToString();
                 lvShowApprovalStatus.DataSource = ds;
                 lvShowApprovalStatus.DataBind();
 
@@ -168,17 +169,17 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             string f_status = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "DIRECT_APPROVAL_UANO IS NOT NULL AND HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
             string f_status1 = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
 
-            if (f_status == "A")
+            if (f_status == "a")
             {
-                objCommon.DisplayMessage(this, "Gate Pass Already Approved By Admin.", this);
+                objCommon.DisplayMessage(this, "gate pass already approved by admin.", this);
                 return;
             }
-            else if (f_status1 == "A")
+            else if (f_status1 == "a")
             {
-                objCommon.DisplayMessage(this, "Gate Pass Generated.You Can Not Modify Status.", this);
+                objCommon.DisplayMessage(this, "gate pass generated.you can not modify status.", this);
                 return;
             }
-            //if (Convert.ToInt32(Session["usertype"]) == 14 || Convert.ToInt32(Session["usertype"]) == 1)    //commented  By Himanshu Tamrakar 23/11/2023
+            //if (convert.toint32(session["usertype"]) == 14 || convert.toint32(session["usertype"]) == 1)    //commented  by himanshu tamrakar 23/11/2023
             //{
             if (FileAttach.HasFile)
             {
@@ -284,16 +285,30 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 
     protected void btnShowAttachment_Click(object sender, EventArgs e)
     {
-        // string imageUrl = hdnAttachmenturl.Value;
-        string imageUrl = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "UPLOAD_DOCUMENT", "HGP_ID=" + hdnhgpid.Value);
-        if (!string.IsNullOrEmpty(imageUrl))
+        try
         {
-            // Use Process.Start to open the file in the default application
-            System.Diagnostics.Process.Start(Server.MapPath(imageUrl));
+             string imageUrl = Imageurl.Value;
+
+             if (!string.IsNullOrEmpty(imageUrl))
+            {
+                // Construct the file path on the server
+                string filePath = ResolveUrl(imageUrl);
+            
+                // Register a client-side script to open the file in a new window
+                string script = "window.open('"+filePath+"', '_blank');";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "OpenFileScript", script, true);
+            }
+            else
+            {
+                objCommon.ConfirmMessage(this, "File not Found.", this);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            objCommon.ConfirmMessage(this, "File not Found.", this);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "HOSTEL_GATEPASS_HostelInOutRequests.btnShowAttachment_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 

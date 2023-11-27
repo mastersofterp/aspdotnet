@@ -18,7 +18,7 @@
     <script type="text/javascript">
         function openImageWindow() {
             // Get the image URL from the hidden field
-            var imageUrl = document.getElementById('<%= hdnAttachmenturl.ClientID %>').value;
+            var imageUrl = document.getElementById('<%= Imageurl.ClientID %>').value;
 
         // Open a new window with the image URL
         window.open(imageUrl, '_blank');
@@ -26,6 +26,12 @@
         // Prevent the default behavior of the button click
         return false;
     }
+</script>
+    <script>
+        function openFileInNewWindow(filePath) {
+            // Open the file in a new window or tab
+            window.open(filePath, '_blank');
+        }
 </script>
 
     <div class="row" runat="server" id="DivShowRequest">
@@ -178,7 +184,6 @@
                                                 <asp:Label ID="lblPassingpath" Font-Bold="true" runat="server" />
                                                 <asp:HiddenField ID="hdnidno" runat="server" />
                                                 <asp:HiddenField ID="hdnhgpid" runat="server" />
-                                                <asp:HiddenField ID="hdnAttachmenturl" runat="server" />
                                             </a>
                                         </li>
                                     </ul>
@@ -215,12 +220,15 @@
                                                         <asp:FileUpload ID="FileAttach" runat="server" CssClass="custom-file-input" Width="291px"  />
                                                         <label class="custom-file-label" for="FileAttach">&nbsp;Choose file</label>
                                                     </div>
+                                                   &nbsp;<asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="60px"  />
                                                 </div>
                                             </a>
                                         </li>
-                                        <li class="list-group-item"><b>View Attachment :</b>
+                                        <li class="list-group-item"><b>Attachment Name :</b>
                                             <a class="sub-label">
-                                                <asp:Button ID="btnShowAttachment" runat="server" CssClass="btn btn-primary text-center" Text="View" OnClick="btnShowAttachment_Click" Width="76px"  />
+                                                <div style="overflow:scroll" >
+                                                    <asp:Label ID="lblAttachmentName" runat="server"></asp:Label>
+                                                </div>
                                             </a>
                                         </li>
                                     </ul>
@@ -285,6 +293,7 @@
                      <p>
                      <asp:RequiredFieldValidator ID="rfvvalstatus" InitialValue="0" ControlToValidate="ddlStatus" ErrorMessage="Please Select Status" runat="server" ValidationGroup="submit"></asp:RequiredFieldValidator>
     </p>
+                    <asp:HiddenField ID="Imageurl" runat="server" />
                 </div>
             </div>
         </div>
