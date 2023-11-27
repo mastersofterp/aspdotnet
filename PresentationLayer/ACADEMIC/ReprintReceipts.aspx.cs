@@ -271,7 +271,6 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                         }
                      if(Session["OrgId"].ToString().Equals("5"))
                        {
-
                        if (ReportFlag == 1)
                            {
                            // Below Code added by Rohit M. on dated 29.05.2023 
@@ -295,6 +294,10 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                            this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                            }
                        }
+                     else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                         {
+                         this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                         } 
                     else
                     {
                     this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]),Convert.ToInt32(Session["CAN_RECP"]));
@@ -310,7 +313,6 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                     }
                   if(Session["OrgId"].ToString().Equals("5"))
                     {
-
                     if (ReportFlag == 1)
                         {
                         //// Below Code added by Rohit M. on dated 25.05.2023 
@@ -333,6 +335,10 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
                         this.ShowReport_ForCash("FeeCollectionReceiptForCash_JECRC.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
                         }
                     }
+                  else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                      {
+                      this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                      } 
                     else
                     {
                     this.ShowReport_ForCash("FeeCollectionReceiptForCash.rpt", Convert.ToInt32(dcr.DcrNo), Convert.ToInt32(dcr.StudentId), "1", Convert.ToString(Session["UAFULLNAME"]), Convert.ToInt32(Session["CAN_REC"]));
@@ -1132,6 +1138,54 @@ public partial class Academic_ReprintReceipts : System.Web.UI.Page
         catch (Exception ex)
             {
             throw;
+            }
+        }
+
+    private void ShowReport_ForCash_PCEN(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
+        {
+        try
+            {
+            int dcrno = 0;
+            foreach (ListViewDataItem dataitem in lvPaidReceipts.Items)
+                {
+                HiddenField hfdcrno = dataitem.FindControl("hidDcrNo") as HiddenField;
+                RadioButton rdb = dataitem.FindControl("rdoSelectRecord") as RadioButton;
+                //if (rdb.Checked == true)
+                //    {
+                dcrno = Convert.ToInt32(hfdcrno.Value);
+                //}
+                }
+            int SemesterNo = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"])));
+            //int DCRNO = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]) + " AND SEMESTERNO=" + Convert.ToInt32(SemesterNo + 1)));
+
+            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=Fee_Collection_Receipt";
+            url += "&path=~,Reports,Academic," + rptName;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + studentNo + ",@P_DCRNO=" + dcrNo + ",@P_UA_NAME=" + Session["username"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]);
+
+
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
+            //"," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]) + "," + this.GetReportParameters(Session["IDNO"].ToString(), studentNo, "0");
+            //divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
+            //divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
+
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //ScriptManager.RegisterClientScriptBlock(this.updEdit, this.updEdit.GetType(), "controlJSScript", sb.ToString(), true);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
+
+            }
+        catch (Exception ex)
+            {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server Unavailable.");
             }
         }
 }
