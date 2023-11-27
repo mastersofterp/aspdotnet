@@ -100,9 +100,11 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                     ddlNumType.Items.Insert(0, new ListItem("Seat Number", "2"));
                     ddlNumType.SelectedValue = "2";
                     hdfNumtypeStat.Value = "2";
+                    spanDecodebtn.Visible = true;
                     ddlNumType.Enabled = false;
                     btnGenNo.Enabled = true;
-                    divtxtNumberSeries.Visible = true;
+                    //divtxtNumberSeries.Visible = true;
+                    btnReport.Visible = false;
 
                     btnReport.Text = "PRINT SEAT NUMBER";
                 }
@@ -241,6 +243,8 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
 
             if (recordCount == "0" && NumType == 1)
             {
+                #region NumType == 1 // Decode Number
+
                 if (ddlCourse.SelectedIndex <= 0)
                 {
                     DataSet CoursenoDs = objCommon.FillDropDown(" ACD_STUDENT_RESULT", "DISTINCT COURSENO", "(CCODE +' - '+ COURSENAME)COURSENAME,SUBID", " SESSIONNO=" + ddlSession.SelectedValue + "AND SEMESTERNO=" + ddlsemester.SelectedValue + " AND EXAM_REGISTERED=1 AND CANCEL=0 AND SCHEMENO=" + ViewState["schemeno"].ToString(), "SUBID");
@@ -287,31 +291,45 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                         BindListView();
                     }
                 }
+
+                #endregion
             }
             else if (NumType == 2)
             {
-                #region NumType == 2
+                #region NumType == 2 // Seat Number
 
                 //false number
-                if (ddlCourse.SelectedIndex <= 0)
+                //if (ddlCourse.SelectedIndex <= 0)
+                //{
+                //    objCommon.DisplayMessage(UpdatePanel1, "Please Select Course", Page);
+                //    return;
+                //}
+                //else if (txtNumSeries.Text == string.Empty)
+                //{
+                //    objCommon.DisplayMessage(UpdatePanel1, "Please Enter False Number Series", Page);
+                //    return;
+                //}
+
+                int numSeries;
+
+                try
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "Please Select Course", Page);
-                    return;
+                    numSeries = Convert.ToInt32(txtNumSeries.Text);
                 }
-                else if (txtNumSeries.Text == string.Empty)
+                catch
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "Please Enter False Number Series", Page);
-                    return;
+                    numSeries = 0;
                 }
-                int numSeries = Convert.ToInt32(txtNumSeries.Text);
 
                 //Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["branchno"].ToString()), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ddlDigits.SelectedValue), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"].ToString())
 
-                CustomStatus ret = (CustomStatus)objStudent.GenerateFalseNumber(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), numSeries, Convert.ToInt32(ViewState["branchno"].ToString()), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString());
+                //CustomStatus ret = (CustomStatus)objStudent.GenerateFalseNumber(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), numSeries, Convert.ToInt32(ViewState["branchno"].ToString()), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString()); // Commented By Sagar Mankar On Date 06112023 For PCEN
+
+                CustomStatus ret = (CustomStatus)objStudent.GenerateSeatNumber(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), numSeries, Convert.ToInt32(ViewState["branchno"].ToString()), ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString()); // Added By Sagar Mankar On Date 06112023 For PCEN
 
                 if (ret.Equals(CustomStatus.RecordUpdated))
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "False Number Generated Successfully", this);
+                    objCommon.DisplayMessage(UpdatePanel1, "Seat Number Generated Successfully", this);
                     txtNumSeries.Text = string.Empty;
                     BindListView();
                     //Clear();
@@ -319,16 +337,15 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 }
                 else if (ret.Equals(CustomStatus.RecordExist))
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "False Number Already Exists", this);
+                    objCommon.DisplayMessage(UpdatePanel1, "Seat Number Already Exists", this);
                 }
                 else if (ret.Equals(CustomStatus.TransactionFailed))
                 {
                     objCommon.DisplayMessage(UpdatePanel1, "Please Lock Absent Student Entry", this);
                 }
-
                 else
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "False Generation Process Not Done", this);
+                    objCommon.DisplayMessage(UpdatePanel1, "Seat Number Generation Process Not Done", this);
                     BindListView();
                 }
 
@@ -336,6 +353,8 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
             }
             else if (NumType == 3)
             {
+                #region NumType == 3 // Barcode Number
+
                 if (ddlCourse.SelectedIndex <= 0)
                 {
                     DataSet CoursenoDs = objCommon.FillDropDown(" ACD_STUDENT_RESULT", "DISTINCT COURSENO", "(CCODE +' - '+ COURSENAME)COURSENAME,SUBID", " SESSIONNO=" + ddlSession.SelectedValue + "AND SEMESTERNO=" + ddlsemester.SelectedValue + " AND EXAM_REGISTERED=1 AND CANCEL=0 AND SCHEMENO=" + ViewState["schemeno"].ToString(), "SUBID");
@@ -395,6 +414,8 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 gvClear();
                 Clear();
             }
+
+                #endregion
         }
         catch (Exception ex)
         {
@@ -491,6 +512,10 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 // if (ViewState["branchno"].ToString() != "99")
                 ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.DECODENO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND EXTERMARK IS NULL AND ISNULL(SR.DETAIND,0)=0 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND C.COURSENO = " + ddlCourse.SelectedValue + "AND SR.SUBID=1 AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
             }
+            else if (ddlNumType.SelectedValue == "2")
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND C.COURSENO = " + ddlCourse.SelectedValue + "AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
+            }
             else if (ddlNumType.SelectedValue == "3")
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND C.COURSENO = " + ddlCourse.SelectedValue + "AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.BARCODE_NO");
@@ -501,6 +526,12 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
             if (ddlNumType.SelectedValue == "1")
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.DECODENO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND EXTERMARK IS NULL AND ISNULL(SR.DETAIND,0)=0 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + "AND SR.SUBID=1 AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
+            }
+            else if (ddlNumType.SelectedValue == "2")
+            {
+                //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON SR.COURSENO = C.COURSENO ", "SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME, SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,SR.EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
+                //ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO)", " distinct SR.IDNO", "(SR.CCODE +' - '+ SR.COURSENAME)COURSENAME,SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,null EXTERMARK", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO"); INT
+                ds = objCommon.FillDropDown("ACD_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_STUDENT S WITH (NOLOCK)	ON (SR.IDNO = S.IDNO) INNER JOIN ACD_SESSION_MASTER SM ON (SR.SESSIONNO=SM.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SR.SCHEMENO=SC.SCHEMENO) INNER JOIN ACD_DEGREE D ON (SC.DEGREENO= D.DEGREENO) INNER JOIN ACD_BRANCH BR ON (SC.BRANCHNO=BR.BRANCHNO)", "DISTINCT SR.IDNO", "(D.DEGREENAME +' - '+ BR.LONGNAME) COURSENAME,SR.REGNO,SR.ROLL_NO,SR.SESSIONNO,SR.SEATNO,SR.BARCODE_NO,NULL EXTERMARK,SM.SESSION_PNAME,D.DEGREENAME,SC.SCHEMENAME,BR.LONGNAME", "ISNULL(CANCEL,0)=0 and SR.EXAM_REGISTERED=1 AND SR.SCHEMENO=" + ViewState["schemeno"].ToString() + " AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO = " + ddlsemester.SelectedValue + " AND BR.BRANCHNO=" + ViewState["branchno"].ToString(), "SR.REGNO");
             }
             else if (ddlNumType.SelectedValue == "3")
             {
@@ -528,12 +559,28 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
                 Label lblHead = lvDecodeNo.FindControl("lblHead") as Label;
                 lblHead.Text = ddlNumType.SelectedItem.ToString();
 
+                Label lblHeadBCD = lvDecodeNo.FindControl("lblHeadBCD") as Label;
+
+                if (ddlNumType.SelectedValue == "2")
+                {
+                    lblHeadBCD.Text = "Degree - Branch";
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide(); $('#tdfalseno td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide();$('#tdfalseno td:nth-child(3)').hide(); });", true);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide();$('td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide();$('td:nth-child(3)').hide();});", true);
+                }
+
                 for (int i = 0; i < lvDecodeNo.Items.Count; i++)
                 {
                     if (ddlNumType.SelectedValue == "1")
                     {
                         Label lblCode = (Label)lvDecodeNo.Items[i].FindControl("lblCode");
                         lblCode.Text = ds.Tables[0].Rows[i]["DECODENO"].ToString();
+                    }
+                    else if (ddlNumType.SelectedValue == "2")
+                    {
+                        Label lblCode = (Label)lvDecodeNo.Items[i].FindControl("lblCode");
+                        lblCode.Text = ds.Tables[0].Rows[i]["SEATNO"].ToString();
+
+                        // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#thfalseno').hide(); $('.tbl-panel2 table td:nth-child(3)').hide();$('#tdfalseno').hide(); $('.tbl-panel3 table td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thfalseno').hide(); $('.tbl-panel2 table td:nth-child(3)').hide();$('#tdfalseno').hide(); $('.tbl-panel3 table td:nth-child(3)').hide();});", true);
                     }
                     else if (ddlNumType.SelectedValue == "3")
                     {
@@ -840,10 +887,12 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
             if (ddlNumType.SelectedValue == "1" || ddlNumType.SelectedValue == "3")
             {
                 spanDecodebtn.Visible = true;
+                btnReport.Visible = true;
             }
             else
             {
-                spanDecodebtn.Visible = false;
+                spanDecodebtn.Visible = true;
+                btnReport.Visible = false;
             }
 
             ddlCourse.Focus();
@@ -870,8 +919,9 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
 
         if (ddlNumType.SelectedValue == "2")
         {
-            divtxtNumberSeries.Visible = true;
-            spanDecodebtn.Visible = false;
+            //divtxtNumberSeries.Visible = true;
+            spanDecodebtn.Visible = true;
+            btnReport.Visible = false;
         }
         else if (ddlNumType.SelectedValue == "1")
         {
@@ -884,6 +934,7 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         {
             spanDecodebtn.Visible = true;
             divtxtNumberSeries.Visible = false;
+            btnReport.Visible = true;
 
             btnReport.Text = "PRINT BARCODE NUMBER";
         }
@@ -951,14 +1002,21 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         this.BindListView();
         this.GetStatus();
 
-        btnReport.Enabled = true;
+        if (ddlNumType.SelectedValue == "1" || ddlNumType.SelectedValue == "3")
+        {
+            btnReport.Enabled = true;
+        }
+        else
+        {
+            btnReport.Visible = false;
+        }
     }
 
 
     protected void btnStatDecode_Click(object sender, EventArgs e)
     {
         lvClear();
-        ddlNumType.SelectedIndex = 0;
+        //ddlNumType.SelectedIndex = 0;
         ViewState["genStatus"] = "GENERATED";
         GetGridSDB();
     }
@@ -1063,6 +1121,15 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         return dsCourse;
     }
 
+    private DataSet GetSeatStatus(string Status)
+    {
+        string sp_para = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@COMMAND_TYPE";
+        string sp_call = "" + ddlSession.SelectedValue + "," + ViewState["schemeno"].ToString() + "," + ddlsemester.SelectedValue + "," + Status;
+        string sp_name = "PKG_ACD_GET_SEAT_STATUS";
+        DataSet dsCourse = objCommon.DynamicSPCall_Select(sp_name, sp_para, sp_call);
+        return dsCourse;
+    }
+
     protected void gvDecode_RowDataBound(object sender, GridViewRowEventArgs e)
     {
         if (e.Row.RowType == DataControlRowType.DataRow)
@@ -1084,6 +1151,10 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
             if (ddlNumType.SelectedValue == "1")
             {
                 dsCourse = GetDecodeStatus(genStat);
+            }
+            else if (ddlNumType.SelectedValue == "2")
+            {
+                dsCourse = GetSeatStatus(genStat);
             }
             else if (ddlNumType.SelectedValue == "3")
             {
@@ -1114,7 +1185,7 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
     protected void btnNotGenDe_Click(object sender, EventArgs e)
     {
         lvClear();
-        ddlNumType.SelectedIndex = 0;
+        //ddlNumType.SelectedIndex = 0;
         ViewState["genStatus"] = "NOTGENERATED";
         GetGridSDB();
 

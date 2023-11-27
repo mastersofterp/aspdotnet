@@ -1412,7 +1412,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             DataSet ds1 = null;
             //======================== DECLARATION PART ====================================//
 
-            int schemeno = 0, sem = 0, sectionno = 0, batchno = 0, extraclass = 0; ;
+            int schemeno = 0, sem = 0, sectionno = 0, batchno = 0, extraclass = 0;
             int TPlanYesNo = 0, AttType = 1, TranType = 0, altCourseno = 0;
             DateTime date = DateTime.MinValue;
 
@@ -1699,13 +1699,13 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     #endregion alternate att..
                 }
                 //================================ END ALTERNATE ATT. ===========================================//
-
+                int is_Tutorial = rdoTutorial.Checked ? 1 : 0;
                 DataSet ds = null;
                 if (AttType == 0)// regular
                 {
                     if (rdoCore.Checked == true)
                     {
-                        ds = objAttController.GetStudentFacultywiseAttendanceModified(sessionno, uano, courseno, date, _schemeType, schemeno, sem, sectionno, batchno, _slotNo, courseno, Session["college_id_att"].ToString(), Convert.ToInt32(Session["OrgId"]));//college_id added by Dileep Kare on 10.04.2021
+                        ds = objAttController.GetStudentFacultywiseAttendanceModified(sessionno, uano, courseno, date, _schemeType, schemeno, sem, sectionno, batchno, _slotNo, courseno, Session["college_id_att"].ToString(), Convert.ToInt32(Session["OrgId"]), is_Tutorial);//college_id added by Dileep Kare on 10.04.2021
                     }
                     else if (rdoGlobalElective.Checked == true)
                     {
@@ -1717,7 +1717,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                 {
                     if (rdoCore.Checked == true)
                     {
-                        ds = objAttController.GetStudentFacultywiseAttendanceModified(sessionno, Convert.ToInt32(Session["AttUaNo"]), altCourseno, date, _schemeType, schemeno, sem, sectionno, batchno, _slotNo, courseno, Session["college_id_att"].ToString(), Convert.ToInt32(Session["OrgId"]));//college_id added by Dileep Kare on 10.04.2021
+                        ds = objAttController.GetStudentFacultywiseAttendanceModified(sessionno, Convert.ToInt32(Session["AttUaNo"]), altCourseno, date, _schemeType, schemeno, sem, sectionno, batchno, _slotNo, courseno, Session["college_id_att"].ToString(), Convert.ToInt32(Session["OrgId"]), is_Tutorial);//college_id added by Dileep Kare on 10.04.2021
                     }
                     else if (rdoGlobalElective.Checked == true)
                     {
@@ -2041,10 +2041,11 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             // while taking alt mutual att. send altCourseno[courseno 1st paramtr](Main Teacher courseno)to get students 
             // and txtCourse.ToolTip[altCourseno 2st paramtr] to get submitted stud. att. status
             //DataSet ds = objAttController.GetStudentFacultywiseAttendanceModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["AttUaNo"]), Convert.ToInt32(altCourseno), Convert.ToDateTime(ViewState["date"]), _schemeType, Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["_slotNo"]), Convert.ToInt32(txtCourse.ToolTip), (Session["college_id_att"]).ToString(), Convert.ToInt32(Session["OrgId"]));
+            int is_Tutorial = rdoTutorial.Checked ? 1 : 0;
             DataSet ds = new DataSet();
             if (rdoCore.Checked == true)
             {
-                ds = objAttController.GetStudentFacultywiseAttendanceModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["AttUaNo"]), Convert.ToInt32(altCourseno), Convert.ToDateTime(ViewState["date"]), _schemeType, Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["_slotNo"]), Convert.ToInt32(txtCourse.ToolTip), (Session["college_id_att"]).ToString(), Convert.ToInt32(Session["OrgId"]));
+                ds = objAttController.GetStudentFacultywiseAttendanceModified(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["AttUaNo"]), Convert.ToInt32(altCourseno), Convert.ToDateTime(ViewState["date"]), _schemeType, Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["_slotNo"]), Convert.ToInt32(txtCourse.ToolTip), (Session["college_id_att"]).ToString(), Convert.ToInt32(Session["OrgId"]), is_Tutorial);
             }
             else if (rdoGlobalElective.Checked == true)
             {

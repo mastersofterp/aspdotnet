@@ -485,7 +485,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
         }
         else if (ddlTranType.SelectedValue.ToString().Trim() == "C")
         {
-            Session["WithoutCashBank"] = "YN"; //Only Cash-Bank Ledgers
+            Session["WithoutCashBank"] = "YN"; 
         }
         else
         {
@@ -789,7 +789,9 @@ public partial class AccountingVouchers : System.Web.UI.Page
             txtVoucherNo.Enabled = false;
         }
         else
-        { txtVoucherNo.Enabled = true; }
+        {
+            txtVoucherNo.Enabled = true; 
+        }
 
     }
 
@@ -810,7 +812,10 @@ public partial class AccountingVouchers : System.Web.UI.Page
                     {
                         isSingleMode = "N";
                     }
-                    else { isSingleMode = ds.Tables[0].Rows[i]["PARAMETER"].ToString().Trim(); }
+                    else
+                    {
+                        isSingleMode = ds.Tables[0].Rows[i]["PARAMETER"].ToString().Trim(); 
+                    }
 
                 }
                 else if (ds.Tables[0].Rows[i]["CONFIGDESC"].ToString().Trim() == "PER ENTRY NARRATION REQUIRED")
@@ -8098,7 +8103,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
         clearGst();
         clearTax();
         SetTransactionType();
-        SetWithoutCashBank();
+        SetWithoutCashBank();  
 
         OnOffBudgetHeadDept();
 
@@ -8145,7 +8150,6 @@ public partial class AccountingVouchers : System.Web.UI.Page
             DataSet ds;
             if (IsAgainstLedger == "Y")
             {
-
                 ds = objCommon.FillDropDown("ACC_" + Session["comp_code"].ToString() + "_PARTY", "PARTY_NO", "PARTY_NAME", "PARTY_NO=" + partyNo + " AND PARTY_NAME ='" + led[0].ToString().Trim() + "' and PAYMENT_TYPE_NO IN ('1','2')", string.Empty);
             }
             else if (IsAgainstLedger == "N")
@@ -8282,6 +8286,18 @@ public partial class AccountingVouchers : System.Web.UI.Page
         //return true;
     }
 
+    // Added by Pawan Nikhare
+    public void getGstNo(string code)
+    {
+        //string gstno = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "GSTNO", "ACC_CODE='" + txtAcc.Text.ToString().Trim().Split('*')[1] + "'");
+        string gstno =objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "GSTNO", "ACC_CODE='" + code + "'");  
+        if (txtGSTNNO.Text==string.Empty)
+        {
+        txtGSTNNO.Text = gstno;
+        }
+    }
+    //end
+
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         //led[1] = led[1].ToString().Replace("¯", "");
@@ -8306,8 +8322,15 @@ public partial class AccountingVouchers : System.Web.UI.Page
             txtAgainstAcc.Text = txtAgainstAcc.Text.Trim().Replace("¯", "");
             //if (ViewState["isEdit"].ToString().Trim() == "N")
             //{
+
+             // Added by Pawan Nikhare         
+            getGstNo(txtAcc.Text.Trim().Split('*')[1]);
+
+            //end
+
             if (ddlTranType.SelectedValue != "J")
                 hdnPartyManual.Value = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "PARTY_NO", "ACC_CODE='" + txtAgainstAcc.Text.Trim().Split('*')[1] + "'");
+                hdnOpartyManual.Value = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "PARTY_NO", "ACC_CODE='" + txtAcc.Text.Trim().Split('*')[1] + "'");
 
             //}
             //else
@@ -8315,8 +8338,10 @@ public partial class AccountingVouchers : System.Web.UI.Page
             //    hdnPartyManual.Value = txtAgainstAcc.Text.Trim().Split('*')[0];
             //}
 
-            hdnOpartyManual.Value = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "PARTY_NO", "ACC_CODE='" + txtAcc.Text.Trim().Split('*')[1] + "'");
-            if (Convert.ToDouble(txtTranAmt.Text) == 0.00 || txtTranAmt.Text == String.Empty)
+
+
+
+             if (Convert.ToDouble(txtTranAmt.Text) == 0.00 || txtTranAmt.Text == String.Empty)
             {
                 objCommon.DisplayUserMessage(UPDLedger, "Please Enter Transaction Amount", this.Page);
                 return;
@@ -10002,7 +10027,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
 
     private void ClearAll()
     {
-        Session["BANKCASHCONTRA"] = ddlTranType.SelectedValue;
+       Session["BANKCASHCONTRA"] = ddlTranType.SelectedValue;
         lblRemainAmt.Text = "";
         ddlSponsor.SelectedValue = "0";
         ddlProjSubHead.SelectedValue = "0";
@@ -10388,6 +10413,35 @@ public partial class AccountingVouchers : System.Web.UI.Page
         }
     }
 
+
+    [System.Web.Script.Services.ScriptMethod()]
+    [System.Web.Services.WebMethod]
+    public static List<string> GetEmployeeName(string prefixText, string contextKey)
+    {
+        List<string> EmployeeName = new List<string>();
+        DataSet ds = new DataSet();
+        try
+        {
+            VMController objVMCon = new VMController();
+            // int studSelectionby = Convert.ToInt32(ddlorderby.SelectedValue);
+            ds = objVMCon.FillEmployeeName(prefixText, contextKey);
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                if (ds.Tables[0].Rows[0]["Type"].ToString() == "E")
+                    EmployeeName.Add(ds.Tables[0].Rows[i]["IDNO"].ToString() + "---------*" + ds.Tables[0].Rows[i]["NAME"].ToString());
+                if (ds.Tables[0].Rows[0]["Type"].ToString() == "S")
+                    EmployeeName.Add(ds.Tables[0].Rows[i]["IDNO"].ToString() + "---------*" + ds.Tables[0].Rows[i]["NAME"].ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            ds.Dispose();
+        }
+        return EmployeeName;
+    }
+
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
@@ -10589,6 +10643,8 @@ public partial class AccountingVouchers : System.Web.UI.Page
                 }
             }
 
+
+
             if (hdnAskSave.Value == "1")
             {
                 if (isSingleMode == "N")
@@ -10718,6 +10774,13 @@ public partial class AccountingVouchers : System.Web.UI.Page
                     else
                         PARTY_NAME.InnerText = PartyName;
 
+                    //started 
+                    //string gstno;
+                    //gstno =Convert.ToString( objCommon.FillDropDown("ACC_" + Session["comp_code"] + "_PARTY", "GSTNO", "", "GSTNO='" + txtGSTNNO.Text+"'", ""));
+
+                    
+
+                    //ended
 
 
 
@@ -14235,6 +14298,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
                 trCostCenter.Visible = false;
                 trMultiCostCenter.Visible = false;
             }
+
             //Commented by gopal anthati on 15-09-2021
             //if (ddlTranType.SelectedValue == "P" || ddlTranType.SelectedValue == "R")
             //{
@@ -14317,7 +14381,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
         else
             return "Not Available";
     }
-
+    
     protected void txtVoucherNo_TextChanged(object sender, EventArgs e)
     {
         if (objCommon.LookUp("ACC_" + Session["comp_code"] + "_CONFIG", "PARAMETER", "CONFIGDESC='AUTOGENERATED VOUCHER NO. REQUIRED'") == "N")

@@ -961,7 +961,7 @@ public partial class assignFacultyAdvisor : System.Web.UI.Page
 
             if (dsfee.Tables.Count > 0 && dsfee.Tables[0].Rows.Count > 0)
             {
-                string attachment = "attachment; filename=Class_Advisor.xls";
+                string attachment = "attachment; filename=Class_Advisor_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/" + "ms-excel";

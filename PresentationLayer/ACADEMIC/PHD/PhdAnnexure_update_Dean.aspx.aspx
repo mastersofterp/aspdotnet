@@ -430,7 +430,7 @@
                                                                             <label>One Institute faculty expert </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlInstFac' runat="server" AppendDataBoundItems="True" TabIndex="20" AutoPostBack="true"
-                                                                            ToolTip="Please Select One Institute faculty expert" CssClass="form-control" data-select2-enable="true">
+                                                                            ToolTip="Please Select One Institute faculty expert" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlInstFac_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                         </asp:DropDownList>
                                                                         <asp:CheckBox ID="CheckBox4" runat="server" Text="Is External" OnCheckedChanged="CheckBox4_CheckedChanged" AutoPostBack="true" />
@@ -497,7 +497,7 @@
                                                                             <label>A DRC nominee </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlDRC' runat="server" AppendDataBoundItems="True" TabIndex="22" AutoPostBack="true"
-                                                                            ToolTip="Please Select A DRC nominee" class="form-control" data-select2-enable="true">
+                                                                            ToolTip="Please Select A DRC nominee" class="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlDRC_SelectedIndexChanged">
                                                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                         </asp:DropDownList>
                                                                         <asp:CheckBox ID="CheckBox5" runat="server" Text="Is External" OnCheckedChanged="CheckBox5_CheckedChanged" AutoPostBack="true" />
@@ -557,7 +557,7 @@
 
                                                         <span class="input-group-addon">
                                                             <asp:DropDownList ID='ddlDRCChairman' runat="server" TabIndex="24" ToolTip="Please Select A DRC nominee"
-                                                                CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true">
+                                                                CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlDRCChairman_SelectedIndexChanged">
                                                             </asp:DropDownList>
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlDRCChairman"
                                                                 Display="None" ErrorMessage="Please Select A DRC Chairman" InitialValue="0" ValidationGroup="Academic"

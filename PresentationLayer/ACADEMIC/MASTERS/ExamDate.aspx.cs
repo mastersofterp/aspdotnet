@@ -962,6 +962,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet_CPUKOTA.rpt");
             }
+            else if ((Convert.ToInt32(Session["OrgId"]) == 18))//For HITS ADDED BY SHUBHAM B
+            {
+                ShowReportDailyAttendenceCresent("Student_Daily_Attendence_Report", "rptDailyAttendanceSheet_HITS.rpt");
+            }
             else
             {
                 ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet.rpt");

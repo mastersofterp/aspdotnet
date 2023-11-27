@@ -6959,6 +6959,108 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
+
+        public int UpdateSpecailizationGroupForStudent(int idno, int sessionno, int semesterno, string groups)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                //Add New Registered Subject Details
+                objParams = new SqlParameter[5];
+
+                objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                objParams[1] = new SqlParameter("@P_IDNO", idno);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                objParams[3] = new SqlParameter("@P_GROUP", groups);
+
+                objParams[4] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[4].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_UPDATE_STUD_SPECIALIZATION_GROUP", objParams, true);
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.UpdateSpecailizationGroupForStudent-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
+
+        /// <summary>
+        /// Added by Swapnil P dated on 12-01-2023 for Approval login Course registration
+        /// </summary>
+        /// <param name="objSR"></param>
+        /// <returns></returns>
+        public int AddSpecializationRegisteredSubjectsApprovalLogin(StudentRegist objSR)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                //Add New Registered Subject Details
+                objParams = new SqlParameter[8];
+
+                objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                objParams[1] = new SqlParameter("@P_IDNO", objSR.IDNO);
+                objParams[2] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                objParams[3] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                objParams[5] = new SqlParameter("@P_UA_N0", objSR.UA_NO);
+                objParams[6] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[7].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PREREGIST_SP_INS_SPECIALIZATION_SUBJECTS_APPROVAL_LOGIN", objParams, true);
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddSpecializationRegisteredSubjectsApprovalLogin-> " + ex.ToString());
+            }
+
+            return retStatus;
+
+        }
+
+        public DataSet GetStudentCourseRegistrationSepcializationSubject(int SESSIONNO, int IDNO, int SEMESTERNO, int SCHEMENO, int COMMANDTYPE, string GROUPIDS)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQL = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[6];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", SESSIONNO);
+                objParams[1] = new SqlParameter("@P_IDNO", IDNO);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+                objParams[3] = new SqlParameter("@P_SCHEMENO", SCHEMENO);
+                objParams[4] = new SqlParameter("@P_COMMANDTYPE", COMMANDTYPE);
+                objParams[5] = new SqlParameter("@P_GROUPIDS", GROUPIDS);
+                ds = objSQL.ExecuteDataSetSP("PKG_COURSEREGISTRATION_SP_GET_SPECIALIZATION_SUBJECTS", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetStudentCourseRegistrationSepcializationSubject-> " + ex.ToString());
+            }
+            return ds;
+        }
     }
 }
 

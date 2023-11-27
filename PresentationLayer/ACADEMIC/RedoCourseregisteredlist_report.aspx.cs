@@ -107,7 +107,7 @@ public partial class ACADEMIC_RedoCourseregisteredlist_report : System.Web.UI.Pa
                 GridView gv = new GridView();
                 gv.DataSource = ds;
                 gv.DataBind();
-                string attachment = "attachment ; filename=REDO_COURSE_REGISTRATION_LIST_REPORT.xls";
+                string attachment = "attachment ; filename=REDO_COURSE_REGISTRATION_LIST_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/ms-excel";

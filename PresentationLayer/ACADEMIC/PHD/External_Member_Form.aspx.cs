@@ -402,24 +402,27 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
             DataSet ds = objPhDController.EditInternalMemberMappingData(ID);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-                {
-                    //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
-                    objCommon.DisplayMessage(this.updInternalMember, "The supervisor has already been allotted to a student So it can not be edit", this.Page);
-                    BindListViewMapping();
-                    lboFacuilty.DataSource = null;
-                    lboFacuilty.Items.Clear();
-                    ddlDesignation.SelectedIndex = 0;
-                    ddlDepartment.SelectedIndex = 0;
-                    ddlInsName.Items.Clear();
-                    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
-                    ViewState["id"] = "0";
-                    return;
-                }
-                else
-                {
+
+
+                //Commented By Vipul T on Date 06-11-2023 for Removing the Condition
+                //if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                //{
+                //    //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
+                //    objCommon.DisplayMessage(this.updInternalMember, "The supervisor has already been allotted to a student So it can not be edit", this.Page); // Commented By Vipul T 
+                //    BindListViewMapping();
+                //    lboFacuilty.DataSource = null;
+                //    lboFacuilty.Items.Clear();
+                //    ddlDesignation.SelectedIndex = 0;
+                //    ddlDepartment.SelectedIndex = 0;
+                //    ddlInsName.Items.Clear();
+                //    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                //    ViewState["id"] = "0";
+                //    return;
+                //}
+                //else
+                //{
     
-                }
+                //}
 
                 ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPTNO"].ToString();
                 objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");            

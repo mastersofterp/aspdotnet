@@ -340,7 +340,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
                 gvPromoted.DataSource = ds;
                 gvPromoted.DataBind();
 
-                string Attachment = "Attachment;FileName=PromotedStudentList.xls";
+                string Attachment = "Attachment;FileName=PromotedStudentList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 Response.ContentType = "application/vnd.ms-excel";
@@ -374,7 +374,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
                 gvNotPromoted.DataSource = ds;
                 gvNotPromoted.DataBind();
 
-                string Attachment = "Attachment; FileName=NotPromotedStudentList.xls";
+                string Attachment = "Attachment; FileName=NotPromotedStudentList_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 Response.ContentType = "application/vnd.ms-excel";

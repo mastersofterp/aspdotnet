@@ -279,8 +279,8 @@ public partial class Masters_qualificationMas : System.Web.UI.Page
 
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,PAYROLL," + rptFileName;
-            url += "&param=@CollegeName=" + Session["coll_name"].ToString() + "," + "@UserName=" + Session["userfullname"].ToString();
+            url += "&path=~,Reports,MASTERS," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@UserName=" + Session["userfullname"].ToString();
 
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
 

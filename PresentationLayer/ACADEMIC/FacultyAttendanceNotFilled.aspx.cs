@@ -333,7 +333,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 
                         if (ds.Tables[0].Rows.Count > 0)
                         {
-                            string attachment = "attachment; filename= AttendanceDetails Attendance Marked-Not Marked Report.xls";
+                            string attachment = "attachment; filename= AttendanceDetails Attendance Marked-Not Marked Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
                             Response.ClearContent();
                             Response.AddHeader("content-disposition", attachment);
@@ -502,7 +502,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                                 Response.Buffer = true;
                                 Response.Charset = "";
                                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                                Response.AddHeader("content-disposition", "attachment;filename=AttendanceDetails Attendance Tracker Report.xlsx");
+                                Response.AddHeader("content-disposition", "attachment;filename=AttendanceDetails Attendance Tracker Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                                 using (MemoryStream MyMemoryStream = new MemoryStream())
                                 {
                                     wb.SaveAs(MyMemoryStream);
@@ -635,7 +635,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 
                     if (DS.Tables[0].Rows.Count > 0)
                     {
-                        string attachment = "attachment; filename= STUDENT_ATTENDANCE_REGISTER_REPORT.xls";
+                        string attachment = "attachment; filename= STUDENT_ATTENDANCE_REGISTER_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
                         Response.ClearContent();
                         Response.AddHeader("content-disposition", attachment);
@@ -688,7 +688,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
 
                     if (DS.Tables[0].Rows.Count > 0)
                     {
-                        string attachment = "attachment; filename= COURSEWISE_CONSOLIDATED_REPORT.xls";
+                        string attachment = "attachment; filename= COURSEWISE_CONSOLIDATED_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
                         Response.ClearContent();
                         Response.AddHeader("content-disposition", attachment);

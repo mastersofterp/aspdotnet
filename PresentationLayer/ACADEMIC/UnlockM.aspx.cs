@@ -35,6 +35,9 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
     MarksEntryController objMarksEntry = new MarksEntryController();
     CourseController objCourse = new CourseController();
     int Userno;
+                string email ; 
+                string Subject;
+                string message;
 
     #region Page Events
     protected void Page_PreInit(object sender, EventArgs e)
@@ -114,7 +117,7 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
                     UpdateLockStatus(dataRow); 
                     if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
                     {
-                        GETEMAIL();
+                       GETEMAIL();
                     }
                     else
                     {
@@ -683,6 +686,7 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
         
         foreach (ListViewDataItem item in lvCourse.Items)
         {
+            countparent++;
             System.Web.UI.WebControls.CheckBox chkID = item.FindControl("chklock") as System.Web.UI.WebControls.CheckBox;
             System.Web.UI.WebControls.HiddenField hdfid = item.FindControl("hidStudentId") as System.Web.UI.WebControls.HiddenField;
             System.Web.UI.WebControls.Label lblcourse = item.FindControl("lblPstudent") as System.Web.UI.WebControls.Label;
@@ -709,9 +713,9 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
                 System.Web.UI.WebControls.Label lblFatherMobile = item.FindControl("lblFatherMobile") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblPstudent = item.FindControl("lblPstudent") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblPwd = item.FindControl("lblPreg") as System.Web.UI.WebControls.Label;
-                string email =Emailid; 
-                string Subject = CodeStandard + "Regarding Lock/Unlock Marks";
-                string message = "Dear " + FULLNAME + "<br />";
+                email =Emailid; 
+                Subject = CodeStandard + "Regarding Lock/Unlock Marks";
+                message = "Dear " + FULLNAME + "<br />";
                 message = message + "Your :" + SUB + "<br />";
                 message = message + "SESSION:" +ddlSession.SelectedItem.Text+ "<br />";
                 message = message + "SEMESTER :" +ddlSemester.SelectedItem.Text + "<br />";
@@ -750,12 +754,15 @@ public partial class ACADEMIC_UnlockM : System.Web.UI.Page
 
                 //------------Code for sending email,It is optional---------------
                 //added by kajal jaiswal  on 03-06-2023
-                int status = 0;
-                SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
-                status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
+             
 
             }
         }
+            //countparent++;
+            int status = 0;
+            SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+            status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
+       
         // added by kajal jaiswal on 16-02-2023 for validating send email button 
         //if (countparent != 0)
         //{

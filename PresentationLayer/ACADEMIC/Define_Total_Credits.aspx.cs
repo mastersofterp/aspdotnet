@@ -1125,7 +1125,7 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
             GVCreditDef.DataSource = ds;
             GVCreditDef.DataBind();
 
-            string attachment = "attachment; filename=" + "Credit Definition Details Report.xls";
+            string attachment = "attachment; filename=" + "Credit Definition Details Report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.MS-excel";

@@ -41,7 +41,9 @@
                                             <sup>*</sup>
                                             <asp:Label ID="lblDYddlColgScheme" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlClgScheme" runat="server" AutoPostBack="true" AppendDataBoundItems="true" data-select2-enable="true" OnSelectedIndexChanged="ddlClgScheme_SelectedIndexChanged" Width="69px" TabIndex="1"></asp:DropDownList>
+                                        <asp:DropDownList ID="ddlClgScheme" runat="server" AutoPostBack="true" AppendDataBoundItems="true" data-select2-enable="true" OnSelectedIndexChanged="ddlClgScheme_SelectedIndexChanged" Width="69px" TabIndex="1">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfcClgScheme" runat="server" InitialValue="0" SetFocusOnError="true" ControlToValidate="ddlClgScheme" Display="None" ErrorMessage="Please Select College & Scheme" ValidationGroup="Show"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" InitialValue="0" SetFocusOnError="true" ControlToValidate="ddlClgScheme" Display="None" ErrorMessage="Please Select College & Scheme" ValidationGroup="ShowStat"></asp:RequiredFieldValidator>
 
@@ -232,7 +234,9 @@
                                                             <%--False No.--%>
                                                             Seat No
                                                         </th>
-                                                        <th id="thCourse">Course 
+                                                        <th>
+                                                            <%--<th id="thCourse">Course --%>
+                                                            <asp:Label ID="lblHeadBCD" runat="server" Text="Course"></asp:Label>
                                                         </th>
 
                                                     </tr>

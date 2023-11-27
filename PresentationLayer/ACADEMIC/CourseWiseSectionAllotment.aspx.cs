@@ -445,7 +445,7 @@ public partial class ACADEMIC_CourseWiseSectionAllotment : System.Web.UI.Page
         {
             gv.DataSource = ds;
             gv.DataBind();
-            string attachment = "attachment ; filename=Coursewise_Section_Allotment_Report.xls";
+            string attachment = "attachment ; filename=Coursewise_Section_Allotment_Report"+"_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/ms-excel";

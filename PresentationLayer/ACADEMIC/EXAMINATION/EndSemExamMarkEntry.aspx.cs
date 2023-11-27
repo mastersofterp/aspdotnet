@@ -2183,6 +2183,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             btnmarkexcel.Visible = false;
                             btnReGrade.Enabled = false;
                             btnReGrade.Visible = false;
+                            btnSave.Enabled = true;
+                            btnLock.Enabled = true;
+                            btnUnlock.Enabled = false;
+                            btnSave.Visible = true;
+                            btnLock.Visible = true;
                             if (Convert.ToInt32(Session["usertype"]) == 7)
                             {
                                 btnGrade.Enabled = false;
@@ -2396,10 +2401,13 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
+            string semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SEMESTER", "STARTED = 1 and SHOW_STATUS =1 and UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and  PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
             if (ddlscheme.SelectedIndex > 0)
             {
                 //objCommon.FillDropDownList(ddlSemester, "ACD_STUDENT SR, ACD_SEMESTER S", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "  SR.COLLEGEID = " + ddlCollege.SelectedValue + " AND SR.SEMESTERNO=S.SEMESTERNO AND S.SEMESTERNO > 0", "S.SEMESTERNO");
-                objCommon.FillDropDownList(ddlsemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO) inner join Session_Activity SA on S.SEMESTERNO in (select value from dbo.Split(SA.SEMESTER,',')) ", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND A.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " and SA.ACTIVITY_NO in (SELECT SA.ACTIVITY_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%') AND A.SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue), "S.SEMESTERNO");
+             //commented by lalit   // objCommon.FillDropDownList(ddlsemester, "ACD_STUDENT_RESULT A INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO=S.SEMESTERNO) inner join Session_Activity SA on S.SEMESTERNO in (select value from dbo.Split(SA.SEMESTER,',')) ", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND A.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " and SA.ACTIVITY_NO in (SELECT SA.ACTIVITY_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%') AND A.SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue), "S.SEMESTERNO");
+                objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND  SCHEMENO =" + Convert.ToInt32(ddlscheme.SelectedValue), "S.SEMESTERNO");
+
             }
             else
             {

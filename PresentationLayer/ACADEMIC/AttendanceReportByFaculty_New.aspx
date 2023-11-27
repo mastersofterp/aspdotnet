@@ -363,6 +363,12 @@
                                      <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Syllabus Coverage Report</asp:LinkButton>
                               <%--   <asp:Button ID="btnSyall" runat="server" Text="Syllabus Coverage Report"  ValidationGroup="SubPercentage"
                                       CssClass="btn btn-info" Visible="false" OnClick="btnSyllabusCoverageReport_Click" />--%>
+                                    
+                                <%-- Added by Sakshi M on date 01-11-2023 --%>
+                                <asp:LinkButton ID="btnAttReport" runat="server" TabIndex="23"
+                                       ValidationGroup="SubPercentage" CssClass="btn btn-info" Visible="false" OnClick="btnAttReport_Click">
+                                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>Attendance Report</asp:LinkButton>
+
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"
                                     class="btn btn-warning" TabIndex="23" OnClick="btnCancel_Click1" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True"
@@ -396,6 +402,7 @@
             <asp:PostBackTrigger ControlID="btnCancel" />
             <asp:PostBackTrigger ControlID="btnSubjectwiseExpectedExcel" />
             <asp:PostBackTrigger ControlID="btnSyllabusCoverageReport" />
+            <asp:PostBackTrigger ControlID="btnAttReport" />
             <%-- <asp:PostBackTrigger ControlID="txtFromDate" />
              <asp:PostBackTrigger ControlID="txtTodate" />--%>
             <%--<asp:PostBackTrigger ControlID="btnPrintChallan" />

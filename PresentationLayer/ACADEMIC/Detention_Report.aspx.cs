@@ -211,7 +211,7 @@ public partial class ACADEMIC_Detention_Report : System.Web.UI.Page
         {
             GvStudent.DataSource = dsfee;
             GvStudent.DataBind();
-            string attachment = "attachment; filename=Provisional_Detention.xls";
+            string attachment = "attachment; filename=Provisional_Detention "+"_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.MS-excel";

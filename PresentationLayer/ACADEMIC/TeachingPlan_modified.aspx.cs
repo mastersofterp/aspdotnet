@@ -1507,15 +1507,15 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         string filepath = Server.MapPath("~/ExcelData/");
 
         if (ddlDegreeEX.SelectedValue == "1")
-            filename = "tp_Degree.xlsx";
+            filename = "tp_Degree_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "2")
-            filename = "tp_MTECH.xlsx";
+            filename = "tp_MTECH_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "4")
-            filename = "tp_MCA.xlsx";
+            filename = "tp_MCA_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "5")
-            filename = "tp_MBA.xlsx";
+            filename = "tp_MBA_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else if (ddlDegreeEX.SelectedValue == "6")
-            filename = "tp_ME.xlsx";
+            filename = "tp_ME_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx";
         else
         {
             objCommon.DisplayMessage(updTeach, "Please Select Degree!", this);
@@ -1973,8 +1973,9 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         objExam.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
 
                     objExam.Ua_No = Convert.ToInt16(Session["userno"].ToString());
-                    int Istutorial = ddlTutorial.SelectedValue == "2" ? 1 : 0;
-                    int OrgId = Convert.ToInt32(Session["OrgId"]);
+					//int Istutorial = ddlTutorial.SelectedValue == "2" ? 1 : 0;
+					int Istutorial = ddlTutorial.SelectedValue == "2" || (Convert.ToInt32(ViewState["IS_TUTORIAL"]) > 0 && Convert.ToInt32(ViewState["IS_PRACTICAL"]) == 0 && Convert.ToInt32(ViewState["IS_THEORY"]) == 0) ? 1 : 0;
+					int OrgId = Convert.ToInt32(Session["OrgId"]);
                     objExam.collegeid = Convert.ToInt32(ViewState["college_id"].ToString());//Added by Dileep on 12.04.2021
 
                     if (CheckDuplicateUploadEntry(objExam.UnitNo, objExam.Lecture_No, objExam.Sectionno, objExam.BatchNo, objExam.Slot) == true)
@@ -2248,7 +2249,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         Response.Buffer = true;
                         Response.Charset = "";
                         Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                        Response.AddHeader("content-disposition", "attachment;filename=BlankExcelFormat.xlsx");
+                        Response.AddHeader("content-disposition", "attachment;filename=BlankExcelFormat_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                         using (MemoryStream MyMemoryStream = new MemoryStream())
                         {
                             wb.SaveAs(MyMemoryStream);
@@ -3196,7 +3197,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=TeachingPlanExcel_ActualVSProposed.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=TeachingPlanExcel_ActualVSProposed_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);

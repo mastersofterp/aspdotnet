@@ -66,13 +66,13 @@
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="span5" runat="server">
                                                                 <div class="label-dynamic">
                                                                     <sup>*</sup>
-                                                                    <label>Project Name</label>
+                                                                    <label>Project Title</label>
                                                                 </div>
                                                                 <asp:DropDownList ID="ddlProjectName" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlProjectName_SelectedIndexChanged">
                                                                     <asp:ListItem Value="0">--Please Select--</asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <asp:RequiredFieldValidator ID="rfvProjName" runat="server" InitialValue="0" ValidationGroup="ProjAllocation"
-                                                                    Display="None" ErrorMessage="Please Select Project Name" ControlToValidate="ddlProjectName"></asp:RequiredFieldValidator>
+                                                                    Display="None" ErrorMessage="Please Select Project Title" ControlToValidate="ddlProjectName"></asp:RequiredFieldValidator>
 
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12" id="Div12" runat="server">
@@ -134,7 +134,7 @@
                                                             </HeaderTemplate>
                                                             <ItemTemplate>
                                                                 <tr class="bg-light-blue">
-                                                                    <td style="font-weight: bold; text-align: left">Project Name : 
+                                                                    <td style="font-weight: bold; text-align: left">Project Title : 
                                                                                 <%#Eval("ProjectName")%>
                                                                         <asp:HiddenField ID="hdnProjectId" runat="server" Value='<%#Eval("ProjectId")%>' />
                                                                     </td>
@@ -252,13 +252,13 @@
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Div21" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>*</sup>
-                                                                <label>Project Name</label>
+                                                                <label>Project Title</label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlProject" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True" TabIndex="1" ToolTip="Please Select" AutoPostBack="true" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlProject"
-                                                                Display="None" ErrorMessage="Please Select Project Name" SetFocusOnError="True"
+                                                                Display="None" ErrorMessage="Please SelectProject Title" SetFocusOnError="True"
                                                                 InitialValue="0" ValidationGroup="ProjSubHead"></asp:RequiredFieldValidator>
 
                                                         </div>
@@ -327,7 +327,7 @@
                                                     <asp:ListView ID="lstSubProj" runat="server" OnItemCommand="lstSubProj_ItemCommand">
                                                         <LayoutTemplate>
                                                             <div class="vista-grid">
-                                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblHead">
+                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tblHead">
                                                                     <thead class="bg-light-blue">
                                                                         <tr>
 
@@ -338,7 +338,7 @@
                                                                             </th>
                                                                             <th>Expense HeadType
                                                                             </th>
-                                                                            <th>Project Name
+                                                                            <th>Project Title
                                                                             </th>
                                                                             <th>Ledger
                                                                             </th>
@@ -397,21 +397,55 @@
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div11" runat="server">
                                                                 <sup>*</sup>
-                                                                <label>Project Name</label>
+                                                                <label>Project Title</label>
                                                             </div>
                                                             <asp:TextBox ID="txtProjName" runat="server" ValidationGroup="submit"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="rfvtxtProjName" runat="server" ValidationGroup="ProjHead" Display="None" ErrorMessage="Please Enter Project Name" ControlToValidate="txtProjName"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="rfvtxtProjName" runat="server" ValidationGroup="ProjHead" Display="None" ErrorMessage="Please Enter Project Title" ControlToValidate="txtProjName"></asp:RequiredFieldValidator>
 
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div10" runat="server">
                                                                 <sup>*</sup>
-                                                                <label>Project Short Code</label>
+                                                                <label>Project Number</label>
                                                             </div>
                                                             <asp:TextBox ID="txtSponShortName" runat="server" ValidationGroup="submit"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="rfvtxtSponShortName" runat="server" ValidationGroup="ProjHead" Display="None" ErrorMessage="Please Enter Project Short Code" ControlToValidate="txtSponShortName"></asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="rfvtxtSponShortName" runat="server" ValidationGroup="ProjHead" Display="None" ErrorMessage="Please Enter Project Number" ControlToValidate="txtSponShortName"></asp:RequiredFieldValidator>
 
                                                         </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div31" runat="server">
+                                                                <%--<sup>*</sup>--%>
+                                                                <label>Funding Agency</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlFundingAgency" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                           <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Select Funding Agency" ControlToValidate="ddlFundingAgency" InitialValue="0"></asp:RequiredFieldValidator>--%>
+                                                        </div>
+
+                                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div16" runat="server">
+                                                                <%--<sup>*</sup>--%>
+                                                                <label>Scheme</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtScheme" runat="server" ValidationGroup="submit" TextMode="MultiLine" onkeyDown="checkTextAreaMaxLength(this,event,'500');" onkeyup="textCounter(this, this.form.remLen, 250);"></asp:TextBox>
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Scheme" ControlToValidate="txtScheme"></asp:RequiredFieldValidator>--%>
+
+                                                        </div>
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div17" runat="server">
+                                                                <sup>*</sup>
+                                                                <label>Principle Investigator</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtCoordinator" runat="server" MaxLength="100" ValidationGroup="submit"></asp:TextBox>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Coordinator" ControlToValidate="txtCoordinator"></asp:RequiredFieldValidator>
+
+                                                        </div>
+
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div14" runat="server">
                                                                 <sup>*</sup>
@@ -424,50 +458,141 @@
                                                                 ErrorMessage="Please Select Department" ControlToValidate="ddlDepartment" InitialValue="0"></asp:RequiredFieldValidator>
 
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic" id="Div15" runat="server">
-                                                                <sup>*</sup>
-                                                                <label>Sanction By</label>
-                                                            </div>
-                                                            <asp:TextBox ID="txtSanctionBy" runat="server" ValidationGroup="submit" MaxLength="100"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead" Display="None"
-                                                                ErrorMessage="Please Enter Sanction By" ControlToValidate="txtSanctionBy"></asp:RequiredFieldValidator>
 
-                                                        </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic" id="Div16" runat="server">
-                                                                <sup>*</sup>
-                                                                <label>Scheme</label>
-                                                            </div>
-                                                            <asp:TextBox ID="txtScheme" runat="server" ValidationGroup="submit" TextMode="MultiLine" onkeyDown="checkTextAreaMaxLength(this,event,'500');" onkeyup="textCounter(this, this.form.remLen, 250);"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ValidationGroup="ProjHead" Display="None"
-                                                                ErrorMessage="Please Enter Scheme" ControlToValidate="txtScheme"></asp:RequiredFieldValidator>
-
-                                                        </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
-                                                            <div class="label-dynamic" id="Div17" runat="server">
-                                                                <sup>*</sup>
-                                                                <label>Coordinator</label>
-                                                            </div>
-                                                            <asp:TextBox ID="txtCoordinator" runat="server" MaxLength="100" ValidationGroup="submit"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ValidationGroup="ProjHead" Display="None"
-                                                                ErrorMessage="Please Enter Coordinator" ControlToValidate="txtCoordinator"></asp:RequiredFieldValidator>
-
-                                                        </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div18" runat="server">
                                                                 <sup>*</sup>
-                                                                <label>Value</label>
+                                                                <label>Total Project Cost</label>
                                                             </div>
                                                             <asp:TextBox ID="txtValue" runat="server" MaxLength="9" ValidationGroup="submit" onkeyup="validateNumeric(this);"></asp:TextBox>
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ValidationGroup="ProjHead"
                                                                 Display="None" ErrorMessage="Please Enter Value" ControlToValidate="txtValue"></asp:RequiredFieldValidator>
 
                                                         </div>
+
+                                                          <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div32" runat="server">
+                                                                 <sup>*</sup> 
+                                                                <label>Project Duration</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtProjectDuration" runat="server" ValidationGroup="submit"></asp:TextBox>
+                                                               <ajaxToolKit:FilteredTextBoxExtender ID="ftbe" runat="server" TargetControlID="txtProjectDuration"
+                                            FilterType="Custom, Numbers" ValidChars="." Enabled="True" />
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Project Duration" ControlToValidate="txtProjectDuration"></asp:RequiredFieldValidator>
+
+                                                        </div>
+
+                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Div1" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup>*</sup>
+                                                                <label>Project Start Date</label>
+                                                            </div>
+                                                            <div class="input-group date">
+                                                                <div class="input-group-addon" id="Div3">
+                                                                    <i class="fa fa-calendar text-blue"></i>
+                                                                </div>
+                                                                <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" CssClass="form-control" OnTextChanged="txtStartDate_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ValidationGroup="ProjHead"
+                                                                Display="None" ErrorMessage="Please Enter Start date" ControlToValidate="txtStartDate"></asp:RequiredFieldValidator>
+                                                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead"
+                                                                    Display="None" ErrorMessage="Please Select Date" ControlToValidate="txtStartDate"></asp:RequiredFieldValidator>--%>
+
+                                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="True"
+                                                                    Format="dd/MM/yyyy" PopupButtonID="Div3" TargetControlID="txtStartDate">
+                                                                </ajaxToolKit:CalendarExtender>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Div13" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup>*</sup>
+                                                                <label>Project End Date</label>
+                                                            </div>
+                                                            <div class="input-group date">
+                                                                <div class="input-group-addon" id="Div22">
+                                                                    <i class="fa fa-calendar text-blue"></i>
+                                                                </div>
+                                                                <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" CssClass="form-control"></asp:TextBox>
+
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ValidationGroup="ProjHead"
+                                                                    Display="None" ErrorMessage="Please Select End Date" ControlToValidate="txtEndDate"></asp:RequiredFieldValidator>
+
+                                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Enabled="True"
+                                                                    Format="dd/MM/yyyy" PopupButtonID="Div22" TargetControlID="txtEndDate">
+                                                                </ajaxToolKit:CalendarExtender>
+                                                            </div>
+                                                        </div>
+
+                                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div34" runat="server">
+                                                                <%--<sup>*</sup>--%>
+                                                                <label>Amount Received Recurring</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtAmtRecurring" runat="server" ValidationGroup="submit" MaxLength="11" ></asp:TextBox>
+                                                           <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Amount Received Recurring" ControlToValidate="txtAmtRecurring"></asp:RequiredFieldValidator>--%>
+
+                                                        </div>
+
+                                                          <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div35" runat="server">
+                                                                <%--<sup>*</sup>--%>
+                                                                <label>Amount Received Non-Recurring</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtAmtNonRecurring" runat="server" ValidationGroup="submit"  MaxLength="11" ></asp:TextBox>
+                                                           <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Amount Received Non-Recurring" ControlToValidate="txtAmtNonRecurring"></asp:RequiredFieldValidator>--%>
+
+                                                        </div>
+
+                                                       
+                                                       
+                                                        <%--<div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div17" runat="server">
+                                                                <sup>*</sup>
+                                                                <label>Principle Investigator</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtCoordinator" runat="server" MaxLength="100" ValidationGroup="submit"></asp:TextBox>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Coordinator" ControlToValidate="txtCoordinator"></asp:RequiredFieldValidator>
+
+                                                        </div>--%>
+                                                       <%-- <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div18" runat="server">
+                                                                <sup>*</sup>
+                                                                <label>Total Project Cost</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtValue" runat="server" MaxLength="9" ValidationGroup="submit" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ValidationGroup="ProjHead"
+                                                                Display="None" ErrorMessage="Please Enter Value" ControlToValidate="txtValue"></asp:RequiredFieldValidator>
+
+                                                        </div>--%>
+
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div20" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup>*</sup>
+                                                                <label>Sanction Date</label>
+                                                            </div>
+                                                            <div class="input-group date">
+                                                                <div class="input-group-addon" id="ImaSanctionDate">
+                                                                    <i class="fa fa-calendar text-blue"></i>
+                                                                </div>
+                                                                <asp:TextBox ID="txtSanctionDate" runat="server" ValidationGroup="submit" CssClass="form-control"></asp:TextBox>
+
+                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ValidationGroup="ProjHead"
+                                                                    Display="None" ErrorMessage="Please Select Sanction Date" ControlToValidate="txtSanctionDate"></asp:RequiredFieldValidator>
+
+                                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender5" runat="server" Enabled="True"
+                                                                    Format="dd/MM/yyyy" PopupButtonID="ImaSanctionDate" TargetControlID="txtSanctionDate">
+                                                                </ajaxToolKit:CalendarExtender>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic" id="Div30" runat="server">
                                                                 <sup>*</sup>
-                                                                <label>Sanction Letter </label>
+                                                                <label>Sanction Number </label>
                                                             </div>
                                                             <asp:TextBox ID="txtSanctionLetter" runat="server" ValidationGroup="submit"></asp:TextBox>
                                                             <%--<asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ForeColor="Red" ErrorMessage="*Please Enter Alphanumeric Value" ControlToValidate="txtSanctionLetter" ValidationExpression="[a-zA-Z0-9]*$" ValidationGroup="ProjHead"></asp:RegularExpressionValidator>--%>
@@ -475,7 +600,7 @@
                                                                 Display="None" ErrorMessage="Please Enter Sanction Number" ControlToValidate="txtSanctionLetter"></asp:RequiredFieldValidator>
 
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div20" runat="server">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div36" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>*</sup>
                                                                 <label>Date</label>
@@ -489,10 +614,21 @@
                                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ValidationGroup="ProjHead"
                                                                     Display="None" ErrorMessage="Please Select Date" ControlToValidate="txtDate"></asp:RequiredFieldValidator>
 
-                                                                <ajaxToolKit:CalendarExtender ID="ceDateSelect" runat="server" Enabled="True"
+                                                                <ajaxToolKit:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="True"
                                                                     Format="dd/MM/yyyy" PopupButtonID="ImaCalStartDate" TargetControlID="txtDate">
                                                                 </ajaxToolKit:CalendarExtender>
                                                             </div>
+                                                        </div>
+
+                                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic" id="Div15" runat="server">
+                                                                <%--<sup>*</sup>--%>
+                                                                <label>Sanction By</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtSanctionBy" runat="server" ValidationGroup="submit" MaxLength="100"></asp:TextBox>
+                                                           <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="ProjHead" Display="None"
+                                                                ErrorMessage="Please Enter Sanction By" ControlToValidate="txtSanctionBy"></asp:RequiredFieldValidator>--%>
+
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic">
@@ -528,19 +664,21 @@
                                                                 <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblHead">
                                                                     <thead class="bg-light-blue">
                                                                         <tr>
-                                                                            <th>Action</th>
+                                                                            <th>Action
+
+                                                                            </th>
                                                                             <th>Short Code
                                                                             </th>
-                                                                            <th>Project Name
+                                                                            <th>Project Title
                                                                             </th>
                                                                             <th>Department
                                                                             </th>
                                                                             <th>Sanction By
                                                                             </th>
-                                                                            <t>
-                                                                            Value
-                                                                        </th>
-                                                                        <th>Sanction Letter
+                                                                            <th>
+                                                                            Total Project Cost
+                                                                            </th>
+                                                                        <th>Sanction Number
                                                                         </th>
                                                                             <th>Bank Ledger
                                                                             </th>

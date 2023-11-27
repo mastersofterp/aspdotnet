@@ -13,6 +13,7 @@ namespace IITMS
                 private string _fieldName = string.Empty;
                 private int _configid = 0; // 
                 private string _OUTSTANDING_MESSAGE = string.Empty;
+                private int _Fee_Receipt_Copies = 0;
 
                 public bool RegnoGenFeeCollection
                 {
@@ -140,6 +141,31 @@ namespace IITMS
                         _OUTSTANDING_MESSAGE = value;
                     }
                 }
+
+                // Added by Gopal M 01112023
+                public bool FEE_HEAD_GROUP
+                {
+                    get;
+                    set;
+                }
+                public int FEE_RECEIPT_COPIES
+                    {
+                    get
+                        {
+                        return _Fee_Receipt_Copies;
+                        }
+                    set
+                        {
+                        _Fee_Receipt_Copies = value;
+                        }
+                    }
+
+                public bool TOSHOW_FEEREC_STUDLOGIN
+                    {
+                    get;
+                    set;
+                    }
+
             }
         }
     }

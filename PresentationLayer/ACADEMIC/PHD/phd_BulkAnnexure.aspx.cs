@@ -108,8 +108,11 @@ public partial class ACADEMIC_PHD_BulkAnnexure : System.Web.UI.Page
     {
         //objCommon.FillDropDownList(ddlAdmBatch, "ACD_PHD_REGISTRATION", "distinct ADMBATCH", "DBO.FN_DESC('ADMBATCH',ADMBATCH)ADMBATCHNAME", "ADMBATCH>0", "ADMBATCH");
         this.objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "ACTIVESTATUS = 1", "BATCHNO"); //added on 27/03/23
-        objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");  
+        //Modified By Vipul Tichakule on date 06-11-2023
+        objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
+        //objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");  
         objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_DEGREE_BRANCH DB INNER JOIN ACD_COLLEGE_MASTER M ON(DB.COLLEGE_ID=M.COLLEGE_ID)", "DISTINCT DB. COLLEGE_ID", "M.COLLEGE_NAME", "UGPGOT=3", "COLLEGE_NAME");  //UGPG=3 added by Nikhil L. on 08/11/2022 hard coded for PhD colleges only.
+
     }
 
     #endregion Page Load 
@@ -117,7 +120,6 @@ public partial class ACADEMIC_PHD_BulkAnnexure : System.Web.UI.Page
     #region DDL (RFC.PHD.REQUIRMENT.MAJOR.1 (28/08/2023))
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, System.EventArgs e)
     {
-
         try
         {
             btnSubmit.Visible = false;
@@ -127,8 +129,7 @@ public partial class ACADEMIC_PHD_BulkAnnexure : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-        }
-       
+        }   
     }
     protected void ddlSchool_SelectedIndexChanged(object sender, System.EventArgs e)
     {
@@ -166,13 +167,12 @@ public partial class ACADEMIC_PHD_BulkAnnexure : System.Web.UI.Page
             if (CheckBox1.Checked)
             {
                 objCommon.FillDropDownList(ddlSupervisor, "ACD_PHD_OUTSIDE_MEMBER_MASTER", "DESIG_NO", "NAME", "DESIG_NO>0", "NAME");
-
             }
 
             else
             {
-                objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO)", "UA_NO", "UA_FULLNAME", "UA_NO>0 AND DESIGNATIONNO IN (1,3)", "ua_fullname");
-
+                //Modified By Vipul Tichakule on date 06-11-2023
+                objCommon.FillDropDownList(ddlSupervisor, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "UA_NO", "UA_FULLNAME + ' - '+EmployeeId+ ' - '+ (CASE WHEN DESIGNATIONNO = 1 THEN '(S)'  WHEN DESIGNATIONNO =2 THEN '(D)' WHEN DESIGNATIONNO = 3 THEN '(SD)' END)", "UA_NO>0", "ua_fullname");
             }
         }
         catch (Exception ex)
@@ -350,4 +350,5 @@ public partial class ACADEMIC_PHD_BulkAnnexure : System.Web.UI.Page
         }
     }
     #endregion Submit
+   
 }

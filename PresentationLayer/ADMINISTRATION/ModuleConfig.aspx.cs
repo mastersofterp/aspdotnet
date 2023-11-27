@@ -697,6 +697,45 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     }
 
 
+                    // Added Fee Head Group  by Gopal M - 01112023  Ticket-#50097
+                    if (ds.Tables[0].Rows[0]["FEE_HEAD_GROUP"].ToString() != null && ds.Tables[0].Rows[0]["FEE_HEAD_GROUP"].ToString() == "1")
+                    {
+                        rdID = "hfchkFeeHeadGroup";
+                        hfchkFeeHeadGroup.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565647", "CheckFeeHeadGroup(true);", true);
+                    }
+                    else
+                    {
+                        hfchkFeeHeadGroup.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565647", "CheckFeeHeadGroup(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString() != null && ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString() != "1")
+                    {
+                        rdID = "hfchkFeeReceiptSDT";
+                        hftxtFeeReceiptCopies.Value = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        txtFeeReceiptCopies.Text = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(true);", true);
+                    }
+                    else
+                    {
+                        hftxtFeeReceiptCopies.Value = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        txtFeeReceiptCopies.Text = ds.Tables[0].Rows[0]["FEE_RECEIPT_COPIES"].ToString();
+                        //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckFeeReceiptSingle(false);", true);
+                    }
+
+                    if (ds.Tables[0].Rows[0]["TOSHOW_FEEREC_STUDLOGIN"].ToString() != null && ds.Tables[0].Rows[0]["TOSHOW_FEEREC_STUDLOGIN"].ToString() == "1")
+                    {
+                        rdID = "hfchkScholarshipConAdj";
+                        hfchkScholarshipConAdj.Value = "true";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckScholarshipConAdj(true);", true);
+                    }
+                    else
+                    {
+                        hfchkScholarshipConAdj.Value = "false";
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript452565648", "CheckScholarshipConAdj(false);", true);
+                    }
+
                 }
             }
         }
@@ -1095,6 +1134,25 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 objMod.OUTSTANDING_MESSAGE = txtOutstandingMessage.Text;
             }
 
+            // Added Fee Head Group by Gopal M 01112023 Ticket #50097
+            if (hfchkFeeHeadGroup.Value == "true")
+            {
+                objMod.FEE_HEAD_GROUP = true;
+            }
+
+            if (txtFeeReceiptCopies.Text == "" || txtFeeReceiptCopies.Text == "0")
+            {
+                objMod.FEE_RECEIPT_COPIES = 1;
+            }
+            else 
+            {
+                objMod.FEE_RECEIPT_COPIES = Convert.ToInt32(txtFeeReceiptCopies.Text);
+            }
+
+            if (hfchkScholarshipConAdj.Value == "true")
+            {
+                objMod.TOSHOW_FEEREC_STUDLOGIN = true;
+            }
 
             //Check whether to add or update
             if (ViewState["action"] != null)

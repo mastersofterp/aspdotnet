@@ -16,6 +16,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentRegistration objSReg = new StudentRegistration();
+    FeeCollectionController objFee = new FeeCollectionController();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -70,7 +71,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", " COLLEGE_ID IN (" + ddlCollege.SelectedValue + ") AND isnull(FLOCK,0)=1 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "SESSIONNO DESC");
+        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", " COLLEGE_ID IN (" + ddlCollege.SelectedValue + ") AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "SESSIONNO DESC");
         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D , ACD_COLLEGE_DEGREE C", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO=C.DEGREENO AND C.DEGREENO>0 AND C.COLLEGE_ID=" + ddlCollege.SelectedValue + " AND C.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "DEGREENO");
         lvApproveCourse.DataSource = null;
         lvApproveCourse.DataBind();
@@ -81,6 +82,9 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
         lvStudentElect.DataBind();
         lvStudentGlobal.DataSource = null;
         lvStudentGlobal.DataBind();
+        lvSpecialization.DataSource = null;
+        lvSpecialization.DataBind();
+        divSpecialization.Visible = false;
         divCore.Visible = false;
         divElect.Visible = false;
         divGlobal.Visible = false;
@@ -90,6 +94,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
         try
         {
             ddlBranch.Items.Clear();
+            ddlSemester.Items.Clear();
             lvApproveCourse.DataSource = null;
             lvApproveCourse.DataBind();
             lvApproveCourse.Visible = false;
@@ -99,6 +104,9 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             lvStudentElect.DataBind();
             lvStudentGlobal.DataSource = null;
             lvStudentGlobal.DataBind();
+            lvSpecialization.DataSource = null;
+            lvSpecialization.DataBind();
+            divSpecialization.Visible = false;
             divCore.Visible = false;
             divElect.Visible = false;
             divGlobal.Visible = false;
@@ -112,7 +120,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(uplReg, "Please select college/school", this.Page);
+               // objCommon.DisplayMessage(uplReg, "Please select college/school", this.Page);
                 ddlDegree.Focus();
             }
         }
@@ -139,23 +147,22 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                 Response.Redirect("~/default.aspx", false);
             CustomStatus cs = CustomStatus.Error;
 
-            bool cbChecked = false;
-            foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
-            {
-                CheckBox cbApprove = (CheckBox)dataitem.FindControl("cbApprove");
-                if (cbApprove.Checked)
-                {
-                    cbChecked = true;
-                    break;
-                }
-            }
+            //bool cbChecked = false;
+            //foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
+            //{
+            //    CheckBox cbApprove = (CheckBox)dataitem.FindControl("cbApprove");
+            //    if (cbApprove.Checked)
+            //    {
+            //        cbChecked = true;
+            //        break;
+            //    }
+            //}
 
-            if (!cbChecked)
-            {
-                objCommon.DisplayMessage(uplReg, "Please Select at least One Student.", this.Page);
-                return;
-            }
-
+            //if (!cbChecked)
+            //{
+            //    objCommon.DisplayMessage(uplReg, "Please Select at least One Student.", this.Page);
+            //    return;
+            //}
 
             foreach (ListViewDataItem dataitem in lvApproveCourse.Items)
             {
@@ -174,6 +181,29 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     objS.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
                     objS.College_ID = Convert.ToInt32(ddlCollege.SelectedValue);
                     string ipAddress = Request.ServerVariables["REMOTE_HOST"];
+
+                    if (ddlFilter.SelectedValue == "12")
+                    {
+                        int semester = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "SEMESTERNO", "IDNO=" + IDNO + ""));
+                        int SCHEMENO = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "SCHEMENO", "IDNO=" + IDNO + ""));
+                        int groupcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_VALUE_ADDED_GROUP", "count(1)", "IDNO =" + objS.IdNo + " AND SEMESTERNO =" + semester + " AND SESSIONNO=" + objS.SessionNo + " AND SCHEMENO=" + SCHEMENO));
+                        if (groupcount > 0)
+                        {
+                            StudentRegist objSR = new StudentRegist();
+                            objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
+                            objSR.SCHEMENO = SCHEMENO;
+                            objSR.IDNO = Convert.ToInt32(IDNO.ToolTip);
+                            objSR.REGNO = IDNO.Text;
+                            objSR.IPADDRESS = ipAddress;
+                            objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                            objSR.COLLEGE_CODE = Session["colcode"].ToString();
+
+                            int ret = objSReg.AddSpecializationRegisteredSubjectsApprovalLogin(objSR);
+                            if (ret > 0)
+                            { }
+                        }
+                    }
+
                     cs = (CustomStatus)objCC.UpdateCourseRegApproval(objS, ipAddress);
                 }
             }
@@ -203,7 +233,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             int sessionID = Convert.ToInt32(ddlSession.SelectedValue);
             int degreeID = Convert.ToInt32(ddlDegree.SelectedValue);
             int branchID = Convert.ToInt32(ddlBranch.SelectedValue);
-            //int studtype = 0;
+            int studtype = 0;
             //if (rdoCourseRegDone.Checked == true)
             //{
             //    studtype = 1;
@@ -213,12 +243,14 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             //    studtype = 2;
             //}
             CourseController objC = new CourseController();
-            DataSet ds = objC.GetCourseRegistrationApprvlListModified(Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlFilter.SelectedValue));
+            DataSet ds = objC.GetCourseRegistrationApprvlListModified(Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), 
+                Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlFilter.SelectedValue),
+                Convert.ToInt32(ddlSemester.SelectedValue), studtype);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 lvApproveCourse.DataSource = ds;
                 lvApproveCourse.DataBind();
-                if (ddlFilter.SelectedValue == "1" || ddlFilter.SelectedValue == "4")
+                if (ddlFilter.SelectedValue == "1" || ddlFilter.SelectedValue == "5" || ddlFilter.SelectedValue == "9")
                 {
                     lvStudentCore.DataSource = ds;
                     lvStudentCore.DataBind();
@@ -226,11 +258,14 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     lvStudentElect.DataBind();
                     lvStudentGlobal.DataSource = null;
                     lvStudentGlobal.DataBind();
+                    lvSpecialization.DataSource = null;
+                    lvSpecialization.DataBind();
                     divCore.Visible = true;
                     divElect.Visible = false;
                     divGlobal.Visible = false;
+                    divSpecialization.Visible = false;
                 }
-                else if (ddlFilter.SelectedValue == "2" || ddlFilter.SelectedValue == "5")
+                else if (ddlFilter.SelectedValue == "2" || ddlFilter.SelectedValue == "6" || ddlFilter.SelectedValue == "10")
                 {
                     lvStudentCore.DataSource = null;
                     lvStudentCore.DataBind();
@@ -238,11 +273,14 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     lvStudentElect.DataBind();
                     lvStudentGlobal.DataSource = null;
                     lvStudentGlobal.DataBind();
+                    lvSpecialization.DataSource = null;
+                    lvSpecialization.DataBind();
                     divCore.Visible = false;
                     divElect.Visible = true;
                     divGlobal.Visible = false;
+                    divSpecialization.Visible = false;
                 }
-                else if (ddlFilter.SelectedValue == "3" || ddlFilter.SelectedValue == "6")
+                else if (ddlFilter.SelectedValue == "3" || ddlFilter.SelectedValue == "7" || ddlFilter.SelectedValue == "11")
                 {
                     lvStudentCore.DataSource = null;
                     lvStudentCore.DataBind();
@@ -250,11 +288,29 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     lvStudentElect.DataBind();
                     lvStudentGlobal.DataSource = ds;
                     lvStudentGlobal.DataBind();
+                    lvSpecialization.DataSource = null;
+                    lvSpecialization.DataBind();
                     divCore.Visible = false;
                     divElect.Visible = false;
                     divGlobal.Visible = true;
+                    divSpecialization.Visible = false;
                 }
-                
+                else if (ddlFilter.SelectedValue == "4" || ddlFilter.SelectedValue == "8" || ddlFilter.SelectedValue == "12")
+                {
+                    lvStudentCore.DataSource = null;
+                    lvStudentCore.DataBind();
+                    lvStudentElect.DataSource = null;
+                    lvStudentElect.DataBind();
+                    lvStudentGlobal.DataSource = null;
+                    lvStudentGlobal.DataBind();
+                    lvSpecialization.DataSource = ds;
+                    lvSpecialization.DataBind();
+                    divSpecialization.Visible=true;
+                    divCore.Visible = false;
+                    divElect.Visible = false;
+                    divGlobal.Visible = false;
+                }
+
                 lvApproveCourse.Visible = true;
                 dvStudentInfo.Visible = false;
                 tblInfo.Visible = true;
@@ -270,10 +326,13 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                 lvStudentElect.DataBind();
                 lvStudentGlobal.DataSource = null;
                 lvStudentGlobal.DataBind();
+                lvSpecialization.DataSource = null;
+                lvSpecialization.DataBind();
                 divCore.Visible = false;
                 divElect.Visible = false;
                 divGlobal.Visible = false;
                 btnSubmit.Enabled = false;
+                divSpecialization.Visible = false;
                 objCommon.DisplayMessage(uplReg, "No Record Found", this.Page);
             }
         }
@@ -317,6 +376,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             // string feedback_status;
             int sessionno = Convert.ToInt16(ddlSession.SelectedValue);
             int semester = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "SEMESTERNO", "IDNO=" + IDNO + ""));
+            int SCHEMENO = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "SCHEMENO", "IDNO=" + IDNO + ""));
             if (IDNO <= 0)
             {
                 objCommon.DisplayMessage(uplReg, "Student with Roll No." + IDNO + " Not Exists!", this.Page);
@@ -358,6 +418,9 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     //DataSet dsTotRegCredits = (DataSet)ViewState["DataSet_Student_Details"]; //objSReg.GetTotalCreditsCount(Convert.ToInt32(hdfDegreeno.Value), Convert.ToInt32(lblBranch.ToolTip), Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt32(lblSemester.ToolTip));
                     lblOfferedRegCredits.Text = (dsStudent != null && dsStudent.Tables[2].Rows.Count > 0) ? Convert.ToString(dsStudent.Tables[2].Rows[0]["TOT_CREDIT_GROUP"]) : "0";
                     lblOfferedRegCreditsFrom.Text = (dsStudent != null && dsStudent.Tables[2].Rows.Count > 0) ? Convert.ToString(dsStudent.Tables[2].Rows[0]["TOT_CREDIT_GROUP_FROM"]) : "0";
+
+                    string groupcount = Convert.ToString(objCommon.LookUp("ACD_BRANCH_SPECIALIZATION_GROUP_LIMIT_MAPPING", "ISNULL(MAX_GROUP_LIMIT,0)", "SRNO>0 AND COLLEGE_ID =" + Convert.ToInt32(dsStudent.Tables[1].Rows[0]["COLLEGE_ID"].ToString()) + " AND  DEGREENO=" + Convert.ToInt32(dsStudent.Tables[1].Rows[0]["DEGREENO"].ToString()) + " AND BRANCHNO=" + Convert.ToInt32(dsStudent.Tables[1].Rows[0]["BRANCHNO"].ToString())));
+                    Session["MAX_GROUP_LIMIT"] = groupcount;
 
                     #region Core Course
                     //Show Current Semester Courses ..
@@ -447,6 +510,70 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     return;
                 }
             }
+
+            int CheckGroupCount = Convert.ToInt32(objCommon.LookUp("ACD_VALUEADDED_COURSE", "Count(1)", " SEMESTERNO =" + Convert.ToInt32(semester) + " AND SCHEMENO = " + Convert.ToInt32(SCHEMENO)));
+            if (CheckGroupCount > 0)
+            {
+                DataSet ds = objFee.BindValueAddedGroups(Convert.ToInt32(semester), Convert.ToInt32(SCHEMENO));
+                //   ViewState["CollegeId"] = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    // ddlSession.SelectedValue = "";
+                    ddlgroups.Items.Clear();
+                    ddlgroups.DataSource = ds;
+                    ddlgroups.DataValueField = ds.Tables[0].Columns[0].ToString();
+                    ddlgroups.DataTextField = ds.Tables[0].Columns[1].ToString();
+                    ddlgroups.DataBind();
+                    // ddlSession.SelectedIndex = 0;
+                }
+
+                //objCommon.FillListBox(ddlgroups, "ACD_GROUP_MASTER_SPECIALIZATION A INNER JOIN ACD_VALUEADDED_COURSE B ON (A.GROUPID=B.GROUPID) ", "DISTINCT A.GROUPID", "GROUP_NAME", "ACTIVE_STATUS=1 and SEMESTERNO=" + ddlSemester.SelectedValue + "COSCHNO=" + Convert.ToInt32(Session["STUD_SCHEMENO"]), "A.GROUPID");
+                divgroups.Visible = true;
+                ViewState["GroupCount"] = 1;
+                Session["HASGROUP"] = 1;
+                if (Session["MAX_GROUP_LIMIT"].ToString() == null || Session["MAX_GROUP_LIMIT"].ToString() == "")
+                {
+                    lblSpecializationGroup.Text = "Select Specialization Groups(Any )";
+                    ScriptManager.RegisterClientScriptBlock(this, GetType(), "Scs", "alert('Please Configure Branch Specialization Group Mapping');", true);
+                    return;
+                }
+                else
+                {
+                    int countmax = Convert.ToInt32(Session["MAX_GROUP_LIMIT"].ToString());
+                    lblSpecializationGroup.Text = "Select Specialization Groups(Any " + countmax + ")";
+                }
+
+
+                DataSet dsgroups = objFee.GetSpecialisationGroupsbyIdno(Convert.ToInt32(IDNO), 1);
+                if (dsgroups != null && dsgroups.Tables[0].Rows.Count > 0)
+                {
+                    if (dsgroups.Tables[0].Rows.Count > 0)
+                    {
+                        string groupids = dsgroups.Tables[0].Rows[0]["GROUPIDS"].ToString();
+                        if (groupids != null && groupids != "")
+                        {
+                            string[] subs = groupids.Split(',');
+
+                            foreach (ListItem groupitems in ddlgroups.Items)
+                            {
+                                for (int i = 0; i < subs.Count(); i++)
+                                {
+                                    if (subs[i].Contains(groupitems.Value))
+                                    {
+                                        groupitems.Selected = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+            else
+            {
+                divgroups.Visible = false;
+            }
         }
         catch
         {
@@ -458,7 +585,38 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     {
         double TotRegCreditsCount = 0;
         int status = 0;
-        foreach (ListViewDataItem dataitem in lvUniCoreSub.Items)
+        int count = 0;
+        if (ViewState["GroupCount"] != null)
+        {
+            if (ViewState["GroupCount"].Equals(1))
+            {
+                int countmax = 0;
+                if (Session["MAX_GROUP_LIMIT"].ToString() == null || Session["MAX_GROUP_LIMIT"].ToString() == "")
+                {
+                    ddlgroups.ClearSelection();
+                    ScriptManager.RegisterClientScriptBlock(this, GetType(), "Sc", "alert('Please Configure Branch Specialization Group Mapping');", true);
+                    return;
+                }
+                else
+                {
+                    countmax = Convert.ToInt32(Session["MAX_GROUP_LIMIT"].ToString());
+                }
+
+                foreach (ListItem li in ddlgroups.Items)
+                {
+                    if (li.Selected)
+                        count = count + 1;
+                }
+                if (count != countmax)
+                {
+                    objCommon.DisplayMessage(uplReg, "You can select only "+countmax+" specialization group.!", this.Page);  // maximum
+                    ddlgroups.ClearSelection();
+                    return;
+                }
+                //status = count; // Added By Shailendra K. On dated 05.07.2023 As per T-45600
+            }
+        }
+        foreach (ListViewDataItem dataitem in lvCurrentSubjects.Items)
         {
             CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
             if (chk.Checked == true) status++;
@@ -559,7 +717,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             {
                 if ((dataitem.FindControl("chkAccept") as CheckBox).Checked == true)
                 {
-                   
+
                     string Code = (dataitem.FindControl("lblCCode") as Label).ToolTip;
                     string maxSeatsForGLobalSubj = objCommon.LookUp("ACD_GLOBAL_OFFERED_COURSE", "ISNULL(CAPACITY,0)",
                                                                     " ISNULL(GLOBAL_OFFERED,0)=1 AND COURSENO = " + Convert.ToInt32(Code) +
@@ -576,9 +734,12 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                     {
                         if (Convert.ToInt32(maxSeatsForGLobalSubj) > 0)
                         {
-                            int TotalRegisteredcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
-                                                                         "R.COURSENO = " + Convert.ToInt32(Code) +
-                                                                         "AND ISNULL(R.CANCEL,0)= 0 AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_GLOBAL_OFFERED_COURSE WHERE R.COURSENO = COURSENO AND ISNULL(GLOBAL_OFFERED,0)=1)"));
+                            //int TotalRegisteredcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R", "ISNULL(COUNT(R.COURSENO),0)",
+                            //                                             "R.COURSENO = " + Convert.ToInt32(Code) +
+                            //                                             "AND ISNULL(R.CANCEL,0)= 0 AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_GLOBAL_OFFERED_COURSE WHERE R.COURSENO = COURSENO AND ISNULL(GLOBAL_OFFERED,0)=1)"));
+                            int TotalRegisteredcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT R WITH (NOLOCK)", "ISNULL(COUNT(R.COURSENO),0)",
+                                                                        "R.COURSENO = " + Convert.ToInt32(Code) +
+                                                                        "AND ISNULL(R.CANCEL,0)= 0 AND R.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WITH (NOLOCK) WHERE SESSIONID IN(SELECT SESSIONID FROM ACD_SESSION_MASTER WITH (NOLOCK) WHERE SESSIONNO =" + objSR.SESSIONNO + "))"));
                             //int GlobalSubAvailable = objSReg.GetGlobalCoursesAvailableSeats(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt32(Code), Convert.ToInt32(lblBranch.ToolTip));
                             int intakeAvailable = Convert.ToInt32(maxSeatsForGLobalSubj) - TotalRegisteredcount;
 
@@ -600,59 +761,56 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
 
             if (lvValueAddedGroup.Visible == true)
             {
-                int grpsCnt = 0;
-                foreach (ListViewDataItem dataitem in lvValueAddedGroup.Items)
-                {
-                    if ((dataitem.FindControl("chkValueAddedGroup") as CheckBox).Checked == true)
-                    { grpsCnt++; }
-                }
-                if (grpsCnt > 0)
-                {
-                    if (grpsCnt != 2)
-                    {
-                        objCommon.DisplayMessage(this.Page, "You can Select Only Two Group.", this.Page);
-                        return;
-                    }
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this.Page, "Please select Groups.", this.Page);
-                    return;
-                }
-                int IsRecordUpdated = objSReg.UpdateGroupsForValueAddedCourse(objSR); 
+               
+                int IsRecordUpdated = objSReg.UpdateGroupsForValueAddedCourse(objSR);
 
                 foreach (ListViewDataItem dataitem in lvValueAddedGroup.Items)
                 {
                     CheckBox chkAccept = dataitem.FindControl("chkValueAddedGroup") as CheckBox;
                     if (chkAccept.Checked == true)
                     {
-                        int ret1 = objSReg.UpSertGroupsForValueAddedCourse(objSR, Convert.ToInt32(chkAccept.ToolTip));
-                        DataSet ds = objSReg.GetCourseSectionOfValueAddedGrp(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt32(chkAccept.ToolTip));
-                        string credits = string.Empty;
-                        string crsNo = string.Empty;
-                        string secNo = string.Empty;
-                        if (ds != null && ds.Tables[0].Rows.Count > 0)
-                        {
-                            credits = ds.Tables[0].Rows[0]["CREDITS"].ToString();
-                            crsNo = ds.Tables[0].Rows[0]["COURSENO"].ToString();
-                            secNo = ds.Tables[0].Rows[0]["SECTIONNO"].ToString();
-                        }
-                        else
-                        {
-                            credits = string.Empty;
-                            crsNo = string.Empty;
-                            secNo = string.Empty;
-                        }
-                        TotRegCreditsCount += Convert.ToDouble(credits);
-                        objSR.COURSENOS += crsNo + "$";
-                        objSR.SECTIONNOS += secNo + "$";
+                        //int ret1 = objSReg.UpSertGroupsForValueAddedCourse(objSR, Convert.ToInt32(chkAccept.ToolTip));
+                        //DataSet ds = objSReg.GetCourseSectionOfValueAddedGrp(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt32(chkAccept.ToolTip));
+                        //string credits = string.Empty;
+                        //string crsNo = string.Empty;
+                        //string secNo = string.Empty;
+                        //if (ds != null && ds.Tables[0].Rows.Count > 0)
+                        //{
+                        //    credits = ds.Tables[0].Rows[0]["CREDITS"].ToString();
+                        //    crsNo = ds.Tables[0].Rows[0]["COURSENO"].ToString();
+                        //    secNo = ds.Tables[0].Rows[0]["SECTIONNO"].ToString();
+                        //}
+                        //else
+                        //{
+                        //    credits = string.Empty;
+                        //    crsNo = string.Empty;
+                        //    secNo = string.Empty;
+                        //}
+                        string Credits = (dataitem.FindControl("lblCredits") as Label).Text;
+                        TotRegCreditsCount += Convert.ToDouble(Credits);
+                        objSR.COURSENOS = objSR.COURSENOS + (dataitem.FindControl("lblCourseno") as Label).ToolTip + "$";
+                        //objSR.COURSENOS += crsNo + "$";
+                        //objSR.SECTIONNOS += secNo + "$";
                     }
                 }
             }
             int ret = objSReg.AddAddlRegisteredSubjectsApprovalLogin(objSR);
             if (ret > 0)
             {
-                BindListView();
+                if (ViewState["GroupCount"] != null)
+                {
+                    if (ViewState["GroupCount"].Equals(1))
+                    {
+                        string Groups = string.Empty;
+                        foreach (ListItem items in ddlgroups.Items)
+                        {
+                            if (items.Selected == true)
+                                Groups += items.Value + ',';
+                        }
+                        int ret1 = objSReg.UpdateSpecailizationGroupForStudent(Convert.ToInt32(objSR.IDNO), Convert.ToInt32(objSR.SESSIONNO), Convert.ToInt32(objSR.SEMESTERNO), Groups);
+                    }
+                }
+                //BindListView();
                 dvStudentInfo.Visible = false;
                 btnSubmit.Enabled = true;
                 btnPrintChallan.Enabled = true;
@@ -808,7 +966,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                 examregcount++;
             }
         }
-        
+
         foreach (ListViewDataItem dataitem in lvGlobalSubjects.Items)
         {
             CheckBox chkAccept = dataitem.FindControl("chkAccept") as CheckBox;
@@ -967,7 +1125,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
                 Count += Convert.ToDouble(Credits);
         }
 
-    
+
         foreach (ListViewDataItem dataitem in lvValueAddedGroup.Items)
         {
             CheckBox chkAccept = dataitem.FindControl("chkValueAddedGroup") as CheckBox;
@@ -1539,7 +1697,7 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
             Label lblCCode = dataitem.FindControl("lblCCode") as Label;
             Label lblSection = dataitem.FindControl("lblSection") as Label;
             Label lblIntake = dataitem.FindControl("lblIntake") as Label;
-            
+
             if (chkAccept.Checked == true && (Convert.ToInt32(chkAccept.ToolTip) == GroupNO))
                 count++;
 
@@ -1567,14 +1725,14 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     //        if (chkAccept.Checked == true && (Convert.ToInt32(chkAccept.ToolTip) == GroupNO))
     //            count++;
 
-           
+
     //    }
     //}
 
     private void CourseDuplicateGloblaGroupCheck(int GroupNO)
     {
         int count = 0;
-       
+
         foreach (ListViewDataItem dataitem in lvGlobalSubjects.Items)
         {
             CheckBox chkAccept = dataitem.FindControl("chkAccept") as CheckBox;
@@ -1634,10 +1792,11 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
-        dvStudentInfo.Visible = false;
-        lvApproveCourse.DataSource = null;
-        lvApproveCourse.DataBind();
-        lvApproveCourse.Visible = false;
+        //dvStudentInfo.Visible = false;
+        //lvApproveCourse.DataSource = null;
+        //lvApproveCourse.DataBind();
+        //lvApproveCourse.Visible = false;
+
         Response.Redirect(Request.Url.ToString());
     }
 
@@ -1678,8 +1837,8 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
     //    return retStatus;
 
     //}
-    
-    protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
+
+    private void ClearListViewData()
     {
         lvApproveCourse.DataSource = null;
         lvApproveCourse.DataBind();
@@ -1690,39 +1849,145 @@ public partial class ACADEMIC_Course_Registration_Approval : System.Web.UI.Page
         lvStudentElect.DataBind();
         lvStudentGlobal.DataSource = null;
         lvStudentGlobal.DataBind();
+        lvSpecialization.DataSource = null;
+        lvSpecialization.DataBind();
+        divSpecialization.Visible = false;
         divCore.Visible = false;
         divElect.Visible = false;
         divGlobal.Visible = false;
     }
+    
+    protected void ddlFilter_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //lvApproveCourse.DataSource = null;
+        //lvApproveCourse.DataBind();
+        //lvApproveCourse.Visible = false;
+        //lvStudentCore.DataSource = null;
+        //lvStudentCore.DataBind();
+        //lvStudentElect.DataSource = null;
+        //lvStudentElect.DataBind();
+        //lvStudentGlobal.DataSource = null;
+        //lvStudentGlobal.DataBind();
+        //divCore.Visible = false;
+        //divElect.Visible = false;
+        //divGlobal.Visible = false;
+        ClearListViewData();
+    }
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvApproveCourse.DataSource = null;
-        lvApproveCourse.DataBind();
-        lvApproveCourse.Visible = false;
-        lvStudentCore.DataSource = null;
-        lvStudentCore.DataBind();
-        lvStudentElect.DataSource = null;
-        lvStudentElect.DataBind();
-        lvStudentGlobal.DataSource = null;
-        lvStudentGlobal.DataBind();
-        divCore.Visible = false;
-        divElect.Visible = false;
-        divGlobal.Visible = false;
+        //lvApproveCourse.DataSource = null;
+        //lvApproveCourse.DataBind();
+        //lvApproveCourse.Visible = false;
+        //lvStudentCore.DataSource = null;
+        //lvStudentCore.DataBind();
+        //lvStudentElect.DataSource = null;
+        //lvStudentElect.DataBind();
+        //lvStudentGlobal.DataSource = null;
+        //lvStudentGlobal.DataBind();
+        //divCore.Visible = false;
+        //divElect.Visible = false;
+        //divGlobal.Visible = false;
+        //ddlFilter.SelectedIndex = 0;
+
+        ClearListViewData();
+        if (ddlBranch.SelectedIndex > 0)
+        {
+            int DURATION = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH WITH (NOLOCK)", "ISNULL(DURATION,0)DURATION", "DEGREENO='" + Convert.ToInt32(ddlDegree.SelectedValue) + "' AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ""));
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO <=" + (DURATION * 2), "SEMESTERNO");
+        }
+
+        ddlSemester.SelectedIndex = 0;
         ddlFilter.SelectedIndex = 0;
     }
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        lvApproveCourse.DataSource = null;
-        lvApproveCourse.DataBind();
-        lvApproveCourse.Visible = false;
-        lvStudentCore.DataSource = null;
-        lvStudentCore.DataBind();
-        lvStudentElect.DataSource = null;
-        lvStudentElect.DataBind();
-        lvStudentGlobal.DataSource = null;
-        lvStudentGlobal.DataBind();
-        divCore.Visible = false;
-        divElect.Visible = false;
-        divGlobal.Visible = false;
+        //lvApproveCourse.DataSource = null;
+        //lvApproveCourse.DataBind();
+        //lvApproveCourse.Visible = false;
+        //lvStudentCore.DataSource = null;
+        //lvStudentCore.DataBind();
+        //lvStudentElect.DataSource = null;
+        //lvStudentElect.DataBind();
+        //lvStudentGlobal.DataSource = null;
+        //lvStudentGlobal.DataBind();
+        //lvSpecialization.DataSource = null;
+        //lvSpecialization.DataBind();
+        //divSpecialization.Visible = false;
+        //divCore.Visible = false;
+        //divElect.Visible = false;
+        //divGlobal.Visible = false;
+
+        ClearListViewData();
+    }
+
+    
+
+    protected void ddlgroups_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        string Groups = "";
+        int count = 0;
+        int countmax = 0;
+        if (Session["MAX_GROUP_LIMIT"].ToString() == null || Session["MAX_GROUP_LIMIT"].ToString() == "")
+        {
+            ddlgroups.ClearSelection();
+            ScriptManager.RegisterClientScriptBlock(this, GetType(), "Sc", "alert('Please Configure Branch Specialization Group Mapping');", true);
+            return;
+        }
+        else
+        {
+            countmax = Convert.ToInt32(Session["MAX_GROUP_LIMIT"].ToString());
+        }
+        foreach (ListItem li in ddlgroups.Items)
+        {
+            if (li.Selected)
+            {
+                count = count + 1;
+            }
+        }
+        if (count > countmax)
+        {
+            objCommon.DisplayMessage(uplReg, "You can select only " + countmax + " specialization group.!", this.Page);
+            ddlgroups.ClearSelection();
+            return;
+        }
+        foreach (ListItem items in ddlgroups.Items)
+        {
+            if (items.Selected == true)
+            {
+                Groups += items.Value + ',';
+            }
+
+        }
+        if (Groups != "")
+        {
+            DataSet dsValueAdded = objSReg.GetStudentCourseRegistrationSepcializationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 1, Groups);
+
+            if (dsValueAdded != null && dsValueAdded.Tables[0].Rows.Count > 0)
+            {
+                lvValueAddedGroup.DataSource = dsValueAdded.Tables[0];
+                lvValueAddedGroup.DataBind();
+                lvValueAddedGroup.Visible = true;
+            }
+            else
+                lvValueAddedGroup.Visible = false;
+        }
+        else
+        {
+            DataSet dsValueAdded = objSReg.GetStudentCourseRegistrationSepcializationSubject(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), 2, Groups);
+
+            if (dsValueAdded != null && dsValueAdded.Tables[0].Rows.Count > 0)
+            {
+                lvValueAddedGroup.DataSource = dsValueAdded.Tables[0];
+                lvValueAddedGroup.DataBind();
+                lvValueAddedGroup.Visible = true;
+            }
+            else
+                lvValueAddedGroup.Visible = false;
+        }
+    }
+    protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        ClearListViewData();
+        ddlFilter.SelectedIndex = 0;
     }
 }

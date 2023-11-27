@@ -122,7 +122,7 @@ public partial class ACADEMIC_Miscellaneous_Collection_Register : System.Web.UI.
 
         if (type == "Excel")
         {
-            filename = "SelectedFieldReport.xls";       //USED TO GENERATE IN EXCEL FORMAT
+            filename = "SelectedFieldReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";       //USED TO GENERATE IN EXCEL FORMAT
             ContentType = "ms-excel";
         }
         else if (type == "Word")
@@ -904,7 +904,7 @@ public partial class ACADEMIC_Miscellaneous_Collection_Register : System.Web.UI.
                         Response.Buffer = true;
                         Response.Charset = "";
                         Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                        Response.AddHeader("content-disposition", "attachment;filename=Misc_Fees_DCR_Short_report.xlsx");
+                        Response.AddHeader("content-disposition", "attachment;filename=Misc_Fees_DCR_Short_report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                         using (MemoryStream MyMemoryStream = new MemoryStream())
                         {
                             wb.SaveAs(MyMemoryStream);
@@ -922,7 +922,7 @@ public partial class ACADEMIC_Miscellaneous_Collection_Register : System.Web.UI.
                 {
                     DataGrid dg = new DataGrid();
 
-                    string attachment = "attachment; filename=Misc_Fees_DCR_Short_report.xls";
+                    string attachment = "attachment; filename=Misc_Fees_DCR_Short_report_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
                     Response.ClearContent();
                     Response.AddHeader("content-disposition", attachment);

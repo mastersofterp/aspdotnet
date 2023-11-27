@@ -66,7 +66,7 @@ public partial class ACADEMIC_AcademicActivityReports : System.Web.UI.Page
         {
             gv.DataSource = ds;
             gv.DataBind();
-            string Attachment = "Attachment; filename=" + FileName + ".xls";
+            string Attachment = "Attachment; filename=" + FileName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             for (int i = 0; i < ds.Tables.Count; i++)
             {
                 ds.Tables[i].TableName = ds.Tables[i].Rows[0]["SHEET_NAME"].ToString();
@@ -88,7 +88,7 @@ public partial class ACADEMIC_AcademicActivityReports : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename=" + FileName + ".xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename=" + FileName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);

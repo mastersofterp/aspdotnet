@@ -50,7 +50,7 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             else
             {
                 //Page Authorization
-               // CheckPageAuthorization();
+                // CheckPageAuthorization();
                 Page.Title = Session["coll_name"].ToString();
                 if (Session["comp_code"] == null)
                 {
@@ -100,14 +100,18 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
 
     private void FillDropDown()
     {
-       ddlProjectName.Items.Clear();
-       ddlProjectSubHead.Items.Clear();
-       objCommon.FillDropDownList(ddlProjectName, "Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectId", "ProjectName", "ProjectId > 0", "");
-       objCommon.FillDropDownList(ddlProjectSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubId", " ProjectSubHeadName+'('+ProjectSubHeadShort+')' as ProjectSubHeadName", "", "");
-       objCommon.FillDropDownList(ddlDepartment, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "");
+        ddlProjectName.Items.Clear();
+        ddlProjectSubHead.Items.Clear();
+        objCommon.FillDropDownList(ddlProjectName, "Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectId", "ProjectName", "ProjectId > 0", "");
+        objCommon.FillDropDownList(ddlProjectSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubId", " ProjectSubHeadName+'('+ProjectSubHeadShort+')' as ProjectSubHeadName", "", "");
+        objCommon.FillDropDownList(ddlDepartment, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "");
 
-       objCommon.FillDropDownList(ddlProject, "Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectId", "ProjectName", "ProjectId > 0", "ProjectId");
-       objCommon.FillDropDownList(ddlResType, "PROJECT_HEADTYPE", "ID", "PROJECTHEADTYPE", "", "");
+        objCommon.FillDropDownList(ddlProject, "Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectId", "ProjectName", "ProjectId > 0", "ProjectId");
+        objCommon.FillDropDownList(ddlResType, "PROJECT_HEADTYPE", "ID", "PROJECTHEADTYPE", "", "");
+
+        //Added by Pawan Nikhare
+        objCommon.FillDropDownList(ddlFundingAgency, "ACC_FUNDING_AGENCY", "AGENCY_ID", "FUNDING_AGENCY", "", "");
+
     }
 
     private void FillListView()
@@ -127,16 +131,16 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
     protected void btnSubmitProj_Click(object sender, EventArgs e)
     {
         string ProName = txtProjName.Text;
-        int look = 0; 
+        int look = 0;
         if (ViewState["ProjectId"] == null)
         {
-           look = Convert.ToInt32(objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PROJECT", "count(isnull(ProjectId,0))", "ProjectName='" + ProName + "'"));
+            look = Convert.ToInt32(objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PROJECT", "count(isnull(ProjectId,0))", "ProjectName='" + ProName + "'"));
         }
         else
         {
-            look = Convert.ToInt32(objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PROJECT", "count(isnull(ProjectId,0))", "ProjectName='" + ProName + "' AND ProjectId !="+Convert.ToInt32(ViewState["ProjectId"].ToString())+""));
+            look = Convert.ToInt32(objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PROJECT", "count(isnull(ProjectId,0))", "ProjectName='" + ProName + "' AND ProjectId !=" + Convert.ToInt32(ViewState["ProjectId"].ToString()) + ""));
         }
-        
+
         if (look > 0)
         {
             objCommon.DisplayUserMessage(updBank, "Project Name Already Exist.!", this);
@@ -144,7 +148,7 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             ViewState["action"] = "add";
             return;
         }
-      
+
         try
         {
             int ret = 0;
@@ -157,10 +161,43 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             objpro.Coordinator = txtCoordinator.Text;
             objpro.Value = txtValue.Text == "" ? 0 : Convert.ToDouble(txtValue.Text);
             objpro._SanctionLetter = txtSanctionLetter.Text.Trim();
-            objpro.Date = Convert.ToDateTime(txtDate.Text);
+            objpro.Date = Convert.ToDateTime(txtDate.Text); 
             objpro.Party_No = Convert.ToInt32(HdnAcc.Value);
+            objpro.FundingAgency = Convert.ToInt32(ddlFundingAgency.SelectedValue);
+            if (txtProjectDuration.Text == "")
+            {
+                objpro.ProjectDuration = 0;
+            }
+            else
+            {
+                objpro.ProjectDuration = Convert.ToInt32(txtProjectDuration.Text);
+            }
+            objpro.ProjectStartDate =Convert.ToDateTime(txtStartDate.Text);
+            objpro.ProjectEndDate = Convert.ToDateTime(txtEndDate.Text);
+            
+           if (txtAmtRecurring.Text == "")
+            {
+                objpro.AmountReceivedRecurring =0  ;
+            }
+            else
+            {
+                objpro.AmountReceivedRecurring =Convert.ToDecimal(txtAmtRecurring.Text);
+            }
 
-            if (ViewState["ProjectId"] == null)
+            if (txtAmtNonRecurring.Text == "")
+            {
+                objpro.AmountReceivedNonRecurring =0 ;
+            }
+            else
+            {
+                objpro.AmountReceivedNonRecurring = Convert.ToDecimal(txtAmtNonRecurring.Text);
+            }
+           
+              
+           objpro.SanctionDate = Convert.ToDateTime(txtSanctionDate.Text);
+            
+
+                if (ViewState["ProjectId"] == null)
             {
                 objpro.ProjectId = 0;
                 ret = objProController.AddUpdateProjectName(objpro, Session["comp_code"].ToString());
@@ -190,14 +227,14 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
                 default:
                     {
                         objCommon.DisplayUserMessage(updBank, "Error Occurred", this.Page);
-                        
+
                         break;
                     }
             }
         }
         catch (Exception ex)
         {
-           
+
         }
     }
 
@@ -220,6 +257,13 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
         txtDate.Text = "";
         HdnAcc.Value = "0";
         txtAgainstAcc.Text = "";
+        txtProjectDuration.Text = string.Empty;
+        txtStartDate.Text = string.Empty;
+        txtEndDate.Text = string.Empty;
+        txtAmtRecurring.Text = string.Empty;
+        txtAmtNonRecurring.Text = string.Empty;
+        txtSanctionDate.Text = string.Empty;
+        ddlFundingAgency.SelectedIndex = 0;
         FillDropDown();
     }
 
@@ -241,16 +285,16 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
         {
             look = (objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ProjectSubHeadShort", "ProjectSubHeadShort='" + ProjectSubHeadShort + "' AND ProjectSubHeadName='" + ProSubHeadName + "' AND ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "'"));
             Count = Convert.ToInt32(objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "count(*)", "(Party_No=" + Convert.ToInt32(hdnOpartyManual.Value) + " OR Party_No !=" + Convert.ToInt32(hdnOpartyManual.Value) + ") AND ProjectSubHeadName='" + ProSubHeadName + "' AND ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "'"));
-            Ledger = Convert.ToInt32(objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "count(*)", "Party_No=" + Convert.ToInt32(hdnOpartyManual.Value) + " AND ProjectId='" + ddlProject.SelectedValue+"' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "'"));
+            Ledger = Convert.ToInt32(objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "count(*)", "Party_No=" + Convert.ToInt32(hdnOpartyManual.Value) + " AND ProjectId='" + ddlProject.SelectedValue + "' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "'"));
 
         }
-        
+
         if (look == ProjectSubHeadShort)
         {
-           objCommon.DisplayUserMessage(updBank,"Project SubHead Name Already Exist.!", this);
-           btnSubmit.Text = "Submit";
-           //ViewState["action"] = "add";
-           return;
+            objCommon.DisplayUserMessage(updBank, "Project SubHead Name Already Exist.!", this);
+            btnSubmit.Text = "Submit";
+            //ViewState["action"] = "add";
+            return;
         }
         else if (Count > 0)
         {
@@ -279,14 +323,15 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
                 //srno = Convert.ToInt32(objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ISNULL(SUM(SrNo),0)", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "'"));
                 SrNo = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "top 1 SrNo", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' ORDER BY ProjectSubId DESC");
             }
-            else {
+            else
+            {
 
                 //srno = Convert.ToInt32(objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "ISNULL(SUM(SrNo),0)", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "'"));
                 SrNo = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "top 1 SrNo", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' AND ProjectSubId !='" + ViewState["ProjectSubId"].ToString() + "' ORDER BY ProjectSubId DESC");
             }
             if (SrNo != string.Empty)
             {
-                srno = Convert.ToInt32(SrNo)+1;               
+                srno = Convert.ToInt32(SrNo) + 1;
             }
             else
             {
@@ -320,22 +365,22 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             {
                 case 1:
                     {
-                        objCommon.DisplayUserMessage(updBank,"Record Saved Successfully", this.Page);
+                        objCommon.DisplayUserMessage(updBank, "Record Saved Successfully", this.Page);
                         ClearSubProj();
                         FillListView();
                         break;
                     }
                 case 2:
                     {
-                        objCommon.DisplayUserMessage(updBank,"Record Update Successfully", this.Page);
+                        objCommon.DisplayUserMessage(updBank, "Record Update Successfully", this.Page);
                         ClearSubProj();
                         FillListView();
                         break;
                     }
                 default:
                     {
-                        objCommon.DisplayUserMessage(updBank,"Error Occurred", this.Page);
-                        
+                        objCommon.DisplayUserMessage(updBank, "Error Occurred", this.Page);
+
                         break;
                     }
             }
@@ -373,9 +418,10 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             int ret = 0;
             objpro.ProjectId = Convert.ToInt32(ddlProjectName.SelectedValue);
             objpro.ProjectSubId = Convert.ToInt32(ddlProjectSubHead.SelectedValue);
-            objpro.TotAmtReceived = txtReceived.Text=="" ? 0 : Convert.ToDouble(txtReceived.Text);
-            objpro.TotAmtSpent = txttotSpent.Text=="" ? 0 : Convert.ToDouble(txttotSpent.Text);
-            objpro.TotAmtRemain = txtReceivedAmt.Text=="" ? 0 : Convert.ToDouble(txtReceivedAmt.Text);            
+            objpro.TotAmtReceived = txtReceived.Text == "" ? 0 : Convert.ToDouble(txtReceived.Text);
+            objpro.TotAmtSpent = txttotSpent.Text == "" ? 0 : Convert.ToDouble(txttotSpent.Text);
+            objpro.TotAmtRemain = txtReceivedAmt.Text == "" ? 0 : Convert.ToDouble(txtReceivedAmt.Text);
+
 
             if (ViewState["ProjectSubHeadAllocationId"] == null)
             {
@@ -459,7 +505,7 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
 
     protected void ListView1_ItemCommand(object sender, ListViewCommandEventArgs e)
     {
-        DataSet ds = objCommon.FillDropDown("Acc_" + Session["comp_code"].ToString() + "_Project A LEFT JOIN Acc_" + Session["comp_code"].ToString() + "_PARTY B ON(A.PARTY_NO = B.PARTY_NO)", "A.ProjectShortName,A.department,A.sanctionby", "A.ProjectName,A.scheme,A.coordinator,A.value,A.SANCTIONLETTER,CONVERT(VARCHAR,A.P_DATE,103)DATE,isnull(A.Party_No,0)Party_No,Isnull(B.PARTY_NAME,'')+'*'+ Isnull(B.ACC_CODE,'')PARTY_NAME", "ProjectId=" + e.CommandArgument.ToString(), "");
+        DataSet ds = objCommon.FillDropDown("Acc_" + Session["comp_code"].ToString() + "_Project A LEFT JOIN Acc_" + Session["comp_code"].ToString() + "_PARTY B ON(A.PARTY_NO = B.PARTY_NO)", "A.ProjectShortName,A.department,A.sanctionby", "A.ProjectName,A.scheme,A.coordinator,A.value,A.SANCTIONLETTER,CONVERT(VARCHAR,A.P_DATE,103)DATE,isnull(A.Party_No,0)Party_No,Isnull(B.PARTY_NAME,'')+'*'+ Isnull(B.ACC_CODE,'')PARTY_NAME,A.PROJECTDURATION,A.PROJECTSTARTDATE,A.PROJECTENDDATE,A.AMOUNTRECEIVEDRECURRING,A.AMOUNTRECEIVEDNONRECURRING,A.SANCTIONDATE,A.FUNDINGAGENCY", "ProjectId=" + e.CommandArgument.ToString(), "");
         txtSponShortName.Text = ds.Tables[0].Rows[0]["ProjectShortName"].ToString();
         txtProjName.Text = ds.Tables[0].Rows[0]["ProjectName"].ToString();
         objCommon.FillDropDownList(ddlDepartment, "PAYROLL_SUBDEPT", "SUBDEPTNO", "SUBDEPT", "", "");
@@ -467,10 +513,26 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
         txtSanctionBy.Text = ds.Tables[0].Rows[0]["sanctionby"].ToString();
         txtScheme.Text = ds.Tables[0].Rows[0]["scheme"].ToString();
         txtCoordinator.Text = ds.Tables[0].Rows[0]["coordinator"].ToString();
-        txtValue.Text = ds.Tables[0].Rows[0]["value"].ToString();
+        txtValue.Text = ds.Tables[0].Rows[0]["value"].ToString();   
         txtSanctionLetter.Text = ds.Tables[0].Rows[0]["SANCTIONLETTER"].ToString();
         txtDate.Text = ds.Tables[0].Rows[0]["DATE"].ToString();
-
+        txtProjectDuration.Text = ds.Tables[0].Rows[0]["PROJECTDURATION"].ToString();
+        txtStartDate.Text = ds.Tables[0].Rows[0]["PROJECTSTARTDATE"].ToString();
+        txtEndDate.Text = ds.Tables[0].Rows[0]["PROJECTENDDATE"].ToString();
+        txtAmtRecurring.Text = ds.Tables[0].Rows[0]["AMOUNTRECEIVEDRECURRING"].ToString();
+        txtAmtNonRecurring.Text = ds.Tables[0].Rows[0]["AMOUNTRECEIVEDNONRECURRING"].ToString();
+        //txtSanctionDate.Text = ds.Tables[0].Rows[0]["SANCTIONDATE"].ToString();
+        DateTime sanctiondt = Convert.ToDateTime(ds.Tables[0].Rows[0]["SANCTIONDATE"].ToString());
+           if(sanctiondt == DateTime.MinValue)
+           {
+               txtSanctionDate.Text = string.Empty;
+           }
+           else
+           {
+               txtSanctionDate.Text = ds.Tables[0].Rows[0]["SANCTIONDATE"].ToString(); 
+           }
+        ddlFundingAgency.SelectedValue = ds.Tables[0].Rows[0]["FUNDINGAGENCY"].ToString();
+        
         HdnAcc.Value = ds.Tables[0].Rows[0]["PARTY_NO"].ToString();
         if (ds.Tables[0].Rows[0]["PARTY_NAME"].ToString() != string.Empty && ds.Tables[0].Rows[0]["PARTY_NAME"].ToString() != "*")
         {
@@ -510,7 +572,7 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
         {
             ddlResType.Enabled = true;
         }
-        
+
         ViewState["ProjectSubId"] = e.CommandArgument;
 
 
@@ -521,9 +583,9 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
         DataSet ds = objCommon.FillDropDown("Acc_" + Session["comp_code"].ToString() + "_ProjectAllocation", "ProjectId,ProjectSubId,TotAmtReceived", "TotAmtSpent,TotAmtRemain", "ProjectSubHeadAllocationId=" + e.CommandArgument.ToString(), "");
         ddlProjectName.SelectedValue = ds.Tables[0].Rows[0]["ProjectId"].ToString();
         ddlProjectSubHead.SelectedValue = ds.Tables[0].Rows[0]["ProjectSubId"].ToString();
-       // txtReceived.Text = ds.Tables[0].Rows[0]["TotAmtReceived"].ToString();
-       // txttotSpent.Text = ds.Tables[0].Rows[0]["TotAmtSpent"].ToString();
-       // txtReceivedAmt.Text = ds.Tables[0].Rows[0]["TotAmtRemain"].ToString();
+        // txtReceived.Text = ds.Tables[0].Rows[0]["TotAmtReceived"].ToString();
+        // txttotSpent.Text = ds.Tables[0].Rows[0]["TotAmtSpent"].ToString();
+        // txtReceivedAmt.Text = ds.Tables[0].Rows[0]["TotAmtRemain"].ToString();
         ViewState["ProjectSubHeadAllocationId"] = e.CommandArgument;
 
         txttotSpent.Text = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_Trans", "SUM((CASE WHEN [TRAN] = 'Dr' THEN isnULL(AMOUNT,0) WHEN [TRAN] = 'Cr' THEN -isnull(AMOUNT,0) END)) AS AMOUNT", "ProjectId = " + ddlProjectName.SelectedValue + " AND ProjectSubId = " + ddlProjectSubHead.SelectedValue);
@@ -570,8 +632,8 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             txttotSpent.Text = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_Trans", "SUM((CASE WHEN [TRAN] = 'Dr' THEN isnULL(AMOUNT,0) WHEN [TRAN] = 'Cr' THEN -isnull(AMOUNT,0) END)) AS AMOUNT", "ProjectId = " + ddlProjectName.SelectedValue + " AND ProjectSubId = " + ddlProjectSubHead.SelectedValue);
 
             DataSet ds = objCommon.FillDropDown("Acc_" + Session["comp_code"].ToString() + "_ProjectAllocation", "ProjectSubHeadAllocationId,ProjectId,ProjectSubId,TotAmtReceived", "TotAmtSpent,TotAmtRemain", "ProjectId = " + ddlProjectName.SelectedValue + " AND ProjectSubId = " + ddlProjectSubHead.SelectedValue, "");
-            
-            if (ds != null && ds.Tables[0].Rows.Count>0)
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 txtReceived.Text = ds.Tables[0].Rows[0]["TotAmtReceived"].ToString();
                 ViewState["ProjectSubHeadAllocationId"] = ds.Tables[0].Rows[0]["ProjectSubHeadAllocationId"].ToString();
@@ -590,7 +652,7 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
 
     protected void txtAcc_TextChanged(object sender, EventArgs e)
     {
-       string[] Party = txtAcc.Text.Trim().Split('*');
+        string[] Party = txtAcc.Text.Trim().Split('*');
         if (Party.Length > 1)
         {
             hdnOpartyManual.Value = objCommon.LookUp("ACC_" + Session["comp_code"].ToString() + "_PARTY", "PARTY_NO", "ACC_CODE='" + Party[1] + "'");
@@ -625,24 +687,27 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
     {
         if (ddlProject.SelectedIndex > 0 && ddlResType.SelectedIndex > 0)
         {
-           string ShortName = objCommon.LookUp ("Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectShortName", "ProjectId='"+ddlProject.SelectedValue+"'");
-           string HeadSrno = objCommon.LookUp("PROJECT_HEADTYPE", "SRNO", "ID='"+ ddlResType.SelectedValue +"'");
-           if(ShortName != string.Empty && HeadSrno != string.Empty){
-               string count = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "top 1 SrNo", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' ORDER BY ProjectSubId DESC");
-               if (count != string.Empty)
-               {
-                   txtProjShortName.Text = ShortName + "." + HeadSrno + "." +(Convert.ToInt32(count) + 1);
-                   //count = 1;
-                   //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count);
-               }
-               else{
-                   //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count+1);
-                   txtProjShortName.Text = ShortName + "." + HeadSrno + "."+1;
-               }
-           }
+            string ShortName = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_Project", "ProjectShortName", "ProjectId='" + ddlProject.SelectedValue + "'");
+            string HeadSrno = objCommon.LookUp("PROJECT_HEADTYPE", "SRNO", "ID='" + ddlResType.SelectedValue + "'");
+            if (ShortName != string.Empty && HeadSrno != string.Empty)
+            {
+                string count = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "top 1 SrNo", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' ORDER BY ProjectSubId DESC");
+                if (count != string.Empty)
+                {
+                    txtProjShortName.Text = ShortName + "." + HeadSrno + "." + (Convert.ToInt32(count) + 1);
+                    //count = 1;
+                    //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count);
+                }
+                else
+                {
+                    //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count+1);
+                    txtProjShortName.Text = ShortName + "." + HeadSrno + "." + 1;
+                }
+            }
 
         }
-        else{
+        else
+        {
             txtProjShortName.Text = string.Empty;
 
         }
@@ -659,14 +724,14 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
                 string count = objCommon.LookUp("Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead", "top 1 SrNo", "ProjectId='" + ddlProject.SelectedValue + "' AND HeadType_id='" + ddlResType.SelectedValue + "' ORDER BY ProjectSubId DESC");
                 if (count != string.Empty)
                 {
-                    txtProjShortName.Text = ShortName + "." + HeadSrno + "."+(Convert.ToInt32(count) + 1);
+                    txtProjShortName.Text = ShortName + "." + HeadSrno + "." + (Convert.ToInt32(count) + 1);
                     //count = 1;
                     //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count);
                 }
                 else
                 {
                     //txtProjShortName.Text = ShortName + "." + HeadSrno + "." + Convert.ToString(count+1);
-                    txtProjShortName.Text = ShortName + "." + HeadSrno + "."+1;
+                    txtProjShortName.Text = ShortName + "." + HeadSrno + "." + 1;
                 }
             }
         }
@@ -702,5 +767,14 @@ public partial class ACCOUNT_sponsoredProjectMaster : System.Web.UI.Page
             ds.Dispose();
         }
         return Ledger;
+    }
+
+    protected void txtStartDate_TextChanged(object sender, EventArgs e)
+    {
+        int val = Convert.ToInt32(txtProjectDuration.Text);
+        DateTime StartDate = Convert.ToDateTime(txtStartDate.Text);
+        DateTime endDate = StartDate.AddMonths(val).AddDays(-1);
+        txtEndDate.Text = endDate.ToString("dd/MM/yyyy");
+
     }
 }

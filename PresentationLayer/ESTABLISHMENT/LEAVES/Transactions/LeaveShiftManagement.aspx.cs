@@ -145,6 +145,34 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LeaveShiftManagement : Sy
                 objUCommon.ShowError(Page, "Server.UnAvailable");
         }
     }
+
+    private void FillShift()
+    {
+        try
+        {
+            
+            objCommon.FillDropDownList(ddlshiftbulk, "PAYROLL_SHIFTMASTER", "SHIFTNO", "SHIFTNAME", "COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue), "SHIFTNO");
+        }
+        catch (Exception ex)
+        {
+        }
+
+    }
+
+    private void Clear()
+    {
+        txtFromDate.Text = txtToDate.Text = string.Empty;
+        ddlCollege.SelectedIndex = ddlIncharge.SelectedIndex = 0;
+        lvIncharge.DataSource = null;
+        lvIncharge.DataBind();
+        pnlIncharge.Visible = false;
+        trNote.Visible = false;
+        ddlshiftbulk.SelectedIndex = 0;
+        pnlIncharge.Visible = false;
+        lvIncharge.DataSource = null;
+        lvIncharge.DataBind();
+    }
+
     private void BindShiftAllocation()
     {
         if (txtToDate.Text.ToString() != string.Empty && txtToDate.Text.ToString() != "__/__/____" && txtFromDate.Text.ToString() != string.Empty && txtFromDate.Text.ToString() != "__/__/____")
@@ -187,12 +215,14 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LeaveShiftManagement : Sy
                 btnSave.Visible = false;
 
             }
+
         }
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
 
         FillIncharge();
+        FillShift();
     }
     protected void ddlIncharge_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -426,6 +456,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LeaveShiftManagement : Sy
         lvIncharge.DataBind();
         pnlIncharge.Visible = false;
         trNote.Visible = false;
+        ddlshiftbulk.SelectedIndex = 0;
     }
     //btnReport_Click
     protected void btnReport_Click(object sender, EventArgs e)
@@ -470,83 +501,169 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LeaveShiftManagement : Sy
         try
         {
             /*Insert Event Log Method*/
-            CustomStatus css = (CustomStatus)objSMC.InsertEventlog(System.IO.Path.GetFileName(Request.Url.AbsolutePath), System.Reflection.MethodBase.GetCurrentMethod().Name, Session["username"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["ipAddress"].ToString(), Session["macAddress"].ToString());
-
-            GetDateRange();
-            DateTime frmdate = Convert.ToDateTime(txtFromDate.Text);
-            DateTime todate = Convert.ToDateTime(txtToDate.Text);
-
-            //string month=frmdate.Month
-            //string monthName = new DateTime(2010, 8, 1).ToString("MMM", CultureInfo.InvariantCulture);
-
-
-            DataTable dt = new DataTable();
-            //dt.Columns.Add(new DataColumn("INCHARGEIDNO", typeof(int)));
-            dt.Columns.Add(new DataColumn("EMPLOYEEIDNO", typeof(int)));
-            dt.Columns.Add(new DataColumn("SHIFTDATE", typeof(DateTime)));
-            dt.Columns.Add(new DataColumn("SHIFTNO", typeof(int)));
-            dt.Columns.Add(new DataColumn("COLLEGE_NO", typeof(int)));
-            dt.Columns.Add(new DataColumn("IsDayOff", typeof(bool)));
-
-            int empid = 0;
-
-
-            foreach (ListViewDataItem lvitem in lvIncharge.Items)
+            int Empid;
+            if (ddlshiftbulk.SelectedIndex > 0)
             {
-                DateTime shiftDate;
-                shiftDate = Convert.ToDateTime(txtFromDate.Text);
+                CustomStatus css = (CustomStatus)objSMC.InsertEventlog(System.IO.Path.GetFileName(Request.Url.AbsolutePath), System.Reflection.MethodBase.GetCurrentMethod().Name, Session["username"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["ipAddress"].ToString(), Session["macAddress"].ToString());
 
-                for (int count = 1; count <= 7; count++)
+                GetDateRange();
+                DateTime frmdate = Convert.ToDateTime(txtFromDate.Text);
+                DateTime todate = Convert.ToDateTime(txtToDate.Text);
+
+                //string month=frmdate.Month
+                //string monthName = new DateTime(2010, 8, 1).ToString("MMM", CultureInfo.InvariantCulture);
+
+
+                DataTable dt = new DataTable();
+                //dt.Columns.Add(new DataColumn("INCHARGEIDNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("EMPLOYEEIDNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("SHIFTDATE", typeof(DateTime)));
+                dt.Columns.Add(new DataColumn("SHIFTNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("COLLEGE_NO", typeof(int)));
+                dt.Columns.Add(new DataColumn("IsDayOff", typeof(bool)));
+
+                int empid = 0;
+
+
+                foreach (ListViewDataItem lvitem in lvIncharge.Items)
                 {
-                    DropDownList ddlDay = lvitem.FindControl("ddlDay" + count) as DropDownList;
-                    DropDownList ddlDayOff = lvitem.FindControl("ddlDayOff" + count) as DropDownList;
-
-                    Label lblEmp = lvitem.FindControl("lblEmp") as Label;
-
-
-                    if (count == 1)
+                    DateTime shiftDate;
+                    shiftDate = Convert.ToDateTime(txtFromDate.Text);
+                    CheckBox chkSelect = lvitem.FindControl("chkSelect") as CheckBox;
+                    if (chkSelect.Checked && chkSelect != null)
                     {
-                        empid = Convert.ToInt32(lblEmp.ToolTip);
+                        Empid = Convert.ToInt32(chkSelect.ToolTip);
+                        for (int count = 1; count <= 7; count++)
+                        {
+                            DropDownList ddlDay = lvitem.FindControl("ddlDay" + count) as DropDownList;
+                            DropDownList ddlDayOff = lvitem.FindControl("ddlDayOff" + count) as DropDownList;
+
+                            Label lblEmp = lvitem.FindControl("lblEmp") as Label;
+
+
+                            //if (count == 1)
+                            //{
+                            //    empid = Convert.ToInt32(lblEmp.ToolTip);
+                            //}
+
+                            if (count > 1 && count <= 7)
+                            {
+                                shiftDate = shiftDate.AddDays(1);
+                            }
+
+
+                            objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
+                            objSME.EMPLOYEEIDNO = empid;
+                            objSME.COLLEGE_NO = Convert.ToInt32(ddlCollege.SelectedValue);
+
+                            DataRow dr = dt.NewRow();
+                            objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
+
+                            //dr["EMPLOYEEIDNO"] = empid;
+                            dr["EMPLOYEEIDNO"] = Empid;
+                            dr["SHIFTDATE"] = shiftDate;
+                            //dr["SHIFTNO"] = ddlDay.SelectedValue;
+                            dr["SHIFTNO"] = Convert.ToInt32(ddlshiftbulk.SelectedValue);
+                            dr["COLLEGE_NO"] = Convert.ToInt32(ddlCollege.SelectedValue);
+
+
+                            dr["IsDayOff"] = false;
+
+
+                            dt.Rows.Add(dr);
+
+                        }
                     }
+                }
+                //txtFromDate.Text
 
-                    if (count > 1 && count <= 7)
-                    {
-                        shiftDate = shiftDate.AddDays(1);
-                    }
+                CustomStatus cs = (CustomStatus)objSMC.InsertShiftManagementDetails(dt, objSME);
 
-
-                    objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
-                    objSME.EMPLOYEEIDNO = empid;
-                    objSME.COLLEGE_NO = Convert.ToInt32(ddlCollege.SelectedValue);
-
-                    DataRow dr = dt.NewRow();
-                    objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
-
-                    dr["EMPLOYEEIDNO"] = empid;
-                    dr["SHIFTDATE"] = shiftDate;
-                    dr["SHIFTNO"] = ddlDay.SelectedValue;
-                    dr["COLLEGE_NO"] = Convert.ToInt32(ddlCollege.SelectedValue);
-
-                    if (ddlDayOff.SelectedValue == "1")
-                    {
-                        dr["IsDayOff"] = true;
-                    }
-                    else
-                    {
-                        dr["IsDayOff"] = false;
-                    }
-
-                    dt.Rows.Add(dr);
-
+                if (cs.Equals(CustomStatus.RecordUpdated))
+                {
+                    // BindListView();
+                    objCommon.DisplayMessage("Record Saved Successfully!", this.Page);
+                    Clear();
                 }
             }
-            //txtFromDate.Text
-
-            CustomStatus cs = (CustomStatus)objSMC.InsertShiftManagementDetails(dt, objSME);
-            if (cs.Equals(CustomStatus.RecordUpdated))
+            else
             {
-                // BindListView();
-                objCommon.DisplayMessage("Record Saved Successfully!", this.Page);
+                CustomStatus css = (CustomStatus)objSMC.InsertEventlog(System.IO.Path.GetFileName(Request.Url.AbsolutePath), System.Reflection.MethodBase.GetCurrentMethod().Name, Session["username"].ToString(), Convert.ToInt32(Session["userno"].ToString()), Session["ipAddress"].ToString(), Session["macAddress"].ToString());
+
+                GetDateRange();
+                DateTime frmdate = Convert.ToDateTime(txtFromDate.Text);
+                DateTime todate = Convert.ToDateTime(txtToDate.Text);
+
+
+                DataTable dt = new DataTable();
+                //dt.Columns.Add(new DataColumn("INCHARGEIDNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("EMPLOYEEIDNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("SHIFTDATE", typeof(DateTime)));
+                dt.Columns.Add(new DataColumn("SHIFTNO", typeof(int)));
+                dt.Columns.Add(new DataColumn("COLLEGE_NO", typeof(int)));
+                dt.Columns.Add(new DataColumn("IsDayOff", typeof(bool)));
+
+                int empid = 0;
+
+
+                foreach (ListViewDataItem lvitem in lvIncharge.Items)
+                {
+                    DateTime shiftDate;
+                    shiftDate = Convert.ToDateTime(txtFromDate.Text);
+
+                    for (int count = 1; count <= 7; count++)
+                    {
+                        DropDownList ddlDay = lvitem.FindControl("ddlDay" + count) as DropDownList;
+                        DropDownList ddlDayOff = lvitem.FindControl("ddlDayOff" + count) as DropDownList;
+
+                        Label lblEmp = lvitem.FindControl("lblEmp") as Label;
+
+
+                        if (count == 1)
+                        {
+                            empid = Convert.ToInt32(lblEmp.ToolTip);
+                        }
+
+                        if (count > 1 && count <= 7)
+                        {
+                            shiftDate = shiftDate.AddDays(1);
+                        }
+
+
+                        objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
+                        objSME.EMPLOYEEIDNO = empid;
+                        objSME.COLLEGE_NO = Convert.ToInt32(ddlCollege.SelectedValue);
+
+                        DataRow dr = dt.NewRow();
+                        objSME.INCHARGEEMPLOYEEIDNO = Convert.ToInt32(ddlIncharge.SelectedValue);
+
+                        dr["EMPLOYEEIDNO"] = empid;
+                        dr["SHIFTDATE"] = shiftDate;
+                        dr["SHIFTNO"] = ddlDay.SelectedValue;
+                        dr["COLLEGE_NO"] = Convert.ToInt32(ddlCollege.SelectedValue);
+
+                        if (ddlDayOff.SelectedValue == "1")
+                        {
+                            dr["IsDayOff"] = true;
+                        }
+                        else
+                        {
+                            dr["IsDayOff"] = false;
+                        }
+
+                        dt.Rows.Add(dr);
+
+                    }
+                }
+                CustomStatus cs = (CustomStatus)objSMC.InsertShiftManagementDetails(dt, objSME);
+
+                if (cs.Equals(CustomStatus.RecordUpdated))
+                {
+                    // BindListView();
+                    objCommon.DisplayMessage("Record Saved Successfully!", this.Page);
+                    Clear();
+                }
+
             }
         }
         catch (Exception ex)

@@ -522,7 +522,7 @@ public partial class ACADEMIC_FeeCollectionReport : System.Web.UI.Page
 
         GV.DataSource = ds;
         GV.DataBind();
-        string attachment = "attachment; filename=" + Title + ".xls";
+        string attachment = "attachment; filename=" + Title +"_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") +  ".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/vnd.MS-excel";

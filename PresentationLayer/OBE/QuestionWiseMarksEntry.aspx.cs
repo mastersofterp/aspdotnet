@@ -1056,7 +1056,18 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
 
             var path = Server.MapPath("~/temp");
-            var fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";//"Spreadsheet.xlsx";
+            #region Added condition as per Ticket Number 51203
+            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId", ""));
+            var fileName=string.Empty;
+            if (Org == 5)
+            {
+                 fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xls";//"Spreadsheet.xlsx";
+            }
+            else
+            {
+                 fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";//"Spreadsheet.xlsx";
+            }
+            #endregion
 
             // Create temp path if not exits
             if (Directory.Exists(path) == false)
@@ -1296,10 +1307,24 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
 
             var path = Server.MapPath("~/temp");
-            var fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
+
+            #region Added condition as per Ticket Number 51203
+            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId", ""));
+            var fileName = string.Empty;
+            if (Org == 5)
+            {
+                fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
+
+               SessionName.Replace(' ', '_') + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xls";
+            }
+            else
+            {
+                fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
 
                SessionName.Replace(' ', '_') + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
-
+            }
+            #endregion
+            
                 //"Spreadsheet.xlsx";
 
             // Create temp path if not exits
@@ -1385,7 +1410,16 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                         break;
                 }
 
-                conString = String.Format(conString, path);
+                if (extension == ".xls")
+                {
+
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;";
+                }
+                else
+                {
+                    conString = String.Format(conString, path);
+                }
+                //conString = String.Format(conString, path);
                 //conString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0 Xml;HDR=YES;IMEX=1;", path);
 
 

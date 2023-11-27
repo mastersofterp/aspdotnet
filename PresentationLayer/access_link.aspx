@@ -153,7 +153,7 @@
                                             </div>
                                         </div>
                                         <!--===== Added By Nikhil L. on Dated 24/04/2023=====-->
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="form-group col-lg-6 col-md-6 col-12">
                                             <div class="row">
                                                 <div class="form-group col-6">
                                                     <div class="label-dynamic">
@@ -164,6 +164,13 @@
                                                         <input type="checkbox" id="chkTrans" name="chkTrans" />
                                                         <label data-on="Yes" data-off="No" for="chkTrans"></label>
                                                     </div>
+                                                </div>
+                                                <div class="form-group col-6">
+                                                    <div class="label-dynamic">
+                                                       <%-- <sup>* </sup>--%>
+                                                        <label>Upload File</label>
+                                                    </div>
+                                                    <asp:FileUpload ID="FilePDF" runat="server" TabIndex="3" accept=".pdf" />
                                                 </div>
                                             </div>
                                         </div>
@@ -370,7 +377,35 @@
                 </div>
             </div>
         </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnSubmit" />
+        </Triggers>
     </asp:UpdatePanel>
+
+    <%--Added By Anurag B. on 31-10-2023--%>
+    <script type="text/javascript">
+        document.getElementById('<%= FilePDF.ClientID %>').onchange = function () {
+            var selectedFile = this.files[0]; // Get the selected file
+            if (selectedFile) {
+                // Check the file extension
+                var fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+                if (fileExtension !== 'pdf') {
+                    alert("Please select a PDF file.");
+                    this.value = ''; // Clear the file input
+                    return;
+                }
+                // Check the file size (in bytes)
+                var maxSizeInBytes = 5 * 1024 * 1024; // 5 MB
+                if (selectedFile.size > maxSizeInBytes) {
+                    alert("File size must be 5 MB or less.");
+                    this.value = ''; // Clear the file input
+                    return;
+                }
+            }
+        };
+    </script>
+
+
     <script type="text/javascript" language="javascript">
         //function totAllSubjects(chklnkstatus) {
         //    var frm = document.forms[0]
@@ -425,7 +460,9 @@
             });
         });
 
+
         //Added By Hemanth G
+
 
     </script>
     <script>

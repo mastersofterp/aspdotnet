@@ -737,19 +737,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     int Is_Specialcase = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(IS_SPECIAL,0)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
                     if (ddlExam.SelectedIndex > 0)
                     {
-                        this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN.rpt");//rptMarksList1.rpt
+                        this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN_RCPIT.rpt");//rptMarksList1.rpt
                     }
                     else
                     {
                         if (ddlSubjectType.SelectedValue == "10")
                         {
-                            this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN.rpt");//rptMarksList1.rpt
+                            this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN_RCPIT.rpt");//rptMarksList1.rpt
                         }
                         else
                         {
                             if (ddlSubjectType.SelectedValue == "2" && Is_Specialcase == 1)
                             {
-                                this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN.rpt");//rptMarksList1.rpt
+                               // this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN.rpt");//rptMarksList1.rpt
+                                this.ShowReportMarksEntry("MarksListReport", "rptMarksList1_NEW_ADMIN_RCPIT.rpt");//rptMarksList1.rpt
                             }
                             else
                             {

@@ -458,7 +458,7 @@ public partial class ACADEMIC_SectionAllotment : System.Web.UI.Page
         {
             gv.DataSource = ds;
             gv.DataBind();
-            string attachment = "attachment ; filename=Section_Regno_Allotment.xls";
+            string attachment = "attachment ; filename=Section_Regno_Allotment_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             StringWriter sw = new StringWriter();

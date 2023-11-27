@@ -127,7 +127,7 @@ public partial class ADMINISTRATION_UploadAdmissionData : System.Web.UI.Page
             Response.Buffer = true;
             Response.Charset = "";
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadStudentData.xlsx");
+            Response.AddHeader("content-disposition", "attachment;filename=PreFormat_For_UploadStudentData_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
             using (MemoryStream MyMemoryStream = new MemoryStream())
             {
                 wb.SaveAs(MyMemoryStream);

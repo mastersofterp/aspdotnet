@@ -576,7 +576,7 @@ public partial class ACADEMIC_OfferedCourse : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string attachment = "attachment; filename=AllOfferedCourses.xls";
+                string attachment = "attachment; filename=AllOfferedCourses_"+  DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";

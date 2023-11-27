@@ -226,7 +226,7 @@ public partial class ACADEMIC_StudentFileUpload : System.Web.UI.Page
             DataGrid dg = new DataGrid();
             if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                string attachment = "attachment; filename=" + "ExcelUploadedDataSheet.xls";
+                string attachment = "attachment; filename=" + "ExcelUploadedDataSheet_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") +  ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/" + "ms-excel";

@@ -445,8 +445,8 @@
                                                 <%--<label>Branch</label>--%>
                                                 <asp:Label ID="lblDYddlBranch" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlBranch" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control"
-                                                data-select2-enable="true" TabIndex="6">
+                                            <asp:DropDownList ID="ddlBranch" runat="server" AppendDataBoundItems="True" AutoPostBack="True" CssClass="form-control"
+                                                data-select2-enable="true" TabIndex="6" OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <%--   <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester" Display="None" 
@@ -505,7 +505,7 @@
                                                 <asp:Label ID="lblDYddlYear" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
                                             <asp:DropDownList ID="ddlYear" runat="server" AppendDataBoundItems="True" AutoPostBack="true" TabIndex="9"
-                                                CssClass="form-control" data-select2-enable="true">
+                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlYear_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>

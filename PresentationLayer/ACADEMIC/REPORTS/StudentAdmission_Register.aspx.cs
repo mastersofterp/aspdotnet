@@ -187,7 +187,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
 
             // url += "&param=@P_COLLEGE_CODE=" + Session["ColCode"].ToString() + ",@P_ADMBATCH=" + ddlAdmbatch.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_FROMDATE=" + txtFromDate.Text + ",@P_TODATE=" + txtToDate.Text + "";
-            url += "&param=@P_COLLEGE_CODE=" + Session["ColCode"].ToString() + ",@P_ADMBATCH=" + ddlAdmbatch.SelectedValue + ",@P_COLLEGE_ID=" + ddlClg.SelectedValue + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",username=" + Session["username"].ToString() + ",@P_DEPTNO=" + Convert.ToInt32(ddlDepartment.SelectedValue) + ",@P_ACADEMIC_YEAR_ID=" + Convert.ToInt32(ddlAcdYear.SelectedValue) + ",@P_SORTBY=" + Convert.ToInt32(ddlAdm.SelectedValue);
+            url += "&param=@P_COLLEGE_CODE=" + Session["ColCode"].ToString() + ",@P_ADMBATCH=" + ddlAdmbatch.SelectedValue + ",@P_COLLEGE_ID=" + ddlClg.SelectedValue + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",username=" + Session["username"].ToString() + ",@P_DEPTNO=" + Convert.ToInt32(ddlDepartment.SelectedValue) + ",@P_ACADEMIC_YEAR_ID="+Convert.ToInt32(ddlAcdYear.SelectedValue);
             //url += "&param=@P_COLLEGE_CODE=" + Session["ColCode"].ToString() + ",@P_ADMBATCH=" + ddlAdmbatch.SelectedValue + ",@P_COLLEGE_ID=" + ddlClg.SelectedValue + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",username=" + Session["username"].ToString();
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
@@ -363,7 +363,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             {
                 GV.DataSource = dsfee;
                 GV.DataBind();
-                string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
+                string attachment = "attachment; filename=AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -421,7 +421,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             {
                 GV.DataSource = dsfee;
                 GV.DataBind();
-                string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
+                string attachment = "attachment; filename=AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -479,7 +479,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             {
                 GV.DataSource = dsfee;
                 GV.DataBind();
-                string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
+                string attachment = "attachment; filename=AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -561,7 +561,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
         {
             GV.DataSource = dsStudData;
             GV.DataBind();
-            string attachment = "attachment; filename=AdmissionRegisterStudents.xls";
+            string attachment = "attachment; filename=AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.MS-excel";
@@ -588,7 +588,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             {
                 GV.DataSource = ds;
                 GV.DataBind();
-                string attachment = "attachment; filename=IsMotherFatherAlive.xls";
+                string attachment = "attachment; filename=IsMotherFatherAlive_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -672,7 +672,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
                 Response.Buffer = true;
                 Response.Charset = "";
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;filename= AdmissionRegisterStudents.xlsx");
+                Response.AddHeader("content-disposition", "attachment;filename= AdmissionRegisterStudents_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 using (MemoryStream MyMemoryStream = new MemoryStream())
                 {
                     wb.SaveAs(MyMemoryStream);

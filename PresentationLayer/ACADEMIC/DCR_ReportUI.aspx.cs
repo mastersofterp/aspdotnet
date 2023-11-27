@@ -486,7 +486,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
 
         if (type == "Excel")
         {
-            filename = "SelectedFieldReport.xls";       //USED TO GENERATE IN EXCEL FORMAT
+            filename = "SelectedFieldReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";       //USED TO GENERATE IN EXCEL FORMAT
             ContentType = "ms-excel";
         }
         else if (type == "Word")
@@ -839,7 +839,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment; filename=" + degree + ".xls";
+                string attachment = "attachment; filename=" + degree + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 //string attachment = "attachment; filename=" + degree.Replace(" ", "_") + "_" + branch.Replace(" ", "_") + "_" + ccode + "_" + txtAttDate.Text.Trim() + "_" + txtRecDate.Text.Trim() + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
@@ -1198,7 +1198,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xls";
+                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();
@@ -1353,7 +1353,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xls";
+                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();
@@ -1566,7 +1566,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xls";
+                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();
@@ -1660,7 +1660,7 @@ public partial class Academic_DCR_ReportUI : System.Web.UI.Page
             {
                 Gr.DataSource = ds;
                 Gr.DataBind();
-                string Attachment = "Attachment; FileName=OutstandingReport.xls";
+                string Attachment = "Attachment; FileName=OutstandingReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", Attachment);
                 StringWriter sw = new StringWriter();

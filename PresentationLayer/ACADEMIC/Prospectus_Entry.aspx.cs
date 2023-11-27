@@ -392,7 +392,7 @@ public partial class ACADEMIC_Prospectus_Entry : System.Web.UI.Page
     private void ExportinExcel()
     {
         StudentController objSC = new StudentController();
-        string attachment = "attachment; filename=" + "ProspectusEntryExcelReport.xls";
+        string attachment = "attachment; filename=" + "ProspectusEntryExcelReport_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") +".xls";
         Response.ClearContent();
         Response.AddHeader("content-disposition", attachment);
         Response.ContentType = "application/" + "ms-excel";

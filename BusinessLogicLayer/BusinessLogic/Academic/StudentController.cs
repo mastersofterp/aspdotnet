@@ -4160,16 +4160,16 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet RetrieveStudentFeesDetails(int idno)
+                public DataSet RetrieveStudentFeesDetails(int idno, int uano)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[1];
+                        objParams = new SqlParameter[2];
                         objParams[0] = new SqlParameter("@P_IDNO", idno);
-
+                        objParams[1] = new SqlParameter("@P_UANO", uano);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_GET_FEES_DETAILS_BY_ID", objParams);
 
                     }
@@ -4179,6 +4179,7 @@ namespace IITMS
                     }
                     return ds;
                 }
+
 
                 public DataSet RetrieveStudentAttendanceDetails(int sessionno, int schemeno, int semesterno, int idno)
                 {

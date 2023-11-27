@@ -49,6 +49,21 @@ namespace IITMS
                 private int _SrNo ;
 
                 private int _partyno;
+
+                //Added by pawan nikhare
+                private int _FundingAgency = 0;
+
+                private int _ProjectDuration = 0;
+
+                private DateTime _ProjectStartDate;
+
+                private DateTime _ProjectEndDate;
+
+                private decimal _AmountReceivedRecurring = 0;
+
+                private decimal _AmountReceivedNonRecurring = 0;
+
+                private DateTime _SanctionDate;
                 #endregion
 
                 #region Public Members
@@ -174,6 +189,48 @@ namespace IITMS
                 {
                     get { return _ResType; }
                     set { _ResType = value; }
+                }
+
+                //Added by pawan nikhare
+                public int FundingAgency
+                {
+                    get { return _FundingAgency; }
+                    set { _FundingAgency = value; }
+                }
+
+                public int ProjectDuration
+                {
+                    get { return _ProjectDuration; }
+                    set { _ProjectDuration = value; }
+                }
+
+                public DateTime ProjectStartDate
+                {
+                    get { return _ProjectStartDate; }
+                    set { _ProjectStartDate = value; }
+                }
+
+                public DateTime ProjectEndDate
+                {
+                    get { return _ProjectEndDate; }
+                    set { _ProjectEndDate = value; }
+                }
+
+                public decimal AmountReceivedRecurring
+                {
+                    get { return _AmountReceivedRecurring; }
+                    set { _AmountReceivedRecurring = value; }
+                }
+
+                public decimal AmountReceivedNonRecurring
+                {
+                    get { return _AmountReceivedNonRecurring; }
+                    set { _AmountReceivedNonRecurring = value; }
+                }
+                public DateTime SanctionDate
+                {
+                    get { return _SanctionDate; }
+                    set { _SanctionDate = value; }
                 }
 
                 #endregion
