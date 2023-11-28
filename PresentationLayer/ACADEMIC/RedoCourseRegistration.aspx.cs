@@ -833,7 +833,9 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
                     GenerateDemand();
                     objCommon.DisplayMessage("Registered Courses Approved By HOD. Now You can do the payment...", this.Page);
-
+                    btnPayment.Visible = true;
+                    btnStudSubmit.Visible = false;
+                    CheckDemandStatus();
                 }
                 else
                     btnPrintRegSlip.Visible = false;
@@ -1536,15 +1538,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                 return;
             }
 
-            lblDemandAmt.Text = totalFees.ToString();
-            //CheckDemandStatus();
-
-            if (dt!=null && dt.Rows.Count > 0)
-            {
-                lvFailCourse.DataSource = dt;
-                lvFailCourse.DataBind();
-            }
-
+            CheckDemandStatus();
 
            // totalFees = 1; //TESTING PURPOSE
             CustomStatus cs = CustomStatus.Others;
