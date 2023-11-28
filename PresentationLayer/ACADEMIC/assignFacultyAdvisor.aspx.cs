@@ -210,6 +210,14 @@ public partial class assignFacultyAdvisor : System.Web.UI.Page
                     ddlDegree.Items.Add("Please Select");
                     ddlDegree.SelectedItem.Value = "0";
 
+                    ddlBranch.Items.Clear();
+                    ddlBranch.Items.Add("Please Select");
+                    ddlBranch.SelectedItem.Value = "0";
+
+                    ddlSemester.Items.Clear();
+                    ddlSemester.Items.Add("Please Select");
+                    ddlSemester.SelectedItem.Value = "0";
+
                     //ddlBranch.Items.Clear();
                     //ddlBranch.Items.Add("Please Select");
                     //ddlBranch.SelectedItem.Value = "0";
