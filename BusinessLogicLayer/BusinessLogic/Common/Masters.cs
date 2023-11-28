@@ -11,13 +11,13 @@ using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
 namespace IITMS
-{
-    namespace UAIMS
     {
-        namespace BusinessLayer.BusinessLogic
+    namespace UAIMS
         {
-            public class Masters
+        namespace BusinessLayer.BusinessLogic
             {
+            public class Masters
+                {
                 private string _uaims_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
                 public string[,] captions = new string[5, 9];
@@ -25,20 +25,20 @@ namespace IITMS
                 public string _tablename = string.Empty;
 
                 public Masters()
-                {
+                    {
                     GetCaptions(captions);
-                }
+                    }
 
                 public Masters(string tablename)
-                {
+                    {
                     _tablename = tablename;
                     GetCaptions(captions);
-                }
+                    }
 
                 private void GetCaptions(string[,] captions)
-                {
-                    switch (_tablename.ToLower())
                     {
+                    switch (_tablename.ToLower())
+                        {
                         #region PAYROLL
 
                         //PAYROLL
@@ -2740,13 +2740,36 @@ namespace IITMS
                             captions[1, 8] = "List of Application Name";
                             break;
 
+                        //case "acd_reciept_head_master":  //academic
+                        //    captions[0, 0] = "Receipt Short Name";                     //Label
+                        //    captions[0, 1] = "textbox";                          //Control
+                        //    captions[0, 2] = "rhshort";                      //FieldName
+                        //    captions[0, 3] = "recieptheadno";                        //ID
+                        //    captions[0, 4] = "2";                                //No of Fields
+                        //    captions[0, 5] = "recieptheadno,rhshort,rhname,activestatus,College_code";   //FieldNames
+                        //    captions[0, 6] = "string2";                           //Validation Type
+                        //    captions[0, 7] = "50";                               //Max length
+                        //    captions[0, 8] = "List of Receipt Master Head";             //Report Title
+
+                        //    captions[1, 0] = "List of Receipt Master Head";                     //Label
+                        //    captions[1, 1] = "textbox";                          //Control
+                        //    captions[1, 2] = "rhname";                      //FieldName
+                        //    captions[1, 3] = "recieptheadno";                        //ID
+                        //    captions[1, 4] = "2";                                //No of Fields
+                        //    captions[1, 5] = "recieptheadno,rhshort,rhname,activestatus,College_code";   //FieldNames
+                        //    captions[1, 6] = "string2";                           //Validation Type
+                        //    captions[1, 7] = "400";                               //Max length
+                        //    captions[1, 8] = "List of Receipt Master Head";             //Report Title
+                        //    break;
+
+
                         case "acd_reciept_head_master":  //academic
                             captions[0, 0] = "Receipt Short Name";                     //Label
                             captions[0, 1] = "textbox";                          //Control
                             captions[0, 2] = "rhshort";                      //FieldName
                             captions[0, 3] = "recieptheadno";                        //ID
-                            captions[0, 4] = "2";                                //No of Fields
-                            captions[0, 5] = "recieptheadno,rhshort,rhname,College_code";   //FieldNames
+                            captions[0, 4] = "3";                                //No of Fields
+                            captions[0, 5] = "recieptheadno,rhshort,rhname,activestatus,College_code";   //FieldNames
                             captions[0, 6] = "string2";                           //Validation Type
                             captions[0, 7] = "50";                               //Max length
                             captions[0, 8] = "List of Receipt Master Head";             //Report Title
@@ -2755,12 +2778,25 @@ namespace IITMS
                             captions[1, 1] = "textbox";                          //Control
                             captions[1, 2] = "rhname";                      //FieldName
                             captions[1, 3] = "recieptheadno";                        //ID
-                            captions[1, 4] = "2";                                //No of Fields
-                            captions[1, 5] = "recieptheadno,rhshort,rhname,College_code";   //FieldNames
+                            captions[1, 4] = "3";                                //No of Fields
+                            captions[1, 5] = "recieptheadno,rhshort,rhname,activestatus,College_code";   //FieldNames
                             captions[1, 6] = "string2";                           //Validation Type
                             captions[1, 7] = "400";                               //Max length
                             captions[1, 8] = "List of Receipt Master Head";             //Report Title
+
+
+                            //Added by Rohit M. on 28/11/2023
+                            captions[2, 0] = "Active Status";                        //Label
+                            captions[2, 1] = "checkbox";                        //Control
+                            captions[2, 2] = "activestatus";                        //FieldName
+                            captions[2, 3] = "recieptheadno";                          //ID
+                            captions[2, 4] = "3";                               //No of Fields
+                            captions[2, 5] = "recieptheadno,rhshort,rhname,activestatus,College_code";//FieldNames
+                            captions[2, 6] = "string";                          //Validation Type
+                            captions[2, 7] = "20";                                //Max length
+                            captions[2, 8] = "List of Receipt Master Head";                 //Report Title
                             break;
+
 
                         case "acd_gst_head_master":  //academic
                             captions[0, 0] = "GST Name";                     //Label
@@ -3090,7 +3126,7 @@ namespace IITMS
 
 
                         //added by aashna 09-11-2022 started-----
-                             
+
                         case "acd_discount":                          //academic
                             captions[0, 0] = "Discount(%)";                //label
                             captions[0, 1] = "textbox";                         //control
@@ -3137,7 +3173,7 @@ namespace IITMS
                             break;
 
                         //added by aashna 09-11-2022 ended-----
- 
+
                         //Added By Shubham B for EXAMINATION_MODE on 18/01/2023
                         case "acd_examination_mode":        //Examination
                             captions[0, 0] = "Exam Mode";                             //Label
@@ -3185,7 +3221,7 @@ namespace IITMS
                             captions[1, 8] = "List of Grades";                             //Report Title
                             break;
                         //Added by Injamam A. for AUDIT_GRADE on 21-2-2023
- 
+
                         //Added By Swapnil P  for ACD_GLOBAL_ELECTIVE_GROUP_MASTER on 21-03-2023
                         case "acd_global_elective_group_master":  //academic
                             captions[0, 0] = "Group Name";                            //Label
@@ -4409,20 +4445,20 @@ namespace IITMS
                             break;
                         #endregion
 
+                        }
                     }
-                }
 
                 public HtmlTable CreateTableHTML()
-                {
+                    {
                     HtmlTable tbl = new HtmlTable();
                     tbl.ID = "tblMaster";
                     tbl.Width = "100%";
 
                     try
-                    {
+                        {
                         //create rows
                         for (int i = 0; i < int.Parse(captions[0, 4]); i++)
-                        {
+                            {
                             HtmlTableRow row = new HtmlTableRow();
 
                             HtmlTableCell cell1 = new HtmlTableCell();
@@ -4430,13 +4466,13 @@ namespace IITMS
                             lbl.Text = "*";
                             // lbl.Attributes.Add("style", "color:Red;");
                             if (captions[i, 0].Equals("Active Status"))
-                            {
+                                {
                                 cell1.InnerHtml = captions[i, 0] + " : ";
-                            }
+                                }
                             else
-                            {
+                                {
                                 cell1.InnerHtml = "<sup style='color:red; font-weight: 800;'>" + lbl.Text + "</sup>" + " " + captions[i, 0] + " : ";
-                            }
+                                }
                             //cell1.InnerText = lbl.Text + " " + captions[i, 0] + " :";
                             //cell1.Attributes.Add("align", "right");
                             //cell1.Attributes.Add("padding", "10px");
@@ -4445,7 +4481,7 @@ namespace IITMS
                             row.Controls.Add(cell1);
 
                             if (captions[i, 1].Equals("textbox"))
-                            {
+                                {
                                 HtmlTableCell cell2 = new HtmlTableCell();
 
                                 cell2.Attributes.Add("class", "form_left_text");
@@ -4469,7 +4505,7 @@ namespace IITMS
                                 cell2.Controls.Add(rfv);
 
                                 if (captions[i, 6].Equals("double"))
-                                {
+                                    {
                                     CompareValidator cv = new CompareValidator();
                                     cv.ID = "cv" + i.ToString();
                                     cv.Display = ValidatorDisplay.None;
@@ -4480,15 +4516,15 @@ namespace IITMS
                                     cv.ValidationGroup = "submit";
                                     cv.SetFocusOnError = true;
                                     cell2.Controls.Add(cv);
-                                }
+                                    }
                                 else if (captions[i, 6].Equals("string"))
-                                {
+                                    {
                                     txt.MaxLength = int.Parse(captions[i, 7]);
                                     //Validation Not Required for :
                                     //- Blood Group
                                     //- Batch
                                     if (!_tablename.Equals("acd_bloodgrp") && !_tablename.Equals("acd_admbatch") && !_tablename.Equals("acd_grade_new") && !_tablename.Equals("payroll_category"))
-                                    {
+                                        {
                                         RegularExpressionValidator rev = new RegularExpressionValidator();
                                         rev.ID = "rev" + i.ToString();
                                         rev.Display = ValidatorDisplay.None;
@@ -4498,14 +4534,14 @@ namespace IITMS
                                         rev.ValidationGroup = "submit";
                                         rev.SetFocusOnError = true;
                                         cell2.Controls.Add(rev);
+                                        }
                                     }
-                                }
                                 else if (captions[i, 6].Equals("string2"))
-                                {
+                                    {
                                     txt.MaxLength = int.Parse(captions[i, 7]);
-                                }
+                                    }
                                 else if (captions[i, 6].Equals("numeric"))
-                                {
+                                    {
                                     CompareValidator cv = new CompareValidator();
                                     cv.ID = "cv" + i.ToString();
                                     cv.Display = ValidatorDisplay.None;
@@ -4516,13 +4552,13 @@ namespace IITMS
                                     cv.SetFocusOnError = true;
                                     cv.ValidationGroup = "submit";
                                     cell2.Controls.Add(cv);
-                                }
+                                    }
 
                                 cell2.Controls.Add(txt);
                                 row.Controls.Add(cell2);
-                            }
+                                }
                             else if (captions[i, 1].Equals("checkbox"))
-                            {
+                                {
                                 HtmlTableCell cell2 = new HtmlTableCell();
                                 cell2.Attributes.Add("class", "form_left_text");
 
@@ -4530,41 +4566,41 @@ namespace IITMS
                                 chk.ID = "chkColumn" + i.ToString();
                                 cell2.Controls.Add(chk);
                                 row.Controls.Add(cell2);
-                            }
+                                }
 
                             tbl.Controls.Add(row);
-                        }
+                            }
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         //if (Convert.ToBoolean(Session["error"]) == true)
                         //    objUCommon.ShowError(Page, "Academic_MarkEntry.btnSubmit_Click --> " + ex.Message + " " + ex.StackTrace);
                         //else
                         //    objUCommon.ShowError(Page, "Server Unavailable.");
-                    }
+                        }
 
                     return tbl;
 
-                }
+                    }
 
                 public GridView CreateGridView(string where)
-                {
+                    {
                     SQLHelper objSH = new SQLHelper(_uaims_constr);
 
                     DataSet ds = AllMasters(_tablename.ToLower(), captions[0, 3] + ">0", captions[0, 3]);
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
+                        {
 
                         if (Convert.ToString(ds.Tables[0].Rows[i]["ACTIVESTATUS"]) == "1")
-                        {
+                            {
                             ds.Tables[0].Rows[i]["ACTIVESTATUS"] = "Active";
-                        }
+                            }
                         else
-                        {
+                            {
                             ds.Tables[0].Rows[i]["ACTIVESTATUS"] = "De-Active";
+                            }
                         }
-                    }
                     GridView gv = new GridView();
                     gv.ID = "gvmaster";
                     gv.Width = Unit.Percentage(100);
@@ -4592,25 +4628,25 @@ namespace IITMS
                     gv.Columns.Add(bfid);
 
                     for (int i = 0; i < int.Parse(captions[0, 4]); i++)
-                    {
+                        {
                         BoundField bf = new BoundField();
                         bf.HeaderText = captions[i, 0];
                         bf.DataField = captions[i, 2];
                         gv.Columns.Add(bf);
-                    }
+                        }
 
                     //Added by Danish
                     gv.DataSource = ds;
                     gv.DataBind();
                     for (int i = 0; i < gv.Rows.Count; i++)
-                    {
+                        {
                         gv.Rows[i].Cells[0].ToolTip = "Edit/Update";
-                    }
+                        }
                     //Added by Danish
 
                     //Added by Swapnil dated on 14092021 for master gridview table make thead and tbody seprate
                     if (gv.Rows.Count > 0)
-                    {
+                        {
                         //Adds THEAD and TBODY Section.
                         gv.HeaderRow.TableSection = TableRowSection.TableHeader;
 
@@ -4618,19 +4654,19 @@ namespace IITMS
                         gv.UseAccessibleHeader = true;
 
 
-                    }
+                        }
                     //End
 
                     return gv;
-                }
+                    }
 
                 #region AllMasters
 
                 public int AddMaster(string tablename, string columnnames, string columnid, string columnvalues)
-                {
+                    {
                     int retStatus = 0;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
 
@@ -4652,21 +4688,21 @@ namespace IITMS
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
                         //Convert.ToInt32(CustomStatus.RecordSaved);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = 0;
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AddMaster-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 public int UpdateMaster(string tablename, string columnid, string columnnames)
-                {
+                    {
 
                     int retStatus = 0;
                     try
-                    {
+                        {
 
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
@@ -4686,22 +4722,22 @@ namespace IITMS
                         else
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
 
                         retStatus = 0;
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.UpdateMaster-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 public DataSet AllMasters(string tablename, string where, string orderby)
-                {
+                    {
 
                     DataSet ds = null;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
                         objParams = new SqlParameter[3];
@@ -4719,44 +4755,44 @@ namespace IITMS
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_MASTERS_SP_ALL_MASTERS", objParams);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AllMasters-> " + ex.ToString());
-                    }
+                        }
                     return ds;
-                }
+                    }
 
                 #endregion
 
                 #region Quarters
 
                 public DataSet AllQuarters()
-                {
+                    {
 
                     DataSet ds = null;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
                         objParams = new SqlParameter[0];
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_MASTERS_SP_ALL_PAY_QUARTERS", objParams);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
 
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AllQuarters-> " + ex.ToString());
-                    }
+                        }
                     return ds;
-                }
+                    }
 
                 public int AddQuarter(string qtrname, int qtrtypeno, string college_code)
-                {
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
 
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
 
@@ -4771,21 +4807,21 @@ namespace IITMS
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_MASTERS_SP_INS_PAY_QUARTERS", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AddQuarter-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 public int UpdateQuarter(int qtrno, string qtrname, int qtrtypeno)
-                {
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
 
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
 
@@ -4798,45 +4834,45 @@ namespace IITMS
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_MASTERS_SP_UPD_PAY_QUARTERS", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.UpdateQuarter-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 #endregion
 
                 #region Qualification
 
                 public DataSet AllQualifications()
-                {
+                    {
 
                     DataSet ds = null;
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
                         objParams = new SqlParameter[0];
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_MASTERS_SP_ALL_PAY_QUALIFICATION", objParams);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
 
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AllQualification-> " + ex.ToString());
-                    }
+                        }
                     return ds;
-                }
+                    }
 
                 public int AddQualification(string qualiname, int qualilevelno, string college_code)
-                {
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
 
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
 
@@ -4851,21 +4887,21 @@ namespace IITMS
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_MASTERS_SP_INS_PAY_QUALIFICATION", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.AddQualification-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 public int UpdateQualification(int qualino, string qualiname, int qualilevelno)
-                {
+                    {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
 
                     try
-                    {
+                        {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] objParams = null;
 
@@ -4878,17 +4914,17 @@ namespace IITMS
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_MASTERS_SP_UPD_PAY_QUALIFICATION", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                    }
+                        }
                     catch (Exception ex)
-                    {
+                        {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.Masters.UpdateQualification-> " + ex.ToString());
-                    }
+                        }
                     return retStatus;
-                }
+                    }
 
                 #endregion
+                }
             }
         }
     }
-}
