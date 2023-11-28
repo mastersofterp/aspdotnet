@@ -444,7 +444,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                     string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
                     if (que_out == "1")
                     {
-                        objCommon.DisplayMessage(this, "Exam Registration Done Sucessfully", this.Page);
+                        objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
                         BindListView();
                     }
 
@@ -483,4 +483,101 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         lvStudentRecords.Visible = false;
        //   lvStudentRecords.DataBind();
     }
+
+
+    protected void lnkbtnPrint_Click(object sender, EventArgs e)
+    {
+       
+        
+        
+        
+       LinkButton lbtn = (LinkButton)(sender);
+       Session["idno"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);    
+      // ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
+
+
+
+        if (Convert.ToInt32(Session["OrgId"]) == 9)
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent.rpt");
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 8)//MIT
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
+        }
+        //
+        else if (Convert.ToInt32(Session["OrgId"]) == 7)//RAJAGIRI
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_Rajagiri.rpt");
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 6)//RCPIPER
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_RCPIPER.rpt");
+          
+           // HideClm();
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 17) //UTKAL
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
+        }
+
+        else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PRIYADARSHNAI
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
+        }
+        else {
+
+
+              ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
+        }
+        
+ //   }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        int sessionno = 0;
+
+
+        int idno = Convert.ToInt32(Session["idno"]);
+        try
+        {
+
+            int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO='" + idno + "'"));
+            int branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO='" + idno + "'"));
+            int Collegeid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO='" + idno + "'"));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + Collegeid + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(degreeno) + ",@P_BRANCHNO=" + Convert.ToInt32(branchno) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
+            //  tring call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "";
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+          //  ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_ReceiptTypeDefinition.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+
 }
