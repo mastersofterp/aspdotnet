@@ -327,8 +327,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         //string sessionno = Session["currentsession"].ToString();
                         int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
                         //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "IS_ACTIVE=1 AND FLOCK=1 AND COLLEGE_ID=" + college_id + "");
-                        string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
-                        //string sessionno = ddlSession.SelectedValue;
+                        //string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
+                        string sessionno = ddlSession.SelectedValue;
                         dsAttendance = objSC.RetrieveStudentAttendanceDetails(Convert.ToInt32(sessionno), Convert.ToInt32(schemeno), Convert.ToInt32(semesterno), idno);
 
 
@@ -2056,7 +2056,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         }
 
-        this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND IDNO = " + Convert.ToInt32(Session["stuinfoidno"]), "R.SESSIONNO DESC");
+        this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "ISNULL(R.CANCEL,0)=0 AND ISNULL(R.REGISTERED,0)=1 AND  IDNO = " + Convert.ToInt32(Session["stuinfoidno"]), "R.SESSIONNO DESC");
         if (ddlSession.Items.Count > 1)
         {
             ddlSession.SelectedIndex = 1;
