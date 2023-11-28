@@ -58,9 +58,9 @@
                                         <asp:DropDownList ID="ddlFeedbackReportType" AppendDataBoundItems="true" ToolTip="Please Select Feedback Type" runat="server" data-select2-enable="true"
                                             CssClass="form-control" OnSelectedIndexChanged="ddlFeedbackReportType_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
-                                            <asp:ListItem Selected="false" Value="1">Faculty Feedback Report</asp:ListItem>
+                                            <%--<asp:ListItem Selected="false" Value="1">Faculty Feedback Report</asp:ListItem>--%>
                                             <%--<asp:ListItem Selected="false" Value="2">Faculty Feedback Report Percentage Wise</asp:ListItem>--%>
-                                            <asp:ListItem Selected="false" Value="3">HOD Feedback Report</asp:ListItem>
+                                            <%--<asp:ListItem Selected="false" Value="3">HOD Feedback Report</asp:ListItem>--%>
                                         </asp:DropDownList>
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFeedbackType"
                                         Display="None" ErrorMessage="Please select Feedback Type." SetFocusOnError="true"

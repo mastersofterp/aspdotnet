@@ -76,7 +76,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
                 PopulateDropDown();
 
-                objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
+                objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1", "FDID");
 
                 FillDropDownList();
                 //to clear all controls
@@ -520,7 +520,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         //    btnFacultyFeedbackReportPercentageWise.Visible = true;
         //    btnHODFeedbackReport.Visible = false;
         //}
-        if (ddlFeedbackReportType.SelectedValue == "3")
+        if (ddlFeedbackReportType.SelectedValue == "2")
         {
             dvFaculttyFeedback.Visible = true;
             btnFacultyFeedbackReport.Visible = false;
@@ -578,7 +578,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
 
             if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
             {
-                if (Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
+                if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
                 {
                     ShowhodfeedbackReport("HOD_FEEDBACK_REPORT", "PRMITR_HODFeedbackReport.rpt", param);
                 }
@@ -601,13 +601,13 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        if (Convert.ToInt32(Session["OrgId"]) == 2)
+        if (Convert.ToInt32(Session["OrgId"]) == 2 )
         {
             url += "&param=" + param + "";
         }
         else
         {
-            url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+            url += "&param=" + param + ",@P_COLLEGE_CODE=" +Convert.ToInt32(ViewState["college_id"]);
         }
         divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
