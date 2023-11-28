@@ -686,8 +686,14 @@ namespace IITMS
                 /// Added By Rishabh on 09-05-2022
                 /// </summary>
                 /// 
-                //changes made by Nehal on 25-08-2023
-                public int InsertStudentFeedBackAnswer(StudentFeedBack SFB, DataTable dt_FEEDBACK, string COMMENTS)
+                /// <summary>
+                /// Added by Amit B. on date 28/11/2023
+                /// </summary>
+                /// <param name="SFB"></param>
+                /// <param name="dt_FEEDBACK"></param>
+                /// <param name="COMMENTS"></param>
+                /// <returns></returns>
+                public int InsertStudentFeedBackAnswer(StudentFeedBack SFB, DataTable dt_FEEDBACK, string COMMENTS, int Is_Final)
                 {
                     int retStatus = 0;
                     try
@@ -719,6 +725,7 @@ namespace IITMS
                         new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
                         new SqlParameter("@P_ACD_FEEDBACK_QA", dt_FEEDBACK),
                         new SqlParameter("@P_COMMENTS", COMMENTS),
+                        new SqlParameter("@P_IS_FINAL", Is_Final),                        
                         new SqlParameter("@P_OUT", SFB.Out),
                         };
 
@@ -733,6 +740,40 @@ namespace IITMS
                         throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedBackController.InsertStudentFeedBackAnswer-> " + ex.ToString());
                     }
                     return retStatus;
+                }
+
+                /// Added by Amit B. on date 28/11/2023
+                public int UpdateFinalSubmitStatus(StudentFeedBack SFB, int OrganisationId, int Is_Final)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                        new SqlParameter("@P_IDNO", SFB.Idno),
+                        new SqlParameter("@P_SESSIONNO", SFB.SessionNo),
+                        new SqlParameter("@P_COLLEGE_CODE", SFB.CollegeCode),
+                        //new SqlParameter("@P_UA_NO", SFB.UA_NO),
+                        new SqlParameter("@P_EXAMNO", SFB.ExamNo),
+                        new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
+                        new SqlParameter("@P_IS_FINAL", Is_Final), 
+                        new SqlParameter("@P_OUT", SFB.Out),
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.InputOutput;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_FINAL_STATUS_FEEDBACK", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedBackController.UpdateFinalSubmitStatus-> " + ex.ToString());
+                    }
+                    return retStatus;
+
+
                 }
 
 

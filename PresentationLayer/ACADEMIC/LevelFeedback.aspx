@@ -159,6 +159,8 @@
                                                     </th>
                                                     <th>Feedback Status
                                                     </th>
+                                                    <th>Final Submit Status
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -184,6 +186,10 @@
                                             </td>
                                             <td>
                                                 <asp:Label ID="lblComplete" Text='<%# Eval("Status")%>' runat="server"></asp:Label>
+                                            </td>
+                                             <td>
+                                                <asp:Label ID="lblFinalSubmit" Text='<%# Eval("Status")%>' runat="server"  ToolTip='<%# Eval("Final_Submit_Status")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
+                                                 <asp:HiddenField ID="hdnFinalSubmitted" Value='<%# Eval("Final_Submit_Status")%>'  runat="server"  />
                                             </td>
                                         </tr>
                                     </ItemTemplate>
@@ -334,10 +340,17 @@
                             </div>
                             <asp:TextBox ID="txtRemark" runat="server" TextMode="MultiLine" placeholder="Please enter comments (Max. 100 char) ." CssClass="form-control" MaxLength="100"></asp:TextBox>
                         </div>
-
+                        </asp:Panel>
+                         <asp:Panel ID="pnlFinalSumbit" runat="server" Visible="false">
                         <div class="col-12 btn-footer">
-                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CssClass="btn btn-primary"
+                            <asp:Button ID="btnSubmit" runat="server" Text="Save & Next" OnClick="btnSubmit_Click" CssClass="btn btn-info"
                                 ValidationGroup="Submit" />
+                            <asp:Button ID="btnPrevious" runat="server" Text="Previous" OnClick="btnPrevious_Click" CssClass="btn btn-info"
+                                ValidationGroup="Submit" />
+                             <asp:Button ID="btnNext" runat="server" Text="Next" OnClick="btnNext_Click" CssClass="btn btn-primary"
+                                ValidationGroup="Submit" Visible="false"/>
+                             <asp:Button ID="btnFinalSubmit" runat="server" Text="Final Submit" OnClick="btnFinalSubmit_Click"  CssClass="btn btn-info"
+                                ValidationGroup="Submit" Visible="false"/>
                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
                             <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False"
                                 ValidationGroup="Submit" />
