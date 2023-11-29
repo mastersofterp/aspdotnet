@@ -210,6 +210,7 @@ namespace IITMS
                     return ds;
                 }
 
+
                 //Updated by Sakshi M 22112023
                 public int AddClubRegistration(int idno, int sessionno, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description, string File, int weightage, int campus, int count)
                 {
@@ -257,6 +258,7 @@ namespace IITMS
                 }
 
 
+
                 //Updated By Sakshi M. ON 20112023
                 public int UpdateClubRegistration(int club_no, int Subuser, string Title, string Venue, string Fromdate, string Todate, string Duration, string Description, string File, int weightage, int campus, int count)
                 {
@@ -302,6 +304,7 @@ namespace IITMS
                     }
                     return status;
                 }
+
 
 
                 public DataSet GetClubActivityRegistrationDetails(int idno)
@@ -737,6 +740,8 @@ namespace IITMS
                     }
                     return status;
                 }
+
+
               
             }
         }

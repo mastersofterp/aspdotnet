@@ -105,6 +105,7 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
     }
     //}
 
+
     private void bindDropdown()
     {
         DataSet ds = null;

@@ -86,10 +86,10 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
 
                 }
 
-
+            
                 // objCommon.FillListBox(ddlsubuser, "CLUB_MASTER", "CLUB_NO", "CLUB_ACTIVITY_TYPE", "CLUB_NO>0", "CLUB_NO");
                 
-               // populateDropDown();
+                 populateDropDown();
                 fillapproveDropDown();
             }
         }
@@ -120,32 +120,19 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
 
     private void fillapproveDropDown()
     {
-
-
         string APPROVAL_1_UANO = objCommon.LookUp("ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "isnull (APPROVAL_1_UANO,0)APPROVAL_1_UANO", "app_no>0 and APPROVAL_1_UANO=" + Convert.ToInt32(Session["userno"]));
         string APPROVAL_2_UANO = objCommon.LookUp("ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "isnull(APPROVAL_2_UANO,0)APPROVAL_2_UANO", "app_no>0 and APPROVAL_2_UANO=" + Convert.ToInt32(Session["userno"]));
-           
-
             if (Session["userno"].Equals(APPROVAL_1_UANO))
             {
-
-               
                 objCommon.FillDropDownList(ddlCollege, "USER_ACC CROSS APPLY STRING_SPLIT(UA_COLLEGE_NOS, ',') INNER JOIN ACD_COLLEGE_MASTER CM ON (CM.COLLEGE_ID=VALUE)", "DISTINCT value AS COLLEGE_ID", "COLLEGE_NAME", "value > 0", "COLLEGE_NAME");
                 //objCommon.FillDropDownList(ddlclub, "ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0", "CLUB_ACTIVITY_NO");
                 objCommon.FillDropDownList(ddlclub, "ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0 and APPROVAL_1_UANO=" + Convert.ToInt32(Session["userno"]), "CLUB_ACTIVITY_NO ");
-
-               
-
             }
             else if (Session["userno"].Equals(APPROVAL_2_UANO))
             {
-              
                 objCommon.FillDropDownList(ddlCollege, "USER_ACC CROSS APPLY STRING_SPLIT(UA_COLLEGE_NOS, ',') INNER JOIN ACD_COLLEGE_MASTER CM ON (CM.COLLEGE_ID=VALUE)", "DISTINCT value AS COLLEGE_ID", "COLLEGE_NAME", "value > 0", "COLLEGE_NAME");
                // objCommon.FillDropDownList(ddlclub, "ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0", "CLUB_ACTIVITY_NO");
                 objCommon.FillDropDownList(ddlclub, "ACD_CLUB_AUTHORITY_APPROVAL_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0 and APPROVAL_2_UANO=" + Convert.ToInt32(Session["userno"]), "CLUB_ACTIVITY_NO ");
-
-
-
             }
        // }
     }
@@ -186,13 +173,11 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
 
+              
                 lvclubRegapprove.DataSource = ds;
                 lvclubRegapprove.DataBind();
                 lvclubRegapprove.Visible = true;
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvclubRegapprove);//Set label -
-     
-
-               
                 
                 foreach (ListViewDataItem item in lvclubRegapprove.Items)
                 {
@@ -211,11 +196,9 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
                     {
 
                         if (Approval_1 == "1")
-                        {
-                         
+                        {   
                             appstatus.Enabled = false;
                             appstatus.Checked = true;
-
                         }
                     }
                     else if (Session["userno"].Equals(APPROVAL_2_UANO))
@@ -223,16 +206,10 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
 
                         if (Approval_1 == "1" && Approval_2=="1")
                         {
-
-                           
                             appstatus.Enabled = false;
                             appstatus.Checked = true;
-
                         } 
                     }
-                    
-            
-
                 }
                 lvclubRegapprove.Visible = true;
                
@@ -280,9 +257,6 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
                 Label lbclub = item.FindControl("lblname") as Label;
                 HiddenField hdCumulativeNo = item.FindControl("hdnCumulativeNo") as HiddenField;
                 HiddenField hdclub = item.FindControl("hdclubno") as HiddenField;
-
-
-
                 //if (Session["userno"].Equals(APPROVAL_1_UANO))
                 //{
 
@@ -306,7 +280,6 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
                 int stat = 0, type = 0, club = 0, clubactivityno=0;
                 if (chk.Checked == true && chk.Enabled == true)
                 {
-
                     IsRecordUpdated = true;
                     stat = 1;
                     type = Convert.ToInt32(hdCumulativeNo.Value);
@@ -316,10 +289,8 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
                     //CustomStatus cs = (CustomStatus)OBJCLUB.Club_Registration_approve_students(id, userNo, userType, stat, type, club);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
-
                         count++;
                     }
-
                 }
             }
 
@@ -356,7 +327,6 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
     {
         try
         {
-
             GridView gv = new GridView();
           
             int club = Convert.ToInt32(ddlclub.SelectedValue);
@@ -390,5 +360,10 @@ public partial class ClubRegistrationApproval : System.Web.UI.Page
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+    protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        lvclubRegapprove.DataSource = null;
+        lvclubRegapprove.DataBind();
     }
 }
