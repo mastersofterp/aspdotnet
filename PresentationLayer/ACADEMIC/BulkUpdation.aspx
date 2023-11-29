@@ -16,6 +16,8 @@
             return true;
         }
 
+        
+
         function checkEmail(txt) {
 
             var email = document.getElementById('txtemail');
@@ -85,6 +87,27 @@
         //    return true;
         //};
     </script>
+
+
+    <script>   
+        function allowAlphaNumericSpace(e) {
+        var code = ('charCode' in e) ? e.charCode : e.keyCode;
+        if (!(code == 32) && // space
+          !(code > 47 && code < 58) && // numeric (0-9)
+          !(code > 64 && code < 91) && // upper alpha (A-Z)
+          !(code > 96 && code < 123)) { // lower alpha (a-z)
+            e.preventDefault();
+            //    alert("Not Allowed Special Character..!");
+            return true;
+        }
+
+        else
+
+            return false;
+
+    }
+    </script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
@@ -583,7 +606,7 @@
                                             </div>
                                             <div id="Div2" runat="server" class="col-12">
                                                 <asp:RadioButtonList ID="rdbCat" runat="server" RepeatDirection="vertical" RepeatColumns="3"
-                                                    OnSelectedIndexChanged="rdbCat_SelectedIndexChanged" AutoPostBack="true">
+                                                    OnSelectedIndexChanged="rdbCat_SelectedIndexChanged" AutoPostBack="true" onclick="checkRadioButtonValue()">
                                                     <%--<asp:ListItem Value="1">College Code</asp:ListItem>
                                                     <asp:ListItem Value="2">Student Type</asp:ListItem>
                                                     <asp:ListItem Value="3">KEA Status</asp:ListItem>
@@ -619,6 +642,7 @@
                                                     <asp:ListItem Value="31">Merit Number</asp:ListItem>
                                                     <asp:ListItem Value="32">Father Mobile Number</asp:ListItem>
                                                     <asp:ListItem Value="33">Mother Mobile Number</asp:ListItem>
+                                                    <asp:ListItem Value="34">ABCC ID</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>
@@ -686,7 +710,7 @@
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <%--<asp:ListItem Value="1">Please Select1</asp:ListItem>--%>
                                                             </asp:DropDownList>
-                                                            <asp:TextBox ID="txtusn" runat="server" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
+                                                            <asp:TextBox ID="txtusn" runat="server" Text='<%#Eval("COLUMNNAME")%>' ClientIDMode="Static"></asp:TextBox>
                                                             <asp:TextBox ID="txtemail" onblur="return checkEmail(this)" runat="server" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>
                                                             <%--<asp:TextBox ID="txtMotherName" runat="server" Text='<%#Eval("COLUMNNAME")%>'></asp:TextBox>--%>
                                                             <%-- <asp:RequiredFieldValidator ID ="rfvEmail" runat="server" ControlToValidate="txtemail" InitialValue="0" SetFocusOnError="true" ValidationGroup="teacherallot" ErrorMessage="Please Enter valid Email Address" Display="None"> </asp:RequiredFieldValidator>--%>
@@ -1076,4 +1100,28 @@
          return array;
          }
      </script>
+
+    <script>
+        function allowAlphaNumericSpace(e, input) {
+            var charCode = ('charCode' in e) ? e.charCode : e.keyCode;
+            var charStr = String.fromCharCode(charCode);
+
+            var allowedChars = /^[A-Za-z0-9]*$/;
+
+            if (!allowedChars.test(charStr)) {
+                alert("Only alphanumeric characters are allowed.");
+                setTimeout(function() {
+                    input.value = ''; 
+                }, 0);
+                return false; 
+            }
+
+            return true; 
+        }
+
+
+
+
+    </script>
+
 </asp:Content>
