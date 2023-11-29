@@ -47,18 +47,6 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "ORGANIZATIONID", ""));
 
-                // Added By Shrikant W. on 25-09-2023
-              
-                if (orgID == 8)
-                {
-                    divApplicationId.Visible = true;
-                }
-                else
-                {
-                    divApplicationId.Visible = false;
-                }
-
-
                 if (rdofatheralive.SelectedValue == "1")
                 {
                     MotherSection.Visible = true;
@@ -148,6 +136,13 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         // Added By Shrikant W. on 08-09-2023 For DAIICT                    
                         if (orgID == 15)
                         {
+                            txtDateOfBirth.Enabled = false;
+                            ddlBloodGroupNo.Enabled = false;
+                            rdobtn_Gender.Enabled = false;
+                            rdbTransport.SelectedValue = "0";
+                            rdbTransport.Enabled = false;
+
+
                             if (final_submit == "1")
                             {
                                 if (txtDateOfBirth.Text != string.Empty)
@@ -217,7 +212,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 }
                 else
                 {
-
+                    txtStudFullname.Enabled = true;
                     txtIDNo.Visible = true;
                     divtxtidno.Visible = true;
                     divadmissiondetails.Visible = true;
@@ -226,8 +221,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     divhome.Visible = true;
                     // txtEnrollno.Enabled = true;
                     txtStudMobile.Enabled = true;
-                    txtStudentEmail.Enabled = true;
-                    txtStudFullname.Enabled = true;
+                    txtStudentEmail.Enabled = true;                    
                     // txtPaymentType.Enabled = false;
                     ddlPayType.Enabled = false;
                     lnkAddressDetail.Enabled = true;
@@ -235,6 +229,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     lnkQualificationDetail.Enabled = true;
                     lnkotherinfo.Enabled = true;
                     lnkprintapp.Enabled = true;
+
+                    
                 }
                 //if (ViewState["usertype"].ToString() == "2")
                 //{
@@ -461,6 +457,11 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         if (finalsubmit == "1" && Convert.ToInt32(Session["usertype"].ToString()) == 2 && allowprocess > 0)
         {
             btnSubmit.Visible = true;
+            fuPhotoUpload.Enabled = true;
+            btnPhotoUpload.Visible = true;
+            fuSignUpload.Enabled = true;
+            btnSignUpload.Visible = true;
+
         }
     }
     private void ShowStudentDetails()
@@ -994,7 +995,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                                 {
                                     if (Convert.ToInt32(abccidcount) > 0)
                                     {
-                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC Id", this.Page);
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another ABCC ID", this.Page);
                                         return;
                                     }
                                 }
@@ -1003,7 +1004,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                                 {
                                     if (Convert.ToInt32(dteappidcount) > 0)
                                     {
-                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application Id", this.Page);
+                                        objCommon.DisplayMessage(this.updpersonalinformation, "Please Enter Another DTE Application ID", this.Page);
                                         return;
                                     }
                                 }

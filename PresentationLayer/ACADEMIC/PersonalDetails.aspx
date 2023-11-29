@@ -698,29 +698,29 @@
                                                 </div>
                                             
                                             <%--<asp:Panel ID="pnlApplicationId" runat="server" Visible="false">--%>
-                                                <div class="row" id="divApplicationId" runat="server" visible="false">
+                                                <div class="row" id="divApplicationId" runat="server">
                                                     <div class="form-group col-lg-3 col-md-6 col-6" id="divABCCId" runat="server">
                                                         <div class="label-dynamic">
                                                             <sup id="supABCCId" runat="server">* </sup>
-                                                            <label id="lblAbccId">ABCC Id</label>
+                                                            <label id="lblAbccId">ABCC ID</label>
                                                         </div>
 
-                                                        <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABCC Id" MaxLength="20"
-                                                            TabIndex="19" placeholder="Enter ABCC Id" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
+                                                        <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABCC ID" MaxLength="20"
+                                                            TabIndex="19" placeholder="Enter ABCC ID" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="rfvtABCCId" runat="server" ControlToValidate="txtABCCId"
-                                                            Display="None" ErrorMessage="Please Enter ABCC Id" SetFocusOnError="True"
+                                                            Display="None" ErrorMessage="Please Enter ABCC ID" SetFocusOnError="True"
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-6" id="divDTEAppId" runat="server">
                                                         <div class="label-dynamic">
                                                             <sup id="supDTEAppId" runat="server">* </sup>
-                                                            <label id="lblDteAppId">DTE Application Id</label>
+                                                            <label id="lblDteAppId">DTE Application ID</label>
                                                         </div>
-                                                        <asp:TextBox ID="txtDTEAppId" runat="server" CssClass="form-control" ToolTip="Please Enter DTE Application Id" MaxLength="20"
-                                                            TabIndex="19" placeholder="Enter DTE Application Id" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
+                                                        <asp:TextBox ID="txtDTEAppId" runat="server" CssClass="form-control" ToolTip="Please Enter DTE Application ID" MaxLength="20"
+                                                            TabIndex="19" placeholder="Enter DTE Application ID" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="rfvDTEAppId" runat="server" ControlToValidate="txtDTEAppId"
-                                                            Display="None" ErrorMessage="Please Enter DTE Application Id" SetFocusOnError="True"
+                                                            Display="None" ErrorMessage="Please Enter DTE Application ID" SetFocusOnError="True"
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
