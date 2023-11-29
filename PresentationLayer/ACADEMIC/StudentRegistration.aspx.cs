@@ -277,57 +277,88 @@ public partial class Academic_Default : System.Web.UI.Page
     {
         try
         {
-
-            // objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_NAME");
-            objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
-            if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
+        objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
+        if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
             {
-                ddlSchool.SelectedValue = "1";
+            ddlSchool.SelectedValue = "1";
             }
+
+        try
+            {
             objCommon.FillDropDownList(ddlBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0 AND ACTIVESTATUS=1 AND ISNULL(IS_ADMSSION,0)=1 ", "BATCHNO DESC");
             //ddlBatch.SelectedValue = "1";
             ddlBatch.SelectedIndex = 1;
+            }
+        catch
+            {
+            ddlBatch.SelectedIndex = 0;
+            objCommon.DisplayMessage(this.Page, "Please Configured Admission Batch Master.", this.Page);
+            }
+        try
+            {
             objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
             ddlYear.SelectedValue = "1";
-            objCommon.FillDropDownList(ddlClaimedCat, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORY");
+            }
+        catch
+            {
+            ddlYear.SelectedValue = "0";
+            objCommon.DisplayMessage(this.Page, "Please Configured Admission Year Master.", this.Page);
+            }
+        objCommon.FillDropDownList(ddlClaimedCat, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORY");
 
-            // objCommon.FillDropDownList(ddlCategory, "ACD_SRCATEGORY", "srcategoryno", "srcategory", "srcategoryno > 0", "srcategory");
+        // objCommon.FillDropDownList(ddlCategory, "ACD_SRCATEGORY", "srcategoryno", "srcategory", "srcategoryno > 0", "srcategory");
 
-            // FILL DROPDOWN SEMESTER
+        // FILL DROPDOWN SEMESTER
+        try
+            {
             objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
             ddlSemester.SelectedValue = "1";
-            // FILL DROPDOWN PAYMENT TYPE
-            objCommon.FillDropDownList(ddlPaymentType, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0 AND ACTIVESTATUS=1", "PAYTYPENAME");
-            // ddlPaymentType.SelectedValue = "1";
-            //objCommon.FillDropDownList(ddlclaim, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0", "PAYTYPENO");
-            //fill dropdown id type
-            objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO > 0 AND ACTIVESTATUS=1", "IDTYPENO");
-            //ddlAdmType.SelectedValue = "1";
+            }
+        catch
+            {
+            ddlSemester.SelectedValue = "0";
+            objCommon.DisplayMessage(this.Page, "Please Configured Semester Master.", this.Page);
+            }
+        // FILL DROPDOWN PAYMENT TYPE
+        objCommon.FillDropDownList(ddlPaymentType, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0 AND ACTIVESTATUS=1", "PAYTYPENAME");
+        // ddlPaymentType.SelectedValue = "1";
+        //objCommon.FillDropDownList(ddlclaim, "ACD_PAYMENTTYPE", "PAYTYPENO", "PAYTYPENAME", "PAYTYPENO>0", "PAYTYPENO");
+        //fill dropdown id type
+        objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO > 0 AND ACTIVESTATUS=1", "IDTYPENO");
+        //ddlAdmType.SelectedValue = "1";
 
-            //fill dropdown adm round
-            // objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0", "ROUNDNAME");
-            //fill dropdown adm quota
-            objCommon.FillDropDownList(ddlQuota, "ACD_QUOTA", "QUOTANO", "QUOTA", "QUOTANO>0", "QUOTANO");
+        //fill dropdown adm round
+        // objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0", "ROUNDNAME");
+        //fill dropdown adm quota
+        objCommon.FillDropDownList(ddlQuota, "ACD_QUOTA", "QUOTANO", "QUOTA", "QUOTANO>0", "QUOTANO");
 
-            objCommon.FillDropDownList(ddlReligion, "ACD_RELIGION", "RELIGIONNO", "RELIGION", "RELIGIONNO > 0 AND ACTIVESTATUS=1", "RELIGION");
-            objCommon.FillDropDownList(ddlNationality, "ACD_NATIONALITY", "NATIONALITYNO", "NATIONALITY", "NATIONALITYNO > 0 AND ACTIVESTATUS=1", "NATIONALITY");
-            objCommon.FillDropDownList(ddlAllotedCat, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORY");
-            objCommon.FillDropDownList(ddlBloodGrp, "ACD_BLOODGRP", "BLOODGRPNO", "BLOODGRPNAME", "BLOODGRPNO > 0 AND ACTIVESTATUS=1", "BLOODGRPNAME");
-            objCommon.FillDropDownList(ddlCategory, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORYNO");
-            //fill dropdown adm quota
-            //objCommon.FillDropDownList(ddlBloodGroup, "ACD_BLOODGRP", "BLOODGRPNO", "BLOODGRPNAME", "BLOODGRPNO>0", "BLOODGRPNO");
-            this.objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKNAME", "ACTIVESTATUS=1", "BANKNAME");
-            //objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "QUALIFYNO");
-            objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "QUALIFYNO >0 AND QEXAMSTATUS='E'", "QUALIEXMNAME");
+        objCommon.FillDropDownList(ddlReligion, "ACD_RELIGION", "RELIGIONNO", "RELIGION", "RELIGIONNO > 0 AND ACTIVESTATUS=1", "RELIGION");
+        objCommon.FillDropDownList(ddlNationality, "ACD_NATIONALITY", "NATIONALITYNO", "NATIONALITY", "NATIONALITYNO > 0 AND ACTIVESTATUS=1", "NATIONALITY");
+        objCommon.FillDropDownList(ddlAllotedCat, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORY");
+        objCommon.FillDropDownList(ddlBloodGrp, "ACD_BLOODGRP", "BLOODGRPNO", "BLOODGRPNAME", "BLOODGRPNO > 0 AND ACTIVESTATUS=1", "BLOODGRPNAME");
+        objCommon.FillDropDownList(ddlCategory, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO > 0 AND ACTIVESTATUS=1", "CATEGORYNO");
+        //fill dropdown adm quota
+        //objCommon.FillDropDownList(ddlBloodGroup, "ACD_BLOODGRP", "BLOODGRPNO", "BLOODGRPNAME", "BLOODGRPNO>0", "BLOODGRPNO");
+        this.objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKNAME", "ACTIVESTATUS=1", "BANKNAME");
+        //objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue), "QUALIFYNO");
+        objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "QUALIFYNO >0 AND QEXAMSTATUS='E'", "QUALIEXMNAME");
 
-            objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO >0 AND ACTIVESTATUS=1", "SECTIONNO ASC");
-            objCommon.FillDropDownList(ddlstate, "ACD_STATE", "STATENO", "STATENAME", "STATENO >0", "STATENAME");
-            objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO>0 and STATENO=" + ddlstate.SelectedValue, "CITY");
-            //ddlstate.SelectedValue = "5";
-            objCommon.FillDropDownList(ddlSchType, "ACD_SCHOLORSHIPTYPE", "SCHOLORSHIPTYPENO", "SCHOLORSHIPNAME", "SCHOLORSHIPTYPENO>0" ,"SCHOLORSHIPTYPENO");
+        objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO >0 AND ACTIVESTATUS=1", "SECTIONNO ASC");
+        objCommon.FillDropDownList(ddlstate, "ACD_STATE", "STATENO", "STATENAME", "STATENO >0", "STATENAME");
+        objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO>0 and STATENO=" + ddlstate.SelectedValue, "CITY");
+        //ddlstate.SelectedValue = "5";
+        objCommon.FillDropDownList(ddlSchType, "ACD_SCHOLORSHIPTYPE", "SCHOLORSHIPTYPENO", "SCHOLORSHIPNAME", "SCHOLORSHIPTYPENO>0", "SCHOLORSHIPTYPENO");
 
+        try
+            {
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             ddladmthrough.SelectedValue = "1";
+            }
+        catch
+            {
+            ddladmthrough.SelectedValue = "0";
+            objCommon.DisplayMessage(this.Page, "Please Configured  Admission Through (Admission Round) Master.", this.Page);
+            }
 
          
         }
