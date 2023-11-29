@@ -446,7 +446,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
         }
         else if ((dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1") || (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1"))
         {
-            if (Convert.ToInt32( dssubtype.Tables[0].Rows[0]["THEORY"]) > 0)
+            if (Convert.ToInt32(dssubtype.Tables[0].Rows[0]["THEORY"]) > 0)
             {
                 divTutorial.Visible = true;
                 ddlTutorial.Items.Add(new ListItem("Theory", "1"));
@@ -468,7 +468,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             ddlTutorial.SelectedValue = "2";
         }
         //else if (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1")
-        else if((dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "2") || (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "2"))
+        else if ((dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "2") || (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "2"))
         {
             if (Convert.ToInt32(dssubtype.Tables[0].Rows[0]["THEORY"]) > 0)
             {
@@ -619,16 +619,16 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
                 else//this code for Theory Subject
                 {
 
-                        if (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" || dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "3")
-                        {
-                            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey7", "$('#BatchTheory1').hide();$('#BatchTheory1').text('Section - Batch');$('td:nth-child(4)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(4)').hide();});", true);
-                            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey8", "$('#Section1').show();$('td:nth-child(3)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#Section1').show();$('td:nth-child(3)').show();});", true);
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey9", "$('#BatchTheory1').show();$('#BatchTheory1').text('Section - Batch');$('td:nth-child(4)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').show();$('td:nth-child(4)').show();});", true);
-                            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey10", "$('#Section1').hide();$('td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#Section1').hide();$('td:nth-child(3)').hide();});", true);
-                        }
+                    if (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" || dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "3")
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey7", "$('#BatchTheory1').hide();$('#BatchTheory1').text('Section - Batch');$('td:nth-child(4)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').hide();$('td:nth-child(4)').hide();});", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey8", "$('#Section1').show();$('td:nth-child(3)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#Section1').show();$('td:nth-child(3)').show();});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey9", "$('#BatchTheory1').show();$('#BatchTheory1').text('Section - Batch');$('td:nth-child(4)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#BatchTheory1').show();$('td:nth-child(4)').show();});", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey10", "$('#Section1').hide();$('td:nth-child(3)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#Section1').hide();$('td:nth-child(3)').hide();});", true);
+                    }
 
                 }
                 lvCourseTeacher.DataSource = ds;
@@ -733,7 +733,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
                     //to get selected sections
                     //DataSet dsGetSections = objsql.ExecuteDataSet("select S.SECTIONNO,SectionName from ACD_Course_TEACHER T inner join ACD_SECTION S on T.SECTIONNO=S.SECTIONNO where T.UA_NO=" + hdnTeacher.Value + "and T.COURSENO=" + chkBox.ToolTip + "AND ISNULL(T.CANCEL,0)=0");
                     //DataSet dsGetSections = objsql.ExecuteDataSet("select S.SECTIONNO,SectionName from ACD_Course_TEACHER T inner join ACD_SECTION S on T.SECTIONNO=S.SECTIONNO where T.UA_NO=" + hdnTeacher.Value + "and T.COURSENO=" + chkBox.ToolTip + "AND ISNULL(T.CANCEL,0)=0 AND ISNULL(IS_TUTORIAL,0)=(CASE WHEN " + ddlTutorial.SelectedValue + "=2 THEN 1 ELSE 0 END)");
-                    DataSet dsGetSections = objsql.ExecuteDataSet("select S.SECTIONNO,SectionName from ACD_Course_TEACHER T inner join ACD_SECTION S on T.SECTIONNO=S.SECTIONNO where T.UA_NO=" + hdnTeacher.Value + "and T.COURSENO=" + chkBox.ToolTip + " AND ISNULL(IS_THPR_BOTH,0)=2 AND T.SEMESTERNO="+ddlSemester.SelectedValue+" AND SESSIONNO = " + Convert.ToInt32(ddlSessionBulk.SelectedValue) + " AND ISNULL(IS_TUTORIAL,0)=0 AND ISNULL(T.CANCEL,0)=0 ");// + dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString());
+                    DataSet dsGetSections = objsql.ExecuteDataSet("select S.SECTIONNO,SectionName from ACD_Course_TEACHER T inner join ACD_SECTION S on T.SECTIONNO=S.SECTIONNO where T.UA_NO=" + hdnTeacher.Value + "and T.COURSENO=" + chkBox.ToolTip + " AND ISNULL(IS_THPR_BOTH,0)=2 AND T.SEMESTERNO=" + ddlSemester.SelectedValue + " AND SESSIONNO = " + Convert.ToInt32(ddlSessionBulk.SelectedValue) + " AND ISNULL(IS_TUTORIAL,0)=0 AND ISNULL(T.CANCEL,0)=0 ");// + dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString());
                     // DataSet dsGetADTeacher = objsql.ExecuteDataSet("select S.SECTIONNO,S.SECTIONNAME,T.IS_ADTEACHER from ACD_Course_TEACHER T inner join ACD_SECTION S on T.SECTIONNO=S.SECTIONNO where T.UA_NO=" + hdnTeacher.Value + "and T.COURSENO=" + chkBox.ToolTip);
                     for (int i = 0; i < dsGetSections.Tables[0].Rows.Count; i++)
                     {
@@ -1111,7 +1111,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
                     //{
                     //if subid=1
 
-                    if (ddlTutorial.SelectedValue == "2" )
+                    if (ddlTutorial.SelectedValue == "2")
                     {
                         if (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" || dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "3")
                         {
@@ -1859,7 +1859,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             ddlTutorialAT.Items.Clear();
             DataSet dssubtype = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID=S.SUBID)", "ISNULL(THEORY,0) AS THEORY,TH_PR,ISNULL(SEC_BATCH,0) AS SEC_BATCH,ISNULL(ISTUTORIAL,0) AS ISTUTORIAL", "", "C.COURSENO=" + ddlSubjectAT.SelectedValue, "");
             //if (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "0")
-            if((dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "0" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1") || (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "0" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1"))
+            if ((dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "1" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "0" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1") || (dssubtype.Tables[0].Rows[0]["SEC_BATCH"].ToString() == "2" && dssubtype.Tables[0].Rows[0]["ISTUTORIAL"].ToString() == "0" && dssubtype.Tables[0].Rows[0]["TH_PR"].ToString() == "1"))
             {
                 divTutorialAT.Visible = false;
                 ddlTutorialAT.Items.Add(new ListItem("Theory", "1"));
@@ -2157,7 +2157,7 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
 
             }
 
-            
+
         }
         else if (ddlTutorialAT.SelectedValue == "2") //Practical
         {
@@ -2971,28 +2971,49 @@ public partial class ACADEMIC_CourseAllotment_Bulk : System.Web.UI.Page
             HiddenField hdnSection = (HiddenField)item.FindControl("hdnSectionCT");
             HiddenField hdnBatchNo = (HiddenField)item.FindControl("hdnBatchCT");
             HiddenField hdnUANO = (HiddenField)item.FindControl("hdnTeacherCT");
-            
+
             string cName = string.Empty;
             cName = objCommon.LookUp("ACD_COURSE WITH (NOLOCK)", "CCODE+' - ['+COURSE_NAME+']'", "COURSENO=" + Convert.ToInt32(hdnCourseNo.Value));
             int CTNO = Convert.ToInt32(chk1.ToolTip);
+            string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
             if (chk1.Checked)
             {
+                DataSet ds = new DataSet();
+                SP_Name = "PKG_ACD_GET_TIME_TABLE_ATTENDANCE_EXIST_COUNT";
+                SP_Parameters = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_COURSENO,@P_SECTIONNO,@P_UA_NO,@P_BATCHNO,@P_CTNO";
+                Call_Values = "" + ddlSessionCT.SelectedValue + "," + ViewState["schemeno"].ToString() + "," + ddlsemesterCT.SelectedValue + "," + Convert.ToInt32(hdnCourseNo.Value) + "," + Convert.ToInt32(hdnSection.Value) + "," + Convert.ToInt32(hdnUANO.Value) + "," + Convert.ToInt32(hdnBatchNo.Value) + "," + CTNO + "";
+                ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
 
-                _count = objCommon.LookUp("ACD_ATTENDANCE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0) AND ISNULL(CANCEL,0)=0"));
-                if (Convert.ToInt32(_count) > 0)
+                if (ds.Tables != null && ds.Tables[1].Rows.Count > 0)
                 {
                     objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, as this faculty has already taken attendance for subject - " + cName, this.Page);
                     chk1.Checked = false;
                     return;
                 }
 
-                TimeTableCount = Convert.ToInt32(objCommon.LookUp("ACD_TIME_TABLE_CONFIG WITH (NOLOCK)", "COUNT(1)", "ISNULL(CANCEL,0)=0 AND CTNO=" + CTNO));
-                if (Convert.ToInt32(TimeTableCount) > 0)
+                if (ds.Tables != null && ds.Tables[0].Rows.Count > 0)
                 {
                     objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, TimeTable is already created for this Faculty.", this.Page);
                     chk1.Checked = false;
                     return;
                 }
+              
+                
+                //_count = objCommon.LookUp("ACD_ATTENDANCE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND ISNULL(CANCEL,0)=0 AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0)") == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE", "COUNT(1)", "SESSIONNO =" + ddlSessionCT.SelectedValue + " AND SCHEMENO =" + ViewState["schemeno"].ToString() + " AND SEMESTERNO =" + ddlsemesterCT.SelectedValue + " AND COURSENO=" + Convert.ToInt32(hdnCourseNo.Value) + " AND SECTIONNO=" + Convert.ToInt32(hdnSection.Value) + " AND UA_NO=" + Convert.ToInt32(hdnUANO.Value) + " AND (BATCHNO=" + Convert.ToInt32(hdnBatchNo.Value) + " OR " + Convert.ToInt32(hdnBatchNo.Value) + "=0) AND ISNULL(CANCEL,0)=0"));
+                //if (Convert.ToInt32(_count) > 0)
+                //{
+                //    objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, as this faculty has already taken attendance for subject - " + cName, this.Page);
+                //    chk1.Checked = false;
+                //    return;
+                //}
+
+                //TimeTableCount = Convert.ToInt32(objCommon.LookUp("ACD_TIME_TABLE_CONFIG WITH (NOLOCK)", "COUNT(1)", "ISNULL(CANCEL,0)=0 AND CTNO=" + CTNO));
+                //if (Convert.ToInt32(TimeTableCount) > 0)
+                //{
+                //    objCommon.DisplayMessage(this.updCancelCT, "Allotment cant be Cancelled, TimeTable is already created for this Faculty.", this.Page);
+                //    chk1.Checked = false;
+                //    return;
+                //}
             }
         }
         catch { }
