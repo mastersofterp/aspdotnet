@@ -115,7 +115,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
     }
     private void PopulateDropDownList()
     {
-        if (Session["usertype"].ToString() != "1")
+        if (Session["usertype"].ToString() == "1")
         {
             objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(FLOCK,0) = 1 AND ISNULL(IS_ACTIVE,0) = 1", "SESSIONID DESC");
         }
