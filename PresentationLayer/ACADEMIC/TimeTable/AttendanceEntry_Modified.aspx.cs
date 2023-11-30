@@ -835,7 +835,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             l.Style.Add("color", "#36c60a");
                             l.Style.Add("opacity", ".5");
                             l.Font.Size = 11;
-                            l.ToolTip = "UnLock";
+                            //l.ToolTip = "UnLock";
                             e.Cell.Controls.Add(l);
                         }
                     }
@@ -1280,7 +1280,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             l.Style.Add("color", "#36c60a");
                             l.Style.Add("opacity", ".5");
                             l.Font.Size = 11;
-                            l.ToolTip = "UnLock";
+                            //l.ToolTip = "UnLock";
                             e.Cell.Controls.Add(l);
                         }
                     }
