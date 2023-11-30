@@ -942,11 +942,52 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
         //}
 
     }
-    private void SubmitData()
+    private void ValidationMulti()
     {
-        try
+        if (ddlSupervisorrole.SelectedValue == "S")
         {
-            
+            //added by Vipul Tichakule on date 07-11-2023
+            if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRC.SelectedValue == ddlSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRC.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+        }
+        else if (ddlSupervisorrole.SelectedValue == "J")
+        {
+            if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisor.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRC.SelectedValue == ddlSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRC.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+        }
+        else
+        {
             //added by Vipul Tichakule on date 07-11-2023
             if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
             {
@@ -974,7 +1015,13 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                 objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
                 return;
             }
-
+        }
+    }
+    private void SubmitData()
+    {
+        try
+        {
+            ValidationMulti();
             PhdController objPhdC = new PhdController();
 
             Phd objS = new Phd();
