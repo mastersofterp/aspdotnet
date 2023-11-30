@@ -1442,7 +1442,7 @@
 
             $.ajax({
                 //url: "/QuestionWiseMarksEntry.aspx/SaveMarkEntry",
-                url: "<%=Page.ResolveClientUrl("QuestionWiseMarksEntry.aspx/SaveMarkEntry")%>",
+                url: "<%=Page.ResolveClientUrl("QuestionWiseMarksEntry_Comman.aspx/SaveMarkEntry")%>",
                 //QuestionWiseMarksEntry.aspx/SaveMarkEntry
                 type: "POST",
                 data: JSON.stringify(Obj),
