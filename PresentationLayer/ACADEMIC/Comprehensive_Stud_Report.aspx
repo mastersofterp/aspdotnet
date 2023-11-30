@@ -342,7 +342,7 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_8" onclick="return Checktabid(this)">Result Details</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_9" onclick="return Checktabid(this)">Revaluation Result Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_9" onclick="return Checktabid(this)" runat="server" id="navReval">Revaluation Result Details</a>
                                                             </li>
                                                             <li class="nav-item" id="divrealease" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_10">Intermediate Garde Realease</a>
@@ -1448,15 +1448,15 @@
                                                                                         <tr>
                                                                                             <th style="width: 10%;">Show
                                                                                             </th>
-                                                                                            <th style="width: 20%;">Session
+                                                                                            <th style="width: 12%;">Session
                                                                                             </th>
                                                                                             <th style="width: 10%;">Section
                                                                                             </th>
-                                                                                            <th style="width: 5%;">TotSub
+                                                                                            <th style="width: 7%;">Registered Courses
                                                                                             </th>
-                                                                                            <th style="width: 5%;">RegCr.
+                                                                                            <th style="width: 5%;">Registered Credits
                                                                                             </th>
-                                                                                            <th style="width: 5%;">EarnCr.
+                                                                                            <th style="width: 5%;">Earned Credits
                                                                                             </th>
                                                                                             <%--<th style="width:5%;">CumCr.
                                                                         </th>
@@ -1469,9 +1469,9 @@
                                                                         </th>--%>
                                                                                             <th style="width: 10%;">CGPA
                                                                                             </th>
-                                                                                            <th style="width: 10%;">Result Dt.
+                                                                                            <th style="width: 10%;">Result Date
                                                                                             </th>
-                                                                                            <th style="width: 10%;" id="printreport">Print.
+                                                                                            <th style="width: 10%;" id="printreport">Print
                                                                                             </th>
 
 
@@ -1487,8 +1487,8 @@
                                                                         <ItemTemplate>
 
                                                                             <table class="table table-hover table-bordered">
-                                                                                <tr id="MAIN" runat="server" class="col-md-12">
-                                                                                    <td>
+                                                                                <div id="MAIN" runat="server" class="col-md-12">
+                                                                                   
                                                                                         <tr>
                                                                                             <td style="width: 10%;">
                                                                                                 <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
@@ -1497,17 +1497,17 @@
                                                                                                 &nbsp;&nbsp;<asp:Label ID="lbIoNo" runat="server" Text='<%# Eval("SEMESTERNO") %>'
                                                                                                     ToolTip='<%# Eval ("IDNO") %>' Visible="false"></asp:Label>
                                                                                             </td>
-                                                                                            <td style="width: 20%;">
+                                                                                            <td style="width: 12%;">
                                                                                                 <asp:Label ID="lblSession" runat="server" Text='<%# Eval("SESSION_NAME")%>' ToolTip='<%# Eval("SESSIONNO") %>'></asp:Label>
                                                                                             </td>
 
                                                                                             <td style="width: 10%;">
                                                                                                 <asp:Label ID="lblsectionname" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
                                                                                             </td>
-                                                                                            <td style="width: 5%;">
+                                                                                            <td style="width: 8%;">
                                                                                                 <asp:Label ID="lbltotsubreg" runat="server" Text='<%# Eval("TOTAL_SUBJ_REGD")%>'></asp:Label>
                                                                                             </td>
-                                                                                            <td style="width: 5%;">
+                                                                                            <td style="width: 7%;">
                                                                                                 <asp:Label ID="lblRegCredits" runat="server" Text=' <%# Eval("REGD_CREDITS")%>'></asp:Label>
                                                                                             </td>
                                                                                             <td style="width: 5%;">
@@ -1542,8 +1542,8 @@
                                                                                             </ajaxToolKit:CollapsiblePanelExtender>
 
                                                                                         </tr>
-                                                                                    </td>
-                                                                                </tr>
+                                                                                  
+                                                                                </div>
                                                                             </table>
 
                                                                             <div class="col-12">
@@ -1567,10 +1567,11 @@
                                                                                                             </th>
                                                                                                             <th>Credits
                                                                                                             </th>
-                                                                                                            <th>GDPoint
+                                                                                                            <th>Grade Point
                                                                                                             </th>
                                                                                                             <th>Grade
                                                                                                             </th>
+                                                                                                             <th>Earned Grade Points</th>
                                                                                                             <th>Result
                                                                                                             </th>
                                                                                                         </tr>
@@ -1598,17 +1599,21 @@
                                                                                                 <td>
                                                                                                     <asp:Label ID="lbltheory" runat="server" Text='<%# Eval("SUBTYPE") %>' ToolTip='<%# Eval("SUBID") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                <td style="text-align:center;">
                                                                                                     <asp:Label ID="lblcredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>'></asp:Label>
                                                                                                 </td>
 
-                                                                                                <td>
+                                                                                                <td style="text-align:center;">
                                                                                                     <asp:Label ID="lblgdpoint" runat="server" Text='<%# Eval("GDPOINT") %>' ToolTip='<%# Eval("GDPOINT") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                <td style="text-align:center;">
                                                                                                     <asp:Label ID="lblGrade" runat="server" Text='<%# Eval("GRADE") %>' ToolTip='<%# Eval("GRADE") %>'></asp:Label>
                                                                                                 </td>
+                                                                                                <td style="text-align:center;">
+                                                                                                    <asp:Label ID="lblEgp" runat="server" Text='<%# Eval("EGP") %>' ToolTip='<%# Eval("EGP") %>'></asp:Label>
                                                                                                 <td>
+                                                                                                </td>
+                                                                                                <td style="text-align:center;">
                                                                                                     <asp:Label ID="Label1" runat="server" Text='<%# Eval("RESULT") %>' ToolTip='<%# Eval("RESULT") %>'></asp:Label>
                                                                                                 </td>
                                                                                             </tr>
@@ -1719,7 +1724,7 @@
                                                     </div>
 
                                                     <div class="tab-pane fade" id="tab_9">
-                                                        <div id="divrevalresult">
+                                                        <div id="divrevalresult" runat="server">
 
                                                             <div id="divreval1" runat="server" class="col-12">
                                                                 <div class="col-12">
@@ -1947,7 +1952,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <div class="tab-pane fade" id="tab_11">
                                                         <div>
                                                             <div class="col-12">
@@ -2184,6 +2189,18 @@
                                                                                                 <th id="th12" style="text-align: center; display: none;"></th>
                                                                                                 <th id="th13" style="text-align: center; display: none;"></th>
                                                                                                 <th id="th14" style="text-align: center; display: none;"></th>
+                                                                                                 <th id="th15" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th16" style="text-align: center; display: none;"></th>
+                                                                                                 <th id="th17" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th18" style="text-align: center; display: none;"></th>
+                                                                                                 <th id="th19" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th20" style="text-align: center; display: none;"></th>
+                                                                                               <th id="th21" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th22" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th23" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th24" style="text-align: center; display: none;"></th>
+                                                                                                 <th id="th25" style="text-align: center; display: none;"></th>
+                                                                                                
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
@@ -2255,9 +2272,43 @@
                                                                                         <asp:Label ID="Label18" runat="server" Enabled="false" MaxLength="5"></asp:Label>
 
                                                                                     </td>
+                                                                                     
                                                                                     <td id="td14" runat="server" style="display: none;">
                                                                                         <asp:Label ID="Label19" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
+                                                                                    </td>
+                                                                                         <td id="td15" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label20" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     
+                                                                                    <td id="td16" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label21" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td17" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label22" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td18" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label23" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td> 
+                                                                                    <td id="td19" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label24" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td20" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label25" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td21" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label26" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td22" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label27" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td23" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label28" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td24" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label29" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                     <td id="td25" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label30" runat="server" Enabled="false" MaxLength="5"></asp:Label>
                                                                                     </td>
 
                                                                                 </tr>

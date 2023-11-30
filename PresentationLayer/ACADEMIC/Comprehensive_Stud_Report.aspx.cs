@@ -140,6 +140,11 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             {
                 lifatheralive.Visible = false;
             }
+            if (Convert.ToString(Session["OrgId"]) == "15")   //Added as per Manoj Shanti Sir for DAIICT dt on 24112023
+            {
+                divreval1.Visible = false;
+                navReval.Visible = false;
+            }
             //End Search Pannel Dropdown
         }
         else
@@ -327,8 +332,10 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         //string sessionno = Session["currentsession"].ToString();
                         int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
                         //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "IS_ACTIVE=1 AND FLOCK=1 AND COLLEGE_ID=" + college_id + "");
+
                         //string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
                         string sessionno = ddlSession.SelectedValue;
+
                         dsAttendance = objSC.RetrieveStudentAttendanceDetails(Convert.ToInt32(sessionno), Convert.ToInt32(schemeno), Convert.ToInt32(semesterno), idno);
 
 
@@ -821,6 +828,8 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
             {
                 getinternalmarks();
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 5 || Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 10)
             {
@@ -1074,7 +1083,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
         }
 
         int arrVal = 0;
-        string[] arr_TextBox = new string[] { "Label5", "Label6", "Label7", "Label8", "Label9", "Label10", "Label11", "Label12", "Label13", "Label14", "Label15", "Label16", "Label17", "Label18", "Label19", "Label20", "Label21", "Label22", "Label23", "Label24" };
+        string[] arr_TextBox = new string[] { "Label5", "Label6", "Label7", "Label8", "Label9", "Label10", "Label11", "Label12", "Label13", "Label14", "Label15", "Label16", "Label17", "Label18", "Label19", "Label20", "Label21", "Label22", "Label23", "Label24", "Label25", "Label26", "Label27", "Label28", "Label29", "Label30" };
         int k = 0;
         foreach (ListViewDataItem lvitem in lvInter.Items)
         {
