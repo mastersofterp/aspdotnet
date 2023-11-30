@@ -72,8 +72,9 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
     #region Action
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        objGatePass.PassNo = Convert.ToInt32(txtPass.Text.Trim());
-
+        Session["GatePassno"] = Convert.ToInt32(txtPass.Text.Trim());
+        objGatePass.PassNo = Convert.ToInt32(Session["GatePassno"]);
+        
         string gatepassno = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_HOSTEL_ROOM_ALLOTMENT HRA ON(HGD.IDNO = HRA.RESIDENT_NO AND HGD.HOSTEL_SESSION_NO = HRA.HOSTEL_SESSION_NO)", "HGD.HOSTEL_GATE_PASS_NO", "HRA.CAN=0 AND HGD.HOSTEL_GATE_PASS_NO = '" + txtPass.Text + "'");
         if (gatepassno == "")
         {
@@ -87,18 +88,18 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
             // FillInformation();
             DisplayInfo(Convert.ToInt32(gatepassno));
 
-            string OutEntryPresent = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "ISNULL(CONVERT(varchar, OUT_DATETIME_ENTRY, 103),'') OUT_DATETIME_ENTRY", "HOSTEL_GATE_PASS_NO = '" + gatepassno + "' ");
+            //string OutEntryPresent = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "ISNULL(CONVERT(varchar, OUT_DATETIME_ENTRY, 103),'') OUT_DATETIME_ENTRY", "HOSTEL_GATE_PASS_NO = '" + gatepassno + "' ");
 
-            if (OutEntryPresent == "")
-            {
-                btnOutEntry.Visible = true;
-                btnInTimeEntry.Visible = false;               
-            }
-            else
-            {
-                btnOutEntry.Visible = false;
-                btnInTimeEntry.Visible = true;  
-            }
+            //if (OutEntryPresent == "")
+            //{
+            //    btnOutEntry.Visible = true;
+            //    btnInTimeEntry.Visible = false;               
+            //}
+            //else
+            //{
+            //    btnOutEntry.Visible = false;
+            //    btnInTimeEntry.Visible = true;  
+            //}
         }
     }
 
@@ -131,7 +132,8 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
                 lblapproval2.Text = dr["SECOND_APPROVER"].ToString();
                 lblapproval3.Text = dr["THIRD_APPROVER"].ToString();
                 lblapproval4.Text = dr["FOURTH_APPROVER"].ToString();
-
+                lblInTimeEntry.Text = dr["IN_TIME_ENTRY"].ToString();
+                lblOutTimeEntry.Text = dr["OUT_DATETIME_ENTRY"].ToString();
                 //if (dr["PHOTO"].ToString() != "")
                 imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dr["IDNO"].ToString() +"&type=STUDENT";
 
@@ -291,6 +293,7 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         if (cs.Equals(CustomStatus.RecordUpdated))
         {
             objCommon.DisplayMessage("Student In Entry updated successfully.", this.Page);
+            DisplayInfo(Convert.ToInt32(Session["GatePassno"]));
         }
     }
     protected void btnOutEntry_Click(object sender, EventArgs e)
@@ -302,6 +305,25 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
         if (cs.Equals(CustomStatus.RecordUpdated))
         {
             objCommon.DisplayMessage("Student Out Entry updated successfully.", this.Page);
+            DisplayInfo(Convert.ToInt32(Session["GatePassno"]));
         }
+    }
+    protected void rdoEntrySelection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        if (rdoEntrySelection.SelectedValue=="0")
+        {
+            btnInTimeEntry.Visible = true;
+            btnOutEntry.Visible = false;
+        }
+        else
+        {
+            btnInTimeEntry.Visible = false;
+            btnOutEntry.Visible = true;
+        }
+    }
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.ToString());
     }
 }

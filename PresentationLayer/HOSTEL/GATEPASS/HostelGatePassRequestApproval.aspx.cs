@@ -169,12 +169,12 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             string f_status = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "DIRECT_APPROVAL_UANO IS NOT NULL AND HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
             string f_status1 = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FINAL_STATUS", "HGP_ID=" + Hgpid);  //Condition Added By Himanshu tamrakar 22/11/2023
 
-            if (f_status == "a")
+            if (f_status == "A")
             {
                 objCommon.DisplayMessage(this, "gate pass already approved by admin.", this);
                 return;
             }
-            else if (f_status1 == "a")
+            else if (f_status1 == "A")
             {
                 objCommon.DisplayMessage(this, "gate pass generated.you can not modify status.", this);
                 return;
@@ -247,23 +247,27 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
             int output = Hgp.ApproveGatepass(Idno, fileUrl, fileName, Hgpid, status, OrganizationId, Convert.ToInt32(Session["userno"]));
             if (output == 1)
             {
-                objCommon.ConfirmMessage(this, "Record Saved SuccessFully.", this);
+                objCommon.ConfirmMessage(this, "Record Saved Successfully.", this);
             }
             else if (output == 2)
             {
                 objCommon.ConfirmMessage(this, "Please Wait for First Approvar forword", this);
+                return;
             }
             else if (output == 3)
             {
                 objCommon.ConfirmMessage(this, "Please Wait for First and Second Approvar forword", this);
+                return;
             }
             else if (output == 4)
             {
                 objCommon.ConfirmMessage(this, "Please Wait for First second and Third Approvar forword", this);
+                return;
             }
             else if (output == 5)
             {
                 objCommon.ConfirmMessage(this, "Record not found for this approval.", this);
+                return;
             }
 
             DataSet ds = null;
@@ -272,6 +276,28 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequestApproval : System.Web.
 
             lvShowApprovalStatus.DataSource = ds;
             lvShowApprovalStatus.DataBind();
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DivShowRequestDetails.Visible = true;
+                DivShowRequest.Visible = false;
+                lblRegno.Text = ds.Tables[0].Rows[0]["REGNO"].ToString();
+                lblSessionName.Text = ds.Tables[0].Rows[0]["SESSION_NAME"].ToString();
+                lblHostel.Text = ds.Tables[0].Rows[0]["HOSTELNAME"].ToString();
+                lblRoomName.Text = ds.Tables[0].Rows[0]["ROOM_NO"].ToString();
+                lblGender.Text = ds.Tables[0].Rows[0]["GENDERNAME"].ToString();
+                lblSemester.Text = ds.Tables[0].Rows[0]["SEMESTER"].ToString();
+                lblStudentType.Text = ds.Tables[0].Rows[0]["STUDENT_TYPE"].ToString();
+                lblPassingpath.Text = ds.Tables[0].Rows[0]["APPROVAL_PASSING_PATH"].ToString();
+                lblRemark.Text = ds.Tables[0].Rows[0]["REMARKS"].ToString();
+                hdnidno.Value = ds.Tables[0].Rows[0]["IDNO"].ToString();
+                hdnhgpid.Value = ds.Tables[0].Rows[0]["HGP_ID"].ToString();
+                lblapplydate.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["APPLY_DATE"].ToString()).ToString("dd-MMM-yyyy");
+                Imageurl.Value = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT"].ToString();
+                lblApprover.Text = ds.Tables[0].Rows[0]["APPROVER"].ToString();
+                lblAttachmentName.Text = ds.Tables[0].Rows[0]["UPLOAD_DOCUMENT_NAME"].ToString();
+                lvShowApprovalStatus.DataSource = ds;
+                lvShowApprovalStatus.DataBind();
+            }
 
         }
         catch (Exception ex)

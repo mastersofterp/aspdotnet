@@ -461,10 +461,10 @@
                                         <asp:HiddenField ID="hdnStutype" runat="server" Value='<%# Eval("STUDENT_TYPE") %>' />--%>
                                     </td>
                                     <td>
-                                        <%# Eval("OUTDATE ") %>
+                                        <%# Eval("OUTDATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                     </td>
                                     <td>
-                                        <%# Eval("INDATE ") %>
+                                        <%# Eval("INDATE","{0:dd/MM/yyyy hh:mm tt}") %>
                                     </td>
                                     <td>
                                         <%# Eval("PURPOSE_NAME") %>

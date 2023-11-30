@@ -227,11 +227,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(IsApprove))
             {
-                string message = "You can't able to edit approved gate pass request record.";
-                string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
-                ddlSearch.SelectedItem.Text = "Please Select";
-                return;
+                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
+                Response.Redirect(Request.RawUrl);
             }
             else
             {
@@ -301,12 +298,14 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtoutDate.Text) > Convert.ToDateTime(txtinDate.Text))
             {
-                objCommon.DisplayMessage("Out Date should be lower than In Date.", this.Page);
+                objCommon.DisplayMessage("Out Date should be less than In Date.", this.Page);
                 txtoutDate.Text = string.Empty;
                 txtoutDate.Focus();
                 return;
             }
-        }       
+        }
+
+        
     }
 
     protected void txtinDate_TextChanged(object sender, EventArgs e)
@@ -315,7 +314,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
         {
             if (Convert.ToDateTime(txtinDate.Text) < System.DateTime.Now.AddDays(-1))
             {
-                string message = "Please select 'In Date' as Current Date or Greater than Today's Date.";
+                string message = "Please select 'In Date' as Current Date or Greater than current Date.";
                 string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
                 txtinDate.Text = string.Empty;
@@ -587,13 +586,28 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             bool res = DateTime.Equals(OutDate, InDate);
             if (res)
             {
-                if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
+                //Commented By Himanshu tamrakar 29/11/2023
+                //if (ddlAM_PM1.SelectedValue == ddlAM_PM2.SelectedValue)
+                //{
+                //    if (ddloutHourFrom.SelectedValue=="0")
+                //    {
+
+                //    }
+                //    else if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                //    {
+                //        objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
+                //        ddlAM_PM2.SelectedValue = "0";
+                //        ddlinHourFrom.Focus();
+                //        return;
+                //    }
+                //}
+                if (ddlAM_PM1.SelectedValue == "PM")
                 {
-                    if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
+                    if (ddlAM_PM2.SelectedValue == "AM")
                     {
-                        objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
-                        ddlAM_PM2.SelectedValue = "0";
-                        ddlinHourFrom.Focus();
+                        objCommon.DisplayMessage("For Current Date, If you select Out Date PM then you can not select AM time of In Date.", this.Page);
+                        ddlAM_PM2.Focus();
+                        ddlAM_PM2.SelectedIndex = 0;
                         return;
                     }
                 }
@@ -604,8 +618,24 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     {
         if (txtoutDate.Text != "" && txtoutDate.Text != string.Empty && txtinDate.Text != "" && txtinDate.Text != string.Empty)
         {
+            string currentDate = System.DateTime.Now.ToString("dd/MM/yyyy");
+
             DateTime OutDate = Convert.ToDateTime(txtoutDate.Text);
             DateTime InDate = Convert.ToDateTime(txtinDate.Text);
+
+            if (InDate == Convert.ToDateTime(currentDate))
+            {
+                if (ddlAM_PM2.SelectedValue == "0")
+                {
+                    string message = "For current date entry.Please select AM/PM before entering Hour To.";
+                    string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
+                    ddlinHourFrom.SelectedIndex = 0;
+                    ddlAM_PM2.Focus();
+                    return;
+                }
+            }
+            
 
             bool res = DateTime.Equals(OutDate, InDate);
             if (res)
@@ -615,12 +645,26 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                     if (Convert.ToInt32(ddloutHourFrom.SelectedValue) >= Convert.ToInt32(ddlinHourFrom.SelectedValue))
                     {
                         objCommon.DisplayMessage("Hour To should be greater than Hour From.", this.Page);
-                        ddlinHourFrom.SelectedIndex = 0 ; 
+                        ddlinHourFrom.SelectedIndex = 0;
                         ddlinHourFrom.Focus();
                         return;
                     }
                 }
+                else
+                {
+                    if (ddlAM_PM1.SelectedValue=="PM")
+                    {
+                        if(ddlAM_PM2.SelectedValue=="AM")
+                        {
+                            objCommon.DisplayMessage("For Current Date, If you select Out Date PM then you can not select AM time of In Date.", this.Page);
+                            ddlAM_PM2.Focus();
+                            ddlAM_PM2.SelectedIndex = 0;
+                            return;
+                        }
+                    }
+                }
             }
+            
         }
     }
     protected void ddloutHourFrom_SelectedIndexChanged(object sender, EventArgs e)
@@ -633,7 +677,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             {
                 if (ddlAM_PM1.SelectedValue == "0")
                 {
-                    string message = "For Today's Date entry before select Hour From, please select AM/PM of Out Date.";
+                    string message = "For current date entry.Please select AM/PM before entering Hour From.";
                     string encodedMessage = HttpUtility.JavaScriptStringEncode(message);
                     ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('" + encodedMessage + "');", true);
                     ddloutHourFrom.SelectedIndex = 0;
