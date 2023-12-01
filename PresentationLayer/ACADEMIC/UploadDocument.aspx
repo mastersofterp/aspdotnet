@@ -247,12 +247,20 @@
                                                             <h5>Upload Document </h5>
                                                         </div>
                                                     </div>
+
+                                                    <div class="form-group col-lg-5 col-md-6 col-12" runat="server" id="divNote">
+                                                        <div class="note-div" style="color: red;">
+                                                            <h5 class="heading">Note</h5>
+                                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>Only .pdf, .jpeg and .jpg required, up to 500 KB only.</span></p>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-12">
                                                         <div style="width: 100%; height: 370px; overflow: auto">
                                                             <table class="table table-striped table-bordered nowrap">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
-                                                                        <th>Sr.NO</th>
+                                                                        <th>Sr.No</th>
                                                                         <%-- <th>Document No.</th>--%>
 
                                                                         <th>Document Name</th>

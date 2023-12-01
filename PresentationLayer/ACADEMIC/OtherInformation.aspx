@@ -303,7 +303,7 @@
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup></sup>
-                                                            <label>Height (In inch)</label>
+                                                            <label>Height (In cm)</label>
                                                         </div>
 
                                                         <asp:TextBox ID="txtHeight" runat="server" CssClass="form-control" onkeyup="validateNumeric(this);"

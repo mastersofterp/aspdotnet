@@ -376,12 +376,16 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
                 if (ViewState["usertype"].ToString() == "2")
                 {
                     dscheckdocuments = objSC.GetDocumentList(Convert.ToInt32(Session["idno"]));
-                    string mandatorycount = dscheckdocuments.Tables[0].Rows[0]["MANDATORYCOUNT"].ToString();
-                    string uploadcount = dscheckdocuments.Tables[0].Rows[0]["UPLOADCOUNT"].ToString();
-                    if (mandatorycount != uploadcount)
+                    if (dscheckdocuments != null && dscheckdocuments.Tables.Count > 0 && dscheckdocuments.Tables[0].Rows.Count > 0)
                     {
-                        objCommon.DisplayMessage(this.Page, "Please submit all mandatory documents from Upload Document tab.... !", this.Page);
-                        return;
+                        string mandatorycount = dscheckdocuments.Tables[0].Rows[0]["MANDATORYCOUNT"].ToString();
+                        string uploadcount = dscheckdocuments.Tables[0].Rows[0]["UPLOADCOUNT"].ToString();
+
+                        if (mandatorycount != uploadcount)
+                        {
+                            objCommon.DisplayMessage(this.Page, "Please submit all mandatory documents from Upload Document tab.... !", this.Page);
+                            return;
+                        }
                     }
                 }
 
