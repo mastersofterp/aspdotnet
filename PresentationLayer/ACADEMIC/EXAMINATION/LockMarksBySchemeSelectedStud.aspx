@@ -57,7 +57,7 @@
                                             <label>Session</label>
                                         </div>
                                         <asp:DropDownList ID="ddlSession" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" data-select2-enable="true"
-                                            runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" TabIndex="2">
+                                            runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSession"
@@ -70,7 +70,7 @@
                                             <sup>* </sup>
                                             <label>Semester </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" data-select2-enable="true" CssClass="form-control" TabIndex="5" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged" AutoPostBack="true">
+                                        <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" data-select2-enable="true" CssClass="form-control" TabIndex="1" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
@@ -82,7 +82,7 @@
                                             <sup></sup>
                                             <label>Section</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="True" CssClass="form-control" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" TabIndex="6" AutoPostBack="True">
+                                        <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="True" CssClass="form-control" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" TabIndex="1" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <%--<asp:RequiredFieldValidator ID="rfvSection" runat="server" ControlToValidate="ddlSection" Display="None" ErrorMessage="Please Select Section" ValidationGroup="save" InitialValue="0"></asp:RequiredFieldValidator>--%>
@@ -93,7 +93,7 @@
                                             <sup>* </sup>
                                             <label>Course Type </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlsub" runat="server" AppendDataBoundItems="True" data-select2-enable="true" CssClass="form-control" OnSelectedIndexChanged="ddlsub_SelectedIndexChanged" TabIndex="8" AutoPostBack="True">
+                                        <asp:DropDownList ID="ddlsub" runat="server" AppendDataBoundItems="True" data-select2-enable="true" CssClass="form-control" OnSelectedIndexChanged="ddlsub_SelectedIndexChanged" TabIndex="1" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvsub" runat="server" ControlToValidate="ddlsub" Display="None" ErrorMessage="Please Select Subject Type" ValidationGroup="save" InitialValue="0"></asp:RequiredFieldValidator>
@@ -104,7 +104,7 @@
                                             <sup>* </sup>
                                             <label>Exam Type </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlExamType" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="9" ValidationGroup="show" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlExamType_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlExamType" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="1" ValidationGroup="show" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlExamType_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvExamType" runat="server" ControlToValidate="ddlExamType" Display="None" ErrorMessage="Please Select Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
@@ -116,7 +116,7 @@
                                             <sup>* </sup>
                                             <label>SubExam Type </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSubExam1" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="9" ValidationGroup="show" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlSubExam_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlSubExam1" runat="server" AppendDataBoundItems="True" data-select2-enable="true" TabIndex="1" ValidationGroup="show" CssClass="form-control" AutoPostBack="true" OnSelectedIndexChanged="ddlSubExam_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSubExam1" Display="None" ErrorMessage="Please Select Exam Type" InitialValue="0" SetFocusOnError="True" ValidationGroup="save"></asp:RequiredFieldValidator>
@@ -129,7 +129,7 @@
                                             <sup>* </sup>
                                             <label>Course </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="True" data-select2-enable="true" ValidationGroup="show" CssClass="form-control" OnSelectedIndexChanged="ddlCourse_SelectedIndexChanged" TabIndex="10" AutoPostBack="True">
+                                        <asp:DropDownList ID="ddlCourse" runat="server" AppendDataBoundItems="True" data-select2-enable="true" ValidationGroup="show" CssClass="form-control" OnSelectedIndexChanged="ddlCourse_SelectedIndexChanged" TabIndex="1" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvCourse" runat="server" ControlToValidate="ddlCourse" Display="None" ErrorMessage="Please Select Course" ValidationGroup="save" InitialValue="0"></asp:RequiredFieldValidator>
@@ -140,7 +140,7 @@
                                             <sup>* </sup>
                                             <label>Student Type </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlStuType" runat="server" AppendDataBoundItems="True" data-select2-enable="true" ValidationGroup="show" CssClass="form-control" OnSelectedIndexChanged="ddlStuType_SelectedIndexChanged" TabIndex="7" AutoPostBack="True">
+                                        <asp:DropDownList ID="ddlStuType" runat="server" AppendDataBoundItems="True" data-select2-enable="true" ValidationGroup="show" CssClass="form-control" OnSelectedIndexChanged="ddlStuType_SelectedIndexChanged" TabIndex="1" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvStuType" runat="server" ControlToValidate="ddlStuType" Display="None" ErrorMessage="Please Select Student Type" ValidationGroup="save" InitialValue="-1"></asp:RequiredFieldValidator>
@@ -151,7 +151,7 @@
                                             <sup>* </sup>
                                             <label>Faculty </label>
                                         </div>
-                                        <asp:DropDownList ID="ddlFac" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true" ValidationGroup="show" OnSelectedIndexChanged="ddlFac_SelectedIndexChanged" TabIndex="11" AutoPostBack="True">
+                                        <asp:DropDownList ID="ddlFac" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true" ValidationGroup="show" OnSelectedIndexChanged="ddlFac_SelectedIndexChanged" TabIndex="1" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvFac" runat="server" ControlToValidate="ddlFac" Display="None" ErrorMessage="Please Select Faculty" ValidationGroup="save" InitialValue="0"></asp:RequiredFieldValidator>
@@ -170,9 +170,9 @@
                             </div>
 
                             <div class="col-12 btn-footer">
-                                <asp:Button ID="btnShow" runat="server" Font-Bold="False" OnClick="btnShow_Click" TabIndex="13" Text="Show" ValidationGroup="save" CssClass="btn btn-primary" />
-                                <asp:Button ID="btnSave" runat="server" Visible="false" Font-Bold="False" OnClick="btnSave_Click" TabIndex="14" Text="Unlock" ValidationGroup="save" CssClass="btn btn-primary" />
-                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" TabIndex="15" Text="Cancel" CssClass="btn btn-warning" />
+                                <asp:Button ID="btnShow" runat="server" Font-Bold="False" OnClick="btnShow_Click" TabIndex="1" Text="Show" ValidationGroup="save" CssClass="btn btn-primary" />
+                                <asp:Button ID="btnSave" runat="server" Visible="false" Font-Bold="False" OnClick="btnSave_Click" TabIndex="1" Text="Unlock" ValidationGroup="save" CssClass="btn btn-primary" />
+                                <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" TabIndex="1" Text="Cancel" CssClass="btn btn-warning" />
 
                                 <asp:ValidationSummary ID="ValidationSummaryShow" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False" ValidationGroup="save" />
 
@@ -214,7 +214,7 @@
                                                     <%# Container.DataItemIndex + 1 %>
                                                 </td>--%>
                                                 <td>
-                                                    <asp:CheckBox ID="chklckStud" runat="server" TabIndex="7" ToolTip='Checked means locked' />
+                                                    <asp:CheckBox ID="chklckStud" runat="server" TabIndex="1" ToolTip='Checked means locked' />
                                                     <asp:HiddenField ID="hdnChkBoxStud" runat="server" Value='<%# Eval ("LOCK") %>' />
                                                 </td>
                                                 <td>

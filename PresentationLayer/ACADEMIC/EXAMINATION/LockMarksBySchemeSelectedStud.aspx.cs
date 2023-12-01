@@ -152,6 +152,23 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
     {
         try
         {
+            ddlSemester.Items.Clear();
+            ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+            ddlsub.Items.Clear();
+            ddlsub.Items.Add(new ListItem("Please Select", "0"));
+            ddlExamType.Items.Clear();
+            ddlExamType.Items.Add(new ListItem("Please Select", "0"));
+            ddlSubExam1.Items.Clear();
+            ddlSubExam1.Items.Add(new ListItem("Please Select", "0"));
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+            ddlStuType.SelectedIndex = 0;
+            ddlFac.Items.Clear();
+            ddlFac.Items.Add(new ListItem("Please Select", "0"));
+            btnSave.Visible = false;
+            lvStudList.DataSource = null;
+            lvStudList.DataBind();
+
             if (ddlSession.SelectedIndex > 0)
             {
                 ClearAllDropDowns();
@@ -266,7 +283,22 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
     {
         try
         {
+            ddlsub.Items.Clear();
+            ddlsub.Items.Add(new ListItem("Please Select", "0"));
+            ddlExamType.Items.Clear();
+            ddlExamType.Items.Add(new ListItem("Please Select", "0"));
+            ddlSubExam1.Items.Clear();
+            ddlSubExam1.Items.Add(new ListItem("Please Select", "0"));
+            ddlCourse.Items.Clear();
+            ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+            ddlStuType.SelectedIndex = 0;
+            ddlFac.Items.Clear();
+            ddlFac.Items.Add(new ListItem("Please Select", "0"));
+
             ClearPanel();
+
+            objCommon.FillDropDownList(ddlsub, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT SR ON S.SUBID = SR.SUBID", "DISTINCT S.SUBID", "SUBNAME", "S.SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1 AND SR.SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "S.SUBID ");
+
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION S INNER JOIN ACD_STUDENT_RESULT R ON R.SECTIONNO=S.SECTIONNO", "DISTINCT S.SECTIONNO", "SECTIONNAME", "R.SCHEMENO=" + "AND SEMESTERNO=" + ddlSemester.SelectedValue, "S.SECTIONNO");
             ddlSection.SelectedIndex = 0;
             ddlSection.Focus();
@@ -291,14 +323,25 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
     protected void ddlExamType_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSubExam1.Items.Clear();
+        ddlSubExam1.Items.Add(new ListItem("Please Select", "0"));
+        ddlCourse.Items.Clear();
+        ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+        ddlStuType.SelectedIndex = 0;
+        ddlFac.Items.Clear();
+        ddlFac.Items.Add(new ListItem("Please Select", "0"));
 
+        lvStudList.DataSource = null;
+        lvStudList.DataBind();
+        btnSave.Visible = false;
         //objCommon.FillDropDownList(ddlSubExam1, "ACD_EXAM_NAME A inner join Acd_subexam_name B on A.EXAMNO= B.EXAMNO  ", "DISTINCT A.EXAMNO", "B.SUBEXAMNAME", "B.FLDNAME LIKE '%" + ddlExamType.SelectedValue + "%' AND SUBEXAM_SUBID="+ddlsub.SelectedValue, "B.SUBEXAMNAME ASC");
         int patternno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "PATTERNNO", "SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"])));
+        if (ddlExamType.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlSubExam1, "ACD_EXAM_NAME A inner join Acd_subexam_name B on A.EXAMNO= B.EXAMNO  ", "DISTINCT B.FLDNAME", "B.SUBEXAMNAME", "B.FLDNAME LIKE '%" + ddlExamType.SelectedValue + "%' AND ISNULL(B.ACTIVESTATUS,0)=1 AND A.PATTERNNO=" + patternno + " AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "B.SUBEXAMNAME ASC");
 
-        objCommon.FillDropDownList(ddlSubExam1, "ACD_EXAM_NAME A inner join Acd_subexam_name B on A.EXAMNO= B.EXAMNO  ", "DISTINCT B.FLDNAME", "B.SUBEXAMNAME", "B.FLDNAME LIKE '%" + ddlExamType.SelectedValue + "%' AND ISNULL(B.ACTIVESTATUS,0)=1 AND A.PATTERNNO=" + patternno + " AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "B.SUBEXAMNAME ASC");
-
-        ddlSubExam1.Focus();
-
+            ddlSubExam1.Focus();
+        }
         //btnSave.Visible = false;
         //spnNote.Visible = false;
         //lvStudList.DataSource = null;
@@ -313,15 +356,18 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
     protected void ddlStuType_SelectedIndexChanged(object sender, EventArgs e)
     {
-       // btnSave.Visible = false;
-       // lvStudList.DataSource = null;
-       // lvStudList.DataBind();
-       // //ddlFac.Items.Clear();
-       // //ddlFac.Items.Add("Please Select");
-       //// ddlExamType.Items.Clear();
-       //// ddlExamType.Items.Add("Please Select");
-       // ddlsub.SelectedIndex = 0;
-       // spnNote.Visible = false;
+        // btnSave.Visible = false;
+        // lvStudList.DataSource = null;
+        // lvStudList.DataBind();
+        // //ddlFac.Items.Clear();
+        // //ddlFac.Items.Add("Please Select");
+        //// ddlExamType.Items.Clear();
+        //// ddlExamType.Items.Add("Please Select");
+        // ddlsub.SelectedIndex = 0;
+        // spnNote.Visible = false;
+        btnSave.Visible = false;
+        lvStudList.DataSource = null;
+        lvStudList.DataBind();
     }
 
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
@@ -332,7 +378,11 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         lvStudList.DataBind();
         ddlFac.Items.Clear();
         ddlFac.Items.Add(new ListItem("Please Select", "0"));
-        objCommon.FillDropDownList(ddlFac, "ACD_STUDENT_RESULT", "DISTINCT CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END FAC_NO", "(CASE WHEN DBO.FN_DESC('UA',CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) IS NULL THEN '' ELSE DBO.FN_DESC('UA',CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) END) AS FACULTYNAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue), "FACULTYNAME ASC");
+
+        ddlStuType.SelectedIndex = 0;
+
+        //objCommon.FillDropDownList(ddlFac, "ACD_STUDENT_RESULT", "DISTINCT CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END FAC_NO", "(CASE WHEN DBO.FN_DESC('UA',CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) IS NULL THEN '' ELSE DBO.FN_DESC('UA',CASE WHEN SUBID=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) END) AS FACULTYNAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue), "FACULTYNAME ASC");
+        objCommon.FillDropDownList(ddlFac, "ACD_STUDENT_RESULT SR INNER JOIN ACD_SUBJECTTYPE [as] ON SR.SUBID = [as].SUBID", "DISTINCT CASE WHEN [as].TH_PR=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END FAC_NO", "(CASE WHEN DBO.FN_DESC('UA',CASE WHEN [as].TH_PR=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) IS NULL THEN '' ELSE DBO.FN_DESC('UA',CASE WHEN [as].TH_PR=1 THEN ISNULL(UA_NO,0) ELSE ISNULL(UA_NO_PRAC,0) END) END) AS FACULTYNAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue), "FACULTYNAME ASC");
     }
 
     protected void ddlFac_SelectedIndexChanged(object sender, EventArgs e)
@@ -345,25 +395,37 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
     protected void ddlsub_SelectedIndexChanged(object sender, EventArgs e)
     {
+
+        ddlExamType.Items.Clear();
+        ddlExamType.Items.Add(new ListItem("Please Select", "0"));
+        ddlSubExam1.Items.Clear();
+        ddlSubExam1.Items.Add(new ListItem("Please Select", "0"));
+        ddlCourse.Items.Clear();
+        ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+        ddlStuType.SelectedIndex = 0;
+        ddlFac.Items.Clear();
+        ddlFac.Items.Add(new ListItem("Please Select", "0"));
+
         btnSave.Visible = false;
         lvStudList.DataSource = null;
         lvStudList.DataBind();
-        ddlFac.Items.Clear();
-        ddlFac.Items.Add("Please Select");
-        ddlExamType.Items.Clear();
-        ddlExamType.Items.Add("Please Select");
-        ddlCourse.Items.Clear();
-        ddlCourse.Items.Add("Please Select");
+        //ddlFac.Items.Clear();
+        //ddlFac.Items.Add("Please Select");
+        //ddlExamType.Items.Clear();
+        //ddlExamType.Items.Add("Please Select");
+        //ddlCourse.Items.Clear();
+        //ddlCourse.Items.Add("Please Select");
         spnNote.Visible = false;
 
         int patternno = Convert.ToInt32(objCommon.LookUp("ACD_SCHEME", "PATTERNNO", "SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"])));
 
+        if (ddlsub.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
 
-        objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
+            ddlExamType.Focus();
 
-        ddlExamType.Focus();
-
-
+        }
         //if (Convert.ToInt32(ddlsub.SelectedValue) > 0 && Convert.ToInt32(ddlsub.SelectedValue) == 1)
         //    objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME", "FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND EXAMNO IN (1,2,6)", "EXAMNAME ASC");
         //else
@@ -392,10 +454,10 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
     private void FillDropdownList()
     {
         //Fill Dropdown session 
-     //   objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 ", "SESSIONNO desc"); //--AND FLOCK = 1
+        //   objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 ", "SESSIONNO desc"); //--AND FLOCK = 1
 
         //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING LM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (LM.OrganizationId = DB.OrganizationId AND LM.DEGREENO = DB.DEGREENO AND LM.BRANCHNO = DB.BRANCHNO AND LM.COLLEGE_ID = DB.COLLEGE_ID) ", "COSCHNO", "COL_SCHEME_NAME", "LM.COLLEGE_ID IN(" + Session["college_nos"] + ")AND COSCHNO>0 AND LM.COLLEGE_ID > 0 AND LM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "");
-        
+
         //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER", " COLLEGE_ID", "COLLEGE_NAME", "", "COLLEGE_NAME ASC");
 
 
@@ -403,10 +465,10 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
 
 
-        objCommon.FillDropDownList(ddlsub, "ACD_SUBJECTTYPE ", "SUBID", "SUBNAME", "SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1  ", "SUBID ");
+        //objCommon.FillDropDownList(ddlsub, "ACD_SUBJECTTYPE ", "SUBID", "SUBNAME", "SUBID > 0 AND ISNULL(ACTIVESTATUS,0)=1  ", "SUBID ");
 
-       
-      
+
+
         //if (Session["usertype"].ToString() == "3" && Session["dec"].ToString() == "1")
         //    objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE d inner JOIN ACD_BRANCH B ON (D.DEGREENO = B.DEGREENO)", "D.DEGREENO", "DEGREENAME", "D.DEGREENO > 0 AND  B.DEPTNO = " + Session["userdeptno"].ToString(), "D.DEGREENO");
         //else
@@ -419,6 +481,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         ddlStuType.Items.Add(new ListItem("Backlog", "1"));
         ddlStuType.Items.Add(new ListItem("Revaluation", "2"));
         ddlStuType.Items.Add(new ListItem("PhotoCopy", "3"));
+        ddlStuType.Items.Add(new ListItem("Substitute Student", "4"));
     }
 
     private void ClearAllDropDowns()
@@ -542,9 +605,9 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
             DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
 
             int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
-            int degreeno = Convert.ToInt32(ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0] ["DEGREENO"]).ToString());
+            int degreeno = Convert.ToInt32(ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString());
             int branchno = Convert.ToInt32(ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString());
-            int schemeno = Convert.ToInt32( ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString());
+            int schemeno = Convert.ToInt32(ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString());
             int sem = Convert.ToInt32(ddlSemester.SelectedValue);
             int prev_status = Convert.ToInt32(ddlStuType.SelectedValue);
             int uano = Convert.ToInt32(Session["userno"]);////For log info
@@ -616,70 +679,70 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         }
     }
 
-   // private void SendemailandSms()  //added by Raju** collee**to send sms and email after mark entry unlock
-        //foreach (ListViewDataItem dataRow in lvCourse.Items)
-        //{
-        //    string CC_Email = string.Empty;
-        //    string CC_Mobilenos = string.Empty;
-        //    string ccode = ((Label)dataRow.FindControl("lblCourseNo")).Text;
-        //    string courseno = ((Label)dataRow.FindControl("lblCourseName")).ToolTip;
-        //    string CourseName = ((Label)dataRow.FindControl("lblCourseName")).Text;
-        //    string CourseCode = ((Label)dataRow.FindControl("lblCourseNo")).Text;
-        //    bool Current_Check_Value = ((CheckBox)dataRow.FindControl("chklock")).Checked;
-        //    bool Prev_Hdn_Value = Convert.ToBoolean(((HiddenField)dataRow.FindControl("hdnCheckBox")).Value);
-        //    if (Prev_Hdn_Value.ToString() == "True")
-        //    {
-        //        if (Current_Check_Value != Prev_Hdn_Value)
-        //        {
-        //            Count++;
-        //            string ua_no = ((Label)dataRow.FindControl("lblFaculty")).ToolTip;
-        //            DataSet Faculty_Details = objCommon.FillDropDown("USER_ACC", "UA_TYPE", "UA_FULLNAME,UA_EMAIL,UA_MOBILE", "UA_NO=" + ua_no, ""); // AlertsNo=2 (UNLOCK) 
-        //            string ua_email = Faculty_Details.Tables[0].Rows[0]["UA_EMAIL"].ToString();
-        //            string ua_mobile = Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString();
-        //            string ua_FullName = Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString();
-        //            DataSet Additional_UaNo = objCommon.FillDropDown("ACD_ALERT_STATUS", "isnull(AlertsNo,0)AlertsNo", "isnull(SEND_THROUGH,0)SEND_THROUGH,confirm_alert", "AlertsNo=2 and confirm_alert=1", "SEND_THROUGH"); // AlertsNo=2 (UNLOCK)
-        //            if (Additional_UaNo != null && Additional_UaNo.Tables[0].Rows.Count > 0)
-        //            {
-        //                DataRow[] result = (Additional_UaNo.Tables[0].Select("SEND_THROUGH=1 and confirm_alert=1"));
-        //                if (result != null && result.Length > 0)
-        //                {
-        //                    DataSet Additional_Emails = objCommon.FillDropDown("ACD_ALERT_USER_DETAILS UD INNER JOIN USER_ACC UA ON (UD.UA_NO = UA.UA_NO)", "AlertsNo", "UD.UA_NO,UA_EMAIL,UA_MOBILE", "Send_Through=1 and AlertsNo=2", ""); // AlertsNo=2 (UNLOCK)    
-        //                    if (Additional_Emails.Tables[0].Rows.Count > 0)
-        //                    {
-        //                        for (int i = 0; i < Additional_Emails.Tables[0].Rows.Count; i++)
-        //                        {
-        //                            CC_Email += Additional_Emails.Tables[0].Rows[i]["UA_EMAIL"].ToString() + ",";
-        //                        }
-        //                        CC_Email = CC_Email.TrimEnd(',');
-        //                        MessageBody(ua_FullName, CC_Email, ua_email, CourseName, CourseCode);
-        //                    }
-        //                }
-        //                DataRow[] resultsms = (Additional_UaNo.Tables[0].Select("SEND_THROUGH=2 and confirm_alert=1"));
-        //                if (resultsms != null && resultsms.Length > 0)
-        //                {
-        //                    DataSet Additional_sms = objCommon.FillDropDown("ACD_ALERT_USER_DETAILS UD INNER JOIN USER_ACC UA ON (UD.UA_NO = UA.UA_NO)", "AlertsNo", "ud.UA_NO,UA_EMAIL,UA_MOBILE", "Send_Through=2 and AlertsNo=2", ""); // AlertsNo=2 (UNLOCK)    
-        //                    if (Additional_sms.Tables[0].Rows.Count > 0)
-        //                    {
-        //                        for (int i = 0; i < Additional_sms.Tables[0].Rows.Count; i++)
-        //                        {
-        //                            CC_Mobilenos += Additional_sms.Tables[0].Rows[i]["UA_MOBILE"].ToString() + ",";
-        //                        }
-        //                        //this.SendSMS(Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString(), "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
-        //                        int smsStatus = objCommon.SENDMSG_PASS(Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString(), "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
-        //                        CC_Mobilenos = CC_Mobilenos.TrimEnd(',');
-        //                        string[] stringArray = (CC_Mobilenos).Split(',');
-        //                        foreach (var i in stringArray)
-        //                        {
-        //                            //this.SendSMS(i, "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
-        //                            smsStatus = objCommon.SENDMSG_PASS(i, "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-   // }
+    // private void SendemailandSms()  //added by Raju** collee**to send sms and email after mark entry unlock
+    //foreach (ListViewDataItem dataRow in lvCourse.Items)
+    //{
+    //    string CC_Email = string.Empty;
+    //    string CC_Mobilenos = string.Empty;
+    //    string ccode = ((Label)dataRow.FindControl("lblCourseNo")).Text;
+    //    string courseno = ((Label)dataRow.FindControl("lblCourseName")).ToolTip;
+    //    string CourseName = ((Label)dataRow.FindControl("lblCourseName")).Text;
+    //    string CourseCode = ((Label)dataRow.FindControl("lblCourseNo")).Text;
+    //    bool Current_Check_Value = ((CheckBox)dataRow.FindControl("chklock")).Checked;
+    //    bool Prev_Hdn_Value = Convert.ToBoolean(((HiddenField)dataRow.FindControl("hdnCheckBox")).Value);
+    //    if (Prev_Hdn_Value.ToString() == "True")
+    //    {
+    //        if (Current_Check_Value != Prev_Hdn_Value)
+    //        {
+    //            Count++;
+    //            string ua_no = ((Label)dataRow.FindControl("lblFaculty")).ToolTip;
+    //            DataSet Faculty_Details = objCommon.FillDropDown("USER_ACC", "UA_TYPE", "UA_FULLNAME,UA_EMAIL,UA_MOBILE", "UA_NO=" + ua_no, ""); // AlertsNo=2 (UNLOCK) 
+    //            string ua_email = Faculty_Details.Tables[0].Rows[0]["UA_EMAIL"].ToString();
+    //            string ua_mobile = Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString();
+    //            string ua_FullName = Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString();
+    //            DataSet Additional_UaNo = objCommon.FillDropDown("ACD_ALERT_STATUS", "isnull(AlertsNo,0)AlertsNo", "isnull(SEND_THROUGH,0)SEND_THROUGH,confirm_alert", "AlertsNo=2 and confirm_alert=1", "SEND_THROUGH"); // AlertsNo=2 (UNLOCK)
+    //            if (Additional_UaNo != null && Additional_UaNo.Tables[0].Rows.Count > 0)
+    //            {
+    //                DataRow[] result = (Additional_UaNo.Tables[0].Select("SEND_THROUGH=1 and confirm_alert=1"));
+    //                if (result != null && result.Length > 0)
+    //                {
+    //                    DataSet Additional_Emails = objCommon.FillDropDown("ACD_ALERT_USER_DETAILS UD INNER JOIN USER_ACC UA ON (UD.UA_NO = UA.UA_NO)", "AlertsNo", "UD.UA_NO,UA_EMAIL,UA_MOBILE", "Send_Through=1 and AlertsNo=2", ""); // AlertsNo=2 (UNLOCK)    
+    //                    if (Additional_Emails.Tables[0].Rows.Count > 0)
+    //                    {
+    //                        for (int i = 0; i < Additional_Emails.Tables[0].Rows.Count; i++)
+    //                        {
+    //                            CC_Email += Additional_Emails.Tables[0].Rows[i]["UA_EMAIL"].ToString() + ",";
+    //                        }
+    //                        CC_Email = CC_Email.TrimEnd(',');
+    //                        MessageBody(ua_FullName, CC_Email, ua_email, CourseName, CourseCode);
+    //                    }
+    //                }
+    //                DataRow[] resultsms = (Additional_UaNo.Tables[0].Select("SEND_THROUGH=2 and confirm_alert=1"));
+    //                if (resultsms != null && resultsms.Length > 0)
+    //                {
+    //                    DataSet Additional_sms = objCommon.FillDropDown("ACD_ALERT_USER_DETAILS UD INNER JOIN USER_ACC UA ON (UD.UA_NO = UA.UA_NO)", "AlertsNo", "ud.UA_NO,UA_EMAIL,UA_MOBILE", "Send_Through=2 and AlertsNo=2", ""); // AlertsNo=2 (UNLOCK)    
+    //                    if (Additional_sms.Tables[0].Rows.Count > 0)
+    //                    {
+    //                        for (int i = 0; i < Additional_sms.Tables[0].Rows.Count; i++)
+    //                        {
+    //                            CC_Mobilenos += Additional_sms.Tables[0].Rows[i]["UA_MOBILE"].ToString() + ",";
+    //                        }
+    //                        //this.SendSMS(Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString(), "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
+    //                        int smsStatus = objCommon.SENDMSG_PASS(Faculty_Details.Tables[0].Rows[0]["UA_MOBILE"].ToString(), "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
+    //                        CC_Mobilenos = CC_Mobilenos.TrimEnd(',');
+    //                        string[] stringArray = (CC_Mobilenos).Split(',');
+    //                        foreach (var i in stringArray)
+    //                        {
+    //                            //this.SendSMS(i, "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
+    //                            smsStatus = objCommon.SENDMSG_PASS(i, "Dear " + Faculty_Details.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + " Mark entry successfully unlocked for Session :-" + ddlSession.SelectedItem.Text + ", Exam Name :-" + ddlExamType.SelectedItem.Text + " and Course :-" + CourseCode + '-' + CourseName + " ");
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    // }
 
     //Below method added by Raju to create message template
     public void MessageBody(string FullName, string CC_Email, string Email, string course_name, string CourseCode)
@@ -849,6 +912,26 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ddlSession.Items.Clear();
+        ddlSession.Items.Add(new ListItem("Please Select", "0"));
+        ddlSemester.Items.Clear();
+        ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+        ddlsub.Items.Clear();
+        ddlsub.Items.Add(new ListItem("Please Select", "0"));
+        ddlExamType.Items.Clear();
+        ddlExamType.Items.Add(new ListItem("Please Select", "0"));
+        ddlSubExam1.Items.Clear();
+        ddlSubExam1.Items.Add(new ListItem("Please Select", "0"));
+        ddlCourse.Items.Clear();
+        ddlCourse.Items.Add(new ListItem("Please Select", "0"));
+        ddlStuType.SelectedIndex = 0;
+        ddlFac.Items.Clear();
+        ddlFac.Items.Add(new ListItem("Please Select", "0"));
+
+        btnSave.Visible = false;
+        lvStudList.DataSource = null;
+        lvStudList.DataBind();
+        spnNote.Visible = false;
         if (ddlClgname.SelectedIndex > 0)
         {
             DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlClgname.SelectedValue));
@@ -885,11 +968,13 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         ddlFac.Items.Clear();
         ddlFac.Items.Add("Please Select");
 
+        ddlStuType.SelectedIndex = 0;
         ddlCourse.Items.Clear();
         ddlCourse.Items.Add("Please Select");
-
-        objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENAME ASC");
-
+        if (ddlSubExam1.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENAME ASC");
+        }
         //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT","DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "COURSENAME ASC");
 
     }
