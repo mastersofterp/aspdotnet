@@ -16,7 +16,7 @@
                 <div class="box-body">
                     <div class="col-12">
                         <div class="row">
-                            <div class="form-group col-lg-3 col-md-6 col-12">
+                            <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>Convocation </label>
@@ -24,20 +24,22 @@
                                 <asp:DropDownList ID="ddlConvocation" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                 </asp:DropDownList>
-                                <asp:RequiredFieldValidator ID="rfvCon" runat="server"
+                                <%--<asp:RequiredFieldValidator ID="rfvCon" runat="server"
                                     ControlToValidate="ddlConvocation" Display="None"
                                     ErrorMessage="Please Select Convocation" InitialValue="0"
                                     SetFocusOnError="True" ValidationGroup="Submit">
-                                </asp:RequiredFieldValidator>
+                                </asp:RequiredFieldValidator>--%>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
                                     <label>Convocation Question</label>
                                 </div>
+
                                 <asp:TextBox ID="txtConvocationQuestion" runat="server" TextMode="MultiLine" CssClass="form-control"
-                                    placeholder="Please Enter Convocation Question (Max. 500 char) ."
-                                    ToolTip="Please Enter Feedback Question">
+                                    placeholder="Please Enter Convocation Question (Max. 500 char)"
+                                    ToolTip="Please Enter Feedback Question"
+                                    oninput="enforceMaxLength(this, 500)">
                                 </asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvQuestion" runat="server"
                                     ControlToValidate="txtConvocationQuestion" Display="None"
@@ -122,7 +124,7 @@
                             <HeaderStyle CssClass="bg-light-blue" />
                         </asp:GridView>
                     </div>
-                    <div class="col-12 btn-footer" runat="server" id="divbtns" visible ="false">
+                    <div class="col-12 btn-footer" runat="server" id="divbtns" visible="false">
                         <asp:Button ID="btnSubmit" runat="server" Text="Submit"
                             TabIndex="0" CssClass="btn btn-primary" OnClick="btnSubmit_Click" ValidationGroup="Submit" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel"
@@ -179,6 +181,14 @@
                 </div>
             </div>
         </div>
+
     </div>
+        <script>
+            function enforceMaxLength(textbox, maxLength) {
+                if (textbox.value.length > maxLength) {
+                    textbox.value = textbox.value.slice(0, maxLength);
+                }
+            }
+</script>
 </asp:Content>
 

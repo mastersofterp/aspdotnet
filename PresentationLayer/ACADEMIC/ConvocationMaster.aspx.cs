@@ -1,4 +1,13 @@
-﻿using System;
+﻿//=================================================================================
+// PROJECT NAME  : RFCC                                                          
+// MODULE NAME   : ACADEMIC -CONVOCATION QUESTION                                       
+// CREATION DATE : 15/11/2023                                               
+// CREATED BY    : SHUBHAM BARKE                                                 
+// MODIFIED BY   :                                                     
+// MODIFIED DESC : 
+//=================================================================================
+
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -205,12 +214,6 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
         string ansOptions = string.Empty;
         string ansValue = string.Empty;
         bool status = CheckQuesCount();
-        if (status == true)
-        {
-            objCommon.DisplayUserMessage(this.Page, "Question Limit is Over Not Able To Add More Questions!", this.Page);
-            Questionlist();
-            return;
-        }
         if (ViewState["CurrentTable"] != null)
         {
             DataTable dtCurrentTable = (DataTable)ViewState["CurrentTable"];
@@ -282,13 +285,19 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
         {
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
+                
                 //Edit 
                 SFB.QuestionId = Convert.ToInt32(ViewState["QuestionId"]);
                 cs = (CustomStatus)objSBC.UpdateConvocationQuestion(SFB);
             }
             else
             {
-
+                if (status == true)
+                {
+                    objCommon.DisplayUserMessage(this.Page, "Question Limit is Over Not Able To Add More Questions!", this.Page);
+                    Questionlist();
+                    return;
+                }
                 //save
                 cs = (CustomStatus)objSBC.AddConvocationQuestion(SFB);
             }
@@ -320,7 +329,7 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
             //Add New
             if (cs.Equals(CustomStatus.RecordSaved))
             {
-                objCommon.DisplayUserMessage(this.Page, "Feedback Question Saved Succefully", this.Page);
+                objCommon.DisplayUserMessage(this.Page, "Feedback Question Saved Successfully", this.Page);
                 ClearControl();
                 Questionlist();
 
@@ -476,6 +485,11 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
             ViewState["action"] = "edit";
             btnSubmit.Text = "Update";
             this.ShowDetails();
+            divansoption.Visible = true;
+            divbtns.Visible = true;
+            btnShow.Visible = false;
+            btnCancel.Visible = true;
+            btnSubmit.Visible = true;
         }
         catch (Exception ex)
         {
@@ -504,6 +518,14 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
 
                     txtConvocationQuestion.Text = ds.Tables[0].Rows[0]["QUESTIONNAME"] == null ? string.Empty : ds.Tables[0].Rows[0]["QUESTIONNAME"].ToString();
 
+                    if (Convert.ToInt32(ds.Tables[0].Rows[0]["ISCOMMAND"]) == 1)
+                    {
+                        ChkCmt.Checked = true;
+                    }
+                    else
+                    {
+                        ChkCmt.Checked = false;
+                    }
                     DataTable dtCurrentTable = new DataTable();
 
                     DataRow drCurrentRow = null;
@@ -610,6 +632,10 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
         ChkCmt.Checked = false;
         btnSubmit.Text = "Submit";
         ViewState["action"] = "add";
+        btnShow.Visible = true;
+        divansoption.Visible = false;
+        btnSubmit.Visible = false;
+        btnCancel.Visible = false;
         SetInitialRow();
     }
 
@@ -626,6 +652,8 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
             divansoption.Visible = true;
             divbtns.Visible = true;
             btnShow.Visible = false;
+            btnSubmit.Visible = true;
+            btnCancel.Visible = true;
         }
         catch (Exception ex)
         {
@@ -662,20 +690,20 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
 
     private bool CheckQuesCount()
     {
-        
-            bool returnValue = false;
-            int count = Convert.ToInt32(objCommon.LookUp("ACD_CONVOCATION_FEEDBACK_QUESTION_DEMO", "COUNT(*)", "QUESTIONID > 0"));
 
-            if (count >= 12)
-            {
-                returnValue = true;
-            }
-            else
-            {
-                return returnValue;
-            }
+        bool returnValue = false;
+        int count = Convert.ToInt32(objCommon.LookUp("ACD_CONVOCATION_FEEDBACK_QUESTION_DEMO", "COUNT(*)", "QUESTIONID > 0"));
 
+        if (count >= 12)
+        {
+            returnValue = true;
+        }
+        else
+        {
             return returnValue;
+        }
+
+        return returnValue;
 
     }
 
