@@ -3766,6 +3766,71 @@ namespace IITMS
                 }
                 #endregion
 
+                // Added on 01-12-2023
+
+                #region EMPLOYEE BULK PHOTOS/SIGN EXTRACT  
+                public DataSet GetEmployeePhoto(int CollegeId, int StaffId, string ExtractedBy)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_CollegeID", CollegeId);
+                        objParams[1] = new SqlParameter("@P_StaffID", StaffId);
+                        objParams[2] = new SqlParameter("@P_Extractedby", ExtractedBy);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_EMPLOYEE_GET_EMP_PHOTO", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.PayConfigurationController.GetEmployeePhoto-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetEmployeeSign(int CollegeId, int StaffId, string ExtractedBy)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_CollegeID", CollegeId);
+                        objParams[1] = new SqlParameter("@P_StaffID", StaffId);
+                        objParams[2] = new SqlParameter("@P_Extractedby", ExtractedBy);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_EMPLOYEE_GET_EMP_SIGNA", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.PayConfigurationController.GetEmployeeSign-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetEmployeeCount(int CollegeId, int StaffId, string Type)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_CollegeID", CollegeId);
+                        objParams[1] = new SqlParameter("@P_StaffID", StaffId);
+                        objParams[2] = new SqlParameter("@P_Extractedby", Type);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_EMPLOYEE_GET_EMPLOYEE_COUNT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.PayConfigurationController.GetEmployeeCount-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                #endregion
+
+
             }
         }
     }
