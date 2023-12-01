@@ -34,7 +34,7 @@
                                 </div>
 
 
-                              <%--  <div class="form-group col-lg-3 col-md-6 col-12" id="divDoctypedatas" runat="server" visible="false">
+                                <div class="form-group col-lg-3 col-md-6 col-12" id="divDoctypedatas" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
                                         <label>Document Type</label>
@@ -47,7 +47,7 @@
                                      <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtdoctype"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
                                       </ajaxToolKit:FilteredTextBoxExtender>
-                                </div>--%>
+                                </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="Divdate" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
@@ -83,10 +83,10 @@
                                         <sup>* </sup>
                                         <label>Document Number</label>
                                     </div>
-                                    <asp:TextBox ID="txtdocnumber" runat="server" CssClass="form-control" ToolTip="Enter Document Number" TabIndex="3" MaxLength="15" ></asp:TextBox>
+                                    <asp:TextBox ID="txtdocnumber" runat="server" CssClass="form-control" ToolTip="Enter Document Number" TabIndex="3"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvdocnumber" runat="server"
                                         ControlToValidate="txtdocnumber" Display="None"
-                                        ErrorMessage="Please Enter Document Number" SetFocusOnError="true"
+                                        ErrorMessage="Please enter Document Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtdocnumber"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
@@ -98,25 +98,25 @@
                                         <sup>* </sup>
                                         <label>Property Address</label>
                                     </div>
-                                    <asp:TextBox ID="txtpropAddress" runat="server" CssClass="form-control" ToolTip="Enter Address" TextMode="MultiLine" TabIndex="4" MaxLength="200"></asp:TextBox>
+                                    <asp:TextBox ID="txtpropAddress" runat="server" CssClass="form-control" ToolTip="Enter Address" TextMode="MultiLine" TabIndex="4"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
                                         ControlToValidate="txtpropAddress" Display="None"
                                         ErrorMessage="Please Enter Property Address" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
-                                       <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtpropAddress"
+                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtpropAddress"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
+                                      </ajaxToolKit:FilteredTextBoxExtender>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divDistrict" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
-                                        <label>District / Taluka / Village</label>
+                                        <label>District</label>
                                     </div>
-                                    <asp:TextBox ID="txtdistrict" runat="server" CssClass="form-control" ToolTip="Enter District" TabIndex="5" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtdistrict" runat="server" CssClass="form-control" ToolTip="Enter District" TabIndex="5"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"
                                         ControlToValidate="txtdocnumber" Display="None"
-                                        ErrorMessage="Please Enter District\Taluka\Village" SetFocusOnError="true"
+                                        ErrorMessage="Please Enter District" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server" TargetControlID="txtdistrict"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
@@ -129,7 +129,7 @@
                                         <sup>* </sup>
                                         <label>Survey Number</label>
                                     </div>
-                                    <asp:TextBox ID="txtsurveyNumber" runat="server" CssClass="form-control" ToolTip="Enter Survey Number" TabIndex="6" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtsurveyNumber" runat="server" CssClass="form-control" ToolTip="Enter Survey Number" TabIndex="6"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server"
                                         ControlToValidate="txtsurveyNumber" Display="None"
                                         ErrorMessage="Please Enter Survey Number" SetFocusOnError="true"
@@ -144,7 +144,7 @@
                                         <sup></sup>
                                         <label>Sub Division Number</label>
                                     </div>
-                                    <asp:TextBox ID="txtsubdivnum" runat="server" CssClass="form-control" ToolTip="Enter Sub Division Number" TabIndex="7" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtsubdivnum" runat="server" CssClass="form-control" ToolTip="Enter Sub Division Number" TabIndex="7"></asp:TextBox>
                                     <%--  <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server"
                                         ControlToValidate="txtsubdivnum" Display="None"
                                         ErrorMessage="Please Enter sub Division Number" SetFocusOnError="true"
@@ -159,7 +159,7 @@
                                         <sup>* </sup>
                                         <label>Total Sq Ft Area</label>
                                     </div>
-                                    <asp:TextBox ID="txtarea" runat="server" CssClass="form-control" ToolTip="Enter Total Area" TabIndex="8" oninput="validateNumberInput(this)" MaxLength="15" ></asp:TextBox>
+                                    <asp:TextBox ID="txtarea" runat="server" CssClass="form-control" ToolTip="Enter Total Area" TabIndex="8" oninput="validateNumberInput(this)"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server"
                                         ControlToValidate="txtarea" Display="None"
                                         ErrorMessage="Please Enter Total Area" SetFocusOnError="true"
@@ -173,7 +173,7 @@
                                         <sup>* </sup>
                                         <label>North-Sq. Ft.</label>
                                     </div>
-                                    <asp:TextBox ID="txtnorth" runat="server" CssClass="form-control" ToolTip="Enter North-Sq. Ft." TabIndex="9" oninput="validateNumberInput(this)" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtnorth" runat="server" CssClass="form-control" ToolTip="Enter North-Sq. Ft." TabIndex="9" oninput="validateNumberInput(this)"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvnorth" runat="server"
                                         ControlToValidate="txtnorth" Display="None"
                                         ErrorMessage="Please Enter North-Sq Ft." SetFocusOnError="true"
@@ -188,7 +188,7 @@
                                         <sup>* </sup>
                                         <label>South-Sq. Ft.</label>
                                     </div>
-                                    <asp:TextBox ID="txtSouth" runat="server" CssClass="form-control" ToolTip="Enter South-Sq. Ft." TabIndex="10" oninput="validateNumberInput(this)" MaxLength="15" ></asp:TextBox>
+                                    <asp:TextBox ID="txtSouth" runat="server" CssClass="form-control" ToolTip="Enter South-Sq. Ft." TabIndex="10" oninput="validateNumberInput(this)" ></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvsouth" runat="server"
                                         ControlToValidate="txtSouth" Display="None"
                                         ErrorMessage="Please Enter South-Sq Ft." SetFocusOnError="true"
@@ -200,7 +200,7 @@
                                         <sup>* </sup>
                                         <label>East-Sq. Ft.</label>
                                     </div>
-                                    <asp:TextBox ID="txtEast" runat="server" CssClass="form-control" ToolTip="Enter East-Sq. Ft." TabIndex="11" oninput="validateNumberInput(this)" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtEast" runat="server" CssClass="form-control" ToolTip="Enter East-Sq. Ft." TabIndex="11" oninput="validateNumberInput(this)"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvEast" runat="server"
                                         ControlToValidate="txtEast" Display="None"
                                         ErrorMessage="Please Enter East-Sq Ft." SetFocusOnError="true"
@@ -212,7 +212,7 @@
                                         <sup>* </sup>
                                         <label>West-Sq. Ft.</label>
                                     </div>
-                                    <asp:TextBox ID="txtWest" runat="server" CssClass="form-control" ToolTip="Enter West-Sq. Ft." TabIndex="12" oninput="validateNumberInput(this)" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtWest" runat="server" CssClass="form-control" ToolTip="Enter West-Sq. Ft." TabIndex="12" oninput="validateNumberInput(this)"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvWest" runat="server"
                                         ControlToValidate="txtWest" Display="None"
                                         ErrorMessage="Please Enter West-Sq Ft." SetFocusOnError="true"
@@ -224,7 +224,7 @@
                                         <sup>*</sup>
                                         <label>EC Number</label>
                                     </div>
-                                    <asp:TextBox ID="txtEC" runat="server" CssClass="form-control" ToolTip="Enter EC Number" TabIndex="13" MaxLength="15"></asp:TextBox>
+                                    <asp:TextBox ID="txtEC" runat="server" CssClass="form-control" ToolTip="Enter EC Number" TabIndex="13"></asp:TextBox>
                                       <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtEC" Display="None" ErrorMessage="Please Enter EC NO." ValidationGroup="Submit">
                                         </asp:RequiredFieldValidator>
                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" TargetControlID="txtEC"
@@ -242,7 +242,7 @@
                                             <i class="fa fa-calendar text-blue"></i>
                                         </div>
                                         <span id="lblSpan" runat="server" style="text-align: left; display: none"></span>
-                                        <asp:TextBox ID="txtFromDate" runat="server" Style="text-align: left" TabIndex="14"
+                                        <asp:TextBox ID="txtFromDate" runat="server" Style="text-align: left"
                                             CssClass="form-control" />
                                         <ajaxToolKit:CalendarExtender ID="cetxtDepDate" runat="server" Enabled="True" Format="dd/MM/yyyy"
                                             PopupButtonID="Image3" TargetControlID="txtFromDate">
@@ -265,43 +265,40 @@
                                         <label>To Date</label>
                                     </div>
                                     <div class="input-group date">
-                                        <div class="input-group-addon" id="imgToDate">
+                                        <div class="input-group-addon" id="Image1">
                                             <i class="fa fa-calendar text-blue"></i>
                                         </div>
-                                      <%--  <asp:TextBox ID="txttodate" runat="server" ToolTip="Enter To Date" CssClass="form-control" TabIndex="3" Text="" OnTextChanged="txttodate_TextChanged"></asp:TextBox>--%>
+                                        <span id="Span1" runat="server" style="text-align: left; display: none"></span>
                                         <asp:TextBox ID="txttodate" runat="server" Style="text-align: left"
                                             CssClass="form-control" OnTextChanged="txttodate_TextChanged" AutoPostBack="true" />
-                                        <%-- <div class="input-group-addon">
-                                                                    <asp:ImageButton ID="imgToDate" runat="server" ImageUrl="~/IMAGES/calendar.png" TabIndex="7" />
-                                                                </div>--%>
-                                        <ajaxToolKit:MaskedEditExtender ID="meToDate" runat="server" DisplayMoney="Left"
-                                            Enabled="true" Mask="99/99/9999" MaskType="Date" TargetControlID="txttodate">
-                                        </ajaxToolKit:MaskedEditExtender>
-                                        <ajaxToolKit:CalendarExtender ID="ceToDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgToDate"
-                                            PopupPosition="BottomRight" TargetControlID="txttodate">
+                                        <ajaxToolKit:CalendarExtender ID="cetodate" runat="server" Enabled="True" Format="dd/MM/yyyy"
+                                            PopupButtonID="Image1" TargetControlID="txttodate">
                                         </ajaxToolKit:CalendarExtender>
-                                        <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meToDate" ControlToValidate="txttodate"
-                                            EmptyValueMessage="Please Select To Date" InvalidValueMessage="To Date is Invalid (Enter dd/MM/yyyy Format)"
-                                            Display="None" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date" SetFocusOnError="True"
-                                            ValidationGroup="Store" IsValidEmpty="false"> </ajaxToolKit:MaskedEditValidator>
-                                         <asp:RequiredFieldValidator ID="rfvtdate" runat="server" ControlToValidate="txttodate" Display="None" ErrorMessage="Please Enter To_Date" ValidationGroup="Submit">
+                                        <ajaxToolKit:MaskedEditExtender ID="metodate" runat="server" AcceptNegative="Left"
+                                            DisplayMoney="Left" ErrorTooltipEnabled="True" Mask="99/99/9999" MaskType="Date"
+                                            OnInvalidCssClass="errordate" TargetControlID="txttodate" CultureAMPMPlaceholder=""
+                                            CultureCurrencySymbolPlaceholder="" CultureDateFormat="" CultureDatePlaceholder=""
+                                            CultureDecimalPlaceholder="" CultureThousandsPlaceholder="" CultureTimePlaceholder=""
+                                            Enabled="True">
+                                        </ajaxToolKit:MaskedEditExtender>
+                                        <asp:RequiredFieldValidator ID="rfvtdate" runat="server" ControlToValidate="txttodate" Display="None" ErrorMessage="Please Enter To_Date" ValidationGroup="Submit">
                                         </asp:RequiredFieldValidator>
                                     </div>
                                 </div>
 
-
-                                
+                                <div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divAttach" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>*</sup><label>Attachment</label><span style="color: red; margin-left: 10px;">(only .pdf, .jpg Formats)</span>      
+                                            <sup></sup>
+                                            <label>Attach</label>
                                         </div>
-                                        <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="16" />
+                                        <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="14" />
                                         <asp:Label ID="lblFileName" runat="server" Text="" Visible="false"></asp:Label>
                                     </div>
                                     <div class="col-1 btn-footer" id="divbtnAdd" runat="server" visible="false">
-                                        <asp:Button ID="btnAdd" runat="server" Text="Add" TabIndex="17" CssClass="btn btn-primary" OnClick="btnAdd_Click" ToolTip="Attach File" />
+                                        <asp:Button ID="btnAdd" runat="server" Text="Add" TabIndex="13" CssClass="btn btn-primary" OnClick="btnAdd_Click" ToolTip="Attach File" />
                                     </div>
-                                
+                                </div>
                             </div>
                         </asp:Panel>
 
@@ -396,17 +393,17 @@
                     </div>
                     <div class="col-12 btn-footer">
 
-                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="Submit" TabIndex="18"
+                        <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="Submit" TabIndex="3"
                             CssClass="btn btn-primary" OnClick="btnSubmit_Click" ToolTip="Click here to Submit" />
-                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" 
-                            ToolTip="Click here to Reset" TabIndex="19" OnClick="btnCancel_Click" />
+                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning"
+                            ToolTip="Click here to Reset" TabIndex="4" OnClick="btnCancel_Click" />
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Submit"
                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>
 
 
                                          <div class="col-12 table-responsive">
-                            <asp:ListView ID="lvDocStorage" runat="server" OnItemDataBound="lvDocStorage_ItemDataBound">
+                            <asp:ListView ID="lvDocStorage" runat="server">
                                 <EmptyDataTemplate>
                                     <center>
                                  <asp:Label ID="lblerr" SkinID="Errorlbl" runat="server" Text="No Records Found" ></asp:Label>
@@ -425,18 +422,15 @@
                                                   <th>
                                                       Document Type
                                                   </th>
-                                                    <th id="thDocNo" runat="server">
+                                                   <th>
                                                     Document No.
                                                     </th>
-                                                    <th id="thDistrict" runat="server" >
+                                                    <th>
                                                     District
                                                     </th>
-                                                    <th id="thSurNo" runat="server">
+                                                    <th>
                                                      Survey No.
                                                     </th>
-                                                        <th id="thECNo" runat="server">
-                                                      EC No.
-                                                     </th>
                                                   <th>
                                                     Attachment
                                                   </th>
@@ -464,22 +458,19 @@
                                         <td>
                                             <%#Eval("DOCUMENT_TYPE") %>
                                         </td>
-                                           <td id="tdDocNo" runat="server">
-                                            <asp:Label ID="lblDno" runat="server" Text='<%# Eval("DNO")%> '></asp:Label>
-                                        </td >
-                                          <td id="tdDistrict" runat="server">
-                                             <asp:Label ID="lbldist" runat="server" Text='<%# Eval("DISTRICT")%>'></asp:Label>
+                                         <td>
+                                            <%# Eval("DNO")%>
                                         </td>
-                                         <td id="tdSurNo" runat="server">
-                                            <asp:Label ID="lblsno" runat="server" Text=' <%# Eval("SURVEYNO")%>' ></asp:Label>
+                                          <td>
+                                            <%# Eval("DISTRICT")%>
                                         </td>
-                                         <td id="tdECNo" runat="server"   >
-                                         <%# Eval("ECNO") %>
-                                       </td>
+                                         <td>
+                                            <%# Eval("SURVEYNO")%>
+                                        </td>
                                         <td>
-                                            <%# Eval("FILE_PATH")%>
+                                            <%# Eval("FILE_NAME")%>
                                         </td>
-                        
+                                       
                                              <td style="text-align: center" id="tdBlob1" runat="server" visible="false">
                                                         <asp:UpdatePanel ID="updPreview" runat="server">
                                                             <ContentTemplate>
