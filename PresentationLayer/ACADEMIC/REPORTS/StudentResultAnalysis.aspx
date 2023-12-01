@@ -365,6 +365,8 @@
                                                     <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session </p>
                                                 </li>
 
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Course </p>
+                                                </li>
 
                                             </ul>
                                         </div>
@@ -1248,7 +1250,13 @@
                     $("#ctl00_ContentPlaceHolder1_ddlSem").removeClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSection").removeClass("red-color");
                 });
-
+                $(".selectsixteen ").click(function () {
+                    $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlcourse").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSection").removeClass("red-color");
+                });
             });
         });
 
