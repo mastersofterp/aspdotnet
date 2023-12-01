@@ -151,7 +151,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
     }
    
 
-
+    
     protected void BindListView()
     {
         try
@@ -494,6 +494,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
        LinkButton lbtn = (LinkButton)(sender);
        Session["idno"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);    
       // ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
+
 
 
 

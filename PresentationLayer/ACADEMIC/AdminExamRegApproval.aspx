@@ -209,6 +209,8 @@
                                                         </th>
                                                         <th>AMOUNT
                                                         </th>
+                                                          <th>DATE
+                                                        </th>
                                                          <th id="REMARKSDATA1">Remarks
                                                         </th>
                                                     </tr>
@@ -260,6 +262,9 @@
                                             </td>
                                               <td>
                                                <b> <%# Eval("TOTAL_AMT")%></b>
+                                            </td>
+                                              <td>
+                                               <b> <%# Eval("PRINTDATE")%></b>
                                             </td>
                                             <%--[PAY_STATUS] [PAY_MODE],TOTAL_AMT[TOTAL_AMT]--%>
                                              <td>
