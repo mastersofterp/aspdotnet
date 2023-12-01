@@ -62,6 +62,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using BusinessLogicLayer.BusinessLogic;
 
 
 
@@ -71,6 +72,7 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     CourseController objCC = new CourseController();
     StudentController objSC = new StudentController();
+    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
     //ConnectionString
     string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
@@ -856,7 +858,8 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
                 ExcelReport(ds, filename);
 
             }
-            else {
+            else
+            {
                 objCommon.DisplayMessage(this.Page, "Data Not Found", this.Page);
             }
         }
@@ -1729,15 +1732,18 @@ public partial class Exam_Registration_Report : System.Web.UI.Page
                                 count++;
                                 StudRegNO += chek.ToolTip + "$";
 
-                                if (Convert.ToInt32(SENDGRID_STATUS) == 1)
-                                {
-                                    Task<int> task = Execute(txtMatter.Text, lblEmail.Text, txtSubject.Text + " " + SUBJECT_OTP + " ERP || OTP for reset password");
-                                    status = task.Result;
-                                }
-                                else
-                                {
-                                    status = sendEmail(txtMatter.Text, lblEmail.Text, txtSubject.Text + " " + SUBJECT_OTP + " ERP");
-                                }
+                                //if (Convert.ToInt32(SENDGRID_STATUS) == 1)
+                                //{
+                                //    Task<int> task = Execute(txtMatter.Text, lblEmail.Text, txtSubject.Text + " " + SUBJECT_OTP + " ERP || OTP for reset password");
+                                //    status = task.Result;
+                                //}
+                                //else
+                                //{
+                                //    status = sendEmail(txtMatter.Text, lblEmail.Text, txtSubject.Text + " " + SUBJECT_OTP + " ERP");
+                                //}
+
+                                //status = objSendEmail.SendEmail(txtMatter.Text, lblEmail.Text, txtSubject.Text + " " + SUBJECT_OTP + " ERP "); //Calling Method
+                                status = objSendEmail.SendEmail(lblEmail.Text, txtMatter.Text, "" + SUBJECT_OTP + " ERP || " + txtSubject.Text + ""); //Calling Method
                             }
                         }
 
