@@ -164,7 +164,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = true;
                 btnLedger.Visible = true; // ADDED BY SHUBHM ON 18-08-2023
                 btnGradeCardIssueRegister.Visible = true;
-               // divYear.Visible = true;
+                // divYear.Visible = true;
                 btnElibilityReport.Visible = true;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
@@ -280,7 +280,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
-               
+
 
             }
         }
@@ -370,6 +370,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     {
         try
         {
+            ddlStuType.Focus();
             ddlStuType.SelectedIndex = 0;
             txtDateOfIssue.Text = string.Empty;
             txtDeclareDate.Text = string.Empty;
@@ -1098,7 +1099,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         #endregion
         #region For Crescent
 
-        else if (Convert.ToInt32(Session["OrgId"]) == 2)        
+        else if (Convert.ToInt32(Session["OrgId"]) == 2)
         {
 
             //string ids = string.Empty;
@@ -1221,8 +1222,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
 
             }
-
-
 
         }
         #endregion
@@ -1909,34 +1908,192 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
         }
         #endregion
-        
+
         #region For PCEN Grad Card Added By Tejas Thakre on 30/10/2023
         else if (Convert.ToInt32(Session["OrgId"]) == 19)
         {
 
-            string ids = string.Empty;
+            string stdids = string.Empty;
+            int cntlength = 0;
             foreach (ListViewDataItem item in lvStudent.Items)
             {
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
                 CheckBox chk = item.FindControl("chkStudent") as CheckBox;
                 Label lblStudname = item.FindControl("lblStudname") as Label;
 
-                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                if (chk.Checked)
+                if (chk.Checked == true)
                 {
-                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
-
-                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
                 }
-            }
-            ids = ids.TrimEnd('.');
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
 
-            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_PCEN.rpt", ids);  
+                if (ddlStuType.SelectedIndex < 0)
+                {
+                    objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                }
+
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_PCEN.rpt", stdids);
         }
         #endregion
         #region For JLOCE Grad Card Added By Tejas Thakre on 17/11/2023
         else if (Convert.ToInt32(Session["OrgId"]) == 20)
         {
+
+            string stdids = string.Empty;
+            int cntlength = 0;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                if (chk.Checked == true)
+                {
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
+                }
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+
+                if (ddlStuType.SelectedIndex < 0)
+                {
+                    objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                }
+
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_JLOCE.rpt", stdids);
+        }
+        #endregion
+        #region For PRMITR Grad Card Added By Tejas Thakre on 29/11/2023
+        else if (Convert.ToInt32(Session["OrgId"]) == 10)
+        {
+
+            string stdids = string.Empty;
+            int cntlength = 0;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                if (chk.Checked == true)
+                {
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
+                }
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+
+                if (ddlStuType.SelectedIndex < 0)
+                {
+                    objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                }
+
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_PRMITR.rpt", stdids);
+        }
+        #endregion
+        #region For TGPCET  Grad Card Added By Tejas Thakre on 01/12/2023
+        else if (Convert.ToInt32(Session["OrgId"]) == 21)
+        {
+            string stdids = string.Empty;
+            int cntlength = 0;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                CheckBox chkHead1 = lvStudent.FindControl("chkheader") as CheckBox;
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                if (chk.Checked == true)
+                {
+                    stdids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+                    cntlength++;
+                }
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+
+                if (ddlStuType.SelectedIndex < 0)
+                {
+                    objCommon.DisplayMessage("Please Select Student Type", this.Page);
+                }
+
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                int Semesterno = Convert.ToInt32(ddlSemester.SelectedValue);
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, idnos, College_id, Degreeno, Branchno, Semesterno, ua_no);
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                stdids = "0";
+            }
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_TGPCET.rpt", stdids);
+        }
+        #endregion
+        #region For MAHER Grade Card Added By Sagar Mankar on Date 21112023
+
+        else if (Convert.ToInt32(Session["OrgId"]) == 16)
+        {
             string ids = string.Empty;
+
             foreach (ListViewDataItem item in lvStudent.Items)
             {
                 CheckBox chk = item.FindControl("chkStudent") as CheckBox;
@@ -1950,10 +2107,11 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
                 }
             }
-            ids = ids.TrimEnd('.');
 
-            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_JLOCE.rpt", ids);
+            ids = ids.TrimEnd('.');
+            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_MAHER.rpt", ids);
         }
+
         #endregion
         else
         {
@@ -2028,6 +2186,9 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
 
     }
+
+
+
     private void ShowGradeCardNew(string reportTitle, string rptFileName, string ids)
     {
         try
@@ -2079,7 +2240,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
 
                     url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + ids + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_STUDTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@DateofIssue=" + DateTime.Today.Date;
-
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 5)
                 {
@@ -2143,11 +2303,23 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 19) // PCEN added by Tejas Thakre on 30/10/2023
                 {
-                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 20) //JLOCE added by Tejas Thakre on 17/11/2023
                 {
-                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 10) //PRMITR  added by Tejas Thakre 29/11/2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 21) //TGPCET  added by Tejas Thakre 01/12/2023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + ids + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 16) // For MAHER Grade Card Added By Sagar Mankar on Date 21112023
+                {
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                 }
                 else
                 {
@@ -2349,7 +2521,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 8)
                 {
-                   // url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_ADMBATCHNO=" + Convert.ToString(stuadmbatch.Value);
+                    // url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_ADMBATCHNO=" + Convert.ToString(stuadmbatch.Value);
                     url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_ADMBATCHNO=" + Convert.ToString(ViewState["schemeno"]);//GetIDNOS_NEW
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 5)
@@ -2414,11 +2586,13 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 if (Convert.ToInt32(Session["OrgId"]) == 1)
                 {
                     //url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCHNO=" + stuadmbatch.Value + ",@P_RESULTDECLAREDDATE=" + txtDeclareDate.Text.ToString() + ",@P_DATE_OF_ISSUE=" + txtDateOfIssue.Text.ToString() + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_PREV_STATUS=" + ddlStuType.SelectedValue;
+
                     url += "&param=@P_IDNO=" + GetIDNO() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_YEAR=" + ddlYear.SelectedValue + ",@P_STUDTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2)
                 {
                     url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCHNO=" + stuadmbatch.Value + ",@P_RESULTDECLAREDDATE=" + txtDeclareDate.Text.ToString() + ",@P_DATE_OF_ISSUE=" + txtDateOfIssue.Text.ToString() + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_PREV_STATUS=" + ddlStuType.SelectedValue;
+
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 5)
                 {
@@ -2455,6 +2629,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 20) // for JLOCE Added by Tejas Thakre on 17-11-2023
                 {
                     url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_IDNO=" + GetIDNOS_NEW();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 10) // For PRMITR by Tejas Thakre on 29-11-2023
+                {
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW();  //GetIDNO1();// +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 21) // For TGPCET   by Tejas Thakre on 01-02-2023
+                {
+                    url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW();  //GetIDNO1();// +",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
                 }
                 else
                 {
@@ -2786,6 +2968,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
                 //this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReportWithoutHeaderPG.rpt");
             }
+
+
         }
         //For JECRC REPORT 
         else if (Convert.ToInt32(Session["OrgId"]) == 5)
@@ -3420,6 +3604,86 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
             this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_JLOCE_Without_Header.rpt");
         }
+        // For PRMITR REPORT
+        else if (Convert.ToInt32(Session["OrgId"]) == 10)
+        {
+            string ids = string.Empty;
+            //CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                //string 
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+
+            }
+            ids = ids.TrimEnd('.');
+            //if (ids != string.Empty)
+            //    GenerateQrCode(ids);
+
+
+
+            if (ddlStuType.SelectedValue == "-1")
+            {
+                objCommon.DisplayUserMessage(updpnlExam, "Please Select Student Type", this.Page);
+            }
+            else
+            {
+
+
+                MarksEntryController objMarkEntry = new MarksEntryController();
+                int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+                int College_id = Convert.ToInt32(ViewState["college_id"]);
+                int Degreeno = Convert.ToInt32(ViewState["degreeno"]);
+                int Branchno = Convert.ToInt32(ViewState["branchno"]);
+                int Semesterno = Convert.ToInt16(ddlSemester.SelectedValue);
+                int ua_no = Convert.ToInt32(Session["userno"].ToString());
+                string idnos = GetIDNOFGenerateGradeNo();
+                objMarkEntry.GradeCardNumberGeneration(Sessionno, ids, College_id, Degreeno, Branchno, Semesterno, ua_no);
+
+                int duration = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "DURATION_LAST_SEM", "DEGREENO =" + Degreeno + " AND BRANCHNO =" + Branchno + " AND COLLEGE_ID=" + College_id));
+                //if (duration == Semesterno)
+                //{
+                //    this.ShowGradeCard("Grade_Card", "rptGradeCardReport_ATLAS_Without_Header");
+                //}
+                //else
+                //{
+                this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_PRMITR_Without_Header.rpt");
+                // }
+            }
+        }
+        //For TGPCET  REPORT
+        else if (Convert.ToInt32(Session["OrgId"]) == 21)
+        {
+            string ids = string.Empty;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                CheckBox chk1 = lvStudent.Controls[0].FindControl("chkheader") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                if (chk.Checked)
+                {
+                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+                    //count++;
+                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                }
+
+            }
+
+            ids = ids.TrimEnd('.');
+
+            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_TGPCET_Without_Header");
+        }
         else
         {
 
@@ -3872,7 +4136,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)=0 AND SR.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
-
+            ddlSemester.Focus();
 
 
         }
@@ -3903,6 +4167,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         lvStudent.DataSource = null;
         lvStudent.DataBind();
         pnlStudent.Visible = false;
+        showstudents.Focus();
     }
 
     protected void btnResultExcel_Click(object sender, EventArgs e)
@@ -3926,7 +4191,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment; filename=ResultReport.xls";
+                string attachment = "attachment; filename=ResultReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -4055,7 +4320,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
 
-                string attachment = "attachment; filename=OverallBacklogReport.xls";
+                string attachment = "attachment; filename=OverallBacklogReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -4114,7 +4379,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GVTrReport.DataSource = ds;
                 GVTrReport.DataBind();
 
-                string attachment = "attachment; filename=TRReport.xls";
+                string attachment = "attachment; filename=TRReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -4156,7 +4421,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             GridView gv = new GridView();
             gv.DataSource = ds;
             gv.DataBind();
-            string attachment = "attachment;filename= ResultStatistics.xls";
+            string attachment = "attachment;filename= ResultStatistics" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.ms-excel";
@@ -4188,7 +4453,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                 ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0  AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");
-
+                ddlSession.Focus();
             }
         }
 
@@ -4369,7 +4634,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             GridView gv = new GridView();
             gv.DataSource = ds;
             gv.DataBind();
-            string attachment = "attachment;filename= GradeRange.xls";
+            string attachment = "attachment;filename= GradeRange" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.ms-excel";
@@ -4415,7 +4680,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             GridView gv = new GridView();
             gv.DataSource = ds.Tables[0];
             gv.DataBind();
-            string attachment = "attachment;filename= FormatIIExcel.xls";
+            string attachment = "attachment;filename= FormatIIExcel" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.ms-excel";
@@ -4452,7 +4717,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             GridView gv = new GridView();
             gv.DataSource = ds.Tables[0];
             gv.DataBind();
-            string attachment = "attachment;filename= ExamFeePaidExcelReport.xls";
+            string attachment = "attachment;filename= ExamFeePaidExcelReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.ms-excel";
@@ -4485,7 +4750,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GVStatus.DataSource = ds;
                 GVStatus.DataBind();
 
-                string attachment = "attachment; filename= ConvocationExcelReport.xls";
+                string attachment = "attachment; filename= ConvocationExcelReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -4999,7 +5264,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GDProgession.DataSource = ds;
                 GDProgession.DataBind();
 
-                string attachment = "attachment; filename=ProgressionReport.xls";
+                string attachment = "attachment; filename=ProgressionReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -5089,7 +5354,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             //ds.Tables[0].Columns.RemoveAt(3);
             GVTrReport.DataSource = ds;
             GVTrReport.DataBind();
-            string attachment = "attachment; filename=SerialNumber.xls";
+            string attachment = "attachment; filename=SerialNumber" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
             Response.ClearContent();
             Response.AddHeader("content-disposition", attachment);
             Response.ContentType = "application/vnd.MS-excel";
@@ -5119,7 +5384,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 dg.DataSource = ds.Tables[0];
                 dg.DataBind();
                 AddReportHeader(dg);
-                string attachment = "attachment; filename=" + "Result_Display_Sheet.xls";
+                string attachment = "attachment; filename=" + "Result_Display_Sheet" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/" + "ms-excel";
@@ -5309,7 +5574,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GridView gv = new GridView();
                 gv.DataSource = ds;
                 gv.DataBind();
-                string attachment = "attachment;filename= UFMList.xls";
+                string attachment = "attachment;filename= UFMList" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.ms-excel";
@@ -5394,7 +5659,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 dg.DataSource = ds.Tables[0];
                 dg.DataBind();
                 //AddReportHeader(dg);
-                string attachment = "attachment; filename=" + "GradeCardIssueRegister.xls";
+                string attachment = "attachment; filename=" + "GradeCardIssueRegister" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/" + "ms-excel";
@@ -5497,25 +5762,25 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
 
     }
-    #region For Crescent Various Degree Certificate 
+    #region For Crescent Various Degree Certificate
     protected void btnCertificate_Click(object sender, EventArgs e)
     {
-    
+
         try
         {
             string idno = GetIDNO();
-            if (idno == "" || idno=="0")
+            if (idno == "" || idno == "0")
             {
                 objCommon.DisplayMessage(updpnlExam, "Please Select At least one Student!!", this.Page);
                 return;
             }
             int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
             string date3 = Convert.ToDateTime(txtprint.Text).ToString("MM/dd/yyyy");
-            string date4 = Convert.ToDateTime(txtprint.Text).ToString("dd/MM/yyyy"); 
+            string date4 = Convert.ToDateTime(txtprint.Text).ToString("dd/MM/yyyy");
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + "Degree Certificate";
-            if ( ViewState["degreeno"]=="2" ||ViewState["degreeno"]=="4" ||ViewState["degreeno"]=="6"||ViewState["degreeno"]=="7"||ViewState["degreeno"]=="11"||ViewState["degreeno"]=="17"||ViewState["degreeno"]=="19"||ViewState["degreeno"]=="19"||ViewState["degreeno"]=="20")
+            if (ViewState["degreeno"] == "2" || ViewState["degreeno"] == "4" || ViewState["degreeno"] == "6" || ViewState["degreeno"] == "7" || ViewState["degreeno"] == "11" || ViewState["degreeno"] == "17" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "20")
             {
                 url += "&path=~,Reports,Academic," + "rptDegreeCertificate.rpt";//as per ticket number 49655 (Template 1)
             }
@@ -5533,7 +5798,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
 
-          
+
         }
         catch (Exception ex)
         {
