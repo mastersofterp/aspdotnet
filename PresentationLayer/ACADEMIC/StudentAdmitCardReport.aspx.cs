@@ -266,7 +266,19 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PCEN/JLCOE   Added By Injamam 20_10_2023   
+            else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PCEN  Added By Injamam 20_10_2023   
+            {
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //JLCOE   Added By Injamam 30_11_2023   
+            {
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 21) //TGPCET  Added By Injamam 29_11_2023 
+            {
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 18) //HITS  Added By Injamam 29_11_2023 
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
@@ -535,9 +547,21 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_Maher.rpt");
                 }
-                else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)  //PCEN/JLCOE   Added By Injamam 20_10_2023
+                else if (Convert.ToInt32(Session["OrgId"]) == 19)  //PCEN   Added By Injamam 20_10_2023
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_PCEN.rpt");
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 20)  //JLCOE   Added By Injamam 30_11_2023
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_PJLCEN.rpt");
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 18) //HITS  Added By Injamam 29_11_2023 
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_HITS.rpt");
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 21) //TGPCET Added By Injamam 29_11_2023 
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_TGPCET.rpt");
                 }
                 else
                 {
