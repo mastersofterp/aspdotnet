@@ -291,7 +291,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
-                btnConsolidtedMPHRAM.Visible = false;
 
 
             }
