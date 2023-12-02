@@ -1314,7 +1314,6 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                 objCommon.DisplayMessage(updSession, "Please Enter Out Of Marks", this.Page);
                 return;
             }
-
             if (Convert.ToInt32(Session["OrgId"]) == 9)
             {
                 if (txtOutOfMarks.Text.Trim() == "" || (txtOutOfMarks.Text.Trim() == ""))
@@ -1372,7 +1371,7 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
 
                 ViewState["Total"] =Convert.ToDecimal(ViewState["Total"].ToString()) + TotalMarks;
 
-                if (Convert.ToInt32(Session["OrgId"]) != 8 && (Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5))
+                if (Convert.ToInt32(Session["OrgId"]) != 8 && Convert.ToInt32(Session["OrgId"]) != 10 && ((Convert.ToInt32(Session["OrgId"]) != 6 && Convert.ToInt32(ViewState["degreeno"]) != 5)))
                 {
                     if (Internal < Convert.ToDecimal(ViewState["Total"].ToString()))
                     {
@@ -1398,7 +1397,8 @@ public partial class ACADEMIC_Exam_Assesment : System.Web.UI.Page
                     }
                 }
             }
-
+            objCommon.DisplayMessage(updSession, "success", this.Page);
+            return;
             //objCommon.DisplayUserMessage(updSession, "Exam Component Added Successfully.", this.Page);
 
             ////ddlAssessment.SelectedIndex = -1;
