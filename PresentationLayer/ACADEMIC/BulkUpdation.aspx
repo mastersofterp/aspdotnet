@@ -1109,7 +1109,7 @@
             var allowedChars = /^[A-Za-z0-9]*$/;
 
             if (!allowedChars.test(charStr)) {
-                alert("Only alphanumeric characters are allowed.");
+                alert("Only Alphanumeric Characters are Allowed.");
                 setTimeout(function() {
                     input.value = ''; 
                 }, 0);

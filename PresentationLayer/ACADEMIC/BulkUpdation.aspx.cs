@@ -213,7 +213,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         {
                             categorys += (lvItem.FindControl("txtAdmDate") as TextBox).Text + "$";
                         }
-                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31" || rdbCat.SelectedValue == "32" || rdbCat.SelectedValue == "33")
+                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31" || rdbCat.SelectedValue == "32" || rdbCat.SelectedValue == "33" || rdbCat.SelectedValue == "34")   // Modified By Shrikant W. on 28-11-2023
                         {
                             categorys += (lvItem.FindControl("txtusn") as TextBox).Text + "$";
                         }
@@ -420,7 +420,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME , S.IDNO AS COLUMNID , '' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
-            else if (rdbCat.SelectedValue == "34")  // ABCC ID
+            else if (rdbCat.SelectedValue == "34")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
@@ -957,7 +957,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ddlcat.Visible = false;
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
-            else if (rdbCat.SelectedValue == "34")
+            else if (rdbCat.SelectedValue == "34")   // Added By Shrikant W. on 28-11-2023
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
                 ddlcat.Visible = false;
@@ -1097,7 +1097,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
                 }
-                else if(rdbCat.SelectedValue == "34")
+                else if(rdbCat.SelectedValue == "34")    // Added By Shrikant W. on 28-11-2023
                 {
                     txtemail.Visible = false;
                     txtUSN.Visible = true;
