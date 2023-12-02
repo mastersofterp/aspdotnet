@@ -60,7 +60,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             }
 
             int user_type = Convert.ToInt32(Session["usertype"].ToString());
-            if (user_type != 1)
+            if (user_type != 1 && user_type != 8)
             {
                 this.FillDropDownByIdno(Convert.ToInt32(Session["idno"].ToString()), 0);
                 ddlEmployee.Enabled = false;
@@ -75,6 +75,11 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             //    ddlCollege.Enabled = false;
                
             //}
+            else if (user_type == 8)
+            {
+                string college_no = objCommon.LookUp("USER_ACC", "UA_COLLEGE_NOS", "UA_NO=" + Convert.ToInt32(Session["userno"]) + "");
+                objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN (" + college_no + ")", "COLLEGE_NAME");
+            }
             else
             {
                 //To fill department
@@ -234,10 +239,7 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-    
 
-
-    
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -245,9 +247,17 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
             if (ddlCollege.SelectedValue != string.Empty )
             {
                 this.TableRowVisibleTrueFalse();
-                this.FillEmployee(Convert.ToInt32(ddlCollege.SelectedValue));
-               // lblDepartment.Text = objCommon.LookUp("PAYROLL_SUBDEPT", "SUBDEPT", "SUBDEPTNO=" + ddlCollege.SelectedValue);
-
+                int user_type = Convert.ToInt32(Session["usertype"].ToString());
+                if (user_type != 8)
+                {
+                    this.FillEmployee(Convert.ToInt32(ddlCollege.SelectedValue));
+                    // lblDepartment.Text = objCommon.LookUp("PAYROLL_SUBDEPT", "SUBDEPT", "SUBDEPTNO=" + ddlCollege.SelectedValue);
+                }
+                else
+                {
+                    int dept_no = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_EMPDEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]) + ""));
+                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM,PAYROLL_PAYMAS PM", "EM.IDNO AS IDNO", "ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.COLLEGE_NO = '" + Convert.ToInt32(ddlCollege.SelectedValue) + "' and EM.SUBDEPTNO=" + dept_no, "EM.FNAME");
+                }
             }
         }
         catch (Exception ex)
