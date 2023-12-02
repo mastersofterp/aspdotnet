@@ -212,7 +212,7 @@ public partial class principalHome : System.Web.UI.Page
 
     private string getMaleCountDetail()
     {
-        string maleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(*) MALECOUNT", "SEX='M' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0");
+        string maleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) MALECOUNT", "SEX='M' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
         return maleCount;
     }
 
@@ -226,7 +226,7 @@ public partial class principalHome : System.Web.UI.Page
     }
     private string getFemaleCountDetail()
     {
-        string femaleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(*) FEMALECOUNT", "SEX='F' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0");
+        string femaleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) FEMALECOUNT", "SEX='F' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
         return femaleCount;
     }
 
@@ -240,7 +240,7 @@ public partial class principalHome : System.Web.UI.Page
     }
     private string getActiveUserDetails()
     {
-        string count = objCommon.LookUp("USER_ACC", "COUNT(*) USERCOUNT", "ISNULL(UA_STATUS,0)=0 ");
+        string count = objCommon.LookUp("USER_ACC", "COUNT(DISTINCT UA_NO) USERCOUNT", "ISNULL(UA_STATUS,0)=0 ");
         return count;
     }
 
@@ -255,7 +255,7 @@ public partial class principalHome : System.Web.UI.Page
     }
     private string getTotalStudentDetails()
     {
-        string count = objCommon.LookUp("ACD_STUDENT ASTUD LEFT JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(*) STUDENT", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0");
+        string count = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) STUDENT", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
         return count;
     }
     
