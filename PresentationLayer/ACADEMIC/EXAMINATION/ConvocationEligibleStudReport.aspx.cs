@@ -80,6 +80,18 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 }
                 this.FillDropdownList();
                 this.PopulateSessionDropDown();
+
+                string passoutflag = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(PASSOUT_RPT,0)", ""));
+                string convfeedback = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(FEEDBACK_RPT,0)", ""));
+
+                if (passoutflag == "1")
+                {
+                    btnPassStudList.Visible = true;
+                }
+                if (convfeedback == "1")
+                {
+                    btnConvocationExcelReport.Visible = true;
+                }
             }
         }
     }

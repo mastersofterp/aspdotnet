@@ -69,8 +69,8 @@
                             </div>
 
                             <div class="col-12 btn-footer" style="text-align: center;">
-                                <asp:Button ID="btnConvocationExcelReport" Text="Convocation Excel Report" runat="server" TabIndex="3" Visible="true" CssClass="btn btn-info" CausesValidation="false" OnClick="btnConvocationExcelReport_Click1" />
-                                <asp:Button ID="btnPassStudList" Text="Passout Student Excel Report" runat="server" TabIndex="4" Visible="true" CssClass="btn btn-info" OnClientClick="return validateField();" CausesValidation="false" OnClick="btnConvocationEligible_Click" />
+                                <asp:Button ID="btnConvocationExcelReport" Text="Convocation Excel Report" runat="server" TabIndex="2" Visible="false" CssClass="btn btn-info" CausesValidation="false" OnClick="btnConvocationExcelReport_Click1" />
+                                <asp:Button ID="btnPassStudList" Text="Passout Student Excel Report" runat="server" TabIndex="3" Visible="false" CssClass="btn btn-info" OnClientClick="return validateField();" CausesValidation="false" OnClick="btnConvocationEligible_Click" />
 
                             </div>
 
