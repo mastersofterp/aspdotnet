@@ -73,7 +73,8 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
 
 
 
-                objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
+                objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
                 PopulateDropDown();
 
                 objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1", "FDID");
@@ -506,7 +507,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
        
         dvallfeedback.Visible = false;
         //dvFeedbackReport.Visible = false;
-        if (ddlFeedbackReportType.SelectedValue == "1")
+        if (ddlFeedbackReportType.SelectedValue == "2")
         {
             dvFaculttyFeedback.Visible = true;
             btnFacultyFeedbackReport.Visible = true;
@@ -520,7 +521,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         //    btnFacultyFeedbackReportPercentageWise.Visible = true;
         //    btnHODFeedbackReport.Visible = false;
         //}
-        if (ddlFeedbackReportType.SelectedValue == "2")
+        if (ddlFeedbackReportType.SelectedValue == "1")
         {
             dvFaculttyFeedback.Visible = true;
             btnFacultyFeedbackReport.Visible = false;
@@ -609,6 +610,78 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         {
             url += "&param=" + param + ",@P_COLLEGE_CODE=" +Convert.ToInt32(ViewState["college_id"]);
         }
+        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+        divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        divMsg.InnerHtml += " </script>";
+        ////To open new window from Updatepanel
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+        ScriptManager.RegisterClientScriptBlock(this.updFeed, this.updFeed.GetType(), "controlJSScript", sb.ToString(), true);
+    }
+    protected void btnShow_Click(object sender, EventArgs e)
+    {
+        DataSet ds;
+        //string SessionNo = string.Empty;
+        //SessionNo = ddlSession.SelectedValue;
+        //int degree = 0;
+        //int scheme = Convert.ToInt32(ddlClgname.SelectedValue);
+        //int branch = 0;
+        //int semester = Convert.ToInt32(ddlSemester.SelectedValue);
+        //int section = Convert.ToInt32(ddlSection.SelectedValue);
+        //int feedbacktype = Convert.ToInt32(ddlFeedbackType.SelectedValue);
+
+        ds = objSFBC.GetSubjectFeedbackCommonData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+        if (ds.Tables.Count > 0 && ds.Tables != null)
+        {
+            lvFacultyDetails.DataSource = ds;
+            lvFacultyDetails.DataBind();
+            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvFacultyDetails);//Set label 
+        }
+        else
+        {
+            lvFacultyDetails.DataSource = null;
+            lvFacultyDetails.DataBind();
+        }
+    }
+
+
+    protected void lnkFacultyName_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            LinkButton lnk = sender as LinkButton;
+            int UA_NO = Convert.ToInt32(lnk.ToolTip);
+            int courseno = Convert.ToInt32(lnk.CommandArgument);
+
+            DataSet ds = objSFBC.GetSubjectFeedbackCommonData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO="+courseno +"";
+            ShowReportNew("FeedBack_Analysis_Report", "rptFeedbackAnalysisReport_PCEN.rpt", param);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_CommonFeedbackReport.lnkFacultyName_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    private void ShowReportNew(string reportTitle, string rptFileName, string param)
+    {
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        //if (Convert.ToInt32(Session["OrgId"]) == 2)
+        //{
+            //url += "&param=" + param + "";
+        //}
+        //else
+        //{
+        url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+        //}
         divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         divMsg.InnerHtml += " </script>";

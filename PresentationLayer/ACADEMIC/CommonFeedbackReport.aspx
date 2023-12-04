@@ -121,7 +121,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Section" runat="server">
                                             <div class="label-dynamic">
-                                                <sup id="sectiondv" runat="server">* </sup>
+                                                <sup id="sectiondv" runat="server"> </sup>
                                                 <%--<label>Section</label>--%>
                                                 <asp:Label ID="lblDYddlSection" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
@@ -151,6 +151,10 @@
                                 </div>
 
                                 <div class="col-12 btn-footer">
+
+                                    <asp:Button ID="btnShow" runat="server" Text="Show" TabIndex="6" Visible="true"
+                                        ValidationGroup="FeedbackFaculty" OnClick="btnShow_Click" CssClass="btn btn-primary" />
+
                                     <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6" Visible="false"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReport_Click" CssClass="btn btn-primary" />
 
@@ -174,6 +178,56 @@
                                     <div id="divMsg" runat="server">
                                     </div>
                                 </div>
+
+
+                                <div class="col-12">
+                            <asp:ListView ID="lvFacultyDetails" runat="server">
+                                <LayoutTemplate>
+                                    <div id="demo-grid" class="vista-grid">
+                                        <div class="sub-heading">
+                                            <h5>Faculty Details</h5>
+                                        </div>
+                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divFacultylist">
+                                            <thead class="bg-light-blue">
+                                                <tr>
+                                                    <th>Sr.No.
+                                                    </th>
+                                                    <th>Teacher name
+                                                    </th>
+                                                    <th>Subject name
+                                                    </th>
+                                                    <th>Average percentage % of feedback
+                                                    </th>                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="itemPlaceholder" runat="server" />
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </LayoutTemplate>
+                                <ItemTemplate>
+                                    <tr class="item">
+                                        <td>
+                                            <%# Container.DataItemIndex + 1%>
+                                        </td>                                        
+                                        <td>
+                                            <asp:LinkButton ID="lnkFacultyName" runat="server" Text='<%# Eval("UA_FULLNAME") %>' OnClick="lnkFacultyName_Click" ToolTip='<%# Eval("UA_NO")%>' CommandArgument='<%# Eval("COURSENO")%>'>LinkButton</asp:LinkButton>  
+                                        </td>
+                                        <td>
+                                            <asp:Label ID="lblsem" Text='<%# Eval("CCODE")%>' ToolTip='<%# Eval("COURSENO")%>' runat="server"></asp:Label>
+                                     
+                                        </td>
+                                        <td>                                            
+                                             <%# Eval("FEEDBACKPERCENT") %>
+                                        </td>                                       
+                                    </tr>
+                                </ItemTemplate>
+                            </asp:ListView>
+                        </div>
+
+
+
 
                             </div>
                         </div>
