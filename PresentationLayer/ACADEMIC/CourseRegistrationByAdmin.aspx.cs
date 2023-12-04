@@ -1087,6 +1087,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 pnlStudents.Visible = false;
                 pnlStudentsReamin.Visible = false;
                 btnBulkSubmit.Enabled = false;
+                lboOfferCourse.Items.Clear();
             }
         }
         catch (Exception)
@@ -1235,7 +1236,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             //DivMultipleSelect.Visible = true;
 
             DataSet dsCourse = objSReg.GetOfferedCourseListForModifyBulkCourseRegistration(Convert.ToInt32(ddlBulkSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue));
-
+            lboOfferCourse.Items.Clear();
             if (dsCourse != null && dsCourse.Tables.Count > 0)
             {
                 if (dsCourse.Tables[0].Rows.Count > 0)
