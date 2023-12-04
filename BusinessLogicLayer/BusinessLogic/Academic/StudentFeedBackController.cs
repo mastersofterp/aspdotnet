@@ -742,7 +742,7 @@ namespace IITMS
                 #region "FeedbackMaster"
 
 
-                public int AddFeedbackMaster(string feedbackName, string collegeCode, int feedbackmode, int coursetype, int choisefor)
+                public int AddFeedbackMaster(string feedbackName, string collegeCode, int feedbackmode, int coursetype, int choisefor, int is_active)
                 {
                     int status = -99;
                     try
@@ -755,6 +755,7 @@ namespace IITMS
                             new SqlParameter("@P_MODE_ID", feedbackmode),
                             new SqlParameter("@P_COURSETYPE", coursetype),  //added by Nehal on 25/8/23
                             new SqlParameter("@P_CHOISEFOR", choisefor), //added by Nehal on 25/8/23
+                            new SqlParameter("@P_IS_ACTIVE", is_active),
                             new SqlParameter("@P_OUTPUT", status)
                         };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -770,7 +771,7 @@ namespace IITMS
                     return status;
                 }
 
-                public int UpdateFeedbackMaster(int feedbackNo, string feedbackName, string collegeCode, int modeid, int coursetype, int choisefor)
+                public int UpdateFeedbackMaster(int feedbackNo, string feedbackName, string collegeCode, int modeid, int coursetype, int choisefor,int is_active)
                 {
                     int status = -99;
                     try
@@ -784,6 +785,7 @@ namespace IITMS
                                  new SqlParameter("@P_MODE_ID", modeid),   
                                  new SqlParameter("@P_COURSETYPE", coursetype),  //added by Nehal on 25/8/23
                                  new SqlParameter("@P_CHOISEFOR", choisefor), //added by Nehal on 25/8/23
+                                 new SqlParameter("@P_IS_ACTIVE", is_active),
                                  new SqlParameter("@P_OUTPUT",status)
                             };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;

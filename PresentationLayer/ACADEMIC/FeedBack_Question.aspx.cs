@@ -600,10 +600,10 @@ public partial class ACADEMIC_FeedBack_Question : System.Web.UI.Page
             //}
 
 
-            int CountOnlinefeedback = Convert.ToInt32(objCommon.LookUp("ACD_ONLINE_FEEDBACK F INNER JOIN ACD_STUDENT_RESULT R ON (R.IDNO=F.IDNO AND R.SESSIONNO=F.SESSIONNO AND R.COURSENO=F.COURSENO)", "Count(*)", "F.QUESTIONID='" + SFB.QuestionId + "' AND F.CTID='" + CTID + "' AND R.SEMESTERNO='" + SemesterNo + "'"));
+            int CountOnlinefeedback = Convert.ToInt32(objCommon.LookUp("ACD_ONLINE_FEEDBACK F", "Count(*)", "F.QUESTIONID=" + SFB.QuestionId ));
             if (CountOnlinefeedback > 0)
             {
-                objCommon.DisplayUserMessage(updQuestion, "Feedback Has been Already Submitted For This Question And Semester", this.Page);
+                objCommon.DisplayUserMessage(updQuestion, "Feedback Has been Already Submitted For This Question", this.Page);
                 return;
             }
             else

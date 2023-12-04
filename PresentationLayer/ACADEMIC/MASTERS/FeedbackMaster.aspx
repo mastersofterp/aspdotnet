@@ -55,14 +55,23 @@
                                             <sup>* </sup>
                                             <label>Feedback Mode</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlfeedbackmode" runat="server"  AppendDataBoundItems="true" TabIndex="1" CssClass="form-control" 
-                                                 data-select2-enable="true">
-                                                <%--<asp:ListItem Value="0">Please Select</asp:ListItem>--%>
-                                            </asp:DropDownList>
+                                        <asp:DropDownList ID="ddlfeedbackmode" runat="server" AppendDataBoundItems="true" TabIndex="1" CssClass="form-control"
+                                            data-select2-enable="true">
+                                            <%--<asp:ListItem Value="0">Please Select</asp:ListItem>--%>
+                                        </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlfeedbackmode"
                                             Display="None" ErrorMessage="Please Select Feedback Mode" ValidationGroup="submit" InitialValue="0"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
                                     </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <label>Active Status</label>
+                                        </div>
+                                        <asp:CheckBox ID="chkActiveStatus" runat="server" TextAlign="Left" Checked="true" />
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <%--<sup>* </sup>--%>
@@ -73,7 +82,7 @@
                                             TabIndex="3" />&nbsp;&nbsp;
                                         <asp:RadioButton ID="rdoPractical" runat="server" Text="Practical" GroupName="act_status"
                                             TabIndex="3" />
-                                        <asp:RadioButton ID="rdoNone1" runat="server" Text="None" GroupName="act_status" checked="true"/>
+                                        <asp:RadioButton ID="rdoNone1" runat="server" Text="None" GroupName="act_status" Checked="true" />
 
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -86,7 +95,7 @@
                                             TabIndex="4" />&nbsp;&nbsp;
                                         <asp:RadioButton ID="rdoFaculty" runat="server" Text="Faculty" GroupName="act_faculty"
                                             TabIndex="4" />
-                                        <asp:RadioButton ID="rdoNone2" runat="server" Text="None" GroupName="act_faculty" checked="true"/>
+                                        <asp:RadioButton ID="rdoNone2" runat="server" Text="None" GroupName="act_faculty" Checked="true" />
 
                                     </div>
                                 </div>
@@ -113,6 +122,7 @@
                                                     <th>Feedback Mode</th>
                                                     <th>Course Type</th>
                                                     <th>Choise For</th>
+                                                    <th>Active Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -137,7 +147,10 @@
                                                 </td>
                                                 <td>
                                                     <%# Eval("CHOISE_FOR")%>
-                                                </td>    
+                                                </td>
+                                                <td>
+                                                    <%# Eval("IS_ACTIVE")%>
+                                                </td>
                                             </tr>
                                         </ItemTemplate>
                                         <FooterTemplate>
