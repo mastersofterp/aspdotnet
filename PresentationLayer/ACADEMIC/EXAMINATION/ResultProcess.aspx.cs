@@ -388,6 +388,11 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                 lvCourse.DataSource = null;
                 lvCourse.DataBind();
                 lvCourse.Visible = false;
+                // ADDED BY SHUBHAM FOR HIDE LISTVIEW COLUMN (ONLY SHOW ON CRESECENT)
+                if (Convert.ToInt32(Session["OrgId"]) != 2)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#studcount').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#studcount').hide();$('td:nth-child(7)').hide();});", true);
+                }
             }
             else
             {
@@ -484,7 +489,6 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                                 objCommon.DisplayMessage(updresult, "Lock Entry Not Done For Current Selection !!", this.Page);
                                 return;
                             }
-
                             else
                             {
                                 // added by shubham on 29/05/2023 for checking Grade TYPE OR MARK TYPE 
@@ -518,7 +522,11 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                                 btnProcessResult.Enabled = true;
                                 //btnLock.Enabled = true;
                                 //btnUnlock.Enabled = true;
-
+                                // ADDED BY SHUBHAM FOR HIDE LISTVIEW COLUMN (ONLY SHOW ON CRESECENT)
+                                if (Convert.ToInt32(Session["OrgId"]) != 2)
+                                {
+                                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#studcount').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#studcount').hide();$('td:nth-child(7)').hide();});", true);
+                                }
 
                             }
                         }
@@ -572,6 +580,11 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                                         CheckBox chk = lvStudent.FindControl("chkheader") as CheckBox;
                                         chk.Checked = false;
                                         btnProcessResult.Enabled = true;
+                                        // ADDED BY SHUBHAM FOR HIDE LISTVIEW COLUMN (ONLY SHOW ON CRESECENT)
+                                        if (Convert.ToInt32(Session["OrgId"]) != 2)
+                                        {
+                                            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#studcount').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#studcount').hide();$('td:nth-child(7)').hide();});", true);
+                                        }
                                     }
                                 }
                             }
@@ -589,6 +602,12 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                                     CheckBox chk = lvStudent.FindControl("chkheader") as CheckBox;
                                     chk.Checked = false;
                                     btnProcessResult.Enabled = true;
+                                    //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm =Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+                                    // ADDED BY SHUBHAM FOR HIDE LISTVIEW COLUMN (ONLY SHOW ON CRESECENT)
+                                    if (Convert.ToInt32(Session["OrgId"]) != 2)
+                                    {
+                                        ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#studcount').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#studcount').hide();$('td:nth-child(7)').hide();});", true);
+                                    }
                                 }
                                 else
                                 {
@@ -636,7 +655,11 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
                             btnProcessResult.Enabled = true;
                             //btnLock.Enabled = true;
                             //btnUnlock.Enabled = true;
-
+                            // ADDED BY SHUBHAM FOR HIDE LISTVIEW COLUMN (ONLY SHOW ON CRESECENT)
+                            if (Convert.ToInt32(Session["OrgId"]) != 2)
+                            {
+                                ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#studcount').hide();$('td:nth-child(7)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#studcount').hide();$('td:nth-child(7)').hide();});", true);
+                            }
 
 
                         }
@@ -853,6 +876,18 @@ public partial class ACADEMIC_EXAMINATION_ResultProcess : System.Web.UI.Page
     {
         Label lblLockStatus = e.Item.FindControl("lblLockstatus") as Label;
         Label lblProcessStatus = e.Item.FindControl("lblPstatus") as Label;
+        //if (e.Item.ItemType == ListViewItemType.DataItem)
+        //{
+        //    // Find the TableCell for the column you want to hide
+        //    TableCell cellToHide = e.Item.FindControl("Srno") as TableCell;
+
+        //    // Check if the cell is found
+        //    //if (cellToHide != null)
+        //    //{
+        //        // Set the Visible property to false to hide the column
+        //        cellToHide.Visible = false;
+        //    //}
+        //}
         if (lblProcessStatus.ToolTip == "1")
         {
             IS_ProcessStatusCount += 1;
