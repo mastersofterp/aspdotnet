@@ -227,8 +227,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(IsApprove))
             {
-                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
-                Response.Redirect(Request.RawUrl);
+                objCommon.DisplayMessage("You can not able to edit approved gatepass.", this.Page);
+                return;
             }
             else
             {
@@ -699,7 +699,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 }
                 else
                 {
-                    objCommon.DisplayMessage("Hour From should be greater than today Hour.", this.Page);
+                    objCommon.DisplayMessage("Hour from should be greater than Current Hour.", this.Page);
                     ddloutHourFrom.Focus();
                     ddloutHourFrom.SelectedIndex = 0;
                     return;
