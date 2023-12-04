@@ -23,7 +23,7 @@ using Ionic.Zip;
 using System.Drawing;
 
 
-public partial class PAYROLL_TRANSACTIONS_Pay_Bulk_Photo_Update : System.Web.UI.Page
+public partial class PAYROLL_TRANSACTIONS_Pay_BulkPhotoSignExtract : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
