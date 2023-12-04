@@ -514,12 +514,14 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
                         {
                             string contentType = contentType = FileUpload1.PostedFile.ContentType;
                             string ext = System.IO.Path.GetExtension(FileUpload1.PostedFile.FileName);
+                            string filext = System.IO.Path.GetFileName(FileUpload1.FileName);
                             //HttpPostedFile file = flupld.PostedFile;
                             //filename = objSevBook.IDNO + "_familyinfo" + ext;
                             //string name = DateTime.Now.ToString("ddMMyyyy_hhmmss");
                             string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
                             filename = req_id + "_REQTRNO_" + time + ext;
-                            objSevBook.ATTACHMENTS = filename;
+                          //  objSevBook.ATTACHMENTS = filename;
+                            objSevBook.ATTACHMENTS = FileUpload1.FileName.ToString();
 
                             if (FileUpload1.FileContent.Length <= 1024 * 10000)
                             {
@@ -529,8 +531,8 @@ public partial class STORES_Transactions_Quotation_StrUserReq : System.Web.UI.Pa
 
                                 if (result == true)
                                 {
-
-                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, req_id + "_REQTRNO_" + time, FileUpload1);
+                                  //  int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, req_id + "_REQTRNO_"  + time, FileUpload1);
+                                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, filext + req_id + "_REQTRNO_" + time, FileUpload1);
                                     if (retval == 0)
                                     {
                                         ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
