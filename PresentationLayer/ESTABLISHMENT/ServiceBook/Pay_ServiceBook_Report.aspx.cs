@@ -239,7 +239,38 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+    protected void FillEmployeeDept()
+    {
+        int ua_type = Convert.ToInt32(Session["usertype"]);
 
+        if (Convert.ToInt32(Session["usertype"]) == 8)  //HOD
+        {
+            int userno = Convert.ToInt32(Session["userno"]);
+            int deptno = Convert.ToInt32(objCommon.LookUp("User_acc", "UA_EMPDEPTNO", "UA_NO = " + Convert.ToInt32(Session["userno"])));
+
+            DataSet ds = null;
+            // int i;
+            ds = objServiceBook.GetDepartmentName(Convert.ToInt32(Session["userno"]));
+            //int rowCount = ds.Tables[0].Rows.Count;
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+               //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS", "IDNO", "isnull(FNAME,'') + ' ' + isnull(MNAME,'') + ' ' + isnull(LNAME,'')", "SUBDEPTNO=" + Convert.ToInt32(paydeptno) + " AND ISNULL(IS_SHIFT_MANAGMENT,0)=0 AND COLLEGE_NO IN(" + Session["college_nos"] + ")", "FNAME");
+                DataSet dsEmp = objServiceBook.GetEmployeeListForDept(Convert.ToInt32(Session["userno"]), 0);
+               if (dsEmp.Tables[0].Rows.Count > 0)
+               {
+                   ddlEmployee.Items.Clear();
+                   ddlEmployee.Items.Add("Please Select");
+                   ddlEmployee.SelectedItem.Value = "0";
+                   ddlEmployee.DataSource = dsEmp;
+                   ddlEmployee.DataValueField = dsEmp.Tables[0].Columns["IDNO"].ToString();
+                   ddlEmployee.DataTextField = dsEmp.Tables[0].Columns["EMPNAME"].ToString();
+                   ddlEmployee.DataBind();
+                   ddlEmployee.SelectedIndex = 0;
+
+               }
+            }
+        }
+    }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -255,8 +286,9 @@ public partial class PayRoll_Pay_ServiceBook_Report : System.Web.UI.Page
                 }
                 else
                 {
-                    int dept_no = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_EMPDEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]) + ""));
-                    objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM,PAYROLL_PAYMAS PM", "EM.IDNO AS IDNO", "ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.COLLEGE_NO = '" + Convert.ToInt32(ddlCollege.SelectedValue) + "' and EM.SUBDEPTNO=" + dept_no, "EM.FNAME");
+                    FillEmployeeDept();
+                    //int dept_no = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_EMPDEPTNO", "UA_NO=" + Convert.ToInt32(Session["userno"]) + ""));
+                    //objCommon.FillDropDownList(ddlEmployee, "PAYROLL_EMPMAS EM,PAYROLL_PAYMAS PM", "EM.IDNO AS IDNO", "ISNULL(TITLE,'')+' '+ISNULL(EM.FNAME,'')+' '+ISNULL(EM.MNAME,'')+' '+ISNULL(EM.LNAME,'') as ENAME", "EM.IDNO = PM.IDNO AND PM.PSTATUS='Y' and EM.IDNO > 0 AND EM.STATUS IS NULL and EM.COLLEGE_NO = '" + Convert.ToInt32(ddlCollege.SelectedValue) + "' and EM.SUBDEPTNO=" + dept_no, "EM.FNAME");
                 }
             }
         }
