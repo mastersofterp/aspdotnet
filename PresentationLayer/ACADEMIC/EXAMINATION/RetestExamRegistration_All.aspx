@@ -447,7 +447,9 @@
                                <br /> Degree Certificate - Rs. 600/- </span>--%>
                     </div>
                     <div class="box-body">
-                        <div id="pnlSearch" runat="server">
+                          <asp:UpdatePanel ID="updatepnl" runat="server">
+                        <ContentTemplate>
+                             <div id="pnlSearch" runat="server">
                             <div class="col-12">
                                 <div class="row">
 
@@ -565,7 +567,12 @@
                                             <asp:HiddenField ID="hdfSemester" runat="server" />
                                             <asp:HiddenField ID="hdfExamLateFee" runat="server" />
                                         </li>
-
+                                        <li class="list-group-item"><b>Total Paid Exam Fee :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblPaidFees" runat="server" Font-Bold="true" /></a>
+                                          
+                                           
+                                        </li>
                                         <%-- <li class="list-group-item">
                                             <a class="sub-label">
                                                 <asp:Label ID="Stuatus" runat="server" Font-Bold="true" Visible="true"/>Pending</a>
@@ -706,7 +713,9 @@
                                                     ValidationGroup="report"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-                                        <asp:ListView ID="lvFailCourse" runat="server">
+
+
+                                        <asp:ListView ID="lvFailCourse" runat="server" OnItemDataBound="lvFailCourse_ItemDataBound" >
                                             <LayoutTemplate>
                                                 <div class="sub-heading">
                                                     <h5>Courses List</h5>
@@ -776,6 +785,10 @@
                                                         <asp:HiddenField ID="hdfexistMarks" Value='<%# Eval("EXISTS_MARK") %>' runat="server" />
                                                         <asp:HiddenField ID="hdfExamRegistered" runat="server" Value='<%# Eval("EXAM_REGISTERED") %>' />
                                                         <asp:HiddenField ID="hdfStudRegistered" runat="server" Value='<%# Eval("STUD_EXAM_REGISTERED") %>' />
+                                                        <asp:HiddenField ID="hdfapplycourses" Value='<%# Eval("ApplyCourse") %>' runat="server" />
+                                                        <asp:HiddenField ID="hdfapprovecourses" Value='<%# Eval("ADMIN_APPROVE") %>' runat="server" />
+                                                        <asp:HiddenField ID="hdfAbsentLog" runat="server" Value='<%# Eval("ABSENT_LOG") %>' />
+                                                        
 
 
                                                     </td>
@@ -856,7 +869,7 @@
                                         </asp:ListView>
                                     </asp:Panel>
                                 </div>
-                                <div class="col-12 btn-footer">
+                                <div id="divbtn" class="col-12 btn-footer" runat="server">
                                     <asp:Button ID="btnsave" runat="server" Text="Submit" CausesValidation="false"
                                         Font-Bold="true" CssClass="btn btn-success" TabIndex="7" OnClick="btnsave_Click" />
                                     <%--OnClick="btnsave_Click"--%>
@@ -870,6 +883,10 @@
                                 </div>
                             </div>
                         </div>
+
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                       
                     </div>
                 </div>
             </div>

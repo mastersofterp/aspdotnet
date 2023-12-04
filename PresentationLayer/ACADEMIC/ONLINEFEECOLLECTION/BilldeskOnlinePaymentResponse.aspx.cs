@@ -74,10 +74,27 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
                     lblTrasactionId.Text = txnid;
                     lblamount.Text = amount;
                     lblstudentname.Text = repoarray[16].ToString();
-                    lblRegNo.Text = Regno;
+                   // lblRegNo.Text = Regno; -- commented bt gaurav 31_11_2023
                     lblOrderId.Text = orderid;
                     lblTransactionDate.Text = transactiondate;
                     string RecieptType = repoarray[18].ToString();
+                    #region added by gaurav for crescent substitute EXAM REg
+                    if (RecieptType == "REF")
+                    {
+                        String[] Regno1 = repoarray[19].ToString().Split('-');
+                        Regno = Regno1[0];
+                        String ExamNo = Regno1[1];
+                        ViewState["ExamNo"] = ExamNo;
+                        lblRegNo.Text = Regno1[0].ToString();
+                        // String Examno=Session["ExamNo"].ToString();
+
+                    }
+                    else
+                    {
+                        Regno = repoarray[19].ToString();
+                        lblRegNo.Text = Regno.ToString();
+                    }
+                    #endregion 
                     lblResponsecode.Text = authstatus;
                     DataSet ds = objCommon.FillDropDown("USER_ACC", "UA_NAME", "UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG", "UA_NO=" + Convert.ToInt32(userno), string.Empty);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -117,9 +134,15 @@ public partial class BilldeskOnlinePaymentResponse : System.Web.UI.Page
                         if (RecieptType == "REF")
                         {
 
-                            int session = Convert.ToInt32(objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "TOP 1 (SESSIONNO)", "IDNO=" + Idno));
-                            DataSet dsstudent = null;
-                            dsstudent = objSC.GetRetestStudentDetailsExam(Convert.ToInt32(Idno), session);
+                            int session = Convert.ToInt32(objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "TOP 1 MAX(SESSIONNO)", "IDNO=" + Idno + " AND Examno=" + Convert.ToInt32(ViewState["ExamNo"])));
+                           // DataSet dsstudent = null; -- Commented by gaurav 30_11_2023
+                            // dsstudent = objSC.GetRetestStudentDetailsExam(Convert.ToInt32(Idno), session);---- Commented by gaurav 30_11_2023
+                            #region
+                            string SP_Name = "PKG_ACD_UPDATE_RETEST_STUDENT_FLAG_CRESCENT";
+                            string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_EXAMNO,@P_OUTPUT";
+                            string Call_Values = "" + Idno + "," + Convert.ToInt32(session) + "," + Convert.ToInt32(ViewState["ExamNo"].ToString()) + ",0";
+                            string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                            #endregion
 
                         }
                         #endregion

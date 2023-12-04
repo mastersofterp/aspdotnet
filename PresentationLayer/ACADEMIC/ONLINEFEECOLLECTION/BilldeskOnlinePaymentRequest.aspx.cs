@@ -206,9 +206,9 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
         int l = System.DateTime.Today.Day;
         int m = System.DateTime.Today.Month;
         string refno = string.Empty;
-        if (Session["ReceiptType"].ToString()=="EF")
+        if (Session["ReceiptType"].ToString() == "EF")
         {
-            refno= Session["Order_id"].ToString();
+            refno = Session["Order_id"].ToString();
         }
         else if (Session["ReceiptType"].ToString() == "PRF" || Session["ReceiptType"].ToString() == "RF")           //Added on 26082022
         {
@@ -216,7 +216,7 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
         }
         else
         {
-        refno = (i + "" + j + "" + k + "" + l + "" + m).ToString() + UserId;
+            refno = (i + "" + j + "" + k + "" + l + "" + m).ToString() + UserId;
         }
 
         string str1 = objCommon.LookUp("ACD_DCR", "ORDER_ID", "ORDER_ID='" + refno + "'");
@@ -226,7 +226,7 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
             {
                 goto Reprocess;
             }
-        }      
+        }
 
         Session["studrefno"] = refno;
         string datetm = indianTime.ToString("dd-MMM-yyyy");
@@ -234,9 +234,19 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
         amount = Convert.ToString(Session["studAmt"]);
 
         //string custtype = "INR";
+        #region  ADDED BY GAURAV 30_11_2023 FOR SUBSTITUTE EXAM REG CRESCENT
+        String ExamNo = Convert.ToString(Session["EXAMNO"]) == "" ? "NA" : Convert.ToString(Session["EXAMNO"]);
+        Session["ExamNo"] = ExamNo;
+        #endregion
+        String data = string.Empty;
+        if (Session["ReceiptType"] == "REF")
+        {
+            data = Convert.ToString(ViewState["merchentId"]) + "|" + refno + "|NA|" + amount + "|NA|NA|NA|INR|NA|R|" + Convert.ToString(ViewState["SecurityId"]) + "|NA|NA|F|" + Convert.ToString(Session["payStudName"]) + "|" + Convert.ToString(Session["paymobileno"]) + "|" + Convert.ToString(Session["ReceiptType"]) + "|" + Convert.ToString(Session["regno"]) + "-" + Convert.ToInt32(Session["ExamNo"]) + "|" + Convert.ToString(Session["idno"]) + "|" + Convert.ToString(Session["userno"]) + "|" + Convert.ToString(Session["Installmentno"]) + "|" + Convert.ToString(ViewState["ResponseUrl"]);
+        }
+        {
 
-
-        String data = Convert.ToString(ViewState["merchentId"]) + "|" + refno + "|NA|" + amount + "|NA|NA|NA|INR|NA|R|" + Convert.ToString(ViewState["SecurityId"]) + "|NA|NA|F|" + Convert.ToString(Session["payStudName"]) + "|" + Convert.ToString(Session["paymobileno"]) + "|" + Convert.ToString(Session["ReceiptType"]) + "|" + Convert.ToString(Session["regno"]) + "|" + Convert.ToString(Session["idno"]) + "|" + Convert.ToString(Session["userno"]) + "|" + Convert.ToString(Session["Installmentno"]) + "|" + Convert.ToString(ViewState["ResponseUrl"]);
+             data = Convert.ToString(ViewState["merchentId"]) + "|" + refno + "|NA|" + amount + "|NA|NA|NA|INR|NA|R|" + Convert.ToString(ViewState["SecurityId"]) + "|NA|NA|F|" + Convert.ToString(Session["payStudName"]) + "|" + Convert.ToString(Session["paymobileno"]) + "|" + Convert.ToString(Session["ReceiptType"]) + "|" + Convert.ToString(Session["regno"]) + "|" + Convert.ToString(Session["idno"]) + "|" + Convert.ToString(Session["userno"]) + "|" + Convert.ToString(Session["Installmentno"]) + "|" + Convert.ToString(ViewState["ResponseUrl"]);
+        }
 
         String commonkey = Convert.ToString(ViewState["ChecksumKey"]);
 
@@ -276,15 +286,15 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
 
             objStudentFees.UserNo = Convert.ToInt32(Session["idno"].ToString());
             objStudentFees.Amount = Convert.ToDouble(Session["studAmt"].ToString());
-            objStudentFees.SessionNo =  (Session["paysession"].ToString());
+            objStudentFees.SessionNo = (Session["paysession"].ToString());
             objStudentFees.OrderID = Session["studrefno"].ToString();// lblOrderID.Text;
             //insert in acd_fees_log
             result = objFees.AddExamDetailsFeeLog(objStudentFees, 1, 1, "EF", 3); //3 for arrear exam fee
-          
+
         }
- 
-            
-             
+
+
+
         if (Convert.ToInt32(Session["Installmentno"]) > 0)
         {
             result = objFees.InsertInstallmentOnlinePayment_TempDCR(Convert.ToInt32(Idno), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), refno, Convert.ToDouble(amount), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), data);
@@ -303,7 +313,7 @@ public partial class BilldeskOnlinePaymentRequest : System.Web.UI.Page
         }
         else
         {
-        result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), refno, 1, Convert.ToString(Session["ReceiptType"]), data);
+            result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), refno, 1, Convert.ToString(Session["ReceiptType"]), data);
         }
         if (result > 0)
         {

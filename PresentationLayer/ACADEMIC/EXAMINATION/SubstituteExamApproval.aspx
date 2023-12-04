@@ -13,7 +13,7 @@
         //    var chk = document.getElementById("")
 
         //}
-        
+
 
     </script>
 
@@ -274,6 +274,7 @@
                                                            <%-- <th>ENROLLNO</th>--%>
                                                             <th>STUDENT NAME</th>
                                                             <%--<th>Degree</th>--%>
+                                                             <th>COURSE CODE</th>
                                                             <th>COURSE NAME</th>
                                                             <%--<th>Branch</th>--%>
                                                             <th>EXAM NAME</th>
@@ -310,7 +311,10 @@
                                                     <asp:Label ID="lblSTUDNAME" runat="server" Text='<%#Eval("STUDNAME")%>' ToolTip='<%# Eval("IDNO") %>' Font-Bold="true" />
 
                                                 </td>
+                                                <td> 
+                                                    <asp:Label ID="lblCOURSECODE" runat="server" Text='<%#Eval("COURSENO")%>' ToolTip='<%# Eval("COURSENO")%>' Font-Bold="true" />
 
+                                                </td>
                                                 <td> 
                                                     <asp:Label ID="lblCOURSENAME" runat="server" Text='<%#Eval("COURSE_NAME")%>' ToolTip='<%# Eval("COURSENO")%>' Font-Bold="true" />
 
@@ -683,9 +687,9 @@
                 function CheckApprove(val) {
                     debugger;
 
-                    try{
+                    try {
                         var length = $("[id*=mytable] td").closest("tr").length;
-                        
+
                         for (var i = 0; i < length; i++) {
                             var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_Absent");
                             var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_ufm");
@@ -695,11 +699,11 @@
                                     chkreject.disabled = true;
                                     chkid.disabled = false;
                                 }
-                                else{
+                                else {
                                     chkreject.disabled = false;
-                                    
+
                                 }
-                            }                                
+                            }
                             else if (chkreject.type == "checkbox") {
                                 if (chkreject.checked == true) {
                                     //var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_ufm");
@@ -714,9 +718,9 @@
                                 chkid.disabled = false;
                                 chkreject.disabled = false;
                             }
-                            }
+                        }
 
-                       // }
+                        // }
 
                     }
                     catch (error) {
@@ -773,7 +777,7 @@
                         var length = $("[id*=mytable] td").closest("tr").length;
 
                         for (var i = 0; i < length; i++) {
-                          //  var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_Absent");
+                            //  var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_Absent");
                             var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_ufm");
                             var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_Absent")
                             if (chkreject.type == "checkbox") {
@@ -781,7 +785,7 @@
                                     //  var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_ufm");
                                     chkid.disabled = true;
                                     chkreject.disabled = false;
-                                   
+
                                 }
                                 else {
                                     chkid.disabled = false;
@@ -866,24 +870,24 @@
                         var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_ufm");
                         var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + i + "_chk_Absent")
                         if (chkreject.type == "checkbox" || chkid.type == "checkbox") {
-                           var count = 0;
-                           for (var j = 0; j < length; j++) {
-                               var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + j + "_chk_ufm");
-                               var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + j + "_chk_Absent")
+                            var count = 0;
+                            for (var j = 0; j < length; j++) {
+                                var chkreject = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + j + "_chk_ufm");
+                                var chkid = document.getElementById("ctl00_ContentPlaceHolder1_lvabsent_ctrl" + j + "_chk_Absent")
                                 if (chkreject.checked == true || chkid.checked == true) {
                                     count++;
-                                }                                       
+                                }
                             }
                             if (count == 0) {
                                 alert('Please Select Atleast one Checkbox');
                                 return false;
                             }
 
-                            if (chkreject.checked == true ) {
+                            if (chkreject.checked == true) {
                                 /// return true;
-                              
-                                   // chkreject.disabled = true;
-                                  //  chkid.disabled = false;
+
+                                // chkreject.disabled = true;
+                                //  chkid.disabled = false;
                             }
                             //else if ( chkid.checked == true) {
                             //    /// return true;
