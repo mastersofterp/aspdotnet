@@ -125,7 +125,7 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
             if (!string.IsNullOrEmpty(colleges))
             {
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONID=SM.SESSIONID",
-                    "DISTINCT SESSIONID", "SESSION_NAME",
+                    "DISTINCT SM.SESSIONID", "SM.SESSION_NAME",
                     "ISNULL(SM.FLOCK,0) = 1 AND ISNULL(SM.IS_ACTIVE,0) = 1 AND ISNULL(S.FLOCK,0) = 1 AND ISNULL(S.IS_ACTIVE,0) = 1 AND SM.COLLEGE_ID IN (" + colleges + ")",
                     "SESSIONID DESC");
             }
