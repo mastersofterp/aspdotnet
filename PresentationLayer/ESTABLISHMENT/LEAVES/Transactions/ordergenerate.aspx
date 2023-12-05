@@ -498,7 +498,7 @@
                                         AutoPostBack="true" OnSelectedIndexChanged="ddlcollege2_SelectedIndexChanged" ToolTip="Select College Name">
                                     </asp:DropDownList>
                                     <asp:RequiredFieldValidator ID="reqcollege" runat="server" ControlToValidate="ddlcollege2" InitialValue="0"
-                                        Display="None" ErrorMessage="Please Select College Name " ValidationGroup="LeaveOrd"
+                                        Display="None" ErrorMessage="Please Select College Name " ValidationGroup="Report"
                                         SetFocusOnError="true">
                                     </asp:RequiredFieldValidator>
                                 </div>
@@ -512,7 +512,7 @@
                                         AutoPostBack="true" TabIndex="2" CssClass="form-control">
                                     </asp:DropDownList>
                                     <asp:RequiredFieldValidator ID="reqstafftype" runat="server" ControlToValidate="ddlstafftype2" InitialValue="0"
-                                        Display="None" ErrorMessage="Please Select Staff Type " ValidationGroup="LeaveOrd"
+                                        Display="None" ErrorMessage="Please Select Staff Type " ValidationGroup="Report"
                                         SetFocusOnError="true">
                                     </asp:RequiredFieldValidator>
                                 </div>
