@@ -1263,12 +1263,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                             }
                         }
 
-
-                      
-
-
-
-
                         // added for absent student by prafull on dated 23072022
                         int z = 0;
 
@@ -2498,9 +2492,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     btnLock.Visible = false;
                                     btnGrade.Enabled = false;
                                     btnGrade.Visible = false;
-
-
-
                                     //added by prafull on dt 30032023  for grade button only for admin login
 
                                     if (Convert.ToInt32(Session["OrgId"]) != 6)
@@ -2625,16 +2616,16 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
                     ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
                     ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
-            
+
                     if (ddlcollege.SelectedIndex > 0)
                     {
                         int count = 0;
                         count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
                         if (count > 0)
                         {
-                            
-                              //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
-                           // ddlSession.Focus();
+
+                            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
+                            // ddlSession.Focus();
 
                             objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
                             ddlSession.Focus();
@@ -2648,11 +2639,15 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     }
                     else
                     {
-                         objCommon.DisplayMessage("Please select College/School Name.", this.Page);
-                         return;
+                        objCommon.DisplayMessage("Please select College/School Name.", this.Page);
+                        return;
                     }
 
                 }
+            }
+            else
+            {
+                ddlSession.SelectedIndex = 0;
             }
         }
         catch (Exception ex)
@@ -2825,7 +2820,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
             else
             {
                 
-                    DIVEXAM.Visible = true;
+                   DIVEXAM.Visible = true;
                
                 DataSet dsMainExam=null;
                 DataSet ds = objMarksEntry.GetLevelMarksEntryCourseDetail(Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ddlSubjectType.SelectedValue));
@@ -3362,17 +3357,17 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     }
                                     else if (Convert.ToDouble(marks) < 0)
                                     {
-                                        //Note : 401 for Absent and Not Eligible
-                                        if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
-                                        {
-                                        }
-                                        else
-                                        {
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero).");
+                                        ////Note : 401 for Absent and Not Eligible
+                                        //if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
+                                        //{
+                                        //}
+                                        //else
+                                        //{
+                                            ShowMessage("Marks Entered [" + marks + "] can not be Less than 0 (zero).");
 
                                             flag = false;
                                             break;
-                                        }
+                                       // }
                                     }
                                 }
 
@@ -3469,6 +3464,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     SubExamComponentName = ddlSubExamName.SelectedValue;
                     examname = ddlExam.SelectedValue;
                 }
+                else
+                {
+                    SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Exam[1]); ;
+                    Subexam = ddlSubExamName.SelectedValue;
+                }
             }
             else
             {
@@ -3535,6 +3535,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     {
         try
         {
+            
+
             //if (ddlSubExam.SelectedIndex != 0)
             //{
             if (FuBrowse.HasFile)           //  if (FuBrowse.HasFile) //(FuBrowse.PostedFile != null)
@@ -3612,7 +3614,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
                 break;
             case ".xlsx": //Excel 07 Excel07ConString
-                //   conStr = ConfigurationManager.ConnectionStrings["Excel07+ConString"].ConnectionString;
+                  //conStr = ConfigurationManager.ConnectionStrings["Excel07+ConString"].ConnectionString;
                 conStr = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
                 break;
         }
