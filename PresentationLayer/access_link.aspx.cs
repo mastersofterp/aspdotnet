@@ -7,6 +7,7 @@
 // MODIFIED DESC : 
 //=================================================================================
 
+
 using System;
 using System.IO;
 using System.Collections;
@@ -255,8 +256,10 @@ public partial class access_links : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objACLink.AddAccessLink(objAL);
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
-                        // objCommon.DisplayMessage(this.updlink,"Link Added Successfully", this.Page);//Added By Hemanth G
-                        Response.Redirect(Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")));
+                        string alertMessage = "Link Created Successfully!";
+                        string script = "<script type='text/javascript'>alert('" + alertMessage + "'); window.location='" + Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")) + "';</script>";   // Added By Shrikant W. on 21-11-2023
+                        ClientScript.RegisterStartupScript(this.GetType(), "insertSuccess", script);
+                        //Response.Redirect(Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")));
                     }
                     else
                         lblStatus.Text = "Error..";
@@ -273,8 +276,10 @@ public partial class access_links : System.Web.UI.Page
                         CustomStatus cs = (CustomStatus)objACLink.UpdateAccessLink(objAL);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
-                            //objCommon.DisplayMessage(this.updlink, "Link Edited Successfully", this);
-                            Response.Redirect(Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")));
+                            string alertMessage = "Link Updated Successfully!";
+                            string script = "<script type='text/javascript'>alert('" + alertMessage + "'); window.location='" + Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")) + "';</script>";
+                            ClientScript.RegisterStartupScript(this.GetType(), "updateSuccess", script);
+                            //Response.Redirect(Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&action")));
                         }
 
                         else
@@ -714,13 +719,13 @@ public partial class access_links : System.Web.UI.Page
                 lblsrno.Text = "MAX SRNO  : 0.0 ";// +ds.Tables[0].Rows[0]["SRNO"].ToString();
             }
         }
-
     }
 
     protected void btn_UpdateAll_Edit_Click(object sender, EventArgs e)
     {
         try
         {
+            bool allUpdatesSuccessful = true;
 
             for (int i = 0; i < lvALinks_Edit.Items.Count; i++)
             {
@@ -767,10 +772,17 @@ public partial class access_links : System.Web.UI.Page
                 cs = (CustomStatus)objACLink.UpdateAccessLink(objAL);
             }
 
+            if (allUpdatesSuccessful)
+            {
+                string url = Request.Url.ToString();
+                int index = url.IndexOf("&action");
 
-            chk_Edit.Checked = false;
-            BindListView();
-            BindListView_Edit();
+                if (index != -1)
+                {
+                    url = url.Remove(index);
+                }
+                ScriptManager.RegisterStartupScript(this, GetType(), "updateAlert", "alert('Link(s) updated successfully'); window.location='" + url + "';", true);
+            }
 
         }
 

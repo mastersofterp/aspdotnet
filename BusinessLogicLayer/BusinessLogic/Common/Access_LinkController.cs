@@ -6,7 +6,6 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.SQLServer.SQLDAL;
-
 using System.Data.SqlClient;
 
 namespace IITMS
@@ -24,6 +23,7 @@ namespace IITMS
                 /// ConnectionStrings
                 /// </summary>
                 private string _uaims_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+
 
                 /// <summary>
                 /// AddAccessLink method is used to add new access link.

@@ -26,7 +26,6 @@
         </asp:UpdateProgress>
     </div>
 
-
     <asp:UpdatePanel ID="updlink" runat="server">
         <ContentTemplate>
             <div class="row">
