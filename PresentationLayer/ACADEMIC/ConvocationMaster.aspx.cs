@@ -285,7 +285,7 @@ public partial class ACADEMIC_EXAMINATION_ConvocationMaster : System.Web.UI.Page
         {
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
-                
+
                 //Edit 
                 SFB.QuestionId = Convert.ToInt32(ViewState["QuestionId"]);
                 cs = (CustomStatus)objSBC.UpdateConvocationQuestion(SFB);

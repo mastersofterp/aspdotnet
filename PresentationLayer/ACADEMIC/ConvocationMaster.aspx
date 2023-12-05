@@ -24,6 +24,7 @@
                                 <asp:DropDownList ID="ddlConvocation" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                 </asp:DropDownList>
+
                                 <%--<asp:RequiredFieldValidator ID="rfvCon" runat="server"
                                     ControlToValidate="ddlConvocation" Display="None"
                                     ErrorMessage="Please Select Convocation" InitialValue="0"
@@ -183,12 +184,12 @@
         </div>
 
     </div>
-        <script>
-            function enforceMaxLength(textbox, maxLength) {
-                if (textbox.value.length > maxLength) {
-                    textbox.value = textbox.value.slice(0, maxLength);
-                }
+    <script>
+        function enforceMaxLength(textbox, maxLength) {
+            if (textbox.value.length > maxLength) {
+                textbox.value = textbox.value.slice(0, maxLength);
             }
-</script>
+        }
+    </script>
 </asp:Content>
 
