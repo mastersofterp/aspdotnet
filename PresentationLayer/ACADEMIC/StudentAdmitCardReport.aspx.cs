@@ -258,7 +258,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 // @P_COLLEGE_CODE=63,@P_IDNO=1453.,@P_DEGREENO=1,@P_BRANCHNO=2,@P_SEMESTERNO=3,@P_SESSIONNO=81,@P_USER_FUll_NAME=Mastersoft%20Super%20Admin,@P_EXAMNO=88,@=P_COLLEGE_ID=1,@P_SECTIONNO=0
 
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 2)//Crescent
+            else if (Convert.ToInt32(Session["OrgId"]) == 2)//Crescent   
             {
                 url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
             }
@@ -266,11 +266,11 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PCEN  Added By Injamam 20_10_2023   
+            else if (Convert.ToInt32(Session["OrgId"]) == 19) //PCEN  Added By Injamam 20_10_2023   
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //JLCOE   Added By Injamam 30_11_2023   
+            else if (Convert.ToInt32(Session["OrgId"]) == 20) //PJLCOE   Added By Injamam 30_11_2023   
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
@@ -531,10 +531,10 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_Rajagiri.rpt");
                 }
-                //else if (Convert.ToInt32(Session["OrgId"]) == 1) //RCPIT
-                //{
-                //    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_RCPIT.rpt");
-                //}
+                else if (Convert.ToInt32(Session["OrgId"]) == 1) //RCPIT
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_RCPIT.rpt");
+                }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2) //CRESCENT
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
@@ -551,7 +551,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_PCEN.rpt");
                 }
-                else if (Convert.ToInt32(Session["OrgId"]) == 20)  //JLCOE   Added By Injamam 30_11_2023
+                else if (Convert.ToInt32(Session["OrgId"]) == 20)  //PJLCOE   Added By Injamam 30_11_2023
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_PJLCEN.rpt");
                 }
