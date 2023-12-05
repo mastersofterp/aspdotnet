@@ -204,16 +204,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                 ViewState["exam_no"] = Convert.ToString(lnk.CommandArgument.ToString().Split('+')[6]);
 
 
-                string excelStatus = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ExcelMarkEntry", "");
-                if (excelStatus == "1")
-                {
-                    lnkExcekImport.Visible = true;
-                }
-                else
-                {
-                    lnkExcekImport.Visible = false;
-                }
-
+             
 
                 if (lnk.CommandArgument.ToString().Split('+')[3].ToString().Equals("S10"))
                 {
@@ -1323,23 +1314,9 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
 
     protected void btnShow_Click(object sender, EventArgs e)
     {
-        if (ddlSubExam.Visible == true)
-        {
+        
             ShowStudents();
-        }
-        else
-        {
-            //if (ddlExam.Enabled==false && Convert.ToString(ViewState["S10"]) == "S10")
-            if (ddlSubExam.Enabled == false && Convert.ToString(ViewState["S10"]) == "S10")
-            {
-                ShowStudents_For_Model_Exam();
-            }
-            else
-            {
-                objCommon.DisplayMessage(this.updpanle1, "Please Select Sub Exam!!", this.Page);
-                ddlSubExam.Focus();
-            }
-        }
+        
     }
 
     private void ShowStudents()
@@ -1431,6 +1408,28 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                                 lockcount++;
                             }
                         }
+
+                        string excelStatus = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ExcelMarkEntry", "");
+                        if (excelStatus == "1")
+                        {
+                            if (lockcount == dsStudent.Tables[0].Rows.Count)
+                            {
+                                lnkExcekImport.Visible = false;
+                            }
+                            else
+                            {
+                                lnkExcekImport.Visible = true;
+                            }
+                        }
+                        else
+                        {
+                            lnkExcekImport.Visible = false;
+                        }
+
+
+
+
+
                     }
                     // Added by lalit on dt 12/09/2022
                     int Gd = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "isnull(GRADEPATTERN,0) as GRADEPATTERN ", "SCHEMENO='" + ViewState["SCHEMENO"] + "'")));
@@ -2470,7 +2469,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             string subexamno = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "ISNULL(ACTIVESTATUS,0)=1 AND FLDNAME='" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[0] + "'");
 
 
-            dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), subexamno);
+            dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1]);
 
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
@@ -2599,17 +2598,20 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                                     else if (Convert.ToDouble(marks) < 0)
                                     {
                                         //Note : 401 for Absent and Not Eligible
-                                        if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
-                                        {
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Less than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero).");
-                                        }
-                                        else
-                                        {
-                                            ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero).");
-
+                                        //if (Convert.ToDouble(marks) == -1 || Convert.ToDouble(marks) == -2 || Convert.ToDouble(marks) == -3 || Convert.ToDouble(marks) == -4)
+                                        //{
+                                            ShowMessage("Marks Entered  can not be Less than 0 (zero).");
                                             flag = false;
                                             break;
-                                        }
+
+                                        //}
+                                        //else
+                                        //{
+                                        //    ShowMessage("Marks Entered [" + marks + "] can not be Greater than Max Marks[" + maxMarks + "].Also Marks can not be Less than 0 (zero).");
+
+                                        //    flag = false;
+                                        //    break;
+                                        //}
                                     }
                                 }
 
@@ -3002,7 +3004,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         if (Div_ExamNameList.Visible == true)
         {
             //objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.CCODE   = C.CCODE )  ", "DISTINCT R.COURSENO", "C.COURSE_NAME", " SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND C.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");
-            objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.COURSENO   = C.COURSENO )  ", "DISTINCT R.COURSENO", "C.COURSE_NAME", " SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND R.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");
+            objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.COURSENO   = C.COURSENO ) INNER JOIN ACD_ASSESSMENT_EXAM_COMPONENT AC ON AC.COURSENO=R.COURSENO AND AC.SESSIONNO=R.SESSIONNO AND ISNULL(AC.CANCLE,0)=0 AND AC.UA_NO=" + Convert.ToInt16(Session["userno"]) + "", "DISTINCT R.COURSENO", "C.COURSE_NAME", " R.SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND R.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) + " AND ((R.UA_NO = " + Convert.ToInt16(Session["userno"]) + ") OR (UA_NO_PRAC = " + Convert.ToInt16(Session["userno"]) + "))", "R.COURSENO");
         }
     }
 

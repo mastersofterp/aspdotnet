@@ -289,14 +289,14 @@
                                             OnClick="btnSave_Click" Text="Save" CssClass="btn btn-primary btnSaveEnabled" ValidationGroup="val" />
                                         <asp:Button ID="btnLock" runat="server" Visible="false" OnClick="btnLock_Click" OnClientClick="return showLockConfirm(this,'val');" Text="Lock"
                                             CssClass="btn btn-warning" />
-                                        <asp:Button ID="lnkExcekImport" runat="server" Visible="true" OnClick="lnkExcekImport_Click" Text="Import Mark Entry Excel" OnClientClick="validateField();" CssClass="btn btn-info"></asp:Button>
+                                        <asp:Button ID="lnkExcekImport" runat="server" Visible="false" OnClick="lnkExcekImport_Click" Text="Import Mark Entry Excel" OnClientClick="validateField();" CssClass="btn btn-info" ></asp:Button>
                                         <asp:Button ID="btnCancel2" runat="server"  OnClick="btnCancel2_Click" Text="Cancel" CssClass="btn btn-warning" Visible="False" />
                                         <asp:Button ID="btnMIDReport" runat="server"  Text="MID Report" CssClass="btn btn-info"
                                             OnClick="btnTAReport_Click" Visible="False" />
                                         <asp:Button ID="btnConsolidateReport" runat="server"  Visible="False"
                                             Text="Consolidate Report" CssClass="btn btn-info" OnClick="btnConsolidateReport_Click" />
                                         <asp:Button ID="btnPrintReport" runat="server"  OnClick="btnPrintReport_Click"
-                                            Text="Print" CssClass="btn btn-primary" Visible="False" Height="26px" />
+                                            Text="Print" CssClass="btn btn-primary" Visible="False" />
                                         <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="show"
                                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                     </div>
