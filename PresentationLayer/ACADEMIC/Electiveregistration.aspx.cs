@@ -67,6 +67,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         {
             Response.Redirect("~/default.aspx");
         }
+        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Src", "test5();", true);
     }
     #endregion
     #region Elective Course Registration
