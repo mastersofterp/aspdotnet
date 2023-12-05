@@ -250,7 +250,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
 
-        public DataSet GetStudentsForDemandCreation(int DEGREENO, int branchNo, int semNo, int semesterfor, int paymentTypeNo, int College_Id)
+        public DataSet GetStudentsForDemandCreation(int DEGREENO, int branchNo, int semNo, int semesterfor, int paymentTypeNo, int College_Id,string ReceiptType)
             {
             DataSet ds = null;
             try
@@ -263,7 +263,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_SEMESTERNO", semNo),
                     new SqlParameter("@P_FOR_SEMESTERNO", semesterfor),
                     new SqlParameter("@P_PAYMENT_TYPE_NO", paymentTypeNo),
-                    new SqlParameter("@P_COLLEGE_ID", College_Id)
+                    new SqlParameter("@P_COLLEGE_ID", College_Id),
+                    new SqlParameter("@P_RECIEPTCODE", ReceiptType)
          
                     
                 };
