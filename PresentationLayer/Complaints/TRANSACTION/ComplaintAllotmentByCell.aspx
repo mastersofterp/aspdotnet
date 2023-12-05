@@ -15,6 +15,11 @@
          });
 
     </script>--%>
+    <style type="text/css">
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
     <script type="text/javascript">
         //On UpdatePanel Refresh
         var prm = Sys.WebForms.PageRequestManager.getInstance();
@@ -98,8 +103,9 @@
                                                     </div>--%>
                                                     <asp:TextBox ID="txtComplaintDate" runat="server" CssClass="form-control" disabled="true"></asp:TextBox>
                                                     <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Format="dd-MMM-yyyy"
-                                                        TargetControlID="txtComplaintDate"  Enabled="true" EnableViewState="true">
-                                                    </ajaxToolKit:CalendarExtender> <%-- PopupButtonID="imgCal"--%>
+                                                        TargetControlID="txtComplaintDate" Enabled="true" EnableViewState="true">
+                                                    </ajaxToolKit:CalendarExtender>
+                                                    <%-- PopupButtonID="imgCal"--%>
                                                 </div>
                                                 <asp:Label ID="lblsample" runat="server"></asp:Label>
                                             </div>
@@ -222,7 +228,7 @@
                                                     InvalidValueMessage="Preferable From Time is invalid" Display="None" TooltipMessage="Input a time"
                                                     EmptyValueBlurredText="*" InvalidValueBlurredMessage="*" 
                                                     ValidationGroup="complaint" ErrorMessage="mevEnterTime" /> --%>
-                                               <%-- <asp:RequiredFieldValidator ID="rfvTimeFrom" runat="server"
+                                                <%-- <asp:RequiredFieldValidator ID="rfvTimeFrom" runat="server"
                                                     ControlToValidate="txtPerferTime" Display="None" ErrorMessage="Please Enter Preferable Time From & To"
                                                     ValidationGroup="complaint"></asp:RequiredFieldValidator>--%>
                                             </div>
@@ -282,11 +288,11 @@
 
                                             <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSuggestion" visible="false">
                                                 <div class="label-dynamic">
-                                                  <%--  <sup>* </sup>--%>
+                                                    <%--  <sup>* </sup>--%>
                                                     <label>Reallotment Remark</label>
                                                 </div>
                                                 <asp:TextBox ID="txtReallotment" runat="server" TabIndex="9" CssClass="form-control" TextMode="MultiLine" MaxLength="300" />
-                                               <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
+                                                <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
                                                     ControlToValidate="txtDetails" Display="None" ErrorMessage="Please Enter Remark"
                                                     ValidationGroup="complaint"></asp:RequiredFieldValidator>--%>
                                             </div>
@@ -431,7 +437,7 @@
                                                 <td><%# Eval("TYPENAME")%></td>
                                                 <td><%# Eval("ALLOT_TO_NAME")%></td>
                                                 <%--<td><%# Eval("DECLINE_REMARK")%></td>--%>
-                                               <%--<td><%# Eval("REOPEN")%></td>--%>
+                                                <%--<td><%# Eval("REOPEN")%></td>--%>
                                                 <td>
                                                     <asp:Button ID="btnPrint" runat="server" CausesValidation="false" CommandName="Print"
                                                         Text="Print" CommandArgument='<%# Eval("COMPLAINTID") %>' OnClick="btnPrint_Click" CssClass="btn btn-primary" />
