@@ -28,12 +28,12 @@
                                 <div class="col-md-12 form-group">
                                     <div class="row">
                                         <div class="form-group col-md-3">
-                                            <label>Ph.D Under Guidance :</label>
+                                            <label>No. of PhD student under your Guidance :</label>
                                             <asp:TextBox ID="txtunderGuidence" runat="server" CssClass="form-control" onkeypress="return CheckNumeric(event,this);" ToolTip="Enter Ph.D Under Guidance"
                                                 MaxLength="50" TabIndex="11"></asp:TextBox>
                                         </div>
                                         <div class="form-group col-md-3">
-                                            <label>Ph.D Awarded :</label>
+                                            <label>No. of student PhD awarded under you :</label>
                                             <asp:TextBox ID="txtAwarded" runat="server" CssClass="form-control" onkeypress="return CheckNumeric(event,this);" ToolTip="Enter Ph.D Awarded"
                                                 MaxLength="40" TabIndex="12"></asp:TextBox>
                                         </div>
