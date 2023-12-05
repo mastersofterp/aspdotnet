@@ -6147,9 +6147,9 @@ namespace IITMS
                     }
                     return retStatus;
                 }
-                public int UpdateStudentname(int idno, string name, string StudEmail, string StudMobile, string StudIndusEmail, string FMob, string FEmail, string MMob, string MEmail)
+                public int UpdateStudentname(int idno, string name, string StudEmail, string StudMobile, string StudIndusEmail, string StuGender, string Fname, string FMob, string FEmail, string Mname, string MMob, string MEmail)
                 {
-
+                     
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
@@ -6161,8 +6161,11 @@ namespace IITMS
                              new SqlParameter("@P_StudEmail",StudEmail),
                              new SqlParameter("@P_StudMobile",StudMobile),
                              new SqlParameter("@P_StudIndusEmail",StudIndusEmail),
+                             new SqlParameter("@P_StuGender",StuGender),
+                             new SqlParameter("@P_FName",Fname),
                              new SqlParameter("@P_FMob",FMob),
                              new SqlParameter("@P_FEmail",FEmail),
+                             new SqlParameter("@P_MName",Mname),
                              new SqlParameter("@P_MMob",MMob),
                              new SqlParameter("@P_MEmail",MEmail),
                              new SqlParameter("@P_OUT",SqlDbType.Int)

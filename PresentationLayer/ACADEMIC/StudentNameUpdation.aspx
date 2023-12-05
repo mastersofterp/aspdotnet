@@ -522,10 +522,13 @@
                                                         </th>
                                                         <th>Student Name</th>
                                                         <th>Student Mobile No.</th>
+                                                         <th>Gender</th>
                                                         <th>Student Email</th>
                                                         <%--<th style="display:none">Student Indus Email</th>--%>
+                                                          <th>Father Name</th>
                                                         <th>Father Mobile No.</th>
                                                         <th>Father Email</th>
+                                                        <th>Mother Name</th>
                                                         <th>Mother Mobile No.</th>
                                                         <th>Mother Email</th>
                                                         <th></th>
@@ -546,28 +549,41 @@
                                                     <%# Eval("REGNO")%>
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtName" runat="server" CssClass="form-control" Text='<%# Eval("STUDNAME")%>' />
+                                                    <asp:TextBox ID="txtName" runat="server" CssClass="form-control" Text='<%# Eval("STUDNAME")%>'  onkeypress="return validateName(event)"/>
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtStudMobile" runat="server" CssClass="form-control" Text='<%# Eval("STUDENTMOBILE")%>' />
+                                                    <asp:TextBox ID="txtStudMobile" runat="server" CssClass="form-control" Text='<%# Eval("STUDENTMOBILE")%>'  onkeypress="return validateMobileNumber(event)" />
+                                                </td>
+                                                   <td>
+                                                 <asp:RadioButtonList ID="rdgender" runat="server" Text='<%# Eval("SEX")%>'  RepeatDirection="Horizontal"  AutoPostBack="True">
+                                               <asp:ListItem Value="M">Male</asp:ListItem>
+                                                <asp:ListItem Value="F">Female</asp:ListItem>
+                                                <asp:ListItem Value="">Other</asp:ListItem>
+                                                </asp:RadioButtonList>  
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtStudEmail" runat="server" CssClass="form-control" Text='<%# Eval("EMAILID")%>' />
+                                                    <asp:TextBox ID="txtStudEmail" runat="server" CssClass="form-control" Text='<%# Eval("EMAILID")%>'   onChange="validateEmail(this)"  />
                                                 </td>
                                                 <%--<td id="Td1" runat="server" visible="false">
                                                     <asp:TextBox Visible="false" ID="txtStudIndusEmail" runat="server" CssClass="form-control" Text='<%# Eval("EMAILID_INS")%>' />
                                                 </td>--%>
-                                                <td>
-                                                    <asp:TextBox ID="txtFMob" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("FATHERMOBILE")%>' />
+                                                 <td>
+                                                    <asp:TextBox ID="txtFName" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("FATHERNAME")%>' onkeypress="return validateName(event)" />
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtFEmail" runat="server" CssClass="form-control" Text='<%# Eval("FATHER_EMAIL")%>' />
+                                                    <asp:TextBox ID="txtFMob" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("FATHERMOBILE")%>'  onkeypress="return validateMobileNumber(event)" />
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtMMob" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("MOTHERMOBILE")%>' />
+                                                    <asp:TextBox ID="txtFEmail" runat="server" CssClass="form-control" Text='<%# Eval("FATHER_EMAIL")%>'   onChange="validateEmail(this)"/>
+                                                </td>
+                                                    <td>
+                                                   <asp:TextBox ID="txtMName" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("MOTHERNAME")%>' onkeypress="return validateName(event)"  />
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="txtMEmail" runat="server" CssClass="form-control" Text='<%# Eval("MOTHER_EMAIL")%>' />
+                                                    <asp:TextBox ID="txtMMob" runat="server" MaxLength="12" CssClass="form-control" Text='<%# Eval("MOTHERMOBILE")%>'   onkeypress="return validateMobileNumber(event)" />
+                                                </td>
+                                                <td>
+                                                    <asp:TextBox ID="txtMEmail" runat="server" CssClass="form-control" Text='<%# Eval("MOTHER_EMAIL")%>'  onChange="validateEmail(this)" />
                                                 </td>
                                                 <td>
                                                     <asp:Button runat="server" ID="btnUpdate" CssClass="btn btn-primary" OnClientClick="return ConfirmToupdate(this);" OnClick="btnUpdate_Click" Text="Update" CommandArgument='<%# Container.DataItemIndex%>' ToolTip='<%# Eval("IDNO")%>' />
@@ -638,5 +654,52 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        function validateName(event) {
+            var regex = /^[a-zA-Z\s]+$/;
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
+        }
+</script>
+
+
+<script type="text/javascript">
+    function validateMobileNumber(event) {
+        var input = event.target;
+
+        // Get the key code of the pressed key
+        var keyCode = event.which || event.keyCode;
+
+        // Allow only numeric digits (0-9) and check if the length is not more than 10
+        if ((keyCode >= 48 && keyCode <= 57) && input.value.length < 10) {
+            return true;
+        } else {
+            // Prevent the default behavior for non-numeric keys or if the length exceeds 10
+            event.preventDefault();
+            return false;
+        }
+    }
+</script>
+
+    <script type="text/javascript">
+        function validateEmail(input) {
+            var email = input.value;
+
+            // Use a regular expression for basic email validation
+      
+            var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/;
+
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");          
+                input.value = null;
+            }
+        }
+</script>
+
 </asp:Content>
 
