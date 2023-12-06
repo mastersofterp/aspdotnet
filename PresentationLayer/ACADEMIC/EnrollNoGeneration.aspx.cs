@@ -245,7 +245,6 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                         {
                         btnGenerateRoll.Visible = true;
                         btnGenerateRoll.Enabled = true;
-
                         }
                     }
                 else
@@ -558,25 +557,24 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
 
         else if (Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 15)
             {
-
             btnGenRegNo.Visible = false;
             btnGenerateRR.Visible = true;
             btnGenerateRR.Enabled = true;
-            int RegCountflag=0;
-            int StudCountflag=0;
+            int RegCountflag = 0;
+            int StudCountflag = 0;
             if (radRollNoGen.Checked) // Class roll no. generation
                 {
 
 
                 btnGenerateRR.Visible = false;
-                 RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
+                RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
 
-                 StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A  WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 "));
+                StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A  WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 "));
 
                 int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
 
 
-                dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue),Convert.ToInt32(ddlyear.SelectedValue));
+                dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
 
                 //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + " AND A.ADMCAN = 0", "A.REGNO");
                 if (dsStudent.Tables[0].Rows.Count > 0)
@@ -617,9 +615,9 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 }
             if (radRegNoGen.Checked)// Regno. generation
                 {
-                 RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
+                RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
 
-                 StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0"));
+                StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0"));
 
                 int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
 
@@ -630,46 +628,46 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                     //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.STUDNAME");
                     }
                 }
+            else
+                {
+                dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.MERITNO");
+                }
+
+            if (dsStudent.Tables[0].Rows.Count > 0)
+                {
+                lvStudents.DataSource = dsStudent.Tables[0];
+                lvStudents.DataBind();
+                lvStudents.Visible = true;
+
+
+                if (StudCountflag != RegCountflag)
+                    {
+
+                    return;
+                    }
+                else if (StudCountflag == RegCountflag)
+                    {
+                    objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number is already generated.", this.Page);
+                    btnGenRegNo.Enabled = false;
+                    return;
+                    }
                 else
                     {
-                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-                    //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.MERITNO");
+                    btnGenRegNo.Visible = true;
+                    btnGenRegNo.Enabled = true;
                     }
-
-                    if (dsStudent.Tables[0].Rows.Count > 0)
-                        {
-                        lvStudents.DataSource = dsStudent.Tables[0];
-                        lvStudents.DataBind();
-                        lvStudents.Visible = true;
-
-
-                        if (StudCountflag != RegCountflag)
-                            {
-
-                            return;
-                            }
-                        else if (StudCountflag == RegCountflag)
-                            {
-                            objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number is already generated.", this.Page);
-                            btnGenRegNo.Enabled = false;
-                            return;
-                            }
-                        else
-                            {
-                            btnGenRegNo.Visible = true;
-                            btnGenRegNo.Enabled = true;
-                            }
-                        }
-                    else
-                        {
-                        lvStudents.DataSource = null;
-                        lvStudents.DataBind();
-                        lvStudents.Visible = false;
-                        objCommon.DisplayMessage(this.UpdatePanel1, "No student found for selected criteria.", this.Page);
-                        btnGenRegNo.Visible = false;
-                        btnReport.Enabled = false;
-                        }
-                    }
+                }
+            else
+                {
+                lvStudents.DataSource = null;
+                lvStudents.DataBind();
+                lvStudents.Visible = false;
+                objCommon.DisplayMessage(this.UpdatePanel1, "No student found for selected criteria.", this.Page);
+                btnGenRegNo.Visible = false;
+                btnReport.Enabled = false;
+                }
+            }
 
         else if (Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 18)
             {
@@ -767,7 +765,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                     objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number is already generated.", this.Page);
                     btnGenRegNo.Enabled = false;
                     btnGenerateRR.Enabled = false;
-                    
+
                     return;
                     }
                 else
@@ -902,89 +900,76 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 btnReport.Enabled = false;
                 }
             }
-
-
-
-                
-            else
+        else
+            {
+            btnGenRegNo.Visible = false;
+            btnGenerateRR.Visible = true;
+            btnGenerateRR.Enabled = true;
+            int RegCountflag = 0;
+            int StudCountflag = 0;
+            if (radRollNoGen.Checked) // Class roll no. generation
                 {
-                btnGenRegNo.Visible = false;
-                btnGenerateRR.Visible = true;
-                btnGenerateRR.Enabled = true;
-                int RegCountflag = 0;
-                int StudCountflag = 0;
-                if (radRollNoGen.Checked) // Class roll no. generation
+                btnGenerateRR.Visible = false;
+                RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
+
+                StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A  WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 "));
+
+                int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
+
+
+                dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+
+                //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + " AND A.ADMCAN = 0", "A.REGNO");
+                if (dsStudent.Tables[0].Rows.Count > 0)
                     {
-
-
-                    btnGenerateRR.Visible = false;
-                    RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
-
-                    StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A  WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 "));
-
-                    int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
-
-
-                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-
-                    //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + " AND A.ADMCAN = 0", "A.REGNO");
-                    if (dsStudent.Tables[0].Rows.Count > 0)
+                    lvlrollno.DataSource = dsStudent.Tables[0];
+                    lvlrollno.DataBind();
+                    lvlrollno.Visible = true;
+                    //if (StudCountflag != RegCountflag)
+                    //    {
+                    //    objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number should be generated first for all the student(s).", this.Page);
+                    //    btnGenerateRoll.Visible = true;
+                    //    btnGenerateRoll.Enabled = false;
+                    //    return;
+                    //    }
+                    //else 
+                    if (StudCountflag == RollCountflag)
                         {
-                        lvlrollno.DataSource = dsStudent.Tables[0];
-                        lvlrollno.DataBind();
-                        lvlrollno.Visible = true;
-                        //if (StudCountflag != RegCountflag)
-                        //    {
-                        //    objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number should be generated first for all the student(s).", this.Page);
-                        //    btnGenerateRoll.Visible = true;
-                        //    btnGenerateRoll.Enabled = false;
-                        //    return;
-                        //    }
-                        //else 
-                        if (StudCountflag == RollCountflag)
-                            {
-                            objCommon.DisplayMessage(this.UpdatePanel1, "Roll No. is already generated.", this.Page);
-                            btnGenerateRoll.Enabled = false;
-                            return;
-                            }
-                        else
-                            {
-                            btnGenerateRoll.Visible = true;
-                            btnGenerateRoll.Enabled = true;
-
-                            }
+                        objCommon.DisplayMessage(this.UpdatePanel1, "Roll No. is already generated.", this.Page);
+                        btnGenerateRoll.Enabled = false;
+                        return;
                         }
                     else
                         {
-                        lvlrollno.DataSource = null;
-                        lvlrollno.DataBind();
-                        lvlrollno.Visible = false;
-                        objCommon.DisplayMessage(this.UpdatePanel1, "No student found for selected criteria.", this.Page);
-                        btnGenerateRoll.Visible = false;
-                        btnReport.Enabled = false;
-                        }
-                    }
-                if (radRegNoGen.Checked)// Regno. generation
-                    {
-                    RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
+                        btnGenerateRoll.Visible = true;
+                        btnGenerateRoll.Enabled = true;
 
-                    StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0"));
-
-                    int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
-
-                    if (ddlsort.SelectedIndex == 1)
-                        {
-
-                        dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-                        //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.STUDNAME");
                         }
                     }
                 else
                     {
-                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-                    //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.MERITNO");
+                    lvlrollno.DataSource = null;
+                    lvlrollno.DataBind();
+                    lvlrollno.Visible = false;
+                    objCommon.DisplayMessage(this.UpdatePanel1, "No student found for selected criteria.", this.Page);
+                    btnGenerateRoll.Visible = false;
+                    btnReport.Enabled = false;
                     }
+                }
+            if (radRegNoGen.Checked)// Regno. generation
+                {
+                RegCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.REGNO  is not null and A.REGNO <>'')"));
 
+                StudCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0"));
+
+                int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
+
+                if (ddlsort.SelectedIndex == 1)
+                    {
+
+                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                    //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.STUDNAME");
+                    }
                 if (dsStudent.Tables[0].Rows.Count > 0)
                     {
                     lvStudents.DataSource = dsStudent.Tables[0];
@@ -1001,6 +986,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                         {
                         objCommon.DisplayMessage(this.UpdatePanel1, "PRN Number is already generated.", this.Page);
                         btnGenRegNo.Enabled = false;
+                        btnGenerateRR.Enabled = false;
                         return;
                         }
                     else
@@ -1020,7 +1006,8 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                     }
                 }
             }
-        
+        }
+
 
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1048,7 +1035,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
         lvStudents.DataBind();
         ddlBranch.SelectedIndex = 0;
         }
-        
+
     protected void btnShow_Click(object sender, EventArgs e)
         {
         this.BindListView();
@@ -1312,7 +1299,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 retStatus = objRegistration.GenereateRRNoForRajagiri(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue));
 
                 }
-            
+
             else
                 {
 
@@ -1449,6 +1436,11 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 retStatus = objRegistration.GenereateRRNoForMaher(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue));
                 btnGenerateRR.Enabled = false;
                 }
+            else if (Session["OrgId"].ToString() == "21")//TGPCET REGNO
+                {
+                retStatus = objRegistration.GenereateRRNoForTGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                btnGenerateRR.Enabled = false;
+                }
             else
                 {
 
@@ -1492,15 +1484,19 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
 
             if (Session["OrgId"].ToString() == "7")
                 {
-                 retStatus = objRegistration.GenereateRollNo_Rajagiri(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
+                retStatus = objRegistration.GenereateRollNo_Rajagiri(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
                 }
             if (Session["OrgId"].ToString() == "15")
                 {
-                retStatus = objRegistration.GenereateRRNoForDaiict(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue),Convert.ToInt32(ddlyear.SelectedValue),Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
+                retStatus = objRegistration.GenereateRRNoForDaiict(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
+                }
+            if (Session["OrgId"].ToString() == "21")
+                {
+                retStatus = objRegistration.GenereateRollNo_TGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
                 }
             else
                 {
-            retStatus = objRegistration.GenereateRollNo(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
+                retStatus = objRegistration.GenereateRollNo(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
                 }
 
             if (retStatus == Convert.ToInt32(CustomStatus.RecordUpdated))
@@ -1577,7 +1573,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
         return ds;
         }
 
-    public DataSet GetStudentsDAIICT(int Batch, int CollegeID, int Degreeno, int BranchNo, int Semester, int Section, int Idtype,int Year)
+    public DataSet GetStudentsDAIICT(int Batch, int CollegeID, int Degreeno, int BranchNo, int Semester, int Section, int Idtype, int Year)
         {
         DataSet ds = null;
         try
