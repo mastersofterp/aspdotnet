@@ -80,7 +80,7 @@ namespace IITMS
                         //ADDDED BY PAWAN NIKHARE
                         objParams[26] = new SqlParameter("@P_Work_Nature", objParty.Work_Nature);
                         objParams[27] = new SqlParameter("@P_PARTY_NO", SqlDbType.Int);
-
+                        
 
                         objParams[27].Direction = ParameterDirection.Output;
 
@@ -114,7 +114,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //Update New Party
-                        objParams = new SqlParameter[28];
+                        objParams = new SqlParameter[29];
                         //Acc_Party
                         objParams[0] = new SqlParameter("@P_CODE_YEAR", code_year);
                         objParams[1] = new SqlParameter("@P_PARTY_NO", objParty.Party_No);
@@ -143,13 +143,15 @@ namespace IITMS
                         //Acc Party
                         objParams[23] = new SqlParameter("@P_TINNO", objParty.TINNO);
                         objParams[24] = new SqlParameter("@P_PANNO", objParty.PANNO);
-                        objParams[25] = new SqlParameter("@ISBudgetHead", objParty.IsBudgetHead);
-                        objParams[26] = new SqlParameter("@P_Work_Nature", objParty.Work_Nature);
-                        objParams[27] = new SqlParameter("@P_OP", SqlDbType.Int);
-                        objParams[27].Direction = ParameterDirection.Output;
+                        //ADDDED BY PAWAN NIKHARE
+                        objParams[25] = new SqlParameter("@P_GSTNO", objParty.GSTNo);
+                        objParams[26] = new SqlParameter("@ISBudgetHead", objParty.IsBudgetHead);
+                        objParams[27] = new SqlParameter("@P_Work_Nature", objParty.Work_Nature);
+                        objParams[28] = new SqlParameter("@P_OP", SqlDbType.Int);
+                        objParams[28].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACC_SP_UPD_PARTY", objParams, true);
-                        if (ret != null)
+                        if (ret != null)    
                         {
                             if (ret.ToString().Equals("-99"))
                                 retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
@@ -167,6 +169,7 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
 
                 public DataTableReader GetPartyByPartyNo(int party_no, string code_year)
                 {

@@ -633,6 +633,7 @@ public partial class Account_ledgerhead : System.Web.UI.Page
                         txtPanNo.Text = dtr["PANNO"] == DBNull.Value ? string.Empty : dtr["PANNO"].ToString();
                         txtTinNo.Text = dtr["TINNO"] == DBNull.Value ? string.Empty : dtr["TINNO"].ToString();
                         //ddlType.SelectedValue = dtr["PAYMENT_TYPE_NO"] == DBNull.Value ? "0" : dtr["PAYMENT_TYPE_NO"].ToString();
+                        txtGSTtNo.Text = dtr["GSTNo"] == DBNull.Value ? string.Empty : dtr["GSTNo"].ToString();
                         ddlDrCr.SelectedValue = dtr["STATUS"].ToString().Trim();
                         //if (dtr["OPBALANCE"].ToString() == "0.00" || dtr["OPBALANCE"] == DBNull.Value)
                         //{
@@ -914,6 +915,7 @@ public partial class Account_ledgerhead : System.Web.UI.Page
         txtPanNo.Text = string.Empty;
         txtAddress.Text = string.Empty;
         txtOpenBalance.Text = string.Empty;
+        txtGSTtNo.Text = string.Empty;
         ddlDrCr.SelectedValue = "D";
         if (IsAutogenratedLedgerAccountCode == "Y")
             txtAccountCode.Enabled = false;
