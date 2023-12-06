@@ -6912,5 +6912,32 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
 
         }
+
+        //Added  On Dated 22-11-2023 as per T-No : -50465
+        public DataSet Get_Student_Admission_Register_Adademic_Report_Excel_Format_II(int batchname, int collegeid, int degreeno, int branchno, int year, int semesterNo, int Academicyear)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objDataAccess = new SQLHelper(_connectionString);
+                SqlParameter[] sqlParams = new SqlParameter[] 
+                {      
+                    new SqlParameter("@P_COLLEGE_ID",collegeid),
+                    new SqlParameter("@P_BATCHNAME", batchname),
+                    new SqlParameter("@P_DEGREENO", degreeno),
+                    new SqlParameter("@P_BRANCHNO", branchno),
+                    new SqlParameter("@P_ACAD_YEAR", Academicyear),
+                    new SqlParameter("@P_YEAR", year),
+                    new SqlParameter("@P_SEMESTERNO", semesterNo),            
+                };
+                ds = objDataAccess.ExecuteDataSetSP("PKG_STUDENT_WISE_FEES_PAID_RCPIT", sqlParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessEntities.FeeCollectionController.Get_Student_Admission_Register_Adademic_Report_Excel_Format_II() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
+           
     }
 }
