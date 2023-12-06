@@ -966,12 +966,9 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
 
                 if (ddlsort.SelectedIndex == 1)
                     {
+
                     dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
                     //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.STUDNAME");
-                    }
-                else
-                    {
-                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
                     }
                 if (dsStudent.Tables[0].Rows.Count > 0)
                     {
