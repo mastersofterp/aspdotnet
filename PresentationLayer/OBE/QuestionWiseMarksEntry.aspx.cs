@@ -128,6 +128,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
     {
         pnlSubjectDetail.Visible = false;
         divSession.Visible = false;
+        divScheme.Visible = false;
         pnlStudentMarksEntry.Visible = true;
         LinkButton LNK = sender as LinkButton;
         string SchemeSubjectId = LNK.ToolTip;
@@ -158,6 +159,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "CO Is Not Created Or COPO Mapping is not Done..', '", this.Page);
             pnlStudentMarksEntry.Visible = false;
             divSession.Visible = true;
+            divScheme.Visible = true;
             ddlSession_SelectedIndexChanged(sender, e);
             return;
         }
@@ -187,6 +189,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Please Create Question Paper First..!!!", this.Page);
             pnlStudentMarksEntry.Visible = false;
             divSession.Visible = true;
+            divScheme.Visible = true;
             ddlSession_SelectedIndexChanged(sender, e);
             
         }
@@ -203,10 +206,19 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
     {
         if (ddlSession.SelectedIndex > 0)
         {
-            DataSet ds = obeMarkEnrty.GetSubjectData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]));
-            rptCourse.DataSource = ds;
-            rptCourse.DataBind();
-            pnlSubjectDetail.Visible = true;
+            pnlSubjectDetail.Visible = false;
+            int USER_TYPE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Session["userno"]));
+            if (USER_TYPE == 3)
+            {
+                objCommon.FillDropDownList(ddlscheme, "acd_student_result ASR inner join ACd_SCHEME AC on(AC.schemeno=ASR.schemeno)", " Distinct ASR.SCHEMENO", "AC.SCHEMENAME", "isnull(cancel,0)=0 and exam_registered=1 and sessionno=" + Convert.ToInt32(ddlSession.SelectedValue) + " and (UA_NO=" + Session["userno"] + "or UA_NO_PRAC=" + Session["userno"] + ")", "");
+            }
+            else
+            {
+
+                objCommon.FillDropDownList(ddlscheme, "acd_student_result ASR inner join ACd_SCHEME AC on(AC.schemeno=ASR.schemeno)", "Distinct ASR.SCHEMENO", "AC.SCHEMENAME", "isnull(cancel,0)=0 and exam_registered=1 and sessionno=" + Convert.ToInt32(ddlSession.SelectedValue), "");
+
+            }
+
         }
         else
         {
@@ -214,12 +226,29 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             rptCourse.DataBind();
             pnlSubjectDetail.Visible = false;
             objCommon.DisplayMessage(this, "No Record Found !!!", this.Page);
+            ddlscheme.SelectedIndex = 0;
         }
+
+        //if (ddlSession.SelectedIndex > 0)
+        //{
+        //    DataSet ds = obeMarkEnrty.GetSubjectData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]));
+        //    rptCourse.DataSource = ds;
+        //    rptCourse.DataBind();
+        //    pnlSubjectDetail.Visible = true;
+        //}
+        //else
+        //{
+        //    rptCourse.DataSource = null;
+        //    rptCourse.DataBind();
+        //    pnlSubjectDetail.Visible = false;
+        //    objCommon.DisplayMessage(this, "No Record Found !!!", this.Page);
+        //}
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
         pnlSubjectDetail.Visible = true;
         divSession.Visible = true;
+        divScheme.Visible = true;
         pnlStudentMarksEntry.Visible = false;
         divsubmarks.Visible = false;
         btnOperation.Visible = false;
@@ -333,6 +362,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                     pnlSubjectDetail.Visible = true;
                     divSession.Visible = true;
                     pnlStudentMarksEntry.Visible = false;
+                    divScheme.Visible = true;
                     divsubmarks.Visible = false;
                     btnOperation.Visible = false;
                     ltTable.Visible = false;
@@ -1704,11 +1734,30 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
         divSession.Visible = true;
         pnlStudentMarksEntry.Visible = false;
         divsubmarks.Visible = false;
+        divScheme.Visible = true;
         btnOperation.Visible = false;
         ltTable.Visible = false;
         ltrStatusCode.Visible = false;
         divStatusCode.Visible = false;
         divExcelExport.Visible = false;
 
+    }
+    protected void ddlscheme_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlscheme.SelectedIndex > 0)
+        {
+            DataSet ds = obeMarkEnrty.GetSubjectData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ddlscheme.SelectedValue));
+           // DataSet ds = obeMarkEnrty.GetSubjectData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]));
+            rptCourse.DataSource = ds;
+            rptCourse.DataBind();
+            pnlSubjectDetail.Visible = true;
+        }
+        else
+        {
+            rptCourse.DataSource = null;
+            rptCourse.DataBind();
+            pnlSubjectDetail.Visible = false;
+            objCommon.DisplayMessage(this, "No Record Found !!!", this.Page);
+        }
     }
 }

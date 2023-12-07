@@ -761,6 +761,31 @@ namespace IITMS.NITPRM.BusinessLayer.BusinessLogic
             return ds;
         }
 
+ #region added Schemeno parameter on date 06122023
+ public DataSet GetSubjectData(int SessionId, int UserId, int Schemeno)
+ {
+     DataSet ds = new DataSet();
+     SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+     try
+     {
+         SqlParameter[] objParams = null;
+
+         objParams = new SqlParameter[3];
+         objParams[0] = new SqlParameter("@P_USERID", Convert.ToInt32(UserId));
+         objParams[1] = new SqlParameter("@P_SESSIONID", SessionId);
+         objParams[2] = new SqlParameter("@P_SCHEMENO", Schemeno);
+         ds = objSQLHelper.ExecuteDataSetSP("spTeacherSubject_Get", objParams);
+
+     }
+     catch (Exception ex)
+     {
+
+     }
+     return ds;
+ }
+
+ #endregion
+
         
     }
 }

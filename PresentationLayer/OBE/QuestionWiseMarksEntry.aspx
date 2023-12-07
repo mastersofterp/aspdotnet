@@ -57,6 +57,18 @@
                                 <%--<asp:RequiredFieldValidator ID="rfdSessionno" runat="server" InitialValue="0" ErrorMessage="Please Select Session" SetFocusOnError="true"
                                            ControlToValidate="ddlSession"></asp:RequiredFieldValidator>--%>
                             </div>
+
+                             <div class="form-group col-lg-8 col-md-8 col-12" id="divScheme" runat="server">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Scheme Name </label>
+                                </div>
+                                <asp:DropDownList ID="ddlscheme" runat="server" AppendDataBoundItems="true"
+                                    ToolTip="Please Select Scheme Name" data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlscheme_SelectedIndexChanged">
+                                    <asp:ListItem Value="0">Please Select Scheme Name</asp:ListItem>
+                                </asp:DropDownList>
+
+                            </div>
                         </div>
                     </div>
 
