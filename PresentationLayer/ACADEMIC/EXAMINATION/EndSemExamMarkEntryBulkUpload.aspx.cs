@@ -2329,8 +2329,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
                  string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_BULK_UPLOAD_CC";
                  string sp_parameters = "@P_SEMESTERNO,@P_UA_NO,@P_SESSIONNO";
-                 string sp_callValues = "" + (ddlSemester.SelectedValue) + "," + ViewState["userno"].ToString() + "," +  ddlcollege.SelectedValue + "";
-                 DataSet dsMainExamnew=null;
+                 string sp_callValues = "" + (ddlSemester.SelectedValue) + "," + Convert.ToInt32(Session["userno"]) + "," + ddlcollege.SelectedValue + "";
+               
                  DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
                  if (dschk.Tables.Count > 0)
                  {
