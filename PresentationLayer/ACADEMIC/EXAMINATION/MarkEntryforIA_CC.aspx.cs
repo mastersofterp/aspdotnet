@@ -2639,10 +2639,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             {
                 ShowMessage("Invalid Excel File !!");
                 flag = false;
-
             }
-
-
         }
         catch (Exception ex)
         {
@@ -2693,7 +2690,11 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             //return;
             if (!string.IsNullOrEmpty(studids))
 
-                cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname1, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["sem"]), Convert.ToInt32(hdfSection.Value));
+                cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CC(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname1, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["sem"]), Convert.ToInt32(hdfSection.Value));
+
+
+            //cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CC(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+
 
             ///TO SAVE BLOG LOG//////////////
             //   log = (CustomStatus)objMarksEntry.InsertMarkEntryBlobLog(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, file_name);
