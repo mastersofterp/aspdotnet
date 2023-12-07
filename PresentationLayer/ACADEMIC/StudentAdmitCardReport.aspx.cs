@@ -284,7 +284,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 2)//Crescent   
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
+               url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 16) //Maher
             {
