@@ -23,7 +23,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     AcademinDashboardController objADEController = new AcademinDashboardController();
     AcdAttendanceController objAttC = new AcdAttendanceController();
     AcdAttendanceModel objAttModel = new AcdAttendanceModel();
-
+    StudentController objSC = new StudentController();
     protected void Page_PreInit(object sender, EventArgs e)
     {
         if (Session["masterpage"] != null)
@@ -53,9 +53,10 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
 
                 //Populate the DropDownList 
                 PopulateDropDownList();
+
                 Session["TimeSlotTbl"] = null;
                 ViewState["globaledit"] = "add";
-
+                
                 int globalElectiveCTAllotment = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "IS_GLOBAL_ELECTIVE_CT_ALLOTMENT_REQUIRED", "ConfigNo>0"));
                 ViewState["globalElectiveCTAllotment"] = globalElectiveCTAllotment;
                 if (globalElectiveCTAllotment == 1)
@@ -1043,7 +1044,22 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         }
         else
         {
-            objCommon.FillDropDownList(ddlsection, " ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON (CT.SECTIONNO =S.SECTIONNO)", "DISTINCT CT.SECTIONNO", "SECTIONNAME", " SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND COURSENO  = " + ddlSubjectAT.SelectedValue + " AND CT.SECTIONNO > 0 AND ISNULL(CT.CANCEL,0)=0", "CT.SECTIONNO");
+            //objCommon.FillDropDownList(ddlsection, "ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON (CT.SECTIONNO =S.SECTIONNO)", "DISTINCT CT.SECTIONNO", "SECTIONNAME", " SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND COURSENO  = " + ddlSubjectAT.SelectedValue + " AND CT.SECTIONNO > 0 AND ISNULL(CT.CANCEL,0)=0", "CT.SECTIONNO");
+            DataSet ds = objCommon.FillDropDown("ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON (CT.SECTIONNO =S.SECTIONNO)", "DISTINCT CT.SECTIONNO", "SECTIONNAME", " SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND COURSENO  = " + ddlSubjectAT.SelectedValue + " AND CT.SECTIONNO > 0 AND ISNULL(CT.CANCEL,0)=0", "CT.SECTIONNO");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                ddlsection.DataSource = ds;
+                ddlsection.DataValueField = ds.Tables[0].Columns[0].ToString();
+                ddlsection.DataTextField = ds.Tables[0].Columns[1].ToString();
+                ddlsection.DataBind();
+            }
+            else
+            {
+                ddlsection.Items.Clear();
+                ddlsection.Items.Add(new ListItem("Please Select", "0"));
+                objCommon.DisplayMessage(this.UpdatePanel1, "Course Teacher Allotment Not Found for Selected Selection", this.Page);
+            }
         }
 
         this.BindTeacherAllotmentListView();
@@ -1149,7 +1165,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             {
                 lvStudents.DataSource = null;
                 lvStudents.DataBind();
-                objCommon.DisplayMessage(this.UpdatePanel1, "No Data Found.", this.Page);
+                objCommon.DisplayMessage(this.UpdatePanel1, "Course Registration Not Found for Selected Selection", this.Page);
             }
         }
         catch
@@ -1522,6 +1538,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     private void ClearControlsTimeTable()
     {
         ddlSessionTimeTable.SelectedIndex = 0;
+        ddlTTSection.SelectedIndex = 0;
         ddlCollegeSchemeTimeTable.SelectedIndex = 0;
         ddlSubjectTimetable.SelectedIndex = 0;
         ddlSlotType.SelectedIndex = 0;
@@ -1533,7 +1550,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     private void ClearAfterSaveControlsTimeTable()
     {
-
+        ddlTTSection.SelectedIndex = 0;
         ddlSubjectTimetable.SelectedIndex = 0;
         ddlSlotType.SelectedIndex = 0;
         Session["TimeSlotTbl"] = null;
@@ -2331,6 +2348,10 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         }
         else
         {
+            lvGlobalTimeTable.DataSource = null;
+            lvGlobalTimeTable.DataBind();
+            ddlTTSection.Items.Clear();
+            ddlTTSection.Items.Add(new ListItem("Please Select", "0"));
             ddlSubjectTimetable.Items.Clear();
             ddlSubjectTimetable.Items.Add(new ListItem("Please Select", "0"));
 
@@ -2386,26 +2407,9 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         try
         {
 
-            ddlMainTeacherCT.Items.Clear();
-            ddlMainTeacherCT.Items.Add(new ListItem("Please Select", "0"));
-            lstAdditionalTeacherCT.ClearSelection();
-            //ddlGlobalElectiveGroup.SelectedIndex = 1;
-            DataSet ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6, 0);
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-
-                // ddlSession.SelectedValue = "";
-                ddlMainTeacherCT.DataSource = ds;
-                ddlMainTeacherCT.DataValueField = ds.Tables[0].Columns[0].ToString();
-                ddlMainTeacherCT.DataTextField = ds.Tables[0].Columns[1].ToString();
-                ddlMainTeacherCT.DataBind();
-                //ddlSession.SelectedIndex = 0;
-
-            }
-            else
-            {
-
-            }
+            BindMainTeacherCT();
+            ddlMainTeacherCT.SelectedIndex = 0;
+            ddlGlobalElectiveGroup.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -2415,6 +2419,31 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+    public void BindMainTeacherCT()
+    {
+        ddlMainTeacherCT.Items.Clear();
+        ddlMainTeacherCT.Items.Add(new ListItem("Please Select", "0"));
+        lstAdditionalTeacherCT.ClearSelection();
+        //ddlGlobalElectiveGroup.SelectedIndex = 1;
+        DataSet ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6, 0);
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+
+            // ddlSession.SelectedValue = "";
+            ddlMainTeacherCT.DataSource = ds;
+            ddlMainTeacherCT.DataValueField = ds.Tables[0].Columns[0].ToString();
+            ddlMainTeacherCT.DataTextField = ds.Tables[0].Columns[1].ToString();
+            ddlMainTeacherCT.DataBind();
+            //ddlSession.SelectedIndex = 0;
+
+        }
+        else
+        {
+
+        }
+    }
+
     protected void ddlSessionCT_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -2472,7 +2501,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         try
         {
 
-            StudentController objSC = new StudentController();
+
             DataSet dsData = objSC.GetGlobalCourseTeacherAllotment(Convert.ToInt16(ddlSessionCT.SelectedValue));
             if (dsData != null & dsData.Tables.Count > 0 && dsData.Tables[0].Rows.Count > 0)
             {
@@ -2506,6 +2535,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             if (ddlMainTeacherCT.SelectedIndex > 0)
             {
                 objCommon.FillListBox(lstAdditionalTeacherCT, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND ISNULL(U.UA_TYPE,0)=3 AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlMainTeacherCT.SelectedValue) + ")", "U.UA_FULLNAME");
+                //Session["CTuano"] = ddlMainTeacherCT.SelectedValue;
             }
             else
             {
@@ -2529,6 +2559,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             Student_Acd objStudent = new Student_Acd();
             objStudent.SessionNo = Convert.ToInt32(ddlSessionCT.SelectedValue);
             objStudent.CourseNo = Convert.ToInt32(ddlCourseCT.SelectedValue);
+            //objStudent.UA_No = Convert.ToInt32(Session["CTuano"]);
             objStudent.UA_No = Convert.ToInt32(ddlMainTeacherCT.SelectedValue);
             string Additionalteacher = "";
             foreach (ListItem items in lstAdditionalTeacherCT.Items)
@@ -2561,7 +2592,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             int output = objSC.UpdateCourseTeachAllotForGlobalElective(objStudent, OrgId, Convert.ToInt32(ddlGlobalElectiveGroup.SelectedValue));
             if (output == 1)
             {
-                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Sucessfully..", this.Page);
+                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Successfully..", this.Page);
             }
             else if (output == 2)
             {
@@ -2569,7 +2600,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             }
             else if (output == 3)
             {
-                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Already Found For Selected Group", this.Page);
+                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Already Found For Selected Section/Group", this.Page);
             }
             else
             {
@@ -2707,7 +2738,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         string courseno = repoarray[0].ToString();
         string facultyno = repoarray[1].ToString();
         DataSet ds = null;
-        if (rdoCancelType.SelectedValue.ToString() == "0" ) //for time table
+        if (rdoCancelType.SelectedValue.ToString() == "0") //for time table
         {
             ds = objAttC.LoadTimeTableDetailsForCancelTT(Convert.ToInt32(ddlSessionCancelTT.SelectedValue), Convert.ToInt32(facultyno), Convert.ToInt32(courseno), Convert.ToInt16(ddlSlotTypeCancelTT.SelectedValue), Convert.ToDateTime(txtCancelTTStartDate.Text), Convert.ToDateTime(txtCancelTTEndDate.Text), Convert.ToInt32(ddlCancelTTSection.SelectedValue));
         }
@@ -2755,7 +2786,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
                     {
                         btnInActiveCancelTT.Enabled = false;
                     }
-                    
+
                 }
             }
 
@@ -2769,6 +2800,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     protected void btnCancelTT_Click(object sender, EventArgs e)
     {
+        ddlCancelTTSection.SelectedIndex = 0;
         ddlSlotTypeCancelTT.SelectedIndex = 0;
         ddlCourseCancelTT.SelectedIndex = 0;
         ddlSessionCancelTT.SelectedIndex = 0;
@@ -3301,7 +3333,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
 
     private void ClearAfterSaveControlsRevisedTimeTable()
     {
-
+        ddlRevisedTTSection.SelectedIndex = 0;
         ddlSubjectRevisedTimetable.SelectedIndex = 0;
         ddlRevisedSlotType.SelectedIndex = 0;
         Session["RevisedTimeSlotTbl"] = null;
@@ -3316,6 +3348,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     private void ClearControlsRevisedTimeTable()
     {
+        ddlRevisedTTSection.SelectedIndex = 0;
         ddlSessionRevisedTimeTable.SelectedIndex = 0;
         ddlSubjectRevisedTimetable.SelectedIndex = 0;
         txtRevisedEndDate.Text = "";
@@ -3467,6 +3500,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         else
         {
             objCommon.DisplayMessage("Record Not Found!!", this.Page);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "script", "tab();", true);
             return;
         }
     }
@@ -3518,11 +3552,24 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
     }
     protected void ddlTTSection_SelectedIndexChanged(object sender, EventArgs e)
     {
+        if (Session["TimeSlotTbl"] == null)
+        {
+            lvTimeSlotDetails.DataSource = null;
+            lvTimeSlotDetails.DataBind();
+        }
         int SessionNo = Convert.ToInt32(ddlSessionTimeTable.SelectedValue);
         if (Convert.ToInt32(ddlTTSection.SelectedValue) > 0)
         {
             BindGlobalTimeTable(SessionNo, 0, 0);
             BindCourseDropdownTimeTable(SessionNo);
+        }
+        else
+        {
+            ddlSlotType.SelectedIndex = 0;
+            BindGlobalTimeTable(SessionNo, 0, 0);
+            ClearControls_TimeSlotDetails();
+            ddlSubjectTimetable.Items.Clear();
+            ddlSubjectTimetable.Items.Add(new ListItem("Please Select", "0"));
         }
     }
 
@@ -3534,6 +3581,23 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
             BindCourseDropdownRevisedTimeTable(SessionNo);
             BindGlobalRevisedTimeTable(Convert.ToInt32(ddlSessionRevisedTimeTable.SelectedValue), 0, 0);
         }
+        else
+        {
+            ddlSubjectRevisedTimetable.Items.Clear();
+            ddlSubjectRevisedTimetable.Items.Add(new ListItem("Please Select", "0"));
+            ddlRevisedSlotType.SelectedIndex = 0;
+            ddlExistingDates.Items.Clear();
+            ddlExistingDates.Items.Add(new ListItem("Please Select", "0"));
+            txtRevisedStartDate.Text = "";
+            txtRevisedEndDate.Text = "";
+            txtRevisedRemark.Text = "";
+            Session["RevisedTimeSlotTbl"] = null;
+            if (Session["RevisedTimeSlotTbl"] == null)
+            {
+                lvRevisedTimeSlotDetails.DataSource = null;
+                lvRevisedTimeSlotDetails.DataBind();
+            }
+        }
     }
     protected void ddlCancelTTSection_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -3541,6 +3605,15 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         {
             int SessionNo = Convert.ToInt32(ddlSessionCancelTT.SelectedValue);
             BindCourseDropdownCancelTimeTable(SessionNo);
+        }
+        else
+        {
+            ddlCourseCancelTT.Items.Clear();
+            ddlCourseCancelTT.Items.Add(new ListItem("Please Select", "0"));
+            ddlSlotTypeCancelTT.SelectedIndex = 0;
+            txtCancelTTStartDate.Text = "";
+            txtCancelRemark.Text = "";
+            txtCancelTTEndDate.Text = "";
         }
     }
     protected void rdoCancelType_SelectedIndexChanged(object sender, EventArgs e)
@@ -3562,6 +3635,59 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         else
         {
             BindCancelTimeTableRecord();
+        }
+    }
+    protected void btnEditCT_Click(object sender, EventArgs e)
+    {
+        Button btn = (Button)sender;
+        var item = (ListViewItem)btn.NamingContainer;
+        HiddenField hdnScheme = item.FindControl("hdfCTSection") as HiddenField;
+
+        int sessionno = Convert.ToInt32(ddlSessionCT.SelectedValue);
+        int courseno = Convert.ToInt32((sender as Button).ToolTip);
+        int ua_no = Convert.ToInt32((sender as Button).CommandArgument);
+        int sectionno = Convert.ToInt32(hdnScheme.Value);
+        string IpAddress = Request.ServerVariables["REMOTE_ADDR"];
+        int Modifiedby = Convert.ToInt32(Session["userno"]);
+        DataSet dsData = objSC.GetGlobalCourseTeacherAllotmentForEdit(Convert.ToInt16(ddlSessionCT.SelectedValue), courseno, ua_no, sectionno);
+        if (dsData != null & dsData.Tables.Count > 0 && dsData.Tables[0].Rows.Count > 0)
+        {
+
+            ddlSessionAttConfig.SelectedValue = dsData.Tables[0].Rows[0]["SESSIONID"] == DBNull.Value ? "0" : dsData.Tables[0].Rows[0]["SESSIONID"].ToString();
+            ddlCourseCT.SelectedValue = dsData.Tables[0].Rows[0]["COURSENO"] == DBNull.Value ? "0" : dsData.Tables[0].Rows[0]["COURSENO"].ToString();
+            ddlGlobalElectiveGroup.SelectedValue = dsData.Tables[0].Rows[0]["SECTIONNO"] == DBNull.Value ? "0" : dsData.Tables[0].Rows[0]["SECTIONNO"].ToString();
+            BindMainTeacherCT();
+
+            ddlMainTeacherCT.SelectedValue = dsData.Tables[0].Rows[0]["UA_NO"] == DBNull.Value ? "0" : dsData.Tables[0].Rows[0]["UA_NO"].ToString();
+            Session["CTuano"] = dsData.Tables[0].Rows[0]["UA_NO"] == DBNull.Value ? "0" : dsData.Tables[0].Rows[0]["UA_NO"].ToString();
+            //ddlMainTeacherCT.Enabled = false;
+            lstAdditionalTeacherCT.Enabled = false;
+            ViewState["additonalitems"] = Convert.ToString(dsData.Tables[0].Rows[0]["ADTEACHER"]).ToString();
+            if (ddlMainTeacherCT.SelectedIndex > 0)
+            {
+                objCommon.FillListBox(lstAdditionalTeacherCT, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND ISNULL(U.UA_TYPE,0)=3 AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlMainTeacherCT.SelectedValue) + ")", "U.UA_FULLNAME");
+            }
+            else
+            {
+                lstAdditionalTeacherCT.ClearSelection();
+            }
+            if (ViewState["additonalitems"] != null && ViewState["additonalitems"] != "")
+            {
+                string Additonalilnos = ViewState["additonalitems"].ToString();
+                string[] subs = Additonalilnos.Split(',');
+
+                foreach (ListItem additonalitems in lstAdditionalTeacherCT.Items)
+                {
+                    for (int i = 0; i < subs.Count(); i++)
+                    {
+                        if (subs[i].ToString().Trim() == additonalitems.Value)
+                        {
+                            additonalitems.Selected = true;
+                        }
+                    }
+                }
+            }
+
         }
     }
 }

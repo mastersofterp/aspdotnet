@@ -67,6 +67,12 @@
             .slider.round:before {
                 border-radius: 50%;
             }
+
+        .disabled {
+            background-color: #f0f0f0; /* Example background color for disabled state */
+            color: #999; /* Example text color for disabled state */
+            /* Add any other styles to visually indicate the disabled state */
+        }
     </style>
 
 
@@ -142,7 +148,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#tab_6" tabindex="7">Cancel Time Table</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tab_8" tabindex="8">TT Report</a>
+                                <a class="nav-link" data-toggle="tab" href="#tab_8" id="tab8" tabindex="8">TT Report</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="my-tab-content">
@@ -452,7 +458,7 @@
 
                                                     </div>
                                                     <asp:DropDownList ID="ddlGlobalElectiveGroup" runat="server" TabIndex="5" AppendDataBoundItems="true" ValidationGroup="courseteacher" OnSelectedIndexChanged="ddlGlobalElectiveGroup_SelectedIndexChanged"
-                                                        AutoPostBack="True" CssClass="form-control" data-select2-enable="true">
+                                                        CssClass="form-control" AutoPostBack="true" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlGlobalElectiveGroup"
@@ -520,6 +526,7 @@
                                                                         </th>
                                                                         <th>Additional Teacher
                                                                         </th>
+                                                                        <%-- <th>Action</th>--%>
                                                                         <th>Status
                                                                         </th>
 
@@ -549,8 +556,15 @@
                                                                 <td>
                                                                     <%# Eval("ADD_TEACHER_NAME")%>
                                                                 </td>
+                                                                <%-- <td >
+                                                                    <asp:Button ID="btnEditCT" runat="server" Text='Edit' CssClass="btn btn-primary"
+                                                                        OnClick="btnEditCT_Click" OnClientClick="return confirm('Do you want to Modify the record ? ');" CommandArgument='<%# Eval("UA_NO")%>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                                    <asp:HiddenField ID="hdfCTSection" runat="server" Value='<%# Eval("SECTIONNO")%>' />
+                                                                </td>--%>
 
                                                                 <td>
+
+
                                                                     <asp:Button ID="btnInActiveCT" runat="server" Text='In-Active' CssClass="btn btn-warning"
                                                                         OnClick="btnInActiveCT_Click" OnClientClick="return confirm('Do you want to In-Active the record ? ');" CommandArgument='<%# Eval("UA_NO")%>' ToolTip='<%# Eval("COURSENO")%>' />
                                                                 </td>
@@ -562,6 +576,7 @@
                                             </div>
                                         </div>
                                     </ContentTemplate>
+
                                 </asp:UpdatePanel>
                             </div>
                             <div class="tab-pane fade" id="tab_2">
@@ -1114,6 +1129,9 @@
                                                         TabIndex="10" CssClass="form-control slottype" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ControlToValidate="ddlSlotType"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="timetable">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="col-lg-3 col-md-6 col-12 form-group">
                                                     <div class="label-dynamic">
@@ -1590,9 +1608,9 @@
                                                             <td><%#Eval("SLOTNAME")%></td>
                                                             <td><%#Eval("ATT_STATUS")%></td>
                                                             <td>
-                                                               <%-- <asp:Button ID="btnInActiveCancelTT" Enabled='<%# (Convert.ToInt32(Eval("ATT_NO") ) == 0 ?  true : false )%>' runat="server" Text='In-Active' CssClass="btn btn-warning"
+                                                                <%-- <asp:Button ID="btnInActiveCancelTT" Enabled='<%# (Convert.ToInt32(Eval("ATT_NO") ) == 0 ?  true : false )%>' runat="server" Text='In-Active' CssClass="btn btn-warning"
                                                                     OnClick="btnInActiveCancelTT_Click" OnClientClick="return confirm('Do you want to In-Active the record ? ');" CommandArgument='<%# Eval("TIME_TABLE_DATE")%>' ToolTip='<%# Eval("SLOTNO")%>' />--%>
-                                                                 <asp:Button ID="btnInActiveCancelTT"  runat="server" Text='In-Active' CssClass="btn btn-warning"
+                                                                <asp:Button ID="btnInActiveCancelTT" runat="server" Text='In-Active' CssClass="btn btn-warning"
                                                                     OnClick="btnInActiveCancelTT_Click" OnClientClick="return confirm('Do you want to In-Active the record ? ');" CommandArgument='<%# Eval("TIME_TABLE_DATE")%>' ToolTip='<%# Eval("SLOTNO")%>' />
                                                                 <asp:HiddenField ID="hdnAttno" runat="server" Value='<%# Convert.ToInt32(Eval("ATT_NO") ) %>' />
                                                             </td>
@@ -1635,7 +1653,7 @@
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSessionRevisedTimeTable"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig6"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="timetable6"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1676,6 +1694,9 @@
                                                         TabIndex="10" CssClass="form-control slottype" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" ControlToValidate="ddlRevisedSlotType"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="timetable6">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1686,6 +1707,9 @@
                                                         OnSelectedIndexChanged="ddlExistingDates_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ControlToValidate="ddlExistingDates"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Existing Dates" ValidationGroup="timetable6">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1701,7 +1725,7 @@
                                                             AutoPostBack="true" OnTextChanged="txtRevisedStartDate_TextChanged" data-mask="" Style="z-index: 0" TabIndex="11" />
                                                         <%-- onchange="test()" --%>
                                                         <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="txtRevisedStartDate"
-                                                            Display="None" ErrorMessage="Please Enter Start Date">
+                                                            Display="None" ErrorMessage="Please Enter Start Date" ValidationGroup="timetable6">
                                                         </asp:RequiredFieldValidator>
                                                         <ajaxToolKit:CalendarExtender ID="ceDate" runat="server" Format="dd/MM/yyyy"
                                                             TargetControlID="txtRevisedStartDate" PopupButtonID="imgStartDate" Enabled="true"
@@ -1731,7 +1755,7 @@
                                                         <asp:TextBox ID="txtRevisedEndDate" runat="server" CssClass="form-control" data-inputmask="'alias': 'dd/mm/yyyy'"
                                                             AutoPostBack="true" OnTextChanged="txtRevisedEndDate_TextChanged" data-mask="" Style="z-index: 0" TabIndex="12" />
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator18" runat="server" ControlToValidate="txtRevisedEndDate"
-                                                            Display="None" ErrorMessage="Please Enter End Date" Visible="false">
+                                                            Display="None" ErrorMessage="Please Enter End Date" ValidationGroup="timetable6">
                                                         </asp:RequiredFieldValidator>
                                                         <ajaxToolKit:CalendarExtender ID="CalendarExtender4" runat="server" Format="dd/MM/yyyy"
                                                             TargetControlID="txtRevisedEndDate" PopupButtonID="imgEndDate" Enabled="true"
@@ -2165,6 +2189,10 @@
     </div>
 
     <script>
+        function tab() {
+            $('#tab8').tab('show')
+        };
+
         function SetStatSms(val) {
             $('[id*=rdSMSYes]').prop('checked', val);
         }
@@ -2181,6 +2209,7 @@
             $('#rdActive').prop('checked', val);
         }
         function validate() {
+          
             var schemeno = document.getElementById("ctl00_ContentPlaceHolder1_ddlCollegeSchemeAttConfig").value;
             var sessionno = document.getElementById("ctl00_ContentPlaceHolder1_ddlSessionAttConfig").value;
             var semester = document.getElementById("ctl00_ContentPlaceHolder1_lstSemesterAttConfig").value;
@@ -2223,6 +2252,7 @@
             $('#hfdTeaching').val($('#rdTeachYes').prop('checked'));
             $('#hfdActive').val($('#rdActive').prop('checked'));
         }
+        
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {
             $(function () {
@@ -2230,6 +2260,7 @@
                     validate();
                 });
             });
+        
         });
     </script>
     <script>

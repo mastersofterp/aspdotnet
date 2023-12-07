@@ -20935,6 +20935,36 @@ namespace IITMS
                      }
                      return ds;
                  }
+
+                 /// <summary>
+                 /// Added by Swapnil For Gloabl Elective Course Teacher Allotment
+                 /// </summary>
+                 /// <param name="objStudent"></param>
+                 /// <param name="OrgId"></param>
+                 /// <returns></returns>
+
+                 public DataSet GetGlobalCourseTeacherAllotmentForEdit(int sessionno, int courseno, int ua_no, int sectionno)
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+
+                         SqlParameter[] objParams = new SqlParameter[4];
+                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
+                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                         objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_RET_COURSE_ALLOTMENT_FOR_EDIT_GLOBAL_ELECTVE", objParams);
+                     }
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                     }
+
+                     return ds;
+                 }
             }
 
 
