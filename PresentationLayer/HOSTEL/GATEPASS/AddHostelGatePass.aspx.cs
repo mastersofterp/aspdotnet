@@ -72,19 +72,19 @@ public partial class HOSTEL_GATEPASS_AddHostelGatePass : System.Web.UI.Page
     #region Action
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        Session["GatePassno"] = Convert.ToInt32(txtPass.Text.Trim());
-        objGatePass.PassNo = Convert.ToInt32(Session["GatePassno"]);
         
-        string gatepassno = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_HOSTEL_ROOM_ALLOTMENT HRA ON(HGD.IDNO = HRA.RESIDENT_NO AND HGD.HOSTEL_SESSION_NO = HRA.HOSTEL_SESSION_NO)", "HGD.HOSTEL_GATE_PASS_NO", "HRA.CAN=0 AND HGD.HOSTEL_GATE_PASS_NO = '" + txtPass.Text + "'");
+        string gatepassno = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_HOSTEL_ROOM_ALLOTMENT HRA ON(HGD.IDNO = HRA.RESIDENT_NO AND HGD.HOSTEL_SESSION_NO = HRA.HOSTEL_SESSION_NO)", "HGD.HOSTEL_GATE_PASS_NO", "HRA.CAN=0 AND HGD.HOSTEL_GATE_PASS_NO = '" + txtPass.Text.Trim() + "'");
         if (gatepassno == "")
         {
-            objCommon.DisplayMessage("Record Not Found", this.Page);
+            objCommon.DisplayMessage("Gate Pass Number not found. Please enter proper Gate Pass Number.", this.Page);
             pnlList.Visible = true;
             pnlinfo.Visible = false;
             btnReport.Visible = false;
         }
         else
         {
+            Session["GatePassno"] = Convert.ToInt32(txtPass.Text.Trim());
+            objGatePass.PassNo = Convert.ToInt32(Session["GatePassno"]);
             // FillInformation();
             DisplayInfo(Convert.ToInt32(gatepassno));
 
