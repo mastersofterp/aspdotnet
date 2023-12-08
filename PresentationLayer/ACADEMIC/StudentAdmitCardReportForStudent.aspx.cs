@@ -461,10 +461,6 @@ public partial class ACADEMIC_StudentAdmitCardReportForStudent : System.Web.UI.P
                                 {
                                     ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_Maher.rpt");
                                 }
-                                else if (Convert.ToInt32(Session["OrgId"]) == 18) //HITS  Added By Injamam 29_11_2023 
-                                {
-                                    ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_HITS.rpt");
-                                }
                                 else if (Convert.ToInt32(Session["OrgId"]) == 19)  //PCEN   Added By Injamam 20_10_2023
                                 {
                                     ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_PCEN.rpt");
@@ -477,10 +473,6 @@ public partial class ACADEMIC_StudentAdmitCardReportForStudent : System.Web.UI.P
                                 else if (Convert.ToInt32(Session["OrgId"]) == 21) //TGPCET Added By Injamam 29_11_2023 
                                 {
                                     ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_TGPCET.rpt");
-                                }
-                                else if (Convert.ToInt32(Session["OrgId"]) == 5) //JECRC Added By Injamam 29_11_2023 
-                                {
-                                    ShowReport(Convert.ToInt32(Session["idno"]), Sessionno, Convert.ToInt32(Semesterno), degreeno, schemeno, College_id, Convert.ToInt32(prev_status), Examno, sectionno, "Student_Admit_Card_Report", "rptBulkExamHallTicket_JECRC.rpt");
                                 }
                                 else
                                 {
@@ -532,7 +524,8 @@ public partial class ACADEMIC_StudentAdmitCardReportForStudent : System.Web.UI.P
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() +
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() +
+            url += "&param=@P_COLLEGE_CODE=" + College_id +
                 ",@P_IDNO=" + param +
                 ",@P_BRANCHNO=" + schemeno +
                 ",@P_DEGREENO=" + Degreeno +
