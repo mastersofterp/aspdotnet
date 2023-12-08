@@ -558,7 +558,7 @@
                                                  <asp:RadioButtonList ID="rdgender" runat="server" Text='<%# Eval("SEX")%>'  RepeatDirection="Horizontal"  AutoPostBack="True">
                                                <asp:ListItem Value="M">Male</asp:ListItem>
                                                 <asp:ListItem Value="F">Female</asp:ListItem>
-                                                <asp:ListItem Value="">Other</asp:ListItem>
+                                                <asp:ListItem Value="T">Other</asp:ListItem>
                                                 </asp:RadioButtonList>  
                                                 </td>
                                                 <td>
