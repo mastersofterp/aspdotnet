@@ -578,7 +578,8 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public int InsertExpe(string Head, decimal firstAmount, decimal SecondAmount, decimal thirdAmount, decimal fourthAmount, string EXPE_CODE, int AcdYear, int OrgId, string ipAddress, int uano, int insert, string gender, int degreeno)
+                //Updated by Sakshi on Date 30112023
+                public int InsertExpe(string Head, decimal firstAmount, decimal SecondAmount, decimal thirdAmount, decimal fourthAmount, string EXPE_CODE, int AcdYear, int OrgId, string ipAddress, int uano, int insert, string gender, int degreeno, int Admtype)
                 {
                     int status = Convert.ToInt32(CustomStatus.Others);
                     try
@@ -586,7 +587,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
 
-                        objParams = new SqlParameter[14];
+                        objParams = new SqlParameter[15];
                         objParams[0] = new SqlParameter("@P_HEAD", Head);
                         objParams[1] = new SqlParameter("@P_FIRSTYEAR", firstAmount);
                         objParams[2] = new SqlParameter("@P_SECONDYEAR", SecondAmount);
@@ -600,8 +601,9 @@ namespace IITMS
                         objParams[10] = new SqlParameter("@P_INS", insert);
                         objParams[11] = new SqlParameter("@P_GENDER", gender);
                         objParams[12] = new SqlParameter("@P_DEGREENO", degreeno);
-                        objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[13].Direction = System.Data.ParameterDirection.Output;
+                        objParams[13] = new SqlParameter("@P_ADMTYPE", Admtype);
+                        objParams[14] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[14].Direction = System.Data.ParameterDirection.Output;
 
                         object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_ISERT_EBC_CERTIFICATE_RCPIT", objParams, true);
 
@@ -618,7 +620,8 @@ namespace IITMS
                     }
                     return status;
                 }
-                public DataSet GetParticularinfo(int Admyear, string EXPE_CODE, string gender, int degreeno)
+                //Updated by Sakshi M on Date 30112023
+                public DataSet GetParticularinfo(int Admyear, string EXPE_CODE, string gender, int degreeno, int Admtype)
                 {
                     DataSet ds = null;
 
@@ -626,11 +629,12 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[4];
+                        objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_ACADEMICID", Admyear);
                         objParams[1] = new SqlParameter("@P_EXPE_CODE", EXPE_CODE);
                         objParams[2] = new SqlParameter("@P_GENDER", gender);
                         objParams[3] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[4] = new SqlParameter("@P_ADMTYPE", Admtype);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_PARTICULAR_EXPENDITURE", objParams);
                     }

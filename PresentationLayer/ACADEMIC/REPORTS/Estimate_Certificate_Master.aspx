@@ -75,6 +75,18 @@
                                                                             </asp:DropDownList>
 
                                                                         </div>
+
+                                                                         <%--  ADDED BY SAKSHI ON DATE 30-11-2023--%>
+                                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server" >
+                                                                            <div>
+                                                                                <sup>* </sup>
+                                                                                <label>Admission Type</label>
+                                                                            </div>
+                                                                            <asp:DropDownList ID="ddlAdmType" runat="server" AppendDataBoundItems="True" AutoPostBack="True" ToolTip="Please Select Admission Type" CssClass="form-control" data-select2-enable="true" TabIndex="2" OnSelectedIndexChanged="ddlAdmType_SelectedIndexChanged">
+                                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                            </asp:DropDownList>
+
+                                                                        </div>
                                                                         <%--  ADDED BY POOJA ON DATE 11-08-2023--%>
 
                                                                         <div class="form-group col-lg-3 col-md-6 col-12">
