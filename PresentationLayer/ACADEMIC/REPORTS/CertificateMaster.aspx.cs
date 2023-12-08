@@ -547,6 +547,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                             }
                         }
                     }
+
                     if (Session["OrgId"].ToString() == "6")
                     {
                         if (CertShortName == "TC")
@@ -570,7 +571,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
                      //Added by pooja for estimate certificate for prmitr ON ADTE 01-08-2023
                         string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + studentIds.TrimEnd('$') +"");
-                        if (Session["OrgId"].ToString() == "10")
+                        if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11")
                         {
                             if (CertShortName == "EC")
                             {
@@ -2881,7 +2882,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
         }
 
-        if (Session["OrgId"].ToString() == "10")
+        if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11" || Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")
         {
             if (CertShortName == "LC")
             {
