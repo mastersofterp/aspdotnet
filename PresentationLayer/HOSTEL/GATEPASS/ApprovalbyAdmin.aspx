@@ -126,14 +126,14 @@
                         <div class="row">
                         <div class="form-group col-lg-4 col-md-4 col-12">
                              <div class="label-dynamic">
-                                 <sup>* </sup>
+                                 <%--<sup>* </sup>--%>
                                     <label>Fourth Approval</label>
                                 </div>
                                 <asp:DropDownList ID="ddlAA4" AppendDataBoundItems="true" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlAA4_SelectedIndexChanged" >
                                 <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
                                 </asp:DropDownList>
-                                <asp:RequiredFieldValidator ID="rfvAA4" runat="server" ErrorMessage="Please Select Fourth Approval"
-                                    Display="None" ControlToValidate="ddlAA4" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>
+                                <%--<asp:RequiredFieldValidator ID="rfvAA4" runat="server" ErrorMessage="Please Select Fourth Approval"
+                                    Display="None" ControlToValidate="ddlAA4" SetFocusOnError="True" ValidationGroup="AA"></asp:RequiredFieldValidator>--%>
                          </div>
 
                         <div class="form-group col-lg-4 col-md-4 col-12">

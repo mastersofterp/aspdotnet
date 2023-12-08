@@ -236,8 +236,22 @@ public partial class HOSTEL_GATEPASS_ApprovalbyAdmin : System.Web.UI.Page
                 string frth_apr = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS", "FOURTH_APPROVAL_UANO", "HGP_ID=" + recid);
                 txtName.Text = objCommon.LookUp("ACD_HOSTEL_GATEPASS_DETAILS HGD INNER JOIN ACD_STUDENT S ON (HGD.IDNO = S.IDNO)", "S.STUDNAME", "HGP_ID=" + recid);
 
-                objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
-                objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                if (fst_apr == "14")
+                {
+                    objCommon.FillDropDownList(ddlAA1, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
+                    objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                }
+                else if (scnd_apr == "14")
+                {
+                    objCommon.FillDropDownList(ddlAA2, "User_Rights", "USERTYPEID", "USERDESC", "USERTYPEID=14", "USERTYPEID");
+                    objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlAA1, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                    objCommon.FillDropDownList(ddlAA2, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
+                }
+
                 objCommon.FillDropDownList(ddlAA3, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
                 objCommon.FillDropDownList(ddlAA4, "user_acc", "UA_NO", "ISNULL(UA_DESIG,'') +' - '+ UA_FULLNAME", "", "UA_NO");
                 // Assign values to variables
