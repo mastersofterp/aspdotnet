@@ -180,11 +180,6 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
         {
             int orgid = Convert.ToInt32(Session["OrgId"]);
 
-
-
-
-
-
             if (orgid == 9)
             {
                 SaveQRCODE();
@@ -307,6 +302,10 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                 {
                     ShowReport_ATLAS(ids, "Student_ID_Card_Report", "rpt_IdentityCard_PCEN.rpt");
                 }
+                else if (orgid == 20)
+                {
+                    ShowReport_ATLAS(ids, "Student_ID_Card_Report", "rpt_IdentityCard_PJLCOE.rpt");
+                }
                 else
                 {
                     // StudentIDCardFrontNew
@@ -333,12 +332,14 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
         return ImageContent;
     }
 
+
     private void GenerateQrCode(string idno)
     {
         DataSet ds = objCommon.FillDropDown("ACD_STUDENT", "REGNO", "STUDNAME,CONVERT(VARCHAR(50),DOB,106 )AS DOB,STUDENTMOBILE", "IDNO='" + idno + "' AND ISNULL(ADMCAN,0)=0  AND  ISNULL(CAN,0) = 0", "REGNO");
 
         //DataSet ds1 = objQrC.GetStudentDataForGradeCardPC(Convert.ToInt16(ddlAdmbatch.SelectedValue), Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(ddlCollege.SelectedValue), Convert.ToInt16(ddlDegree.SelectedValue), Convert.ToInt16(ddlBranch.SelectedValue), Convert.ToInt16(ddlSemester.SelectedValue), declaredDate, dateOfIssue, Convert.ToInt16(idno));
         //StudName:=" + ds.Tables[0].Rows[0]["STUDNAME"].ToString().Trim() + ";
+
         string Qrtext = "PRN=" + ds.Tables[0].Rows[0]["REGNO"].ToString().Trim() +
                         ";STUDENT NAME: " + ds.Tables[0].Rows[0]["STUDNAME"].ToString().Trim() +
                         ";DOB: " + ds.Tables[0].Rows[0]["DOB"].ToString().Trim() +
