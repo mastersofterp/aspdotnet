@@ -349,9 +349,9 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
 
 
             string sp_procedure = "PKG_ACAD_TEST_MARKS_ENTRY_NOTDONE";
-            string sp_parameters = "@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_SEMESTERNO,@P_EXAMNO,@P_SUBEXAMTYPE";
+            string sp_parameters = "@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_SEMESTERNO,@P_EXAMNO,@P_SUBEXAMTYPE,@P_SUBJECTTYPE";
             // string sp_callValues = "'" + ViewState["SessionNo"].ToString() + "'," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + ",'" + ddlSubExam.SelectedValue + "'";
-            string sp_callValues = "" + ViewState["SessionNo"] + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + "," + ddlSubExam.SelectedValue + "";
+            string sp_callValues = "" + ViewState["SessionNo"] + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + "," + ddlSubExam.SelectedValue + "," + ddlSubType.SelectedValue + "";
 
             ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
 
@@ -371,8 +371,12 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SUBEXAMTYPE=" + (divSubExam.Visible == true ? ddlSubExam.SelectedValue : string.Empty); // modified on 15-02-2020 by Vaishali
                 //url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"].ToString() + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SUBEXAMTYPE=" + ddlSubExam.SelectedValue; // modified on 15-02-2020 by Vaishali
 
-                url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SUBEXAMTYPE=" + ddlSubExam.SelectedValue; // modified on 15-02-2020 by Vaishali
-
+                if (!CollageIDs.Contains(","))
+                {
+                    url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(CollageIDs) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SUBEXAMTYPE=" + ddlSubExam.SelectedValue + ",@P_SUBJECTTYPE=" + ddlSubType.SelectedValue; // modified on 15-02-2020 by Vaishali
+                }else{
+                url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SUBEXAMTYPE=" + ddlSubExam.SelectedValue + ",@P_SUBJECTTYPE=" + ddlSubType.SelectedValue; // modified on 15-02-2020 by Vaishali
+                }
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -767,8 +771,8 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             //DataSet ds = objMarksEntry.GetLockMarkEntryNotDoneRecordReport(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(0), Convert.ToInt32(0), Convert.ToInt32(ddlSemester.SelectedValue), ddlTest.SelectedValue.Split('-')[1].ToString(), divSubExam.Visible == true ? ddlSubExam.SelectedValue.Trim() : string.Empty);
 
             string sp_procedure = "PKG_ACAD_TEST_LOCK_ENTRY_NOTDONE";
-            string sp_parameters = "@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_SEMESTERNO,@P_EXAMNO,@P_SUBEXAMTYPE";
-            string sp_callValues = "" + ViewState["SessionNo"] + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + "," + ddlSubExam.SelectedValue + "";
+            string sp_parameters = "@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_SEMESTERNO,@P_EXAMNO,@P_SUBEXAMTYPE,@P_SUBJECTTYPE";
+            string sp_callValues = "" + ViewState["SessionNo"] + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + "," + ddlSubExam.SelectedValue + "," + ddlSubType.SelectedValue + "";
 
             ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
 
@@ -783,8 +787,15 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=REPORT";
                 url += "&path=~,Reports,Academic," + "rptMarkEntryLockNotDone.rpt";
-                url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SUBEXAMTYPE=" + (divSubExam.Visible == true ? ddlSubExam.SelectedValue : string.Empty); // modified on 15-02-2020 by Vaishali
 
+                if (!CollageIDs.Contains(","))
+                {
+                    url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(CollageIDs) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SUBEXAMTYPE=" + (divSubExam.Visible == true ? ddlSubExam.SelectedValue : string.Empty) + ",@P_SUBJECTTYPE=" + ddlSubType.SelectedValue;  // modified on 15-02-2020 by Vaishali
+                }
+                else 
+                {
+                    url += "&param=@P_SESSIONNO=" + ViewState["SessionNo"] + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_EXAMNO=" + ddlTest.SelectedValue.Split('-')[1].ToString() + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SUBEXAMTYPE=" + (divSubExam.Visible == true ? ddlSubExam.SelectedValue : string.Empty) + ",@P_SUBJECTTYPE=" + ddlSubType.SelectedValue;  // modified on 15-02-2020 by Vaishali
+                }
 
 
                 //System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -842,7 +853,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
                 {
                     GV.DataSource = ds;
                     GV.DataBind();
-                    string Attachment = "Attachment ; filename=AllExamMarkEntryStatus.xls";
+                    string Attachment = "Attachment ; filename=AllExamMarkEntryStatus" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                     Response.ClearContent();
                     Response.AddHeader("content-disposition", Attachment);
                     Response.ContentType = "application/ms-excel";
@@ -1151,6 +1162,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
         ddlSubExam.SelectedItem.Value = "0";
         //}
     }
+
     protected void btnAbsententryreport_Click(object sender, EventArgs e)
     {
         {
@@ -1166,7 +1178,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             string CollageIDs = CollageID.Remove(CollageID.Length - 1);
             //            ViewState["SessionNo"] = SessionNo;
             ViewState["SessionNo"] = objCommon.LookUp("ACD_SESSION_MASTER", "STRING_AGG(SESSIONNO,'$')", "SESSIONID =" + Convert.ToInt32(ddlSessionID.SelectedValue) + "AND COLLEGE_ID IN (" + CollageIDs + ")");
-            
+
             //string sp_procedure = "PKG_ACAD_ABSENT_ENTRY_REPORT";
             //string sp_parameters = "@P_SESSIONNO,@P_COLLEGE_ID,@P_SCHEMENO,@P_SEMESTERNO,@P_EXAMNO,@P_SUBEXAMTYPE,@SUBTYPE,@PATTERN";
             //// string sp_callValues = "'" + ViewState["SessionNo"].ToString() + "'," + Convert.ToInt32(0) + "," + Convert.ToInt32(0) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + ddlTest.SelectedValue.Split('-')[1].ToString() + ",'" + ddlSubExam.SelectedValue + "'";
@@ -1179,8 +1191,8 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             string sp_callValues = "" + ViewState["SessionNo"] + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + 0 + "," + 0 + "," + ddlSubType.SelectedValue + "," + ddlPattern.SelectedValue + "";
 
             ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-            
-                //if (ds.Tables[0].Rows.Count > 0)
+
+            //if (ds.Tables[0].Rows.Count > 0)
             if (ds.Tables.Count > 0)
             {
                 if (ds.Tables[0].Rows.Count > 0)
@@ -1207,7 +1219,7 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this.Page, "Record Not Found.", this.Page);
             }
-            
+
         }
     }
 
@@ -1219,10 +1231,12 @@ public partial class Academic_REPORTS_MarksEntryNotDone : System.Web.UI.Page
             if (ddlSessionID.SelectedIndex > 0)
             {
 
+                string college_IDs = objCommon.LookUp("User_Acc", "UA_COLLEGE_NOS", "UA_NO=" + Session["userno"].ToString());
 
-                DataSet dsCollegeSession = objCommon.FillDropDown("ACD_SESSION_MASTER SM INNER JOIN ACD_COLLEGE_MASTER CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON (SR.SESSIONNO = SM.SESSIONNO)", "DISTINCT CM.COLLEGE_ID", "COLLEGE_NAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSessionID.SelectedValue), "CM.COLLEGE_ID");
+                //DataSet dsCollegeSession = objCommon.FillDropDown("ACD_SESSION_MASTER SM INNER JOIN ACD_COLLEGE_MASTER CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON (SR.SESSIONNO = SM.SESSIONNO)", "DISTINCT CM.COLLEGE_ID", "COLLEGE_NAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSessionID.SelectedValue), "CM.COLLEGE_ID");
+                DataSet dsCollegeSession = objCommon.FillDropDown("ACD_SESSION_MASTER SM INNER JOIN ACD_COLLEGE_MASTER CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON (SR.SESSIONNO = SM.SESSIONNO)", "DISTINCT CM.COLLEGE_ID", "COLLEGE_NAME", "SM.SESSIONID =" + Convert.ToInt32(ddlSessionID.SelectedValue) + " AND (CM.COLLEGE_ID IN (SELECT VALUE FROM DBO.SPLIT('" + college_IDs + "',',')) OR '" + college_IDs + "'='')", "CM.COLLEGE_ID");
 
-                //string college_IDs = objCommon.LookUp("User_Acc", "UA_COLLEGE_NOS", "UA_NO=" + Session["userno"].ToString());
+
                 //DataSet dsCollegeSession = objCC.GetCollegeSession(0, college_IDs);
 
                 ddlSession.Items.Clear();

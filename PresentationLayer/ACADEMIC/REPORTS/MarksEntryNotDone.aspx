@@ -93,14 +93,16 @@
                                         <asp:ListBox ID="ddlSession" runat="server" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control multi-select-demo" SelectionMode="Multiple" TabIndex="1" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"></asp:ListBox>
 
                                         <asp:RequiredFieldValidator ID="rfStaff" runat="server" ControlToValidate="ddlSession" Display="None" SetFocusOnError="True"
-                                            ErrorMessage="Please Select College/Session" ValidationGroup="Summary"></asp:RequiredFieldValidator>
+                                            ErrorMessage="Please Select College" ValidationGroup="Summary"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSession" Display="None" SetFocusOnError="True"
-                                            ErrorMessage="Please Select College/Session" ValidationGroup="MarkEntryStatus"></asp:RequiredFieldValidator>
+                                            ErrorMessage="Please Select College" ValidationGroup="MarkEntryStatus"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSession" Display="None" SetFocusOnError="True"
-                                            ErrorMessage="Please Select College/Session" ValidationGroup="Absent"></asp:RequiredFieldValidator>
+                                            ErrorMessage="Please Select College" ValidationGroup="Absent"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSession" Display="None" SetFocusOnError="True"
+                                            ErrorMessage="Please Select College" ValidationGroup="Status"></asp:RequiredFieldValidator>
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server"
                                             ControlToValidate="ddlSession" Display="None"
-                                            ErrorMessage="Please Select College/Session"
+                                            ErrorMessage="Please Select College"
                                             SetFocusOnError="True" ValidationGroup="Summary"></asp:RequiredFieldValidator>--%>
 
                                         <%--<asp:ListBox ID="ddlCollegeSession" runat="server" AppendDataBoundItems="true" ValidationGroup="configure" TabIndex="1"
@@ -112,7 +114,7 @@
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="MarkEntryStatus"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
-                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSession"
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Status"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
                                     </div>
@@ -196,9 +198,9 @@
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" ErrorMessage="Please Select Semester" ValidationGroup="Absent"
                                             InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
-                                        <asp:RequiredFieldValidator ID="RequiredFir5" runat="server" ControlToValidate="ddlSemester"
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFir5" runat="server" ControlToValidate="ddlSemester"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Absent"
-                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>--%>
                                     </div>
 
 
@@ -218,9 +220,9 @@
                                         <asp:RequiredFieldValidator ID="rfvSubType" runat="server" ControlToValidate="ddlSubType"
                                             Display="None" ErrorMessage="Please Select Course Type" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="Summary"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlSubType"
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlSubType"
                                             Display="None" ErrorMessage="Please Select Course Type" InitialValue="0" SetFocusOnError="True"
-                                            ValidationGroup="Absent"></asp:RequiredFieldValidator>
+                                            ValidationGroup="Absent"></asp:RequiredFieldValidator>--%>
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -234,9 +236,9 @@
                                         <asp:RequiredFieldValidator ID="rfvPattern" runat="server" ControlToValidate="ddlPattern"
                                             Display="None" ErrorMessage="Please Select Pattern" InitialValue="0" SetFocusOnError="true"
                                             ValidationGroup="Summary"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlPattern"
+                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlPattern"
                                             Display="None" ErrorMessage="Please Select Pattern" InitialValue="0" SetFocusOnError="true"
-                                            ValidationGroup="Absent"></asp:RequiredFieldValidator>
+                                            ValidationGroup="Absent"></asp:RequiredFieldValidator>--%>
                                         <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlPattern"
                                             Display="None" ErrorMessage="Please Select Pattern" InitialValue="0" SetFocusOnError="true"
                                             ValidationGroup="ReportShow"></asp:RequiredFieldValidator>--%>
@@ -296,7 +298,7 @@
                                     <div id="Note" runat="server" class="form-group col-lg-7 col-md-12 col-12" visible="false">
                                         <div class=" note-div">
                                             <h5 class="heading">Note (Please Select)</h5>
-                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>For Status Button - <span style="color: green; font-weight: bold">School & Scheme->Session</span></span></p>
+                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>For Status Button - <span style="color: green; font-weight: bold">College/Session</span></span></p>
                                         </div>
                                     </div>
                                 </div>
@@ -313,7 +315,7 @@
                                     CssClass="btn btn-info" OnClick="btnMarkStatus_Click" ValidationGroup="MarkEntryStatus" TabIndex="1" Visible="false" />
                                 <%--CausesValidation="false"--%>
                                 <asp:Button ID="tbnStatus" runat="server" Text="Status"
-                                    CssClass="btn btn-info" TabIndex="1"  OnClick="tbnStatus_Click" ValidationGroup="Summary" Visible="false" />
+                                    CssClass="btn btn-info" TabIndex="1"  OnClick="tbnStatus_Click" ValidationGroup="Status" Visible="false" />
                                 
                                 
                                 <asp:Button ID="btnAbsententryreport" runat="server" Text="Absent entry report" CssClass="btn btn-info" TabIndex="1" OnClick="btnAbsententryreport_Click" Visible="false" ValidationGroup="Absent" />
