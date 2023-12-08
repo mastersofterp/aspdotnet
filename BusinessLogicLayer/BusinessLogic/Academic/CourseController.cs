@@ -3380,6 +3380,7 @@ namespace IITMS
                     return ds;
                 }
 
+                //UPDATED BY SAKSHI M ON 07122023
                 public int InsertSubjectTypeData(Course objCe, int istutorial)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -3394,7 +3395,9 @@ namespace IITMS
                             new SqlParameter("@P_ACTIVESTATUS",objCe.activestatus),
                             new SqlParameter("@P_SUBNAME", objCe.subjecttype),
                             new SqlParameter("@P_ISTUTORIAL",istutorial),
-                              new SqlParameter("@P_OUT", SqlDbType.Int),
+                            new SqlParameter("@P_UANO", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"])),
+                            new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString()),
+                            new SqlParameter("@P_OUT", SqlDbType.Int),
                               };
 
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
@@ -3418,6 +3421,8 @@ namespace IITMS
                     return retStatus;
                 }
 
+
+                //UPDATED BY SAKSHI M ON 07122023
                 public int UpdateSubjectTypeData(Course objCe, int subid, int istutorial)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -3431,7 +3436,9 @@ namespace IITMS
                             new SqlParameter("@P_SEC_BATCH",objCe.sec_batch),
                              new SqlParameter("@P_ACTIVESTATUS",objCe.activestatus),
                               new SqlParameter("@P_SUBNAME", objCe.subjecttype),
-                              new SqlParameter ("@P_ISTUTORIAL",istutorial),
+                             new SqlParameter("@P_UANO", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"])),
+                            new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString()),
+                              new SqlParameter("@P_ISTUTORIAL",istutorial),
                               new SqlParameter("@P_OUT", SqlDbType.Int),
                           };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
