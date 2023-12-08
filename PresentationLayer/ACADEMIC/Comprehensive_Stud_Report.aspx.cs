@@ -597,7 +597,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             if (dsStudentPro != null && dsStudentPro.Tables.Count > 0 && dsStudentPro.Tables[0].Rows.Count > 0)
                             {
                                 lvProt.DataSource = dsStudentPro;
-                                lvProt.DataBind();
+                                lvProt.DataBind();//added by lalit 
                             }
                             else
                             {
