@@ -1168,7 +1168,14 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     {
         try
         {
-            ValidationMulti();
+            if (ViewState["usertype"].ToString() == "2")
+            {
+
+            }
+            else
+            {
+                ValidationMulti();
+            }
             PhdController objPhdC = new PhdController();
 
             Phd objS = new Phd();
