@@ -353,6 +353,8 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
                     gvChildGrid_1.Columns[6].Visible = false;  //S1T4 MARK
                     gvChildGrid_1.Columns[7].Visible = false;  //S2 MARK
                     gvChildGrid_1.Columns[8].Visible = false; //EXTERNAL MARK
+                    gvChildGrid_1.Columns[9].Visible = false; //EXTERNAL MARK
+                    gvChildGrid_1.Columns[10].Visible = false; //EXTERNAL MARK
 
                     DataSet dsComponent = objMEDC.GetMarksEntryComponentDetail(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(childhdfCourseNo.Value), Convert.ToInt32(childhdfSubType.Value));
                     int COUNT = 0;
@@ -406,6 +408,22 @@ public partial class ACADEMIC_REPORTS_MarksEntryDetailReport : System.Web.UI.Pag
                             {
                                 gvChildGrid_1.Columns[8].HeaderText = Convert.ToString(dr["EXAMNAME"]);
                                 gvChildGrid_1.Columns[8].Visible = true;
+                            }
+                        }
+                        else if (COUNT == 7)
+                        {
+                            if (Convert.ToString(dr["EXAMNAME"]) != string.Empty)
+                            {
+                                gvChildGrid_1.Columns[9].HeaderText = Convert.ToString(dr["EXAMNAME"]);
+                                gvChildGrid_1.Columns[9].Visible = true;
+                            }
+                        }
+                        else if (COUNT == 8)
+                        {
+                            if (Convert.ToString(dr["EXAMNAME"]) != string.Empty)
+                            {
+                                gvChildGrid_1.Columns[10].HeaderText = Convert.ToString(dr["EXAMNAME"]);
+                                gvChildGrid_1.Columns[10].Visible = true;
                             }
                         }
 
