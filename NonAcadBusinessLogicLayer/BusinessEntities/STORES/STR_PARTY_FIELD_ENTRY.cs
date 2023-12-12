@@ -22,6 +22,13 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
        //pROPERY
 
          private DataTable _VENDOR_TAX_TBL;
+
+
+         public int IsBlob { get; set; }   
+         public string VENDRQUOT_FILE_NAME { get; set; }
+         public DataTable VENDRQUOT_UPLOAD_FILE_TBL { get; set; }
+
+
          public DataTable VENDOR_TAX_TBL
          {
              get
