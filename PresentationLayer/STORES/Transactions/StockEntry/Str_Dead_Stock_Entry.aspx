@@ -147,7 +147,7 @@
                                             <label>Stock Entry Date</label>
                                         </div>
                                         <div class="input-group date">
-                                            <div class="input-group-addon" id="Image1">
+                                            <div class="input-group-addon" id="Image1234">
                                                 <i class="fa fa-calendar text-blue"></i>
                                             </div>
                                             <%--  <div class="input-group-addon">
@@ -156,7 +156,7 @@
                                             <asp:TextBox ID="txtIssueDate" runat="server" CssClass="form-control" ToolTip="Select Date" /><%--ValidationGroup="Store"--%>
 
                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender5" runat="server" Enabled="true" EnableViewState="true"
-                                                Format="dd/MM/yyyy" PopupButtonID="Image1" TargetControlID="txtIssueDate" />
+                                                Format="dd/MM/yyyy" PopupButtonID="Image1234" TargetControlID="txtIssueDate" />
                                             <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender5" runat="server" Mask="99/99/9999" MaskType="Date"
                                                 OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtIssueDate" />
                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator5" runat="server" EmptyValueMessage="Please Enter Valid Event Issue Date"
@@ -242,7 +242,7 @@
                             </div>
                             <div class="col-12 btn-footer">
 
-                                <asp:Button ID="btnSaveItem" runat="server" CssClass="btn btn-info" Text="Add Item" ValidationGroup="AddItem" OnClick="btnSaveItem_Click" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; this.value='Please Wait..';" />
+                                <asp:Button ID="btnSaveItem" runat="server" CssClass="btn btn-info" Text="Add Item" ValidationGroup="AddItem" OnClick="btnSaveItem_Click" UseSubmitBehavior="false" OnClientClick="this.disabled='true'; setTimeout('enableButton()', 5000)" />
                                 <%--OnClientClick="return GetPO()"--%>
                                 <asp:Button ID="btnCancelItem" runat="server" Visible="false" CssClass="btn btn-warning" Text="Cancel" CausesValidation="true" />
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="AddItem" />
@@ -799,6 +799,16 @@
         });
 
     </script>
+     <script type="text/javascript">
+         debugger;
+         function enableButton() {
+             // ctl00_ContentPlaceHolder1_btnSubmit
+             $('#ctl00_ContentPlaceHolder1_btnSaveItem').prop('disabled', false);
+             //  document.getElementById($('#ctl00_ContentPlaceHolder1_btnSubmit')).value = 'Submit';
+             //   $('#ctl00_ContentPlaceHolder1_btnSubmit').text('Submit');
+             // document.getElementById('#ctl00_ContentPlaceHolder1_btnSubmit').prop('disabled', true);
 
+         }
+</script>
 
 </asp:Content>

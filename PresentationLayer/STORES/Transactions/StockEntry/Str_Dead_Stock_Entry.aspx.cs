@@ -777,7 +777,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
                 {
                     if (txtIssueDate.Text == string.Empty)
                     {
-                        objCommon.DisplayMessage("Please Enter Issue Date", this);
+                        objCommon.DisplayMessage("Please Enter Stock Entry Date", this);
                         return;
                     }
                 }
@@ -798,7 +798,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
             {
                 if (Convert.ToDateTime(txtIssueDate.Text) > DateTime.Today)
                 {
-                    objCommon.DisplayMessage("Issue Date Is Not Greater Than Current Date", this);
+                    objCommon.DisplayMessage("Stock Entry Date Is Not Greater Than Current Date", this);
                     return;
                 }
             }
@@ -832,7 +832,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
                         GenerateDeadStockNumber();
 
                         cs = (CustomStatus)strSerial.AddDeadStockEntry(objLM, orgId, createdBy, CreatedDate, TranDate, DSTKID, modifyby, txtDStoNumber.Text, status); //Shaikh Juned (29/03/2022)
-                        objCommon.DisplayMessage("Record Saved & Stock Number Generated Successfully", this);
+                        objCommon.DisplayMessage(this.Page,"Record Saved & Stock Number Generated Successfully", this);
                         //GenerateDeadStockNumber();
                         divdednumber.Visible = true;
                         btnSubmit.Enabled = false;
@@ -892,7 +892,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
                     }
                 deadstockno = txtDStoNumber.Text;
                     cs = (CustomStatus)strSerial.UpdDeadStockEntry(objLM, orgId, createdBy, CreatedDate, ModifyBy, TranDate, DSTKID, deadstockno, status); //Shaikh Juned (29/03/2022)
-                objCommon.DisplayMessage("Record Updated Successfully", this);
+                    objCommon.DisplayMessage(this.Page,"Record Updated Successfully", this);
                 divdednumber.Visible = true;
                 btnSubmit.Enabled = false;
                 //ClearItem();
@@ -936,7 +936,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
 
     private void ClearAll()
     {
-
+        ddlItem.Enabled = true;
         btnAddNew.Visible = false;
         PnlItem.Visible = true;
         btnSaveItem.Visible = true;
@@ -972,6 +972,10 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
         divbtn.Visible = false;
         PnlitemDetail.Visible = true;
         btnSubmit.Enabled = true;
+        ddlItem.Enabled = true;
+        ddlItem.SelectedValue = "0";
+        txtItemQty.Text = string.Empty;
+        txtRate.Text = string.Empty;
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -1405,6 +1409,7 @@ public partial class STORES_Transactions_StockEntry_Str_Dead_Stock_Entry : Syste
     {
         if (txtDStoNumber.Text==string.Empty)
         {
+            lvitem.Visible = false;
             MessageBox("Data Is Not Avelable.");
             return;
         }
