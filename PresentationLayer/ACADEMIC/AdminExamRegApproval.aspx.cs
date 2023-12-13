@@ -159,10 +159,10 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
             DataSet ds = objExamController.GetExamRegStud(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue),Convert.ToInt32(ddlSession.SelectedValue),Convert.ToInt32(rdoDegree.SelectedValue));
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                if (Convert.ToInt32(Session["OrgId"]) == 1)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#REMARKSDATA1').hide();$('td:nth-child(5)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#REMARKSDATA1').hide();$('td:nth-child(5)').hide();});", true);
-                }
+                //if (Convert.ToInt32(Session["OrgId"]) == 1)
+                //{
+                //    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#REMARKSDATA1').hide();$('td:nth-child(5)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#REMARKSDATA1').hide();$('td:nth-child(5)').hide();});", true);
+                //}
                 lvStudentRecords.DataSource = ds;
                 lvStudentRecords.DataBind();
                 lvStudentRecords.Visible = true;
