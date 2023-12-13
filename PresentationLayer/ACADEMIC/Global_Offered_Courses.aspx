@@ -73,6 +73,14 @@
             color: #999; /* Example text color for disabled state */
             /* Add any other styles to visually indicate the disabled state */
         }
+
+        .studentlist .dataTables_filter {
+            display: none !important;
+        }
+
+        .studentlist .dt-buttons {
+            display: none !important;
+        }
     </style>
 
 
@@ -720,78 +728,79 @@
                                                     </div>
                                                 </div>
                                                 <asp:Panel ID="Panel1" runat="server">
+                                                    <div class="studentlist">
+                                                        <asp:ListView ID="lvStudents" runat="server">
+                                                            <LayoutTemplate>
+                                                                <div class="sub-heading">
+                                                                    <h5>Student List</h5>
+                                                                </div>
+                                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblStudents">
+                                                                    <thead class="bg-light-blue" style="top: -15px !important;">
+                                                                        <tr>
+                                                                            <th>
+                                                                                <asp:CheckBox ID="cbHead" runat="server" onclick="totAllSubjects(this)" />
+                                                                            </th>
+                                                                            <th>
+                                                                                <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
+                                                                            </th>
+                                                                            <th>Student Name
+                                                                            </th>
+                                                                            <th>
+                                                                                <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
+                                                                            </th>
+                                                                            <th>Semester
+                                                                            </th>
+                                                                            <th>
+                                                                                <asp:Label ID="lblDYddlSection_Tab" runat="server" Font-Bold="true"></asp:Label>
+                                                                            </th>
 
-                                                    <asp:ListView ID="lvStudents" runat="server">
-                                                        <LayoutTemplate>
-                                                            <div class="sub-heading">
-                                                                <h5>Student List</h5>
-                                                            </div>
-                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblStudents">
-                                                                <thead class="bg-light-blue" style="top: -15px !important;">
-                                                                    <tr>
-                                                                        <th>
-                                                                            <asp:CheckBox ID="cbHead" runat="server" onclick="totAllSubjects(this)" />
-                                                                        </th>
-                                                                        <th>
-                                                                            <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
-                                                                        </th>
-                                                                        <th>Student Name
-                                                                        </th>
-                                                                        <th>
-                                                                            <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
-                                                                        </th>
-                                                                        <th>Semester
-                                                                        </th>
-                                                                        <th>
-                                                                            <asp:Label ID="lblDYddlSection_Tab" runat="server" Font-Bold="true"></asp:Label>
-                                                                        </th>
-
-                                                                        <th>Main Teacher
-                                                                        </th>
-                                                                        <th>Additional Teacher
-                                                                        </th>
+                                                                            <th>Main Teacher
+                                                                            </th>
+                                                                            <th>Additional Teacher
+                                                                            </th>
 
 
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr id="itemPlaceholder" runat="server" />
-                                                                </tbody>
-                                                            </table>
-                                                        </LayoutTemplate>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </LayoutTemplate>
 
-                                                        <ItemTemplate>
-                                                            <tr>
-                                                                <td>
-                                                                    <asp:CheckBox ID="cbRow" runat="server" onclick="totStud(this);" ToolTip='<%# Eval("IDNO")%>' />
-                                                                </td>
-                                                                <td>
-                                                                    <%# Eval("REGNO")%>
-                                                                </td>
-                                                                <td>
-                                                                    <%# Eval("STUDNAME")%>
-                                                                </td>
-                                                                <td>
-                                                                    <%# Eval("BRANCHNAME")%>
-                                                                </td>
-                                                                <td>
-                                                                    <%# Eval("SEMESTERNAME")%>
-                                                                </td>
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:CheckBox ID="cbRow" runat="server" onclick="totStud(this);" ToolTip='<%# Eval("IDNO")%>' />
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("REGNO")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("STUDNAME")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("BRANCHNAME")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("SEMESTERNAME")%>
+                                                                    </td>
 
-                                                                <td>
-                                                                    <%# Eval("SECTIONNAME")%>
-                                                                </td>
+                                                                    <td>
+                                                                        <%# Eval("SECTIONNAME")%>
+                                                                    </td>
 
-                                                                <td>
-                                                                    <%# Eval("UA_FULLNAME")%>
-                                                                </td>
-                                                                <td>
-                                                                    <%# Eval("ADD_TEACHER_NAME")%>
-                                                                </td>
+                                                                    <td>
+                                                                        <%# Eval("UA_FULLNAME")%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%# Eval("ADD_TEACHER_NAME")%>
+                                                                    </td>
 
-                                                            </tr>
-                                                        </ItemTemplate>
-                                                    </asp:ListView>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:ListView>
+                                                    </div>
                                                 </asp:Panel>
                                             </div>
                                         </div>

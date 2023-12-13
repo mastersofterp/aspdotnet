@@ -1317,7 +1317,22 @@
 
             var classType = $("[id*=ctl00_ContentPlaceHolder1_ddlClassType]").val();
             var att_status = $("[id*=ctl00_ContentPlaceHolder1_ddlStatus]").val();
-            var txtTopicDesc = document.getElementById("<%=txtTopcDesc.ClientID%>").value;
+            var hdnTeachingPlanStatus = document.getElementById('<%=hdnTeachingPlanStatus.ClientID %>').value;
+            // hdnTeachingPlanStatus=1 dropdown
+            if (hdnTeachingPlanStatus == "1") {
+                var tpno = $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").val();
+                if (tpno == 0) {
+                    alert('Please Select Topic Covered', 'Warning!');
+                    $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").focus();
+                    return false;
+                }
+            }
+            else {
+                tpno = "0";
+
+                var txtTopicDesc = document.getElementById("<%=txtTopcDesc.ClientID%>").value;
+            }
+
 
             if (txtTopicDesc == null || txtTopicDesc == "") {
                 txtTopicDesc = "";

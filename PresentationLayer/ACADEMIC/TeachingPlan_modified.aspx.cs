@@ -153,18 +153,18 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SCHEMENO = SC.SCHEMENO)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND ISNULL(CANCEL,0)=0", "COSCHNO"); //old scheme bind 
 
                 //new Scheme bind added by Ro-hit M on 17-10-2023 as per ticket no  48557
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID DESC");
 
-                objCommon.FillDropDownList(ddlSessionGlobal, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID");
+                objCommon.FillDropDownList(ddlSessionGlobal, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID DESC");
             }
             else
             {
                 //objCommon.FillDropDownList(ddlScheme, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID) INNER JOIN ACD_SCHEME SC ON(SC.SCHEMENO=SM.SCHEMENO) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID)", "DISTINCT COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COSCHNO");
 
                 //new Scheme bind added by Ro-hit M on 17-10-2023 as per ticket no  48557
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ") AND ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND ISNULL(CT.CANCEL,0)=0", "S.SESSIONID DESC");
 
-                objCommon.FillDropDownList(ddlSessionGlobal, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID");
+                objCommon.FillDropDownList(ddlSessionGlobal, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
             }
         }
         catch
@@ -3433,13 +3433,26 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
 
         }
+        else
+        {
+            ddlSemesterGlobal.Items.Clear();
+            ddlSemesterGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlTimeTableDateGlobal.Items.Clear();
+            ddlTimeTableDateGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlGlobalSection.Items.Clear();
+            ddlGlobalSection.Items.Add(new ListItem("Please Select", "0"));
+            ddlUnitNoGlobal.Items.Clear();
+            ddlUnitNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlLectureNoGlobal.Items.Clear();
+            ddlLectureNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+        }
     }
 
     protected void ddlSemesterGlobal_SelectedIndexChanged(object sender, EventArgs e)
     {
-
         lvTeachingPlanGlobalElective.DataSource = null;
         lvTeachingPlanGlobalElective.DataBind();
+        txtLectureTopicGlobal.Text = "";
         if (ddlSemesterGlobal.SelectedIndex > 0)
         {
 
@@ -3450,18 +3463,23 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             string courseno = repoarray[1].ToString();
             ViewState["globalSUBID"] = SUBID;
             ViewState["globalcourseno"] = courseno;
-            objCommon.FillDropDownList(ddlTimeTableDateGlobal, "ACD_TIME_TABLE_CONFIG TT INNER JOIN ACD_COURSE_TEACHER CT ON (CT.CT_NO=TT.CTNO)", "DISTINCT CONCAT(CAST(START_DATE AS DATE),'-',CAST(END_DATE AS DATE)) AS TT_DATE", "CAST(CONVERT(VARCHAR(10) ,START_DATE,103) AS NVARCHAR(15)) + ' - '+ CAST(CONVERT(VARCHAR(10),END_DATE ,103) AS NVARCHAR(15))", "CT.COURSENO=" + Convert.ToInt32(courseno) + " AND SUBID=" + Convert.ToInt32(SUBID) + " AND CT.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ") AND ISNULL(TT.CANCEL,0)=0 AND ISNULL(CT.CANCEL,0)=0 AND (CT.UA_NO =" + Convert.ToInt32(Session["userno"]) + " OR CT.ADTEACHER =" + Convert.ToInt32(Session["userno"]) + ")", "TT_DATE");
-            ddlTimeTableDateGlobal.Focus();
-            //decimal tutorial = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "THEORY", "COURSENO=" + Convert.ToInt32(courseno)));
-            //if (tutorial > 0)
-            //{
-            //    dvTutorial.Visible = true;
-            //}
-            //else
-            //{
-            //    dvTutorial.Visible = false;
-            //}
+            objCommon.FillDropDownList(ddlGlobalSection, "ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON(CT.SECTIONNO=S.SECTIONNO) INNER JOIN ACD_TIME_TABLE_CONFIG TTG ON(TTG.CTNO= CT.CT_NO) INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONNO=CT.SESSIONNO)", "DISTINCT CT.SECTIONNO", "S.SECTIONNAME", "CT.COURSENO=" + Convert.ToInt32(courseno) + " AND SM.SESSIONID =" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND ISNULL(TTG.CANCEL,0)=0 AND ISNULL(CT.CANCEL,0)=0 AND (CT.UA_NO =" + Convert.ToInt32(Session["userno"]) + " OR ISNULL(CT.ADTEACHER,0) =" + Convert.ToInt32(Session["userno"]) + ")", "CT.SECTIONNO");
+            ddlGlobalSection.Focus();
+
         }
+        else
+        {
+           
+            ddlTimeTableDateGlobal.Items.Clear();
+            ddlTimeTableDateGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlGlobalSection.Items.Clear();
+            ddlGlobalSection.Items.Add(new ListItem("Please Select", "0"));
+            ddlUnitNoGlobal.Items.Clear();
+            ddlUnitNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlLectureNoGlobal.Items.Clear();
+            ddlLectureNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+        }
+
     }
     protected void ddlTimeTableDateGlobal_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -3611,12 +3629,13 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         int session = Convert.ToInt32(ddlSessionGlobal.SelectedValue);
         int ua_no = Convert.ToInt32(Session["userno"]);
         int courseno = Convert.ToInt32(ViewState["globalcourseno"].ToString());
+        int sectionno = Convert.ToInt32(ddlGlobalSection.SelectedValue);
 
         //added buy sumit on 07022020
         //string DEGREENO = objCommon.LookUp("ACD_SCHEME", "DEGREENO", "SCHEMENO IN (SELECT DISTINCT SCHEMENO FROM ACD_COURSE WHERE COURSENO = " + Convert.ToInt32(ViewState["courseno"].ToString()) + ")");
 
 
-        DataSet ds = objTPC.GetSlotGlobalElective(Convert.ToInt32(ddlSessionGlobal.SelectedValue), ua_no, courseno, DAYNO, startdate, enddate);
+        DataSet ds = objTPC.GetSlotGlobalElective(Convert.ToInt32(ddlSessionGlobal.SelectedValue), ua_no, courseno, DAYNO, startdate, enddate, sectionno);
 
         ddllist.Items.Clear();
         ddllist.Items.Add("Please Select");
@@ -3640,7 +3659,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             DataSet ds = new DataSet();
             int ua_no = ua_no = Convert.ToInt32(Session["userno"]);
 
-            ds = objTeachingPlanController.GetAllTEACHING_PLANGlobalElective(ua_no, Convert.ToInt32(ViewState["globalcourseno"].ToString()), Convert.ToInt32(Session["OrgId"]));
+            ds = objTeachingPlanController.GetAllTEACHING_PLANGlobalElective(ua_no, Convert.ToInt32(ViewState["globalcourseno"].ToString()), Convert.ToInt32(Session["OrgId"]), Convert.ToInt32(ddlGlobalSection.SelectedValue));
 
             if (ds != null && ds.Tables.Count > 0)
             {
@@ -3696,7 +3715,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
                 for (int i = 1; i <= 80; i++)
                 {
-                    int count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "UA_NO =" + Session["userno"] + " AND COURSENO =" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND UNIT_NO=" + Convert.ToInt32(ddlUnitNoGlobal.SelectedValue) + " AND LECTURE_NO=" + Convert.ToInt32(i) + " AND TUTORIAL = 0  AND ISNULL(CANCEL,0)=0 AND SESSIONNO IN( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ")"));
+                    int count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "UA_NO =" + Session["userno"] + " AND COURSENO =" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND UNIT_NO=" + Convert.ToInt32(ddlUnitNoGlobal.SelectedValue) + " AND LECTURE_NO=" + Convert.ToInt32(i) + " AND TUTORIAL = 0  AND ISNULL(CANCEL,0)=0 AND SECTIONNO="+ Convert.ToInt32(ddlGlobalSection.SelectedValue) +" AND SESSIONNO IN( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ")"));
                     if (count == 0)
                     {
                         ddlLectureNoGlobal.Items.Add(new ListItem(i.ToString()));
@@ -4030,6 +4049,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
             objExam.SessionNo = Convert.ToInt32(ddlSessionGlobal.SelectedValue);
             objExam.Ua_No = Convert.ToInt32(Session["userno"]);
+            objExam.Sectionno = Convert.ToInt32(ddlGlobalSection.SelectedValue);
 
             int Counter = CheckDropdownSelectGlobalElective();
             int counterSlot = this.CheckSlotSelectGlobalElective();
@@ -4247,7 +4267,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         {
             string TP_NO = string.Empty;
 
-            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
+            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND SECTIONNO=" + Convert.ToInt32(ddlGlobalSection.SelectedValue)+ " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
             if (TP_NO != null && TP_NO != string.Empty)
             {
                 flag = true;
@@ -4266,7 +4286,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         try
         {
             string TP_NO = string.Empty;
-            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND TP_NO != " + ViewState["GlobalTP_NO"] + " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
+            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND TP_NO != " + ViewState["GlobalTP_NO"] + " AND SECTIONNO=" + Convert.ToInt32(ddlGlobalSection.SelectedValue) + " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
 
             if (TP_NO != null && TP_NO != string.Empty)
             {
@@ -4283,4 +4303,41 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
 
 
+    protected void ddlGlobalSection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        txtLectureTopicGlobal.Text = "";
+        lvTeachingPlanGlobalElective.DataSource = null;
+        lvTeachingPlanGlobalElective.DataBind();
+        if (ddlSemesterGlobal.SelectedIndex > 0)
+        {
+
+            string MSG = ddlSemesterGlobal.SelectedValue.ToString();// Request.Form["msg"].ToString();
+            string[] repoarray;
+            repoarray = MSG.Split('-');
+            string SUBID = repoarray[0].ToString();
+            string courseno = repoarray[1].ToString();
+            ViewState["globalSUBID"] = SUBID;
+            ViewState["globalcourseno"] = courseno;
+            objCommon.FillDropDownList(ddlTimeTableDateGlobal, "ACD_TIME_TABLE_CONFIG TT INNER JOIN ACD_COURSE_TEACHER CT ON (CT.CT_NO=TT.CTNO)", "DISTINCT CONCAT(CAST(START_DATE AS DATE),'-',CAST(END_DATE AS DATE)) AS TT_DATE", "CAST(CONVERT(VARCHAR(10) ,START_DATE,103) AS NVARCHAR(15)) + ' - '+ CAST(CONVERT(VARCHAR(10),END_DATE ,103) AS NVARCHAR(15))", "CT.COURSENO=" + Convert.ToInt32(courseno) + " AND SUBID=" + Convert.ToInt32(SUBID) + " AND CT.SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ") AND ISNULL(TT.CANCEL,0)=0 AND ISNULL(CT.CANCEL,0)=0 AND (CT.UA_NO =" + Convert.ToInt32(Session["userno"]) + " OR CT.ADTEACHER =" + Convert.ToInt32(Session["userno"]) + ") AND CT.SECTIONNO =" + Convert.ToInt32(ddlGlobalSection.SelectedValue), "TT_DATE");
+            ddlTimeTableDateGlobal.Focus();
+            //decimal tutorial = Convert.ToDecimal(objCommon.LookUp("ACD_COURSE", "THEORY", "COURSENO=" + Convert.ToInt32(courseno)));
+            //if (tutorial > 0)
+            //{
+            //    dvTutorial.Visible = true;
+            //}
+            //else
+            //{
+            //    dvTutorial.Visible = false;
+            //}
+        }
+        else
+        {
+            ddlTimeTableDateGlobal.Items.Clear();
+            ddlTimeTableDateGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlUnitNoGlobal.Items.Clear();
+            ddlUnitNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+            ddlLectureNoGlobal.Items.Clear();
+            ddlLectureNoGlobal.Items.Add(new ListItem("Please Select", "0"));
+        }
+    }
 }

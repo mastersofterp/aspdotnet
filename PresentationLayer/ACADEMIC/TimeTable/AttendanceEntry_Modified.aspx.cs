@@ -2772,6 +2772,22 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
             return;
         }
+
+        //divClgSession.Visible = false;
+        try
+        {
+            Calendar1.Dispose();
+            if (ddlSessionGlobal.SelectedIndex > 0)
+            {
+                this.GetDates();
+                this.GetCourse();
+                Calendar1.DayRender += new DayRenderEventHandler(this.Calendar1_DayRender);
+            }
+        }
+        catch
+        {
+            throw;
+        }
     }
     protected void rdoGlobalElective_CheckedChanged(object sender, EventArgs e)
     {
