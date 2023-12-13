@@ -157,7 +157,8 @@
                                                 <div class="sub-heading">
                                                     <h5>Students List</h5>
                                                 </div>
-                                                <table class="table table-striped table-bordered nowrap display">
+                                                <%--<table class="table table-striped table-bordered nowrap display">--%>
+                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
                                                     <thead>
                                                         <tr class="bg-light-blue">
                                                             <th>RRN No.</th>

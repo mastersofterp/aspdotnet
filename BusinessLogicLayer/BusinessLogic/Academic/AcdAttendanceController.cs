@@ -4891,7 +4891,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="att_status"></param>
         /// <param name="topic_desc"></param>
         /// <returns></returns>
-        public int CopyAttendacnce(int slotno, int att_no, int class_type, int att_status, string topic_desc)
+        public int CopyAttendacnce(int slotno, int att_no, int class_type, int att_status, string topic_desc, int Tpno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -4899,16 +4899,17 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objParams = null;
 
-                objParams = new SqlParameter[6];
+                objParams = new SqlParameter[7];
                 objParams[0] = new SqlParameter("@P_SLOTNO", slotno);
                 objParams[1] = new SqlParameter("@P_ATT_NO", att_no);
 
                 objParams[2] = new SqlParameter("@P_CLASS_TYPE", class_type);
                 objParams[3] = new SqlParameter("@P_ATT_STATUS", att_status);
                 objParams[4] = new SqlParameter("@P_TOPIC_DESC", topic_desc);
+                objParams[5] = new SqlParameter("@P_TPNO", Tpno);
 
-                objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[5].Direction = ParameterDirection.Output;
+                objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[6].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("PKG_INSERT_COPY_ATTENDANCE_DATA", objParams, true);
                 if (obj != null)
                 {

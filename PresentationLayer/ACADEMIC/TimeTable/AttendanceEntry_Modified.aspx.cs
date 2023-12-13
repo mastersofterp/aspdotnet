@@ -1513,6 +1513,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         {
                             ddlClassType.Enabled = false;
                         }
+                        hdnTeachingPlanStatus.Value = "1";
                     }
                     else
                     {
@@ -1575,6 +1576,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         //{
                         //    rbRegular.Checked = true;
                         //}
+                        hdnTeachingPlanStatus.Value = "0";
                     }
                     #endregion regular att..
                 }
@@ -2732,12 +2734,12 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc)
+    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc, int Tpno)
     {
         AcdAttendanceController objAttController = new AcdAttendanceController();
         int outval = 0;
 
-        outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc);
+        outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc, Tpno);
 
         if (outval != null || outval != 0)
         {

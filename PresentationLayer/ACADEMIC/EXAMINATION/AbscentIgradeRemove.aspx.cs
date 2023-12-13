@@ -1,4 +1,15 @@
-﻿using System;
+﻿
+//======================================================================================
+// PROJECT NAME  : COMMON CODE                                                          
+// MODULE NAME   : EXAMINATION
+// PAGE NAME     : REMOVE ABSENT ENTRY [EXAMINATION]
+// CREATION DATE :                                         
+// CREATED BY    : PRAFULL MUKE          
+                                                 
+//=======================================================================================
+
+
+using System;
 using System.Web.UI;
 using System.Data;
 using System.Web.UI.WebControls;
@@ -62,12 +73,10 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));//Header
         }
     }
-
     private void CheckPageAuthorization()
     {
         if (Request.QueryString["pageno"] != null)
         {
-            //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
                 Response.Redirect("~/notauthorized.aspx?page=AbscentIgradeRemove.aspx");
@@ -75,11 +84,9 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
         }
         else
         {
-            //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=AbscentIgradeRemove.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=AbscentIgradeRemove.aspx");
         }
     }
-
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
 
@@ -268,16 +275,66 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
             CheckBox chk_Igrade = (CheckBox)item.FindControl("IGrade");
             CheckBox UfmGrade = (CheckBox)item.FindControl("UfmGrade");
             hfd_IDNO = ((HiddenField)item.FindControl("hdf_IDNO")).Value;
+            if (ddlAbIgEntry.SelectedValue == "1")
+            {
+                if (chk_AbGrade.Checked == false)
+                {
 
-            if (chk_AbGrade.Checked == false && chk_AbGrade.Enabled == true)
-            {
-                ABgrade += "1" + ",";
-                //OldGrade += ViewState["grade"] + ",";
-                //idno += hfd_IDNO + ",";
+                    if (chk_AbGrade.Checked == false && chk_AbGrade.Enabled == true)
+                    {
+                        ABgrade += "1" + ",";
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        ABgrade += "0" + ',';
+                    }
+
+                    if (chk_Igrade.Checked == false && chk_Igrade.Enabled == true)
+                    {
+                        IGrdae += "1" + ',';
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        IGrdae += "0" + ',';
+                    }
+                    OldGrade += ViewState["grade"] + ",";
+                    idno += hfd_IDNO + ",";
+                }
             }
-            else
+            else if (ddlAbIgEntry.SelectedValue == "2")
             {
-                ABgrade += "0" + ',';
+                if (chk_Igrade.Checked == false )
+                {
+
+                    if (chk_AbGrade.Checked == false && chk_AbGrade.Enabled == true)
+                    {
+                        ABgrade += "1" + ",";
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        ABgrade += "0" + ',';
+                    }
+
+                    if (chk_Igrade.Checked == false && chk_Igrade.Enabled == true)
+                    {
+                        IGrdae += "1" + ',';
+                        //OldGrade += ViewState["grade"] + ",";
+                        //idno += hfd_IDNO + ",";
+                    }
+                    else
+                    {
+                        IGrdae += "0" + ',';
+                    }
+                    OldGrade += ViewState["grade"] + ",";
+                    idno += hfd_IDNO + ",";
+                }
+                
             }
             else if (ddlAbIgEntry.SelectedValue == "3")
             {
@@ -322,19 +379,6 @@ public partial class ACADEMIC_EXAMINATION_AbscentIgradeRemove : System.Web.UI.Pa
                     idno += hfd_IDNO + ",";
                 }
             }
-
-            if (chk_Igrade.Checked == false && chk_Igrade.Enabled == true)
-            {
-                IGrdae += "1" + ',';
-                //OldGrade += ViewState["grade"] + ",";
-                //idno += hfd_IDNO + ",";
-            }
-            else
-            {
-                IGrdae += "0" + ',';
-            }
-            OldGrade += ViewState["grade"] + ",";
-            idno += hfd_IDNO + ",";
 
         }
        // return;
