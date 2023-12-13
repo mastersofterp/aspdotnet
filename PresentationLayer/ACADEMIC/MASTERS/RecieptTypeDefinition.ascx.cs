@@ -127,6 +127,8 @@ public partial class Fees_RecieptTypeDefinition : System.Web.UI.UserControl
                 recieptType.isadmission = 0;
             }
 
+            recieptType.IsLateFine = (chkLateFineStatus.Checked) ? 1 : 0;
+
 
             //Check whether to add or update
             if (ViewState["action"] != null)
@@ -229,6 +231,8 @@ public partial class Fees_RecieptTypeDefinition : System.Web.UI.UserControl
             }
             //
 
+            chkLateFineStatus.Checked = (dt.Rows[0]["IS_LATE_FINE_APPLICABLE"].ToString() == "1") ? true : false;
+
             // ddlCompany.SelectedValue = dt.Rows[0]["CNAME"].ToString();
             if (dt.Rows[0]["LINKED"].ToString() == "True")
                 rdoYes.Checked = true;
@@ -272,6 +276,7 @@ public partial class Fees_RecieptTypeDefinition : System.Web.UI.UserControl
         ddlBelongsTo.SelectedIndex = 0;
         txtAccountNo.Text = string.Empty;
         chkStatus.Checked = false;
+        chkLateFineStatus.Checked = false;
         //ddlCompany.SelectedValue = "Please Select";
 
         ViewState["action"] = "add";

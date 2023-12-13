@@ -15,7 +15,13 @@
             </ProgressTemplate>
         </asp:UpdateProgress>
     </div>
+    <style>
 
+        .dataTables_scrollHeadInner {
+    width: max-content!important;
+}
+
+    </style>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -163,7 +169,7 @@
                                         <asp:Button ID="btnShow" runat="server" Text="SHOW"  OnClick="btnShow_Click" TabIndex="8" ToolTip="Shows Details" ValidationGroup="show" CssClass="btn btn-primary"/> 
                                         <asp:Button ID="btnsubmit" runat="server" Text="SUBMIT"  OnClick="btnSubmit_Click" TabIndex="9" ToolTip="" ValidationGroup="show" CssClass="btn btn-primary"/>                                         
                                         <asp:Button ID="btnReport" runat="server" Text="REPORT" ValidationGroup="Show" CssClass="btn btn-info" TabIndex="10" Visible="false" />                                        
-                                       <asp:Button ID="btnCancel" runat="server" Text="CANCLE"  CssClass="btn btn-warning" TabIndex="11" OnClick="btncancle_Click" />
+                                       <asp:Button ID="btnCancel" runat="server" Text="CANCEL"  CssClass="btn btn-warning" TabIndex="11" OnClick="btncancle_Click" />
                                         <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="show"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                     </div>
@@ -182,8 +188,10 @@
                                                     <tr>
                                                         <th>                                                                
                                                         <asp:CheckBox ID="chkAll" runat="server" onclick="totAllSubjects(this);" />
-                                                           Select All
+                                                           All
                                                          </th>
+                                                         <th>Print
+                                                        </th>
                                                         <th>Enrollment No.
                                                         </th>
                                                         <th>Student Name
@@ -194,6 +202,14 @@
                                                         <th>Course Code
                                                         </th>
                                                         <th>Status
+                                                        </th>    <%--[PAY_STATUS] [PAY_MODE],TOTAL_AMT[TOTAL_AMT]--%>
+                                                         <th>PAYMENT STATUS
+                                                        </th>
+                                                        <th>PAYMENT MODE
+                                                        </th>
+                                                        <th>AMOUNT
+                                                        </th>
+                                                          <th>DATE
                                                         </th>
                                                          <th id="REMARKSDATA1">Remarks
                                                         </th>
@@ -210,10 +226,17 @@
                                             <td>
                                                  <asp:CheckBox ID="chkAccept" runat="server"  Checked='<%#(Convert.ToInt32(Eval("EXAM_REGISTERED"))==1 ? true : false)%>'/><%--OnCheckedChanged="chkAccept_CheckedChanged"--%>  <%--Checked='<%#(Convert.ToInt32(Eval("STUD_EXAM_REGISTERED"))==1 ? true : false)%>' --%>
                                                 </td>
-                                            <td>
-                                                <%# Eval("REGNO")%>
-                                               
-                                            </td>
+                                             <td>
+                                                    <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default"
+                                                       OnClick="lnkbtnPrint_Click"  CommandArgument='<%# Eval("IDNO")+","+Eval("STUDNAME") %>'>
+                                                       <i class="fa fa-print" aria-hidden="true"></i>
+
+                                                    </asp:LinkButton>
+                                                </td>                                      
+                                                  <td>                                            
+                                                  <%--<asp:LinkButton ID="lnkbtnPrint" runat="server" Text='<%# Eval("REGNO") %>' CommandArgument='<%# Eval("REGNO") %>' />--%> 
+                                                        <asp:Label ID="lblregno" runat="server" Text='<%# Eval("REGNO")%>' ToolTip='<%# Eval("REGNO")%>' />
+                                                  </td>
                                             <td>
                                                 <asp:Label ID="lblstudname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("IDNO")%>' />
                                                 <%--<%# Eval("STUDNAME")%>--%>
@@ -231,6 +254,19 @@
                                            <td>
                                                <b> <%# Eval("STATUS")%></b>
                                             </td>
+                                            <td>
+                                               <b> <%# Eval("PAY_STATUS")%></b>
+                                            </td>
+                                            <td>
+                                               <b> <%# Eval("PAY_MODE")%></b>
+                                            </td>
+                                              <td>
+                                               <b> <%# Eval("TOTAL_AMT")%></b>
+                                            </td>
+                                              <td>
+                                               <b> <%# Eval("PRINTDATE")%></b>
+                                            </td>
+                                            <%--[PAY_STATUS] [PAY_MODE],TOTAL_AMT[TOTAL_AMT]--%>
                                              <td>
                                                <b> <%# Eval("Remarks")%></b>
                                             </td>
@@ -244,8 +280,9 @@
                                     ShowSummary="false" ValidationGroup="search" />
                        
                         </ContentTemplate>
-                        <Triggers>
-                            <%--<asp:PostBackTrigger ControlID="btnPrint" />--%>
+                       <Triggers>
+                           <asp:PostBackTrigger  ControlID="lvStudentRecords" />
+                           
                         </Triggers>
                     </asp:UpdatePanel>
                 </div>

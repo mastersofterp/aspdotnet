@@ -5,6 +5,23 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
+
+    <style>
+        .Searchfilter {
+            font-size: 15px !important;
+            padding: 0.375rem 0.75rem !important;
+            display: block !important;
+            width: 100% !important;
+            height: 42px !important;
+            background-color: transparent !important;
+            border: 1px solid #ced4da !important;
+            border-radius: 0.25rem !important;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+            margin-left: -15px !important;
+            margin-bottom: 5px !important;
+        }
+    </style>
+
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updpnlSection"
             DynamicLayout="true" DisplayAfter="0">
@@ -140,21 +157,7 @@
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Course." ValidationGroup="course">
                                         </asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
-                                            <label>Section</label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true"
-                                            TabIndex="7" CssClass="form-control" data-select2-enable="true">
-                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList>
 
-                                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
-                                            Display="None" InitialValue="0" ErrorMessage="Please Select Section." ValidationGroup="course">
-                                        </asp:RequiredFieldValidator>--%>
-                                    </div>
                                 </div>
                             </div>
 
@@ -171,6 +174,52 @@
                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                             </div>
 
+
+                            <div class="col-md-12">
+                                <div class="row"  runat="server" id="MainDivSection" visible="false">
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivSection" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <label>Section</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged"
+                                            TabIndex="10" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+
+                                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSection" SetFocusOnError="true"
+                                            Display="None" InitialValue="0" ErrorMessage="Please Select Section." ValidationGroup="course">
+                                        </asp:RequiredFieldValidator>--%>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivBatch" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <label>Batch</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="11" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="DivTutorialBatch" visible="false">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <%--<asp:Label ID="Label1" runat="server" Font-Bold="true"></asp:Label>--%>
+                                            <label>Tutorial Batch</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlTutorialBatch" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="11" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
                             <div class="col-12">
                                 <asp:Panel ID="pnlStudent" runat="server" Visible="false">
                                     <asp:ListView ID="lvStudents" runat="server">
@@ -184,31 +233,36 @@
                                                     <%-- <button type="button" class="btn btn-outline-primary float-lg-right saveAsExcel">Export Excel</button>--%>
                                                 </div>
 
-                                                <div class="col-lg-3 col-md-6">
+                                                <%--  <div class="col-lg-3 col-md-6">
                                                     <div class="input-group sea-rch">
                                                         <input type="text" id="FilterData" class="form-control" placeholder="Search" />
                                                         <div class="input-group-addon">
                                                             <i class="fa fa-search"></i>
                                                         </div>
                                                     </div>
+                                                </div>--%>
 
+                                                <div class="col-lg-3 col-md-6">
+                                                    <div>
+                                                        <input type="text" id="FilterData" class="Searchfilter" placeholder="Search" onkeyup="SearchFunction()" />
+                                                        <%-- <div class="input-group-addon"> <i class="fa fa-search"></i> </div>--%>
+                                                    </div>
                                                 </div>
+
                                             </div>
                                             <div class="table-responsive" style="height: 500px; overflow: scroll; border-top: 1px solid #e5e5e5;">
                                                 <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="divlistType">
                                                     <thead class="bg-light-blue" style="position: sticky; top: 0; z-index: 1; background: #fff !important; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
                                                         <tr>
-                                                            <th style="text-align: center;">Sr No.
-                                                            </th>
+                                                            <th style="text-align: center;">Sr No.</th>
                                                             <th>
-                                                                <asp:CheckBox ID="cbHead" Text="Select All" runat="server"  onclick="totAllSubjects(this)" ToolTip="Select/Select all" />
+                                                                <asp:CheckBox ID="cbHead" Text="Select All" runat="server" onclick="totAllSubjects(this)" ToolTip="Select/Select all" />
                                                             </th>
-                                                            <th>Roll No.
-                                                            </th>
-                                                            <th>Student Name
-                                                            </th>
-                                                            <th>Section
-                                                            </th>
+                                                            <th>Roll No.</th>
+                                                            <th>Student Name</th>
+                                                            <th>Section</th>
+                                                            <th>Batch Name</th>
+                                                            <th>Tutorial Batch Name</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -225,17 +279,21 @@
                                                 <td>
                                                     <asp:CheckBox ID="cbRow" runat="server" onclick="totSubjects(this)" ToolTip='<%# Eval("IDNO")%>' /></td>
                                                 <td>
-
-                                                    <%# Eval("REGNO")%>
+                                                    <asp:Label ID="lblREGNO" runat="server"> <%# Eval("REGNO")%></asp:Label>
                                                 </td>
                                                 <td>
-                                                    <%# Eval("STUDNAME")%>
+                                                    <asp:Label ID="lblSTUDNAME" runat="server"> <%# Eval("STUDNAME")%></asp:Label>
                                                 </td>
                                                 <td>
                                                     <%--<asp:DropDownList ID="ddlsec" runat="server" AppendDataBoundItems="true" TabIndex="8" ToolTip='<%# Eval("SECTIONNO")%>'>
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>BATCHNAME
                                                     </asp:DropDownList>--%>
                                                     <asp:Label ID="lblSectionName" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
+                                                </td>
+                                                <td> 
+                                                 <asp:Label ID="lblBatchName" runat="server" Text='<%# Eval("BATCHNAME")%>'></asp:Label></td>
+                                                <td>  
+                                                    <asp:Label ID="lblTutBatchName" runat="server" Text='<%# Eval("TH_BATCHNAME")%>'></asp:Label>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -253,100 +311,15 @@
         </Triggers>
     </asp:UpdatePanel>
 
-    <script>
-        function toggleSearch(searchBar, table) {
-            var tableBody = table.querySelector('tbody');
-            var allRows = tableBody.querySelectorAll('tr');
-            var val = searchBar.value.toLowerCase();
-            allRows.forEach((row, index) => {
-                var insideSearch = row.innerHTML.trim().toLowerCase();
-            //console.log('data',insideSearch.includes(val),'searchhere',insideSearch);
-            if (insideSearch.includes(val)) {
-                row.style.display = 'table-row';
-            }
-            else {
-                row.style.display = 'none';
-            }
-
-        });
-        }
-
-        function test5() {
-            var searchBar5 = document.querySelector('#FilterData');
-            var table5 = document.querySelector('#divlistType');
-
-            //console.log(allRows);
-            searchBar5.addEventListener('focusout', () => {
-                toggleSearch(searchBar5, table5);
-        });
-
-        $(".saveAsExcel").click(function () {
-            var workbook = XLSX.utils.book_new();
-            var allDataArray = [];
-            allDataArray = makeTableArray(table5, allDataArray);
-            var worksheet = XLSX.utils.aoa_to_sheet(allDataArray);
-            workbook.SheetNames.push("Test");
-            workbook.Sheets["Test"] = worksheet;
-            XLSX.writeFile(workbook, "StudentList.xlsx");
-        });
-        }
-
-        function makeTableArray(table, array) {
-            var allTableRows = table.querySelectorAll('tr');
-            allTableRows.forEach(row => {
-                var rowArray = [];
-            if (row.querySelector('td')) {
-                var allTds = row.querySelectorAll('td');
-                allTds.forEach(td => {
-                    if (td.querySelector('span')) {
-                        rowArray.push(td.querySelector('span').textContent);
-            }
-            else if (td.querySelector('input')) {
-                rowArray.push(td.querySelector('input').value);
-            }
-            else if (td.querySelector('select')) {
-                rowArray.push(td.querySelector('select').value);
-            }
-            else if (td.innerText) {
-                rowArray.push(td.innerText);
-            }
-            else{
-                rowArray.push('');
-            }
-
-        });
-        }
-        if (row.querySelector('th')) {
-            var allThs = row.querySelectorAll('th');
-            allThs.forEach(th => {
-                if (th.textContent) {
-                    rowArray.push(th.textContent);
-        }
-        else {
-            rowArray.push('');
-        }
-        });
-        }
-        // console.log(allTds);
-
-        array.push(rowArray);
-        });
-        return array;
-        }
-
-    </script>
     <script type="text/javascript" language="javascript">
-        function totAllSubjects(headchk)
-        {
+        function totAllSubjects(headchk) {
             var frm = document.forms[0]
             var count = 0;
-            for (i = 0; i < document.forms[0].elements.length; i++)
-            {
+            for (i = 0; i < document.forms[0].elements.length; i++) {
                 // alert("check1");
                 var e = frm.elements[i];
                 if (e.type == 'checkbox') {
-                    if (headchk.checked == true)
-                    {
+                    if (headchk.checked == true) {
                         e.checked = true;
                         //count++;
                     }
@@ -355,11 +328,120 @@
                 }
             }
             if (headchk.checked == true) {
-                count = $('[id*=tblStudents] td').closest("tr").length;
+                count = $('[id*=divlistType] td').closest("tr").length;
             }
-            
+
         }
-
-
     </script>
+
+    <script>
+        function SearchFunction() {
+            var input, filter, table, tr, td, i, txtValue, td1, td2;
+            var Tcount = 0;
+            var Pcount = 0;
+            var ODcount = 0;
+            var totalcount = 0;
+            var regnoflag = 0;
+            var rollnoflag = 0;
+            var namefalg = 0;
+            var tdval = 0;
+            var td1val = 0;
+            var td2val = 0;
+
+            input = document.getElementById("FilterData");
+            filter = input.value.toLowerCase();
+            table = document.getElementById("divlistType");
+            trRow = table.getElementsByTagName("tr");
+
+            for (i = 0; i < trRow.length; i++) {
+
+                td = trRow[i].getElementsByTagName("td")[2]; // 3- check RRNO column
+                td1 = trRow[i].getElementsByTagName("td")[3]; // 1- check Name column
+                //td2 = trRow[i].getElementsByTagName("td")[4]; // 2- check roll column
+
+                if (td) {
+                    if (!isNaN(filter - 0)) {
+                        var tdval = 1;
+                    }
+                    //RRNO search
+                    if (regnoflag == 0 && rollnoflag == 0 && tdval == 1) {
+                        txtValue = td.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            namefalg = 1;
+                            Tcount++;
+                            //var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                            //var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                            //if (e != null) {
+                            //    if (e.checked == true) {
+                            //        Pcount++;
+                            //    }
+                            //    if (e.checked == false && e1.value == 1) {
+                            //        ODcount++;
+                            //    }
+                            //}
+
+                            trRow[i].style.display = "";
+
+                        }
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+                    }
+
+                    //Name search
+                    if (namefalg == 0 && rollnoflag == 0) {
+                        txtValue = td1.innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            regnoflag = 1;
+                            Tcount++;
+                            var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                            var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                            //if (e != null) {
+                            //    if (e.checked == true) {
+                            //        Pcount++;
+                            //    }
+                            //    if (e.checked == false && e1.value == 1) {
+                            //        ODcount++;
+                            //    }
+                            //}
+
+                            trRow[i].style.display = "";
+
+                        }
+                        else {
+                            trRow[i].style.display = "none";
+                        }
+                    }
+
+                    //Roll No search
+                    //if (namefalg == 0 && regnoflag == 0) {
+                    //    txtValue = td2.textContent || td2.innerText;
+                    //    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    //        rollnoflag = 1;
+                    //        Tcount++;
+                    //        var e = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_cbRow");
+                    //        var e1 = document.getElementById("ctl00_ContentPlaceHolder1_lvStudent_ctrl" + i + "_hdfLeaveStatus");
+                    //        //if (e != null) {
+                    //        //    if (e.checked == true) {
+                    //        //        Pcount++;
+                    //        //    }
+                    //        //    if (e.checked == false && e1.value == 1) {
+                    //        //        ODcount++;
+                    //        //    }
+                    //        //}
+
+                    //        trRow[i].style.display = "";
+
+                    //    }
+                    //    else {
+                    //        trRow[i].style.display = "none";
+                    //    }
+                    //}
+
+                }
+            }
+
+        }
+    </script>
+
 </asp:Content>

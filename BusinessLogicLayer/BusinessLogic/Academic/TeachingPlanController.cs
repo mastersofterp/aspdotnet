@@ -1598,20 +1598,21 @@ namespace IITMS
                 /// <param name="schemeno"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetSlotGlobalElective(int sessionno, int ua_no, int courseno, int Dayno, string sdate, string enddate)
+                public DataSet GetSlotGlobalElective(int sessionno, int ua_no, int courseno, int Dayno, string sdate, string enddate, int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[6];
+                        SqlParameter[] objParams = new SqlParameter[7];
 
                         objParams[0] = new SqlParameter("@P_SESSIONID", sessionno);
                         objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[2] = new SqlParameter("@P_COURSENO", courseno);
-                        objParams[3] = new SqlParameter("@P_DAYNO", Dayno);
-                        objParams[4] = new SqlParameter("@P_START_DATE", sdate);//Added By Rishabh 12/11/2022
-                        objParams[5] = new SqlParameter("@P_END_DATE", enddate);//Added By Rishabh 12/11/2022
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[4] = new SqlParameter("@P_DAYNO", Dayno);
+                        objParams[5] = new SqlParameter("@P_START_DATE", sdate);//Added By Rishabh 12/11/2022
+                        objParams[6] = new SqlParameter("@P_END_DATE", enddate);//Added By Rishabh 12/11/2022
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_GET_SLOT_GLOBAL_ELECTIVE", objParams);
                     }
                     catch (Exception ex)
@@ -1682,16 +1683,17 @@ namespace IITMS
                 /// <param name="OrgId"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetAllTEACHING_PLANGlobalElective(int ua_no, int courseno, int OrgId)
+                public DataSet GetAllTEACHING_PLANGlobalElective(int ua_no, int courseno, int OrgId, int Sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_ORGANIZATIONID", OrgId);//ADDED BY DILEEP KARE ON 15.02.2022
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", Sectionno);//ADDED BY DILEEP KARE ON 15.02.2022
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_TEACHING_PLAN_GET_ALL_GLOBAL_ELECTIVE", objParams);
                     }
                     catch (Exception ex)
@@ -1787,19 +1789,20 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
 
-                        objParams = new SqlParameter[10];
+                        objParams = new SqlParameter[11];
 
                         objParams[0] = new SqlParameter("@P_UA_NO", objExam.Ua_No);
                         objParams[1] = new SqlParameter("@P_DATE", objExam.Date);
                         objParams[2] = new SqlParameter("@P_LECTURE_NO", objExam.Lecture_No);
                         objParams[3] = new SqlParameter("@P_COURSENO", objExam.Courseno);
                         objParams[4] = new SqlParameter("@P_SESSIONNO", objExam.SessionNo);
-                        objParams[5] = new SqlParameter("@P_TOPIC_COVERED", objExam.Topic_Covered);
-                        objParams[6] = new SqlParameter("@P_UNIT_NO", objExam.UnitNo);
-                        objParams[7] = new SqlParameter("@P_SLOT_NO", objExam.Slot);
-                        objParams[8] = new SqlParameter("@P_ORGANIZATIONID", OrgID);//Added by Dileep Kare on 15.02.2022
-                        objParams[9] = new SqlParameter("@P_TP_NO", SqlDbType.Int);
-                        objParams[9].Direction = ParameterDirection.Output;
+                        objParams[5] = new SqlParameter("@P_SECTIONNO", objExam.Sectionno);
+                        objParams[6] = new SqlParameter("@P_TOPIC_COVERED", objExam.Topic_Covered);
+                        objParams[7] = new SqlParameter("@P_UNIT_NO", objExam.UnitNo);
+                        objParams[8] = new SqlParameter("@P_SLOT_NO", objExam.Slot);
+                        objParams[9] = new SqlParameter("@P_ORGANIZATIONID", OrgID);//Added by Dileep Kare on 15.02.2022
+                        objParams[10] = new SqlParameter("@P_TP_NO", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
 
                         int ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_TEACHING_PLAN_INSERT_GLOBAL_ELECTIVE_MODIFIED", objParams, true));
                         if (ret != -99)
@@ -1869,10 +1872,11 @@ namespace IITMS
                         objParams[2] = new SqlParameter("@P_LECTURE_NO", objExam.Lecture_No);
                         objParams[3] = new SqlParameter("@P_COURSENO", objExam.Courseno);
                         objParams[4] = new SqlParameter("@P_SESSIONNO", objExam.SessionNo);
-                        objParams[5] = new SqlParameter("@P_TOPIC_COVERED", objExam.Topic_Covered);
-                        objParams[6] = new SqlParameter("@P_UNIT_NO", objExam.UnitNo);
-                        objParams[7] = new SqlParameter("@P_SLOT_NO", objExam.Slot);
-                        objParams[8] = new SqlParameter("@P_TP_NO", objExam.TP_NO);
+                        objParams[5] = new SqlParameter("@P_SECTIONNO", objExam.Sectionno);
+                        objParams[6] = new SqlParameter("@P_TOPIC_COVERED", objExam.Topic_Covered);
+                        objParams[7] = new SqlParameter("@P_UNIT_NO", objExam.UnitNo);
+                        objParams[8] = new SqlParameter("@P_SLOT_NO", objExam.Slot);
+                        objParams[9] = new SqlParameter("@P_TP_NO", objExam.TP_NO);
 
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_TEACHING_PLAN_UPDATE_GLOBAL_ELECTIVE_MODIFIED", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);

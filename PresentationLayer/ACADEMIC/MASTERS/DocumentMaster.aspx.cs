@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Configuration;
 using System.Data;
@@ -9,7 +8,6 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-
 using System.Data.SqlClient;
 using IITMS;
 using IITMS.UAIMS;
@@ -25,6 +23,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
     StudentController objdfc = new StudentController();
     string category = string.Empty;
     string nationality = string.Empty;
+    string AdmCategory = string.Empty;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -56,6 +55,35 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "DEGREENO");
             objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO IN(1,2) AND ISNULL(ACTIVESTATUS,0) = 1", "IDTYPENO");
             //objCommon.FillDropDownList(ddlNationality, "ACD_NATIONALITY", "NATIONALITYNO", "NATIONALITY", "NATIONALITYNO>0", "NATIONALITY ASC");
+            //int param_value = Convert.ToInt32(objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME='ALLOW_ADMISSION_CATEGORY_ON_DOCUMENT_LIST_MASTER'"));     // Added by Shrikant Waghmare on 15-11-2023
+
+            DataSet ds = objCommon.FillDropDown("ACD_PARAMETER", "PARAM_VALUE", string.Empty, "PARAM_NAME='ALLOW_ADMISSION_CATEGORY_ON_DOCUMENT_LIST_MASTER'", string.Empty);
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                string param_value = ds.Tables[0].Rows[0]["PARAM_VALUE"].ToString();
+
+                if (param_value != "1")
+                {
+                    divAdmCategory.Visible = false;
+                    chkAdmCategoryList.ClearSelection();
+                }
+                else if (param_value == "1")
+                {
+                    divAdmCategory.Visible = true;
+                    divCasteCategory.Visible = false;
+                    chkCategoryList.ClearSelection();
+                }
+            }
+            else
+            {
+                chkCategory.Visible = true;
+                divAdmCategory.Visible = false;
+                chkAdmCategoryList.ClearSelection();
+            }
+
+            
+            PopulatAdmCategoryList();
             PopulatCategoryList();
             PopulatNationalityList();
             BindListView();
@@ -137,6 +165,34 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
         }
     }
 
+    private void PopulatAdmCategoryList()          // Added By Shrikant Waghmare on 15-11-2023
+    {
+        try
+        {
+            //DataSet ds = objCommon.FillDropDown("ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO<>0", "CATEGORY");
+            DataSet ds = objCommon.FillDropDown("ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO<>0 AND ISNULL(ACTIVESTATUS,0)=1", "CATEGORY");  
+
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    chkAdmCategoryList.DataTextField = "CATEGORY";
+                    chkAdmCategoryList.DataValueField = "CATEGORYNO";
+                    chkAdmCategoryList.ToolTip = "CATEGORYNO";
+                    chkAdmCategoryList.DataSource = ds.Tables[0];
+                    chkAdmCategoryList.DataBind();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Activity_SessionActivityDefinition.PopulateDegreeList --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
        // this.objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH a INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON a.BRANCHNO=B.BRANCHNO", "B.BRANCHNO", "A.LONGNAME", "DEGREENO=" + ddlDegree.SelectedValue, "A.SHORTNAME");
@@ -145,7 +201,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
-        {
+         {
             DocumentControllerAcad objDC = new DocumentControllerAcad();
             DocumentAcad objDocument = new DocumentAcad();
             int nationalityno = 0;
@@ -166,7 +222,12 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                 objDocument.chkstatus = 0;
             }
 
-            getChk();
+            bool flag = getChk();
+
+            if (flag == false)
+            {
+                return;
+            }
            // nationalityno=Convert.ToInt32(ddlNationality.SelectedValue);
             //IsMandatory = (rdoMandetory.Checked ? true : false);
             if (hfdMandatory.Value == "true")
@@ -195,7 +256,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                        return;
                    }
                     //Add Batch
-                   CustomStatus cs = (CustomStatus)objDC.AddDocument(objDocument, category, nationality);
+                   CustomStatus cs = (CustomStatus)objDC.AddDocument(objDocument, category, nationality, AdmCategory);
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         ViewState["action"] = "add";
@@ -221,7 +282,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                         //    objCommon.DisplayMessage(this.updDocument, "Sr. No. Already Exist", this.Page);
                         //    return;
                         //}
-                        CustomStatus cs = (CustomStatus)objDC.UpdateDocument(objDocument, category, nationality);
+                        CustomStatus cs = (CustomStatus)objDC.UpdateDocument(objDocument, category, nationality, AdmCategory);
                         if (cs.Equals(CustomStatus.RecordUpdated))
                         {
                             ViewState["action"] = null;
@@ -248,29 +309,15 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
         }
     }
 
-    void getChk()
+    bool getChk()
     {
-        for (int i = 0; i < chkCategoryList.Items.Count; i++)
-        {
-            if (chkCategoryList.Items[i].Selected)
-            {
-                category += chkCategoryList.Items[i].Value + ",";
-            }
-        }
-        if (!string.IsNullOrEmpty(category))
-        {
-            category = category.Substring(0, category.Length - 1);
-        }
-        else
-        {
-            objCommon.DisplayMessage(this.updDocument, "Please select atleast one Category!", this.Page);
-           
-        }
+        DataSet ds = objCommon.FillDropDown("ACD_PARAMETER", "PARAM_VALUE", string.Empty, "PARAM_NAME='ALLOW_ADMISSION_CATEGORY_ON_DOCUMENT_LIST_MASTER'", string.Empty);     
+
         for (int i = 0; i < chkNationalityList.Items.Count; i++)
         {
             if (chkNationalityList.Items[i].Selected)
             {
-                nationality += chkNationalityList.Items[i].Value + ",";
+                nationality += chkNationalityList.Items[i].Value.ToString() + ",";
             }
         }
 
@@ -281,8 +328,73 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
         else
         {
             objCommon.DisplayMessage(this.updDocument, "Please select atleast one Nationality!", this.Page);
-          
+            return false;
         }
+
+        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        {
+            string param_value = ds.Tables[0].Rows[0]["PARAM_VALUE"].ToString();
+
+            if (param_value == "1")
+            {
+
+                for (int i = 0; i < chkAdmCategoryList.Items.Count; i++)
+                {
+                    if (chkAdmCategoryList.Items[i].Selected)
+                    {
+                        AdmCategory += chkAdmCategoryList.Items[i].Value.ToString() + ",";
+                    }
+                }
+                if (!string.IsNullOrEmpty(AdmCategory))
+                {
+                    AdmCategory = AdmCategory.Substring(0, AdmCategory.Length - 1);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updDocument, "Please select atleast one Admission Category!", this.Page);
+                    return false;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chkCategoryList.Items.Count; i++)
+                {
+                    if (chkCategoryList.Items[i].Selected)
+                    {
+                        category += chkCategoryList.Items[i].Value.ToString() + ",";
+                    }
+                }
+                if (!string.IsNullOrEmpty(category))
+                {
+                    category = category.Substring(0, category.Length - 1);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updDocument, "Please select atleast one Category!", this.Page);
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < chkCategoryList.Items.Count; i++)
+            {
+                if (chkCategoryList.Items[i].Selected)
+                {
+                    category += chkCategoryList.Items[i].Value.ToString() + ",";
+                }
+            }
+            if (!string.IsNullOrEmpty(category))
+            {
+                category = category.Substring(0, category.Length - 1);
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updDocument, "Please select atleast one Category!", this.Page);
+                return false;
+            }
+        }
+        return true;
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -377,6 +489,21 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
                     }
                 }
 
+                PopulatAdmCategoryList();
+                AdmCategory = dr["ADMCATEGORYNO"].ToString();
+
+                string[] admCat = AdmCategory.Split(delimiterChars);
+                for (int j = 0; j < admCat.Length; j++)
+                {
+                    for (int i = 0; i < chkAdmCategoryList.Items.Count; i++)
+                    {
+                        if (admCat[j] == chkAdmCategoryList.Items[i].Value)
+                        {
+                            chkAdmCategoryList.Items[i].Selected = true;
+                        }
+                    }
+                }
+
                 //if (dr["MANDATORY"].ToString().ToLower().Equals("true"))
                 //{
                 //    rdoMandetory.Checked = true;
@@ -403,6 +530,7 @@ public partial class ACADEMIC_MASTERS_DocumentMaster : System.Web.UI.Page
        // ddlNationality.SelectedIndex = 0;
         chkNationalityList.ClearSelection();
         chkCategoryList.ClearSelection();
+        chkAdmCategoryList.ClearSelection();
         //rdoMandetory.Checked = false;
         //rdoNonMadatory.Checked = true;
        

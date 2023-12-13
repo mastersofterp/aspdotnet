@@ -375,7 +375,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         if (ViewState["usertype"].ToString() == "2")
         {
             idno = Convert.ToInt32(Session["idno"]);
-            sessionno = Convert.ToInt32(Session["currentsession"]);
+            sessionno = Convert.ToInt32(ViewState["currentsession"]);
 
         }
         else if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "8")
@@ -452,7 +452,8 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         if (ViewState["usertype"].ToString() == "2")
         {
             idno = Convert.ToInt32(Session["idno"]);
-            sessionno = Convert.ToInt32(Session["currentsession"]);
+            sessionno = Convert.ToInt16(objCommon.LookUp("ACD_SESSION_MASTER WITH (NOLOCK)", "count(*)", "FLOCK=1 and college_ID=" + Convert.ToInt16(ViewState["CLG_ID"])));           
+           // sessionno = Convert.ToInt32(Session["currentsession"]);
 
         }
         else if (ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "8")
@@ -460,6 +461,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             idno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "REGNO = '" + txtRollNo.Text.Trim() + "'"));
             sessionno = Convert.ToInt32(ddlSession.SelectedValue);
         }
+        ViewState["currentsession"] = sessionno;
 
         BindAvailableCourseList();
 
@@ -550,8 +552,12 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
     {
         DataSet dsCurrCourses = null;
         //Show Current Semester Courses ..
-        dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID) INNER JOIN ACD_OFFERED_COURSE O ON (O.COURSENO=C.COURSENO)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER, (CASE  WHEN (ISNULL(C.GLOBALELE,0)=1 AND ISNULL(C.ELECT,0)=1)  THEN 'Global Elective'  WHEN ISNULL(C.ELECT,0)=1 THEN 'Elective' ELSE 'Core' END) AS CATEGORY ", "C.SCHEMENO = " + lblScheme.ToolTip + " AND ISNULL(COURSE_OFFERED,0)=1 AND O.SEMESTERNO = " + lblSemester.ToolTip, "C.CCODE");
-        //dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER ", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1", "C.CCODE");
+        //dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID) INNER JOIN ACD_OFFERED_COURSE O ON (O.COURSENO=C.COURSENO)", 
+        //    "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER, (CASE  WHEN (ISNULL(C.GLOBALELE,0)=1 AND ISNULL(C.ELECT,0)=1)  THEN 'Global Elective'  WHEN ISNULL(C.ELECT,0)=1 THEN 'Elective' ELSE 'Core' END) AS CATEGORY ",
+        //    "C.SCHEMENO = " + lblScheme.ToolTip + " AND ISNULL(COURSE_OFFERED,0)=1 AND O.SEMESTERNO = " + lblSemester.ToolTip, "C.CCODE");
+        ////dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER ", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1", "C.CCODE");
+
+        dsCurrCourses = objSReg.GetAvailableCourseListForModified(Convert.ToInt16(lblScheme.ToolTip), Convert.ToInt16(lblSemester.ToolTip), Convert.ToInt32(ViewState["currentsession"]));
         if (dsCurrCourses != null && dsCurrCourses.Tables.Count > 0 && dsCurrCourses.Tables[0].Rows.Count > 0)
         {
             btnSubmit.Enabled = true;
@@ -1081,6 +1087,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 pnlStudents.Visible = false;
                 pnlStudentsReamin.Visible = false;
                 btnBulkSubmit.Enabled = false;
+                lboOfferCourse.Items.Clear();
             }
         }
         catch (Exception)
@@ -1229,7 +1236,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             //DivMultipleSelect.Visible = true;
 
             DataSet dsCourse = objSReg.GetOfferedCourseListForModifyBulkCourseRegistration(Convert.ToInt32(ddlBulkSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue));
-
+            lboOfferCourse.Items.Clear();
             if (dsCourse != null && dsCourse.Tables.Count > 0)
             {
                 if (dsCourse.Tables[0].Rows.Count > 0)

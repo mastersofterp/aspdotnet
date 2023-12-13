@@ -444,8 +444,39 @@
                 <div id="div2" runat="server"></div>
                 <div class="box-header with-border">
                     <%--<h3 class="box-title">SESSION CREATION</h3>--%>
-                    <h3 class="box-title">EXAM REGISTRATION</h3>
+                    <h3 class="box-title">
+                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label>
+
+                    </h3>
                 </div>
+
+                 <%-- <-----------------------------------------Added By Rohit--------------------------------------------------->--%>
+                   <div id="pnlSearch" runat="server" visible="False">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div id="divenroll" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>PRN No</label>
+                                        </div>
+                                        <asp:TextBox ID="txtEnrollno" runat="server" CssClass="form-control" ToolTip="Enter text to search." TabIndex="1" MaxLength="20"></asp:TextBox>
+                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterType="Numbers, UppercaseLetters, LowercaseLetters" TargetControlID="txtEnrollno" />
+                                        <asp:RequiredFieldValidator ID="valSearchText" runat="server" ControlToValidate="txtEnrollno"
+                                            Display="None" ErrorMessage="Please Enter PRN No." SetFocusOnError="true"
+                                            ValidationGroup="search" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 btn-footer">
+                                <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="search" />
+                          <%--  <asp:Button ID="btnSearch" runat="server" Text="Show" ValidationGroup="search" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear" ValidationGroup="Show" TabIndex="1" OnClick="btnClear_Click" CssClass="btn btn-warning" />--%>
+                                  <asp:Button ID="btnSearch" runat="server" Text="Show" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear" TabIndex="1" CssClass="btn btn-warning" OnClick="btnClear_Click" />
+                            </div>
+                        </div>
+                <%--<-------------------------------------------------------------------------------------------------------------->--%>
 
                 <div class="box-body">
                     <asp:UpdatePanel ID="updatepnl" runat="server">
@@ -485,6 +516,10 @@
                                                 <a class="sub-label">
                                                     <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                             </li>
+                                             <li class="list-group-item"><b>Session :</b>
+                                                    <a class="sub-label">
+                                                        <asp:Label ID="lblsessionno" runat="server" Font-Bold="true" /></a>
+                                                </li>
                                         </ul>
                                     </div>
 
@@ -519,6 +554,11 @@
                                                 <a class="sub-label">
                                                     <asp:Label ID="FinalTotal" runat="server" Font-Bold="true" /></a>
                                                 <asp:HiddenField ID="hdfCreditTotal" runat="server" />
+                                            </li>
+                                            <li class="list-group-item"><b>Paid Fee :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="PaidTotal" runat="server" Font-Bold="true" /></a>
+                                                <asp:HiddenField ID="hdfPaidTotal" runat="server" />
                                             </li>
 
                                         </ul>

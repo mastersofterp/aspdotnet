@@ -3380,6 +3380,7 @@ namespace IITMS
                     return ds;
                 }
 
+                //UPDATED BY SAKSHI M ON 07122023
                 public int InsertSubjectTypeData(Course objCe, int istutorial)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -3394,7 +3395,9 @@ namespace IITMS
                             new SqlParameter("@P_ACTIVESTATUS",objCe.activestatus),
                             new SqlParameter("@P_SUBNAME", objCe.subjecttype),
                             new SqlParameter("@P_ISTUTORIAL",istutorial),
-                              new SqlParameter("@P_OUT", SqlDbType.Int),
+                            new SqlParameter("@P_UANO", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"])),
+                            new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString()),
+                            new SqlParameter("@P_OUT", SqlDbType.Int),
                               };
 
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
@@ -3418,6 +3421,8 @@ namespace IITMS
                     return retStatus;
                 }
 
+
+                //UPDATED BY SAKSHI M ON 07122023
                 public int UpdateSubjectTypeData(Course objCe, int subid, int istutorial)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -3431,7 +3436,9 @@ namespace IITMS
                             new SqlParameter("@P_SEC_BATCH",objCe.sec_batch),
                              new SqlParameter("@P_ACTIVESTATUS",objCe.activestatus),
                               new SqlParameter("@P_SUBNAME", objCe.subjecttype),
-                              new SqlParameter ("@P_ISTUTORIAL",istutorial),
+                             new SqlParameter("@P_UANO", Convert.ToInt32(System.Web.HttpContext.Current.Session["userno"])),
+                            new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString()),
+                              new SqlParameter("@P_ISTUTORIAL",istutorial),
                               new SqlParameter("@P_OUT", SqlDbType.Int),
                           };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
@@ -4057,6 +4064,26 @@ namespace IITMS
                     }
                     return ds;
                 }
+                public DataSet GetGlobalOfferedCourseList_Section(int sessionno, int courseno, int ua_no, int mode, int sectionno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[3] = new SqlParameter("@P_MODE", mode);
+                        objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_GLOBAL_COURSE_SECTION", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetGlobalOfferedCourseList-> " + ex.ToString());
+                    }
+                    return ds;
+                }
 
 
                 /// <summary>
@@ -4254,16 +4281,17 @@ namespace IITMS
                 /// <param name="schemeNo"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetGlobalCoursesTimeTableModified(int Sessionno, int courseno, int ua_no)
+                public DataSet GetGlobalCoursesTimeTableModified(int Sessionno, int courseno, int ua_no,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_GLOBAL_COURSE_TIME_TABLE_MODIFIED", objParams);
                     }
@@ -4575,13 +4603,13 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public int InActiveGlobalTimeTableDateWise(int slotno, string Datetime, int ua_no, int courseno, int sessionid, int cancelby, string cancelipaddress, string cancelRemark)
+                public int InActiveGlobalTimeTableDateWise(int slotno, string Datetime, int ua_no, int courseno, int sessionid, int cancelby, string cancelipaddress, string cancelRemark,int cancellationtype,int sectionno)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[9];
+                        SqlParameter[] objParams = new SqlParameter[11];
                         objParams[0] = new SqlParameter("@P_SLOTNO", slotno);
                         objParams[1] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[2] = new SqlParameter("@P_COURSENO", courseno);
@@ -4590,8 +4618,10 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_CANCEL_BY", cancelby);
                         objParams[6] = new SqlParameter("@P_CANCEL_IPADDRESS", cancelipaddress);
                         objParams[7] = new SqlParameter("@P_CANCEL_REMARK", cancelRemark);
-                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[8].Direction = ParameterDirection.Output;
+                        objParams[8] = new SqlParameter("@P_CANCELLATION_TYPE", cancellationtype);
+                        objParams[9] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_TIMETABLE_CANCEL_GLOBAL_ELECTIVE", objParams, true);
                         if (Convert.ToInt32(ret) == -99)
@@ -4644,16 +4674,17 @@ namespace IITMS
                 /// <param name="schemeNo"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetGlobalCoursesRevisedTimeTableModified(int Sessionno, int courseno, int ua_no)
+                public DataSet GetGlobalCoursesRevisedTimeTableModified(int Sessionno, int courseno, int ua_no,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_GLOBAL_COURSE_REVISED_TIME_TABLE_MODIFIED", objParams);
                     }
                     catch (Exception ex)

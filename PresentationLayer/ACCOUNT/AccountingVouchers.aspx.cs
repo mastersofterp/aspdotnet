@@ -9653,7 +9653,9 @@ public partial class AccountingVouchers : System.Web.UI.Page
             if (IsMultipalCostCenter == "Y")
             {
                 trMultiCostCenter.Visible = true;
-                objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+               // objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+                objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter ACC inner join  Acc_" + Session["comp_code"] + "_CostCategory ACAT on (ACC.Cat_ID=ACAT.Cat_ID)", "isnull(ACC.CC_ID,0) CC_ID", "ACC.CCNAME + ' ( '+ACAT.Category+' ) ' as CCNAME", "", "");
+          
             }
             else
             {
@@ -10236,7 +10238,9 @@ public partial class AccountingVouchers : System.Web.UI.Page
         if (IsMultipalCostCenter == "Y")
         {
             DataSet dsMCC = null;
-            objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+           // objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+            objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter ACC inner join  Acc_" + Session["comp_code"] + "_CostCategory ACAT on (ACC.Cat_ID=ACAT.Cat_ID)", "isnull(ACC.CC_ID,0) CC_ID", "ACC.CCNAME + ' ( '+ACAT.Category+' ) ' as CCNAME", "", "");
+
             if (isTempVoucher == "Y")
             {
                 dsMCC = objCostCenterController.GetCostCenterdata(Convert.ToInt32(para[1].ToString().Trim()), Session["comp_code"].ToString(), "Y");
@@ -14284,7 +14288,9 @@ public partial class AccountingVouchers : System.Web.UI.Page
                 if (IsMultipalCostCenter == "Y")
                 {
                     trMultiCostCenter.Visible = true;
-                    objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+                  //  objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter", "isnull(CC_ID,0) CC_ID", "CCNAME", "", "");
+                    objCommon.FillDropDownList(ddlmuliicostcenter, "Acc_" + Session["comp_code"] + "_CostCenter ACC inner join  Acc_" + Session["comp_code"] + "_CostCategory ACAT on (ACC.Cat_ID=ACAT.Cat_ID)", "isnull(ACC.CC_ID,0) CC_ID", "ACC.CCNAME + ' ( '+ACAT.Category+' ) ' as CCNAME", "", "");
+
                 }
                 else
                 {
@@ -14593,12 +14599,16 @@ public partial class AccountingVouchers : System.Web.UI.Page
                 {
                     if (ds.Tables[0].Rows.Count > 0)
                     {
-                        lblBudgetBal.Text = String.Format("{0:0.00}", Convert.ToDouble(ds.Tables[0].Rows[0]["BALANCE"].ToString()));
+                        if (ds.Tables[6].Rows.Count > 0)
+                        {
+                            lblBudgetBal.Text = String.Format("{0:0.00}", Convert.ToDouble(ds.Tables[6].Rows[0]["BALANCE"].ToString()));
+                        }
+                        else
+                        {
+                            lblBudgetBal.Text = "0.00";
+                        }
                     }
-                    else
-                    {
-                        lblBudgetBal.Text = "0.00";
-                    }
+                   
                 }
             }
 

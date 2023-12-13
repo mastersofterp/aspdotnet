@@ -115,7 +115,26 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
     }
     private void PopulateDropDownList()
     {
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(FLOCK,0) = 1 AND ISNULL(IS_ACTIVE,0) = 1", "SESSIONID DESC");
+        if (Session["usertype"].ToString() == "1")
+        {
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_NAME", "ISNULL(FLOCK,0) = 1 AND ISNULL(IS_ACTIVE,0) = 1", "SESSIONID DESC");
+        }
+        else if (Session["usertype"].ToString() == "8" || Session["usertype"].ToString() == "5")
+        {
+            string colleges = Session["college_nos"].ToString(); // objCommon.LookUp("USER_ACC", "ISNULL(UA_COLLEGE_NOS,'0')", "UA_NO=" + Convert.ToInt16(Session["userno"].ToString()));
+            if (!string.IsNullOrEmpty(colleges))
+            {
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONID=SM.SESSIONID",
+                    "DISTINCT SM.SESSIONID", "SM.SESSION_NAME",
+                    "ISNULL(SM.FLOCK,0) = 1 AND ISNULL(SM.IS_ACTIVE,0) = 1 AND ISNULL(S.FLOCK,0) = 1 AND ISNULL(S.IS_ACTIVE,0) = 1 AND SM.COLLEGE_ID IN (" + colleges + ")",
+                    "SESSIONID DESC");
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnl, "College not assigned to user!", this.Page);
+                return;
+            }
+        }
     }
 
     //private void PopulateDropDownList()
@@ -408,12 +427,15 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
                 //ds = objCommon.FillDropDown("ACD_COLLEGE_MASTER CM INNER JOIN ACD_SESSION_MASTER SM ON (CM.COLLEGE_ID = SM.COLLEGE_ID)", "DISTINCT CONCAT(SM.SESSIONNO, '-', CM.COLLEGE_ID) AS SESCOLNO", "COLLEGE_NAME, CM.COLLEGE_ID, SM.SESSIONNO", "ISNULL(ActiveStatus,0) = 1 AND ISNULL(SESSIONID,0) =" + Convert.ToInt32(ddlSession.SelectedValue), "CM.COLLEGE_ID ASC, SM.SESSIONNO");
                 //ds = AcadDash.Get_CollegeID_BySession(Convert.ToInt32(ddlSession.SelectedValue));
 
+                DataTable dt = new DataTable();
+                dt = ds.Tables[0].Select("COLLEGE_ID in (" + Session["college_nos"].ToString() + ")").CopyToDataTable();
+
                 lstbxSchool.Items.Clear();
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    lstbxSchool.DataSource = ds;
-                    lstbxSchool.DataValueField = ds.Tables[0].Columns[0].ToString();
-                    lstbxSchool.DataTextField = ds.Tables[0].Columns[1].ToString();
+                    lstbxSchool.DataSource = dt;
+                    lstbxSchool.DataValueField = dt.Columns[0].ToString();
+                    lstbxSchool.DataTextField = dt.Columns[1].ToString();
                     lstbxSchool.DataBind();
                 }
             }
@@ -1006,7 +1028,10 @@ public partial class ACADEMIC_AttendanceConfig : System.Web.UI.Page
 
         if (Session["usertype"].ToString() != "1")
         {
-            objCommon.FillListBox(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B  WITH (NOLOCK) ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.ACTIVESTATUS=1 AND D.DEGREENO>0 AND  COLLEGE_ID=" + Convert.ToInt32(ViewState["CollegeId"]), "D.DEGREENO");
+            objCommon.FillListBox(ddlDegree, "ACD_DEGREE D WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B  WITH (NOLOCK) ON (D.DEGREENO=B.DEGREENO)",
+                "DISTINCT (D.DEGREENO)", "DEGREENAME",
+                "D.ACTIVESTATUS=1 AND D.DEGREENO>0 AND  COLLEGE_ID IN (SELECT ISNULL(COLLEGE_ID,0)COLLEGE_ID FROM ACD_SESSION_MASTER WHERE SESSIONNO IN (" + Sessionn + "))", //Convert.ToInt32(ViewState["CollegeId"]),
+                "D.DEGREENO");
             // objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT AD INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (AD.DEPTNO = CDB.DEPTNO) INNER JOIN ACD_SESSION_MASTER SM ON(SM.COLLEGE_ID = CDB.COLLEGE_ID)", "DISTINCT AD.DEPTNO", "DEPTNAME", "AD.ACTIVESTATUS=1 AND AD.DEPTNO>0 and SESSIONNO IN( " + ViewState["SessionNos"].ToString() + ")", "DEPTNAME ASC");
             ddlDegree.Focus();
         }

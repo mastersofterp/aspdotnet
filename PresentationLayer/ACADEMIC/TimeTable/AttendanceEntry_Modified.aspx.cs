@@ -783,8 +783,8 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     string lockDate = string.Empty;                                                     //Convert.ToDateTime(Calendar1.SelectedDate.ToString("dd/MM/yyyy"));
                     // lockDate = objCommon.LookUp("ACD_HOLIDAY_MASTER", "ISNULL(LOCK,0)LOCK", "HOLIDAY_DATE=CONVERT(DATETIME,'" + e.Day.Date.ToString() + "',103)") == string.Empty ? string.Empty : objCommon.LookUp("ACD_HOLIDAY_MASTER", "ISNULL(LOCK,0)LOCK", "HOLIDAY_DATE=CONVERT(DATETIME,'" + e.Day.Date.ToString() + "',103)");
                     //lockDate = objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103)=CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103)=CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue));
-                    lockDate = objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue));
-
+                    lockDate = "0";// objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue));
+                    // above lockDate = "0" added by rishabh on 22/11/2023. tkt no 50662 for unlocking attendance for holidays also.
                     #region Lock/Unlock
                     //SET DATES SELECTABLE ONLY WHICH ARE SET LOCK DAYS BEFORE CURRENT DAY FOR ATTENDANCE LOCK IN ATTENDANCE CONFIGURATION
                     //AND FUTURE DATES ARE NOT SELECTABLE TO MARK ATTENDANCE
@@ -835,7 +835,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             l.Style.Add("color", "#36c60a");
                             l.Style.Add("opacity", ".5");
                             l.Font.Size = 11;
-                            l.ToolTip = "UnLock";
+                            //l.ToolTip = "UnLock";
                             e.Cell.Controls.Add(l);
                         }
                     }
@@ -1227,7 +1227,8 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     string lockDate = string.Empty;                                                     //Convert.ToDateTime(Calendar1.SelectedDate.ToString("dd/MM/yyyy"));
                     // lockDate = objCommon.LookUp("ACD_HOLIDAY_MASTER", "ISNULL(LOCK,0)LOCK", "HOLIDAY_DATE=CONVERT(DATETIME,'" + e.Day.Date.ToString() + "',103)") == string.Empty ? string.Empty : objCommon.LookUp("ACD_HOLIDAY_MASTER", "ISNULL(LOCK,0)LOCK", "HOLIDAY_DATE=CONVERT(DATETIME,'" + e.Day.Date.ToString() + "',103)");
                     //lockDate = objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103)=CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103)=CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue));
-                    lockDate = objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue));
+                    lockDate = "0";// objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue)) == string.Empty ? string.Empty : objCommon.LookUp("ACD_ACADEMIC_HOLIDAY_MASTER", "COUNT(1)", "CONVERT(DATETIME,'" + Convert.ToDateTime(e.Day.Date.ToString("dd/MM/yyyy")) + "',103) BETWEEN CONVERT(DATETIME,ACADEMIC_HOLIDAY_STDATE,103) AND CONVERT(DATETIME,ACADEMIC_HOLIDAY_ENDDATE,103) AND SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue));
+                    // above lockDate = "0" added by rishabh on 22/11/2023. tkt no 50662 for unlocking attendance for holidays also.
 
                     #region Lock/Unlock
                     //SET DATES SELECTABLE ONLY WHICH ARE SET LOCK DAYS BEFORE CURRENT DAY FOR ATTENDANCE LOCK IN ATTENDANCE CONFIGURATION
@@ -1279,7 +1280,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             l.Style.Add("color", "#36c60a");
                             l.Style.Add("opacity", ".5");
                             l.Font.Size = 11;
-                            l.ToolTip = "UnLock";
+                            //l.ToolTip = "UnLock";
                             e.Cell.Controls.Add(l);
                         }
                     }
@@ -1512,6 +1513,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         {
                             ddlClassType.Enabled = false;
                         }
+                        hdnTeachingPlanStatus.Value = "1";
                     }
                     else
                     {
@@ -1574,6 +1576,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         //{
                         //    rbRegular.Checked = true;
                         //}
+                        hdnTeachingPlanStatus.Value = "0";
                     }
                     #endregion regular att..
                 }
@@ -2731,12 +2734,12 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
     }
 
     [WebMethod]
-    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc)
+    public static int CopyAttendance(int slotno, int att_no, int class_type, int att_status, string topic_desc, int Tpno)
     {
         AcdAttendanceController objAttController = new AcdAttendanceController();
         int outval = 0;
 
-        outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc);
+        outval = objAttController.CopyAttendacnce(slotno, att_no, class_type, att_status, topic_desc, Tpno);
 
         if (outval != null || outval != 0)
         {
@@ -2770,6 +2773,22 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
         {
             objCommon.DisplayMessage(this.Page, "Data not found!!.", this.Page);
             return;
+        }
+
+        //divClgSession.Visible = false;
+        try
+        {
+            Calendar1.Dispose();
+            if (ddlSessionGlobal.SelectedIndex > 0)
+            {
+                this.GetDates();
+                this.GetCourse();
+                Calendar1.DayRender += new DayRenderEventHandler(this.Calendar1_DayRender);
+            }
+        }
+        catch
+        {
+            throw;
         }
     }
     protected void rdoGlobalElective_CheckedChanged(object sender, EventArgs e)

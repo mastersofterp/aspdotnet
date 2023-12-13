@@ -14,6 +14,10 @@
             width: max-content !important;
         }
 
+         #ctl00_ContentPlaceHolder1_div4 .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+
         .courseteacher .dataTables_filter {
             display: none !important;
         }

@@ -118,7 +118,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
         {
             //int ExamType = Convert.ToInt16(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "FLOCK=1"));
 
-            string Reciept = Convert.ToString(objCommon.LookUp("ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RCPTTYPENO = " + Convert.ToInt32(ddlReceiptType.SelectedValue))); //Added By Nikhil Lambe on 18032020 to get only RECIEPT_CODE
+        //string Reciept = Convert.ToString(objCommon.LookUp("ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_CODE = " + (ddlReceiptType.SelectedValue.ToString()))); //Added By Nikhil Lambe on 18032020 to get only RECIEPT_CODE
             //if (ExamType == 1)
             //{
             //    demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]);
@@ -128,7 +128,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
             //    demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]) + 1;
             //}
             //demandCriteria.SessionNo = Convert.ToInt16(ddlSession.SelectedValue);
-            demandCriteria.ReceiptTypeCode = Reciept.ToString();
+           // demandCriteria.ReceiptTypeCode = Reciept.ToString();
             //demandCriteria.ReceiptTypeCode = ddlReceiptType.SelectedValue;
             demandCriteria.BranchNo = (ddlBranch.SelectedIndex > 0 ? Int32.Parse(ddlBranch.SelectedValue) : 0);
             demandCriteria.SemesterNo = (ddlForSemester.SelectedIndex > 0 ? Int32.Parse(ddlForSemester.SelectedValue) : 0);
@@ -336,10 +336,11 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
                 return;
             }
 
+            demandCriteria.ReceiptTypeCode = ddlReceiptType.SelectedValue.ToString();
             string AdmBatch = objCommon.LookUp("ACD_STUDENT", "ISNULL(ADMBATCH,0)", "IDNO=" + studentIDs.Split(',')[0]);
-            string rec_code = objCommon.LookUp("ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RCPTTYPENO=" + Convert.ToInt32(ddlReceiptType.SelectedValue));
+            //string rec_code = objCommon.LookUp("ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RCPTTYPENO=" + Convert.ToInt32(ddlReceiptType.SelectedValue));
             int PaymenttypeNo = (ddlPaymentType.SelectedIndex > 0 ? int.Parse(ddlPaymentType.SelectedValue) : 0);
-            string Standardfee = objCommon.LookUp("ACD_STANDARD_FEES", "ISNULL(SUM(SEMESTER" + ddlForSemester.SelectedValue + "),0)", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "  AND COLLEGE_ID=" + College_Id + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND PAYTYPENO=" + Convert.ToInt32(ddlPaymentType.SelectedValue) + " AND RECIEPT_CODE='" + rec_code + "' AND BATCHNO=" + Convert.ToInt32(AdmBatch));
+            string Standardfee = objCommon.LookUp("ACD_STANDARD_FEES", "ISNULL(SUM(SEMESTER" + ddlForSemester.SelectedValue + "),0)", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "  AND COLLEGE_ID=" + College_Id + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND PAYTYPENO=" + Convert.ToInt32(ddlPaymentType.SelectedValue) + " AND RECIEPT_CODE='" + ddlReceiptType.SelectedValue.ToString() + "' AND BATCHNO=" + Convert.ToInt32(AdmBatch));
             //string response = dmController.CreateDemandForSelectedStudents(studentIDs, demandCriteria, selectSemesterNo, chkOverwrite.Checked, Convert.ToInt32(ddlSchClg.SelectedValue));
             string response = string.Empty;
 
@@ -400,7 +401,9 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
             int branchNo = (ddlBranch.SelectedIndex > 0 ? int.Parse(ddlBranch.SelectedValue) : 0);
             int semNo = (ddlSelectSemester.SelectedIndex > 0 ? int.Parse(ddlSelectSemester.SelectedValue) : 0);
             int PaymenttypeNo = (ddlPaymentType.SelectedIndex > 0 ? int.Parse(ddlPaymentType.SelectedValue) : 0);
+            string ReceiptType = ddlReceiptType.SelectedValue.ToString();
             char sp = '-';
+            
 
             string college = Convert.ToString(ddlSchClg.SelectedValue.ToString().Split(sp));
             // int College_Idno = (ddlSchClg.SelectedIndex > 0 ? int.Parse(ddlSchClg.SelectedValue) : 0);
@@ -426,7 +429,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
             ViewState["PaymenttypeNo"] = PaymenttypeNo;
             DemandModificationController dmController = new DemandModificationController();
             //string rec_code = objCommon.LookUp("ACD_RECIEPT_TYPE", "RECIEPT_CODE", "RCPTTYPENO=" + ddlReceiptType.SelectedValue);
-            DataSet ds = dmController.GetStudentsForDemandCreation(Convert.ToInt32(ddlDegree.SelectedValue), branchNo, Convert.ToInt32(ddlSelectSemester.SelectedValue),Convert.ToInt32(ddlForSemester.SelectedValue), PaymenttypeNo, College_Id);
+            DataSet ds = dmController.GetStudentsForDemandCreation(Convert.ToInt32(ddlDegree.SelectedValue), branchNo, Convert.ToInt32(ddlSelectSemester.SelectedValue), Convert.ToInt32(ddlForSemester.SelectedValue), PaymenttypeNo, College_Id, ReceiptType);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 lvStudents.Visible = true;
@@ -496,7 +499,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
            // ddlDegree.Items.Clear();
             //this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ddlSchClg.SelectedValue) + " AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
             //this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE B WITH (NOLOCK) ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND B.COLLEGE_ID = " + Convert.ToInt32(ddlSchClg.SelectedValue), "A.DEGREENAME");
-            this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RCPTTYPENO", "RECIEPT_TITLE", "RCPTTYPENO > 0", "RCPTTYPENO");
+        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO > 0", "RCPTTYPENO");
             ddlReceiptType.Focus();
             ddlSession.Focus();
 
@@ -592,7 +595,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             ddlReceiptType.Items.Clear();
-            this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RCPTTYPENO", "RECIEPT_TITLE", "RCPTTYPENO > 0", "RCPTTYPENO");
+            this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO > 0", "RCPTTYPENO");
             ddlReceiptType.Focus();
         }
         else
@@ -823,6 +826,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
                     FeeDemand demandCriteria = this.GetDemandCriteriaforSingleStudent();
                     int selectSemesterNo = Int32.Parse(txtSemesterName.ToolTip);
                     string studentIDs = Convert.ToString(Session["stuinfoidno"]);
+                    string ReceiptType = ddlReceiptType.SelectedValue.ToString();
                     int College_Id = Convert.ToInt32(objCommon.LookUp("acd_student", "COLLEGE_ID", "idno=" + Session["stuinfoidno"]));
                     int count = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND", "count(idno)", "SESSIONNO=" + demandCriteria.SessionNo + " and DEGREENO = " + demandCriteria.DegreeNo + " and BRANCHNO= " + demandCriteria.BranchNo + "and PAYTYPENO=" + demandCriteria.PaymentTypeNo + " and IDNO= " + Session["stuinfoidno"] + " and SEMESTERNO=" + demandCriteria.SemesterNo));
                     
@@ -851,7 +855,7 @@ public partial class Academic_CreateDemand : System.Web.UI.Page
                             int semNo = Convert.ToInt32(ViewState["semNo"]);
                             int PaymenttypeNo = Convert.ToInt32(ViewState["PaymenttypeNo"]);
                             int DEGREENO = Convert.ToInt32(ViewState["DEGREENO"]);
-                            DataSet ds = dmController.GetStudentsForDemandCreation(DEGREENO, branchNo, Convert.ToInt32(ddlSelectSemester.SelectedValue), Convert.ToInt32(ddlForSemester.SelectedValue) ,PaymenttypeNo, College_Id);
+                            DataSet ds = dmController.GetStudentsForDemandCreation(DEGREENO, branchNo, Convert.ToInt32(ddlSelectSemester.SelectedValue), Convert.ToInt32(ddlForSemester.SelectedValue), PaymenttypeNo, College_Id, ReceiptType);
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
                                 lvStudents.Visible = true;
@@ -1042,10 +1046,7 @@ INNER JOIN ACD_PAYMENTTYPE G ON (A.PTYPE=G.PAYTYPENO)",
         }
     protected void ddlForSemesterN_SelectedIndexChanged(object sender, EventArgs e)
         {
-        
             ddlRecType.SelectedIndex = 0;
             lblStatus.Text = "";
-            
-
         }
 }

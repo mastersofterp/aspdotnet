@@ -257,7 +257,7 @@
                                             <label>AICTE No. </label>
                                         </div>
                                         <asp:TextBox ID="txtaicte" runat="server" CssClass="form-control" ToolTip="Enter Aicte Number"
-                                            TabIndex="25" MaxLength="12" onkeyup="validateNumeric(this);"></asp:TextBox>
+                                            TabIndex="25" MaxLength="12"></asp:TextBox>
                                     </div>
 
                                 </div>

@@ -21,6 +21,7 @@ DESIGN AND DEVELOPED BY :  Gaurav Kalbande
     --table-border-color: #e5e5e5;
 }
 
+
 .main-white-bg {
     background: var(--main-white);
 }
@@ -4799,7 +4800,7 @@ ul.light-dark {
         background: rgba(53, 60, 72, 0) !important;
     }
 
-@media (min-width: 1024px) {
+/*@media (min-width: 1024px) {
     .main-header ul.level2.dropdown-menu {
         max-height: 85vh;
         overflow-x: scroll;
@@ -4810,9 +4811,9 @@ ul.light-dark {
         top: 100% !important;
         left: 30% !important;
         background: #eee;
-    }
+    } 
 
         .level3 li {
             background: #eee;
         }
-}
+}*/

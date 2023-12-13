@@ -202,6 +202,8 @@
 
                                 <asp:Button ID="btnAdmissionRegReport"  runat="server" Text="Admission Register Student Data (Excel)" OnClick="btnAdmissionRegReport_Click" TabIndex="14"  ValidationGroup="RegisterReport" CssClass="btn btn-info"  Visible="false"  />
                                 
+                                 <asp:Button ID="btnAdmissionRegStuDataExcelReport" runat="server" Text="Admission Register Student Data (Excel Format II)" OnClick="btnAdmissionRegStuDataExcelReport_Click" ValidationGroup="RegisterReport" TabIndex="16" CssClass="btn btn-info"  Visible="false" />
+
                                 <asp:Button ID="btnstudcount" runat="server" Text="Student Count Excel Report" OnClick="btnstudcount_Click" TabIndex="15" ValidationGroup="Excel" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnMothFathNotAlive" runat="server" Text="Mother/Father is not Alive Report" OnClick="btnMothFathNotAlive_Click" TabIndex="16" ValidationGroup="Excel" CssClass="btn btn-info" Visible="false"  />
                                  <asp:Button ID="btnTotalApplifeereport" runat="server" Text="Total Applicable Fee Report" OnClick="btnTotalApplifeereport_Click"  TabIndex="17"   CssClass="btn btn-info" Visible="false" />
@@ -245,6 +247,8 @@
             <asp:PostBackTrigger ControlID="btnAdmissionBatchWiseReport" />
             <asp:PostBackTrigger ControlID="btnMothFathNotAlive" />
             <asp:PostBackTrigger ControlID="btnAdmissionRegReport" />
+            <asp:PostBackTrigger ControlID="btnAdmissionRegStuDataExcelReport" />
+
         </Triggers>
     </asp:UpdatePanel>
     <script>

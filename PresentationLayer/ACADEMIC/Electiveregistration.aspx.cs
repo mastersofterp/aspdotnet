@@ -67,6 +67,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
         {
             Response.Redirect("~/default.aspx");
         }
+        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Src", "test5();", true);
     }
     #endregion
     #region Elective Course Registration
@@ -117,9 +118,12 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
 
 
                     bool IsGlobalCourse = Convert.ToBoolean(objCommon.LookUp("ACD_COURSE", "ISNULL(GLOBALELE,0)", " COURSENO=" + Convert.ToInt32(ddlcourselist.SelectedValue)));
+
+                    double zeroCreditCourse = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "ISNULL(CREDITS,0)", " COURSENO=" + Convert.ToInt32(ddlcourselist.SelectedValue)));
+
                     if (!IsGlobalCourse)
                     {
-                        if (electcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
+                        if (zeroCreditCourse > 0 && electcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
                         {
                             objCommon.DisplayMessage(updBulkReg, "The Total Elective Credits limits is " + lblTotalCredit.Text + ", Student " + objSR.REGNO + " Already Registered Elective Credit is " + electcreditregistred + ", Kindly check the course registration", this.Page);
                             return;
@@ -167,18 +171,18 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
                                 return;
                             }
                         }
-                        else
-                        {
-                            objCommon.DisplayMessage(updBulkReg, "Please Define Choices for selected Elective Group", this.Page);
-                            return;
-                        }
+                        //else // commenetd by Shailendra K. on dated 08.12.2023 as per In course creation pafe elective group is not mandatory.
+                        //{
+                        //    objCommon.DisplayMessage(updBulkReg, "Please Define Choices for selected Elective Group", this.Page);
+                        //    return;
+                        //}
 
                         if (totalElectCrs > 0 && grpNo > 0 && choiceFor > 0 && totalElectCrs >= choiceFor)
                             count = 1;
                     }
                     else
                     {
-                        if (globalcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
+                        if (zeroCreditCourse > 0 && globalcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
                         {
                             objCommon.DisplayMessage(updBulkReg, "The Total Global Credits limits is " + lblTotalCredit.Text + ", Student " + objSR.REGNO + " Already Registered Global Credit is " + globalcreditregistred + ", Kindly check course registration", this.Page);
                             return;
@@ -1087,9 +1091,12 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
 
                     int totalElectCrs = 0;
                     bool IsGlobalCourse = Convert.ToBoolean(objCommon.LookUp("ACD_COURSE", "ISNULL(GLOBALELE,0)", " COURSENO=" + Convert.ToInt32(ddlcourselist.SelectedValue)));
+
+                    double zeroCreditCourse = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "ISNULL(CREDITS,0)", " COURSENO=" + Convert.ToInt32(ddlcourselist.SelectedValue)));
+
                     if (!IsGlobalCourse)
                     {
-                        if (electcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
+                        if (zeroCreditCourse > 0 && electcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
                         {
                             objCommon.DisplayMessage(updBulkReg, "The Total Elective Credits limits is " + lblTotalCredit.Text + ", Student Already Registered Elective Credit is " + electcreditregistred + ", Kindly check the course registration", this.Page);
                             return;
@@ -1144,18 +1151,18 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
                                 return;
                             }
                         }
-                        else
-                        {
-                            objCommon.DisplayMessage(updBulkReg, "Please Define Choices for selected Elective Group", this.Page);
-                            return;
-                        }
+                        //else // commenetd by Shailendra K. on dated 08.12.2023 as per In course creation pafe elective group is not mandatory.
+                        //{
+                        //    objCommon.DisplayMessage(updBulkReg, "Please Define Choices for selected Elective Group", this.Page);
+                        //    return;
+                        //}
 
                         if (totalElectCrs > 0 && grpNo > 0 && choiceFor > 0 && totalElectCrs >= choiceFor)
                             count = 1;
                     }
                     else
                     {
-                        if (globalcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
+                        if (zeroCreditCourse > 0 && globalcreditregistred >= Convert.ToDouble(lblTotalCredit.Text))
                         {
                             objCommon.DisplayMessage(updBulkReg, "The Total Global Credits limits is " + lblTotalCredit.Text + ", Student Already Registered Global Credit is " + globalcreditregistred + ", Kindly check the course credits", this.Page);
                             return;

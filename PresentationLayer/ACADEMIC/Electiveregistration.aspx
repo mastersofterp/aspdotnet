@@ -4,6 +4,10 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
+
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -272,7 +276,7 @@
                                             <div class="col-12" id="divpanels" runat="server">
 
                                                 <div class="col-md-6">
-                                                    <asp:Panel ID="pnlStudents" runat="server" Visible="false" ScrollBars="Auto" Height="400px">
+                                                    <asp:Panel ID="pnlStudents" runat="server" Visible="false">
                                                         <asp:ListView ID="lvStudent" runat="server">
                                                             <%--OnLayoutCreated="lvStudent_LayoutCreated">--%>
                                                             <LayoutTemplate>
@@ -280,33 +284,55 @@
                                                                     <div class="sub-heading">
                                                                         <h5>Student List</h5>
                                                                     </div>
-                                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblHead">
+                                                                    <div class="row mb-1">
+                                                                        <div class="col-lg-3 col-md-6 offset-lg-5">
+                                                                            <button type="button" class="btn btn-outline-primary float-lg-right saveAsExcel">Export Excel</button>
+                                                                        </div>
+
+
+                                                                        <div class="col-lg-4 col-md-6">
+                                                                            <div class="input-group sea-rch">
+                                                                                <input type="text" id="FilterData" class="form-control" placeholder="Search" />
+                                                                                <div class="input-group-addon">
+                                                                                    <i class="fa fa-search"></i>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <%--<table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblHead">
                                                                         <thead class="bg-light-blue">
-                                                                            <tr>
-                                                                                <th>
-                                                                                    <asp:CheckBox ID="cbHead" runat="server" onclick="SelectAll(this)" OnCheckedChanged="cbRow_CheckedChanged" ToolTip="Select/Select all" />
-                                                                                </th>
-                                                                                <th>USN No.
-                                                                                </th>
-                                                                                <%--<th style="text-align: left; width: 15%">
+                                                                            <tr>--%>
+                                                                    <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                                        <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="tblHead">
+                                                                            <thead class="bg-light-blue" style="position: sticky; z-index: 1; top: 0; box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 1px;">
+                                                                                <tr>
+                                                                                    <th>
+                                                                                        <asp:CheckBox ID="cbHead" runat="server" onclick="SelectAll(this)" OnCheckedChanged="cbRow_CheckedChanged" ToolTip="Select/Select all" />
+                                                                                    </th>
+                                                                                    <th>USN No.
+                                                                                    </th>
+                                                                                    <%--<th style="text-align: left; width: 15%">
                                                                             Enroll. No.
                                                                         </th>--%>
-                                                                                <th>Student Name
-                                                                                </th>
-                                                                                <th style="display: none">Elective Courses
-                                                                                </th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr id="itemPlaceholder" runat="server" />
-                                                                        </tbody>
-                                                                    </table>
+                                                                                    <th>Student Name
+                                                                                    </th>
+                                                                                    <th style="display: none">Elective Courses
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr id="itemPlaceholder" runat="server" />
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </LayoutTemplate>
                                                             <ItemTemplate>
                                                                 <tr>
                                                                     <td>
-                                                                        <asp:CheckBox ID="cbRow" runat="server" ToolTip='<%# Eval("IDNO") %>' onClick="totStudents(this);"  Enabled='<%# (Eval("REGISTERED").ToString() == "0" ?true:false)%>'
+                                                                        <asp:CheckBox ID="cbRow" runat="server" ToolTip='<%# Eval("IDNO") %>' onClick="totStudents(this);" Enabled='<%# (Eval("REGISTERED").ToString() == "0" ?true:false)%>'
                                                                             Checked='<%# (Eval("REGISTERED").ToString() == "1" ?true:false)%>' OnCheckedChanged="cbRow_CheckedChanged" AutoPostBack="true" />
                                                                         <asp:HiddenField ID="hdnId" runat="server" Value='<%# Eval("IDNO") %>' />
                                                                     </td>
@@ -716,4 +742,102 @@
             }
         }
     </script>
+
+
+    <script>
+        function toggleSearch(searchBar, table) {
+            var tableBody = table.querySelector('tbody');
+            var allRows = tableBody.querySelectorAll('tr');
+            var val = searchBar.value.toLowerCase();
+            allRows.forEach((row, index) => {
+                var insideSearch = row.innerHTML.trim().toLowerCase();
+            //console.log('data',insideSearch.includes(val),'searchhere',insideSearch);
+            if (insideSearch.includes(val)) {
+                row.style.display = 'table-row';
+            }
+            else {
+                row.style.display = 'none';
+            }
+
+
+
+        });
+        }
+
+
+
+        function test5() {
+            var searchBar5 = document.querySelector('#FilterData');
+            var table5 = document.querySelector('#tblHead');
+
+
+
+            //console.log(allRows);
+            searchBar5.addEventListener('focusout', () => {
+                toggleSearch(searchBar5, table5);
+        });
+
+
+
+        $(".saveAsExcel").click(function () {
+
+            //if (confirm('Do You Want To Apply for New Program?') == true) {
+            // return false;
+            //}
+            var workbook = XLSX.utils.book_new();
+            var allDataArray = [];
+            allDataArray = makeTableArray(table5, allDataArray);
+            var worksheet = XLSX.utils.aoa_to_sheet(allDataArray);
+            workbook.SheetNames.push("Test");
+            workbook.Sheets["Test"] = worksheet;
+            XLSX.writeFile(workbook, "LeadData.xlsx");
+        });
+        }
+
+
+
+        function makeTableArray(table, array) {
+            var allTableRows = table.querySelectorAll('tr');
+            allTableRows.forEach(row => {
+                var rowArray = [];
+            if (row.querySelector('td')) {
+                var allTds = row.querySelectorAll('td');
+                allTds.forEach(td => {
+                    if (td.querySelector('span')) {
+                rowArray.push(td.querySelector('span').textContent);
+            }
+            else if (td.querySelector('input')) {
+                rowArray.push(td.querySelector('input').value);
+            }
+            else if (td.querySelector('select')) {
+                rowArray.push(td.querySelector('select').value);
+            }
+            else if (td.innerText) {
+                rowArray.push(td.innerText);
+            }
+            else{
+                rowArray.push('');
+            }
+        });
+        }
+        if (row.querySelector('th')) {
+            var allThs = row.querySelectorAll('th');
+            allThs.forEach(th => {
+                if (th.textContent) {
+            rowArray.push(th.textContent);
+        }
+        else {
+            rowArray.push('');
+        }
+        });
+        }
+        // console.log(allTds);
+
+
+
+        array.push(rowArray);
+        });
+        return array;
+        }
+</script>
 </asp:Content>

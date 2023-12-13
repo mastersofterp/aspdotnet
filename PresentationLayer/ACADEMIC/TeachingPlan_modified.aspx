@@ -48,7 +48,7 @@
 
                                                     <div class="row">
 
-                                                      
+
 
                                                         <div class="form-group col-lg-4 col-md-6 col-12">
                                                             <div class="label-dynamic">
@@ -65,7 +65,7 @@
                                                                 ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="true" />
                                                         </div>
 
-                                                          <div class="form-group col-lg-4 col-md-6 col-12" id="adminScheme" runat="server">
+                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="adminScheme" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <%-- <label>Scheme</label>--%>
@@ -653,7 +653,24 @@
                                                                 ErrorMessage="Please Select Semester/Course" InitialValue="0" SetFocusOnError="True" ValidationGroup="ReportGlobal">
                                                             </asp:RequiredFieldValidator>
                                                         </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <sup>* </sup>
+                                                                <asp:Label ID="lblDYddlSection_Tab" runat="server" Font-Bold="true"></asp:Label>
 
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlGlobalSection" runat="server" TabIndex="5" AppendDataBoundItems="true" ValidationGroup="courseteacher" OnSelectedIndexChanged="ddlGlobalSection_SelectedIndexChanged"
+                                                                CssClass="form-control" AutoPostBack="true" data-select2-enable="true">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlGlobalSection"
+                                                                Display="None" InitialValue="0" ErrorMessage="Please Select Section" ValidationGroup="SubmitGlobal">
+                                                            </asp:RequiredFieldValidator>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlGlobalSection" Display="None"
+                                                                ErrorMessage="Please Select Section" InitialValue="0" SetFocusOnError="True" ValidationGroup="ReportGlobal">
+                                                            </asp:RequiredFieldValidator>
+
+                                                        </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Div8" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
@@ -907,7 +924,7 @@
                                                         </td>
                                                         <td><%# Eval("LectureDate")%></td>
                                                         <td><%# Eval("CONDUCT_DATE")%></td>
-                                                        <td><span style="font-weight: bold"><%# Eval("CCODE")%></span>- <%# Eval("COURSE_NAME")%><span style="color: Red; font-weight: bold"></span>
+                                                        <td><span style="font-weight: bold"><%# Eval("CCODE")%></span>- <%# Eval("COURSE_NAME")%><span style="color: Red; font-weight: bold">[Section : <%# Eval("SECTIONNAME")%>]</span></span>
                                                         </td>
                                                     </tr>
                                                 </ItemTemplate>

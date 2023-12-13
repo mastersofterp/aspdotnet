@@ -18,6 +18,7 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     PhdController objPhdC = new PhdController();
     string ua_dept = string.Empty;
     string UANO = string.Empty;
+
     #region Page Load
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -46,6 +47,8 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                     //Page Authorization
                  //  this.CheckPageAuthorization();
 
+                    
+                    //nodgc.Visible = false;
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
 
@@ -69,6 +72,8 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                         divchairman.Visible = false;
                         pnlApprove.Visible = true;
                         REPORTAPPROVE();
+                        CheckBox1.Visible = false; // Added By Vipul Tichakule on dated 20-11-2023 as per TicketNo -
+
 
                     }
                     else if (ViewState["usertype"].ToString() == "1" )
@@ -250,8 +255,16 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                         divtxt.Visible = false;
                         lblDropdown.Text = ddlSearch.SelectedItem.Text;
 
+                        if (tablename == "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_BRANCH B ON(B.BRANCHNO= CDB.BRANCHNO)" || tablename == "ACD_COLLEGE_DEGREE_BRANCH CDB INNER JOIN ACD_DEGREE D ON(D.DEGREENO= CDB.DEGREENO)")
+                        {
 
-                        objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, "UGPGOT=3", column1);
+                            objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, "UGPGOT=3", column1);
+                        }
+                        else
+                        {
+
+                            objCommon.FillDropDownList(ddlDropdown, tablename, "DISTINCT " + column1, column2, ""+column1+">0", column1);
+                        }
 
                     }
                     else
@@ -431,6 +444,11 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 lblfathername.Text = dtr["FATHERNAME"] == null ? string.Empty : dtr["FATHERNAME"].ToString().ToUpper();
                 lbljoiningdate.Text = dtr["ADMDATE"] == DBNull.Value ? "" : Convert.ToDateTime(dtr["ADMDATE"]).ToString("dd/MM/yyyy");
                 lblDepartment.Text = dtr["BRANCHNAME"].ToString();
+                lblModeOfStudy.Text = dtr["PHD_MODE"] == null ? string.Empty : dtr["PHD_MODE"].ToString();
+                lblEmailID.Text = dtr["EMAILID"] == null ? string.Empty : dtr["EMAILID"].ToString();
+                lblSession.Text = dtr["ADMISSION_SESSION_NAME"] == null ? string.Empty : dtr["ADMISSION_SESSION_NAME"].ToString();
+                lblMobileNo.Text = dtr["STUDENTMOBILE"].ToString();
+           
                 string SEMESTERNO = objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
                 int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO =" + Convert.ToInt32(Session["idno"]) + "AND SEMESTERNO =" + Convert.ToInt16(SEMESTERNO) + "AND ISNULL(CANCEL,0)=0"));
                 if (count > 0)
@@ -820,6 +838,14 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
     {
 
     }
+    protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        lvStudent.Visible = false;
+        lvStudent.DataSource = null;
+        lblNoRecords.Text = string.Empty;
+        divCriteria.Visible = false;
+        divpanel.Visible = false;
+    }
 
     #endregion
 
@@ -1063,23 +1089,12 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
        // }
 
     }
-    private void SubmitData()
+    private void ValidationMulti()
     {
-        try
+        if (ddlSupervisorrole.SelectedValue == "S")
         {
-
             //added by Vipul Tichakule on date 07-11-2023
             if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
-            {
-                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
-                return;
-            }
-            if (ddlJointSupervisor.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
-            {
-                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
-                return;
-            }
-            if (ddlJointSupervisorSecond.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlJointSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRCChairman.SelectedValue)
             {
                 objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
                 return;
@@ -1094,7 +1109,73 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
                 objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
                 return;
             }
+        }
+        else if (ddlSupervisorrole.SelectedValue == "J")
+        {
+            if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisor.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRC.SelectedValue == ddlSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRC.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+        }
+        else
+        {
+            //added by Vipul Tichakule on date 07-11-2023
+            if (ddlSupervisor.SelectedValue == ddlJointSupervisor.SelectedValue || ddlSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisor.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisor.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisor.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlJointSupervisorSecond.SelectedValue == ddlSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlJointSupervisor.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRC.SelectedValue || ddlJointSupervisorSecond.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
 
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRC.SelectedValue == ddlSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRC.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRC.SelectedValue == ddlDRCChairman.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+            if (ddlDRCChairman.SelectedValue == ddlSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisor.SelectedValue || ddlDRCChairman.SelectedValue == ddlJointSupervisorSecond.SelectedValue || ddlDRCChairman.SelectedValue == ddlDRC.SelectedValue)
+            {
+                objCommon.DisplayMessage("Multiple faculty with the same name are not allowed!!!", this.Page);
+                return;
+            }
+        }
+    }
+    private void SubmitData()
+    {
+        try
+        {
+            if (ViewState["usertype"].ToString() == "2")
+            {
+
+            }
+            else
+            {
+                ValidationMulti();
+            }
             PhdController objPhdC = new PhdController();
 
             Phd objS = new Phd();
@@ -1254,15 +1335,5 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update : System.Web.UI.Page
         Response.Redirect(Request.Url.ToString());
     }
     #endregion
-
-    protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        lvStudent.Visible = false;
-        lvStudent.DataSource = null;
-        lblNoRecords.Text = string.Empty;
-        divCriteria.Visible = false;
-        divpanel.Visible = false;
-    }
-
   
 }

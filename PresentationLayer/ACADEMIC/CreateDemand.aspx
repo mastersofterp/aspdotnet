@@ -400,7 +400,7 @@
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <%-- <label>School/Institute Name</label>--%>
-                                                        <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
+                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSchClg" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
                                                         TabIndex="3" AutoPostBack="true" OnSelectedIndexChanged="ddlSchClg_SelectedIndexChanged" ToolTip="Please Select Institute." />
@@ -412,7 +412,7 @@
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <%--<label>Session</label>--%>
-                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                                        <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
                                                     <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1" AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" ToolTip="Please Select Session">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>

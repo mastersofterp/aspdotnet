@@ -107,10 +107,10 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     ddlDepartment.SelectedIndex = 0;
                 }
             }
-            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH WITH (NOLOCK)", "BATCHNO", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
+            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH WITH (NOLOCK)", "BATCHNO", "BATCHNAME", "BATCHNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "BATCHNO DESC");
 
-            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
-            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "SEMESTERNO");
+            objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "DEGREENO");
         }
         catch (Exception ex)
         {
@@ -213,7 +213,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                         {
                             categorys += (lvItem.FindControl("txtAdmDate") as TextBox).Text + "$";
                         }
-                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31" || rdbCat.SelectedValue == "32" || rdbCat.SelectedValue == "33")
+                        else if (rdbCat.SelectedValue == "9" || rdbCat.SelectedValue == "11" || rdbCat.SelectedValue == "15" || rdbCat.SelectedValue == "16" || rdbCat.SelectedValue == "17" || rdbCat.SelectedValue == "19" || rdbCat.SelectedValue == "21" || rdbCat.SelectedValue == "31" || rdbCat.SelectedValue == "32" || rdbCat.SelectedValue == "33" || rdbCat.SelectedValue == "34")   // Modified By Shrikant W. on 28-11-2023
                         {
                             categorys += (lvItem.FindControl("txtusn") as TextBox).Text + "$";
                         }
@@ -246,7 +246,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 int fieldID = Convert.ToInt32(rdbCat.SelectedValue);
 
 
-                if (objSC.UpdateStudentCategory(studids, categorys, fieldID,paddress) == Convert.ToInt32(CustomStatus.RecordUpdated))
+                if (objSC.UpdateStudentCategory(studids, categorys, fieldID, paddress) == Convert.ToInt32(CustomStatus.RecordUpdated))
                 {
                     this.BindListView();
                     objCommon.DisplayMessage(this.updStudent, "Data Updated Successfully.", this.Page);
@@ -420,6 +420,10 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME , S.IDNO AS COLUMNID , '' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
+            else if (rdbCat.SelectedValue == "34")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+            }
             #region studfather
             if (rdbCat.SelectedValue == "24" )
             {
@@ -576,7 +580,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
         if (ddlDegree.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH", "BRANCHNO", "LONGNAME", "DEGREENO = " + ddlDegree.SelectedValue, "BRANCHNO");
-            objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) INNER JOIN ACD_BRANCH B WITH (NOLOCK) ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 ", "B.LONGNAME"); //AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue)          
+            objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) INNER JOIN ACD_BRANCH B WITH (NOLOCK) ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(CD.ACTIVESTATUS,0)=1", "B.LONGNAME"); //AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue)          
             ddlSemester.SelectedValue = "0";
             trFilter.Visible = false;
             rdbCat.ClearSelection();
@@ -607,11 +611,11 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             TextBox txtUSN = e.Item.FindControl("txtusn") as TextBox; // USN No
             TextBox txtemail = e.Item.FindControl("txtemail") as TextBox;// for email
             TextBox txtLAdd = e.Item.FindControl("txtLAdd") as TextBox;  // for local address
-           // TextBox tdDivPAddress = e.Item.FindControl("txtPAdd") as TextBox; // for p address
+            // TextBox tdDivPAddress = e.Item.FindControl("txtPAdd") as TextBox; // for p address
             if (rdbCat.SelectedValue == "1")  // for College Code
             {
 
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
                 //ds = objCommon.FillDropDown("ACD_COLLEGECODE", "CODENO AS COLUMNID", "CODENAME AS COLUMNNAME", "CODENO > 0", "CODENO");
                 ds = objCommon.FillDropDown("ACD_COLLEGECODE WITH (NOLOCK)", "CODENO AS COLUMNID", "CODENAME AS COLUMNNAME", "CODENO > 0", "CODENO");
                 txtemail.Visible = false;
@@ -619,7 +623,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             }
             else if (rdbCat.SelectedValue == "2") // for Student Type
             {
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
@@ -629,7 +633,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
                 txtemail.Visible = false;
                 ds = objCommon.FillDropDown("ACD_KEA_STATUS WITH (NOLOCK)", "KEANO AS COLUMNID", "KEA_NAME AS COLUMNNAME", "", "KEANO");
             }
@@ -637,7 +641,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 txtLAdd.Visible = false;
 
-               // lblStudent.Visible = true;
+                // lblStudent.Visible = true;
                 txtemail.Visible = false;
                 ds = objCommon.FillDropDown("ACD_CATEGORY WITH (NOLOCK)", "CATEGORYNO AS COLUMNID", "CATEGORY AS COLUMNNAME", "CATEGORYNO > 0", "CATEGORYNO");
             }
@@ -645,7 +649,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 txtLAdd.Visible = false;
 
-               // lblStudent.Visible = true;
+                // lblStudent.Visible = true;
                 txtemail.Visible = false;
                 ds = objCommon.FillDropDown("ACD_CATEGORY WITH (NOLOCK)", "CATEGORYNO AS COLUMNID", "CATEGORY AS COLUMNNAME", "CATEGORYNO > 0", "CATEGORYNO");
             }
@@ -653,7 +657,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 txtLAdd.Visible = false;
 
-               // lblStudent.Visible = true;
+                // lblStudent.Visible = true;
                 txtemail.Visible = false;
                 ds = objCommon.FillDropDown("ACD_ADMBATCH WITH (NOLOCK)", "BATCHNO AS COLUMNID", "BATCHNAME AS COLUMNNAME", "BATCHNO > 0", "BATCHNO");
             }
@@ -661,7 +665,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
                 txtemail.Visible = false;
                 ds = objCommon.FillDropDown("ACD_BLOODGRP WITH (NOLOCK)", "BLOODGRPNO AS COLUMNID", "BLOODGRPNAME AS COLUMNNAME", "BLOODGRPNO > 0", "BLOODGRPNO");
             }
@@ -673,7 +677,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ddlcat.Visible = false;
                 txtUSN.Visible = false;
                 txtemail.Visible = false;
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "9")
             {
@@ -684,7 +688,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
 
             }
             else if (rdbCat.SelectedValue == "10") // Admission Date
@@ -695,7 +699,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
                 //S.CSN_NO,
             }
             else if (rdbCat.SelectedValue == "11")
@@ -707,7 +711,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "12")
             {
@@ -719,7 +723,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "13")
             {
@@ -731,7 +735,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
             }
 
             else if (rdbCat.SelectedValue == "14")
@@ -744,7 +748,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "15")
             {
@@ -755,7 +759,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "16")
             {
@@ -766,7 +770,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "17")
             {
@@ -777,7 +781,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
+                //   lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "18")
             {
@@ -789,8 +793,8 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-             //   lblStudent.Visible = true;
-               //DropDownList ddlcatt = (DropDownList)e.Item.FindControl("ddlcat");
+                //   lblStudent.Visible = true;
+                //DropDownList ddlcatt = (DropDownList)e.Item.FindControl("ddlcat");
                 //ddlcatt.Items.Add(new ListItem("Aided", "1"));
                 //ddlcatt.Items.Add(new ListItem("Un-aided", "2"));
             }
@@ -804,7 +808,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-           //     lblStudent.Visible = true;
+                //     lblStudent.Visible = true;
 
             }
             else if (rdbCat.SelectedValue == "20")
@@ -816,7 +820,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtAdmissionDate.Visible = false;
                 imgCal.Visible = false;
                 txtemail.Visible = false;
-            //    lblStudent.Visible = true;
+                //    lblStudent.Visible = true;
                 txtUSN.Visible = false;
                 txtLAdd.Visible = false;
 
@@ -829,7 +833,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtAdmissionDate.Visible = false;
                 imgCal.Visible = false;
                 txtemail.Visible = false;
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
                 txtLAdd.Visible = false;
 
             }
@@ -844,7 +848,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
             }
             else if (rdbCat.SelectedValue == "23") // Category
             {
@@ -854,7 +858,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-               // lblStudent.Visible = true;
+                // lblStudent.Visible = true;
                 ds = objCommon.FillDropDown("ACD_CATEGORY WITH (NOLOCK)", "CATEGORYNO AS COLUMNID", "CATEGORY AS COLUMNNAME", "CATEGORYNO > 0", "CATEGORYNO");
             }
             else if (rdbCat.SelectedValue == "25")//Father Name
@@ -865,7 +869,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtemail.Visible = false;
                 txtLAdd.Visible = false;
 
-              //  lblStudent.Visible = false;
+                //  lblStudent.Visible = false;
                 txtUSN.Visible = true;
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.FATHERNAME AS COLUMNNAME, S.IDNO AS COLUMNID", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
@@ -891,7 +895,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtLAdd.Visible = false;
 
                 txtemail.Visible = false;
-               // lblStudent.Visible = false;
+                // lblStudent.Visible = false;
                 txtUSN.Visible = true;
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MOTHERNAME AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "COLUMNID");
             }
@@ -901,7 +905,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 txtAdmissionDate.Visible = false;
                 imgCal.Visible = false;
                 txtemail.Visible = false;
-              //  lblStudent.Visible = true;
+                //  lblStudent.Visible = true;
                 txtLAdd.Visible = false;
                 txtUSN.Visible = false;
                 ddlcat.Items.Clear();
@@ -932,7 +936,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MERITNO AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
 
-            else if (rdbCat.SelectedValue == "32") 
+            else if (rdbCat.SelectedValue == "32")
             {
                 txtLAdd.Visible = false;
                 txtUSN.Visible = true;
@@ -953,12 +957,21 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                 ddlcat.Visible = false;
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO AS COLUMNID", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
+            else if (rdbCat.SelectedValue == "34")   // Added By Shrikant W. on 28-11-2023
+            {
+                ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
+                ddlcat.Visible = false;
+                txtAdmissionDate.Visible = false;
+                imgCal.Visible = false;
+                txtemail.Visible = false;
+                txtLAdd.Visible = false;
+            }
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 if (rdbCat.SelectedValue == "8" || rdbCat.SelectedValue == "10")
                 {
-                 //   lblStudent.Visible = true;
+                    //   lblStudent.Visible = true;
                     txtemail.Visible = false;
                     ddlcat.Visible = false;
                     txtAdmissionDate.Visible = true;
@@ -976,7 +989,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     imgCal.Visible = false;
                     txtLAdd.Visible = false;
 
-                 //   lblStudent.Visible = true;
+                    //   lblStudent.Visible = true;
                 }
                 else if (rdbCat.SelectedValue == "19")  //Added By Vinay Mishra to Apply Validation for Aadhar Card Number - Bug Id 166611
                 {
@@ -1001,7 +1014,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtLAdd.Visible = false;
 
                     txtUSN.MaxLength = 10;
-                 //   lblStudent.Visible = true;
+                    //   lblStudent.Visible = true;
 
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
@@ -1017,7 +1030,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtAdmissionDate.Visible = false;
                     txtLAdd.Visible = false;
                     imgCal.Visible = false;
-                  //  lblStudent.Visible = true;
+                    //  lblStudent.Visible = true;
                     // ClientScript.RegisterStartupScript(this.GetType(), "UpdateTime", script, true);
 
                     // txtUSN.Attributes.Add("onblur", "return checkEmail(event)");
@@ -1032,7 +1045,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     ddlcat.Visible = false;
                     txtAdmissionDate.Visible = false;
                     imgCal.Visible = false;
-                 //   lblStudent.Visible = true;
+                    //   lblStudent.Visible = true;
                 }
                 else if (rdbCat.SelectedValue == "26")
                 {
@@ -1043,7 +1056,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtAdmissionDate.Visible = false;
                     imgCal.Visible = false;
 
-                 //   lblStudent.Visible = true;
+                    //   lblStudent.Visible = true;
                 }
                 else if (rdbCat.SelectedValue == "31")  //Added By Vinay Mishra on 14092023 - To Update Merit Number for Students
                 {
@@ -1058,7 +1071,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
                 }
-                else if (rdbCat.SelectedValue == "32")  
+                else if (rdbCat.SelectedValue == "32")
                 {
                     txtemail.Visible = false;
                     txtUSN.Visible = true;
@@ -1071,7 +1084,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
                 }
-                else if (rdbCat.SelectedValue == "33")  
+                else if (rdbCat.SelectedValue == "33")
                 {
                     txtemail.Visible = false;
                     txtUSN.Visible = true;
@@ -1083,6 +1096,17 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
                     txtUSN.MaxLength = 13;
                     txtUSN.Attributes.Add("onkeypress", "return numeralsOnly(event)");
 
+                }
+                else if(rdbCat.SelectedValue == "34")    // Added By Shrikant W. on 28-11-2023
+                {
+                    txtemail.Visible = false;
+                    txtUSN.Visible = true;
+                    ddlcat.Visible = false;
+                    txtAdmissionDate.Visible = false;
+                    imgCal.Visible = false;
+                    txtLAdd.Visible = false;
+                    txtUSN.MaxLength = 20;
+                    txtUSN.Attributes.Add("onkeypress", "return allowAlphaNumericSpace(event, this)");
                 }
                 else
                 {

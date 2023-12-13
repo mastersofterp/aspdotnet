@@ -47,9 +47,9 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             else
             {
 
-                //CheckPageAuthorization();
+
                 DataSet ds_CheckActivity = obeMarkEnrty.CheckSessionActivity(Session["usertype"].ToString(), Request.QueryString["pageno"].ToString(), Convert.ToInt32(Session["userno"]));
-                // DataSet ds_CheckActivity = obeMarkEnrty.CheckSessionActivity(Session["usertype"].ToString(), Request.QueryString["pageno"].ToString());
+
 
                 int USER_TYPE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Session["userno"]));
                 if (USER_TYPE == 3)
@@ -73,13 +73,14 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                 {
 
                     objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER SM ON(S.COLLEGE_ID=SM.COLLEGE_ID)", "S.sessionno", "Concat(s.SESSION_NAME , '-',SM.SHORT_NAME)SESSION_NAME", "FLOCK=1", "S.sessionno");
-                
+
                 }
-                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO = 207 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO = 237 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
 
                 Page.Title = Session["coll_name"].ToString();
                 ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
-              
+
             }
 
         }
@@ -166,7 +167,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             ddlExamName.DataTextField = "ExamName";
             ddlExamName.DataValueField = "QuestionPaperId";
             ddlExamName.DataBind();
-            ddlExamName.Items.Insert(0, new ListItem("Please select Exam Name", "0")); 
+            ddlExamName.Items.Insert(0, new ListItem("Please select Exam Name", "0"));
             ddlExamName.SelectedIndex = 0;
 
 
@@ -174,16 +175,16 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
         }
         else
-        {   
+        {
             ddlExamName.DataSource = null;
             ddlExamName.DataBind();
             objCommon.DisplayMessage(this.Page, "Please Create Question Paper First..!!!", this.Page);
             pnlStudentMarksEntry.Visible = false;
             divSession.Visible = true;
             ddlSession_SelectedIndexChanged(sender, e);
-            
+
         }
-           
+
 
         lblSubjectName.Text = ("Subject Name : " + LNK.Text + " (Sec ~ " + LNK.CommandName + ")");
         lblQuestionDetails.Visible = false;
@@ -227,38 +228,61 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
         try
         {
-            //******************added on 21112022************************
+            //******************added on 21112022****************************************
             int SCHEMENO = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SCHEMEID", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
             int COURSENO = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SUBJECTID", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
             hdfSchemeTest.Value = SCHEMENO.ToString();
             int Sessionno = Convert.ToInt32(ddlSession.SelectedValue);
 
-            //*******************RULE validation added DT 04072023**************************
+            //*******************RULE validation added DT 04072023***********************
 
-            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId",""));
+            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId", ""));
             int Global = Convert.ToInt32(objCommon.LookUp("ACD_course", "CAST (ISNULL(GLOBALELE,0) AS INT) AS GLOBALELE", "Courseno=" + COURSENO));
             int SUBEXAMNO = Convert.ToInt32(objCommon.LookUp("tblExamQuestionPaper  QP INNER JOIN TBLEXAMPATTERNMAPPING EP ON QP.ExamPatternMappingId=EP.ExamPatternMappingId INNER JOIN TBLEXAMNAMEMASTER EMN ON EP.EXAMNAMEID=EMN.EXAMNAMEID INNER JOIN ACD_SUBEXAM_NAME SN ON EMN.FLDNAME=SN.FLDNAME and EMN.Patternno=SN.PAtternno and EMN.SUBID=SN.SUBEXAM_SUBID", "DISTINCT isnull(SUBEXAMNO,0)SUBEXAMNO", " ISNULL(SN.ACTIVESTATUS,0)=1 AND QuestionPaperId=" + ddlExamName.SelectedValue));
 
-
-            //int ExamNameId = Convert.ToInt32(objCommon.LookUp("tblExamQuestionPaper  QP INNER JOIN TBLEXAMPATTERNMAPPING EP ON QP.ExamPatternMappingId=EP.ExamPatternMappingId INNER JOIN TBLEXAMNAMEMASTER EMN ON EP.EXAMNAMEID=EMN.EXAMNAMEID INNER JOIN ACD_SUBEXAM_NAME SN ON EMN.EXAMNO=SN.SUBEXAMNO", "DISTINCT isnull(EMN.ExamNameId,0)", "QuestionPaperId=" + ddlExamName.SelectedValue));
-
             int SUBJECTTYPE = Convert.ToInt32(objCommon.LookUp("tblacdschemesubjectmapping", "SubjectTypeId", "SchemeSubjectId=" + ViewState["SchemeSubjectId"]));
 
-            //string Semesterno = Convert.ToString(objCommon.LookUp("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and (UA_NO=" + Session[userno] + "or UA_NO_PRAC=" + Session[userno] + ") and isnull(cancel,0)=0 and isnull(exam_registered,0)=1"));
             int USER_TYPE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Session["userno"]));
-            
-                if ((Global != 1) && (Org==5))
+            string CCODE = Convert.ToString(objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + COURSENO));
+
+            if ((Global != 1))
+            {
+                if (SUBJECTTYPE != 2)//Practical -Subject Type
                 {
-                    if (SUBJECTTYPE != 2)//Practical -Subject Type
+                    if (SUBJECTTYPE != 6)//Project -Subject Type
                     {
-                        if (SUBJECTTYPE != 6)//Project -Subject Type
+
+                        DataSet ds4 = objCommon.FillDropDown("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "Sessionno", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and isnull(cancel,0)=0 and isnull(exam_registered,0)=1", "semesterno");
+
+                        if ((objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])))) != 1)
                         {
-                            
-                          //  DataSet ds4 = objCommon.FillDropDown("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "Sessionno", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and (UA_NO=" + Session["userno"] + "or UA_NO_PRAC=" + Session["userno"] + ") and isnull(cancel,0)=0 and isnull(exam_registered,0)=1", "semesterno");
+                            #region For Crescent allowed only CCODE wise Mark entry rule.
+                            if (Org == 2)
+                            {
+                                DataSet ds7 = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + SUBEXAMNO + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND CCODE='" + CCODE + "' AND SEMESTERNO in (" + Convert.ToString(ds4.Tables[0].Rows[0]["SEMESTERNO"]) + ")", "");
 
-                            DataSet ds4 = objCommon.FillDropDown("ACD_STUDENT_RESULT", "distinct SEMESTERNO", "Sessionno", "COURSENO=" + Convert.ToInt32(COURSENO) + "and Schemeno=" + Convert.ToInt32(SCHEMENO) + "and sessionno =" + Convert.ToInt32(ddlSession.SelectedValue) + "and sectionno =" + Convert.ToInt32(ViewState["SectionId"]) + " and isnull(cancel,0)=0 and isnull(exam_registered,0)=1", "semesterno");
+                                if (ds7 != null && ds7.Tables[0].Rows.Count > 0)
+                                {
+                                    if (Convert.ToInt32(ds7.Tables[0].Rows[0][0]) < 0)
+                                    {
+                                        objCommon.DisplayMessage(this.Page, "STOP !!! Rule 1 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                        return;
+                                    }
+                                    else if (Convert.ToInt32(ds7.Tables[0].Rows[0][1]) < 0)
+                                    {
+                                        objCommon.DisplayMessage(this.Page, "STOP !!! Rule 2 for " + Convert.ToString(ddlExamName.SelectedItem.Text) + " is not Defined", this.Page);
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    objCommon.DisplayMessage(this.Page, "STOP !!! Exam Rule is not Defined", this.Page);
+                                    return;
+                                }
 
-                            if ((objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "ISNULL(CAST(GLOBALELE AS INT),0) AS GLOBALELE", "COURSENO=" + Convert.ToInt32(ViewState["COURSENO"])))) != 1)
+                            }
+                            #endregion
+                            else
                             {
 
                                 DataSet ds7 = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + SUBEXAMNO + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + COURSENO + ") AND COURSENO=" + COURSENO + " AND SEMESTERNO in (" + Convert.ToString(ds4.Tables[0].Rows[0]["SEMESTERNO"]) + ")", "");
@@ -285,17 +309,18 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
                             }
                         }
+                    }
                 }
-            
+
             }
             //***********************END***************************
 
-           // DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno);
-          //  DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]));//added on 30032023
-          //DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]),Sessionno);//added on 26062023
+            // DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno);
+            //  DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]));//added on 30032023
+            //DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, userno, Convert.ToInt32(ViewState["SectionId"]),Sessionno);//added on 26062023
             string Examname = objCommon.LookUp("TBLEXAMPATTERNMAPPING M LEFT JOIN TBLEXAMQUESTIONPAPER Q ON(Q.EXAMPATTERNMAPPINGID=M.EXAMPATTERNMAPPINGID) INNER JOIN TBLEXAMNAMEMASTER E ON(M.EXAMNAMEID=E.EXAMNAMEID) INNER JOIN ACD_SUBEXAM_NAME SN ON E.EXAMNO = SN.EXAMNO AND SN.SUBEXAMNAME = EXAMNAME ", "distinct substring(SN.FLDNAME,1,1)FLDNAME", "Q.QUESTIONPAPERID=" + ddlExamName.SelectedValue);
-            
-            if (Examname == "E" && USER_TYPE==3)
+
+            if (Examname == "E" && USER_TYPE == 3)
             {
                 DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["SectionId"]), Sessionno);//added on 26062023
                 //if (checklock.Tables[0].Rows.Count > 0)
@@ -808,7 +833,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
                                     }
 
-                                    
+
                                 }
                                 else
                                 {
@@ -871,7 +896,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                                 btnDownloadExcel.Visible = false;
                                 xls.Visible = false;
                             }
-                           //******************************************
+                            //******************************************
                             objCommon.DisplayMessage(this.Page, "NO Student Found For Mark Entry !!!", this.Page);
 
                         }
@@ -900,7 +925,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
         {
 
         }
-    } 
+    }
 
     private string checkMark(int QUESTIONID, int IDNO, int COURSEID, DataTable STUDENTMARK)
     {
@@ -921,7 +946,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static string SaveMarkEntry(int userno, string MarkEntryList, string TotMarksList, int LockStatus, int ExamNameId, string IpAddress, int Flag, string ElectType, string Ccode, int schemeno)
     {
-       
+
         Object outval = 0;
         OBEMarkEntryController obeMark = new OBEMarkEntryController();
         var unQuotedString = MarkEntryList.TrimStart('"').TrimEnd('"');
@@ -933,10 +958,10 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
         List<TotMarksListDataModel> data1 = JsonConvert.DeserializeObject<List<TotMarksListDataModel>>(unQuotedString1);
         string json1 = JsonConvert.SerializeObject(data1);
         DataTable dtTotMarkData = JsonConvert.DeserializeObject<DataTable>(json1);
-        
+
         if (ElectType != "2")
         {
-            
+
 
             //outval = obeMark.SaveMarkEntry(userno, dtMarkentryData, dtTotMarkData, LockStatus, ExamNameId, IpAddress, Flag);
             outval = obeMark.SaveMarkEntry_Advance(userno, dtMarkentryData, dtTotMarkData, LockStatus, ExamNameId, IpAddress, Flag, schemeno);
@@ -944,7 +969,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
         }
         else
         {
-           
+
             outval = obeMark.SaveFreeElectMarkEntry(userno, dtMarkentryData, dtTotMarkData, LockStatus, ExamNameId, IpAddress, Flag, Ccode);
         }
         return JsonConvert.SerializeObject(outval);
@@ -1031,7 +1056,19 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
 
             var path = Server.MapPath("~/temp");
-            var fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";//"Spreadsheet.xlsx";
+            #region Added condition as per Ticket Number 51203
+            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId", ""));
+            var fileName = string.Empty;
+            if (Org == 5)
+            {
+                fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xls";//"Spreadsheet.xlsx";
+            }
+            else
+            {
+                fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";//"Spreadsheet.xlsx";
+            }
+            #endregion
+            //var fileName = SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";//"Spreadsheet.xlsx";
 
             // Create temp path if not exits
             if (Directory.Exists(path) == false)
@@ -1042,7 +1079,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             string SortColumn = "[[Registration Number]]";
             dv.Sort = SortColumn + " ASC";
             DataTable sortedDT = dv.ToTable();
-            string fullPath = Path.Combine(path, fileName); 
+            string fullPath = Path.Combine(path, fileName);
 
             GridView gvStudData = new GridView();
             gvStudData.DataSource = sortedDT;
@@ -1271,11 +1308,22 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
 
 
             var path = Server.MapPath("~/temp");
-            var fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
+            #region Added condition as per Ticket Number 51203
+            int Org = Convert.ToInt32(objCommon.LookUp("reff", "OrganizationId", ""));
+            var fileName = string.Empty;
+            if (Org == 5)
+            {
+                fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
+
+               SessionName.Replace(' ', '_') + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xls";
+            }
+            else
+            {
+                fileName =// SessionName.Replace(' ', '_') + "_" + SubjectName.Replace(' ', '_').Replace(':', '-') + "_" + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
 
                SessionName.Replace(' ', '_') + ddlExamName.SelectedItem.Text.Replace(' ', '_').Replace(':', '-') + ".xlsx";
-
-                //"Spreadsheet.xlsx";
+            }
+            #endregion
 
             // Create temp path if not exits
             if (Directory.Exists(path) == false)
@@ -1289,7 +1337,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             DataTable sortedDT = dv.ToTable();
             string fullPath = Path.Combine(path, fileName);
             //******************************************Added on 23022023**********************************
-           // string fullPath = path+fileName;
+            // string fullPath = path+fileName;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 wb.Worksheets.Add(sortedDT);
@@ -1305,6 +1353,7 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                     MyMemoryStream.WriteTo(Response.OutputStream);
                     //Response.Flush();
                     Response.End();
+
                 }
             }
 
@@ -1344,7 +1393,8 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                     System.IO.Directory.CreateDirectory(Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["XlsFilePath"]));
                 }
 
-                string path = Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["XlsFilePath"] + fileName);
+               string path = Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["XlsFilePath"] + fileName); 
+
                 DataTable dt = new DataTable();
                 FileUpload1.SaveAs(path);
                 string conString = string.Empty;
@@ -1360,7 +1410,17 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                         break;
                 }
 
-                conString = String.Format(conString, path);
+                if (extension == ".xls")
+                {
+                    
+                    conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;";
+                }
+                else
+                {
+                    conString = String.Format(conString, path);
+                }
+          
+                //  conString = String.Format(conString, path);
                 //conString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0 Xml;HDR=YES;IMEX=1;", path);
 
 

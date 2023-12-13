@@ -11,7 +11,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
     {
         string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-        public int AddDocument(DocumentAcad objDocument, string category, string nationality)
+        public int AddDocument(DocumentAcad objDocument, string category, string nationality, string admCategory)
         {
             int status = 0;
             try
@@ -28,6 +28,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_CATEGOTY", category),
                     new SqlParameter("@P_NATIONALITY", nationality),
                     new SqlParameter("@P_MANDATORY", objDocument.MandtStatus),
+                    new SqlParameter("@P_ADMCATEGORYNO", admCategory),
                     new SqlParameter("@P_DOCUMENTNO", status)
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -48,7 +49,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
 
-        public int UpdateDocument(DocumentAcad objDocument, string category, string nationality)
+        public int UpdateDocument(DocumentAcad objDocument, string category, string nationality, string admCategory)
         {
             int status = 0;
             try
@@ -65,6 +66,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                     new SqlParameter("@P_CATEGOTY", category),
                     new SqlParameter("@P_NATIONALITY", nationality),
                     new SqlParameter("@P_MANDATORY", objDocument.MandtStatus),
+                    new SqlParameter("@P_ADMCATEGORYNO", admCategory),
                     new SqlParameter("@P_DOCUMENTNO",objDocument.Documentno)
                 };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;

@@ -6,6 +6,12 @@
      <link href='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>' rel="stylesheet" />
            <script src='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.js") %>'></script>
 
+
+    <style>
+        .dataTables_scrollHeadInner {
+width: max-content!important;
+}
+    </style>
      <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updclub"
             DynamicLayout="true" DisplayAfter="0">
@@ -46,8 +52,6 @@
                                             AppendDataBoundItems="True"  ToolTip="Please Select Club">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                          
-                                        
                                            
                                       </div>
                         <div class="form-group col-lg-4 col-md-6 col-12" >
@@ -57,7 +61,7 @@
                                                     <%-- <asp:Label ID="lblDYsubuser" runat="server" Font-Bold="true" Text="SubCounsellors"></asp:Label>--%>
                                                        </div> 
                              <asp:DropDownList ID="ddlCollege" runat="server" CssClass="form-control" TabIndex="1" data-select2-enable="true"
-                                            AppendDataBoundItems="True"  ToolTip="Please Select College">
+                                            AppendDataBoundItems="True"  ToolTip="Please Select College" AutoPostBack="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged" >
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlCollege"
@@ -66,13 +70,8 @@
                          <%--   <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" Display="None"
                                               ErrorMessage="Please Select Session" ValidationGroup="submit" SetFocusOnError="True" >
                                               </asp:RequiredFieldValidator>--%>
-
                                       
                                       </div>
-                               
-                                    
-                                   
-                                 
                                      <div class="col-12 btn-footer">
                                          <asp:Button ID="btnShow" runat="server" ValidationGroup="submit" Text="Show Student List" 
                                      CssClass="btn btn-primary" OnClick="btnShow_Click" />
@@ -93,9 +92,12 @@
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divsessionlist">
                                                 <thead class="bg-light-blue">
                                                     <tr>
-                                                        <th >SrNo
+                                                        <th>
+                                                            SrNo
                                                         </th>
-                                                        <th>Select for Approve</th>
+                                                        <th>
+                                                            Select for Approve
+                                                        </th>
                                                         <th>
                                                           Session
                                                         </th>
@@ -121,6 +123,18 @@
                                                         <th>
                                                             Description of Event
                                                         </th>
+                                                         <th>
+                                                             Student Role
+                                                         </th>
+                                                        <th>
+                                                            Campus
+                                                        </th>
+                                                        <th>
+                                                            Hours
+                                                        </th>
+                                                        <th>
+                                                            Points
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -132,7 +146,7 @@
                                             <tr>
                                                   <td>
                                                         <%#Container.DataItemIndex+1%>
-                                                              </td>
+                                                  </td>
                                                 <td>
                                                        <asp:CheckBox ID="chkapprove" runat="server"  ToolTip='<%# Eval("IDNO") %>' />
                                                      <asp:HiddenField ID="hdclubno" runat="server" Value='<%# Eval("CLUB_NO") %>'/>
@@ -151,9 +165,7 @@
                                                 <td>
                                                      <asp:Label ID="lbltype" runat="server" Text='<%# Eval("CLUB_ACTIVITY_TYPE")%>' ToolTip='<%# Eval("APPROVAL_1") %>'></asp:Label>
                                                     <asp:HiddenField ID="hdnCumulativeNo" runat="server" Value='<%# Eval("CLUBACTIVITY_TYPE") %>'/>
-                                                     
                                                     <asp:HiddenField ID="hdclubactivityno" runat="server" Value='<%# Eval("CLUB_ACTIVITY_NO") %>'/>
-
                                                     <%--<%# Eval("CLUB_ACTIVITY_TYPE" ) %>' ToolTip='<%# Eval("APPROVESTATUS") %>--%>
                                                 </td>
                                                 <td>
@@ -171,8 +183,20 @@
                                                  <td>
                                                     <%# Eval("DURATION")%>
                                                 </td>
+                                                <td>
+                                                      <%# Eval("DESCRIPTION_OF_EVENT")%>
+                                                </td>
                                                  <td>
-                                                    <%# Eval("DESCRIPTION_OF_EVENT")%>
+                                                    <%# Eval("WEIGHTAGE_NAME")%>
+                                                </td>
+                                                <td>
+                                                      <%# Eval("CAMPUS_NAME")%>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("COUNT_NAME")%>
+                                                </td>
+                                                <td>
+                                                       <asp:Label ID="lblPoints" runat="server" Text=' <%# Eval("POINTS").ToString()==""?"NA": Eval("POINTS")%>'></asp:Label>
                                                 </td>
                                                  <asp:HiddenField ID="hfidno" runat="server" Value='<%# Eval("IDNO")%>' />
                                                  <%--<asp:HiddenField ID="hdclubactivityno" runat="server" Value='<%# Eval("CLUB_ACTIVITY_NO")%>' />--%>
@@ -181,8 +205,6 @@
                                     </asp:ListView>
                                 </asp:Panel>
                             </div>
-
-                                    
                                     </div>
                                 </div>
                   </div>

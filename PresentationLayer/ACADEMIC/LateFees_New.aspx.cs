@@ -55,7 +55,8 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New : System.Web.UI.Page
                     //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO desc");
                     //  this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "");
                     //BindCheckList_ForDegree();
-                    this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN(2,3,5,8,9,10,15,16)", "");
+                   // this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN(2,3,4,5,8,10,15,16)", "");
+                    this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "ISNULL(IS_LATE_FINE_APPLICABLE,0)=1", "");
                     this.objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER WITH (NOLOCK)", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
                     ViewState["action"] = "add";
                     chkDegree.Enabled = false;

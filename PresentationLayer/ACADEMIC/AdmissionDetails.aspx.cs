@@ -33,6 +33,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             ddlDefenceQuota.Attributes.Add("disabled", "disabled");
             ddlMinorityQuota.Attributes.Add("disabled", "disabled");
             ddlAdmRound.Attributes.Add("disabled", "disabled");
+            ddlAdmCategory.Attributes.Add("disabled", "disabled");
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -170,7 +171,6 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             }
         }
     }
-    #endregion
 
     private Control FindControlRecursive(Control parentControl, string controlId)
     {
@@ -207,6 +207,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
         }
 
     }
+    #endregion
 
     private void DocumentRequaired(int payType)
     {
@@ -291,6 +292,8 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
 
                 ddlPaymentType.SelectedValue = dtr["ADMCATEGORYNO"] == null ? "0" : dtr["ADMCATEGORYNO"].ToString();
 
+                ddlAdmCategory.SelectedValue = dtr["ADMCATEGORYNO"] == null ? "0" : dtr["ADMCATEGORYNO"].ToString();
+
                 if ((ddlDegree.SelectedValue) == "1")
                 {
                     if (Convert.ToInt32(ddlPaymentType.SelectedValue) == 3)
@@ -336,6 +339,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             objCommon.FillDropDownList(ddlSeatType, "ACD_SEAT_TYPE", "SEATNO", "SEAT_TYPE", "SEATNO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "SEATNO");
             objCommon.FillDropDownList(ddlAdmCentre, "ACD_ADMISSION_CENTRE", "ADM_CENTRENO", "ADM_CENTRENAME", "ADM_CENTRENO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "ADM_CENTRENO");
             objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
+            objCommon.FillDropDownList(ddlAdmCategory, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORY");
         }
         catch (Exception ex)
         {

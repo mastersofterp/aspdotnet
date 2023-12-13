@@ -24,21 +24,21 @@
             </div>
 
             <div class="box-body">
-           
-                        <div class="form-group col-lg-3 col-md-6 col-12">
-                            <div class="label-dynamic">
-                              <%--  <sup>* </sup>
+
+                <div class="form-group col-lg-3 col-md-6 col-12">
+                    <div class="label-dynamic">
+                        <%--  <sup>* </sup>
                                 <label>Receipt Code</label>--%>
-                            </div>
-                            <asp:TextBox ID="txtCode" runat="server" TabIndex="1" MaxLength="3"
-                                CssClass="form-control" ToolTip="Please Enter Receipt Code" Visible="false" />
-                            <asp:RequiredFieldValidator ID="valCode" runat="server" ControlToValidate="txtCode"
-                                ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Receipt Code." />
-                            <ajaxToolKit:FilteredTextBoxExtender ID="fteCode" runat="server" FilterMode="InvalidChars"
-                                FilterType="Custom" InvalidChars="`~!@#$%^&*()_+-=|\{}[]:;'<>?,./" TargetControlID="txtCode">
-                            </ajaxToolKit:FilteredTextBoxExtender>
-                        </div>
-                    <div class="col-12">
+                    </div>
+                    <asp:TextBox ID="txtCode" runat="server" TabIndex="1" MaxLength="3"
+                        CssClass="form-control" ToolTip="Please Enter Receipt Code" Visible="false" />
+                    <asp:RequiredFieldValidator ID="valCode" runat="server" ControlToValidate="txtCode"
+                        ValidationGroup="Submit" Display="None" ErrorMessage="Please Enter Receipt Code." />
+                    <ajaxToolKit:FilteredTextBoxExtender ID="fteCode" runat="server" FilterMode="InvalidChars"
+                        FilterType="Custom" InvalidChars="`~!@#$%^&*()_+-=|\{}[]:;'<>?,./" TargetControlID="txtCode">
+                    </ajaxToolKit:FilteredTextBoxExtender>
+                </div>
+                <div class="col-12">
                     <div class="row">
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <div class="label-dynamic">
@@ -61,8 +61,8 @@
                             </div>
                             <asp:DropDownList ID="ddlReceiptCode" runat="server" TabIndex="3" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
                                 ToolTip="Please Select Receipt">
-                                <asp:ListItem Value="0">Select Receipt Code</asp:ListItem>  
-                                
+                                <asp:ListItem Value="0">Select Receipt Code</asp:ListItem>
+
                             </asp:DropDownList>
                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlReceiptCode"
                                 InitialValue="0" ValidationGroup="Submit" Display="None"
@@ -118,74 +118,82 @@
                                 <asp:RadioButton ID="rdoNo" runat="server" Text="No" GroupName="Link" Checked="true"
                                     TabIndex="6" />
                         </div>
-                              <div class="form-group col-lg-3 col-md-6 col-12" id="Div3">
-
-                                        <label>Is Tution/Admission/Institute Fees</label>
-
-                                        <asp:CheckBox ID="chkStatus" runat="server"  ToolTip="Check status" TabIndex="6" />
-                                    </div>
+                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div3">
+                            <label>Is Tution/Admission/Institute Fees</label>
+                            <asp:CheckBox ID="chkStatus" runat="server" ToolTip="Check status" TabIndex="6" />
+                        </div>
+                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div4">
+                            <label>Is Late Fine Applicable For Receipt</label>
+                            <asp:CheckBox ID="chkLateFineStatus" runat="server" TabIndex="7" />
+                        </div>
                     </div>
-                </div>
-        </div>
-
-                <div class="col-12 btn-footer">
-                    <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="Submit"
-                        OnClick="btnSubmit_Click" TabIndex="7" CssClass="btn btn-primary" />
-                    <asp:Button ID="btnReport" runat="server" TabIndex="8" Text="Report" OnClick="btnReport_Click" CssClass="btn btn-info" Visible="false" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"
-                        OnClick="btnCancel_Click" TabIndex="9" CssClass="btn btn-warning" />
-
-                    <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ValidationGroup="Submit"
-                        ShowMessageBox="true" ShowSummary="false" />
-                </div>
-
-                <div class="col-12">
-                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                        <asp:Repeater ID="lvRecieptType" runat="server">
-                            <HeaderTemplate>
-                                <div class="sub-heading">
-                                    <h5>Receipt Type List</h5>
-                                </div>
-                                <thead class="bg-light-blue">
-                                    <tr>
-                                        <th>Edit
-                                        </th>
-                                        <th>Title
-                                        </th>
-                                        <th>Receipt Code
-                                        </th>
-                                    </tr>
-                                    <thead>
-                                <tbody>
-                                    <%--<tr id="itemPlaceholder" runat="server" />--%>
-                            </HeaderTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td>
-                                        <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/Images/edit.png"
-                                            CommandArgument='<%# Eval("RCPTTYPENO") %>' AlternateText="Edit Record" ToolTip="Edit Record"
-                                            OnClick="btnEdit_Click" TabIndex="10" />
-                                    </td>
-                                    
-                                    <td>
-                                        <%# Eval("RECIEPT_TITLE")%>
-                                    </td>
-                                    <td>
-                                        <%# Eval("RC_NAME")%>
-                                    </td>
-                                </tr>
-                            </ItemTemplate>
-                            <FooterTemplate>
-                                </tbody>
-                            </FooterTemplate>
-                        </asp:Repeater>
-                    </table>
-                </div>
-
-                <div id="divMsg" runat="server">
                 </div>
             </div>
 
+            <div class="col-12 btn-footer">
+                <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="Submit"
+                    OnClick="btnSubmit_Click" TabIndex="7" CssClass="btn btn-primary" />
+                <asp:Button ID="btnReport" runat="server" TabIndex="8" Text="Report" OnClick="btnReport_Click" CssClass="btn btn-info" Visible="false" />
+                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"
+                    OnClick="btnCancel_Click" TabIndex="9" CssClass="btn btn-warning" />
+
+                <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ValidationGroup="Submit"
+                    ShowMessageBox="true" ShowSummary="false" />
+            </div>
+
+            <div class="col-12">
+                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                    <asp:Repeater ID="lvRecieptType" runat="server">
+                        <HeaderTemplate>
+                            <div class="sub-heading">
+                                <h5>Receipt Type List</h5>
+                            </div>
+                            <thead class="bg-light-blue">
+                                <tr>
+                                    <th>Edit
+                                    </th>
+                                    <th>Title
+                                    </th>
+                                    <th>Receipt Code
+                                    </th>
+                                    <th>Late Fine Applicable For Receipt
+                                    </th>
+                                </tr>
+                                <thead>
+                            <tbody>
+                                <%--<tr id="itemPlaceholder" runat="server" />--%>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <tr>
+                                <td>
+                                    <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/Images/edit.png"
+                                        CommandArgument='<%# Eval("RCPTTYPENO") %>' AlternateText="Edit Record" ToolTip="Edit Record"
+                                        OnClick="btnEdit_Click" TabIndex="10" />
+                                </td>
+
+                                <td>
+                                    <%# Eval("RECIEPT_TITLE")%>
+                                </td>
+                                <td>
+                                    <%# Eval("RC_NAME")%>
+                                </td>
+                                <td>
+                                    <asp:Label ID="Label8" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("IS_LATE_FINE_APPLICABLE") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
+                                        Text='<%# (Convert.ToInt32(Eval("IS_LATE_FINE_APPLICABLE") )!= 0 ?  "Yes" : "No" )%>' />
+                                </td>
+                            </tr>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            </tbody>
+                        </FooterTemplate>
+                    </asp:Repeater>
+                </table>
+            </div>
+
+            <div id="divMsg" runat="server">
+            </div>
         </div>
+
     </div>
+</div>
 </div>

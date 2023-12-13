@@ -85,6 +85,7 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
                         btnMothFathNotAlive.Visible = true;
                         btnTotalApplifeereport.Visible = true;
                         btnAdmissionRegReport.Visible = true;
+                        btnAdmissionRegStuDataExcelReport.Visible = true;
                         rfcvacdyear.Visible = true;
                     }   
                
@@ -688,5 +689,60 @@ public partial class ACADEMIC_StudentHorizontalReport : System.Web.UI.Page
             return;
         }
 
+    }
+
+    //Added  On Dated 22-11-2023 as per T-No : - 50465
+
+    private void ExcelReportAdmissionRegisterStudent()
+    {
+        FeeCollectionController feeCntrl = new FeeCollectionController();
+
+        int batchname = Convert.ToInt32(ddlAdmbatch.SelectedValue);
+        int collegeid = Convert.ToInt32(ddlClg.SelectedValue);
+        int degreeno = Convert.ToInt32(ddlDegree.SelectedValue);
+        int branchno = Convert.ToInt32(ddlBranch.SelectedValue);
+        int Year = Convert.ToInt32(ddlYear.SelectedValue);
+        int semesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
+        int Academicyear = Convert.ToInt32(ddlAcdYear.SelectedValue);
+
+        DataSet dsadmstud = feeCntrl.Get_Student_Admission_Register_Adademic_Report_Excel_Format_II(batchname, collegeid, degreeno, branchno, Year, semesterNo, Academicyear);
+
+        if (dsadmstud != null && dsadmstud.Tables[0].Rows.Count > 0)
+        {
+            dsadmstud.Tables[0].TableName = "AdmissionRegStudent(Format II)";
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                foreach (System.Data.DataTable dt in dsadmstud.Tables)
+                {
+                    //Add System.Data.DataTable as Worksheet.
+                    if (dt != null && dt.Rows.Count > 0)
+                        wb.Worksheets.Add(dt);
+                }
+                //Export the Excel file.
+                Response.Clear();
+                Response.Buffer = true;
+                Response.Charset = "";
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;filename=AdmissionRegStudent(Format II)_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
+
+                using (MemoryStream MyMemoryStream = new MemoryStream())
+                {
+                    wb.SaveAs(MyMemoryStream);
+                    MyMemoryStream.WriteTo(Response.OutputStream);
+                    Response.Flush();
+                    Response.End();
+                }
+            }
+        }
+        else
+        {
+            objCommon.DisplayUserMessage(this.Page, "No Record Found", this.Page);
+            return;
+        }
+
+    }
+    protected void btnAdmissionRegStuDataExcelReport_Click(object sender, EventArgs e)
+    {
+        ExcelReportAdmissionRegisterStudent();
     }
 }

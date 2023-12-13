@@ -11,7 +11,7 @@
         }
     </style>--%>
 
-  <style>
+    <style>
         .Searchfilter {
             font-size: 15px !important;
             padding: 0.375rem 0.75rem !important;
@@ -27,7 +27,7 @@
         }
     </style>
 
- <style>
+    <style>
         #ctl00_ContentPlaceHolder1_pnlAttendenceEntry .dataTables_scrollHeadInner {
             width: max-content !important;
         }
@@ -517,7 +517,7 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-12 attendancestudent" >
+                                                <div class="col-12 attendancestudent">
                                                     <asp:ListView ID="lvStudent" runat="server" OnItemDataBound="lvStudent_ItemDataBound">
                                                         <LayoutTemplate>
                                                             <%-- Search Textbox Modified by Gopal M - 18/08/2023--%>
@@ -1015,6 +1015,7 @@
                             </div>
                         </div>
                         <asp:HiddenField ID="hdnAttNo" runat="server" />
+                        <asp:HiddenField ID="hdnTeachingPlanStatus" runat="server" />
                     </div>
                 </div>
             </div>
@@ -1317,7 +1318,22 @@
 
             var classType = $("[id*=ctl00_ContentPlaceHolder1_ddlClassType]").val();
             var att_status = $("[id*=ctl00_ContentPlaceHolder1_ddlStatus]").val();
-            var txtTopicDesc = document.getElementById("<%=txtTopcDesc.ClientID%>").value;
+            var hdnTeachingPlanStatus = document.getElementById('<%=hdnTeachingPlanStatus.ClientID %>').value;
+            // hdnTeachingPlanStatus=1 dropdown
+            if (hdnTeachingPlanStatus == "1") {
+                var tpno = $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").val();
+                if (tpno == 0) {
+                    alert('Please Select Topic Covered', 'Warning!');
+                    $("[id*=ctl00_ContentPlaceHolder1_ddlTopicCovered]").focus();
+                    return false;
+                }
+            }
+            else {
+                tpno = "0";
+
+                var txtTopicDesc = document.getElementById("<%=txtTopcDesc.ClientID%>").value;
+            }
+
 
             if (txtTopicDesc == null || txtTopicDesc == "") {
                 txtTopicDesc = "";
@@ -1333,7 +1349,7 @@
                 type: "POST",
                 url: '<%=Page.ResolveUrl("~/ACADEMIC/TimeTable/AttendanceEntry_Modified.aspx/CopyAttendance")%>',
                 //url: "AttendanceEntry_Modified.aspx/CopyAttendance",
-                data: '{slotno: ' + JSON.parse(ddlCopytoSlot) + ',att_no: ' + JSON.parse(hdnAttNo) + ',class_type: ' + JSON.parse(classType) + ',att_status: ' + JSON.parse(att_status) + ',topic_desc: ' + JSON.stringify(txtTopicDesc) + '}',
+                data: '{slotno: ' + JSON.parse(ddlCopytoSlot) + ',att_no: ' + JSON.parse(hdnAttNo) + ',class_type: ' + JSON.parse(classType) + ',att_status: ' + JSON.parse(att_status) + ',topic_desc: ' + JSON.stringify(txtTopicDesc) + ',Tpno: ' + JSON.parse(tpno) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {

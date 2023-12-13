@@ -195,16 +195,31 @@
                                                 <div class="row">
                                                     <div class="col-lg-6 col-md-6 col-12">
                                                         <ul class="list-group list-group-unbordered">
+                                                            <%--    <li class="list-group-item"><b>RRN No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblRrnno" runat="server" Font-Bold="True"></asp:Label>
+                                                                </a>
+                                                            </li>--%>
+                                                            <li class="list-group-item"><b>RRN No. :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblenrollmentnos" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
                                                             <li class="list-group-item"><b>ID No. :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblidno" runat="server" Font-Bold="True"></asp:Label>
                                                                 </a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Enrollment No. :</b>
+
+                                                            <li class="list-group-item"><b>Admitted Session :</b>
                                                                 <a class="sub-label">
-                                                                    <asp:Label ID="lblenrollmentnos" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                    <asp:Label ID="lblSession" runat="server" Font-Bold="True"></asp:Label></a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Date of Joining :</b>
+
+                                                            <li class="list-group-item"><b>Mode Of Study :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblModeOfStudy" runat="server" Font-Bold="True"></asp:Label></a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Provisional Date of Joining :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lbljoiningdate" runat="server" Font-Bold="True"></asp:Label>
                                                                     <asp:HiddenField ID="hfdegreenos" runat="server" />
@@ -218,26 +233,39 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-12">
                                                         <ul class="list-group list-group-unbordered">
-                                                            <li class="list-group-item"><b>Student Name :</b>
+                                                            <li class="list-group-item"><b>Scholar Name :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblnames" runat="server" Font-Bold="True"></asp:Label>
                                                                 </a>
                                                             </li>
-                                                            <li class="list-group-item"><b>Father Name :</b>
+                                                            <li class="list-group-item"><b>Father/ Spouse Name :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblfathername" runat="server" Font-Bold="True"></asp:Label>
-                                                                </a>
-                                                            </li>
-                                                            <li class="list-group-item"><b>Department :</b>
-                                                                <a class="sub-label">
-                                                                    <asp:Label ID="lblDepartment" runat="server" Font-Bold="true"></asp:Label>
-                                                                    <asp:HiddenField ID="hfDepartment" runat="server" />
                                                                 </a>
                                                             </li>
                                                             <li class="list-group-item"><b>Admission Batch :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lbladmbatch" runat="server" Font-Bold="True"></asp:Label>
-                                                                    <asp:HiddenField ID="hfadmbatch" runat="server" />
+
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Department :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblDepartment" runat="server" Font-Bold="true"></asp:Label>
+
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Mobile No :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblMobileNo" runat="server" Font-Bold="true"></asp:Label>
+
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="list-group-item"><b>Email ID :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblEmailID" runat="server" Font-Bold="true"></asp:Label>
+
                                                                 </a>
                                                             </li>
                                                         </ul>
@@ -288,7 +316,8 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="nodgc" runat="server">
+                                                    <%--"d-none" Added By Vipul Tichakule on dated 20-11-2023 as per TicketNo ---%>
+                                                    <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="nodgc" runat="server">
                                                         <div class="label-dynamic">
                                                             <sup>* </sup>
                                                             <label>No.of DGC Member</label>
@@ -347,10 +376,10 @@
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
-                                                                  <%--  <sup>* </sup>--%>
+                                                                    <%--  <sup>* </sup>--%>
                                                                     <label>Supervisor Role</label>
                                                                 </div>
-                                                                 <%--patches updated--%>
+                                                                <%--patches updated--%>
                                                                 <asp:DropDownList ID="ddlSupervisorrole" runat="server" AutoPostBack="true" AppendDataBoundItems="True"
                                                                     TabIndex="15" ToolTip="Please Select Supervisor role" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlSupervisorrole_SelectedIndexChanged">
                                                                     <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
@@ -535,51 +564,50 @@
                                                     </div>
 
                                                 </asp:Panel>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
-            <div class="card" id="divchairman" runat="server">
-                <div class="card-header collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true">
-                    <span class="title" id="trdrc" runat="server">Recommendation of the Departmental Research Committee(DRC)</span>
-                    <span class="accicon"><i class="fa fa-angle-down rotate-icon"></i></span>
-                </div>
-                <div id="collapseThree" class="collapse collapse show">
-                    <div class="card-body">
-                        <div id="divdrc" runat="server" class="col-12">
-                            The DRC recommends the registration of Mr./Mrs.<asp:Label ID="lblname" runat="server"
-                                Text="name" Font-Bold="true"></asp:Label>&nbsp;<asp:Label ID="partfull" runat="server"></asp:Label>
-                            student with effect from
+                                <div class="card" id="divchairman" runat="server">
+                                    <div class="card-header collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true">
+                                        <span class="title" id="trdrc" runat="server">Recommendation of the Departmental Research Committee(DRC)</span>
+                                        <span class="accicon"><i class="fa fa-angle-down rotate-icon"></i></span>
+                                    </div>
+                                    <div id="collapseThree" class="collapse collapse show">
+                                        <div class="card-body">
+                                            <div id="divdrc" runat="server" class="col-12">
+                                                The DRC recommends the registration of Mr./Mrs.<asp:Label ID="lblname" runat="server"
+                                                    Text="name" Font-Bold="true"></asp:Label>&nbsp;<asp:Label ID="partfull" runat="server"></asp:Label>
+                                                student with effect from
                                                         <asp:Label ID="lbldate" runat="server" Font-Bold="true"></asp:Label>
-                            and also recommends the appointment of supervisor (s) as he / she / they satisfy
+                                                and also recommends the appointment of supervisor (s) as he / she / they satisfy
                                                         rule R.7 of PhD ordinance (supervisors' Bio-data with list of publications and experience
                                                         be enclosed) and formation of DGC as indicated above.
-                        </div>
+                                            </div>
+                                            <div id="trdrc1" runat="server" class="col-12 mt-3">
+                                                <div class="row">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <label>A DRC Chairman </label>
+                                                        </div>
 
-                        <div id="trdrc1" runat="server" class="col-12 mt-3">
-                            <div class="row">
-                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                    <div class="label-dynamic">
-                                        <label>A DRC Chairman </label>
+                                                        <span class="input-group-addon">
+                                                            <asp:DropDownList ID='ddlDRCChairman' runat="server" TabIndex="24" ToolTip="Please Select A DRC nominee" OnSelectedIndexChanged="ddlDRCChairman_SelectedIndexChanged"
+                                                                CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true">
+                                                            </asp:DropDownList>
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlDRCChairman"
+                                                                Display="None" ErrorMessage="Please Select A DRC Chairman" InitialValue="0" ValidationGroup="Academic"
+                                                                SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <span class="input-group-addon">
-                                        <asp:DropDownList ID='ddlDRCChairman' runat="server" TabIndex="24" ToolTip="Please Select A DRC nominee" OnSelectedIndexChanged="ddlDRCChairman_SelectedIndexChanged"
-                                            CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true">
-                                        </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="ddlDRCChairman" 
-                                            Display="None" ErrorMessage="Please Select A DRC Chairman" InitialValue="0" ValidationGroup="Academic"
-                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
-                                    </span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </asp:Panel>
+                            </asp:Panel>
 
                             <div class="col-12">
                                 <asp:Panel ID="pnlApprove" runat="server">
@@ -625,18 +653,17 @@
                                 </asp:Panel>
                             </div>
 
-            <div class="col-12 btn-footer">
+                            <div class="col-12 btn-footer">
 
-                <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" OnClick="btnSubmit_Click" TabIndex="26" Text="Submit" ValidationGroup="Academic" />
-
-                <asp:Button ID="btnApprove" runat="server" CssClass="btn btn-primary" OnClick="btnApprove_Click" TabIndex="27" Text="Approve" ValidationGroup="Academic" Visible="false" />
-                <asp:Button ID="btnReject" runat="server" CssClass="btn btn-warning" OnClick="btnReject_Click" TabIndex="28" Text="Reject" Visible="false" />
-                <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="29" Text="Cancel" />
-                <asp:ValidationSummary ID="rfvValidationSummary" runat="server" ValidationGroup="Academic"
-                    DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
-            </div>
-        </div>
-        </div>
+                                <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" OnClick="btnSubmit_Click" TabIndex="26" Text="Submit" ValidationGroup="Academic" />
+                                <asp:Button ID="btnApprove" runat="server" CssClass="btn btn-primary" OnClick="btnApprove_Click" TabIndex="27" Text="Approve" ValidationGroup="Academic" Visible="false" />
+                                <asp:Button ID="btnReject" runat="server" CssClass="btn btn-warning" OnClick="btnReject_Click" TabIndex="28" Text="Reject" Visible="false" />
+                                <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="29" Text="Cancel" />
+                                <asp:ValidationSummary ID="rfvValidationSummary" runat="server" ValidationGroup="Academic"
+                                    DisplayMode="List" ShowMessageBox="True" ShowSummary="False" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

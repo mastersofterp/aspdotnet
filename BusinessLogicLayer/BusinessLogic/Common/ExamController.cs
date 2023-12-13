@@ -7420,6 +7420,617 @@ namespace IITMS
 
                 #endregion
 
+                #region Common course time table for common code Added on 02-11-2023
+                public int AddCommonCourseTimeTable(Exam objExam, int OrgID, string ccode, int sessionid, int subid, string schemeno, string sectionno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    object ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[4] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[5] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[6] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[7] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParams[8] = new SqlParameter("@P_SUBID", subid);
+                        objParams[9] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[10] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[11] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[12] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_COMMONCOURSES_CC", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddCommonCourseTimeTable -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTableCommonCourses(string ccode, int sessionid, int examno, int subid, string schemeno, DateTime date, int slot, string sectionno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_CCODE", ccode),                             
+                               new SqlParameter("@P_SESSIONID", sessionid),                             
+                               new SqlParameter("@P_EXAMNO", examno),                             
+                               new SqlParameter("@P_SUBID", subid),                             
+                               new SqlParameter("@P_SCHEMENO", schemeno),                             
+                               new SqlParameter("@P_DATE", date),                             
+                               new SqlParameter("@P_SLOT", slot),                                  
+                               new SqlParameter("@P_SECTIONNO", sectionno),                                  
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE_COMMONCOURSES_CC", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTableCommonCourses-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+
+                public int GetViewOnStudentLock_CommonCourses(int sessionid, int examno, int subid, int slot, DateTime date, string ccode, string schemeno, string sectionno)
+                {
+
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_CCODE", ccode),                             
+                               new SqlParameter("@P_SESSIONID", sessionid),                             
+                               new SqlParameter("@P_EXAMNO", examno),                             
+                               new SqlParameter("@P_SUBID", subid),                             
+                               new SqlParameter("@P_SCHEMENO", schemeno),                             
+                               new SqlParameter("@P_DATE", date),                             
+                               new SqlParameter("@P_SLOT", slot),                                  
+                               new SqlParameter("@P_SECTIONNO", sectionno),        
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_VIEWON_STUDENT_EXAM_TIME_TABLE_COMMONCOURSES_CC", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.GetViewOnStudentLock_CommonCourses-> " + ex.ToString());
+                    }
+
+                    return ret;
+
+                }
+                #endregion
+
+                #region modified methods for maintaining log of Exam Time Table
+                public int AddExamDay(Exam objExam, int OrgID, int Modeexam, int sectionno, int batchno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[19];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", objExam.SessionNo);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_SEMESTERNO", objExam.SemesterNo);
+                        objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[5] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[6] = new SqlParameter("@P_DEGREENO", objExam.DegreeNo);
+                        objParams[7] = new SqlParameter("@P_BRANCHNO", objExam.BranchNo);
+                        objParams[8] = new SqlParameter("@P_SCHEMENO", objExam.SchemeNo);
+                        objParams[9] = new SqlParameter("@P_COURSENO", objExam.Courseno);
+                        objParams[10] = new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode);
+                        objParams[11] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[12] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[13] = new SqlParameter("@P_COLLEGE_ID", objExam.collegeid);
+                        objParams[14] = new SqlParameter("@P_ModeEXAMNO", Modeexam);
+                        objParams[15] = new SqlParameter("@P_BATCHNO", batchno);
+                        objParams[16] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[17] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[18] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[18].Direction = ParameterDirection.Output;
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_BATCHWISE", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamDay -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int AddExamDay(Exam objExam, int OrgID, int Modeexam, int sectionno, string ccode, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[19];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", objExam.SessionNo);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_SEMESTERNO", objExam.SemesterNo);
+                        objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[5] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[6] = new SqlParameter("@P_DEGREENO", objExam.DegreeNo);
+                        objParams[7] = new SqlParameter("@P_BRANCHNO", objExam.BranchNo);
+                        objParams[8] = new SqlParameter("@P_SCHEMENO", objExam.SchemeNo);
+                        objParams[9] = new SqlParameter("@P_COURSENO", objExam.Courseno);
+                        objParams[10] = new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode);
+                        objParams[11] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[12] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[13] = new SqlParameter("@P_COLLEGE_ID", objExam.collegeid);
+                        objParams[14] = new SqlParameter("@P_ModeEXAMNO", Modeexam);
+                        objParams[15] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[16] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[17] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[18] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[18].Direction = ParameterDirection.Output;
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamDay -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTable(int exdtno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_EXDTNO", exdtno),                             
+                               new SqlParameter("@P_UA_NO", ua_no),                             
+                               new SqlParameter("@P_IPADRESS", ip_adress),                             
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTable-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+
+                public int AddExamDayElect(Exam objExam, int OrgID, int Modeexam, string ccode, int sessionid, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    object ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[11];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionid);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[4] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[5] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[6] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[7] = new SqlParameter("@P_ModeEXAMNO", Modeexam);
+                        objParams[8] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[9] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[10] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
+
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_GLOBALE_ELECTIVE_CC", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamDay -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTableElectiv_CC(string ccode, int sessionid, int examno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_CCODE", ccode),                             
+                               new SqlParameter("@P_SESSIONID", sessionid),                             
+                               new SqlParameter("@P_EXAMNO", examno),                             
+                               new SqlParameter("@P_UA_NO", ua_no),                             
+                               new SqlParameter("@P_IPADRESS", ip_adress),                             
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE_ELECTIVE_CC", objParams, true));
+
+                        if (!string.IsNullOrEmpty(ret.ToString()) && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTable-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+
+                public int AddExamDay1(Exam objExam, int OrgID, int Modeexam, string ccode, int sessionid, int subexamno, int section, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    object ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionid);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[4] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[5] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[6] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[7] = new SqlParameter("@P_ModeEXAMNO", Modeexam);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNO", subexamno);
+                        objParams[9] = new SqlParameter("@P_SECTIONNO", section);
+                        objParams[10] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[11] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[12] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_MULTIPLE_SCHEME", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamDay -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTable_JECRC(string allexdtno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_EXDTNO", allexdtno),     
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),  
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE_JECRC", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTable-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+
+                public int AddExamDayElect(Exam objExam, int OrgID, int Modeexam, string ccode, int sessionid, int subexamno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    object ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[12];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionid);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[4] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[5] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[6] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[7] = new SqlParameter("@P_ModeEXAMNO", Modeexam);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNO", subexamno);
+                        objParams[9] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[10] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[11] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_ELECTIVE_CC_JECRC", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddExamDay -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTableElectiv(string ccode, int sessionid, int subexamno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_CCODE", ccode),                             
+                               new SqlParameter("@P_SESSIONID", sessionid),                             
+                               new SqlParameter("@P_SUBEXAMNO", subexamno), 
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),  
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE_ELECTIVE_JECRC", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTable-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+
+                public int AddCommonCourseTimeTable(Exam objExam, int OrgID, string ccode, int sessionid, int subexamno, int subid, string schemeno, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    object ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[13];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionid);
+                        objParams[1] = new SqlParameter("@P_EXAM_TT_TYPE", objExam.Exam_TT_Type);
+                        objParams[2] = new SqlParameter("@P_SLOTNO", objExam.Slot);
+                        objParams[3] = new SqlParameter("@P_CCODE", ccode);
+                        objParams[4] = new SqlParameter("@P_EXAMDATE", objExam.Examdate);
+                        objParams[5] = new SqlParameter("@P_STATUS", objExam.Status);
+                        objParams[6] = new SqlParameter("@P_ORGID", OrgID);
+                        objParams[7] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParams[8] = new SqlParameter("@P_SUBEXAMNO", subexamno);
+                        objParams[9] = new SqlParameter("@P_SUBID", subid);
+                        objParams[10] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[11] = new SqlParameter("@P_IPADRESS", ip_adress);
+                        objParams[12] = new SqlParameter("@P_EXDTNO", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
+
+                        ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_EXAM_DATE_INSERT_COMMONCOURSES_JECRC", objParams, true);
+                        if (Convert.ToInt32(ret) == 1)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else if (Convert.ToInt32(ret) == 2)
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamNameController.AddCommonCourseTimeTable -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int DeleteTimeTableCommonCourses(string ccode, int sessionid, int subexamno, int subid, string schemeno, DateTime date, int slot, int ua_no, string ip_adress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int ret = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[]                   
+                        {
+                               new SqlParameter("@P_CCODE", ccode),                             
+                               new SqlParameter("@P_SESSIONID", sessionid),                             
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),                             
+                               new SqlParameter("@P_SUBID", subid),                             
+                               new SqlParameter("@P_SCHEMENO", schemeno),                             
+                               new SqlParameter("@P_DATE", date),                             
+                               new SqlParameter("@P_SLOT", slot), 
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),                                  
+                               new SqlParameter("@P_OUTPUT", SqlDbType.Int)
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.Output;
+
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_DELETE_EXAM_TIME_TABLE_COMMONCOURSES_JECRC", objParams, true));
+
+                        if (ret != null && ret.ToString() == "1")
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.ExamController.DeleteTimeTableCommonCourses-> " + ex.ToString());
+                    }
+
+                    return ret;
+                }
+                #endregion
+
+
+
+                //added by prafull on dt:23112023 
+                public int UpdateStudentByGrade(int Schemeno, int Sessionno, int Semester, int Courseno, string Ccode, string Idno, string ABgrade, string Igrade, string UFMgrade, string OldGrade, int UA_NO)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[12];
+
+                        objParams[0] = new SqlParameter("@P_SCHEMENO", Schemeno);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", Sessionno);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", Semester);
+                        objParams[3] = new SqlParameter("@P_COURSENO", Courseno);
+                        objParams[4] = new SqlParameter("@P_CCODE", Ccode);
+                        objParams[5] = new SqlParameter("@P_IDNO", Idno);
+                        objParams[6] = new SqlParameter("@P_ABGrade", ABgrade);
+                        objParams[7] = new SqlParameter("@P_IGrade", Igrade);
+                        objParams[8] = new SqlParameter("@P_UFMGrade", UFMgrade);
+                        objParams[9] = new SqlParameter("@P_OLD_GRADE", OldGrade);
+                        objParams[10] = new SqlParameter("@P_UA_NO", UA_NO);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_ACD_UPDENT_STUDENT_BY_GRADE", objParams, true);
+
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetCourseExamRuleSubjectwise-> " + ex.ToString());
+                    }
+                    return status;
+                }
+
             }
         }
     }

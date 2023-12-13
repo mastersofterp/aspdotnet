@@ -95,11 +95,21 @@
                                             </ajaxToolKit:FilteredTextBoxExtender>
                                             <asp:HiddenField ID="hdUserId" runat="server" Value="0" />
                                         </div>
+
+                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <label>Status</label>
+
+                                        <div class="switch form-inline">
+                                            <input type="checkbox" id="rdActive" name="switch" checked />
+                                            <label data-on="Active" tabindex="5" class="newAddNew Tab" data-off="Inactive" for="rdActive"></label>
+                                             <asp:HiddenField ID="hfStatus" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnSubmitPatten" runat="server" CssClass="btn btn-primary" Text="Submit" OnClick="btnSubmitPatten_Click" TabIndex="16" ValidationGroup="Submit" />
+                                    <asp:Button ID="btnSubmitPatten" runat="server" CssClass="btn btn-primary" Text="Submit" OnClick="btnSubmitPatten_Click" TabIndex="16" ValidationGroup="Submit" OnClientClick="return funStatus();" />
                                     <asp:Button ID="btnCancelPattern" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btnCancel1_Click" TabIndex="17" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
                                         ShowSummary="false" DisplayMode="List" ValidationGroup="Submit" />
@@ -117,6 +127,7 @@
                                                     <th>Configure</th>
                                                     <th>Pattern Name</th>
                                                     <th>Marks</th>
+                                                     <th>Status</th>
 
                                                 </tr>
                                             </thead>
@@ -128,7 +139,7 @@
                                                                 <asp:LinkButton ID="lnkEdit" CommandArgument='<%# Eval("QuestionPatternId") %>' CommandName="Edit" runat="server" OnClick="lnkEdit_Click" ToolTip='<%# Eval("QuestionPatternId")%>' TabIndex="4"><i class="fas fa-edit"></i></asp:LinkButton>
                                                                 <asp:HiddenField ID="hdnSrno1" runat="server" Value='<%# Eval("QuestionPatternId")%>' />
                                                             </td>
-                                                            <td>
+                                                            <td>    
                                                                 <asp:LinkButton ID="lnkConfigure" CommandArgument='<%# Eval("QuestionPatternId") %>' CommandName="Edit" runat="server" OnClick="lnkConfigure" ToolTip='<%# Eval("QuestionPatternId")%>' TabIndex="4"><i class="fa fa-cog" aria-hidden="true"></i></asp:LinkButton>
                                                             </td>
                                                             <td>
@@ -138,6 +149,10 @@
 
                                                             <td>
                                                                 <asp:Label ID="lblMarks" runat="server" Text='<%# Eval("MARKS") %>' />
+
+                                                            </td>
+                                                             <td>
+                                                                     <asp:Label ID="lblstatus"  Text='<%# Eval("ACTIVESTATUS")%>' ForeColor='<%# Eval("ACTIVESTATUS").ToString().Equals("Active")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' runat="server" />
 
                                                             </td>
                                                         </tr>
@@ -374,7 +389,27 @@
 
     <%--    <script src="Scripts/ObeTransaction/ExamQuestionPaper.js"></script>--%>
 
+     <script>
+         function setstatus(val) {
 
+             $('#rdActive').prop('checked', val);
+             // $('#hftimeslot').val($('#rdActivetimeslot').prop('checked'));
+         }
+         function funStatus() {
+             $('#hfStatus').val(Number($('#rdActive').prop('checked')));
+         }
+         var prm = Sys.WebForms.PageRequestManager.getInstance();
+         prm.add_endRequest(function () {
+             $(function () {
+                 $('#btnSubmitPatten').click(function () {
+                     // alert("hi");
+                     funStatus();
+                 });
+             });
+         });
+
+
+    </script>
     <script language="javascript" type="text/javascript">
 
         function quemaxvalcheck(id) {
@@ -581,14 +616,23 @@
                     {
                         if (tMark > fMark)
                         {
+                            if (orwith > 1)
+                            {
+                            }
+                            else
+                            {
                                 alert('Question Total should not Greater than Maximum Marks.');
                                 return false;
+                            }
                          }
                      }
                    // }
             });
 
         });
+
+
+
 
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         prm.add_endRequest(function () {

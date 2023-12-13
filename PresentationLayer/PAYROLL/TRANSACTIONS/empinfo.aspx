@@ -219,6 +219,7 @@
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>BioID./RFID.</label>
+                                                       <asp:Button ID="btngetmaxid" runat="server" Text="Get Max RFID" CssClass="btn btn-primary ml-3" OnClick="btngetmaxid_Click" style="padding:3px 8px !important; font-size : 10px !important" Visible="false" />
                                                     </div>
                                                     <asp:TextBox ID="txtRFIDno" runat="server" CssClass="form-control" MaxLength="9" TabIndex="5"></asp:TextBox>
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server"

@@ -125,9 +125,9 @@ public partial class ACADEMIC_StudentNameUpdation : System.Web.UI.Page
         try
         {
             //FILL DROPDOWN 
-            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO > 0", "BATCHNO DESC");
-            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNAME");
-            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
+            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "BATCHNO DESC");
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "SEMESTERNAME");
+            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND ISNULL(ActiveStatus,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
 
         }
         catch (Exception ex)
@@ -185,7 +185,7 @@ public partial class ACADEMIC_StudentNameUpdation : System.Web.UI.Page
     {
         try
         {
-            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON A.DEGREENO=B.DEGREENO AND A.BRANCHNO=B.BRANCHNO", "distinct A.STUDNAME", "A.IDNO,A.REGNO,STUDENTMOBILE,FATHERMOBILE,MOTHERMOBILE,EMAILID,FATHER_EMAIL,EMAILID_INS,MOTHER_EMAIL", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " AND A.DEGREENO =  " + ddlDegree.SelectedValue + " AND A.BRANCHNO =  " + ddlBranch.SelectedValue + "AND A.COLLEGE_ID =  " + ddlClgname.SelectedValue + " AND ISNULL(ADMCAN,0) = 0 and semesterno=" + Convert.ToInt32(ddlSemester.SelectedValue), "IDNO");
+            DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON A.DEGREENO=B.DEGREENO AND A.BRANCHNO=B.BRANCHNO", "distinct A.STUDNAME", "A.IDNO,A.REGNO,STUDENTMOBILE,SEX,FATHERNAME,FATHERMOBILE,MOTHERNAME,MOTHERMOBILE,EMAILID,FATHER_EMAIL,EMAILID_INS,MOTHER_EMAIL", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " AND A.DEGREENO =  " + ddlDegree.SelectedValue + " AND A.BRANCHNO =  " + ddlBranch.SelectedValue + "AND A.COLLEGE_ID =  " + ddlClgname.SelectedValue + " AND ISNULL(ADMCAN,0) = 0 and semesterno=" + Convert.ToInt32(ddlSemester.SelectedValue), "IDNO");
             if (dsStudent.Tables[0].Rows.Count > 0 && dsStudent != null && dsStudent.Tables.Count > 0)
             {
                 lvStudents.Visible = true;
@@ -252,15 +252,21 @@ public partial class ACADEMIC_StudentNameUpdation : System.Web.UI.Page
         TextBox txtStudEmail = (TextBox)item.FindControl("txtStudEmail");
         TextBox txtStudMobile = (TextBox)item.FindControl("txtStudMobile");
         TextBox txtStudIndusEmail = (TextBox)item.FindControl("txtStudIndusEmail");
+        RadioButtonList rdgender = (RadioButtonList)item.FindControl("rdgender");
         //txtStudIndusEmail.Visible = false;
         TextBox txtFMob = (TextBox)item.FindControl("txtFMob");
+        TextBox txtFName = (TextBox)item.FindControl("txtFName");
         TextBox txtFEmail = (TextBox)item.FindControl("txtFEmail");
+        TextBox txtMName = (TextBox)item.FindControl("txtMName");
         TextBox txtMMob = (TextBox)item.FindControl("txtMMob");
         TextBox txtMEmail = (TextBox)item.FindControl("txtMEmail");
 
         string name = txtName.Text.ToString();
         string StudEmail = txtStudEmail.Text.ToString();
         string StudMobile = txtStudMobile.Text.ToString();
+        string StuGender = rdgender.SelectedValue.ToString();
+        string Fname = txtFName.Text.ToString();
+        string Mname = txtMName.Text.ToString();
         string StudIndusEmail = "";
         string FMob = txtFMob.Text.ToString();
         string FEmail = txtFEmail.Text.ToString();
@@ -268,7 +274,7 @@ public partial class ACADEMIC_StudentNameUpdation : System.Web.UI.Page
         string MEmail = txtMEmail.Text.ToString();
 
         ////int cs = objs.UpdateStudentname(Convert.ToInt32(btnUpdate.ToolTip), name);
-        int cs = objs.UpdateStudentname(Convert.ToInt32(btnUpdate.ToolTip), name, StudEmail, StudMobile, StudIndusEmail, FMob, FEmail, MMob, MEmail);
+        int cs = objs.UpdateStudentname(Convert.ToInt32(btnUpdate.ToolTip), name, StudEmail, StudMobile, StudIndusEmail, StuGender, Fname, FMob, FEmail, Mname, MMob, MEmail);
         if (cs == 2)
         {
             objCommon.DisplayMessage(updpnlStudent, "Student Data Updated Successfully", this.Page);

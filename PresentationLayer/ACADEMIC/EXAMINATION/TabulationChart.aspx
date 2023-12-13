@@ -355,9 +355,9 @@
                                         <%--   <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true"
                                             Display="None" ErrorMessage="Please Select College & Regulation" InitialValue="0" ValidationGroup="report">
                                         </asp:RequiredFieldValidator>--%>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator60" runat="server" ControlToValidate="ddlClgname"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator60" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="ER"
-                                            SetFocusOnError="True"></asp:RequiredFieldValidator> 
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
 
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator64" runat="server" ControlToValidate="ddlClgname"
                                             Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="CPD"
@@ -426,8 +426,8 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Summary"
-                                            SetFocusOnError="True"></asp:RequiredFieldValidator>  
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator65" runat="server" ControlToValidate="ddlSession"
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator65" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="CPD"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator56" runat="server" ControlToValidate="ddlSession"
@@ -566,9 +566,9 @@
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Ledger"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
 
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSemester" Display="None"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlSemester" Display="None" SetFocusOnError="true"
                                             ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ControlToValidate="ddlSemester" Display="None"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator17" runat="server" ControlToValidate="ddlSemester" Display="None" SetFocusOnError="true"
                                             ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="GradeCard"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlSemester" Display="None"
                                             ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="TRReport"></asp:RequiredFieldValidator>
@@ -588,7 +588,7 @@
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear" Display="None"
                                             ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="Summary"></asp:RequiredFieldValidator>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator61" runat="server" ControlToValidate="ddlYear"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator61" runat="server" ControlToValidate="ddlYear"
                                             Display="None" ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="ER"
                                             SetFocusOnError="True"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator45" runat="server" ControlToValidate="ddlYear" Display="None"
@@ -619,10 +619,13 @@
                                             <asp:ListItem Value="-1">Please Select</asp:ListItem>
                                             <asp:ListItem Value="0">Regular</asp:ListItem>
                                             <asp:ListItem Value="1">Backlog</asp:ListItem>
+                                            <asp:ListItem Value="2">PhotoCopy/Revaluation</asp:ListItem>
+                                            <asp:ListItem Value="3">Redo/Resit</asp:ListItem>
+
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvstudenttype" Display="None" runat="server" ControlToValidate="ddlStuType"
+                                        <asp:RequiredFieldValidator ID="rfvstudenttype" Display="None" runat="server" ControlToValidate="ddlStuType" SetFocusOnError="true"
                                             InitialValue="-1" ErrorMessage="Please Select Student Type" ValidationGroup="Show"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator18" Display="None" runat="server" ControlToValidate="ddlStuType"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator18" Display="None" runat="server" ControlToValidate="ddlStuType" SetFocusOnError="true"
                                             InitialValue="-1" ErrorMessage="Please Select Student Type" ValidationGroup="GradeCard"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator21" Display="None" runat="server" ControlToValidate="ddlStuType"
                                             InitialValue="-1" ErrorMessage="Please Select Student Type" ValidationGroup="Summary"></asp:RequiredFieldValidator>
@@ -638,18 +641,18 @@
 
 
 
-                                          <div id="divYear" runat="server" visible="false" class="form-group col-lg-3 col-md-6 col-12">
+                                    <div id="divYear" runat="server" visible="false" class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Year</label>
                                         </div>
                                         <asp:DropDownList ID="ddlYears" runat="server" AppendDataBoundItems="True" AutoPostBack="true" ValidationGroup="ER" CssClass="form-control threess redborder redborder2 redborder3" data-select2-enable="true"
-                                             TabIndex="1">
+                                            TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator62" runat="server" ControlToValidate="ddlYears" Display="None"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator62" runat="server" ControlToValidate="ddlYears" Display="None"
                                             ErrorMessage="Please Select Year" InitialValue="0" ValidationGroup="ER"></asp:RequiredFieldValidator>
-                                       
+
                                     </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
@@ -722,7 +725,7 @@
                                     </div>
 
 
-                                  <div class="form-group col-lg-3 col-md-6 col-12" id="divprint" runat="server" visible="false">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divprint" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <label>Date Of Convocation</label>
                                         </div>
@@ -890,12 +893,12 @@
                                 <asp:Button ID="btnLedger" runat="server" Text="Students Ledger Report" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="Ledger" OnClick="btnLedger_Click" />
                                 <asp:Button ID="btnGradeCardIssueRegister" runat="server" Text="Grade Card Issue Register" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCardIssueRegister" OnClick="btnGradeCardIssueRegister_Click" />
 
-                                
-                                <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER"  />
+
+                                <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER" OnClick="btnElibilityReport_Click" />
 
                                 <asp:Button ID="btnCertificate" Text="Degree Certificate" runat="server" TabIndex="1" CssClass="btn btn-info"
                                     Visible="false" ValidationGroup="CPD" OnClick="btnCertificate_Click" />
-                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
+                                <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />
                                 <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="ER" />
@@ -1040,8 +1043,8 @@
             <asp:PostBackTrigger ControlID="btnufm" />
             <asp:PostBackTrigger ControlID="btngraderange" />
             <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
-             <asp:PostBackTrigger ControlID="btnElibilityReport" /> 
-             <asp:PostBackTrigger ControlID="btnCertificate" />
+            <asp:PostBackTrigger ControlID="btnElibilityReport" />
+            <asp:PostBackTrigger ControlID="btnCertificate" />
 
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>
@@ -1069,19 +1072,19 @@
         }
     </script>
 
-      <script language="javascript" type="text/javascript">
-          function totAll1(headchk) {
-              var frm = document.forms[0]
-              for (i = 0; i < document.forms[0].elements.length; i++) {
-                  var e = frm.elements[i];
-                  if (e.type == 'checkbox') {
-                      if (headchk.checked == true)
-                          e.checked = true;
-                      else
-                          e.checked = false;
-                  }
-              }
-          }
+    <script language="javascript" type="text/javascript">
+        function totAll1(headchk) {
+            var frm = document.forms[0]
+            for (i = 0; i < document.forms[0].elements.length; i++) {
+                var e = frm.elements[i];
+                if (e.type == 'checkbox') {
+                    if (headchk.checked == true)
+                        e.checked = true;
+                    else
+                        e.checked = false;
+                }
+            }
+        }
     </script>
 
 

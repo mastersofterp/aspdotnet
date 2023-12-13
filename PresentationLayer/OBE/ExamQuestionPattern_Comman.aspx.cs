@@ -126,6 +126,7 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
     {
         txtQuestionPatternName.Text = "";
         txtPatternMarks.Text = "";
+        ViewState["edit"] = null;
         BindPattern(0, 0);
     }
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -162,12 +163,35 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
             //    return;  
 
             //}
-           
+            if (txtQuestionPatternName.Text == null || txtQuestionPatternName.Text == "")
+            {
+                objCommon.DisplayMessage(this.Page, "Please Select Question Pattern Name", this.Page);
+                return;
+            }
+            if (txtPatternMarks.Text == null || txtPatternMarks.Text == "")
+            {
+                objCommon.DisplayMessage(this.Page, "Please Select Maximum Marks", this.Page);
+                return;
+            }
+            if (ViewState["edit"] == null)
+            {
+                string Chk = objCommon.LookUp("tblQuestionPatternMaster", "COUNT(1)", "QuestionPatternName ='" + txtQuestionPatternName.Text + "' and MARKS = " + txtPatternMarks.Text);
+
+                if ((Chk != null || Chk != string.Empty) && Chk != "0")
+                {
+                    objCommon.DisplayMessage(updEdit, " Record Already Exist..", this.Page);
+                    return;
+
+                }
+            }
+
+            int Activestatus = 0; ;
+            Activestatus = Convert.ToInt32(hfStatus.Value);
             if(hdnPatternId.Value == "")
             {
                 hdnPatternId.Value = "0";
             }
-            int result = ObjQP.SaveQuestionPattern(Convert.ToInt32(hdnPatternId.Value), txtQuestionPatternName.Text, txtPatternMarks.Text);
+            int result = ObjQP.SaveQuestionPattern(Convert.ToInt32(hdnPatternId.Value), txtQuestionPatternName.Text, txtPatternMarks.Text, Activestatus);
 
             if (result == 1)
             {
@@ -617,24 +641,34 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
         //    return;
 
         //}
+        ViewState["edit"] = "Edit";
         RepeaterItem item = (sender as LinkButton).NamingContainer as RepeaterItem;
-      
+
         int patternid = Convert.ToInt32((item.FindControl("hdnSchemeSubjectId") as HiddenField).Value);
 
         int Patternno = Convert.ToInt32(objCommon.LookUp("TBLQUESTIONSOBTAINEDMARKS TQ inner join TBLEXAMPAPERQUESTIONS TE on (TQ.PaperQuestionsId=TE.PaperQuestionsId)", "Count(*)", " isnull(TQ.islock,0)=1 AND questionpatternid=" + patternid));
-        if (Patternno > 0)
-        {
-            objCommon.DisplayMessage(this.Page, "STOP !!! Exam Mark Entry Already Lock you can not modify.", this.Page);
-            txtQuestionPatternName.Text = "";
-            txtPatternMarks.Text = "";
-            return;
+        //if (Patternno > 0)
+        //{
+        //    objCommon.DisplayMessage(this.Page, "STOP !!! Exam Mark Entry Already Lock you can not modify.", this.Page);
+        //    txtQuestionPatternName.Text = "";
+        //    txtPatternMarks.Text = "";
+        //    return;
 
-        }
-        hdnPatternId.Value =((item.FindControl("hdnSchemeSubjectId") as HiddenField).Value);
-        
+        //}
+        hdnPatternId.Value = ((item.FindControl("hdnSchemeSubjectId") as HiddenField).Value);
+
         txtQuestionPatternName.Text = (item.FindControl("lblSubjectName") as Label).Text;
 
         txtPatternMarks.Text = (item.FindControl("lblMarks") as Label).Text;
+        string lblStatusShow = (item.FindControl("lblStatus") as Label).Text;
+        if (lblStatusShow.ToString() == "Active" || lblStatusShow.ToString() == "ACTIVE")
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "Src", "setstatus(true);", true);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "Src", "setstatus(false);", true);
+        }
     }
 
     protected void lnkView_Click(object sender, EventArgs e)
@@ -721,9 +755,17 @@ public partial class OBE_ExamQuestionPattern : System.Web.UI.Page
     {
         if (Convert.ToInt32(ddlQueOrWith.SelectedIndex) > 0)
         {
-            idminimum.Visible = false;
-            idoutof.Visible = false;
-
+            if (Convert.ToInt32(ddlQueLevel.SelectedIndex) > 0)
+            {
+                idminimum.Visible = true;
+                idoutof.Visible = true;
+            }
+            else
+            {
+                idminimum.Visible = false;
+                idoutof.Visible = false;
+            }
+           
         }
         else
         {

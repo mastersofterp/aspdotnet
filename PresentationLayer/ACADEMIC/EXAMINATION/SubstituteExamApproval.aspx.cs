@@ -19,6 +19,7 @@ using CrystalDecisions.CrystalReports.Engine;
 
 public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI.Page
 {
+    //GAURAV
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     ExamController objExamController = new ExamController();
@@ -67,11 +68,12 @@ public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI
                     // if (Session["usertype"].ToString() != "1")
                     if (Session["usertype"].ToString() == "3")
                     {
-                        objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
+                     
+                        objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO in ( " + Session["userdeptno"]+")","");
                     }
                     else if (Session["usertype"].ToString() == "8")
                     {
-                        objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
+                        objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND DB.DEPTNO in ( " + Session["userdeptno"] + ")", "");
                     }
                     else
                     {
@@ -289,6 +291,7 @@ public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI
     {
         try
         {
+            #region HOD log in
             if (Convert.ToUInt32(Session["usertype"]) == 8)
             {
             if (ListView1.Items.Count > 0)
@@ -328,7 +331,8 @@ public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI
                         }
                     }
                 }
-                 }      
+            }
+            #endregion
             else
                 {
                 if (lvabsent.Items.Count > 0)
@@ -351,24 +355,34 @@ public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI
                         }
                         else
                         {
-                            status = null;
+                            status = "null";
                         }
 
                         int Idno = Convert.ToInt32(idno.ToolTip);
-                        if (Idno > 0)
+                        if (Idno > 0 && (status == "1" || status == "0"))
                         {
+
                             string SP_Name = "PKG_ACD_GET_ABSENT_STUD_LIST_APPROVE_REJECT";
+
                             string SP_Parameters = "@P_IDNO, @P_SESSIONNO, @P_COURSENO, @P_SEMESTERNO, @P_APPROVEREJECT,@P_UA_NO,@P_OUT";
                             string Call_Values = "" + Idno + "," + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + "," + Convert.ToInt32(courseno.ToolTip) + "," + Convert.ToInt32(semesterno.ToolTip) +
-                                "," + Convert.ToInt32(status) + "," + Convert.ToInt32(Session["userno"]) + ",0";
+                                "," + status + "," + Convert.ToInt32(Session["userno"]) + ",0";
                             // return;
                             string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
 
                         }
+                        else
+                        {
+                           // objCommon.DisplayMessage(this.updpnlExam, "Records Submit Succesfully...!!!", this.Page);
+                            //FillStudentList();
+                        }
+
                     }
                     //addedfor unique no
                     foreach (ListViewDataItem item in lvabsent.Items)
                     {
+
+                   
                         CheckBox Checkapprove = item.FindControl("chk_Absent") as CheckBox;
                         CheckBox Checkreject = item.FindControl("chk_ufm") as CheckBox;
                         Label courseno = item.FindControl("lblCOURSENAME") as Label;
@@ -411,26 +425,33 @@ public partial class ACADEMIC_EXAMINATION_SubstituteExamApproval : System.Web.UI
                             goto Reprocess;
                         }
                         Session["Order_id"] = refno;
-                        if (status1 != "0" || status1 != null || status1 != "")
-                        {
-                            string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno1.ToolTip);
-                            int fees1 = Convert.ToInt32(objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "count(IDNO)", "IDNO=" + idno1.ToolTip + "and advisor_approve=1"));
-                            objSR.SESSIONNO = Convert.ToInt32(ddlsessionforabsent.SelectedValue);
-                            objSR.IDNO = Convert.ToInt32(idno1.ToolTip);
-                            objSR.REGNO = Regno;
-                            objSR.SCHEMENO = Convert.ToInt32(ViewState["schemeno"]);
-                            objSR.SEMESTERNOS = semesterno.ToolTip;
-                            objSR.IPADDRESS = Session["ipAddress"].ToString(); ;
-                            objSR.COLLEGE_CODE = Session["colcode"].ToString();
-                            objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
-                            objSR.COURSENOS = courseno.ToolTip;
-                            string Amt = Convert.ToString(fees1 * 350);
-                            //string Amt = Convert.ToString(fees.ToolTip);
-                            //create Demand
-                            int ret = objSReg.AddReTestExamRegistrationDetails(objSR, Amt, Session["Order_id"].ToString());
-                            objCommon.DisplayMessage(this.updpnlExam, "Records Submit Succesfully...!!!", this.Page);
-                            FillStudentList();
-                        }
+
+                        if (Checkapprove.Checked == true)
+                        {                            
+                            if (status1 != "0" || status1 != null || status1 != "")
+                            {
+                                string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + idno1.ToolTip);
+                                int fees1 = Convert.ToInt32(objCommon.LookUp("ACD_ABSENT_STUD_EXAM_REG_LOG", "count(IDNO) IDNO", "IDNO=" + idno1.ToolTip + " and advisor_approve=1 AND SEMESTERNO=" + Convert.ToInt32(semesterno.ToolTip) + "and SESSIONNO=" + Convert.ToInt32(ddlsessionforabsent.SelectedValue)));
+
+                                objSR.SESSIONNO = Convert.ToInt32(ddlsessionforabsent.SelectedValue);
+                                objSR.IDNO = Convert.ToInt32(idno1.ToolTip);
+                                objSR.REGNO = Regno;
+                                objSR.SCHEMENO = Convert.ToInt32(ViewState["schemeno"]);
+                                objSR.SEMESTERNOS = semesterno.ToolTip;
+                                objSR.IPADDRESS = Session["ipAddress"].ToString(); ;
+                                objSR.COLLEGE_CODE = Session["colcode"].ToString();
+                                objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
+                                objSR.COURSENOS = courseno.ToolTip;
+                                string Amt = Convert.ToString(fees1 * 350);
+                                // string Amt = Convert.ToString( 350);btnShow_Click
+                                //string Amt = Convert.ToString(fees.ToolTip);
+                                //create Demand
+                                //return;
+                                int ret = objSReg.AddReTestExamRegistrationDetails(objSR, Amt, Session["Order_id"].ToString());
+                                objCommon.DisplayMessage(this.updpnlExam, "Records Submit Succesfully...!!!", this.Page);
+                                FillStudentList();
+                            }
+                        }//
                         else { }
                         btnSubmit.Enabled = true;
                         btnAbsentReport1.Enabled = true;

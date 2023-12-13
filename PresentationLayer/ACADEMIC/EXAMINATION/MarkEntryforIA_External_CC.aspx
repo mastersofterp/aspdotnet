@@ -161,9 +161,11 @@
                                         </div>
                                     </div>
                                     <div class="row mt-3">
-                                        <div class="col-lg-6 col-md-12 col-12">
+                                        <%--<div class="col-lg-6 col-md-12 col-12">--%>
+                                        <div class="col-lg-12 col-md-12 col-12">
                                             <div class="row">
-                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <%--<div class="form-group col-lg-6 col-md-6 col-12">--%>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
                                                         <label>
@@ -177,7 +179,8 @@
                                                         Display="None" ErrorMessage="Please Select Exam" InitialValue="0" SetFocusOnError="True"
                                                         ValidationGroup="show"></asp:RequiredFieldValidator>
                                                 </div>
-                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <%--<div class="form-group col-lg-6 col-md-6 col-12">--%>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup></sup>
                                                         <label>
@@ -192,7 +195,8 @@
                                                         <asp:ListItem Value="3">Student Name</asp:ListItem>
                                                     </asp:DropDownList>
                                                 </div>
-                                                <div class="form-group col-lg-12 col-md-12 col-12">
+                                                <%--<div class="form-group col-lg-12 col-md-12 col-12">--%>
+                                                <div class="form-group col-lg-6 col-md-12 col-12">
                                                     <div class="sub-heading">
                                                         <h5>Activity Details</h5>
                                                     </div>
@@ -218,7 +222,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-6 col-md-6 col-12 mb-3">
+
+                                        <div class="form-group col-lg-12 col-md-6 col-12 mb-3" runat="server" id="divnote">
                                             <asp:Repeater ID="rptMarkCodes" runat="server">
                                                 <HeaderTemplate>
                                                     <div class=" note-div">
@@ -226,7 +231,9 @@
                                                         <p><i class="fa fa-star" aria-hidden="true"></i><span>Please Save and Lock for Final Submission of Marks</span> </p>
                                                 </HeaderTemplate>
                                                 <ItemTemplate>
-                                                    <strong><%# Eval("CODE_VALUE")%></strong> - <%# Eval("CODE_DESC")%><br />
+                                                    <div style="display: inline-block; margin-right: 10px;">
+                                                        <strong><%# Eval("CODE_VALUE")%></strong> - <%# Eval("CODE_DESC")%>
+                                                    </div>
                                                 </ItemTemplate>
                                                 <FooterTemplate>
                                                 </FooterTemplate>
@@ -287,7 +294,10 @@
                                     <asp:Panel ID="pnlStudGrid" runat="server" Visible="false">
                                         <div id="demo-grid" class="vista-grid">
                                             <div class="sub-heading">
-                                                <h5>Enter Marks for following Students</h5>
+                                                <h5>
+                                                    <%--Enter Marks for following Students--%>
+                                                    <asp:Label runat="server" ID="lblGridHeading" Text=""></asp:Label>
+                                                </h5>
                                             </div>
                                             <asp:HiddenField ID="hfdMaxMark" runat="server" />
                                             <asp:HiddenField ID="hfdMinMark" runat="server" />
@@ -527,7 +537,6 @@
                 $("#ctl00_ContentPlaceHolder1_gvStudent .form-control").keypress(function (e) {
                     if (((e.which != 46 || (e.which == 46 && $(this).val() == '')) || $(this).val().indexOf('.') != -1) && (e.which < 48 || e.which > 57)) {
                         e.preventDefault();
-                        //$(this).val("Digits Only").show().fadeOut("slow");
                         $(this).fadeOut("slow").css("border", "1px solid red");
                         $(this).fadeIn("slow");
                     }
@@ -543,10 +552,7 @@
                     debugger;
 
                     $(this).css("border", "1px solid #d2d6de");
-                    var MaxMarks = parseFloat($('input[id$=hfdMaxMark]').val().trim());//$(".MaxMarks").html().split(':')[1].slice(0, -1).trim();
-                    //alert('hi Beerla');
-                    //alert(MaxMarks);
-                    //if (parseInt($(this).val()) == 90) {
+                    var MaxMarks = parseFloat($('input[id$=hfdMaxMark]').val().trim());
                     if (parseInt($(this).val()) == 90 || parseInt($(this).val()) == 9 || parseInt($(this).val()) == 6) {
                         if (parseInt($(this).val()) > MaxMarks) {
                             alert('Marks should not greater than Max Marks !!');

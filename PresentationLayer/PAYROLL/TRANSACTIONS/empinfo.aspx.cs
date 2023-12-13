@@ -68,11 +68,13 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 {
                     divHRAHEADID.Visible = true;
                     divDAHeadID.Visible = true;
+                    btngetmaxid.Visible = true;
                 }
                 else
                 {
                     divHRAHEADID.Visible = false;
                     divDAHeadID.Visible = false;
+                    btngetmaxid.Visible = false;
                 }
                 IsGradepayApplicable = Convert.ToBoolean(objCommon.LookUp("PAYROLL_pay_REF with (nolock)", "isnull(IsGradepayApplicable,1)IsGradepayApplicable", string.Empty));
                 if (IsGradepayApplicable==true)
@@ -83,8 +85,6 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 {
                     txtGradePay.Enabled = false;
                 }
-
-
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Populate all the DropDownLists
@@ -1619,8 +1619,6 @@ public partial class payroll_empinfo : System.Web.UI.Page
                 //{
                 //    if (!txtgroupofdoj.Text.Trim().Equals(string.Empty)) objEM.GROUPOFDOJ = Convert.ToDateTime(txtgroupofdoj.Text);
                 //}
-
-
                 if (ViewState["action"] != null)
                 {
                     if (ViewState["action"].ToString().Equals("add"))
@@ -1981,6 +1979,24 @@ public partial class payroll_empinfo : System.Web.UI.Page
           int collegeno = Convert.ToInt32(ddlCollege.SelectedValue);
           objCommon.FillDropDownList(ddlshiftno, "PAYROLL_LEAVE_SHIFTMAS", "DISTINCT(SHIFTNO)", "SHIFTNAME", "SHIFTNO>0 and COLLEGE_NO=" + collegeno, "SHIFTNAME");
 
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "payroll_empinfo.FillDropDown-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    protected void btngetmaxid_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            DataSet ds = objCommon.FillDropDown("PAYROLL_EMPMAS", "max(RFIDNO)RFIDNO", "", "", "");
+            int temp = Convert.ToInt32(ds.Tables[0].Rows[0]["RFIDNO"].ToString());
+            int temp2 = temp++;
+            txtRFIDno.Text = temp.ToString();
         }
         catch (Exception ex)
         {

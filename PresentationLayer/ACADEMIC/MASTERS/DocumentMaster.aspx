@@ -125,14 +125,26 @@
                                             ValidationGroup="submit" InitialValue="0"></asp:RequiredFieldValidator>--%>
                             </div>
 
-                            <div class="form-group col-lg-3 col-md-6 col-12 h-100">
+                            <div class="form-group col-lg-3 col-md-6 col-12 h-100" runat="server" id="divCasteCategory">
                                 <div class="label-dynamic">
                                     <sup>* </sup>
-                                    <label>Category </label>
+                                    <label>Caste Category </label>
                                 </div>
                                 <div class="form-group col-md-12 checkbox-list-box">
                                     <asp:CheckBox ID="chkCategory" runat="server" Text="All Category" onclick="SelectAllCategory()" />
                                     <asp:CheckBoxList ID="chkCategoryList" runat="server" RepeatColumns="2" RepeatDirection="Horizontal" Width="100%">
+                                    </asp:CheckBoxList>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12 h-100" runat="server" id="divAdmCategory" visible="false">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Admission Category </label>
+                                </div>
+                                <div class="form-group col-md-12 checkbox-list-box">
+                                    <asp:CheckBox ID="chkAdmCategory" runat="server" Text="All Category" onclick="SelectAllAdmCategory()" />
+                                    <asp:CheckBoxList ID="chkAdmCategoryList" runat="server" RepeatColumns="2" RepeatDirection="Horizontal" Width="100%">
                                     </asp:CheckBoxList>
                                 </div>
                             </div>
@@ -300,6 +312,7 @@
             }
         }
 
+
         function SelectAllNationality() {
 
             var CHK = document.getElementById("<%=chkNationalityList.ClientID%>");
@@ -318,6 +331,27 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        function SelectAllAdmCategory() {
+
+            var CHK = document.getElementById("<%=chkAdmCategoryList.ClientID%>");
+            var checkbox = CHK.getElementsByTagName("input");
+
+
+            var chkBranch = document.getElementById('ctl00_ContentPlaceHolder1_chkAdmCategory');
+
+        for (var i = 0; i < checkbox.length; i++) {
+            var chk = document.getElementById('ctl00_ContentPlaceHolder1_chkAdmCategoryList_' + i);
+            if (chkBranch.checked == true) {
+                chk.checked = true;
+            }
+            else {
+                chk.checked = false;
+            }
+        }
+    }
     </script>
 </asp:Content>
 

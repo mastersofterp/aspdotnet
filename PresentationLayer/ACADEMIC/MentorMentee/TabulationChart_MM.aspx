@@ -836,8 +836,8 @@
                                                 <table class="table table-striped table-bordered nowrap display" style="width: 100%;">
                                                     <thead class="bg-light-blue">
                                                         <tr>
-                                                            <th style="text-align: left;">Select
-                                                        <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" TabIndex="10" />
+                                                            <th style="text-align: left;">
+                                                        <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" TabIndex="10" /> Select
                                                             </th>
                                                             <th>Enrollment No. </th>
                                                             <th>Student Name </th>
@@ -852,7 +852,7 @@
                                         </LayoutTemplate>
                                         <ItemTemplate>
                                             <tr>
-                                                <td style="text-align: center;">
+                                                <td style="text-align: left;">
                                                     <asp:CheckBox ID="chkStudent" runat="server" TabIndex="10" ToolTip="Select to view Tabulation Chart" />
                                                 </td>
                                                 <td><%# Eval("REGNO")%></td>
@@ -863,8 +863,8 @@
                                                     <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' />
                                                     <asp:HiddenField ID="hdfAppliid" runat="server" Value='<%# Eval("STUDNAME") %>' />
                                                 </td>
-                                                <td><%# Eval("EMAILID_INS")%></td>
-                                                <asp:HiddenField ID="Hdfemail" runat="server" Value='<%# Eval("EMAILID_INS") %>' />
+                                                <td><%# Eval("EMAILID")%></td>
+                                                <asp:HiddenField ID="Hdfemail" runat="server" Value='<%# Eval("EMAILID") %>' />
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>

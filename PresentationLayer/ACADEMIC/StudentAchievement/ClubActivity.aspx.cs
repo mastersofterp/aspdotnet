@@ -72,6 +72,7 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                             pnlMain.Visible = false;
                         }
                        BindListView();
+                       bindDropdown();
 
                     }
                     else
@@ -80,7 +81,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                         pnlMain.Visible = false;
                         //div3.Visible = false;
                         //lvPraticipation.Visible = false;
-
                         return;
 
                         Page.Title = Session["coll_name"].ToString();
@@ -88,12 +88,12 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                         PageId = Request.QueryString["pageno"];
 
                     }
-                    int idno = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO=" + Convert.ToInt32(Session["userno"])));
-                    objCommon.FillDropDownList(ddlsubuser, "ACD_CLUB_REGISTRATION  R INNER JOIN ACD_CLUB_MASTER cm ON (R.CLUB_ACTIVITY_NO=cm.CLUB_ACTIVITY_NO) ", "CM.CLUB_ACTIVITY_NO", "CM.CLUB_ACTIVITY_TYPE", "IDNO="+idno, "R.CLUB_REGISTRATION_NO");
+                       int idno = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO=" + Convert.ToInt32(Session["userno"])));
+                     //  objCommon.FillDropDownList(ddlsubuser, "ACD_CLUB_REGISTRATION  R INNER JOIN ACD_CLUB_MASTER cm ON (R.CLUB_ACTIVITY_NO=cm.CLUB_ACTIVITY_NO) ", "CM.CLUB_ACTIVITY_NO", "CM.CLUB_ACTIVITY_TYPE", "IDNO=" + idno, "R.CLUB_REGISTRATION_NO");
 
-                    //objCommon.FillDropDownList(ddlsubuser, "ACD_CLUB_REGISTRATION", "CLUB_REGISTRATION_NO", "", "CLUB_REGISTRATION_NO > 0", "CLUB_REGISTRATION_NO");
+                      // objCommon.FillDropDownList(ddlsubuser, "ACD_CLUB_REGISTRATION", "CLUB_REGISTRATION_NO", "", "CLUB_REGISTRATION_NO > 0", "CLUB_REGISTRATION_NO");
 
-                    //objCommon.FillListBox(ddlsubuser, "ACD_CLUB_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0 AND ACTIVESTATUS=1", "CLUB_ACTIVITY_NO");
+                       objCommon.FillDropDownList(ddlsubuser, "ACD_CLUB_MASTER", "CLUB_ACTIVITY_NO", "CLUB_ACTIVITY_TYPE", "CLUB_ACTIVITY_NO>0 AND ACTIVESTATUS=1", "CLUB_ACTIVITY_NO");
                     ViewState["action"] = "add";
                 }
             }
@@ -104,6 +104,77 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
         
     }
     //}
+
+
+    private void bindDropdown()
+    {
+        DataSet ds = null;
+        ds = OBJCLUB.PointMapping(0);
+
+           #region ddlWeightage
+
+        ddlWeightage.DataSource = null;
+        ddlWeightage.DataBind();
+
+        if (ds.Tables[6].Rows.Count > 0)
+        {
+           
+            ddlWeightage.DataSource = ds.Tables[6];
+            ddlWeightage.DataTextField = "WEIGHTAGE_NAME";
+            ddlWeightage.DataValueField = "WEIGHTAGE_NO";
+            ddlWeightage.DataBind();
+        }
+        else
+        {
+            ddlWeightage.DataSource = null;
+            ddlWeightage.DataBind();
+        }
+        ddlWeightage.Items.Insert(0, new ListItem("Please Select ", ""));
+        
+        #endregion ddlWeightage
+
+           #region ddlCampus
+
+        ddlCampus.DataSource = null;
+        ddlCampus.DataBind();
+        if (ds.Tables[7].Rows.Count > 0)
+        {
+          
+            ddlCampus.DataSource = ds.Tables[7];
+            ddlCampus.DataTextField = "CAMPUS_NAME";
+            ddlCampus.DataValueField = "CAMPUS_NO";
+            ddlCampus.DataBind();
+        }
+        else
+        {
+            ddlCampus.DataSource = null;
+            ddlCampus.DataBind();
+        }
+        ddlCampus.Items.Insert(0, new ListItem("Please Select ", ""));
+
+        #endregion ddlCampus
+
+           #region ddlCount
+
+        ddlHours.DataSource = null;
+        ddlHours.DataBind();
+        if (ds.Tables[8].Rows.Count > 0)
+        {
+
+            ddlHours.DataSource = ds.Tables[8];
+            ddlHours.DataTextField = "COUNT_NAME";
+            ddlHours.DataValueField = "HC_NO";
+            ddlHours.DataBind();
+        }
+        else
+        {
+            ddlHours.DataSource = null;
+            ddlHours.DataBind();
+        }
+        ddlHours.Items.Insert(0, new ListItem("Please Select ", ""));
+        #endregion ddlCount
+
+    }
 
     protected void BindListView()
     {
@@ -176,11 +247,13 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
     private void populateDropDown()
     {
 
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "SESSIONNO DESC");
+        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0", "SESSIONNO DESC");
+      //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND SHOW_STATUS =1  AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "SESSIONNO DESC");
         ddlSession.SelectedIndex = 1;
         //mrqSession.InnerHtml = "Registration Started for Session : " + (Convert.ToInt32(ddlSession.SelectedValue) > 0 ? ddlSession.SelectedItem.Text : "---");
         ddlSession.Focus();
     }
+
     private bool CheckActivity()
     {
         bool ret = true;
@@ -211,7 +284,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
         return ret;
     }
 
-   
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         ClubController OBJCLUB = new ClubController();
@@ -225,9 +297,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
         string duration=string.Empty;
         string description =string.Empty;
         string file_name = string.Empty;
-
-
-
         try
         {
             int idno = Convert.ToInt32(Session["idno"]);
@@ -251,8 +320,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
             }
               if (ViewState["action"].ToString().Equals("add"))
               {
-
-           
             //int collegeid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID","IDNO="+idno+ ""));
             //int COUNT = Convert.ToInt32(objCommon.LookUp("ACD_CLUB_ACTIVITY_REGISTRATION", "count(idno)", "IDNO="+idno+ "AND CLUBACTIVITY_TYPE=" + ddlsubuser.SelectedValue + ""));
            
@@ -423,25 +490,19 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
             //    if (ViewState["action"].ToString().Equals("add"))
             //    {
 
-                    CustomStatus cs = (CustomStatus)OBJCLUB.AddClubRegistration(idno, SessionNo, club, tileofevent, venue, Fdate, Todate, duration, description, file_name);
+            CustomStatus cs = (CustomStatus)OBJCLUB.AddClubRegistration(idno, SessionNo, club, tileofevent, venue, Fdate, Todate, duration, description, file_name, Convert.ToInt32(ddlWeightage.SelectedValue), Convert.ToInt32(ddlCampus.SelectedValue), Convert.ToInt32(ddlHours.SelectedValue));
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
-
-                        //ViewState["action"] = "add";
+                       //ViewState["action"] = "add";
                         Clear();
                         objCommon.DisplayMessage(this.updclub, "Record Saved Successfully!", this.Page);
-
                     }
-
-
                     else
                     {
                        // ViewState["action"] = "add";
                         Clear();
                         objCommon.DisplayMessage(this.updclub, "Record Already Exist !", this.Page);
                     }
-
-
                 }
             //}
             else
@@ -462,8 +523,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                 club = Convert.ToInt32(ddlsubuser.SelectedValue);
            }
 
-
-
             //foreach (ListItem items in ddlsubuser.Items)
             //{
             //    if (items.Selected == true)
@@ -482,7 +541,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                 return;
             }
             {
-
                 tileofevent = txttitle.Text;
             }
 
@@ -492,7 +550,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                 return;
             }
             {
-
                 venue = txtvenue.Text;
             }
             if (txtFromDate.Text == string.Empty)
@@ -501,7 +558,6 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                 return;
             }
             {
-
                 Fdate = txtFromDate.Text;
             }
             //if (txtFromDate.Text == string.Empty)
@@ -586,11 +642,9 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
                     objCommon.DisplayMessage(this, "Only PDF files are allowed!", this.Page);
                     return;
                 }
-
-
             }
                     CLUBNO = Convert.ToInt32(ViewState["CLUBNO"].ToString());
-                    CustomStatus cs = (CustomStatus)OBJCLUB.UpdateClubRegistration(CLUBNO, club, tileofevent, venue, Fdate, Todate, duration, description,file_name);
+                    CustomStatus cs = (CustomStatus)OBJCLUB.UpdateClubRegistration(CLUBNO, club, tileofevent, venue, Fdate, Todate, duration, description,file_name ,Convert.ToInt32(ddlWeightage.SelectedValue), Convert.ToInt32(ddlCampus.SelectedValue), Convert.ToInt32(ddlHours.SelectedValue));
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {
 
@@ -612,8 +666,7 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
 
             BindListView();
         }
-      
-                              
+                  
         catch (Exception ex)
         {
             throw;
@@ -634,15 +687,13 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
             int maxWidth = 320;
             imageHeight = (imageHeight * maxWidth) / imageWidth;
             imageWidth = maxWidth;
-
             if (imageHeight > maxHeight)
             {
                 imageWidth = (imageWidth * maxHeight) / imageHeight;
                 imageHeight = maxHeight;
             }
-
             // Saving image to smaller size and converting in byte[]
-            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
+            System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized,imageWidth,imageHeight);
             System.IO.MemoryStream stream = new MemoryStream();
             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
             stream.Position = 0;
@@ -656,14 +707,18 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
     {
        //ViewState["action"] = null;
         ddlsubuser.ClearSelection();
-
         txttitle.Text = string.Empty;
         txtvenue.Text = string.Empty;
         txtFromDate.Text = string.Empty;
         txtToDate.Text = string.Empty;
         txtdescription.Text = string.Empty;
         txtduration.Text = string.Empty;
-        
+        ddlWeightage.ClearSelection();
+        ddlHours.ClearSelection();
+        ddlCampus.ClearSelection();
+       
+         
+
     }
    
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -722,18 +777,18 @@ public partial class ACADEMIC_ClubActivityRegistration : System.Web.UI.Page
             //char clubChars = ',';
             ddlsubuser.SelectedValue = dsEdit.Tables[0].Rows[0]["CLUBACTIVITY_TYPE"].ToString();
 
-
-
             txttitle.Text = dsEdit.Tables[0].Rows[0]["TITLE_OF_EVENT"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["TITLE_OF_EVENT"].ToString();
             txtvenue.Text = dsEdit.Tables[0].Rows[0]["VENUE"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["VENUE"].ToString();
-
-
 
             txtFromDate.Text = dsEdit.Tables[0].Rows[0]["FROMDATE"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["FROMDATE"].ToString();
             txtToDate.Text = dsEdit.Tables[0].Rows[0]["TODATE"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["TODATE"].ToString();
 
             txtduration.Text = dsEdit.Tables[0].Rows[0]["DURATION"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["DURATION"].ToString();
             txtdescription.Text = dsEdit.Tables[0].Rows[0]["DESCRIPTION_OF_EVENT"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["DESCRIPTION_OF_EVENT"].ToString();
+
+            ddlWeightage.SelectedValue = dsEdit.Tables[0].Rows[0]["HOUR_WEIGHTAGENO"].ToString();
+            ddlHours.SelectedValue = dsEdit.Tables[0].Rows[0]["HOUR_COUNTNO"].ToString();
+            ddlCampus.SelectedValue = dsEdit.Tables[0].Rows[0]["CAMPUS_NO"].ToString();
 
 
             ViewState["action"] = "edit";

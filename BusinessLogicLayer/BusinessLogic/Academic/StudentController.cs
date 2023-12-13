@@ -6147,9 +6147,9 @@ namespace IITMS
                     }
                     return retStatus;
                 }
-                public int UpdateStudentname(int idno, string name, string StudEmail, string StudMobile, string StudIndusEmail, string FMob, string FEmail, string MMob, string MEmail)
+                public int UpdateStudentname(int idno, string name, string StudEmail, string StudMobile, string StudIndusEmail, string StuGender, string Fname, string FMob, string FEmail, string Mname, string MMob, string MEmail)
                 {
-
+                     
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
@@ -6161,8 +6161,11 @@ namespace IITMS
                              new SqlParameter("@P_StudEmail",StudEmail),
                              new SqlParameter("@P_StudMobile",StudMobile),
                              new SqlParameter("@P_StudIndusEmail",StudIndusEmail),
+                             new SqlParameter("@P_StuGender",StuGender),
+                             new SqlParameter("@P_FName",Fname),
                              new SqlParameter("@P_FMob",FMob),
                              new SqlParameter("@P_FEmail",FEmail),
+                             new SqlParameter("@P_MName",Mname),
                              new SqlParameter("@P_MMob",MMob),
                              new SqlParameter("@P_MEmail",MEmail),
                              new SqlParameter("@P_OUT",SqlDbType.Int)
@@ -8438,13 +8441,13 @@ namespace IITMS
                 }
 
                 // add by hemant on 28-12-2018
-                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, int schemeno, int semesterno, int courseno, string studids, string sectionnos, int userno)
+                public int UpdateStudentCourseWiseSection(int sessiono, int college_id, int degreeno, int branchno, int schemeno, int semesterno, int courseno, string studids, string sectionnos, int userno, string batchnos, string tutbatchnos)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[11];
+                        SqlParameter[] objParams = new SqlParameter[13];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessiono);
                         objParams[1] = new SqlParameter("@P_COLLEGE_ID", college_id);
                         objParams[2] = new SqlParameter("@P_DEGREENO", degreeno);
@@ -8455,8 +8458,10 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_STUDIDS", studids);
                         objParams[8] = new SqlParameter("@P_SECTIONNO", sectionnos);
                         objParams[9] = new SqlParameter("@P_UA_NO", userno);
-                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[10].Direction = ParameterDirection.Output;
+                        objParams[10] = new SqlParameter("@P_BATCHNO", batchnos);                    // Added by Gopal M 21/11/2023 Ticket #49030
+                        objParams[11] = new SqlParameter("@P_TUTORIALBATCHNO", tutbatchnos); // Added by Gopal M 21/11/2023 Ticket #49030
+                        objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[12].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_UPDATE_COURSE_WISE_SECTION_ALLOTMENT", objParams, false);
                         if (ret != null)
                             if (ret.ToString() != "-99")
@@ -8469,6 +8474,7 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
 
                 /// <summary>
                 /// Added by Rita munde - 06042019
@@ -17826,13 +17832,14 @@ namespace IITMS
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateStudent-> " + ex.ToString());
                     }
                 }
-                public int UpdateStudentSectionBulk(string studids, string sectionnos, int ua_no, string admbatchno, int degreeno, int branchno, string ipaddress)
+                public int UpdateStudentSectionBulk(string studids, string sectionnos, int ua_no, string admbatchno, int degreeno, int branchno, string ipaddress, string batchNos)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[8];
+                        SqlParameter[] objParams = new SqlParameter[9];
+
                         objParams[0] = new SqlParameter("@P_STUDID", studids);
                         objParams[1] = new SqlParameter("@P_SECTIONNO", sectionnos);
                         //objParams[2] = new SqlParameter("@P_ROLLNOS", rollnos);
@@ -17842,8 +17849,9 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_BRANCHNO", branchno);
                         objParams[6] = new SqlParameter("@P_IPADDRESS", ipaddress);
                         //objParams[8] = new SqlParameter("@P_ROLL", roll);//Added by Nidhi Gour 18102019
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_STUD_BATCHNO", batchNos);  // Added by Gopal M 25-09-2023
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BULK_SECTION_ALLOTMENT", objParams, false);
                         if (ret != null)
@@ -19850,13 +19858,13 @@ namespace IITMS
                 /// <param name="objStudent"></param>
                 /// <param name="OrgId"></param>
                 /// <returns></returns>
-                public int UpdateStudent_TeachAllotForGlobalElective_Modified(Student_Acd objStudent, int OrgId)
+                public int UpdateStudent_TeachAllotForGlobalElective_Modified(Student_Acd objStudent, int OrgId,int sectionno)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[8];
+                        SqlParameter[] objParams = new SqlParameter[9];
 
                         objParams[0] = new SqlParameter("@P_SESSIONNO", objStudent.SessionNo);
                         objParams[1] = new SqlParameter("@P_COURSENO", objStudent.CourseNo);
@@ -19865,8 +19873,9 @@ namespace IITMS
                         objParams[4] = new SqlParameter("@P_ADDITIONAL_FLAG", objStudent.isAdditionalFlag);
                         objParams[5] = new SqlParameter("@P_STUDID", objStudent.StudId);
                         objParams[6] = new SqlParameter("@P_ORGID", OrgId);
-                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[7].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[8].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BYFACULTY_FOR_GLOBAL_ELECTIVE_MODIFIED", objParams, false);
                         if (ret != null)
@@ -20924,6 +20933,36 @@ namespace IITMS
                      {
                          throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.CheckExistsStudentDataForDualDegree->" + ex.ToString());
                      }
+                     return ds;
+                 }
+
+                 /// <summary>
+                 /// Added by Swapnil For Gloabl Elective Course Teacher Allotment
+                 /// </summary>
+                 /// <param name="objStudent"></param>
+                 /// <param name="OrgId"></param>
+                 /// <returns></returns>
+
+                 public DataSet GetGlobalCourseTeacherAllotmentForEdit(int sessionno, int courseno, int ua_no, int sectionno)
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+
+                         SqlParameter[] objParams = new SqlParameter[4];
+                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
+                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                         objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_SP_RET_COURSE_ALLOTMENT_FOR_EDIT_GLOBAL_ELECTVE", objParams);
+                     }
+                     catch (Exception ex)
+                     {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                     }
+
                      return ds;
                  }
             }

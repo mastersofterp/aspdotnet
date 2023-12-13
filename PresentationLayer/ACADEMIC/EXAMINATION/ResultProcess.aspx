@@ -260,13 +260,13 @@
                                                             </th>
                                                             <th>Student Name
                                                             </th>
-
                                                             <th>Date
                                                             </th>
-
                                                             <th>Process Status
                                                             </th>
                                                             <th>Lock Status
+                                                            </th>
+                                                             <th id="studcount">Serial No.
                                                             </th>
                                                         </tr>
                                                     </thead>
@@ -301,6 +301,9 @@
 
                                                 <td>
                                                     <asp:Label runat="server" ID="lblLockstatus" Font-Bold="true" ToolTip='<%# (Eval("LOCK"))%>' Text='<%# (Eval("LOCK_STATUS"))%>' ForeColor='<%# (Convert.ToInt32(Eval("LOCK") )== 1 ?  System.Drawing.Color.Green : System.Drawing.Color.Red )%>'></asp:Label>
+                                                </td>
+                                                <td id="stdcounts">
+                                                    <asp:Label ID="lblCount" runat="server" Text='<%# Eval("GRADE_SRNO")%>' />
                                                 </td>
                                             </tr>
                                         </ItemTemplate>

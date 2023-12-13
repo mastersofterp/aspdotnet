@@ -145,8 +145,13 @@ public partial class Itle_selectCourse : System.Web.UI.Page
             else if (Convert.ToInt32(Session["usertype"]) == 3 || (Convert.ToInt32(Session["usertype"]) == 5))
             {
 
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN  ACD_COLLEGE_MASTER B ON (A.COLLEGE_ID=B.COLLEGE_ID)  ", "A.SESSIONNO", "CONCAT( A.SESSION_NAME ,' - ', B.COLLEGE_NAME)", "SESSIONNO>0 AND EXAMTYPE IN (1,3) and B.COLLEGE_ID in (" + (Session["college_nos"]) + ")", "SESSIONNO DESC");
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN  ACD_COLLEGE_MASTER B ON (A.COLLEGE_ID=B.COLLEGE_ID)  ", "A.SESSIONNO", "CONCAT( A.SESSION_NAME ,' - ', B.COLLEGE_NAME)", "SESSIONNO>0 AND EXAMTYPE IN (1,3) and B.COLLEGE_ID in (" + (Session["college_nos"]) + ")", "SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
 
+//objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID)INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)INNER JOIN ACD_COLLEGE_MASTER B ON (SM.COLLEGE_ID=B.COLLEGE_ID )", "DISTINCT CT.SESSIONNO", "CONCAT( SM.SESSION_NAME ,' - ', B.COLLEGE_NAME) as SESSION_NAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "AND sm.SESSIONNO>0 AND sm.EXAMTYPE IN (1,3)" + "and B.COLLEGE_ID in (" + (Session["college_nos"]) + ")", "");
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(SM.SESSIONID = S.SESSIONID)INNER JOIN ACD_COURSE_TEACHER CT ON(SM.COLLEGE_ID=CT.COLLEGE_ID AND CT.SESSIONNO = SM.SESSIONNO)INNER JOIN ACD_COLLEGE_MASTER B ON (SM.COLLEGE_ID=B.COLLEGE_ID )", "CT.SESSIONNO", "CONCAT( SM.SESSION_NAME ,' - ', B.COLLEGE_NAME) as SESSION_NAME", "CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + " and  sm.SESSIONNO>0 AND sm.EXAMTYPE IN (1,3) and B.COLLEGE_ID in (" + (Session["college_nos"]) + ")", "SESSIONNO DESC");
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER B ON (A.COLLEGE_ID=B.COLLEGE_ID) ", "A.SESSIONNO", "CONCAT( A.SESSION_NAME ,' - ', B.COLLEGE_NAME)", "SESSIONNO>0 AND EXAMTYPE IN (1,3) and B.COLLEGE_ID in (" + (Session["college_nos"]) + ")", "SESSIONNO DESC");
             }
                 
             // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO>0 AND EXAMTYPE IN (1,3) and COLLEGE_ID in (" + (Session["college_nos"]) + ")", "SESSIONNO DESC");

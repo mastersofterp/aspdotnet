@@ -174,23 +174,13 @@
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblMobileNo" runat="server" Font-Bold="True"></asp:Label></a>
                                                             </li>
-
-
-
                                                         </ul>
                                                     </div>
-
-
-
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-
                             </div>
 
                             <%--  <asp:Panel runat="server" ID="Panel1">--%>
@@ -371,9 +361,64 @@
                                                 </div>
 
                                             </div>
+                                                 <%--Added by sakshi M --%>
+                                              <div class="form-group col-lg-3 col-md-6 col-12" id="div3" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                    <label>Student Role</label>
+                                                    <%-- <asp:Label ID="lblDYsubuser" runat="server" Font-Bold="true" Text="SubCounsellors"></asp:Label>--%>
+                                                </div>
+                                                <asp:DropDownList ID="ddlWeightage" runat="server" CssClass="form-control" TabIndex="2" data-select2-enable="true"
+                                                    AppendDataBoundItems="false" ToolTip="Please Select Club">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlWeightage" InitialValue="0"
+                                                    Display="None" ErrorMessage="Please Select Club Role" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                <%--                                        <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true"   CssClass="form-control multi-select-demo" SelectionMode="Multiple"   ></asp:ListBox>--%>
+
+                                                <%-- <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"
+                                            SelectionMode="multiple" TabIndex="8"></asp:ListBox>--%>
+                                                <%--                                         <asp:RequiredFieldValidator ID="rfvSubUser" runat="server" ControlToValidate="ddlsubuser" Display="None" ErrorMessage="Please Select Sub User." ValidationGroup="submit" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
+                                            </div>
 
 
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="div4" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                    <label>On Campus/ Off Campus </label>
+                                                    <%-- <asp:Label ID="lblDYsubuser" runat="server" Font-Bold="true" Text="SubCounsellors"></asp:Label>--%>
+                                                </div>
+                                                <asp:DropDownList ID="ddlCampus" runat="server" CssClass="form-control" TabIndex="2" data-select2-enable="true"
+                                                    AppendDataBoundItems="false" ToolTip="Please Select Club">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlCampus" InitialValue="0"
+                                                    Display="None" ErrorMessage="Please Select Club Campus" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                <%--                                        <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true"   CssClass="form-control multi-select-demo" SelectionMode="Multiple"   ></asp:ListBox>--%>
 
+                                                <%-- <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"
+                                            SelectionMode="multiple" TabIndex="8"></asp:ListBox>--%>
+                                                <%--                                         <asp:RequiredFieldValidator ID="rfvSubUser" runat="server" ControlToValidate="ddlsubuser" Display="None" ErrorMessage="Please Select Sub User." ValidationGroup="submit" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
+                                            </div>
+
+                                            <div class="form-group col-lg-3 col-md-6 col-12" id="div5" runat="server">
+                                                <div class="label-dynamic">
+                                                    <sup>* </sup>
+                                                    <label>Hours</label>
+                                                    <%-- <asp:Label ID="lblDYsubuser" runat="server" Font-Bold="true" Text="SubCounsellors"></asp:Label>--%>
+                                                </div>
+                                                <asp:DropDownList ID="ddlHours" runat="server" CssClass="form-control" TabIndex="2" data-select2-enable="true"
+                                                    AppendDataBoundItems="false" ToolTip="Please Select Club">
+                                                    <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="ddlHours" InitialValue="0"
+                                                    Display="None" ErrorMessage="Please Select Club Hours" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                                <%--                                        <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true"   CssClass="form-control multi-select-demo" SelectionMode="Multiple"   ></asp:ListBox>--%>
+
+                                                <%-- <asp:ListBox ID="ddlsubuser" runat="server" AppendDataBoundItems="true" CssClass="form-control multi-select-demo"
+                                            SelectionMode="multiple" TabIndex="8"></asp:ListBox>--%>
+                                                <%--                                         <asp:RequiredFieldValidator ID="rfvSubUser" runat="server" ControlToValidate="ddlsubuser" Display="None" ErrorMessage="Please Select Sub User." ValidationGroup="submit" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -420,6 +465,10 @@
                                                         </th>
                                                         <th>Description of Event
                                                         </th>
+                                                        <th> Student Role</th>
+                                                        <th>Campus</th>
+                                                        <th>Hours</th>
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -469,6 +518,16 @@
                                                     <%# Eval("DESCRIPTION_OF_EVENT")%>
                                                 </td>
 
+                                                  <td>
+                                                    <%# Eval("WEIGHTAGE_NAME")%>
+                                                </td>
+                                                <td>
+                                                      <%# Eval("CAMPUS_NAME")%>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("COUNT_NAME")%>
+                                                </td>
+                                               
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
