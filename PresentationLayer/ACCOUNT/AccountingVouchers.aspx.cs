@@ -230,7 +230,8 @@ public partial class AccountingVouchers : System.Web.UI.Page
             txtDate.Text = DateTime.Now.Date.ToString("dd/MM/yyyy");
             txtChequeDt2.Text = DateTime.Now.Date.ToString("dd/MM/yyyy");
             txtinvoicedate.Text = DateTime.Now.Date.ToString("dd/MM/yyyy");
-            
+            objCommon.FillDropDownList(ddldepartment, "payroll_subdept", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO<>0 AND SUBDEPT<>''", "SUBDEPTNO");
+            OnOffBudgetHeadDept();
             ddlTranType.SelectedIndex = 0;
             ViewState["isModi"] = "N";
             ViewState["Balance3"] = "0";
@@ -313,8 +314,8 @@ public partial class AccountingVouchers : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlPaymentMode, "ACC_PAYMODE", "PAYMODE_CODE", "PAYMODE", "", "PAYMODE");
             }
-            objCommon.FillDropDownList(ddldepartment, "payroll_subdept", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO<>0 AND SUBDEPT<>''", "SUBDEPTNO");
-            OnOffBudgetHeadDept();
+          //  objCommon.FillDropDownList(ddldepartment, "payroll_subdept", "SUBDEPTNO", "SUBDEPT", "SUBDEPTNO<>0 AND SUBDEPT<>''", "SUBDEPTNO");
+           // OnOffBudgetHeadDept();
         }
         // added by tanu 02/03/2022
         // isTempVoucher = objCommon.LookUp("ACC_MAIN_CONFIGURATION", "IsTempVoucher", "");
@@ -6650,6 +6651,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
                     ddlBillNo.SelectedValue = dtContain.Rows[0]["BILL_ID"].ToString().Trim();
                     ddlSponsor.SelectedValue = dtContain.Rows[0]["ProjectId"].ToString().Trim();
                     objCommon.FillDropDownList(ddlProjSubHead, "Acc_" + Session["comp_code"].ToString() + "_ProjectAllocation a inner join Acc_" + Session["comp_code"].ToString() + "_ProjectSubHead b on (a.ProjectSubId=b.ProjectSubId)", "b.ProjectSubId", "ProjectSubHeadName", "a.ProjectId=" + dtContain.Rows[0]["ProjectId"].ToString().Trim(), "");
+                   
                     ddlProjSubHead.SelectedValue = dtContain.Rows[0]["ProjectSubId"].ToString().Trim();
                     ViewState["EditBal"] = dtContain.Rows[0]["BALANCE"].ToString().Trim();
                     int TDS = Convert.ToInt32(dtContain.Rows[0]["TDS"].ToString().Trim());
