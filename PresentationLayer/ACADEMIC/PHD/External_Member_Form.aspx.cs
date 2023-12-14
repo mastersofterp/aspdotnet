@@ -219,8 +219,8 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     #region Internal
     private void PopulateDropDown()
     {
-        objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
-
+        objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 ", "CDB.COLLEGE_ID DESC");
+        //objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
@@ -364,8 +364,8 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     protected void ddlInsName_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlInsName.SelectedIndex > 0)
-        {
-            objCommon.FillListBox(lboFacuilty, "user_acc", "ua_no", "UA_FULLNAME", "ua_type IN (3,5) and isnull(ua_status,0)=0 and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,','))", "ua_no");
+        {    
+            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
         }
         else
         {
@@ -379,7 +379,8 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     {
         if (ddlDepartment.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
+            objCommon.FillListBox(lboFacuilty, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "ua_no", "UA_FULLNAME + ' - '+EmployeeId", "UA.ua_type IN (3,5) and isnull(ua_status,0)=0  and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,',')) ", "ua_no");
+            //objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
         }
         else
         {
