@@ -276,6 +276,10 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                     {
                         ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
                     }
+                    else
+                    {
+                        ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
+                    }
                 }
 
                   //
