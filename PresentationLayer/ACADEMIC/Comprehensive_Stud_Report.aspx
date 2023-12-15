@@ -170,7 +170,7 @@
                                                         <sup>* </sup>
                                                         <label>Search String</label>
                                                     </div>
-                                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" onkeypress="return Validate()"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" AutoComplete="off" onkeypress="return Validate()"></asp:TextBox>
                                                 </div>
                                             </asp:Panel>
 

@@ -999,118 +999,129 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
     public void getinternalmarks1()
     {
-        int idno = 0;
-        if (ViewState["usertype"].ToString() == "2")
+        try
         {
-            idno = Convert.ToInt32(Session["idno"]);
-        }
-        else
-        {
-            idno = Convert.ToInt32(ViewState["idno"]);
-            //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
-            //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
-
-        }
-        StudentController objSC = new StudentController();
-        DataSet dsInternal = null;
-        if (Convert.ToInt32(Session["OrgId"]) == 2)
-        {
-
-            dsInternal = objSC.GetDetailsOfInternalMarksHeader_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
-        }
-        else
-        {
-
-             dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
-        }
-        ViewState["dshead"] = dsInternal;
-        DataTable dt = new DataTable();
-
-
-
-        if (dsInternal != null && dsInternal.Tables.Count > 0 && dsInternal.Tables[0].Rows.Count > 0)
-        {
-            dt = dsInternal.Tables[0];
-            DataRow[] dr = dt.Select("");
-            string str = string.Empty;
-            string str1 = string.Empty;
-            int td = 0;
-            int colcont = dsInternal.Tables[0].Columns.Count;
-            ViewState["colcount"] = colcont.ToString();
-            int rule1 = colcont + 2;//tbl_Rule1
-            // int rule1 = colcont
-            for (int i = 0; i < colcont; i++)
+            int idno = 0;
+            if (ViewState["usertype"].ToString() == "2")
             {
-                str += "$('td:nth-child(1)').show();$('td:nth-child(2)').show();$('td:nth-child(3)').show();$('#tbl_Rule1').attr('colspan'," + rule1 + ");$('#th" + i + "').text('" + Convert.ToString(dr[0][i]).ToString() + "');$('#th" + i + "').text.length=='null'?$('#th" + i + "').hide():$('#th" + i + "').show();";
+                idno = Convert.ToInt32(Session["idno"]);
             }
-            int z = 4;
-            for (int j = 0; j < colcont; j++)
+            else
             {
+                idno = Convert.ToInt32(ViewState["idno"]);
+                //idno = feeController.GetStudentIdByEnrollmentNo(txtEnrollmentSearch.Text.Trim());
+                //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");                                
 
-                str1 += "$('#th" + (j) + "').text('" + Convert.ToString(dr[0][j]).ToString() + "');$('#th" + j + "').text.length==0?$('td:nth-child(" + z + ")').hide():$('td:nth-child(" + z + ")').show();";
-                z++;
             }
-
-            string str3 = str + str1;
-            ViewState["headerscript"] = str3.ToString();//str+str1.ToString();
-            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "" + str3 + "", true);
-
-        }
-
-        else
-        {
-            lvInter.DataSource = null;
-            lvInter.DataBind();
-        }
-        DataSet dsInternal1 = null;
-        if (Convert.ToInt32(Session["OrgId"]) == 2)
-        {
-            dsInternal1 = objSC.GetDetailsOfInternalMarks1_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
-        }
-        else
-        {
-            dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
-        }
-        if (dsInternal1 != null && dsInternal1.Tables.Count > 0 && dsInternal1.Tables[0].Rows.Count > 0)
-        {
-            lvInter.DataSource = dsInternal1.Tables[0];
-            lvInter.DataBind();
-        }
-        else
-        {
-            lvInter.DataSource = null;
-            lvInter.DataBind();
-        }
-
-        int arrVal = 0;
-        string[] arr_TextBox = new string[] { "Label5", "Label6", "Label7", "Label8", "Label9", "Label10", "Label11", "Label12", "Label13", "Label14", "Label15", "Label16", "Label17", "Label18", "Label19", "Label20", "Label21", "Label22", "Label23", "Label24", "Label25", "Label26", "Label27", "Label28", "Label29", "Label30" };
-        int k = 0;
-        foreach (ListViewDataItem lvitem in lvInter.Items)
-        {
-            for (; k < dsInternal1.Tables[0].Rows.Count; )
+            StudentController objSC = new StudentController();
+            DataSet dsInternal = null;
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
-                for (int j = 0; j < dsInternal1.Tables[0].Columns.Count; j++)
+
+                dsInternal = objSC.GetDetailsOfInternalMarksHeader_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+            }
+            else
+            {
+
+                dsInternal = objSC.GetDetailsOfInternalMarksHeader_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+            }
+            ViewState["dshead"] = dsInternal;
+            DataTable dt = new DataTable();
+
+
+
+            if (dsInternal != null && dsInternal.Tables.Count > 0 && dsInternal.Tables[0].Rows.Count > 0)
+            {
+                dt = dsInternal.Tables[0];
+                DataRow[] dr = dt.Select("");
+                string str = string.Empty;
+                string str1 = string.Empty;
+                int td = 0;
+                int colcont = dsInternal.Tables[0].Columns.Count;
+                ViewState["colcount"] = colcont.ToString();
+                int rule1 = colcont + 2;//tbl_Rule1
+                // int rule1 = colcont
+                for (int i = 0; i < colcont; i++)
                 {
-                    if (Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) != "")
-                    {
-                        string CL = Convert.ToString(dsInternal1.Tables[0].Columns[j].ColumnName);
-                        ((Label)lvitem.FindControl(arr_TextBox[arrVal])).Text = Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) != "-1.00" ? Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) : "";
-                        // arrVal++;
-
-
-                        if (j + 2 > Convert.ToInt32(dsInternal1.Tables[0].Columns.Count))
-                        {
-                            arrVal = 0;
-                            break;
-                        }
-                    }
-                    arrVal++;
+                    str += "$('td:nth-child(1)').show();$('td:nth-child(2)').show();$('td:nth-child(3)').show();$('#tbl_Rule1').attr('colspan'," + rule1 + ");$('#th" + i + "').text('" + Convert.ToString(dr[0][i]).ToString() + "');$('#th" + i + "').text.length=='null'?$('#th" + i + "').hide():$('#th" + i + "').show();";
                 }
-                k++;
-                break;
-            }
-            arrVal = 0;
+                int z = 4;
+                for (int j = 0; j < colcont; j++)
+                {
 
+                    str1 += "$('#th" + (j) + "').text('" + Convert.ToString(dr[0][j]).ToString() + "');$('#th" + j + "').text.length==0?$('td:nth-child(" + z + ")').hide():$('td:nth-child(" + z + ")').show();";
+                    z++;
+                }
+
+                string str3 = str + str1;
+                ViewState["headerscript"] = str3.ToString();//str+str1.ToString();
+                ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "" + str3 + "", true);
+
+            }
+
+            else
+            {
+                lvInter.DataSource = null;
+                lvInter.DataBind();
+                lvInter.Items.Clear();
+            }
+            DataSet dsInternal1 = null;
+            if (Convert.ToInt32(Session["OrgId"]) == 2)
+            {
+                dsInternal1 = objSC.GetDetailsOfInternalMarks1_Subexam(idno, Convert.ToInt32(ddlSession.SelectedValue));
+            }
+            else
+            {
+                dsInternal1 = objSC.GetDetailsOfInternalMarks1_jecrc(idno, Convert.ToInt32(ddlSession.SelectedValue));
+            }
+            if (dsInternal1 != null && dsInternal1.Tables.Count > 0 && dsInternal1.Tables[0].Rows.Count > 0)
+            {
+                lvInter.DataSource = dsInternal1.Tables[0];
+                lvInter.DataBind();
+            }
+            else
+            {
+                lvInter.DataSource = null;
+                lvInter.DataBind();
+                lvInter.Items.Clear();
+            }
+
+            int arrVal = 0;
+            string[] arr_TextBox = new string[] { "Label5", "Label6", "Label7", "Label8", "Label9", "Label10", "Label11", "Label12", "Label13", "Label14", "Label15", "Label16", "Label17", "Label18", "Label19", "Label20", "Label21", "Label22", "Label23", "Label24", "Label25", "Label26", "Label27", "Label28", "Label29", "Label30" };
+            int k = 0;
+            foreach (ListViewDataItem lvitem in lvInter.Items)
+            {
+                if (dsInternal1.Tables[0].Rows.Count > 0)
+                {
+                    for (; k < dsInternal1.Tables[0].Rows.Count; )
+                    {
+                        for (int j = 0; j < dsInternal1.Tables[0].Columns.Count; j++)
+                        {
+                            if (Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) != "")
+                            {
+                                string CL = Convert.ToString(dsInternal1.Tables[0].Columns[j].ColumnName);
+                                ((Label)lvitem.FindControl(arr_TextBox[arrVal])).Text = Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) != "-1.00" ? Convert.ToString(dsInternal1.Tables[0].Rows[k][j]) : "";
+                                // arrVal++;
+
+
+                                if (j + 2 > Convert.ToInt32(dsInternal1.Tables[0].Columns.Count))
+                                {
+                                    arrVal = 0;
+                                    break;
+                                }
+                            }
+                            arrVal++;
+                        }
+                        k++;
+                        break;
+                    }
+                }
+                arrVal = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new IITMSException("ACADEMIC_Comprehensive_Stud_Report.getinternalmarks1-> " + ex.ToString());
         }
     }
 
@@ -1122,7 +1133,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     }
     public void BindListViewRevaluation()
     {
-       
+
         int idno = 0;
         if (Session["usertype"].ToString().Equals("2"))
         {
@@ -1153,26 +1164,26 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
         else if (orgid == 2)
         {
-            
-                DataSet dsreval1 = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(RadioButtonList1.SelectedValue));
-                if (dsreval1.Tables[0].Rows.Count > 0)
-                {
-                    pnlrevalresult.Visible = true;
-                    lvRevalDetails.DataSource = dsreval1;
-                    lvRevalDetails.DataBind();
-                }
-                else
-                {
-                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
-                    pnlrevalresult.Visible = false;
-                    lvRevalDetails.DataSource = null;
-                    lvRevalDetails.DataBind();
-                }
-           
-         
+
+            DataSet dsreval1 = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(RadioButtonList1.SelectedValue));
+            if (dsreval1.Tables[0].Rows.Count > 0)
+            {
+                pnlrevalresult.Visible = true;
+                lvRevalDetails.DataSource = dsreval1;
+                lvRevalDetails.DataBind();
+            }
+            else
+            {
+                // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                pnlrevalresult.Visible = false;
+                lvRevalDetails.DataSource = null;
+                lvRevalDetails.DataBind();
+            }
+
+
 
         }
-       
+
 
 
     }
@@ -1230,7 +1241,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                     {
 
                         DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
-    //added by lalit remove regarding ticket no 48549  // DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                        //added by lalit remove regarding ticket no 48549  // DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
                         if (ds.Tables[0].Rows.Count > 0)
                         {
                             pnlCollege.Visible = true;
@@ -1537,7 +1548,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             }
             else if (orgid == 8)  //Added by lalit on dated 
             {
-                int Count=0;
+                int Count = 0;
                 string proc_name = "PKG_CHECK_STATUS_FOR_FEEDBACK_IN_STUDENT_LOGIN";
                 string parameter = "@P_IDNO,@P_SEMESTERNO";
                 string Call_values = "" + idno + "," + Convert.ToInt32(rdolistSemester.SelectedValue) + "";
@@ -1548,7 +1559,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
                 int schemeno = Convert.ToInt32(objCommon.LookUp("acd_student", "schemeno", "idno=" + idno + ""));
                 int coursecount = Convert.ToInt32(objCommon.LookUp("acd_course", "Count(courseno) ", "schemeno=" + schemeno + " and semesterno=" + Convert.ToInt32(rdolistSemester.SelectedValue) + ""));
-                int countfeedback = Convert.ToInt32(objCommon.LookUp("acd_online_feedback", "count(*)", "sessionno=" + Convert.ToInt32(ddlSession.SelectedValue)+ ""));
+                int countfeedback = Convert.ToInt32(objCommon.LookUp("acd_online_feedback", "count(*)", "sessionno=" + Convert.ToInt32(ddlSession.SelectedValue) + ""));
                 if (countfeedback > 0)
                 {
                     if (Count == coursecount)
@@ -2200,9 +2211,9 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                     }
                 }
                 else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
-                    {
+                {
                     this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                    }
+                }
 
 
 
@@ -2640,9 +2651,9 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     }
 
     private void ShowReport_ForCash_PCEN(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
-        {
+    {
         try
-            {
+        {
             //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -2663,13 +2674,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.pnlPopUp, this.pnlPopUp.GetType(), "controlJSScript", sb.ToString(), true);
-            }
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
-            }
         }
+    }
 }
