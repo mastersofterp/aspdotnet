@@ -47,8 +47,8 @@
                         <div class="col-12 btn-footer">
                             <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="show"
                                 OnClick="btnShow_Click" ToolTip="Click here to Show User Type" TabIndex="2" />
-                                                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false"
-                                                                    OnClick="btnCancel_Click" ToolTip="Click here to Reset" TabIndex="3" />
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false"
+                                OnClick="btnCancel_Click" ToolTip="Click here to Reset" TabIndex="3" />
                             <asp:Button ID="btnReport" runat="server" Text="Report" CssClass="btn btn-info" TabIndex="4"
                                 OnClick="btnReport_Click" Visible="false" ToolTip="Click here to Show Report" />
                             <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
@@ -72,8 +72,9 @@
                                         <asp:ListView ID="lvUsers" runat="server">
                                             <LayoutTemplate>
                                                 <div id="lgv1">
-                                                    <h4 class="box-title">User List
-                                                    </h4>
+                                                    <div class="sub-heading">
+                                                        <h5>User List</h5>
+                                                    </div>
                                                     <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
                                                         <thead class="bg-light-blue">
                                                             <tr>
@@ -119,7 +120,7 @@
 
         </div>
     </div>
- 
+
 
     <script language="javascript" type="text/javascript">
         function totAllSubjects(headchk) {
@@ -147,13 +148,13 @@
         function validateAssign() {
             var hdfTot = document.getElementById('<%= hdfTot.ClientID %>').value;
 
-                            if (hdfTot == 0) {
-                                alert('Please Select Atleast One User from User List');
-                                return false;
-                            }
-                            else
-                                return true;
-                        }
+            if (hdfTot == 0) {
+                alert('Please Select Atleast One User from User List');
+                return false;
+            }
+            else
+                return true;
+        }
     </script>
 
     <script language="javascript" type="text/javascript">

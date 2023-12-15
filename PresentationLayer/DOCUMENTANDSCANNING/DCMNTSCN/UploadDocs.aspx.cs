@@ -25,6 +25,8 @@ using IITMS.SQLServer.SQLDAL;
 using System.Configuration;
 using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
 using System.Linq;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 
 public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
@@ -98,8 +100,9 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
                 //GetFilesList(directoryPath);
                 //FillDept();
                 pnlButton.Visible = false;
-            }
 
+            }
+            BlobDetails();
             //delete previous override files if any.
             //DirectoryInfo dInfo = new DirectoryInfo(Server.MapPath("~/DOCUMENTANDSCANNING/fileupload_overide/"));
             //    FileInfo[] fInfo = dInfo.GetFiles();
@@ -296,8 +299,20 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
             obj.KEYWORD = Convert.ToString(txtKeyword.Text.Trim());
             obj.TITLE = Convert.ToString(txtTitle.Text.Trim());
             obj.SHARED = chkId.Checked ? Convert.ToChar('Y') : Convert.ToChar('N');
-            obj.AttachTable = (Session["Attachments"]) as DataTable;
+            // obj.AttachTable = (Session["Attachments"]) as DataTable;
 
+            if (lblBlobConnectiontring.Text == "")
+            {
+                obj.IS_BLOB = 0;
+            }
+            else
+            {
+                obj.IS_BLOB = 1;
+            }
+            if (obj.IS_BLOB == 1)
+            {
+                obj.AttachTable = (Session["Attachments"]) as DataTable;
+            }
             obj.UA_NO = Convert.ToInt32(Session["userno"].ToString());
             Session["obj"] = obj;
 
@@ -389,7 +404,7 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
                         Session["obje"] = obje;
                     }
 
-                    // CustomStatus cs = (CustomStatus)objC.AddFile(obj);
+                    CustomStatus cs = (CustomStatus)objC.AddFile(obj);
                     // }
                     // }
                     // }
@@ -412,7 +427,7 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
 
                         obj.UPLNO = Convert.ToInt32(Session["UPLNO"].ToString());
                         int no = Convert.ToInt32(objC.UpdateDocument(obj));
-
+                        CustomStatus cse = (CustomStatus)objC.AddFile(obj);
 
                         #region
                         //HttpFileCollection files = Request.Files;
@@ -619,21 +634,68 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
                 {
 
                     DataRow dr = dt.NewRow();
-                    dr["ATTACH_ID"] = d.Tables[0].Rows[j]["ATTACH_ID"];
+                    dr["IDNO"] = d.Tables[0].Rows[j]["IDNO"];
 
-                    dr["ORIGINAL_FILENAME"] = d.Tables[0].Rows[j]["FILE_NAME"].ToString();
-                    dr["FILE_PATH"] = d.Tables[0].Rows[j]["FILE_PATH"].ToString();
+                    dr["ORIGINAL_FILENAME"] = d.Tables[0].Rows[j]["ORIGINAL_FILENAME"].ToString();
+                    dr["FILEPATH"] = d.Tables[0].Rows[j]["FILE_PATH"].ToString();
                     dr["SIZE"] = d.Tables[0].Rows[j]["SIZE"];
+                    dr["UA_NO"] = d.Tables[0].Rows[j]["UA_NO"];
                     dt.Rows.Add(dr);
                     Session["Attachments"] = dt;
                     this.BindListView_Attachments(dt);
                 }
+                if (dt.Rows.Count > 0)
+                {
+                    int blob;
+                    blob = Convert.ToInt32(objCommon.FillDropDown("ADMN_DC_DOCUMENT_UPLOAD", "ISBLOB", "", "UPLNO='" + Convert.ToInt32(UPLNO) + "'", ""));
+
+
+                    if (blob == 1)
+                    {
+                        Control ctrHeader = lvAttach.FindControl("divBlobDownload");
+                        Control ctrHead1 = lvAttach.FindControl("divattachblob");
+                        Control ctrhead2 = lvAttach.FindControl("divattach");
+                        ctrHeader.Visible = true;
+                        ctrHead1.Visible = true;
+                        ctrhead2.Visible = false;
+
+                        foreach (ListViewItem lvRow in lvAttach.Items)
+                        {
+                            Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                            Control ckattach = (Control)lvRow.FindControl("attachfile");
+                            Control attachblob = (Control)lvRow.FindControl("attachblob");
+                            ckBox.Visible = true;
+                            attachblob.Visible = true;
+                            ckattach.Visible = false;
+
+                        }
+                    }
+                    else
+                    {
+
+
+
+                        Control ctrHeader = lvAttach.FindControl("divDownload");
+
+                        ctrHeader.Visible = false;
+
+
+                        foreach (ListViewItem lvRow in lvAttach.Items)
+                        {
+                            Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+
+                            ckBox.Visible = false;
+
+                        }
+                    }
+
+                }
 
             }
-            else
+            else 
             {
-                lvAttachments.DataSource = null;
-                lvAttachments.DataBind();
+                lvAttach.DataSource = null;
+                lvAttach.DataBind();
             }
             LVCATDOC.Visible = false;
         }
@@ -669,8 +731,8 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
         chkId.Checked = false;
         ddlCategory.SelectedIndex = 0;
         ftbDescription.Text = string.Empty;
-        lvAttachments.DataSource = null;
-        lvAttachments.DataBind();
+        lvAttach.DataSource = null;
+        lvAttach.DataBind();
         //chkLstDept .DataSource = null;
         //chkLstDept .DataBind();
         lbl.Text = "";
@@ -697,6 +759,8 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
         LVCATDOC.DataBind();
         pnlButton.Visible = false;
         lnkAdd.Visible = true;
+        lvAttach.DataSource = null;
+        lvAttach.DataBind();
     }
 
     //UPLOAD FILES
@@ -855,8 +919,8 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
         }
         lbl.Text = "Path : " + path1;
         BindDocCategorywise(Convert.ToInt32(ddlCategory.SelectedValue));
-        lvAttachments.DataSource = null;
-        lvAttachments.DataBind();
+        lvAttach.DataSource = null;
+        lvAttach.DataBind();
         LVCATDOC.Visible = true;
     }
 
@@ -894,7 +958,7 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
         {
             foreach (DataRow dr in dt.Rows)
             {
-                if (dr["ATTACH_ID"].ToString() == value)
+                if (dr["UA_NO"].ToString() == value)
                 {
                     dataRow = dr;
                     break;
@@ -1023,13 +1087,217 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
     }
 
 
+    //protected void btnAttachFile_Click(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        bool result;
+
+
+
+    //        GetAttachmentSize();
+
+    //        string filename = string.Empty;
+    //        string FilePath = string.Empty;
+    //        string time = DateTime.Now.ToString("MMddyyyyhhmmssfff");
+
+    //        if (FileUpload10.HasFile)
+    //        {
+
+    //            string DOCFOLDER = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD";
+
+    //            if (!System.IO.Directory.Exists(DOCFOLDER))
+    //            {
+    //                System.IO.Directory.CreateDirectory(DOCFOLDER);
+
+    //            }
+    //            string fileName = System.Guid.NewGuid().ToString() + FileUpload10.FileName.Substring(FileUpload10.FileName.IndexOf('.'));
+
+    //            string contentType = contentType = FileUpload10.PostedFile.ContentType;
+    //            string ext = System.IO.Path.GetExtension(FileUpload10.PostedFile.FileName);
+
+    //            HttpPostedFile file = FileUpload10.PostedFile;
+
+
+    //            filename = filename + time;
+
+    //            obj.ATTACHMENT = filename;
+    //            obj.FILEPATH = FileUpload10.FileName;
+
+
+    //            int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "' AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + ""));
+
+    //            DataSet dsPURPOSE = new DataSet();
+
+    //            //dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "", "", "");
+
+    //            if (count != 0)
+    //            {
+    //                string filePath = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
+
+
+    //                if (FileUpload10.PostedFile.ContentLength < File_size)
+    //                {
+    //                    FileUpload10.SaveAs(filePath);
+
+    //                    string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+    //                    string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+    //                    result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+    //                    if (result == true)
+    //                    {
+
+    //                        int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, filename, FileUpload10);
+    //                        if (retval == 0)
+    //                        {
+    //                            ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
+    //                            return;
+    //                        }
+
+    //                        obj.FILEPATH = FileUpload10.FileName;
+
+
+    //                    }
+    //                    else
+    //                    {
+    //                        obj.FILEPATH = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
+
+    //                    }
+
+    //                }
+    //                else
+    //                {
+    //                    objCommon.DisplayMessage("Unable to upload file. Size of uploaded file is greater than maximum upload size allowed.", this);
+    //                    return;
+    //                }
+
+    //                DataTable dt;
+    //                int maxVal = 0;
+
+    //                if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
+    //                {
+    //                    dt = ((DataTable)Session["Attachments"]);
+    //                    DataRow dr = dt.NewRow();
+
+    //                    if (dt != null && dt.Rows.Count > 0)
+    //                    {
+    //                        // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+    //                        if (dt != null)
+    //                        {
+    //                            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
+    //                        }
+    //                        dr["ATTACH_ID"] = maxVal + 1;
+    //                        if (result == true)
+    //                        {
+    //                            dr["ORIGINAL_FILENAME"] = filename + ext;
+    //                        }
+    //                        else
+    //                        {
+    //                            dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
+    //                        }
+
+    //                        dr["FILE_PATH"] = obj.FILEPATH;
+    //                        dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
+    //                        //  dr["UPLNO"] = 0;
+
+    //                        // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
+    //                        dt.Rows.Add(dr);
+    //                        Session["Attachments"] = dt;
+    //                        this.BindListView_Attachments(dt);
+
+    //                    }
+    //                    else
+    //                    {
+    //                        dt = this.GetAttachmentDataTable();
+    //                        dr = dt.NewRow();
+    //                        //dr["ATTACH_ID"] = dt.Rows.Count + 1;
+    //                        if (dt != null)
+    //                        {
+    //                            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
+    //                        }
+    //                        dr["ATTACH_ID"] = maxVal + 1;
+    //                        if (result == true)
+    //                        {
+    //                            dr["ORIGINAL_FILENAME"] = filename + ext;
+    //                        }
+    //                        else
+    //                        {
+    //                            dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
+    //                        }
+    //                        dr["FILE_PATH"] = obj.FILEPATH;
+    //                        dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
+    //                        //  dr["UPLNO"] = 0;
+
+    //                        // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
+    //                        dt.Rows.Add(dr);
+    //                        Session.Add("Attachments", dt);
+    //                        this.BindListView_Attachments(dt);
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    dt = this.GetAttachmentDataTable();
+    //                    DataRow dr = dt.NewRow();
+    //                    // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+    //                    if (dt != null)
+    //                    {
+    //                        maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
+    //                    }
+    //                    dr["ATTACH_ID"] = maxVal + 1;
+    //                    if (result == true)
+    //                    {
+    //                        dr["ORIGINAL_FILENAME"] = filename + ext;
+    //                    }
+    //                    else
+    //                    {
+    //                        dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
+    //                    }
+    //                    dr["FILE_PATH"] = obj.FILEPATH;
+    //                    dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
+    //                    //  dr["UPLNO"] = 0;
+
+    //                    // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
+    //                    dt.Rows.Add(dr);
+    //                    Session.Add("Attachments", dt);
+    //                    this.BindListView_Attachments(dt);
+    //                }
+    //            }
+    //            // else
+    //            // {
+    //            //    string Extension = "";
+    //            //    for (int i = 0; i < dsPURPOSE.Tables[0].Rows.Count; i++)
+    //            //    {
+    //            //        if (Extension == "")
+    //            //            Extension = dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+    //            //        else
+    //            //            Extension = Extension + ", " + dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+    //            //    }
+    //            //    objCommon.DisplayMessage("Upload Supported File Format.Please Upload File In " + Extension, this);
+    //            //  }
+    //        }
+    //        else
+    //        {
+    //            objCommon.DisplayMessage("Please select a file to attach.", this);
+    //        }
+    //    }
+
+
+    //    catch (Exception ex)
+    //    {
+    //        if (Convert.ToBoolean(Session["error"]) == true)
+    //            objUCommon.ShowError(Page, "assignmentMaster.btnAttachFile_Click() --> " + ex.Message + " " + ex.StackTrace);
+    //        else
+    //            objUCommon.ShowError(Page, "Server Unavailable.");
+    //    }
+    //}
+
+
+
     protected void btnAttachFile_Click(object sender, EventArgs e)
     {
         try
         {
             bool result;
-
-
 
             GetAttachmentSize();
 
@@ -1042,17 +1310,17 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
 
                 string DOCFOLDER = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD";
 
-                if (!System.IO.Directory.Exists(DOCFOLDER))
-                {
-                    System.IO.Directory.CreateDirectory(DOCFOLDER);
+                //if (!System.IO.Directory.Exists(DOCFOLDER))
+                //{
+                //    System.IO.Directory.CreateDirectory(DOCFOLDER);
 
-                }
+                //}
                 string fileName = System.Guid.NewGuid().ToString() + FileUpload10.FileName.Substring(FileUpload10.FileName.IndexOf('.'));
 
                 string contentType = contentType = FileUpload10.PostedFile.ContentType;
                 string ext = System.IO.Path.GetExtension(FileUpload10.PostedFile.FileName);
 
-                HttpPostedFile file = FileUpload10.PostedFile;
+
 
 
                 filename = filename + time;
@@ -1061,125 +1329,67 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
                 obj.FILEPATH = FileUpload10.FileName;
 
 
-                int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "' AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]) + ""));
+                // int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "'"));
 
                 DataSet dsPURPOSE = new DataSet();
 
                 //dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "", "", "");
 
-                if (count != 0)
+
+
+                string filePath = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
+
+
+                //if (FileUpload10.PostedFile.ContentLength < File_size)
+                //{
+                //  FileUpload10.SaveAs(filePath);
+
+                string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+                string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+                result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
+
+                if (result == true)
                 {
-                    string filePath = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
 
-
-                    if (FileUpload10.PostedFile.ContentLength < File_size)
+                    int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, filename, FileUpload10);
+                    if (retval == 0)
                     {
-                        FileUpload10.SaveAs(filePath);
-
-                        string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
-                        string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
-                        result = objBlob.CheckBlobExists(blob_ConStr, blob_ContainerName);
-
-                        if (result == true)
-                        {
-
-                            int retval = objBlob.Blob_Upload(blob_ConStr, blob_ContainerName, filename, FileUpload10);
-                            if (retval == 0)
-                            {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
-                                return;
-                            }
-
-                            obj.FILEPATH = FileUpload10.FileName;
-
-
-                        }
-                        else
-                        {
-                            obj.FILEPATH = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
-
-                        }
-
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage("Unable to upload file. Size of uploaded file is greater than maximum upload size allowed.", this);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Alert", "alert('Unable to upload...Please try again...');", true);
                         return;
                     }
 
-                    DataTable dt;
-                    int maxVal = 0;
+                    obj.FILEPATH = FileUpload10.FileName;
 
-                    if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
+
+                }
+                else
+                {
+                    obj.FILEPATH = file_path + "DOCUMENTANDSCANNING\\FILEUPLOAD" + fileName;
+                    HttpPostedFile file = FileUpload10.PostedFile;
+                }
+
+                //}
+                //else
+                //{
+                //    objCommon.DisplayMessage("Unable to upload file. Size of uploaded file is greater than maximum upload size allowed.", this);
+                //    return;
+                //}
+
+                DataTable dt;
+                int maxVal = 0;
+
+                if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
+                {
+                    dt = ((DataTable)Session["Attachments"]);
+                    DataRow dr = dt.NewRow();
+
+                    if (dt != null && dt.Rows.Count > 0)
                     {
-                        dt = ((DataTable)Session["Attachments"]);
-                        DataRow dr = dt.NewRow();
-
-                        if (dt != null && dt.Rows.Count > 0)
-                        {
-                            // dr["ATTACH_ID"] = dt.Rows.Count + 1;
-                            if (dt != null)
-                            {
-                                maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
-                            }
-                            dr["ATTACH_ID"] = maxVal + 1;
-                            if (result == true)
-                            {
-                                dr["ORIGINAL_FILENAME"] = filename + ext;
-                            }
-                            else
-                            {
-                                dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
-                            }
-
-                            dr["FILE_PATH"] = obj.FILEPATH;
-                            dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
-                            //  dr["UPLNO"] = 0;
-
-                            // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
-                            dt.Rows.Add(dr);
-                            Session["Attachments"] = dt;
-                            this.BindListView_Attachments(dt);
-
-                        }
-                        else
-                        {
-                            dt = this.GetAttachmentDataTable();
-                            dr = dt.NewRow();
-                            //dr["ATTACH_ID"] = dt.Rows.Count + 1;
-                            if (dt != null)
-                            {
-                                maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
-                            }
-                            dr["ATTACH_ID"] = maxVal + 1;
-                            if (result == true)
-                            {
-                                dr["ORIGINAL_FILENAME"] = filename + ext;
-                            }
-                            else
-                            {
-                                dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
-                            }
-                            dr["FILE_PATH"] = obj.FILEPATH;
-                            dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
-                            //  dr["UPLNO"] = 0;
-
-                            // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
-                            dt.Rows.Add(dr);
-                            Session.Add("Attachments", dt);
-                            this.BindListView_Attachments(dt);
-                        }
-                    }
-                    else
-                    {
-                        dt = this.GetAttachmentDataTable();
-                        DataRow dr = dt.NewRow();
-                        // dr["ATTACH_ID"] = dt.Rows.Count + 1;
-                        if (dt != null)
-                        {
-                            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["ATTACH_ID"]));
-                        }
-                        dr["ATTACH_ID"] = maxVal + 1;
+                        dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString());
+                        dr["UPLNO"] = Convert.ToInt32(Session["UPLNO"]);
+                        dr["FILENAME"] = filename;
+                        dr["FILEPATH"] = obj.FILEPATH;
+                        dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
                         if (result == true)
                         {
                             dr["ORIGINAL_FILENAME"] = filename + ext;
@@ -1188,16 +1398,88 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
                         {
                             dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
                         }
-                        dr["FILE_PATH"] = obj.FILEPATH;
-                        dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
-                        //  dr["UPLNO"] = 0;
+                        // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        if (dt != null)
+                        {
+                            // maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        }
+                        dr["UA_NO"] = maxVal + 1;
 
-                        // dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString()); ;
                         dt.Rows.Add(dr);
-                        Session.Add("Attachments", dt);
+                        Session["Attachments"] = dt;
+                        this.BindListView_Attachments(dt);
+
+                    }
+                    else
+                    {
+                        dt = this.GetAttachmentDataTable();
+                        dr = dt.NewRow();
+                        //dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        if (dt != null)
+                        {
+                            maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        }
+
+                        dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString());
+                        dr["UPLNO"] = Convert.ToInt32(Session["UPLNO"]);
+                        dr["FILENAME"] = filename;
+                        dr["FILEPATH"] = obj.FILEPATH;
+                        dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
+                        if (result == true)
+                        {
+                            dr["ORIGINAL_FILENAME"] = filename + ext;
+                        }
+                        else
+                        {
+                            dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
+                        }
+                        // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                        if (dt != null)
+                        {
+                            //maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                        }
+                        dr["UA_NO"] = maxVal + 1;
+
+                        dt.Rows.Add(dr);
+                        Session["Attachments"] = dt;
                         this.BindListView_Attachments(dt);
                     }
                 }
+                else
+                {
+                    dt = this.GetAttachmentDataTable();
+                    DataRow dr = dt.NewRow();
+                    // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                    if (dt != null)
+                    {
+                        maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                    }
+
+                    dr["IDNO"] = Convert.ToInt32(Session["userno"].ToString());
+                    dr["UPLNO"] = Convert.ToInt32(Session["UPLNO"]);
+                    dr["FILENAME"] = filename;
+                    dr["FILEPATH"] = obj.FILEPATH;
+                    dr["SIZE"] = (FileUpload10.PostedFile.ContentLength);
+                    if (result == true)
+                    {
+                        dr["ORIGINAL_FILENAME"] = filename + ext;
+                    }
+                    else
+                    {
+                        dr["ORIGINAL_FILENAME"] = FileUpload10.FileName;
+                    }
+                    // dr["ATTACH_ID"] = dt.Rows.Count + 1;
+                    if (dt != null)
+                    {
+                        //maxVal = Convert.ToInt32(dt.AsEnumerable().Max(row => row["UA_NO"]));
+                    }
+                    dr["UA_NO"] = maxVal + 1;
+
+                    dt.Rows.Add(dr);
+                    Session["Attachments"] = dt;
+                    this.BindListView_Attachments(dt);
+                }
+
                 // else
                 // {
                 //    string Extension = "";
@@ -1227,58 +1509,96 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
         }
     }
 
+
+
     private void BindListView_Attachments(DataTable dt)
     {
+
+        #region
+        //divAttch.Style["display"] = "block";
+        // lvCompAttach.DataSource = dt;
+        // lvCompAttach.DataBind();
+
+
+        //if (lblBlobConnectiontring.Text != "")
+        //{
+        //    Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
+        //    Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
+        //    Control ctrhead2 = lvCompAttach.FindControl("divattach");
+        //    ctrHeader.Visible = true;
+        //    ctrHead1.Visible = true;
+        //    ctrhead2.Visible = false;
+
+        //    foreach (ListViewItem lvRow in lvCompAttach.Items)
+        //    {
+        //        Control ckBox = (Control)lvRow.FindControl("tdBlob");
+        //        Control ckattach = (Control)lvRow.FindControl("attachfile");
+        //        Control attachblob = (Control)lvRow.FindControl("attachblob");
+        //        ckBox.Visible = true;
+        //        attachblob.Visible = true;
+        //        ckattach.Visible = false;
+
+        //    }
+        //}
+        //else
+        //{
+
+
+
+        //    Control ctrHeader = lvCompAttach.FindControl("divDownload");
+        //    ctrHeader.Visible = false;
+
+        //    foreach (ListViewItem lvRow in lvCompAttach.Items)
+        //    {
+        //        Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+        //        ckBox.Visible = false;
+
+        //    }
+        //}
+        #endregion
+
+        //lvAttach.DataSource = dt;
+        //lvAttach.DataBind();
+
+
         try
         {
-            #region
-            //divAttch.Style["display"] = "block";
-            // lvCompAttach.DataSource = dt;
-            // lvCompAttach.DataBind();
+            divAttch.Style["display"] = "block";
+            lvAttach.DataSource = dt;
+            lvAttach.DataBind();
 
 
-            //if (lblBlobConnectiontring.Text != "")
-            //{
-            //    Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
-            //    Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
-            //    Control ctrhead2 = lvCompAttach.FindControl("divattach");
-            //    ctrHeader.Visible = true;
-            //    ctrHead1.Visible = true;
-            //    ctrhead2.Visible = false;
+            if (lblBlobConnectiontring.Text != "")
+            {
+                Control ctrHeader = lvAttach.FindControl("divBlobDownload");
+                Control ctrHead1 = lvAttach.FindControl("divattachblob");
+                Control ctrhead2 = lvAttach.FindControl("divattach");
+                ctrHeader.Visible = true;
+                ctrHead1.Visible = true;
+                ctrhead2.Visible = false;
 
-            //    foreach (ListViewItem lvRow in lvCompAttach.Items)
-            //    {
-            //        Control ckBox = (Control)lvRow.FindControl("tdBlob");
-            //        Control ckattach = (Control)lvRow.FindControl("attachfile");
-            //        Control attachblob = (Control)lvRow.FindControl("attachblob");
-            //        ckBox.Visible = true;
-            //        attachblob.Visible = true;
-            //        ckattach.Visible = false;
+                foreach (ListViewItem lvRow in lvAttach.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                    Control ckattach = (Control)lvRow.FindControl("attachfile");
+                    Control attachblob = (Control)lvRow.FindControl("attachblob");
+                    ckBox.Visible = true;
+                    attachblob.Visible = true;
+                    ckattach.Visible = false;
 
-            //    }
-            //}
-            //else
-            //{
+                }
+            }
+            else
+            {
+                Control ctrHeader = lvAttach.FindControl("divDownload");
+                ctrHeader.Visible = false;
 
-
-
-            //    Control ctrHeader = lvCompAttach.FindControl("divDownload");
-            //    ctrHeader.Visible = false;
-
-            //    foreach (ListViewItem lvRow in lvCompAttach.Items)
-            //    {
-            //        Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
-            //        ckBox.Visible = false;
-
-            //    }
-            //}
-            #endregion
-
-            lvAttachments.DataSource = dt;
-            lvAttachments.DataBind();
-
-
-
+                foreach (ListViewItem lvRow in lvAttach.Items)
+                {
+                    Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+                    ckBox.Visible = false;
+                }
+            }
 
         }
         catch (Exception ex)
@@ -1288,17 +1608,171 @@ public partial class DCMNTSCN_UploadDocs : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
+
     }
+
+
 
     private DataTable GetAttachmentDataTable()
     {
         DataTable dt = new DataTable();
-        dt.Columns.Add(new DataColumn("ATTACH_ID", typeof(int)));
-        dt.Columns.Add(new DataColumn("ORIGINAL_FILENAME", typeof(string)));
-        dt.Columns.Add(new DataColumn("FILE_PATH", typeof(string)));
+        dt.Columns.Add(new DataColumn("IDNO", typeof(int)));
+        dt.Columns.Add(new DataColumn("UPLNO", typeof(int)));
+        dt.Columns.Add(new DataColumn("FILENAME", typeof(string)));
+        dt.Columns.Add(new DataColumn("FILEPATH", typeof(string)));
         dt.Columns.Add(new DataColumn("SIZE", typeof(int)));
-        // dt.Columns.Add(new DataColumn("IDNO", typeof(int)));
-        //   dt.Columns.Add(new DataColumn("UPLNO", typeof(int)));
+        dt.Columns.Add(new DataColumn("ORIGINAL_FILENAME", typeof(string)));
+        dt.Columns.Add(new DataColumn("UA_NO", typeof(int)));
         return dt;
+    }
+
+
+    protected void lnkRemoveAttach_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            LinkButton btnRemove = sender as LinkButton;
+
+            int fileId = int.Parse(btnRemove.CommandArgument);
+
+            DataTable dt;
+            if (Session["Attachments"] != null && ((DataTable)Session["Attachments"]) != null)
+            {
+                dt = ((DataTable)Session["Attachments"]);
+                dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
+                Session["Attachments"] = dt;
+                this.BindListView_Attachments(dt);
+            }
+
+            //to permanently delete from database in case of Edit
+            if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
+            {
+
+                string count = objCommon.LookUp("ADMN_DC_DOCUMENT_FILE", "UPLNO,UA_NO", "UPLNO =" + Convert.ToInt32(Session["UPLNO"]) + "AND UA_NO =" + Convert.ToInt32(fileId));
+                if (count != "")
+                {
+                    int cs = objCommon.DeleteClientTableRow("ADMN_DC_DOCUMENT_FILE", "UPLNO =" + Convert.ToInt32(Session["UPLNO"]) + "AND UA_NO=" + Convert.ToInt32(fileId));
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "Documentandscanning";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+
+    protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+            string directoryName = "~/DOCUMENTANDSCANNING" + "/";
+            directoryPath = Server.MapPath(directoryName);
+
+            if (!Directory.Exists(directoryPath.ToString()))
+            {
+
+                Directory.CreateDirectory(directoryPath.ToString());
+            }
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"600px\" height=\"400px\">";
+                embed += "If you are unable to view file, you can download from <a target = \"_blank\" href = \"{0}\">here</a>";
+                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+                embed += "</object>";
+                // ltEmbed.Text = "Image Not Found....!";
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+
+                string filePath = directoryPath + ImageName;
+
+                if ((System.IO.File.Exists(filePath)))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+                string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
+                embed += "If you are unable to view file, you can download from <a target = \"_blank\" href = \"{0}\">here</a>";
+                embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
+                embed += "</object>";
+                ltEmbed.Text = string.Format(embed, ResolveUrl("~/DOCUMENTANDSCANNING/" + ImageName));
+
+                hdnfilename.Value = filePath;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    protected void BTNCLOSEData_Click(object sender, EventArgs e)
+    {
+        string directoryPath = Server.MapPath("~/DOCUMENTANDSCANNING/");
+
+        if (Directory.Exists(directoryPath))
+        {
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (string file in files)
+            {
+                if (file == hdnfilename.Value)
+                {
+                    File.Delete(file);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "CloseModal();", true);
+                }
+            }
+        }
     }
 }

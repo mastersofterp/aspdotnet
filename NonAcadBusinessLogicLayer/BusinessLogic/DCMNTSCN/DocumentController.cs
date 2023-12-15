@@ -35,7 +35,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[9];
+                        objParams = new SqlParameter[10];
                         objParams[0] = new SqlParameter("@P_TITLE", objC.TITLE);
                         objParams[1] = new SqlParameter("@P_UA_NO", objC.UA_NO);
                         objParams[2] = new SqlParameter("@P_DNO", objC.DNO);
@@ -45,8 +45,9 @@ namespace IITMS
                         objParams[6] = new SqlParameter("@P_COLLEGE_CODE", objC.COLLEGE_CODE);
                         objParams[7] = new SqlParameter("@P_ATTACH_TABLE", objC.AttachTable);
                         //objParams[7] = new SqlParameter("@P_ALLOW_DEPTS", objC.DEPARTMENTS );
-                        objParams[8] = new SqlParameter("@P_UPLNO", SqlDbType.Int);
-                        objParams[8].Direction = ParameterDirection.Output;
+                        objParams[8] = new SqlParameter("@P_ISBLOB", objC.IS_BLOB);
+                        objParams[9] = new SqlParameter("@P_UPLNO", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
                         object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_DOCUMENT_UPLOAD_INSERT", objParams, true);
 
                         retStatus = Convert.ToInt32(obj);
@@ -112,15 +113,17 @@ namespace IITMS
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[7];
-                        objParams[0] = new SqlParameter("@P_FILENAME", obj.FILENAME);
-                        objParams[1] = new SqlParameter("@P_SIZE", obj.SIZE);
-                        objParams[2] = new SqlParameter("@P_UA_NO", obj.UA_NO);
-                        objParams[3] = new SqlParameter("@P_FILEPATH", obj.FILE_PATH);
-                        objParams[4] = new SqlParameter("@P_ORIGINAL_FILENAME", obj.ORIGINAL_FILENAME);
-                        objParams[5] = new SqlParameter("@P_UPLNO", obj.UPLNO);
-                        objParams[6] = new SqlParameter("@P_IDNO", SqlDbType.Int);
-                        objParams[6].Direction = ParameterDirection.Output;
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        //objParams[0] = new SqlParameter("@P_FILENAME", obj.FILENAME);
+                        //objParams[1] = new SqlParameter("@P_SIZE", obj.SIZE);
+                        //objParams[2] = new SqlParameter("@P_UA_NO", obj.UA_NO);
+                        //objParams[3] = new SqlParameter("@P_FILEPATH", obj.FILE_PATH);
+                        //objParams[4] = new SqlParameter("@P_ORIGINAL_FILENAME", obj.ORIGINAL_FILENAME);
+                        //objParams[5] = new SqlParameter("@P_UPLNO", obj.UPLNO);
+                        //objParams[6] = new SqlParameter("@P_IDNO", SqlDbType.Int);
+                        objParams[0] = new SqlParameter("@P_ATTACH_TABLE", obj.AttachTable);
+                        objParams[1] = new SqlParameter("@P_IDNO", SqlDbType.Int);
+                        objParams[1].Direction = ParameterDirection.Output;
                         object objc = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_DOCUMENT_FILE_INSERT", objParams, true);
 
                         if (objc != null && obj.ToString().Equals("-99"))
@@ -311,7 +314,7 @@ namespace IITMS
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[9];
+                        SqlParameter[] objParams = new SqlParameter[10];
                         objParams[0] = new SqlParameter("@P_TITLE", obj.TITLE);
                         objParams[1] = new SqlParameter("@P_UA_NO", obj.UA_NO);
                         objParams[2] = new SqlParameter("@P_DNO", obj.DNO);
@@ -320,10 +323,10 @@ namespace IITMS
                         objParams[5] = new SqlParameter("@P_SHARE", obj.SHARED);
                         objParams[6] = new SqlParameter("@P_UPLNO", obj.UPLNO);
                         //objParams[7] = new SqlParameter("@P_ALLOW_DEPTS", obj.DEPARTMENTS );
-
-                        objParams[7] = new SqlParameter("@P_ATTACH_TABLE", obj.AttachTable);
-                        objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[8].Direction = ParameterDirection.Output;
+                        objParams[7] = new SqlParameter("@P_ISBLOB", obj.IS_BLOB);
+                        objParams[8] = new SqlParameter("@P_ATTACH_TABLE", obj.AttachTable);
+                        objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[9].Direction = ParameterDirection.Output;
                         object objc = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_DOCUMENT_UPLOAD_UPDATE", objParams, true);
                         retstatus = Convert.ToInt32(objc);
                     }
@@ -522,6 +525,25 @@ namespace IITMS
                         throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.DocumentController.RetrieveDocumentByCategory-> " + ex.ToString());
                     }
                     return ds;
+                }
+
+
+              //added method by khushabu 13-12-2023
+                public DataTableReader RetriveFileData(int UPLNO)
+                {
+                    DataTableReader dtr = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UPLNO", UPLNO);
+                        dtr = objSQLHelper.ExecuteDataSetSP("PKG_ADMN_DOCUMENT_RETRIVE_DOCUMENET_BY_UANO", objParams).Tables[0].CreateDataReader();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                    return dtr;
                 }
             }
         }
