@@ -235,32 +235,42 @@ public partial class ACADEMIC_ExtraClassTT : System.Web.UI.Page
             //  Convert.ToDecimal(ds.Tables[0].Rows[0]["THEORY"].ToString());
             int TH_PR = Convert.ToInt32(dt.Rows[0]["TH_PR"]);
 
+            //Added By RB on 15.12.2023
+            string coursetypes = "";
+            foreach (DataRow row in dt.Rows)
+            {
+                string columnValue = row["COURSETYPE"].ToString();
+                coursetypes += columnValue + ",";
+            }
+            //end
+
+
             if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
             {
-                if (tutorial > 0 && TH_PR == 1)
-                {
-                    ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("3"));
-                    ddlCourseType_SelectedIndexChanged(sender, e);
-                }
-                else if (TH_PR == 1)
-                {
-                    ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("2"));
-                    ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("3"));
-                    ViewState["TH_PR"] = TH_PR;
-                    ddlCourseType_SelectedIndexChanged(sender, e);
-                }
-                else
+                if (!coursetypes.Contains("1")) // 1 means theory
                 {
                     ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("1"));
+                }
+                if (!coursetypes.Contains("2")) //2 means Practical
+                {
+                    ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("3"));
+                    ViewState["TH_PR"] = TH_PR;
+                    //ddlCourseType_SelectedIndexChanged(sender, e);
+                }
+                if (!coursetypes.Contains("3")) // 3 means Tutorial
+                {
                     ddlCourseType.Items.Remove(ddlCourseType.Items.FindByValue("2"));
                     ViewState["TH_PR"] = TH_PR;
-                    ddlCourseType_SelectedIndexChanged(sender, e);
+                    //ddlCourseType_SelectedIndexChanged(sender, e);
                 }
+                ddlCourseType_SelectedIndexChanged(sender, e);
+
             }
-            if (ddlCourse.SelectedIndex > 0)
-            {
-                BindDropDowns(ddlSection, "SECTIONNAME", "SECTIONNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND COURSENO=" + ddlCourse.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue, 0);
-            }
+        }
+        else
+        {
+            ddlCourseType.Items.Clear();
+            ddlCourseType.Items.Add(new ListItem("Please Select", "0"));
         }
     }
 
@@ -277,6 +287,23 @@ public partial class ACADEMIC_ExtraClassTT : System.Web.UI.Page
             divBatch.Visible = false;
         }
         ViewState["RECORDCHECK"] = null;
+
+        if (Convert.ToInt32(ddlCourseType.SelectedValue) > 0)
+        {
+            int type = Convert.ToInt32(ddlCourseType.SelectedValue);
+            if (type == 1) //Theory
+            {
+                BindDropDowns(ddlSection, "SECTIONNAME", "SECTIONNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND COURSENO=" + ddlCourse.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND COURSETYPE=1", 0);
+            }
+            if (type == 2) // Tutorial 
+            {
+                BindDropDowns(ddlSection, "SECTIONNAME", "SECTIONNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND COURSENO=" + ddlCourse.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND COURSETYPE=3", 0);
+            }
+            if (type == 3) // Practical
+            {
+                BindDropDowns(ddlSection, "SECTIONNAME", "SECTIONNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND COURSENO=" + ddlCourse.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND COURSETYPE=2", 0);
+            }
+        }
     }
 
 
@@ -297,12 +324,12 @@ public partial class ACADEMIC_ExtraClassTT : System.Web.UI.Page
             if (ddlCourseType.SelectedValue == "2")
             {
                 divBatch.Visible = true;
-                BindDropDowns(ddlBatch, "BATCHNAME", "BATCHNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(BATCHNO,0)>0 AND TH_PR=1", 0); //Fill tutorial course batches
+                BindDropDowns(ddlBatch, "BATCHNAME", "BATCHNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(BATCHNO,0)>0 AND COURSETYPE=3", 0); //Fill tutorial course batches
             }
             else if (ddlCourseType.SelectedValue == "3")
             {
                 divBatch.Visible = true;
-                BindDropDowns(ddlBatch, "BATCHNAME", "BATCHNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(BATCHNO,0)>0 AND TH_PR=2", 0); //Fill practical course batches
+                BindDropDowns(ddlBatch, "BATCHNAME", "BATCHNO", "COSCHNO=" + ddlClgname.SelectedValue + " AND SEMESTERNO=" + ddlSem.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(BATCHNO,0)>0 AND COURSETYPE=2", 0); //Fill practical course batches
             }
         }
     }
