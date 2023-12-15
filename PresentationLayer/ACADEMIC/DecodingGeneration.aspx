@@ -83,6 +83,9 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" InitialValue="0" SetFocusOnError="true"
                                             ControlToValidate="ddlsemester" Display="None" ErrorMessage="Please Select Semester."
                                             ValidationGroup="ShowStat"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" InitialValue="0" SetFocusOnError="true"
+                                            ControlToValidate="ddlsemester" Display="None" ErrorMessage="Please Select Semester."
+                                            ValidationGroup="Excel"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                         <div class="label-dynamic">
@@ -203,9 +206,11 @@
                                     <asp:Button ID="btnStatDecode" runat="server" CssClass="btn btn-primary" Text="Show Generated" OnClick="btnStatDecode_Click" ValidationGroup="ShowStat" TabIndex="1" />
                                     <asp:Button ID="btnNotGenDe" runat="server" CssClass="btn btn-primary" Text="Show Not Generated" OnClick="btnNotGenDe_Click" ValidationGroup="ShowStat" TabIndex="1" />
                                 </span>
+                                <asp:Button ID="btnExcel" runat="server" CssClass="btn btn-primary" Text="RollList Excel Report" TabIndex="1" OnClick="btnExcel_Click" ValidationGroup="Show"  />
                                 <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" />
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Show" />
                                 <%-- ShowStat --%>
+                                <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Excel" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="ShowStat" />
                             </div>
 
@@ -223,6 +228,8 @@
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%">
                                                 <thead>
                                                     <tr class="bg-light-blue">
+                                                        <th><center>Sr.No.</center>
+                                                        </th>
                                                         <th>Reg No
                                                         </th>
                                                         <th>
@@ -249,8 +256,12 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td>
-                                                    <%# Eval("REGNO") %>
+                                                    <center><%# Container.DataItemIndex + 1 %></center> 
                                                     <asp:HiddenField ID="hdfAB" runat="server" Value='<%# Eval("EXTERMARK") %>' />
+                                                </td>
+                                                <td>
+                                                    <%# Eval("REGNO") %>
+                                                    
                                                 </td>
                                                 <td>
                                                     <%--<%# Eval("DECODENO")%>--%>
@@ -366,6 +377,7 @@
             <asp:PostBackTrigger ControlID="btnShow" />
             <asp:PostBackTrigger ControlID="btnStatDecode" />
             <asp:PostBackTrigger ControlID="btnNotGenDe" />
+            <asp:PostBackTrigger ControlID="btnExcel" />
         </Triggers>
     </asp:UpdatePanel>
     <div id="divMsg" runat="server" />
