@@ -20470,13 +20470,13 @@ namespace IITMS
                  /// <param name="objStudent"></param>
                  /// <param name="OrgId"></param>
                  /// <returns></returns>
-                 public int UpdateStudent_TeachAllotForValue_Added_Modified(Student_Acd objStudent, int OrgId)
+                 public int UpdateStudent_TeachAllotForValue_Added_Modified(Student_Acd objStudent, int OrgId,int sectionno)
                  {
                      int retStatus = Convert.ToInt32(CustomStatus.Others);
                      try
                      {
                          SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                         SqlParameter[] objParams = new SqlParameter[8];
+                         SqlParameter[] objParams = new SqlParameter[9];
 
                          objParams[0] = new SqlParameter("@P_SESSIONNO", objStudent.SessionNo);
                          objParams[1] = new SqlParameter("@P_COURSENO", objStudent.CourseNo);
@@ -20485,8 +20485,9 @@ namespace IITMS
                          objParams[4] = new SqlParameter("@P_ADDITIONAL_FLAG", objStudent.isAdditionalFlag);
                          objParams[5] = new SqlParameter("@P_STUDID", objStudent.StudId);
                          objParams[6] = new SqlParameter("@P_ORGID", OrgId);
-                         objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                         objParams[7].Direction = ParameterDirection.Output;
+                         objParams[7] = new SqlParameter("@P_SECTIONNO", sectionno);
+                         objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                         objParams[8].Direction = ParameterDirection.Output;
 
                          object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STUDENT_SP_UPD_BYFACULTY_FOR_VALUE_ADDED_MODIFIED", objParams, false);
                          if (ret != null)

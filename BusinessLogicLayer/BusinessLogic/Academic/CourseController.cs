@@ -4919,17 +4919,18 @@ namespace IITMS
                 /// <param name="mode"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetValueAddedCourseList(int sessionno, int courseno, int ua_no, int mode)
+                public DataSet GetValueAddedCourseList(int sessionno, int courseno, int ua_no, int mode,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[4];
+                        SqlParameter[] objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[3] = new SqlParameter("@P_MODE", mode);
+                        objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_VALUE_ADDED_COURSE", objParams);
                     }
                     catch (Exception ex)
@@ -4946,17 +4947,17 @@ namespace IITMS
                 /// <param name="schemeNo"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetValueAddedCoursesTimeTableModified(int Sessionno, int courseno, int ua_no)
+                public DataSet GetValueAddedCoursesTimeTableModified(int Sessionno, int courseno, int ua_no,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
-
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_VALUE_ADDED_COURSE_TIME_TABLE_MODIFIED", objParams);
                     }
                     catch (Exception ex)
@@ -5030,6 +5031,28 @@ namespace IITMS
                     return ds;
                 }
 
+                public DataSet GetValueAddedCoursesTimeTableDetailsSectionModified(int facultyNo, int alternate, int Sessionno, string startDate, string endDate, int courseno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_FACULTYNO", facultyNo);
+                        objParams[1] = new SqlParameter("@P_ALTERNATEFLAG", alternate);
+                        objParams[2] = new SqlParameter("@P_SESSIONNO", Sessionno);
+                        objParams[3] = new SqlParameter("@P_START_DATE", startDate);
+                        objParams[4] = new SqlParameter("@P_END_DATE", endDate);
+                        objParams[5] = new SqlParameter("@P_COURSENO", courseno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_VALUE_ADDED_COURSE_TIME_TABLE_DETAILS_SECTION_MODIFIED", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetValueAddedCoursesTimeTableDetailsSectionModified-> " + ex.ToString());
+                    }
+                    return ds;
+                }
 
                 /// <summary>
                 /// Added by Amit Bhumbur for Value Added Offered Course
@@ -5069,17 +5092,18 @@ namespace IITMS
                 /// <param name="mode"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetValueAddedOfferedCourseList(int sessionno, int courseno, int ua_no, int mode)
+                public DataSet GetValueAddedOfferedCourseList(int sessionno, int courseno, int ua_no, int mode,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[4];
+                        SqlParameter[] objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
                         objParams[3] = new SqlParameter("@P_MODE", mode);
+                        objParams[4] = new SqlParameter("@P_SECTIONNO", sectionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_OFFERED_VALUE_ADDED_COURSE", objParams);
                     }
                     catch (Exception ex)
@@ -5096,16 +5120,17 @@ namespace IITMS
                 /// <param name="schemeNo"></param>
                 /// <returns></returns>
                 /// Done
-                public DataSet GetValueAddedCoursesRevisedTimeTableModified(int Sessionno, int courseno, int ua_no)
+                public DataSet GetValueAddedCoursesRevisedTimeTableModified(int Sessionno, int courseno, int ua_no,int sectionno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[3];
+                        SqlParameter[] objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionno);
                         objParams[1] = new SqlParameter("@P_COURSENO", courseno);
                         objParams[2] = new SqlParameter("@P_UA_NO", ua_no);
+                        objParams[3] = new SqlParameter("@P_SECTIONNO", sectionno);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_VALUE_ADDED_COURSE_REVISED_TIME_TABLE_MODIFIED", objParams);
                     }
                     catch (Exception ex)

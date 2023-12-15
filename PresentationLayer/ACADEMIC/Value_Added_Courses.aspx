@@ -95,7 +95,11 @@
         }
     </style>
 
-
+    <style>
+        #ctl00_ContentPlaceHolder1_Panel1 .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
     <%--  <asp:UpdatePanel ID="updpnl" runat="server">
         <ContentTemplate>--%>
     <div class="row">
@@ -170,7 +174,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
-                                                        <label>Semester</label>
+                                                        <asp:Label ID="lblDYddlSemester_Tab2" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
 
                                                     <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="true"
@@ -487,7 +491,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup></sup>
-                                                        <label>Group</label>
+                                                        <label>Group/Section</label>
 
                                                     </div>
                                                     <asp:DropDownList ID="ddlValueAddedGroup" runat="server" TabIndex="5" AppendDataBoundItems="true" ValidationGroup="courseteacher" OnSelectedIndexChanged="ddlValueAddedGroup_SelectedIndexChanged"
@@ -552,7 +556,7 @@
                                                                         <th>
                                                                             <asp:Label ID="lblDYlvCourse" runat="server" Font-Bold="true"></asp:Label>
                                                                         </th>
-                                                                        <th>Group
+                                                                        <th>Group/Section
                                                                         </th>
                                                                         <th>Main Teacher
                                                                         </th>
@@ -703,6 +707,19 @@
 
 
                                             <div class="row">
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlsection" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
+                                                        ValidationGroup="teacherallot" AutoPostBack="True" OnSelectedIndexChanged="ddlsection_SelectedIndexChanged">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlsection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="teacherallot"></asp:RequiredFieldValidator>
+                                                </div>
+
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -863,7 +880,7 @@
                                                 <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                     <div class="label-dynamic">
                                                         <sup>*</sup>
-                                                        <label>Semester</label>
+                                                        <asp:Label ID="lblDYtxtSemesterName" runat="server" Font-Bold="true"></asp:Label>
                                                     </div>
                                                     <asp:ListBox ID="lstSemesterAttConfig" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="4"></asp:ListBox>
                                                     <%--  <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="lstSemesterAttConfig"
@@ -1097,6 +1114,8 @@
                                                         Display="None" InitialValue="0" ErrorMessage="Please Select College & Scheme" ValidationGroup="timetable">
                                                     </asp:RequiredFieldValidator>--%>
                                                     <asp:HiddenField ID="hdnDate" runat="server" />
+                                                    <asp:HiddenField ID="hdnConfigStartDate" runat="server" />
+                                                    <asp:HiddenField ID="hdnConfigEndDate" runat="server" />
                                                 </div>
 
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
@@ -1111,7 +1130,18 @@
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSessionTimeTable"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>
                                                 </div>
-
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="teacherallot" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ControlToValidate="ddlTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="timetable"></asp:RequiredFieldValidator>
+                                                </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -1150,16 +1180,11 @@
                                                         <i class="fa fa-angle-down" aria-hidden="true" style="float: right; padding-top: 4px; font-weight: bold;"></i>
                                                     </div>
                                                 </div>
-                                                <%--  <div class="col-lg-8 col-md-6 col-12">
-                                                    <div class="form-group text-right mt-3">
-                                                        <button type="button" class="btn btn-outline-primary addMoreSchedules">
-                                                            <i class="far fa-plus tippy " data-tippy-content="Add Schedule"></i>
-                                                        </button>
-                                                    </div>
+                                                <div class="col-lg-3 col-md-6 col-12 form-group" id="divNote" runat="server" visible="false">
+                                                    <p class="text-center" style="border-style: double; font-size: 14px; font-weight: bold; color: #3c8dbc;">
+                                                        <asp:Label ID="lblTitleDate" runat="server" Text="Attendance Configuration Start & End Date" TabIndex="14"></asp:Label>
+                                                    </p>
                                                 </div>
-                                                <div class="col-12 mb-3">
-                                                    <div class="schedules-container"></div>
-                                                </div>--%>
                                             </div>
                                         </div>
                                         <div class="col-12 box box-primary">
@@ -1297,12 +1322,14 @@
                                                                     <td style="text-align: center; width: 5%">
                                                                     Show
                                                                     </th>
-                                                                    <th style="text-align: center; width: 20%">
+                                                                    <th style="text-align: center; width: 15%">
                                                                         <%--<asp:Label ID="lblDYddlColgScheme_Tab2" runat="server" Font-Bold="true"></asp:Label>--%>
                                                                         Session
                                                                     </th>
                                                                     <th style="text-align: center; width: 45%">
                                                                         <asp:Label ID="lblDYtxtCourseName" runat="server" Font-Bold="true"></asp:Label>
+                                                                    </th>
+                                                                    <th style="text-align: center; width: 5%">Section Name
                                                                     </th>
                                                                     <th style="text-align: center; width: 10%">Slot Type
                                                                     </th>
@@ -1333,11 +1360,14 @@
                                                                                 <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
                                                                             </asp:Panel>
                                                                         </td>
-                                                                        <td style="white-space: normal; width: 20%">
+                                                                        <td style="white-space: normal; width: 15%">
                                                                             <%# Eval("SESSION_NAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 45%">
                                                                             <%# Eval("COURSE_NAME")%>
+                                                                        </td>
+                                                                        <td style="white-space: normal; width: 5%">
+                                                                            <%# Eval("SECTIONNAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SLOTTYPE_NAME")%>
@@ -1445,6 +1475,19 @@
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlSessionCancelTT"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Canceltimetable"></asp:RequiredFieldValidator>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlCancelTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                        data-select2-enable="true" OnSelectedIndexChanged="ddlCancelTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="Canceltimetable" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ControlToValidate="ddlCancelTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="Canceltimetable"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1624,6 +1667,19 @@
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSessionRevisedTimeTable"
                                                         Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig6"></asp:RequiredFieldValidator>
+                                                </div>
+                                                 <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>Section</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlRevisedTTSection" runat="server" AppendDataBoundItems="true" CssClass="form-control"
+                                                        data-select2-enable="true" OnSelectedIndexChanged="ddlRevisedTTSection_SelectedIndexChanged"
+                                                        ValidationGroup="timetable6" AutoPostBack="True">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ControlToValidate="ddlRevisedTTSection"
+                                                        Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="timetable6"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1868,12 +1924,14 @@
                                                                     <td style="text-align: center; width: 5%">
                                                                     Show
                                                                     </th>
-                                                                    <th style="text-align: center; width: 20%">
+                                                                    <th style="text-align: center; width: 15%">
                                                                         <%--<asp:Label ID="lblDYddlColgScheme_Tab2" runat="server" Font-Bold="true"></asp:Label>--%>
                                                                         Session
                                                                     </th>
                                                                     <th style="text-align: center; width: 45%">
                                                                         <asp:Label ID="lblDYtxtCourseName6" runat="server" Font-Bold="true"></asp:Label>
+                                                                    </th>
+                                                                    <th style="text-align: center; width: 5%">Section Name
                                                                     </th>
                                                                     <th style="text-align: center; width: 10%">Slot Type
                                                                     </th>
@@ -1908,11 +1966,14 @@
                                                                                 <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
                                                                             </asp:Panel>
                                                                         </td>
-                                                                        <td style="white-space: normal; width: 20%">
+                                                                        <td style="white-space: normal; width: 15%">
                                                                             <%# Eval("SESSION_NAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 45%">
                                                                             <%# Eval("COURSE_NAME")%>
+                                                                        </td>
+                                                                        <td style="white-space: normal; width: 5%">
+                                                                            <%# Eval("SECTIONNAME")%>
                                                                         </td>
                                                                         <td style="white-space: normal; width: 10%">
                                                                             <%# Eval("SLOTTYPE_NAME")%>
@@ -2467,6 +2528,7 @@
     <script type="text/javascript">
             $(document).ready(function () {
                 $('#picker').daterangepicker({
+                    
                     startDate: moment().subtract(00, 'days'),
                     endDate: moment(),
                     locale: {
@@ -2488,7 +2550,20 @@
             function (start, end) 
             {
                 $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
-                alert('a');
+                
+                var configstartdate = document.getElementById('<%=hdnConfigStartDate.ClientID%>').value;
+                var configenddate = document.getElementById('<%=hdnConfigEndDate.ClientID%>').value;
+                var startdate = start.format("YYYY-MM-DD");
+                var enddate= end.format("YYYY-MM-DD");
+              
+                if(configstartdate > startdate || configenddate < enddate)
+                {
+                    alert('Kindly Select Date Range In Between Attendance Configuration Date!');
+                    var date = moment();
+                    $('#date').html(moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'))
+                    document.getElementById('<%=hdnDate.ClientID%>').value = (date.format('DD MMM, YYYY') + ' - ' + date.format('DD MMM, YYYY'))
+                    return;
+                }
                 document.getElementById('<%=hdnDate.ClientID%>').value = (start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
             });
 
@@ -2505,19 +2580,27 @@
                         locale: {
                             format: 'DD MMM, YYYY'
                         },
-                        //also comment "range" in daterangepicker.js('<div class="ranges"></div>' +)
+                        
                         ranges: {
-                            //                    'Today': [moment(), moment()],
-                            //                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                            //                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                            //                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                            //                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                            //                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')] 
+                           
                         },
                
                     },
                 function (start, end) {
                     debugger
+                    var configstartdate = document.getElementById('<%=hdnConfigStartDate.ClientID%>').value;
+                    var configenddate = document.getElementById('<%=hdnConfigEndDate.ClientID%>').value;
+                    var startdate = start.format("YYYY-MM-DD");
+                    var enddate= end.format("YYYY-MM-DD");
+                
+                    if(configstartdate > startdate || configenddate < enddate)
+                    {
+                        alert('Kindly Select Date Range In Between Attendance Configuration Date!');
+                        var date = moment();
+                        $('#date').html(moment().subtract(00, 'days').format('DD MMM, YYYY') + ' - ' + moment().format('DD MMM, YYYY'))
+                        document.getElementById('<%=hdnDate.ClientID%>').value = (date.format('DD MMM, YYYY') + ' - ' + date.format('DD MMM, YYYY'))
+                        return;
+                    }
                     $('#date').html(start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
                     document.getElementById('<%=hdnDate.ClientID%>').value = (start.format('DD MMM, YYYY') + ' - ' + end.format('DD MMM, YYYY'))
                 });
@@ -2533,12 +2616,14 @@
 
     <script>
             function Setdate(date) {
+               
                 var prm = Sys.WebForms.PageRequestManager.getInstance();
                 prm.add_endRequest(function () {
                     $(document).ready(function () {
                         debugger;
                         var startDate = moment(date.split('-')[0], "DD MMM, YYYY");
                         var endtDate = moment(date.split('-')[1], "DD MMM, YYYY");
+                        
                         //$('#date').html(date);
                         $('#date').html(startDate.format("DD MMM, YYYY") + ' - ' + endtDate.format("DD MMM, YYYY"));
                         document.getElementById('<%=hdnDate.ClientID%>').value = date;

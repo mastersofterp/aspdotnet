@@ -7045,7 +7045,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="teacherflag"></param>
         /// <returns></returns>
         /// Done
-        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag)
+        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag,int sectionno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -7053,7 +7053,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objParams = null;
                 //Update Student Local Address
-                objParams = new SqlParameter[11];
+                objParams = new SqlParameter[12];
                 objParams[0] = new SqlParameter("@P_DATATYPE", dt);
                 objParams[1] = new SqlParameter("@P_COURSENO", objGOC.Courseno);
                 objParams[2] = new SqlParameter("@P_SLOTTYPE", objGOC.SlotType);
@@ -7064,8 +7064,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[7] = new SqlParameter("@P_UA_NO", objGOC.Ua_no);
                 objParams[8] = new SqlParameter("@P_ORGANIZATIONID", objGOC.Orgid);
                 objParams[9] = new SqlParameter("@P_TEACHERFLAG", teacherflag);
-                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[10].Direction = ParameterDirection.Output;
+                objParams[10] = new SqlParameter("@P_SECTIONNO", sectionno);
+                objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[11].Direction = ParameterDirection.Output;
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_VALUE_ADDED_ELECTIVE_TIMETABLE_INSERT", objParams, true);
                 if (ret != null && ret.ToString() != "-99" && ret.ToString() != "-1001")
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -7185,19 +7186,20 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
         //load time table for single dates(Cancel_TimeTable.aspx)
-        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate)
+        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate,int sectionno)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                SqlParameter[] objParams = new SqlParameter[6];
+                SqlParameter[] objParams = new SqlParameter[7];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                 objParams[1] = new SqlParameter("@P_UA_NO", uano);
                 objParams[2] = new SqlParameter("@P_COURSENO", courseno);
                 objParams[3] = new SqlParameter("@P_SLOTTYPE", slottype);
                 objParams[4] = new SqlParameter("@P_START_DATE", startdate);
                 objParams[5] = new SqlParameter("@P_END_DATE", endate);
+                objParams[6] = new SqlParameter("@P_SECTIONNO", sectionno);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_VALUE_ADDED_TIMETABLE_DETAILS_FOR_CANCEL_TT", objParams);
             }
             catch (Exception ex)
