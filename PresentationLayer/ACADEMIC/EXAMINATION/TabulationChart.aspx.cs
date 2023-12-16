@@ -131,6 +131,9 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
                 divprint.Visible = true;    //Added on 07112023
                 btnCertificate.Visible = true; //Added on 07112023
+                btnConsolidtedMPHRAM.Visible = false;
+
+
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
@@ -166,6 +169,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnGradeCardIssueRegister.Visible = true;
                 // divYear.Visible = true;
                 btnElibilityReport.Visible = true;
+                btnConsolidtedMPHRAM.Visible = false;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
             {
@@ -187,6 +191,9 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
+
+
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 5)
             {
@@ -216,6 +223,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = true;
                 lblScrutinized.Visible = true;
                 btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
 
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 3)
@@ -224,6 +232,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
+
             }
             #region For RCPIPER Grade Card added on 25/07/2023 by shubham
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
@@ -251,6 +261,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = true;//added by tejas thakre as on 16-12-2023
             }
             #endregion
             else
@@ -280,6 +291,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 txtScrutinized.Visible = false;
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
 
 
             }
@@ -5810,4 +5822,99 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
     }
     #endregion
+
+    #region For RCIPIPER Consolidated Grade Card M.PHARM 
+    protected void btnConsolidtedMPHRAM_Click(object sender, EventArgs e)
+    {
+        string ids = string.Empty;
+        foreach (ListViewDataItem item in lvStudent.Items)
+        {
+            CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+            Label lblStudname = item.FindControl("lblStudname") as Label;
+
+
+            string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+            if (chk.Checked)
+            {
+                ids += ((item.FindControl("lblStudname")) as Label).ToolTip + "$";
+
+                //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+            }
+        }
+        ids = ids.TrimEnd('.');
+
+   
+        this.ShowconsolitedGradeCardNewRcipiperMPHARM("Consolidate Grade Card", "MarksGrade_C_MPHRAM_RCPIPER.rpt", ids);
+    }
+    #endregion
+
+    private void ShowconsolitedGradeCardNewRcipiperMPHARM(string reportTitle, string rptFileName, string ids) //Added by Tejas Thakre as on 16_12_2023
+    {
+        try
+        {
+
+            int count = 0;
+            foreach (ListViewItem item in lvStudent.Items)
+            {
+                if ((item.FindControl("chkStudent") as CheckBox).Checked == true)
+                {
+                    count++;
+                }
+            }
+
+            if (count > 0)
+            {
+
+                DateTime dateofissue = DateTime.MinValue;
+                string dateofIssue = txtDateOfIssue.Text == "" ? string.Empty : (txtDateOfIssue.Text);
+                if (dateofIssue == string.Empty)
+                {
+                    dateofIssue = "";
+                    dateofissue = DateTime.Today;
+                }
+                else
+                // DateTime dateofissue = Convert.ToDateTime(txtDateofIssue.Text);
+                {
+
+                    if (txtDateOfIssue.Text != "")
+                    {
+                        dateofissue = Convert.ToDateTime(txtDateOfIssue.Text);
+                        txtDateOfIssue.Text = dateofissue.ToString("dd-MMM-yyyy");
+                        // dateofissue =Convert.ToDateTime( txtDateofIssue.Text);
+                    }
+                    else
+                    {
+                        DateTime? dtt = null;
+                        dateofissue = DateTime.Today;
+                    }
+                }
+                string spec = string.Empty;
+                string Result = string.Empty;
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_IDNO=" + ids + ",@P_RESULT=" + Result + ",@P_SPEC=" + spec + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@DateofIssue=" + DateTime.Today.Date;
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "Please Select at least one student !!!!", this.Page);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            //lblMsg.Text = ex.ToString();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnTranscript_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
 }
