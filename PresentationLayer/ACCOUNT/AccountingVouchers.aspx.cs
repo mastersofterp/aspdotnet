@@ -10469,6 +10469,12 @@ public partial class AccountingVouchers : System.Web.UI.Page
                 return;
             }
 
+            if (txtPartyName.Text == string.Empty)
+            {
+                objCommon.DisplayUserMessage(UPDLedger, "Please Enter Party Name", this.Page);
+                return;
+            }
+
             // Added by Akshay Dixit On 07/04/2022
             int IsCompanyLock = Convert.ToInt32(objCommon.LookUp("ACC_COMPANY", "Lock_Status", "COMPANY_CODE='" + (Session["Comp_Code"]).ToString() + "'"));
 

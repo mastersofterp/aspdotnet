@@ -1742,7 +1742,7 @@ function calTdsOnIGstAmount() {
 
                                 <div id="Div3" class="row mt-2" runat="server">
                                     <div class="col-md-2">
-                                        <label>Party Name</label>
+                                        <label><span style="color: red">*</span>Party Name</label>
                                     </div>
                                     <div class="col-md-4">
                                         <asp:TextBox ID="txtPartyName" runat="server" TextMode="MultiLine" ToolTip="Please Enter Party Name"
