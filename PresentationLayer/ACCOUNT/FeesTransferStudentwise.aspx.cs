@@ -493,7 +493,16 @@ public partial class FeesTransferStudentwise : System.Web.UI.Page
 
                 objAccountTrans.CBTYPE = ddlReceipt.SelectedValue;
                 objAccountTrans.USER = Session["userno"].ToString();
-                objAccountTrans.PARTICULARS = "Fees Transfer from Receipt No:-" + ViewState["ReceiptDNo"].ToString().TrimEnd(',');
+
+               string  DEGREENAME =objCommon.LookUp("ACD_DEGREE","DEGREENAME","DEGREENO="+(ddlDegree.SelectedValue.ToString()));
+               string BRANCHNAME = objCommon.LookUp("ACD_BRANCH", "LONGNAME", "BRANCHNO=" + (ddlBranch.SelectedValue.ToString()));
+               string SEMESTER = objCommon.LookUp("ACD_SEMESTER", "SEMESTERNAME", "SEMESTERNO=" + (ddsem.SelectedValue.ToString()));
+               string result = DEGREENAME + " - " + BRANCHNAME + " - " + SEMESTER;
+
+               objAccountTrans.PARTICULARS = "Fees Transfer for " + result + "-"+ddlReceipt.SelectedItem+"With Receipt No: " + ViewState["ReceiptDNo"].ToString().TrimEnd(',') ;
+
+              // objAccountTrans.PARTICULARS = "Fees Transfer for" + result + " Receipt No:-" + ViewState["ReceiptDNo"].ToString().TrimEnd(',');
+
                 string transdate = Convert.ToDateTime(txtVoucherDate.Text).ToString("dd-MMM-yyyy");
                 objAccountTrans.TRANSACTION_DATE = Convert.ToDateTime(transdate);
 
