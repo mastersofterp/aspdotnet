@@ -56,9 +56,8 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             else
             {
 
-                //CheckPageAuthorization();
+
                 DataSet ds_CheckActivity = obeMarkEnrty.CheckSessionActivity(Session["usertype"].ToString(), Request.QueryString["pageno"].ToString(), Convert.ToInt32(Session["userno"]));
-                // DataSet ds_CheckActivity = obeMarkEnrty.CheckSessionActivity(Session["usertype"].ToString(), Request.QueryString["pageno"].ToString());
 
                 int USER_TYPE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_TYPE", "UA_NO=" + Session["userno"]));
                 if (USER_TYPE == 3)
@@ -82,9 +81,9 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
                 {
 
                     objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER SM ON(S.COLLEGE_ID=SM.COLLEGE_ID)", "S.sessionno", "Concat(s.SESSION_NAME , '-',SM.SHORT_NAME)SESSION_NAME", "FLOCK=1", "S.sessionno");
-                
+
                 }
-                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO = 207 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
+               // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO = 227 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
 
                 Page.Title = Session["coll_name"].ToString();
                 ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
