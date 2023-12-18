@@ -152,7 +152,7 @@
 
                                 <div class="col-12 btn-footer">
 
-                                    <asp:Button ID="btnShow" runat="server" Text="Show" TabIndex="6" Visible="true"
+                                    <asp:Button ID="btnShow" runat="server" Text="Show" TabIndex="6" Visible="false"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnShow_Click" CssClass="btn btn-primary" />
 
                                     <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6" Visible="false"
