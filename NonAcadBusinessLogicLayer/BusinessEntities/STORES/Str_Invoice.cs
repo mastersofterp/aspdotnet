@@ -31,6 +31,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         public string INV_FILE_NAME { get; set; }
         public DataTable INVOICE_UPLOAD_FILE_TBL { get; set; }
 
+        public DateTime EXPIRYDATE { get; set; }
+        public DateTime WARRANTYDATE { get; set; }
+
 
     }
 }

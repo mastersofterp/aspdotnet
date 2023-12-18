@@ -925,7 +925,7 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
          objINVEnt.GRN_NUM = GRNNumber == "" ? "0" : GRNNumber;
         
         objINVEnt.INVDATE = Convert.ToDateTime(txtInvoiceDate.Text);     
-        if (txtGRNDate.Text != string.Empty)     //Shaikh Juned (31/03/2022)
+        if (txtGRNDate.Text != string.Empty && txtGRNDate.Text!="99/99/9999")     //Shaikh Juned (31/03/2022)
         {
             objINVEnt.GRNDATE = Convert.ToDateTime(txtGRNDate.Text);
         }
@@ -933,6 +933,35 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
         {
             objINVEnt.GRNDATE = DateTime.MinValue;
         }
+
+        //------------------------------------------------//
+        if (txtItemExpiryDate.Text != string.Empty && txtItemExpiryDate.Text!="99/99/9999")
+        {
+            objINVEnt.EXPIRYDATE = Convert.ToDateTime(txtItemExpiryDate.Text);
+        }
+        else
+        {
+            objINVEnt.EXPIRYDATE = DateTime.MinValue;
+        }
+        if (txtItemWarrentyDate.Text != string.Empty && txtItemWarrentyDate.Text!="99/99/9999")
+        {
+            objINVEnt.WARRANTYDATE = Convert.ToDateTime(txtItemWarrentyDate.Text);
+        }
+        else
+        {
+            objINVEnt.WARRANTYDATE = DateTime.MinValue;
+        }
+
+        if (txtItemWarrentyDate.Text != string.Empty && txtItemWarrentyDate.Text != "99/99/9999")
+        {
+            if (Convert.ToDateTime(txtItemWarrentyDate.Text) > Convert.ToDateTime(txtItemExpiryDate.Text))
+            {
+                MessageBox("Warranty Date Should not Be Greater Than  Expiry From Date ");
+                return;
+            }
+        }
+
+        //----------------------------------------------------//
         objINVEnt.PNO = Convert.ToInt32(ddlVendor.SelectedValue);
         objINVEnt.MDNO = Convert.ToInt32(Session["strdeptcode"]);
         objINVEnt.REMARK = txtRemark.Text;
@@ -1168,6 +1197,9 @@ public partial class Stores_Transactions_Stock_Entry_Str_Invoice_Entry : System.
         txtDMDate.Text = ds.Tables[0].Rows[0]["DMDATE"].ToString();
         txtDMNo.Text = ds.Tables[0].Rows[0]["DMNO"].ToString();
         lblNetAmtCount.Text = ds.Tables[0].Rows[0]["NETAMT"].ToString();
+
+        txtItemExpiryDate.Text = ds.Tables[0].Rows[0]["EXPIRYDATE"].ToString();
+        txtItemWarrentyDate.Text = ds.Tables[0].Rows[0]["WARRANTYDATE"].ToString();
 
         if (ds.Tables[0].Rows[0]["PORDNO"].ToString() != "0")
         {
