@@ -143,7 +143,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         try
         {
             this.BindListView();
-
         }
         catch (Exception ex)
         {
@@ -207,8 +206,22 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             ddlDegree.SelectedIndex = 0;
             ddlBranch.SelectedIndex = 0;
             ddlSemester.SelectedIndex = 0;
+            ddlColg.SelectedIndex = 0;
+            ddlSession.SelectedIndex = 0;
+            ddlSection.SelectedIndex = 0;
+            ddlExamname.SelectedIndex = 0;
+
+            lvStudentRecords.DataSource = null;
+            lvStudentRecords.DataBind();
+            lvStudentRecords.Visible = false;
+
+            txtRemark.Text = "";
+            txtDateofissue.Text = "";
+
+            ddlColg.Focus();
+
             Session["listIdCard"] = null;
-            Response.Redirect(Request.Url.ToString());
+            //Response.Redirect(Request.Url.ToString());
         }
         catch (Exception)
         {
@@ -260,7 +273,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 2)//Crescent   
             {
-               url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAM_DATE=" + date1;
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 16) //Maher
             {
@@ -279,6 +292,10 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 18) //HITS  Added By Injamam 29_11_2023 
+            {
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 5) //JECRC  Added By Injamam 29_11_2023 
             {
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
             }
@@ -563,6 +580,10 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_TGPCET.rpt");
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 5) //JECRC Added By Injamam 29_11_2023 
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_JECRC.rpt");
+                }
                 else
                 {
                     //ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamRegslip.rpt");  
@@ -595,32 +616,56 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         txtRemark.Text = string.Empty;
         //  ddlExamname.SelectedIndex = 1;
 
-
-        //int schemeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND SCHEMENO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])));
-        DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlColg.SelectedValue));  //Added on 14122022 
-
-        if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+        if (ddlColg.SelectedIndex > 0)
         {
-            ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-            ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-            ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-            ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            //int schemeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND SCHEMENO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])));
+            DataSet ds = objCommon.GetCollegeSchemeMappingDetails(Convert.ToInt32(ddlColg.SelectedValue));  //Added on 14122022 
+
+            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+                ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+                ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+                ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            }
+
+            //DataSet ds12 = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID", "COSCHNO=" + ddlColg.SelectedValue, "COLLEGE_ID");
+
+            //int clg_id = Convert.ToInt32(ds12.Tables[0].Rows[0]["COLLEGE_ID"]);
+            //ViewState["clg_id"] = Convert.ToInt32(ds12.Tables[0].Rows[0]["COLLEGE_ID"]);
+
+
+            //int schemeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND COL_SCHEME_NAME=" + "'" + ddlColg.SelectedItem.Text + "'" + "AND SCHEMENO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])));
+
+            //(ViewState["schemenoss"]) = schemeno;
+
+            objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE A WITH (NOLOCK) INNER JOIN ACD_DEGREE B WITH (NOLOCK) ON(A.DEGREENO=B.DEGREENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "B.DEGREENAME", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]), "a.DEGREENO");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");
+            //objCommon.FillDropDownList(ddlSession, "ACD_EXAM_DATE ED INNER JOIN ACD_SESSION_MASTER SM ON (ED.SESSIONNO=SM.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (ED.SCHEMENO=SC.SCHEMENO)", "DISTINCT ED.SESSIONNO", "SESSION_PNAME", "ED.COLLEGE_ID = " + Convert.ToInt32(ddlColg.SelectedValue), "SESSIONNO DESC");
+            //ddlDegree.Focus();
+
+            ddlSession.Focus();
         }
+        else
+        {
+            ddlColg.Focus();
 
-        //DataSet ds12 = objCommon.FillDropDown("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID", "COSCHNO=" + ddlColg.SelectedValue, "COLLEGE_ID");
+            ddlSession.Items.Clear();
+            ddlSession.Items.Add("Please Select");
+            ddlSession.SelectedItem.Value = "0";
 
-        //int clg_id = Convert.ToInt32(ds12.Tables[0].Rows[0]["COLLEGE_ID"]);
-        //ViewState["clg_id"] = Convert.ToInt32(ds12.Tables[0].Rows[0]["COLLEGE_ID"]);
+            ddlSemester.Items.Clear();
+            ddlSemester.Items.Add("Please Select");
+            ddlSemester.SelectedItem.Value = "0";
 
+            ddlSection.Items.Clear();
+            ddlSection.Items.Add("Please Select");
+            ddlSection.SelectedItem.Value = "0";
 
-        //int schemeno = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "SCHEMENO", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND COL_SCHEME_NAME=" + "'" + ddlColg.SelectedItem.Text + "'" + "AND SCHEMENO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])));
-
-        //(ViewState["schemenoss"]) = schemeno;
-
-        objCommon.FillDropDownList(ddlDegree, "ACD_COLLEGE_DEGREE A WITH (NOLOCK) INNER JOIN ACD_DEGREE B WITH (NOLOCK) ON(A.DEGREENO=B.DEGREENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CD WITH (NOLOCK) ON (CD.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "B.DEGREENAME", "A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]), "a.DEGREENO");
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");
-        //objCommon.FillDropDownList(ddlSession, "ACD_EXAM_DATE ED INNER JOIN ACD_SESSION_MASTER SM ON (ED.SESSIONNO=SM.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (ED.SCHEMENO=SC.SCHEMENO)", "DISTINCT ED.SESSIONNO", "SESSION_PNAME", "ED.COLLEGE_ID = " + Convert.ToInt32(ddlColg.SelectedValue), "SESSIONNO DESC");
-        //ddlDegree.Focus();
+            ddlExamname.Items.Clear();
+            ddlExamname.Items.Add("Please Select");
+            ddlExamname.SelectedItem.Value = "0";
+        }
     }
     //sending from mail aayushi gupta
 
@@ -830,9 +875,23 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
 
         //(ViewState["schemenoss"])=schemeno;
 
-        objCommon.FillDropDownList(ddlExamname, " ACD_SCHEME S WITH (NOLOCK) INNER JOIN ACD_EXAM_NAME ED WITH (NOLOCK) ON(ED.PATTERNNO=S.PATTERNNO)", "DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND S.Schemeno=" + ViewState["schemeno"], "EXAMNAME");
+        if (ddlSemester.SelectedIndex > 0)
+        {
 
-        //ddlExamname.SelectedIndex = 1;
+            objCommon.FillDropDownList(ddlExamname, " ACD_SCHEME S WITH (NOLOCK) INNER JOIN ACD_EXAM_NAME ED WITH (NOLOCK) ON(ED.PATTERNNO=S.PATTERNNO)", "DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND S.Schemeno=" + ViewState["schemeno"], "EXAMNAME");
+
+            //ddlExamname.SelectedIndex = 1;
+
+            txtDateofissue.Focus();
+        }
+        else
+        {
+            ddlSemester.Focus();
+
+            ddlExamname.Items.Clear();
+            ddlExamname.Items.Add("Please Select");
+            ddlExamname.SelectedItem.Value = "0";
+        }
 
 
         if (Convert.ToInt32(Session["OrgId"]) == 9)
@@ -864,6 +923,8 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
         lvStudentRecords.Visible = false;
+
+        btnShow.Focus();
     }
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
@@ -880,12 +941,28 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         }
         else
         {
-            ddlSession.Items.Clear();
-            ddlSession.Items.Add(new ListItem("Please Select", "0"));
+            ddlSession.Focus();
+
+            //ddlSession.Items.Clear();
+            //ddlSession.Items.Add(new ListItem("Please Select", "0"));
+
+            //ddlSemester.Items.Clear();
+            //ddlSemester.Items.Add(new ListItem("Please Select", "0"));
 
             ddlSemester.Items.Clear();
-            ddlSemester.Items.Add(new ListItem("Please Select", "0"));
+            ddlSemester.Items.Add("Please Select");
+            ddlSemester.SelectedItem.Value = "0";
+
+            ddlSection.Items.Clear();
+            ddlSection.Items.Add("Please Select");
+            ddlSection.SelectedItem.Value = "0";
+
+            ddlExamname.Items.Clear();
+            ddlExamname.Items.Add("Please Select");
+            ddlExamname.SelectedItem.Value = "0";
+
         }
+
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
     }

@@ -59,24 +59,24 @@
                                             <ItemTemplate>
                                                 <tr>
                                                     <td><%# Eval("SESSION_NAME")%>
-                                                          <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' Visible="false" />
-                                                           <asp:HiddenField ID="hdfdegreeno" runat="server" Value='<%# Eval("DEGREENO") %>' Visible="false" />
-                                                           <asp:HiddenField ID="hdfbranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' Visible="false" />
-                                                           <asp:HiddenField ID="hdSessionno" runat="server" Value='<%# Eval("SESSIONNO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdfdegreeno" runat="server" Value='<%# Eval("DEGREENO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdfbranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdSessionno" runat="server" Value='<%# Eval("SESSIONNO") %>' Visible="false" />
                                                     </td>
                                                     <td><%# Eval("SEMESTERNAME")%>
                                                         <asp:HiddenField ID="hdfsem" runat="server" Value='<%# Eval("SEMESTERNO") %>' Visible="false" />
                                                     </td>
                                                     <td><%# Eval("EXAMNAME")%>
-                                                     <asp:HiddenField ID="hdfprev_status" runat="server" Value='<%# Eval("PREV_STATUS") %>' Visible="false" />
-                                                     <asp:HiddenField ID="hdexamno" runat="server" Value='<%# Eval("EXAMNO") %>' Visible="false"/>
-                                                     <asp:HiddenField ID="hdExamName" runat="server" Value='<%# Eval("EXAMNAME") %>' Visible="false"/>
-                                                     <asp:HiddenField ID="hdSection" runat="server" Value='<%# Eval("SECTIONNO") %>' Visible="false" />
-                                                     <asp:HiddenField ID="hdSchemeno" runat="server" Value='<%# Eval("SCHEMENO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdfprev_status" runat="server" Value='<%# Eval("PREV_STATUS") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdexamno" runat="server" Value='<%# Eval("EXAMNO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdExamName" runat="server" Value='<%# Eval("EXAMNAME") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdSection" runat="server" Value='<%# Eval("SECTIONNO") %>' Visible="false" />
+                                                        <asp:HiddenField ID="hdSchemeno" runat="server" Value='<%# Eval("SCHEMENO") %>' Visible="false" />
                                                     </td>
                                                     <th><%# Eval("SECTIONNAME")%></th>
                                                     <td>
-                                                        <asp:LinkButton ID="btnHallTicket" runat="server" Text="Hall Ticket" OnClick="btnHallTicket_Click" CausesValidation="false" CommandName='<%# Eval("EXAMNO") %>' CommandArgument='<%# Eval("IDNO") %>' ToolTip=<%# Container.DataItemIndex + 1 %>/>
+                                                        <asp:LinkButton ID="btnHallTicket" runat="server" Text="Hall Ticket" OnClick="btnHallTicket_Click" CausesValidation="false" CommandName='<%# Eval("EXAMNO") %>' CommandArgument='<%# Eval("IDNO") %>' ToolTip="<%# Container.DataItemIndex + 1 %>" />
                                                         <%--<asp ID="btnEdit" runat="server" AlternateText="Edit Record" CausesValidation="false" CommandArgument='<%# Eval("SESSION_ACTIVITY_NO") %>' ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click" TabIndex="10" ToolTip="Edit Record" />--%>
                                                     </td>
                                                 </tr>

@@ -32,29 +32,29 @@
                                     <%-- <div class="col-lg-3 col-md-6 col-12 form-group">--%>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>School/Institute Name/Scheme </label>
+                                            <sup>*</sup>
+                                            <label>School/Institute Name/Scheme</label>
                                         </div>
                                         <asp:DropDownList ID="ddlColg" runat="server" data-select2-enable="true" AppendDataBoundItems="True" TabIndex="1" OnSelectedIndexChanged="ddlColg_SelectedIndexChanged" CssClass="form-control"
                                             AutoPostBack="True" ToolTip="Please Select Institute">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvColg" runat="server" ControlToValidate="ddlColg"
-                                            Display="None" ErrorMessage="Please Select Institute" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="rfvColg" runat="server" ControlToValidate="ddlColg" SetFocusOnError="True"
+                                            Display="None" ErrorMessage="Please Select Institute Name" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Session </label>
+                                            <sup>*</sup>
+                                            <label>Session</label>
                                         </div>
                                         <%--<asp:TextBox ID="lblSession" runat="server"></asp:TextBox>--%>
-                                        <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="True" TabIndex="2"
+                                        <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="True" TabIndex="1"
                                             AutoPostBack="True" ToolTip="Please Select Session" data-select2-enable="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession"
+                                        <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSession"
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="eligible"></asp:RequiredFieldValidator>
                                         <%--<asp:Label ID="lblSession" runat="server"  ></asp:Label>--%>
                                     </div>
@@ -88,45 +88,45 @@
 
                                     <div class="col-lg-3 col-md-6 col-12 form-group" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Degree </label>
+                                            <sup>*</sup>
+                                            <label>Degree</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlDegree" data-select2-enable="true" runat="server" AppendDataBoundItems="True" TabIndex="3"
+                                        <asp:DropDownList ID="ddlDegree" data-select2-enable="true" runat="server" AppendDataBoundItems="True" TabIndex="1"
                                             OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged" ToolTip="Please Select Degree" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree"
+                                        <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Degree" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Programme/Branch </label>
+                                            <sup>*</sup>
+                                            <label>Programme/Branch</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlBranch" data-select2-enable="true" runat="server" AppendDataBoundItems="True" TabIndex="4"
+                                        <asp:DropDownList ID="ddlBranch" data-select2-enable="true" runat="server" AppendDataBoundItems="True" TabIndex="1"
                                             OnSelectedIndexChanged="ddlBranch_SelectedIndexChanged" ToolTip="Please Select Branch" AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvBranch" runat="server" ControlToValidate="ddlBranch"
+                                        <asp:RequiredFieldValidator ID="rfvBranch" runat="server" ControlToValidate="ddlBranch" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Programme/Branch" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Semester </label>
+                                            <sup>*</sup>
+                                            <label>Semester</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSemester" data-select2-enable="true" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Semester" TabIndex="5" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlSemester" data-select2-enable="true" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Semester" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester"
+                                        <asp:RequiredFieldValidator ID="rfvSemester" runat="server" ControlToValidate="ddlSemester" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group">
                                         <div class="label-dynamic">
                                             <sup></sup>
-                                            <label>Section </label>
+                                            <label>Section</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSection" data-select2-enable="true" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Section" TabIndex="6" AutoPostBack="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlSection" data-select2-enable="true" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Section" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSemester"
@@ -134,14 +134,14 @@
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Date of Issue </label>
+                                            <sup>*</sup>
+                                            <label>Date of Issue</label>
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar" id="imgExamDate1"></i>
                                             </div>
-                                            <asp:TextBox runat="server" ID="txtDateofissue" TabIndex="7" ToolTip="Please Enter Date"></asp:TextBox>
+                                            <asp:TextBox runat="server" ID="txtDateofissue" TabIndex="1" ToolTip="Please Enter Date"></asp:TextBox>
                                             <%-- <asp:Image ID="imgExamDate" runat="server" ImageUrl="~/images/calendar.png" />--%>
                                             <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy"
                                                 TargetControlID="txtDateofissue" PopupButtonID="imgExamDate1" />
@@ -152,48 +152,48 @@
                                                 ControlExtender="meExamDate" ControlToValidate="txtDateofissue" IsValidEmpty="false"
                                                 InvalidValueMessage="Exam Date is invalid" Display="None" ErrorMessage="Please Enter Date of Issue"
                                                 InvalidValueBlurredMessage="*" ValidationGroup="Submit" SetFocusOnError="true" />
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtDateofissue"
-                                                Display="None" ErrorMessage="Please Select/Enter Date" ValidationGroup="show"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtDateofissue" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select/Enter Date of Issue" ValidationGroup="show"></asp:RequiredFieldValidator>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6 col-12 form-group" id="divRemark" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <%--<sup>* </sup>--%>
-                                            <label>Remark </label>
+                                            <label>Remark</label>
                                         </div>
-                                        <asp:TextBox ID="txtRemark" runat="server" ToolTip="Please Enter Remark" CssClass="form-control"></asp:TextBox>
+                                        <asp:TextBox ID="txtRemark" runat="server" ToolTip="Please Enter Remark" CssClass="form-control" TabIndex="1"></asp:TextBox>
                                         <%--<asp:RequiredFieldValidator ID="rfvRemark" runat="server" ControlToValidate="txtRemark" ErrorMessage="Please Enter Remark"
                                             ValidationGroup="Report" SetFocusOnError="true" Display="None"></asp:RequiredFieldValidator>--%>
                                     </div>
 
                                     <div class="col-lg-3 col-md-6 col-12 form-group">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Exam Name </label>
+                                            <sup>*</sup>
+                                            <label>Exam Name</label>
                                         </div>
-                                        <asp:DropDownList ID="ddlExamname" runat="server" data-select2-enable="true" AppendDataBoundItems="True" ToolTip="Please Select Semester" TabIndex="5" AutoPostBack="true" OnSelectedIndexChanged="ddlExamname_SelectedIndexChanged">
+                                        <asp:DropDownList ID="ddlExamname" runat="server" data-select2-enable="true" AppendDataBoundItems="True" ToolTip="Please Select Semester" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlExamname_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="rfvExamName" runat="server" ControlToValidate="ddlExamname"
+                                        <asp:RequiredFieldValidator ID="rfvExamName" runat="server" ControlToValidate="ddlExamname" SetFocusOnError="True"
                                             Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" ValidationGroup="show"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 btn-footer">
 
-                                <asp:Button ID="btnEligibleStudReport" runat="server" Text="Eligible Student List" Visible="false" TabIndex="8" CssClass="btn btn-info"
+                                <asp:Button ID="btnEligibleStudReport" runat="server" Text="Eligible Student List" Visible="false" TabIndex="1" CssClass="btn btn-info"
                                     OnClick="btnEligibleStudReport_Click" ToolTip="Print Eligible Student under Selected Criteria." ValidationGroup="eligible" />
 
-                                <asp:Button ID="btnShow" runat="server" Text="Show Student" OnClick="btnShow_Click" TabIndex="9"
+                                <asp:Button ID="btnShow" runat="server" Text="Show Student" OnClick="btnShow_Click" TabIndex="1"
                                     ToolTip="Shows Students under Selected Criteria." ValidationGroup="show" CssClass="btn btn-primary" />
 
-                                <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="10" CssClass="btn btn-info"
+                                <asp:Button ID="btnPrintReport" runat="server" Text="Admit Card" TabIndex="1" CssClass="btn btn-info"
                                     OnClick="btnPrintReport_Click" ToolTip="Print Card under Selected Criteria." Enabled="false" ValidationGroup="Report" />
 
                                 <asp:Button ID="btnSendEmail" runat="server" Text="Send To Email" TabIndex="999" CssClass="btn btn-info"
                                     OnClick="btnSendEmail_Click1" ToolTip="Send Card By Email" ValidationGroup="show" Visible="false" />
 
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" TabIndex="11"
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" TabIndex="1"
                                     ToolTip="Cancel Selected under Selected Criteria." CssClass="btn btn-warning" />
                                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="show" DisplayMode="List" />
@@ -319,7 +319,7 @@
         }
 
     </script>
-   <%-- <script>
+    <%-- <script>
         $(document).ready(function () {
 
             bindDataTable();
@@ -333,7 +333,6 @@
             });
         }
     </script>--%>
-
 </asp:Content>
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">
     <style type="text/css">
