@@ -353,7 +353,7 @@
                                                 </li>
                                                 <li class="nav selectthirteen list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Gpa Cgpa Report</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
 
                                                 <li class="nav selectfourteen list-group-item-new " id="pre_fourteen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Branch  Wise Result Analysis</a></b>
@@ -578,6 +578,9 @@
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="schemesession">
                                             </asp:RequiredFieldValidator>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divSection" runat="server">
@@ -1230,8 +1233,8 @@
                 });
 
                 $(".selectthirteen ").click(function () {
-                    $("#ctl00_ContentPlaceHolder1_ddlSession").removeClass("red-color");
-                    $("#ctl00_ContentPlaceHolder1_ddlSem").removeClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                 });

@@ -2429,8 +2429,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             int degreeno = Convert.ToInt32(ViewState["degreeno"]);
 
             string SP_Name = "PKG_GET_GPA_CGPA_BATCH_WISE";
-            string SP_Parameters = "@P_BRANCHNO";
-            string Call_Values = "" + branchno + "";
+            string SP_Parameters = "@P_BRANCHNO,@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO";
+            string Call_Values = "" + branchno + "," + Sessionno + "," + schemeno + "," + semesterno + "";
 
             DataSet ds = null;
             ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
@@ -2443,7 +2443,10 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 url += "&path=~,Reports,Academic," + rptFileName;
                 //url += "&param=@P_ADMBATCH=" + ddlAdmbatch.SelectedValue + ",@P_BRANCHNO=" + ViewState["branchno"];
                 //url += "&param=@P_BRANCHNO=" + ViewState["branchno"];
-                url += "&param=@P_BRANCHNO=" + ViewState["branchno"] + ",@P_COLLEGE_CODE=" + ViewState["college_id"] + "";
+
+                //url += "&param=@P_BRANCHNO=" + ViewState["branchno"] + ",@P_COLLEGE_CODE=" + ViewState["college_id"] + "";
+                url += "&param=@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SESSIONNO=" + Sessionno + ",@P_SCHEMENO=" + schemeno + ",@P_SEMESTERNO=" + semesterno + ",@P_COLLEGE_CODE=" + ViewState["college_id"] + "";
+
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
