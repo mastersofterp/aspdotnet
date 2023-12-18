@@ -190,6 +190,8 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             objSR.EXAM_REGISTERED = 0;
             objSR.SCHEMENO = Convert.ToInt32(lblScheme.ToolTip);
             objSR.SEMESTERNO = Convert.ToInt32(lblSemester.ToolTip);
+            objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
+            objSR.IDNO = Convert.ToInt32(lblName.ToolTip);
             double globalCredits = 0;
             double electiveCredits = 0;
             double coreCredits = 0;
@@ -216,28 +218,30 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 }
             }
 
-            DataSet dsRegdCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE C",
+            DataSet dsRegdCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE C ON C.COURSENO=SR.COURSENO",
                         "DISTINCT SR.COURSENO", "SR.CCODE,ISNULL(C.CREDITS,0)CREDITS,ISNULL(C.ELECT,0)ELECT,ISNULL(C.GLOBALELE,0)GLOBALELE",
-                        "ISNULL(SR.REGISTERED,0) = 0 AND ISNULL(SR.CANCEL,0) = 0 AND ISNULL(SR.PREV_STATUS,0) = 0 AND SR.SESSIONNO = " + Convert.ToInt32(objSR.SESSIONNO)
+                        "ISNULL(SR.REGISTERED,0) = 1 AND ISNULL(SR.CANCEL,0) = 0 AND ISNULL(SR.PREV_STATUS,0) = 0 AND SR.SESSIONNO = " + Convert.ToInt32(objSR.SESSIONNO)
                         + " AND SR.IDNO = " + objSR.IDNO + " AND SR.SEMESTERNO=" + objSR.SEMESTERNO, "SR.CCODE");
 
             if (dsRegdCrs.Tables[0].Rows.Count > 0)
             {
-                for (int i = 0; i <= dsRegdCrs.Tables[0].Rows.Count; i++)
+                for (int i = 0; i < dsRegdCrs.Tables[0].Rows.Count; i++)
                 {
                     string courseNo = dsRegdCrs.Tables[0].Rows[i]["COURSENO"].ToString();
-
-                    int IsGlobalCourse = Convert.ToInt32(dsRegdCrs.Tables[0].Rows[i]["GLOBALELE"].ToString());
-                    double credit = Convert.ToDouble(dsRegdCrs.Tables[0].Rows[i]["CREDITS"].ToString());
-                    if (IsGlobalCourse == 1)
-                        globalCredits += credit;
-                    else
+                    if (!objSR.COURSENOS.Contains(courseNo))
                     {
-                        int IsElectCourse = Convert.ToInt32(dsRegdCrs.Tables[0].Rows[i]["ELECT"].ToString());
-                        if (IsElectCourse == 1)
-                            electiveCredits += credit;
+                        bool IsGlobalCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["GLOBALELE"].ToString());
+                        double credit = Convert.ToDouble(dsRegdCrs.Tables[0].Rows[i]["CREDITS"].ToString());
+                        if (IsGlobalCourse)
+                            globalCredits += credit;
                         else
-                            coreCredits += credit;
+                        {
+                            bool IsElectCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["ELECT"].ToString());
+                            if (IsElectCourse)
+                                electiveCredits += credit;
+                            else
+                                coreCredits += credit;
+                        }
                     }
                 }
             }
@@ -264,17 +268,17 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
                 if (coreCredits > 0 && coreCredits > totCoreCredits)
                 {
-                    objCommon.DisplayMessage(updBulkReg, "The Total Core Credits limits is "
-                        + totElectiveCredits
+                    objCommon.DisplayMessage(updReg, "The Total Core Credits limits is "
+                        + totCoreCredits
                         + ", Student Already Registered Core Credit is "
-                        + electiveCredits, this.Page);
+                        + coreCredits, this.Page);
 
                     return;
                 }
 
                 if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
                 {
-                    objCommon.DisplayMessage(updBulkReg, "The Total Elective Credits limits is "
+                    objCommon.DisplayMessage(updReg, "The Total Elective Credits limits is "
                         + totElectiveCredits
                         + ", Student Already Registered Elective Credit is "
                         + electiveCredits, this.Page);
@@ -284,10 +288,10 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
                 if (globalCredits > 0 && globalCredits > totGlobalCredits)               
                 {
-                    objCommon.DisplayMessage(updBulkReg, "The Total Global Credits limits is "
-                        + totElectiveCredits
+                    objCommon.DisplayMessage(updReg, "The Total Global Credits limits is "
+                        + totGlobalCredits
                         + ", Student Already Registered Global Credit is "
-                        + electiveCredits, this.Page);
+                        + globalCredits, this.Page);
 
                     return;
                 }
@@ -319,11 +323,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             //}
 
             objSR.Backlog_course = objSR.Backlog_course.TrimEnd('$');           
-            //Add registered 
-            objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
-            objSR.IDNO = Convert.ToInt32(lblName.ToolTip);
-            
-            
+            //Add registered           
 
             objSR.IPADDRESS = Session["ipAddress"].ToString();
             objSR.UA_NO = Convert.ToInt32(Session["userno"].ToString());
@@ -1562,7 +1562,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             {
                 if (Item.Selected)
                 {
-                    objSR.COURSENOS += Item.Value + "$";
+                    //objSR.COURSENOS += Item.Value + "$";
                     count++;
                 }
             }
@@ -1585,13 +1585,13 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                     courseNo = Item.Value;
                     DataTable dt = dsOfferedCrs.Tables[0].Select("COURSENO =" + Convert.ToInt32(courseNo)).CopyToDataTable();
 
-                    int IsGlobalCourse = Convert.ToInt32(dt.Rows[0]["GLOBALELE"].ToString());
-                    if (IsGlobalCourse == 1)
+                    bool IsGlobalCourse = Convert.ToBoolean(dt.Rows[0]["GLOBALELE"].ToString());
+                    if (IsGlobalCourse)
                         globalCredits += Convert.ToDouble(dt.Rows[0]["CREDITS"].ToString());
                     else
                     {
-                        int IsElectCourse = Convert.ToInt32(dt.Rows[0]["ELECT"].ToString());
-                        if (IsElectCourse == 1)
+                        bool IsElectCourse = Convert.ToBoolean(dt.Rows[0]["ELECT"].ToString());
+                        if (IsElectCourse)
                             electiveCredits += Convert.ToDouble(dt.Rows[0]["CREDITS"].ToString());
                         else
                             coreCredits += Convert.ToDouble(dt.Rows[0]["CREDITS"].ToString());
@@ -1603,42 +1603,42 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
             objSR.SCHEMENO = Convert.ToInt32(ViewState["schemeno"]);
             objSR.SEMESTERNO = Convert.ToInt32(ddlSemester.SelectedValue);
-            if (coreCredits > 0 || electiveCredits > 0 || globalCredits > 0)
-            {
-                DataSet dsCredits = objCommon.FillDropDown("ACD_DEFINE_TOTAL_CREDIT WITH (NOLOCK)", "ISNULL(CORE_CREDIT,0)CORE_CREDIT", "ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT", "SCHEMENO =" + objSR.SCHEMENO + " AND TERM = " + objSR.SEMESTERNO, "");
-                double totGlobalCredits = 0;
-                double totElectiveCredits = 0;
-                double totCoreCredits = 0;
-                if (dsCredits.Tables[0].Rows.Count > 0)
-                {
-                    totCoreCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["CORE_CREDIT"].ToString());
-                    totElectiveCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["ELECTIVE_CREDIT"].ToString());
-                    totGlobalCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["GLOBAL_CREDIT"].ToString());
-                }
-                else
-                {
-                    objCommon.DisplayUserMessage(this.updBulkReg, "Please define Credit limit", this.Page);
-                    return;
-                }
+            //if (coreCredits > 0 || electiveCredits > 0 || globalCredits > 0)
+            //{
+            //    DataSet dsCredits = objCommon.FillDropDown("ACD_DEFINE_TOTAL_CREDIT WITH (NOLOCK)", "ISNULL(CORE_CREDIT,0)CORE_CREDIT", "ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT", "SCHEMENO =" + objSR.SCHEMENO + " AND TERM = " + objSR.SEMESTERNO, "");
+            //    double totGlobalCredits = 0;
+            //    double totElectiveCredits = 0;
+            //    double totCoreCredits = 0;
+            //    if (dsCredits.Tables[0].Rows.Count > 0)
+            //    {
+            //        totCoreCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["CORE_CREDIT"].ToString());
+            //        totElectiveCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["ELECTIVE_CREDIT"].ToString());
+            //        totGlobalCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["GLOBAL_CREDIT"].ToString());
+            //    }
+            //    else
+            //    {
+            //        objCommon.DisplayUserMessage(this.updBulkReg, "Please define Credit limit", this.Page);
+            //        return;
+            //    }
 
-                if (coreCredits > 0 && coreCredits > totCoreCredits)
-                {
-                    objCommon.DisplayMessage(updBulkReg, "You have reached maximum Core Credit is " + electiveCredits, this.Page);
-                    return;
-                }
+            //    if (coreCredits > 0 && coreCredits > totCoreCredits)
+            //    {
+            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum Core Credit is " + electiveCredits, this.Page);
+            //        return;
+            //    }
 
-                if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
-                {
-                    objCommon.DisplayMessage(updBulkReg, "You have reached maximum elective Credit is " + electiveCredits, this.Page);
-                    return;
-                }
+            //    if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
+            //    {
+            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum elective Credit is " + electiveCredits, this.Page);
+            //        return;
+            //    }
 
-                if (globalCredits > 0 && globalCredits > totGlobalCredits)
-                {
-                    objCommon.DisplayMessage(updBulkReg, "You have reached maximum Global Credit is " + electiveCredits, this.Page);
-                    return;
-                }
-            }
+            //    if (globalCredits > 0 && globalCredits > totGlobalCredits)
+            //    {
+            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum Global Credit is " + electiveCredits, this.Page);
+            //        return;
+            //    }
+            //}
 
             foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
             {
@@ -1669,28 +1669,30 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                     objSR.REGNO = lblRegNo.Text.Trim();
                     objSR.ROLLNO =((dataitem.FindControl("lblRollNoForbulk")) as Label).Text;
 
-                    DataSet dsRegdCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE C",
+                    DataSet dsRegdCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE C ON C.COURSENO=SR.COURSENO",
                         "DISTINCT SR.COURSENO", "SR.CCODE,ISNULL(C.CREDITS,0)CREDITS,ISNULL(C.ELECT,0)ELECT,ISNULL(C.GLOBALELE,0)GLOBALELE",
-                        "ISNULL(SR.REGISTERED,0) = 0 AND ISNULL(SR.CANCEL,0) = 0 AND ISNULL(SR.PREV_STATUS,0) = 0 AND SR.SESSIONNO = " + Convert.ToInt32(objSR.SESSIONNO)
+                        "ISNULL(SR.REGISTERED,0) = 1 AND ISNULL(SR.CANCEL,0) = 0 AND ISNULL(SR.PREV_STATUS,0) = 0 AND SR.SESSIONNO = " + Convert.ToInt32(objSR.SESSIONNO)
                         + " AND SR.IDNO = " + objSR.IDNO + " AND SR.SEMESTERNO=" + objSR.SEMESTERNO, "SR.CCODE");
 
                     if (dsRegdCrs.Tables[0].Rows.Count > 0)
                     {
-                        for (int i = 0; i <= dsRegdCrs.Tables[0].Rows.Count; i++)
+                        for (int i = 0; i < dsRegdCrs.Tables[0].Rows.Count; i++)
                         {
                             string courseNo = dsRegdCrs.Tables[0].Rows[i]["COURSENO"].ToString();
-
-                            int IsGlobalCourse = Convert.ToInt32(dsRegdCrs.Tables[0].Rows[i]["GLOBALELE"].ToString());
-                            double credit = Convert.ToDouble(dsRegdCrs.Tables[0].Rows[i]["CREDITS"].ToString());
-                            if (IsGlobalCourse == 1)
-                                globalCredits += credit;
-                            else
+                            if (!objSR.COURSENOS.Contains(courseNo))
                             {
-                                int IsElectCourse = Convert.ToInt32(dsRegdCrs.Tables[0].Rows[i]["ELECT"].ToString());
-                                if (IsElectCourse == 1)
-                                    electiveCredits += credit;
+                                bool IsGlobalCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["GLOBALELE"].ToString());
+                                double credit = Convert.ToDouble(dsRegdCrs.Tables[0].Rows[i]["CREDITS"].ToString());
+                                if (IsGlobalCourse)
+                                    globalCredits += credit;
                                 else
-                                    coreCredits += credit;
+                                {
+                                    bool IsElectCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["ELECT"].ToString());
+                                    if (IsElectCourse)
+                                        electiveCredits += credit;
+                                    else
+                                        coreCredits += credit;
+                                }
                             }
                         }
 
@@ -1714,19 +1716,31 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
                             if (coreCredits > 0 && coreCredits > totCoreCredits)
                             {
-                                objCommon.DisplayMessage(updBulkReg, "You have reached maximum Core Credit is " + electiveCredits, this.Page);
+                                objCommon.DisplayMessage(updBulkReg, "The Total Core Credits limits is "
+                                    + totCoreCredits
+                                    + ", Student Already Registered Core Credit is "
+                                    + coreCredits, this.Page);
+
                                 return;
                             }
 
                             if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
                             {
-                                objCommon.DisplayMessage(updBulkReg, "You have reached maximum elective Credit is " + electiveCredits, this.Page);
+                                objCommon.DisplayMessage(updBulkReg, "The Total Elective Credits limits is "
+                                    + totElectiveCredits
+                                    + ", Student Already Registered Elective Credit is "
+                                    + electiveCredits, this.Page);
+
                                 return;
                             }
 
                             if (globalCredits > 0 && globalCredits > totGlobalCredits)
                             {
-                                objCommon.DisplayMessage(updBulkReg, "You have reached maximum Global Credit is " + electiveCredits, this.Page);
+                                objCommon.DisplayMessage(updBulkReg, "The Total Global Credits limits is "
+                                    + totGlobalCredits
+                                    + ", Student Already Registered Global Credit is "
+                                    + globalCredits, this.Page);
+
                                 return;
                             }
                         }
@@ -1747,93 +1761,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         {
             throw;
         }
-            
-
-       
-        
-
-
-
-
-
-
-
-
-        //string roll = string.Empty;
-        //StudentRegistration objSRegist = new StudentRegistration();
-        //StudentRegist objSR = new StudentRegist();
-        ////CheckBox cbRow = new CheckBox();
-
-        //try
-        //{
-        //    foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
-        //    {
-        //        //Get Student Details from lvStudent
-        //        CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
-        //        if (cbRow.Checked == true)
-        //        {
-        //            objSR.SESSIONNO = Convert.ToInt32(ddlSession.SelectedValue);
-        //            objSR.IDNO = Convert.ToInt32(((dataitem.FindControl("lblIDNo")) as Label).ToolTip);
-        //            objSR.REGNO = ((dataitem.FindControl("lblIDNo")) as Label).Text;
-        //            objSR.SEMESTERNO = Convert.ToInt32(ddlSemester.SelectedValue);
-        //            objSR.SCHEMENO = Convert.ToInt32(ViewState["schemeno"]);
-        //            objSR.IPADDRESS = ViewState["ipAddress"].ToString();
-        //            objSR.COLLEGE_CODE = Session["colcode"].ToString();
-        //            objSR.UA_NO = Convert.ToInt32(Session["userno"]);
-
-        //            int count = 0;
-
-        //            foreach (ListItem Item in lboOfferCourse.Items)
-        //            {
-        //                if (Item.Selected)
-        //                {
-        //                    objSR.COURSENOS += Item.Value + ",";
-        //                    count++;
-                           
-        //                }
-        //            }
-
-        //            //Get Course Details
-        //            //foreach (ListViewDataItem dataitemCourse in lvCourse.Items)
-        //            //{
-        //            //    if (((dataitemCourse.FindControl("cbRow")) as CheckBox).Checked == true)
-        //            //    {
-        //            //        objSR.COURSENOS += ((dataitemCourse.FindControl("lblCCode")) as Label).ToolTip + "$";
-        //            //        Label elective = (dataitemCourse.FindControl("lblCourseName")) as Label;
-        //            //        if (elective.ToolTip == "False")
-        //            //        {
-        //            //            objSR.ELECTIVE += "0" + "$";
-        //            //        }
-        //            //        else
-        //            //        {
-        //            //            objSR.ELECTIVE += "1" + "$";
-        //            //        }
-        //            //    }
-        //            //}
-
-        //            objSR.ACEEPTSUB = "1";
-
-        //            //Register Single Student
-        //            //int prev_status = 0;    //Regular Courses
-        //            //int seatno = 0;
-
-        //            CustomStatus cs = (CustomStatus)objSRegist.AddRegisteredSubjectsModifyBulk(objSR);
-        //            if (cs.Equals(CustomStatus.RecordSaved))
-        //            {
-        //                objSR.COURSENOS = string.Empty;
-        //                objSR.ACEEPTSUB = string.Empty;
-        //            }
-        //        }
-        //    }
-        //    objCommon.DisplayMessage(updBulkReg, "Student(s) Registered Successfully!!", this.Page);
-        //    clear();
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw;
-        //}
     }
-
 }
 
 
