@@ -78,9 +78,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
-                this.FillDropdownList();
+                //this.FillDropdownList();
                 this.PopulateSessionDropDown();
 
+
+                btnPassStudList.Visible = true;
+                btnConvocationExcelReport.Visible = true;
+
+               
                 string passoutflag = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(PASSOUT_RPT,0)", ""));
                 string convfeedback = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(FEEDBACK_RPT,0)", ""));
 
@@ -92,6 +97,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 {
                     btnConvocationExcelReport.Visible = true;
                 }
+                
             }
         }
     }
@@ -147,7 +153,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         {
             //Fill Dropdown Session 
             string college_IDs = objCommon.LookUp("User_Acc", "UA_COLLEGE_NOS", "UA_NO=" + Session["userno"].ToString());
-            DataSet dsCollegeSession = objCC.GetCollegeSession(1, college_IDs);
+          //  DataSet dsCollegeSession = objCC.GetCollegeSession(0, college_IDs);
+            DataSet dsCollegeSession = objCommon.FillDropDown("ACD_SESSION_MASTER SM INNER JOIN ACD_COLLEGE_MASTER CM ON (SM.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_STUDENT_RESULT SR ON (SR.SESSIONNO = SM.SESSIONNO)", "DISTINCT SM.SESSIONNO","CM.COLLEGE_ID,SESSION_NAME,COLLEGE_NAME,CONCAT (COLLEGE_NAME ,'-', SESSION_NAME) AS COLLEGE_SESSION ","ISNULL(IS_ACTIVE,0)=1", "SESSIONNO,COLLEGE_ID DESC");
             ddlCollege.Items.Clear();
             //ddlCollege.Items.Add("Please Select");
             ddlCollege.DataSource = dsCollegeSession;
@@ -161,8 +168,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             throw;
         }
     }
- 
-
+  
     string admbatch = string.Empty; 
     public void clear()
     { 
