@@ -11813,6 +11813,25 @@ namespace IITMS
                     return ds;
                 }
 
+                //----13-12-2023 --Get Announce Data on Home Page---- start
+                public DataSet GetPlacement(int UANO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UANO", UANO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_TP_GET_JOBANNOUNCE_DESHBOARD_DETAILS", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.GetJobLoc-> " + ex.ToString());
+
+                    }
+                    return ds;
+                }
 
                 //----21-12-2023 --Get Exam Details----
                 public DataSet BindExamDetails(int idno)
