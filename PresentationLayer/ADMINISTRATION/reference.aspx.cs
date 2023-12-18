@@ -75,7 +75,7 @@ public partial class error : System.Web.UI.Page
                 txtCollegeAddress.Enabled = false;
                 txtPhoneNo.Enabled = false;
                 txtEmailID.Enabled = false;
-                fuCollegeLogo.Enabled = false;
+                //fuCollegeLogo.Enabled = false;       -- Commented by Shrikant W. After Discussion with Manoj Shanti Sir to enable Collge Logo Upload for all Admin User
                 txtCollegeCode.Enabled = false;
                 txtFacUserType.Enabled = false;
                 chkEnroll.Enabled = false;
