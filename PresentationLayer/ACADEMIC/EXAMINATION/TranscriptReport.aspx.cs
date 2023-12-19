@@ -668,6 +668,10 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
 
         }
         #endregion
+        else if (Convert.ToInt32(Session["OrgId"]) == 18) //Transcript for HITS Client as on 19_12_2023
+        {
+            ShowTranscriptReport_hits("AllTranscript", "rpt_Transcript_Report_HITS.rpt");
+        }
         else
         {
             ShowTranscriptReport("AllTranscript", "rpt_Transcript_Report.rpt");
@@ -724,6 +728,43 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
 
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
             url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + ViewState["idno"].ToString();
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            //lblMsg.Text = ex.ToString();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TranscriptReport.btnTranscript_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    private void ShowTranscriptReport_hits(string reportTitle, string rptFileName)
+    {
+        try
+        {
+            int COLLEGE_ID = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() +  ",@P_IDNO=" + ViewState["idno"].ToString()+",@P_SEMESTERNO="+0+"";
+
+
+
+
+            int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
+
+            url += "&param=@P_COLLEGE_CODE=" + COLLEGE_ID + ",@P_IDNO=" + ViewState["idno"].ToString();
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
