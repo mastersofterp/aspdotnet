@@ -5374,7 +5374,84 @@ namespace IITMS
                     return ds;
                 }
 
+                //Added by Gopal M 23/10/2023   Ticket
+                public DataSet GetBacklogRedoCourseRegistrationApprvlList(int clgID, int departNo, int sessionID, int degreeID, int branchID, int semesterNo)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_COLLEGE_ID", clgID);
+                        objParams[1] = new SqlParameter("@P_DEPARTMENTID", 0);
+                        objParams[2] = new SqlParameter("@P_SESSIONNO", sessionID);
+                        objParams[3] = new SqlParameter("@P_DEGREENO", degreeID);
+                        //objParams[4] = new SqlParameter("@P_BRANCHNO", branchID);
+                        objParams[4] = new SqlParameter("@P_SEMESTERNO", semesterNo);
+                        //objParams[4] = new SqlParameter("@P_FILTER", filter);
+                        ds = objSQLHelper.ExecuteDataSetSP("ACD_BAKCLOG_REDO_COURSE_REG_APPROVE_VIEWLIST", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.CourseController.GetCourseRegistrationApprvlList-> " + ex.ToString());
+                    }
+                    return ds;
+                }
 
+                // Backlog Redo Course Regi Approval Update Method - Added by Gopal M 23/10/2023
+                public int UpdateBacklogRedoCourseRegApproval(int userno, int SessionNo, int DegreeNo, int BranchNo, int College_ID, string StudIDNOs, string ipAddress)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        //Edit Course
+                        objParams = new SqlParameter[7];
+
+                        objParams[0] = new SqlParameter("@P_IDNOs", StudIDNOs);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", SessionNo);
+                        objParams[2] = new SqlParameter("@P_COLLEGE_ID", DegreeNo);
+                        objParams[3] = new SqlParameter("@P_INCH_CREG_UANO", userno);
+                        objParams[4] = new SqlParameter("@P_INCH_CREG_IPADDR", ipAddress);
+                        objParams[5] = new SqlParameter("@P_OrgId", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                        objParams[6] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[6].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_BACKLOG_REDO_COURSE_REG_APPROVAL", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.CourseController.UpdateBacklogRedoCourseRegApproval -> " + ex.ToString());
+                    }
+
+                    return retStatus;
+                }
+
+                public DataSet GetGlobalTimeSlotDropdown(int sessionno, int courseno, int slottype)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[2] = new SqlParameter("@P_SLOTTYPE", slottype);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_DROPDOWN_SP_GET_TIME_SLOT_GLOBAL", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetGlobalTimeSlotDropdown-> " + ex.ToString());
+                    }
+                    return ds;
+                }
 
 
             }//END: BusinessLayer.BusinessLogic
