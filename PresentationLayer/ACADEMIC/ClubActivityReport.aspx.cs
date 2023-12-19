@@ -5,9 +5,9 @@
 // PAGE NAME     : ClubActivityReport                                 
 // CREATION DATE : 25-10-2023                                                      
 // CREATED BY    : Vipul Tichakule                                                        
-// MODIFIED DATE : 
-// MODIFIED BY                                                     
-// MODIFIED DESC :                                                                  
+// MODIFIED DATE :  19-12-2023    
+// MODIFIED BY   : Jay S. takalkhede                                             
+// MODIFIED DESC : Remove Session Field                                                               
 //======================================================================================
 using BusinessLogicLayer.BusinessLogic.Academic;
 using ClosedXML.Excel;
@@ -42,7 +42,7 @@ public partial class ACADEMIC_ClubActivityReport : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                  CheckPageAuthorization();
+                 // CheckPageAuthorization();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 if (Session["usertype"].ToString() == "1" )
@@ -82,7 +82,16 @@ public partial class ACADEMIC_ClubActivityReport : System.Web.UI.Page
     #region Filldropdownlist
     private void FillDropDownList()
     {
-        objCommon.FillDropDownList(ddlSession, "[dbo].[ACD_SESSION]", "SESSIONID", "SESSION_NAME", "isnull(FLOCK,0)=1", "SESSION_NAME");
+        if (Session["usertype"].ToString() == "1")
+        {
+            objCommon.FillListBox(lstbxClub, "ACD_CLUB_MASTER AM INNER JOIN ACD_CLUB_ACTIVITY_REGISTRATION CR ON CR.CLUBACTIVITY_TYPE = AM.CLUB_ACTIVITY_NO", "DISTINCT CR.CLUBACTIVITY_TYPE", "AM.CLUB_ACTIVITY_TYPE", "", "CLUB_ACTIVITY_TYPE");
+
+        }
+        else
+        {
+            objCommon.FillListBox(lstbxClub, "ACD_CLUB_MASTER AM INNER JOIN ACD_CLUB_ACTIVITY_REGISTRATION CR ON CR.CLUBACTIVITY_TYPE = AM.CLUB_ACTIVITY_NO", "DISTINCT CR.CLUBACTIVITY_TYPE", "AM.CLUB_ACTIVITY_TYPE", "INCHARGE_NO=" + Convert.ToInt32(Session["userno"].ToString()) + "", "CLUB_ACTIVITY_TYPE");
+        }
+        //objCommon.FillDropDownList(ddlSession, "[dbo].[ACD_SESSION]", "SESSIONID", "SESSION_NAME", "isnull(FLOCK,0)=1", "SESSION_NAME");
     }
     #endregion 
 
@@ -105,7 +114,7 @@ public partial class ACADEMIC_ClubActivityReport : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (Session["usertype"].ToString() != "1")
+        if (Session["usertype"].ToString() == "1")
         {
             objCommon.FillListBox(lstbxClub, "ACD_CLUB_MASTER AM INNER JOIN ACD_CLUB_ACTIVITY_REGISTRATION CR ON CR.CLUBACTIVITY_TYPE = AM.CLUB_ACTIVITY_NO", "DISTINCT CR.CLUBACTIVITY_TYPE", "AM.CLUB_ACTIVITY_TYPE", "SESSIONNO IN (select SESSIONNO from acd_session_MASTER WHERE ISNULL(FLOCK,0)=1 AND SESSIONID=" + ddlSession.SelectedValue + " )", "CLUB_ACTIVITY_TYPE");
 
@@ -174,7 +183,7 @@ public partial class ACADEMIC_ClubActivityReport : System.Web.UI.Page
     protected void ClearControls()
     {
         ddlSession.SelectedIndex = 0;
-        lstbxClub.Items.Clear();
+        //lstbxClub.Items.Clear();
     }
 
     protected void btnCancelReport_Click(object sender, EventArgs e)
