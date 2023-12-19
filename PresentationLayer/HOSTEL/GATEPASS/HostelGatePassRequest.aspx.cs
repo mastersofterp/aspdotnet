@@ -229,8 +229,8 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(IsApprove))
             {
-                objCommon.DisplayMessage("You can not able to edit approved gatepass.", this.Page);
-                return;
+                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
+                Response.Redirect(Request.RawUrl);
             }
             else
             {
