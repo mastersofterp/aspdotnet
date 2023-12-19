@@ -414,6 +414,13 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="schemesession">
                                             </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="InternalmarkReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="rfvCnameAnalysisReport" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true" Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0"
+                                             ValidationGroup="AnalysisReport">
+                                            </asp:RequiredFieldValidator>
+
                                         </div>
 
 
@@ -808,7 +815,7 @@
                                     <asp:Button ID="btnGraderpt" runat="server" Text="Format - II Report" CssClass="btn btn-info" OnClick="btnGraderpt_Click" TabIndex="1" ValidationGroup="FormatIIReport" />
                                     <asp:Button ID="btntrexcel" runat="server" Text="TR EXCEL (GRADE)" CssClass="btn btn-info" OnClick="btntrexcel_Click" TabIndex="1" CausesValidation="false" />
 
-                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" TabIndex="1" Visible="true" CausesValidation="false" />
+                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" ValidationGroup="AnalysisReport" TabIndex="1" Visible="true" />
 
                                     <asp:Button ID="btnFaculty" runat="server" Text="Faculty Wise Result Analysis" CssClass="btn btn-info" OnClick="btnFaculty_Click" TabIndex="1" CausesValidation="false" Visible="false" />
                                     <asp:Button ID="btnAnalysis" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnAnalysis_Click" TabIndex="1" CausesValidation="false" Visible="false" />

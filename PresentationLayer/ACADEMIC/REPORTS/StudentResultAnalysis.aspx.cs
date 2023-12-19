@@ -1728,24 +1728,24 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void btnGradesheet_Click(object sender, EventArgs e)
     {
-        if (ddlSem.SelectedIndex == 0)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Semester.');", true);
-            ddlSem.Focus();
-            return;
-        }
-        else if (ddlClgname.SelectedIndex == 0)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select college name.');", true);
-            ddlClgname.Focus();
-            return;
-        }
-        else if (ddlSection.SelectedIndex == 0)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Section.');", true);
-            ddlSection.Focus();
-            return;
-        }
+        //if (ddlSem.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Semester.');", true);
+        //    ddlSem.Focus();
+        //    return;
+        //}
+        //else if (ddlClgname.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select college name.');", true);
+        //    ddlClgname.Focus();
+        //    return;
+        //}
+        //else if (ddlSection.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Section.');", true);
+        //    ddlSection.Focus();
+        //    return;
+        //}
         if (Session["OrgId"] == "1")
         {
             string reportTitle = "Result Analysis";
@@ -1802,30 +1802,45 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         }
         else
         {
-            string reportTitle = "Analysis Report";
-            string rptFileName = "rptCourseWise_Result_Analysis.rpt";
-            try
+
+
+            string SP_Name = "PKG_CLASSWISE_RESULT_ANALYSIS";
+            string SP_Parameters = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_SECTIONO,@P_UA_NO,@P_UA_TYPE";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ViewState["degreeno"] + "," + ViewState["branchno"] + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Session["userno"] + "," + Session["usertype"]+"";
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-                url += "Reports/CommonReport.aspx?";
-                url += "pagetitle=" + reportTitle;
-                url += "&path=~,Reports,Academic," + rptFileName;
-                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
-                    ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+                string reportTitle = "Analysis Report";
+                string rptFileName = "rptCourseWise_Result_Analysis.rpt";
+                try
+                {
+                    string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                    url += "Reports/CommonReport.aspx?";
+                    url += "pagetitle=" + reportTitle;
+                    url += "&path=~,Reports,Academic," + rptFileName;
+                    url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+                        ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"] + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
-                //divMsg.InnerHtml += " </script>";
-                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                    //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                    //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+                    //divMsg.InnerHtml += " </script>";
+                    string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
 
-                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+                    ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+                }
+                catch (Exception ex)
+                {
+                    if (Convert.ToBoolean(Session["error"]) == true)
+                        objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+                    else
+                        objUCommon.ShowError(Page, "Server Unavailable.");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                if (Convert.ToBoolean(Session["error"]) == true)
-                    objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
-                else
-                    objUCommon.ShowError(Page, "Server Unavailable.");
+                objCommon.DisplayMessage(updpnlExam, "No Data Found for current selection.", this.Page);
             }
         }
     }
