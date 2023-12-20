@@ -1955,6 +1955,64 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
             //    objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
+    public void BindListViewRevaluation()
+    {
+
+        int idno = 0;
+        if (Session["usertype"].ToString().Equals("2"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(Session["stuinfoidno"]);
+        }
+        DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(RadioButtonList1.SelectedValue));
+        int orgid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "OrganizationId", "IDNO=" + idno));
+        if (orgid == 1)
+        {
+            if (dsreval.Tables[0].Rows.Count > 0)
+            {
+                pnlrevalresult.Visible = true;
+                lvRevalDetails.DataSource = dsreval;
+                lvRevalDetails.DataBind();
+            }
+            else
+            {
+                // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                pnlrevalresult.Visible = false;
+                lvRevalDetails.DataSource = null;
+                lvRevalDetails.DataBind();
+            }
+        }
+
+        else if (orgid == 2)
+        {
+
+            DataSet dsreval1 = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(RadioButtonList1.SelectedValue));
+            if (dsreval1.Tables[0].Rows.Count > 0)
+            {
+                pnlrevalresult.Visible = true;
+                lvRevalDetails.DataSource = dsreval1;
+                lvRevalDetails.DataBind();
+            }
+            else
+            {
+                // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                pnlrevalresult.Visible = false;
+                lvRevalDetails.DataSource = null;
+                lvRevalDetails.DataBind();
+            }
+        }
+
+    }
+
+    protected void RadioButtonList1_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        BindListViewRevaluation();
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
+    }
     protected void lnkccode_Click(object sender, EventArgs e)
     {
         int idno = 0;

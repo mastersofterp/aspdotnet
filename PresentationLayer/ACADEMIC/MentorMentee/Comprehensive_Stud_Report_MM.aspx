@@ -2021,9 +2021,6 @@
                                                                             <td><%--style="width:15%"--%>
                                                                                 <%# Eval("REMARKS") %>
                                                                             </td>
-
-
-
                                                                         </tr>
                                                                     </ItemTemplate>
                                                                 </asp:ListView>
