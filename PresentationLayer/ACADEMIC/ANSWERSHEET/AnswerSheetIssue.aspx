@@ -240,7 +240,7 @@
                                             </div>
                                             <asp:HiddenField ID="hdissuerid" runat="server" />
                                             <asp:DropDownList ID="ddlFaculty" AppendDataBoundItems="True" runat="server" ValidationGroup="submit"
-                                                Width="90%" TabIndex="10">
+                                                Width="90%" TabIndex="1" CssClass="form-control" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rfvFaculty" runat="server" ControlToValidate="ddlFaculty"
@@ -334,7 +334,7 @@
                                                     ErrorMessage="Please Enter Issuer Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid"
                                                     IsValidEmpty="False" SetFocusOnError="True" ValidationGroup="Submit" />
                                                 <asp:RequiredFieldValidator ID="rfvIssuerDate" runat="server" ControlToValidate="txtIssueDate"
-                                                    Display="None" ErrorMessage="Please select AnsSheet Issuer Date." ValidationGroup="MrksheetRcev"></asp:RequiredFieldValidator>
+                                                    Display="None" ErrorMessage="Please select Issuer Date." ValidationGroup="submit"></asp:RequiredFieldValidator>
                                                 <asp:HiddenField ID="hdIssuerdate" runat="server" Value='<%# Eval("ISSUER_DATE") %>' />
                                             </div>
                                         </div>
@@ -361,6 +361,8 @@
                                                     ControlToValidate="txtRecdDate" Display="None" EmptyValueMessage="Please Enter Receiver Date"
                                                     ErrorMessage="Please Enter Receiver Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid"
                                                     IsValidEmpty="False" SetFocusOnError="True" ValidationGroup="Submit" />
+                                                <asp:RequiredFieldValidator ID="rfvRecdDate" runat="server" ControlToValidate="txtRecdDate"
+                                                    Display="None" ErrorMessage="Please select Receiver Date." ValidationGroup="submit" Enabled="false"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="ReceiverName" runat="server" visible="false">
@@ -369,6 +371,9 @@
                                                 <asp:Label ID="lblReceiveName" runat="server" Style="font-family: Sans-Serif; font-size: small;" Text="Receiver Name : " Visible="false"></asp:Label>
                                             </div>
                                             <asp:TextBox ID="txtReceiveName" runat="server" CssClass="form-control" MaxLength="100" TabIndex="2" />
+                                            <asp:RequiredFieldValidator ID="RfvReceiveName" runat="server" SetFocusOnError="True"
+                                                ErrorMessage="Please Enter Receiver Name" ControlToValidate="txtReceiveName"
+                                                Display="None" ValidationGroup="submit" Enabled="false" />
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
@@ -397,7 +402,7 @@
                                     &nbsp;<asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="show" />
                                 </div>
 
-                                <asp:Panel ID="pnlSession" runat="server">
+                                <asp:Panel ID="pnlSession" runat="server" Width="100%">
                                     <div class="col-12">
                                         <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="table2">
                                             <asp:Repeater ID="lvStudentsIssuer" runat="server">
@@ -421,7 +426,7 @@
                                                 <ItemTemplate>
                                                     <tr>
                                                         <td>
-                                                            <asp:ImageButton ID="btnEdit" runat="server" CommandArgument='<%# Eval("ISSUERID") %>' ImageUrl="~/images/edit.gif" OnClick=" btnEdit_Click" ToolTip="Edit Record" />
+                                                            <asp:ImageButton ID="btnEdit" runat="server" CommandArgument='<%# Eval("ISSUERID") %>' ImageUrl="~/images/Edit.png" OnClick=" btnEdit_Click" ToolTip="Edit Record" AlternateText="Edit Record" />
                                                         </td>
                                                         <td><%# Eval("COURSENAME")%>
                                                             <asp:HiddenField ID="hdCourseno" runat="server" Value='<%# Eval("COURSENO") %>' />
@@ -446,7 +451,8 @@
                                                 <AlternatingItemTemplate>
                                                     <tr>
                                                         <td>
-                                                            <asp:ImageButton ID="btnEdit" runat="server" CommandArgument='<%# Eval("ISSUERID") %>' ImageUrl="~/images/edit.gif" OnClick=" btnEdit_Click" ToolTip="Edit Record" />
+                                                            <%--<asp:ImageButton ID="btnEdit" runat="server" CommandArgument='<%# Eval("ISSUERID") %>' ImageUrl="~/images/edit.gif" OnClick=" btnEdit_Click" AlternateText="Edit Record" ToolTip="Edit Record" />--%>
+                                                            <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("ISSUERID") %>' AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="1" />
                                                         </td>
                                                         <td><%# Eval("COURSENAME")%>
                                                             <asp:HiddenField ID="hdCourseno" runat="server" Value='<%# Eval("COURSENO") %>' />

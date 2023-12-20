@@ -49,10 +49,11 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
                     if (Request.QueryString["pageno"] != null)
                         //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
 
-                    this.FillDropdown();
+                        this.FillDropdown();
                     btnReport.Enabled = false;
                     btnShow.Enabled = false;
-
+                    //add for edit validation by Shubham B
+                    ViewState["action"] = "add";
                     //AjaxControlToolkit.CalendarExtender CalID = new AjaxControlToolkit.CalendarExtender();
                     //CalID1.StartDate = DateTime.Now;
 
@@ -96,9 +97,9 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
         try
         {
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "");
-           //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
-           //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
-           //objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME WITH (NOLOCK)", "EXAMNO", "EXAMNAME", "EXAMTYPE=2 and PATTERNNO=1 ", "EXAMNO");
+            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
+            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
+            //objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME WITH (NOLOCK)", "EXAMNO", "EXAMNAME", "EXAMTYPE=2 and PATTERNNO=1 ", "EXAMNO");
 
         }
         catch (Exception ex)
@@ -114,10 +115,10 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
         try
         {
             AnswerSheet objAnsSheet = new AnswerSheet();
-           //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
-           //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
-           //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
-           //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
+            //ViewState["degreeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["DEGREENO"]).ToString();
+            //ViewState["branchno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["BRANCHNO"]).ToString();
+            //ViewState["college_id"] = Convert.ToInt32(ds.Tables[0].Rows[0]["COLLEGE_ID"]).ToString();
+            //ViewState["schemeno"] = Convert.ToInt32(ds.Tables[0].Rows[0]["SCHEMENO"]).ToString();
             objAnsSheet.SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
             objAnsSheet.SchemeNo = Convert.ToInt32(ViewState["schemeno"]);
             objAnsSheet.SemesterNo = Convert.ToInt32(ddlSem.SelectedValue);
@@ -149,7 +150,7 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
                     }
                     else
                     {
-                       lvStudentsIssuer.DataSource = null;
+                        lvStudentsIssuer.DataSource = null;
                         lvStudentsIssuer.DataBind();
                         lvStudentsIssuer.Visible = false;
                         btnReport.Enabled = false;
@@ -190,19 +191,32 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        int Duplicate = Convert.ToInt32(objCommon.LookUp("ACD_ANS_ISSUE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND EXAM_STAFF_NO=" + Convert.ToInt32(ddlFaculty.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ddlCourses.SelectedValue) + ""));
-        if (Duplicate > 0)
-        {
-            objCommon.DisplayMessage(this.updSession, "Record Already Exists.", this.Page);
-        }
-        else
+        
         try
         {
             int IssuerId;
             string recdname = string.Empty; ;
             string recd_date = string.Empty; ;
-
             AnswerSheet objAnsSheet = new AnswerSheet();
+            if (ViewState["action"].ToString().Equals("edit"))
+            {
+                int Duplicate = Convert.ToInt32(objCommon.LookUp("ACD_ANS_ISSUE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND EXAM_STAFF_NO=" + Convert.ToInt32(ddlFaculty.SelectedValue) + "AND  COURSENO=" + Convert.ToInt32(ddlCourses.SelectedValue) + " AND RECEIVER_DATE != '' AND RECEIVER_NAME IS NOT NULL"));
+                if (Duplicate > 0)
+                {
+                    objCommon.DisplayMessage(this.updSession, "Record Already Exists.", this.Page);
+                    return;
+                }
+            }
+            else 
+            {
+                int Duplicate = Convert.ToInt32(objCommon.LookUp("ACD_ANS_ISSUE WITH (NOLOCK)", "COUNT(1)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND EXAM_STAFF_NO=" + Convert.ToInt32(ddlFaculty.SelectedValue) + "AND  COURSENO=" + Convert.ToInt32(ddlCourses.SelectedValue) + ""));
+                if (Duplicate > 0)
+                {
+                    objCommon.DisplayMessage(this.updSession, "Record Already Exists.", this.Page);
+                    return;
+                }
+            }
+           
             if (txtReceiveName.Text != null && (hdissuerid.Value) != string.Empty)
             {
                 IssuerId = Convert.ToInt32(hdissuerid.Value);
@@ -228,7 +242,7 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
             objAnsSheet.Balance = Convert.ToInt32(txtBalance.Text);
             objAnsSheet.Bundle = txtBundle.Text;
             objAnsSheet.Issuer_Date = Convert.ToDateTime(txtIssueDate.Text);
-            // objAnsSheet.Receiver_Date = Convert.ToDateTime(txtRecdDate.Text);
+            //objAnsSheet.Receiver_Date = Convert.ToDateTime(txtRecdDate.Text);
             objAnsSheet.Remark = txtRemark.Text;
             objAnsSheet.Examtype = Convert.ToInt32(ddlExamType.SelectedValue);
 
@@ -237,6 +251,10 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
             if (cs.Equals(CustomStatus.RecordSaved))
             {
                 objCommon.DisplayMessage(this.updSession, "Record Saved Successfully.", this.Page);
+                //add for edit validation by Shubham B
+                RfvReceiveName.Enabled = false;
+                rfvRecdDate.Enabled = false;
+                ViewState["action"] = "add";
             }
             else
             {
@@ -265,9 +283,10 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
             ReceiverName.Visible = true;
             ReceiveDT.Visible = true;
             lblReceiveDT.Visible = true;
-        //    ReceiveName.Visible = true;
+            //ReceiveName.Visible = true;
             txtRecdDate.Visible = true;
             lblReceiveName.Visible = true;
+            ViewState["action"] = "edit";
             try
             {
                 DataSet ds = objAnsSheetController.ShowIssuerDetails(issuerid);
@@ -287,8 +306,9 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
                     txtReceiveName.Text = ds.Tables[0].Rows[0]["RECEIVER_NAME"].ToString();
                     txtBalance.Text = ds.Tables[0].Rows[0]["QUTBALANCE"].ToString();
 
-
-
+                    //add for edit validation by Shubham B
+                    RfvReceiveName.Enabled = true;
+                    rfvRecdDate.Enabled = true;
                 }
                 else
                 {
@@ -367,6 +387,8 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
         ddlSem.Enabled = true;
         ddlCourses.Enabled = true;
         ddlFaculty.SelectedItem.Text = string.Empty;
+        ddlClgname.SelectedIndex = 0;
+        ddlExamType.SelectedIndex = 0;
 
     }
     private void ClearData()
@@ -406,10 +428,10 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
     protected void ddlExamType_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-        objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME WITH (NOLOCK)", "DISTINCT EXAMNO", "EXAMNAME", "EXAMTYPE=" + ddlExamType.SelectedValue + "and PATTERNNO=1 and EXAMTYPE<>0 and examname<>''", "EXAMNO");
+        objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME WITH (NOLOCK)", "DISTINCT EXAMNO", "EXAMNAME", "EXAMTYPE= 2 and PATTERNNO=1 and EXAMNAME<>''", "EXAMNO");
         //objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR WITH (NOLOCK) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON AR.COURSENO=C.COURSENO", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ddlScheme.SelectedValue + "", "");
 
-       // objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR INNER JOIN ACD_COURSE C ON AR.COURSENO=C.COURSENO LEFT JOIN ACD_ANS_ISSUE AI ON AR.RECDID=AI.RECDID", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ddlScheme.SelectedValue + " AND AR.SEMESTERNO = " + ddlSem.SelectedValue + "AND AR.EXAMTYPE = " + ddlExamType.SelectedValue, "C.COURSENO");
+        // objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR INNER JOIN ACD_COURSE C ON AR.COURSENO=C.COURSENO LEFT JOIN ACD_ANS_ISSUE AI ON AR.RECDID=AI.RECDID", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ddlScheme.SelectedValue + " AND AR.SEMESTERNO = " + ddlSem.SelectedValue + "AND AR.EXAMTYPE = " + ddlExamType.SelectedValue, "C.COURSENO");
         lvStudentsIssuer.DataSource = null;
         lvStudentsIssuer.DataBind();
         ClearData();
@@ -421,8 +443,9 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
 
         if (Convert.ToInt32(ddlCourses.SelectedValue) > 0)
         {
-           // this.BindListView();
-            objCommon.FillDropDownList(ddlFaculty, "ACD_EXAM_STAFF A WITH (NOLOCK) INNER JOIN ACD_EXAM_EVALUATOR B WITH (NOLOCK) ON A.EXAM_STAFF_NO =B.EXAM_STAFF_NO", "distinct A.EXAM_STAFF_NO", "A.STAFF_NAME", "A.ACTIVE=1 and B.STATUS=0 AND APPROVE_STATUS=1 AND B.COURSENO=" + ddlCourses.SelectedValue + " AND B.SESSIONNO=" + ddlSession.SelectedValue + "AND B.EXAMTYPE=" + ddlExamType.SelectedValue, "A.EXAM_STAFF_NO");
+            // this.BindListView();
+            //objCommon.FillDropDownList(ddlFaculty, "ACD_EXAM_STAFF A WITH (NOLOCK) INNER JOIN ACD_EXAM_EVALUATOR B WITH (NOLOCK) ON A.EXAM_STAFF_NO =B.EXAM_STAFF_NO", "distinct A.EXAM_STAFF_NO", "A.STAFF_NAME", "A.ACTIVE=1 and B.STATUS=0 AND APPROVE_STATUS=1 AND B.COURSENO=" + ddlCourses.SelectedValue + " AND B.SESSIONNO=" + ddlSession.SelectedValue + "AND B.EXAMTYPE=" + ddlExamType.SelectedValue, "A.EXAM_STAFF_NO");
+            objCommon.FillDropDownList(ddlFaculty, "ACD_EXAM_STAFF A WITH (NOLOCK) INNER JOIN ACD_EXAM_EVALUATOR B WITH (NOLOCK) ON A.EXAM_STAFF_NO =B.EXAM_STAFF_NO", "distinct A.EXAM_STAFF_NO", "A.STAFF_NAME", "A.ACTIVE=1 and B.STATUS=0 AND APPROVE_STATUS=1 AND B.COURSENO=" + ddlCourses.SelectedValue + " AND B.SESSIONNO=" + ddlSession.SelectedValue, "A.EXAM_STAFF_NO");
             btnShow.Enabled = true;
             //tblFacdetai.Visible = true;
             //ClearData();
@@ -496,7 +519,7 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
             ddlExam.Items.Add(new ListItem("Please Select", "0"));
             ddlSession.Items.Clear();
             ddlSession.Items.Add(new ListItem("Please Select", "0"));
-          
+
         }
 
     }
@@ -515,7 +538,7 @@ public partial class ACADEMIC_ANSWERSHEET_AnswerSheetIssue : System.Web.UI.Page
     {
         //objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR WITH (NOLOCK) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON AR.COURSENO=C.COURSENO", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ddlScheme.SelectedValue + "", "");
 
-         objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR INNER JOIN ACD_COURSE C ON AR.COURSENO=C.COURSENO LEFT JOIN ACD_ANS_ISSUE AI ON AR.RECDID=AI.RECDID", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ViewState["schemeno"] + " AND AR.SEMESTERNO = " + ddlSem.SelectedValue + "AND AR.EXAMTYPE = " + ddlExamType.SelectedValue, "C.COURSENO");
+        objCommon.FillDropDownList(ddlCourses, "ACD_ANS_RECD AR INNER JOIN ACD_COURSE C ON AR.COURSENO=C.COURSENO LEFT JOIN ACD_ANS_ISSUE AI ON AR.RECDID=AI.RECDID", "DISTINCT C.COURSENO", "(C.CCODE+'-'+ C.COURSE_NAME) AS COURSENAME", " AR.SESSIONNO = " + ddlSession.SelectedValue + " AND AR.SCHEMENO = " + ViewState["schemeno"] + " AND AR.SEMESTERNO = " + ddlSem.SelectedValue + "AND AR.EXAMTYPE = " + ddlExamType.SelectedValue, "C.COURSENO");
         lvStudentsIssuer.DataSource = null;
         lvStudentsIssuer.DataBind();
         ClearData();
