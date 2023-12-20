@@ -72,12 +72,35 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 //fill dropdown
 
 
+                if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
+                {
+                    if (Convert.ToInt32(Session["usertype"]) == 3)
+                    {
+                        objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1 AND MODE_ID=2", "FEEDBACK_NO");
+                        objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1 AND MODE_ID=2", "FEEDBACK_NO");
 
-                objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
-                objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                    }
+                    else
+                    {
+                        objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                        objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                    }
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                    objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0 AND ISNULL(IS_ACTIVE,0)=1", "FEEDBACK_NO");
+                }
                 PopulateDropDown();
 
-                objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1", "FDID");
+                if (Convert.ToInt32(Session["usertype"]) == 3)
+                {
+                    objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1 AND FDID=2", "FDID");
+                }
+                else 
+                {
+                    objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1", "FDID");
+                }
 
                 FillDropDownList();
                 //to clear all controls
@@ -115,7 +138,8 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     {
         if (Session["usertype"].ToString() != "1")
             //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.ORGANIZATION_ID = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "(COSCHNO,COL_SCHEME_NAME)", "", "SM.COLLEGE_ID =" + (Convert.ToInt32(Session["college_nos"])) AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND (DB.DEPTNO =ISNULL  + (Convert.ToInt32(Session["userdeptno"]), 0)", "");
-            objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
+            //objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (CASE WHEN '" + Session["userdeptno"] + "' ='0'  THEN '0' ELSE DB.DEPTNO END) IN (" + Session["userdeptno"] + ")", "");
+            objCommon.FillDropDownList(ddlClgname, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COLLEGE_SCHEME_MAPPING SC ON (SC.SCHEMENO = CT.SCHEMENO)", "DISTINCT SC.COSCHNO", "SC.COL_SCHEME_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "SC.COSCHNO");
         else
 
             objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
@@ -193,9 +217,20 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        if (Convert.ToInt32(Session["OrgId"]) == 2 )
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
         {
             url += "&param=" + param + "";
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
+        {
+            if (Convert.ToInt32(Session["usertype"]) == 3)
+            {
+                url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_UA_NO=" + Convert.ToInt32( Session["userno"]);
+            }
+            else
+            {
+                url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+            }
         }
         else
         {
@@ -264,7 +299,14 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
                 {
-                    ShowReport("Faculty_FeedBack_Report_Percentage_Wise", "PRMITR_Percentage_Report_1.rpt", param);
+                    if (Convert.ToInt32(Session["usertype"]) == 3)
+                    {
+                        ShowReport("Faculty_FeedBack_Report_Percentage_Wise", "PRMITR_Percentage_Report_1_Faculty.rpt", param);
+                    }
+                    else
+                    {
+                        ShowReport("Faculty_FeedBack_Report_Percentage_Wise", "PRMITR_Percentage_Report_1.rpt", param);
+                    }
                 }
                 else
                 {
@@ -508,7 +550,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     }
     protected void ddlFeedbackReportType_SelectedIndexChanged(object sender, EventArgs e)
     {
-       
+
         dvallfeedback.Visible = false;
         //dvFeedbackReport.Visible = false;
         if (ddlFeedbackReportType.SelectedValue == "2")
@@ -606,13 +648,13 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        if (Convert.ToInt32(Session["OrgId"]) == 2 )
+        if (Convert.ToInt32(Session["OrgId"]) == 2)
         {
             url += "&param=" + param + "";
         }
         else
         {
-            url += "&param=" + param + ",@P_COLLEGE_CODE=" +Convert.ToInt32(ViewState["college_id"]);
+            url += "&param=" + param + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
         }
         divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -626,7 +668,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     }
     protected void btnShow_Click(object sender, EventArgs e)
     {
-       // DataSet ds;
+        // DataSet ds;
         //string SessionNo = string.Empty;
         //SessionNo = ddlSession.SelectedValue;
         //int degree = 0;
@@ -664,7 +706,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             LinkButton lnk = sender as LinkButton;
             int UA_NO = Convert.ToInt32(lnk.ToolTip);
             int courseno = Convert.ToInt32(lnk.CommandArgument);
-            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO="+courseno +"";
+            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO=" + courseno + "";
             ShowReportNew("FeedBack_Analysis_Report", "rptFeedbackAnalysisReport_PCEN.rpt", param);
         }
         catch (Exception ex)
@@ -684,7 +726,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         url += "&path=~,Reports,Academic," + rptFileName;
         //if (Convert.ToInt32(Session["OrgId"]) == 2)
         //{
-            //url += "&param=" + param + "";
+        //url += "&param=" + param + "";
         //}
         //else
         //{
