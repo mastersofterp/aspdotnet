@@ -2654,31 +2654,31 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 HiddenField hdfexreg = (HiddenField)e.Item.FindControl("hdfExamRegistered");
                 HiddenField hdftxn = (HiddenField)e.Item.FindControl("hdfextind");
                 CheckBox chkhead = lvFailCourse.FindControl("chkAll") as CheckBox;
-                //   if (hdftxn.Value == "1" && hdfexreg.Value=="1")
+             //   if (hdftxn.Value == "1" && hdfexreg.Value=="1")
+                   
+                     if(hdftxn.Value == "1" && hdfexreg.Value == "1")
+                    {
+                        chk.Checked = true;
+                        chk.Enabled = false;
+                        chkhead.Checked = false;
+                        chkhead.Enabled = false;
+                        chk.BackColor = System.Drawing.Color.Green;
 
-                if (hdftxn.Value == "1" && hdfexreg.Value == "1")
-                {
+                    }
+                    else if (hdftxn.Value == "1" )
+                    {
                     chk.Checked = true;
-                    chk.Enabled = false;
-                    chkhead.Checked = false;
-                    chkhead.Enabled = false;
-                    chk.BackColor = System.Drawing.Color.Green;
-
-                }
-                else if (hdftxn.Value == "1")
-                {
-                    chk.Checked = true;
-                    // chk.Enabled = false;
+                   // chk.Enabled = false;
                     chkhead.Checked = false;
                     //chkhead.Enabled = false;
 
-                }
-                else
-                {
-                    chk.Checked = false;
-                    chkhead.Checked = false;
+                     }
+                    else
+                    {
+                        chk.Checked = false;
+                        chkhead.Checked = false;
 
-                }
+                    }
             }
 
 
