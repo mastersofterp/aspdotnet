@@ -188,8 +188,9 @@
                                                 <asp:Label ID="lblComplete" Text='<%# Eval("Status")%>' runat="server"></asp:Label>
                                             </td>
                                              <td>
-                                                <asp:Label ID="lblFinalSubmit" Text='<%# Eval("Status")%>' runat="server"  ToolTip='<%# Eval("Final_Submit_Status")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
-                                                 <asp:HiddenField ID="hdnFinalSubmitted" Value='<%# Eval("Final_Submit_Status")%>'  runat="server"  />
+                                                <asp:Label ID="lblFinalSubmit" Text='<%# Eval("Status")%>' runat="server" Visible="false"  ToolTip='<%# Eval("Final_Submit_Status")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
+                                                <asp:Label ID="lblFinalSubmittext" Text='<%# Eval("Final_Submit_Text")%>' runat="server"  ToolTip='<%# Eval("Final_Submit_Text")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
+                                                  <asp:HiddenField ID="hdnFinalSubmitted" Value='<%# Eval("Final_Submit_Status")%>'  runat="server"  />
                                             </td>
                                         </tr>
                                     </ItemTemplate>
