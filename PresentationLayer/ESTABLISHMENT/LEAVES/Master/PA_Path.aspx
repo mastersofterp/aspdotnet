@@ -121,7 +121,8 @@
                                                 <sup>* </sup>
                                                 <label>Employee</label>
                                             </div>
-                                            <asp:Label ID="lblEmpName" runat="server" class="form-control" Font-Bold="true" TabIndex="3"></asp:Label>
+                                            <%--<asp:Label ID="lblEmpName" runat="server" class="form-control" Font-Bold="true" TabIndex="3"></asp:Label>--%>
+                                            <asp:TextBox ID="lblEmpName" runat="server" class="form-control" Font-Bold="true" TabIndex="3" TextMode="MultiLine"></asp:TextBox>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
