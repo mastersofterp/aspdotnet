@@ -792,7 +792,10 @@
                                                         <th>Exam Type</th>
                                                         <th>Session</th>
                                                         <th>Fees Structure</th>
+
                                                         <th>Degree</th>
+                                                        <th>College</th>
+
                                                         <th>Semester</th>
                                                         <th>Fees Applicable</th>
                                                         <th>Fees</th>
@@ -842,6 +845,9 @@
                                             </td>
                                             <td>
                                                 <asp:Label ID="deg" runat="server" Text='<%# Eval("DEGREE")%>'></asp:Label>
+                                            </td>
+                                             <td>
+                                                <asp:Label ID="Label7" runat="server" Text='<%# Eval("COLLEGE_NAME")%>'></asp:Label>
                                             </td>
                                             <td>
                                                 <asp:Label ID="seme" runat="server" Text='<%# Eval("SEMESTERNAME")%>'></asp:Label>
