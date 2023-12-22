@@ -310,7 +310,9 @@
                                                                     </td>
                                                                     <td>
                                                                         <%-- <center>--%>
-                                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO")+","+Eval("EXAMNO")+","+Eval("EXAMNAME")+","+Eval("FLDNAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+                                                                        <%--<asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO")+","+Eval("EXAMNO")+","+Eval("EXAMNAME")+","+Eval("FLDNAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>--%>
+                                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("SECTIONNO")+","+Eval("semesterno")+","+Eval("FLDNAME")+","+Eval("EXAMNO")+","+Eval("EXAMNAME")+","+Eval("COURSENAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+
                                                                         <%--</center>--%>
                                                                     </td>
                                                                 </tr>
