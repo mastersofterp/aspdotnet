@@ -1344,7 +1344,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforCIA : System.Web.UI.Page
             DataSet ds = objCommon.FillDropDown("Reff", "SMSSVCID", "SMSSVCPWD", "", "");
             if (ds.Tables[0].Rows.Count > 0)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
                 request.ContentType = "text/xml; charset=utf-8";
                 request.Method = "POST";
 
@@ -1456,13 +1456,21 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforCIA : System.Web.UI.Page
     protected void lbtnPrint_Click(object sender, EventArgs e)
     {
         LinkButton lbtn = (LinkButton)(sender);
+        //ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
+        //lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
+        //ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
+        //ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[3]);
+        //ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
+        //ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
+        //ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
+
         ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
-        lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
+        //lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
         ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
-        ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[3]);
+        ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[1]);
         ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
         ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
-        ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
+        ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[3]);
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
 
