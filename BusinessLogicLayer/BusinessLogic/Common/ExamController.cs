@@ -7948,6 +7948,221 @@ namespace IITMS
                 }
                 #endregion
 
+
+
+                //added by prafull on dt:23112023 
+                public int UpdateStudentByGrade(int Schemeno, int Sessionno, int Semester, int Courseno, string Ccode, string Idno, string ABgrade, string Igrade, string UFMgrade, string OldGrade, int UA_NO)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+
+                        SqlParameter[] objParams = new SqlParameter[12];
+
+                        objParams[0] = new SqlParameter("@P_SCHEMENO", Schemeno);
+                        objParams[1] = new SqlParameter("@P_SESSIONNO", Sessionno);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", Semester);
+                        objParams[3] = new SqlParameter("@P_COURSENO", Courseno);
+                        objParams[4] = new SqlParameter("@P_CCODE", Ccode);
+                        objParams[5] = new SqlParameter("@P_IDNO", Idno);
+                        objParams[6] = new SqlParameter("@P_ABGrade", ABgrade);
+                        objParams[7] = new SqlParameter("@P_IGrade", Igrade);
+                        objParams[8] = new SqlParameter("@P_UFMGrade", UFMgrade);
+                        objParams[9] = new SqlParameter("@P_OLD_GRADE", OldGrade);
+                        objParams[10] = new SqlParameter("@P_UA_NO", UA_NO);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_ACD_UPDENT_STUDENT_BY_GRADE", objParams, true);
+
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetCourseExamRuleSubjectwise-> " + ex.ToString());
+                    }
+                    return status;
+                }
+                #region Update By Rohit Diwate on date 04122023
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParam = new SqlParameter[35];
+                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
+                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
+                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
+                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
+                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
+                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
+                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
+                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
+                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
+                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
+                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
+                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
+                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
+                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
+                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
+                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
+                        objParam[16] = new SqlParameter("@P_ADMIN_GRADE", Gradeadmin);
+                        objParam[17] = new SqlParameter("@P_FACULTY_GRADE", GradeFaculty);
+                        objParam[18] = new SqlParameter("@P_GRAPH", graph);
+                        objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
+                        objParam[20] = new SqlParameter("@P_COLLEGE", college); //Added by Rohit Diwate on 150923
+                        objParam[21] = new SqlParameter("@P_SESSION", session); //Added by Rohit Diwate on 150923
+                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", feescollection); //Added by Rohit Diwate on 210923
+                        objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
+                        objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
+                        objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
+                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback);
+                        objParam[27] = new SqlParameter("@P_ATTENDANCE", attendance);
+                        objParam[28] = new SqlParameter("@P_ATTENDANCE_PERCENTAGE", attendance_percentage);
+                        objParam[29] = new SqlParameter("@p_INTSUBEXAM", intsubexam);
+                        objParam[30] = new SqlParameter("@P_INTASSESSMENT", intassessment);
+                        objParam[31] = new SqlParameter("@P_INTEXCELFORMAT", intexcelformat);
+                        objParam[32] = new SqlParameter("@P_ADMISSION_STATUS", admissionstatus);
+                        objParam[33] = new SqlParameter("@P_ENDSEM_COMPONENT", endsemcomponent);
+                        objParam[34] = new SqlParameter("@P_ADMIN_EX_APPROVAL", adminexapproval);
+
+                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
+                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
+
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+                #endregion
+
+                #region Added By ROHIT on date 21_12_2023
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent)
+                {
+                    int status = 0;
+                    try
+                    {
+                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParam = new SqlParameter[37];
+                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
+                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
+                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
+                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
+                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
+                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
+                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
+                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
+                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
+                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
+                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
+                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
+                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
+                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
+                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
+                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
+                        objParam[16] = new SqlParameter("@P_ADMIN_GRADE", Gradeadmin);
+                        objParam[17] = new SqlParameter("@P_FACULTY_GRADE", GradeFaculty);
+                        objParam[18] = new SqlParameter("@P_GRAPH", graph);
+                        objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
+                        objParam[20] = new SqlParameter("@P_COLLEGE", college); //Added by Rohit Diwate on 150923
+                        objParam[21] = new SqlParameter("@P_SESSION", session); //Added by Rohit Diwate on 150923
+                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", feescollection); //Added by Rohit Diwate on 210923
+                        objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
+                        objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
+                        objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
+                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback);
+                        objParam[27] = new SqlParameter("@P_ATTENDANCE", attendance);
+                        objParam[28] = new SqlParameter("@P_ATTENDANCE_PERCENTAGE", attendance_percentage);
+                        objParam[29] = new SqlParameter("@p_INTSUBEXAM", intsubexam);
+                        objParam[30] = new SqlParameter("@P_INTASSESSMENT", intassessment);
+                        objParam[31] = new SqlParameter("@P_INTEXCELFORMAT", intexcelformat);
+                        objParam[32] = new SqlParameter("@P_ADMISSION_STATUS", admissionstatus);
+                        objParam[33] = new SqlParameter("@P_ENDSEM_COMPONENT", endsemcomponent);
+                        objParam[34] = new SqlParameter("@P_ADMIN_EX_APPROVAL", adminexapproval);
+                        objParam[35] = new SqlParameter("@P_ADMIN_COMPONENT", admincomponent);//Added by Hitesh 061223
+                        objParam[36] = new SqlParameter("@P_FACULTY_COMPONENT", facultycomponent);//Added by Hitesh 061223
+
+                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
+
+                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
+                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
+
+                        if (obj != null)
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else
+                            status = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return status;
+                }
+                #endregion
+
+                #region Added By ROHIT.D on 22_12_2023
+                public int AddStudentExamRegistrationDetails_Improvement(StudentRegist objSR, string Amt, string order_id)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        //Add New eXAM Registered Subject Details
+
+                        objParams = new SqlParameter[12];
+
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                        objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNOS);
+                        objParams[3] = new SqlParameter("@P_COURSENOS", objSR.COURSENOS);
+                        objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                        objParams[5] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                        objParams[6] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                        objParams[7] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                        objParams[8] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                        objParams[9] = new SqlParameter("@P_EXAM_FEES", Amt);
+                        objParams[10] = new SqlParameter("@P_ORDER_ID", order_id);
+                        objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[11].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_REGISTRATION_DETAILS_FOR_IMPROVEMENT", objParams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+                }
+                #endregion
+
+
             }
         }
     }
