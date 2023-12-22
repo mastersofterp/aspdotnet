@@ -159,10 +159,10 @@
                                                                                 <th style="text-align: center;">Edit
                                                                                 </th>
                                                                                 <th>
-                                                                                    Department
+                                                                                     College
                                                                                 </th>
                                                                                 <th>
-                                                                                    College
+                                                                                    Department
                                                                                 </th>
                                                                                 <th>Faculty
                                                                                 </th>
@@ -184,10 +184,10 @@
                                                                                  CausesValidation="false" CommandArgument='<%#Eval("DESIG_UANO_ID")%>' />
                                                                         </td>
                                                                     <td>
-                                                                        <%# Eval("DEPTNAME")%>
+                                                                         <%# Eval("COLLEGE_NAME")%>
                                                                     </td>
                                                                         <td>
-                                                                            <%# Eval("COLLEGE_NAME")%>
+                                                                           <%# Eval("DEPTNAME")%>
                                                                         </td>
                                                                         <td>
                                                                             <%# Eval("FACULTY_NAME")%>
@@ -205,6 +205,7 @@
                                                 </div>
                                             </div>
                                         </ContentTemplate>
+                                       
                                     </asp:UpdatePanel>
                                 </div>
 
