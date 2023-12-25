@@ -2335,7 +2335,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
                     objCommon.DisplayMessage(UpdatePanel1, "Please Select Academic Year", this.Page);
                     rbdExpenditure.SelectedIndex = -1;
                 }
-                if (ddlDegree.SelectedValue == "0")
+                if (ddldegreerc.SelectedValue == "0")
                 {
                     objCommon.DisplayMessage(UpdatePanel1, "Please Select Degree", this.Page);
                     rbdExpenditure.SelectedIndex = -1;
