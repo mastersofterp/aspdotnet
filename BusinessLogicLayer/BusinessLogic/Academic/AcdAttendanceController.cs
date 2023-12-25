@@ -6434,6 +6434,24 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         #endregion
 
+        // Added By Vipul Tichakule on Dated 22-12-2023
+        public DataSet GetFacultyLectureCount(int Session)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[1];
+                objParams[0] = new SqlParameter("@P_SESSIONNO", Session);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACAD_FACULTY_LECTURE_COUNT_REPORT", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetFacultyLectureCount-> " + ex.ToString());
+            }
+            return ds;
+        }
+
 
 
         //Added by Nehal on 28/04/2023
