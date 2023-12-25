@@ -107,7 +107,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "DISTINCT SECTIONNO", "SECTIONNAME", "SECTIONNO>0 and ISNULL(ACTIVESTATUS,0)=1", "SECTIONNO");
-            objCommon.FillDropDownList(ddlSessionn, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_PNAME", "SESSIONID>0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONID");
+            objCommon.FillDropDownList(ddlSessionn, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO>0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO");
             //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             //objCommon.FillDropDownList(ddlSession, "ACd_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT SR.SESSIONNO", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
             //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENAME DESC");
@@ -752,13 +752,6 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
-        if (ddlSessionn.SelectedIndex==0)
-        {
-            objCommon.DisplayMessage(this, "Please Select Session.", this.Page);
-            return;
-        }
-        else
-        {
         DataSet DS = acdatt.GetFacultyLectureCount(Convert.ToInt32(ddlSessionn.SelectedValue));
         DataGrid dg = new DataGrid();
 
@@ -780,9 +773,8 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
         }
         else
         {
-            objCommon.DisplayMessage(this, "Record Not Found!!", this.Page);
+            objCommon.DisplayMessage("Record Not Found!!", this.Page);
             return;
-        }
         }
     }
 }
