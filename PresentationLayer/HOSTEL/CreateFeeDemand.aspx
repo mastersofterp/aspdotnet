@@ -264,12 +264,12 @@
                     if (headchk.checked == true) {
                         e.checked = true;
                         headchk.checked == true;
-                        document.getElementById('ctl00_ContentPlaceHolder1_lvGatePass_chkAll').checked = true;
+                        document.getElementById('ctl00_ContentPlaceHolder1_lvStudents_chkAll').checked = true;
                     }
                     else {
                         e.checked = false;
                         headchk.checked == false;
-                        document.getElementById('ctl00_ContentPlaceHolder1_lvGatePass_chkAll').checked = false;
+                        document.getElementById('ctl00_ContentPlaceHolder1_lvStudents_chkAll').checked = false;
                     }
                 }
             }
