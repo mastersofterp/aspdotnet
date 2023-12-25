@@ -706,7 +706,9 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             LinkButton lnk = sender as LinkButton;
             int UA_NO = Convert.ToInt32(lnk.ToolTip);
             int courseno = Convert.ToInt32(lnk.CommandArgument);
-            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO=" + courseno + "";
+            HiddenField hdnsection = lnk.FindControl("hdnsection") as HiddenField;
+            int sectionno = Convert.ToInt32(hdnsection.Value);
+            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(sectionno) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO=" + courseno + "";
             ShowReportNew("FeedBack_Analysis_Report", "rptFeedbackAnalysisReport_PCEN.rpt", param);
         }
         catch (Exception ex)

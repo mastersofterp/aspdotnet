@@ -215,9 +215,9 @@
                                             <asp:LinkButton ID="lnkFacultyName" runat="server" Text='<%# Eval("UA_FULLNAME") %>' OnClick="lnkFacultyName_Click" ToolTip='<%# Eval("UA_NO")%>' CommandArgument='<%# Eval("COURSENO")%>'>LinkButton</asp:LinkButton>  
                                         </td>
                                         <td>
-                                            <asp:Label ID="lblsem" Text='<%# Eval("CCODE")%>' ToolTip='<%# Eval("COURSENO")%>' runat="server"></asp:Label>
-                                     
-                                        </td>
+                                            <asp:Label ID="lblsem" Text='<%# Eval("CCODE") + " - " + Eval("SECTION")%>' ToolTip='<%# Eval("COURSENO")%>' runat="server"></asp:Label>
+                                            <asp:HiddenField ID="hdnsection" runat="server" Value=' <%# Eval("SECTIONNO") %>' />
+                                        </td>    
                                         <td>                                            
                                              <%# Eval("FEEDBACKPERCENT") %>
                                         </td>                                       
