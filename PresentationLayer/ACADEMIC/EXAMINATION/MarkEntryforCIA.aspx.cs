@@ -1474,6 +1474,10 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforCIA : System.Web.UI.Page
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
 
+
+        string coursename = objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO="+Convert.ToInt32(ViewState["courseNo_POP"]));
+        lbl_SubjectName.Text = coursename.ToString();
+
         ddlExamPrint.Items.Clear();
         ddlExamPrint.Items.Add(new ListItem("Please Select", "0"));
         ddlExamPrint.Items.Add(new ListItem(ViewState["examName_POP"].ToString(), ViewState["examNo_POP"].ToString()));
