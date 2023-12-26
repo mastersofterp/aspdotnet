@@ -484,10 +484,12 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[3];
+                        objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_CTID", SFB.CTID);
                         objParams[1] = new SqlParameter("@P_SUBID", SFB.SubId);
                         objParams[2] = new SqlParameter("@P_SEMESTERNO", SFB.SemesterNo);
+                        objParams[3] = new SqlParameter("@P_IDNO", SFB.Idno);
+                        objParams[4] = new SqlParameter("@P_UA_NO", SFB.UA_NO);
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_GET_FEEDBACK_QUESTION_LIST", objParams);
                     }
                     catch (Exception ex)
@@ -757,7 +759,8 @@ namespace IITMS
                         //new SqlParameter("@P_UA_NO", SFB.UA_NO),
                         new SqlParameter("@P_EXAMNO", SFB.ExamNo),
                         new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
-                        new SqlParameter("@P_IS_FINAL", Is_Final), 
+                        new SqlParameter("@P_IS_FINAL", Is_Final),
+                        new SqlParameter("@P_CTID", SFB.CTID),
                         new SqlParameter("@P_OUT", SFB.Out),
                         };
 
