@@ -462,6 +462,7 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlBlockNo"
                                             Display="None" ErrorMessage="Please Select Block" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="Submit"></asp:RequiredFieldValidator>
+                                        <br />
                                     </div>
 
                                 </div>
@@ -470,7 +471,8 @@
                             <div>
                                 <div class="col-12  mt-3">
                                     <asp:Panel ID="pnlAssessment" runat="server">
-                                            <asp:ListView ID="lvAssessment" runat="server">
+                                            <asp:ListView ID="lvAssessment" runat="server" AutoGenerateColumns="false"
+                            ShowFooter="true" OnItemDataBound="lvAssessment_ItemDataBound">
                                                 <LayoutTemplate>
                                                     <div class="table-responsive" style="height: 250px; overflow: scroll; border-top: 1px solid #e5e5e5;">
                                                         <table class="table table-striped table-bordered nowrap " style="width: 100%;" id="MainLeadTable">
@@ -480,6 +482,7 @@
                                                                     <th>Room Name</th>
                                                                     <th>Room Capacity</th>
                                                                     <th>Status</th>
+                                                                    <th>Delete</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -504,6 +507,11 @@
                                                               ValidChars="1234567890" FilterMode="ValidChars" />
                                                              <td>
                                                                 <asp:CheckBox ID="chkStatus" runat="server" TabIndex="6" /></td>
+                                                            <td> 
+                                                             <asp:ImageButton ID="lnkRemove" runat="server"
+                                            ImageUrl="~/IMAGES/delete.png" AlternateText="Remove Row" OnClick="lnkRemove_Click"
+                                            OnClientClick="return UserDeleteConfirmation();"></asp:ImageButton>
+                                                                </td>
 
 
                                                             <%--placeholder="25"--%>
@@ -643,12 +651,17 @@
         }
 
         function cancelDelClick() {
-            //  find the confirm ModalPopup and hide it 
+            //find the confirm ModalPopup and hide it 
             this._popup.hide();
             //  clear the event source
             this._source = null;
             this._popup = null;
         }
+
+        function enforceMaxLength(textbox, maxLength) {
+            if (textbox.value.length > maxLength) {
+                textbox.value = textbox.value.slice(0, maxLength);
+
     </script>
 
 
