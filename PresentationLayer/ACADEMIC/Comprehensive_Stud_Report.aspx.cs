@@ -598,11 +598,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             {
                                 lvProt.DataSource = dsStudentPro;
                                 lvProt.DataBind();//added by lalit 
+                              
                             }
                             else
                             {
                                 lvProt.DataSource = null;
                                 lvProt.DataBind();
+                               
                             }
                         }
 
@@ -825,6 +827,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 //this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT R INNER JOIN ACD_SESSION_MASTER M ON(R.SESSIONNO=M.SESSIONNO)", "DISTINCT R.SESSIONNO", "M.SESSION_NAME", "IDNO = " + idno, "R.SESSIONNO DESC");
             }
             ShowDetails();
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
             if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
             {
                 getinternalmarks();
@@ -850,7 +853,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                     lvGradeRealease.DataSource = null;
                     lvGradeRealease.DataBind();
                 }
-
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
 
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 8)
@@ -867,10 +870,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
-            else
-            {
-
-            }
+          
             DataSet dsCourse = objSC.RetrieveRegDetailsByIdnoAndSession(idno, Convert.ToInt32(ddlSession.SelectedValue));
             if (dsCourse != null && dsCourse.Tables.Count > 0 && dsCourse.Tables[0].Rows.Count > 0)
             {
@@ -884,7 +884,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             }
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
-            // ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow1();</script>", false);
+           
         }
         catch (Exception ex)
         {
@@ -2129,6 +2129,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
 
 
         ShowDetails();
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
 
     }
     #endregion

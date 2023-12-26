@@ -1784,11 +1784,11 @@
                                                                                     </table>
                                                                                 </div>
                                                                             </LayoutTemplate>
-                                                                            <EmptyDataTemplate>
-                                                                                <%--<div style="text-align: center; font-family: Arial; font-size: medium">
-                                                                                No Record Found
-                                                                            </div>--%>
-                                                                            </EmptyDataTemplate>
+                                                                           <EmptyDataTemplate>
+                                                                                           <%-- <div style="text-align: center; font-family: Arial; font-size: medium">
+                                                                                                No Record Found
+                                                                                            </div>--%>
+                                                                           </EmptyDataTemplate>
                                                                             <ItemTemplate>
                                                                                 <tr>
                                                                                     <td>
