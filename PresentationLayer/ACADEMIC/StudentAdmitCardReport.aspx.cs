@@ -10,7 +10,6 @@ using MessagingToolkit.QRCode.Codec.Ecc;
 using MessagingToolkit.QRCode.Codec.Data;
 using MessagingToolkit.QRCode.Codec.Util;
 using System.Drawing;
-
 using System.Transactions;
 using CrystalDecisions.Shared;
 using System.IO;
@@ -262,7 +261,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
 
             }
-
             else if (Convert.ToInt32(Session["OrgId"]) == 8)//MIT AOE
             {
                 url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FULL_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
@@ -481,11 +479,15 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                     {
                         studentIds = chkBox.ToolTip;
                         string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip) + ""));
-                        //  GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
+                        // GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
                         ids = "0";
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
 
-
+                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+                        {
+                            int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
+                            GenerateQrCode_RCPIPER(id);         //RCPIPER added by SHUBHAM ON 21/12/2023
+                        }
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
                         //int chkg = studCont.InsAdmitCardLog(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), studentIds + '.', ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"]), txtRemark.Text, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToDateTime(txtDateofissue.Text), OrgID, Convert.ToInt32(ddlSection.SelectedValue));
 
@@ -504,10 +506,14 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                     {
                         studentIds = chkBox.ToolTip;
                         string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip) + ""));
-                        //  GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
+                        // GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
 
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
-
+                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+                        {
+                            int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
+                            GenerateQrCode_RCPIPER(id);       //RCPIPER added by SHUBHAM ON 21/12/2023
+                        }
 
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
                         //int chkg = studCont.InsAdmitCardLog(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), studentIds + '.', ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"]), txtRemark.Text, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToDateTime(txtDateofissue.Text), OrgID, Convert.ToInt32(ddlSection.SelectedValue));
@@ -554,7 +560,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2) //CRESCENT
                 {
-                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
+                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_CRESCENT.rpt");
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by gaurav 28_02_2023
                 {
@@ -966,4 +972,78 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataSource = null;
         lvStudentRecords.DataBind();
     }
+
+
+
+
+    //This Method Generate QR-CODE FOR RCPIPER & also  save image in ACD_HALLTICKET_QRCODE Table & QR-Code Files Folder. Added by Shubham on 24/12/23
+    private void GenerateQrCode_RCPIPER(int idno)
+    {
+        try
+        {
+            string SP_Name = "PKG_GENERATEQR_CODE_DETAILS_FOR_HALLTICKET";
+            string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_SCHEMENO,@P_COLLEGE_ID";
+            string Call_Values = "" + idno + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ViewState["college_id"]);
+            DataSet ds1 = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+            if (ds1.Tables[0].Rows.Count > 0)
+            {
+                DataRow row = ds1.Tables[0].Rows[0];
+
+                // Check if the required columns exist
+                if (row.Table.Columns.Contains("REGNO") && row.Table.Columns.Contains("STUDNAME") &&
+                    row.Table.Columns.Contains("DEGREENAME") && row.Table.Columns.Contains("LONGNAME") &&
+                    row.Table.Columns.Contains("YEARNAME") && row.Table.Columns.Contains("SEMESTERNAME") &&
+                    row.Table.Columns.Contains("SCHEMENAME"))
+                {
+                    string Qrtext = "PRN:" + ds1.Tables[0].Rows[0]["REGNO"].ToString().Trim() +
+                                    "; Stud Name: " + ds1.Tables[0].Rows[0]["STUDNAME"].ToString().Trim() +
+                                    "; Degree: " + ds1.Tables[0].Rows[0]["DEGREENAME"] +
+                                    "; Branch: " + ds1.Tables[0].Rows[0]["LONGNAME"] +
+                                    "; C_Year: " + ds1.Tables[0].Rows[0]["YEARNAME"] +
+                                    "; Sem: " + ds1.Tables[0].Rows[0]["SEMESTERNAME"] +
+                                    "; Scheme: " + ds1.Tables[0].Rows[0]["SCHEMENAME"] +
+                                     "";
+
+                    Session["qr"] = Qrtext.ToString();
+
+                    if (Session["qr"] != null && Session["qr"] is string)
+                    {
+                        QRCodeEncoder encoder = new QRCodeEncoder();
+                        encoder.QRCodeVersion = 10;
+
+                        //ak
+                        string newStr = Session["qr"].ToString();
+                        //
+
+                        Bitmap img = encoder.Encode(newStr);
+                        img.Save(Server.MapPath("~\\img.Jpeg"));
+                        ViewState["File"] = imageToByteArray(Request.PhysicalApplicationPath + "\\img.Jpeg");
+
+                        byte[] QR_IMAGE = ViewState["File"] as byte[];
+                        long ret = objQrC.AddUpdateQrCodeHallTicket(Convert.ToInt16(idno), QR_IMAGE, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Convert.ToInt32(ddlSession.SelectedValue));
+
+                    }
+                }
+                else
+                {
+                    // Handle the case where the required columns are missing
+                }
+            }
+            else
+            {
+
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_StudentAdmitCardReport.GenerateQrCode_RCPIPER() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
+    }
+
 }
