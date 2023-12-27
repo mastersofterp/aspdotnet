@@ -15,7 +15,6 @@
     </style>
     <script type="text/javascript">
 
-
         function dateValidation() {
             var obj = document.getElementById("<%=txtToDate.ClientID%>");
             var day = obj.value.split("/")[0];

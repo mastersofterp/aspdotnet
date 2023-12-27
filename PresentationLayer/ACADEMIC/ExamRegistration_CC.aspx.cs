@@ -1136,7 +1136,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
         {
             ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
         }
-        else if (Convert.ToInt32(Session["OrgId"]) == 10)//PRMIT
+        else if (Convert.ToInt32(Session["OrgId"]) == 10)
         {
             ShowReport("CourseRegistration", "rptExam_registrationStudent_PRMITR.rpt");
         }
@@ -2144,7 +2144,9 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
             string Call_Values = "" + strNewDate + "";
             dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
 
-            latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO "));
+            //latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO "));
+            latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO " + " union all select  0 as AMOUNT"));
+
 
             if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["COUNT"]) > 0)
             {
@@ -2340,7 +2342,9 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
            string Call_Values = "" + strNewDate + "";
            dsStudent = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
 
-           latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO "));
+           //latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO "));
+           latefees = Convert.ToDecimal(objCommon.LookUp("ACD_MASTER_LATE_FEE_EXAM", " TOP (1) AMOUNT", " LATE_FEE_NO=" + Latefee + "  AND  " + Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]) + " BETWEEN DAY_NO_FROM AND DAY_NO_TO " + " union all select  0 as AMOUNT"));
+
 
            if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["COUNT"]) > 0)
            {

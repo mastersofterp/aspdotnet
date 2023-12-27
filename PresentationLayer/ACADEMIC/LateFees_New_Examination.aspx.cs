@@ -18,7 +18,6 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     LateFeeController lateFeeController = new LateFeeController();
 
-
     protected void Page_PreInit(object sender, EventArgs e)
     {
         // sssssssssSet MasterPage
@@ -56,7 +55,7 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
                     //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO desc");
                     //  this.objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "");
                     //BindCheckList_ForDegree();
-                    this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO NOT IN(2,3,5,8,9,10,15,16)", "");
+                    this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE WITH (NOLOCK)", "RECIEPT_CODE", "RECIEPT_TITLE", "", "");
 
 
                     //objCommon.FillDropDownList(ddlReceiptType, "ACD_EXAM_TYPE WITH (NOLOCK)", "EXAM_TYPENO", "EXAM_TYPE", "EXAM_TYPENO>=0", "");
@@ -562,7 +561,7 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
     private void EnableControls()
     {
         //chkDegrees.Enabled = false;
-        ddlReceiptType.Enabled = false;
+        //ddlReceiptType.Enabled = false;
         ddlFeeItems.Enabled = false;
         //txtToDate.Enabled = false;
     }
@@ -874,7 +873,7 @@ public partial class ACADEMIC_EXAMINATION_LateFees_New_Examination : System.Web.
                 //Edit 
                 CustomStatus cs = (CustomStatus)lateFeeController.UpdateLate_New_FeesDetails_EXAM(Convert.ToDateTime(txtToDate.Text), DegreeId,
                     Convert.ToInt32(ViewState["Late_Fee_NO"]), ddlFeeItems.SelectedValue, ddlReceiptType.SelectedValue,
-                    Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["college_id"]), ReAdmissionFlag, ReAdmAmt);//Late_Fees_NO, hdnID, s,DayFrom, DayTo, TotFees,
+                    Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["college_id"]), ReAdmissionFlag, ReAdmAmt,semesternos);//Late_Fees_NO, hdnID, s,DayFrom, DayTo, TotFees,
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                     if (!string.IsNullOrEmpty(DegreeId))
