@@ -218,11 +218,11 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
                         {
 
                             image = br.ReadBytes((Int32)fs.Length);
-                            checkSize += image.Length;
-                            if (checkSize > 1073714824)
+                            checkSize = image.Length;
+                            if (checkSize > 50000)
                             {
                                 flag = 1;
-                                lblmessageShow.Text = "Images Size exceed 1 GB !";
+                                lblmessageShow.Text = "Images Size exceed 50kb !";
                                 lblmessageShow.ForeColor = System.Drawing.Color.OrangeRed;
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
                                 break;

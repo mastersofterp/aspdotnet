@@ -64,7 +64,7 @@
                                                         InitialValue="0"></asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="form-group col-lg-4 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>Select Images</label>
@@ -79,7 +79,7 @@
                                                     </asp:RequiredFieldValidator>
                                                 </div>
 
-                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="form-group col-lg-4 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
                                                         <label>Upload By</label>
@@ -95,11 +95,15 @@
                                                     <asp:Label ID="lblRollnoUpload" runat="server" Font-Bold="true" Text="RollNo"></asp:Label>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <p style="color: red; padding-top: 5px">Note: Please save the images either by Registration No. or Roll No. with a minimum size of 50kb before uploading</p>
+                                            </div>
                                         </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
 
                                 <div class="col-12 btn-footer">
+                                   
                                     <asp:Button ID="btnShow" CssClass="btn btn-primary" ValidationGroup="academic" OnClick="btnShow_Click" Text="Show" runat="server" />
                                     <asp:Button ID="btnSave" type="button" CssClass="btn btn-primary" runat="server" OnClientClick="return ProgressBar()" Text="Upload" OnClick="btnSave_Click"></asp:Button>
                                     <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" CssClass="btn btn-warning" />
@@ -145,9 +149,9 @@
                                                 </ItemTemplate>
                                             </asp:ListView>
                                         </ContentTemplate>
-                                       <Triggers>
-                                           <asp:PostBackTrigger ControlID="ListView1" />
-                                       </Triggers>
+                                        <Triggers>
+                                            <asp:PostBackTrigger ControlID="ListView1" />
+                                        </Triggers>
                                     </asp:UpdatePanel>
 
                                 </div>
@@ -446,7 +450,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-12">
-                                                    <div class="form-group col-md-12 d-none" >
+                                                    <div class="form-group col-md-12 d-none">
                                                         <span><b>Total Records :</b></span>
                                                         <b>
                                                             <asp:Label ID="lbltotal" Style="color: #347fbe;" runat="server"></asp:Label></b>
@@ -486,9 +490,9 @@
                                         <div class="col-12 btn-footer">
                                             <asp:Label ID="lblmessageShow" Style="font-weight: bold" runat="server" Text="Regno"></asp:Label>
                                         </div>
-                                        <div class="col-12 btn-footer">
+                                        <%--<div class="col-12 btn-footer">
                                             <asp:Button ID="Button1" runat="server" Text="Close" CssClass="btn btn-warning" data-dismiss="modal" />
-                                        </div>
+                                        </div>--%>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
