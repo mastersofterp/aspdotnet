@@ -230,10 +230,14 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     else
                         {
                         divHostelTransport.Visible = false;
-                        divhosteltype.Visible = true;
-                        this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
-                        ddlhosteltype.SelectedValue = Hosteltype.ToString();
-                        ddlhosteltype.Enabled = false;
+
+                        if (HostelTypeSelection == 1)
+                            {
+                            divhosteltype.Visible = true;
+                            this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
+                            ddlhosteltype.SelectedValue = Hosteltype.ToString();
+                            ddlhosteltype.Enabled = false;
+                            }
                         }
                     divInstallmentPayment.Visible = false;
                     divDirectPayment.Visible = true;
@@ -1974,7 +1978,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=Fee_Collection_Receipt";
             url += "&path=~,Reports,Academic," + rptName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + Session["IDNO"] + ",@P_DCRNO=" + dcrNo + ",@P_UA_NAME=" + Session["UAFULLNAME"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]);
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + studentNo + ",@P_DCRNO=" + dcrNo + ",@P_UA_NAME=" + Session["UAFULLNAME"].ToString() + "," + "@P_CANCEL=" + Convert.ToInt32(Session["CANCEL_REC"]);
+
 
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_UA_NAME=" + Session["UAFULLNAME"].ToString() +
