@@ -1128,7 +1128,7 @@
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSessionTimeTable"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="timetable"></asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1168,6 +1168,9 @@
                                                         TabIndex="10" CssClass="form-control slottype" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlSlotType"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="timetable">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="col-lg-3 col-md-6 col-12 form-group">
                                                     <div class="label-dynamic">
@@ -1666,7 +1669,7 @@
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlSessionRevisedTimeTable"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AttConfig6"></asp:RequiredFieldValidator>
+                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="timetable6"></asp:RequiredFieldValidator>
                                                 </div>
                                                  <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
@@ -1707,6 +1710,9 @@
                                                         TabIndex="10" CssClass="form-control slottype" data-select2-enable="true">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ControlToValidate="ddlRevisedSlotType"
+                                                        Display="None" InitialValue="0" ErrorMessage="Please Select Slot Type" ValidationGroup="timetable6">
+                                                    </asp:RequiredFieldValidator>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">

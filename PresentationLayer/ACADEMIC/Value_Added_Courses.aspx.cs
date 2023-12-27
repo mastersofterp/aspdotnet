@@ -1099,7 +1099,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         }
         int OrgId = Convert.ToInt32(Session["OrgId"].ToString());
         if (objSC.UpdateStudent_TeachAllotForValue_Added_Modified(objStudent, OrgId, Convert.ToInt32(ddlsection.SelectedValue)) == Convert.ToInt32(CustomStatus.RecordUpdated))
-            objCommon.DisplayMessage(this.UpdatePanel1, "Teacher Alloted Sucessfully..", this.Page);
+            objCommon.DisplayMessage(this.UpdatePanel1, "Teacher Alloted Successfully..", this.Page);
         else
             objCommon.DisplayMessage(this.UpdatePanel1, "Server Error", this.Page);
 
@@ -1358,7 +1358,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlTimeSlot.SelectedIndex = 0;
         ddlRoom.SelectedIndex = 0;
         ddlAllDay.SelectedIndex = 0;
-        ddlTTSection.SelectedIndex = 0;
+       // ddlTTSection.SelectedIndex = 0;
         if (Session["TimeSlotTbl"] == null)
         {
             lvTimeSlotDetails.DataSource = null;
@@ -2693,7 +2693,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlRevisedTimeSlot.SelectedIndex = 0;
         ddlRevisedRoom.SelectedIndex = 0;
         ddlRevisedAllDay.SelectedIndex = 0;
-        ddlRevisedTTSection.SelectedIndex = 0;
+        //ddlRevisedTTSection.SelectedIndex = 0;
         if (Session["RevisedTimeSlotTbl"] == null)
         {
             lvRevisedTimeSlotDetails.DataSource = null;
@@ -3428,7 +3428,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             int output = objCC.UpdateCourseTeachAllotForValueAdded(objStudent, OrgId, Convert.ToInt32(ddlValueAddedGroup.SelectedValue));
             if (output == 1)
             {
-                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Sucessfully..", this.Page);
+                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Successfully..", this.Page);
             }
             else if (output == 2)
             {
@@ -3472,7 +3472,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         lstAdditionalTeacherCT.ClearSelection();
         lvGlobalCourseTeacher.DataSource = null;
         lvGlobalCourseTeacher.DataBind();
-        ddlValueAddedGroup.SelectedIndex = 1;
+        ddlValueAddedGroup.SelectedIndex = 0;
     }
 
     private void BindCourseTeacherAllotment()
