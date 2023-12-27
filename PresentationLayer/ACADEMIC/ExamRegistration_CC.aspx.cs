@@ -171,15 +171,14 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                                if (CheckExamRegApprovalAdmin == 0)
                                {
 
-                                   objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page);                                    
+                                   objCommon.DisplayMessage("YOU HAVE NOT BEEN APPROVED TO EXAM REGISTER. PLEASE CONTACT THE EXAM SECTION!!!", this.Page); 
+                                   divbtn.Visible = false;
                                    return;
-                              
+
 
 
                                }
                                #endregion
-
-
                             this.ShowDetails();
                             bindcourses();                               
 
@@ -689,7 +688,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         {
                             
                            // decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "SUM(AD.TOTAL_AMT)", "AD.SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(lblSemester.ToolTip) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='EF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                            decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO="+Convert.ToInt32(Session["idno"])+" and AD.RECIEPT_CODE='EF' and AD.SEMESTERNO="+ Convert.ToInt32(lblSemester.ToolTip) ));
+                            decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO="+ Convert.ToInt32(Session["idno"])+" and AD.RECIEPT_CODE='EF' and AD.SEMESTERNO="+ Convert.ToInt32(lblSemester.ToolTip) ));
                            
                             if (ViewState["usertype"].ToString() == "2")
                             {
@@ -767,7 +766,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                            if (paysuccess > 0)
                            {
                                //decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(lblSemester.ToolTip) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND AD.RECIEPT_CODE='EF'  AND ISNULL(AD.RECON,0)=1 AND ISNULL(AD.CAN,0)=0 AND   AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                               decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO="+Convert.ToInt32(Session["idno"])+" and AD.RECIEPT_CODE='EF' and AD.SEMESTERNO=" +Convert.ToInt32(lblSemester.ToolTip) ));
+                               decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO=" + Convert.ToInt32(Session["idno"]) + " and AD.RECIEPT_CODE='EF' and AD.SEMESTERNO=" + Convert.ToInt32(lblSemester.ToolTip)));
                               
                                if (ViewState["usertype"].ToString() == "2")
                                {
@@ -859,7 +858,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                     if (paysuccess > 0)
                     {
                        // decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp("ACD_DEMAND D INNER JOIN   ACD_DCR AD ON (D.IDNO=AD.IDNO AND D.SESSIONNO=AD.SESSIONNO)", "TOP 1 AD.TOTAL_AMT", "AD.SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND ad.SEMESTERNO =" + Convert.ToInt32(lblSemester.ToolTip) + " AND (TRANSACTIONSTATUS='Success' or TRANSACTIONSTATUS='1') AND D.RECIEPT_CODE='EF' AND ISNULL(AD.CAN,0)=0 AND ISNULL(AD.RECON,0)=1 AND AD.IDNO=" + Convert.ToInt32(Session["idno"])));
-                        decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO="+Convert.ToInt32(Session["idno"])+ "AND AD.RECIEPT_CODE='EF' and AD.SEMESTERNO="+ Convert.ToInt32(lblSemester.ToolTip)));
+                        decimal ToalPaidAmount = Convert.ToDecimal(objCommon.LookUp(" ACD_DCR AD inner join ACD_DEMAND  D on (AD.IDNO=D.IDNO and AD.SEMESTERNO=D.SEMESTERNO and AD.RECIEPT_CODE=D.RECIEPT_CODE)", "SUM( AD.TOTAL_AMT)", "AD.IDNO="+ Convert.ToInt32(Session["idno"])+" and AD.RECIEPT_CODE='EF' and AD.SEMESTERNO="+ Convert.ToInt32(lblSemester.ToolTip)));
                         if (ViewState["usertype"].ToString() == "2")
                         {
                             btnPrintRegSlip.Visible = true;
@@ -1075,7 +1074,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
                         if (Idno > 0)
                         {
                            // string SP_Name = "PKG_ACD_INSERT_EXAMREGISTRATION_FREE";
-                             string SP_Name = "PKG_ACD_INSERT_EXAMREGISTRATION";
+                            string SP_Name = "PKG_ACD_INSERT_EXAMREGISTRATION_FREE";
                             string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_COURSENO,@P_STATUS,@P_OUT";
                             string Call_Values = "" + Idno + "," + Convert.ToInt32(ViewState["sessionnonew"]) + "," + ccode + "," + flag + ",0";
                             string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);                           
@@ -1111,6 +1110,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
         if (Convert.ToInt32(Session["OrgId"]) == 9)
         {
             ShowReport("CourseRegistration", "rptExam_registrationStudent.rpt");
+           
         }
         else if (Convert.ToInt32(Session["OrgId"]) == 8)//MIT
         {
@@ -1132,9 +1132,13 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
             ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
         }
 
-        else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PRIYADARSHNAI
+        else if (Convert.ToInt32(Session["OrgId"]) == 19) //PRIYADARSHNAI
         {
             ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 10)//PRMIT
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_PRMITR.rpt");
         }
         else {
 
@@ -1772,7 +1776,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
 
        
 
-           string payactivityno = objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", " TOP 1 ACTIVITYNO", "ACTIVESTATUS=1 AND ACTIVITYNAME like '%Exam%'");
+           string payactivityno = objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "TOP 1 ACTIVITYNO", "ACTIVESTATUS=1 AND ACTIVITYNAME like '%Exam%'");
            if (payactivityno == string.Empty || payactivityno == null)
            {
                objCommon.DisplayMessage(updatepnl, "Payment Activity Master is not define.", this.Page);
@@ -2144,7 +2148,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
 
             if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["COUNT"]) > 0)
             {
-                calculatelatefee = latefees * Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]);
+                calculatelatefee = latefees;//* Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]);
 
             }
             else
@@ -2340,7 +2344,7 @@ public partial class Academic_ExamRegistration : System.Web.UI.Page
 
            if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["COUNT"]) > 0)
            {
-               calculatelatefee = latefees * Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]);
+               calculatelatefee = latefees; //* Convert.ToDecimal(dsStudent.Tables[0].Rows[0]["COUNT"]);
 
            }
            else
