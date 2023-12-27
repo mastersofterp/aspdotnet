@@ -1585,7 +1585,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 GVStudData.DataSource = ds;
                 GVStudData.DataBind();
 
-                string attachment = "attachment;filename=InternalMarks.xls";
+                string attachment = "attachment;filename=InternalMarks" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.Charset = "";
@@ -1890,7 +1890,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 GVTrReport.DataSource = ds;
                 GVTrReport.DataBind();
 
-                string attachment = "attachment; filename=TR_GradeReport.xls";
+                string attachment = "attachment; filename=TR_GradeReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -1942,7 +1942,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 GVTrReport.DataSource = ds;
                 GVTrReport.DataBind();
 
-                string attachment = "attachment; filename=ExaminationFeePaidExcel.xls";
+                string attachment = "attachment; filename=ExaminationFeePaidExcel" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -2423,18 +2423,18 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     private void ShowGpaReport(string reportTitle, string rptFileName)
     {
-        if (ddlClgname.SelectedIndex == 0)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlColgScheme.Text + ".');", true);
-            ddlClgname.Focus();
-            return;
-        }
-        else if (ddlSession.SelectedIndex == 0)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlSession.Text + ".');", true);
-            ddlSession.Focus();
-            return;
-        }
+        //if (ddlClgname.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlColgScheme.Text + ".');", true);
+        //    ddlClgname.Focus();
+        //    return;
+        //}
+        //else if (ddlSession.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlSession.Text + ".');", true);
+        //    ddlSession.Focus();
+        //    return;
+        //}
 
         try
         {
@@ -2442,6 +2442,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             int branchno = Convert.ToInt32(ViewState["branchno"]);
             int semesterno = Convert.ToInt32(ddlSem.SelectedValue);
             int degreeno = Convert.ToInt32(ViewState["degreeno"]);
+            int schemeno = Convert.ToInt32(ViewState["schemeno"]);
 
             string SP_Name = "PKG_GET_GPA_CGPA_BATCH_WISE";
             string SP_Parameters = "@P_BRANCHNO,@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO";
@@ -2862,7 +2863,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                     GV.DataBind();
 
                     //AddReportHeader(GV);
-                    string Attachment = "Attachment ; filename=CGPAReoprte.xls";
+                    string Attachment = "Attachment ; filename=CGPAReoprte" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                     Response.ClearContent();
                     Response.AddHeader("content-disposition", Attachment);
                     Response.ContentType = "application/ms-excel";
@@ -2929,7 +2930,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             {
                 GVDayWiseAtt.DataSource = ds;
                 GVDayWiseAtt.DataBind();
-                string attachment = "attachment; filename=CourseWiseExamRegistartion.xls";
+                string attachment = "attachment; filename=CourseWiseExamRegistartion" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
@@ -3003,7 +3004,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 GVStudData.DataSource = ds;
                 GVStudData.DataBind();
 
-                string attachment = "attachment;filename=Substitute Exam Registered Report.xls";
+                string attachment = "attachment;filename=Substitute Exam Registered Report" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.Charset = "";
