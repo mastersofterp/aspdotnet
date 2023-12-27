@@ -20966,6 +20966,31 @@ namespace IITMS
 
                      return ds;
                  }
+
+                //Added BY Ro-hit More on 27-12-2023
+                 public DataSet GetStudentOnlinePaymentLog(int CollegeID, int Degreeno, int Branchno, int Semesterno, string ReceiptType)
+                     {
+                     DataSet ds = null;
+                     try
+                         {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+
+                         SqlParameter[] objParams = new SqlParameter[5];
+                         objParams[0] = new SqlParameter("@P_COLLEGEID", CollegeID);
+                         objParams[1] = new SqlParameter("@P_DEGREENO", Degreeno);
+                         objParams[2] = new SqlParameter("@P_BRANCHNO", Branchno);
+                         objParams[3] = new SqlParameter("@P_SEMESTERNO", Semesterno);
+                         objParams[4] = new SqlParameter("@P_RECIEPT_TYPE", ReceiptType);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_ONLINE_PAYMENT_TRANSACTION_LOG_DETAILS", objParams);
+                         }
+                     catch (Exception ex)
+                         {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                         }
+
+                     return ds;
+                     }
             }
 
 

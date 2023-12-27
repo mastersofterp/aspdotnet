@@ -2475,5 +2475,26 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              get { return _eligibiltyno; }
              set { _eligibiltyno = value; }
          }
+
+
+        public class StudentInfo
+            {
+                public string Registrationno { get; set; }
+                public string StudentName { get; set; }
+                public string CollegeID { get; set; }
+                public string Degreeno { get; set; }
+                public string Branchno { get; set; }
+                public string SemesterName { get; set; }
+                public int College_ID { get; set; }
+                public int Degree_no { get; set; }
+                public int Branch_no { get; set; }
+                public int SemesterNo { get; set; }
+                public string OrderID { get; set; }
+                public string transactionID { get; set; }
+                public string PaymentDate { get; set; }
+                public Decimal Amount { get; set; }
+                public string ReceiptType { get; set; }
+                public string PaymentStatus { get; set; }
+            }
     }
 }
