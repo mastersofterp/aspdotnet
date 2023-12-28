@@ -52,8 +52,11 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="true"
                                             ValidationGroup="Show"></asp:RequiredFieldValidator>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlSession"
+                                            Display="None" ErrorMessage="Please Select Session." InitialValue="0" SetFocusOnError="true"
+                                            ValidationGroup="Allotment"></asp:RequiredFieldValidator>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="dvCollege" runat="server">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>College</label>
@@ -177,6 +180,8 @@
                                 <asp:Button ID="btnSendEmail" runat="server" Text="Send Email" Visible="false" ValidationGroup="Email" OnClick="btnSendEmail_Click" CssClass="btn btn-primary"></asp:Button>
                                 <asp:Button ID="btnExcel" runat="Server" ToolTip="Excel" Text="Excel Report" TabIndex="3" ValidationGroup="Excel" OnClick="btnExcel_Click1"
                                     CssClass="btn btn-info" />
+                                 <asp:Button ID="btnStudentAllotment" runat="Server" Visible="false" ToolTip="Excel" Text="Student Allotment Report(Excel)" TabIndex="3" ValidationGroup="Allotment" OnClick="btnStudentAllotment_Click"
+                                    CssClass="btn btn-info" />
                                 <asp:Button ID="btnCancel" runat="server" ToolTip="Cancel" Text="Cancel" TabIndex="4" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Show" />
@@ -184,6 +189,8 @@
                                     ShowSummary="false" ValidationGroup="Email" />
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="Excel" />
+                                 <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List" ShowMessageBox="true"
+                                    ShowSummary="false" ValidationGroup="Allotment" />
                             </div>
                         </div>
                         <div class="col-12 d-none">
@@ -334,6 +341,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="btnExcel" />
             <asp:PostBackTrigger ControlID="btnShow" />
+            <asp:PostBackTrigger ControlID="btnStudentAllotment" />
         </Triggers>
     </asp:UpdatePanel>
     <div id="divMsg" runat="server">
