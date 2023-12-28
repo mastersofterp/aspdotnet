@@ -1,4 +1,5 @@
-﻿using IITMS;
+﻿using CrystalDecisions.ReportAppServer.ReportDefModel;
+using IITMS;
 using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
@@ -41,7 +42,7 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    this.CheckPageAuthorization();
+                   // this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -65,6 +66,7 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+
     private void ShowReport(string reportTitle, string rptFileName)
     {
         try
@@ -115,12 +117,26 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
 
     protected void btnReport_Click(object sender, EventArgs e)
     {
-        ShowReport("Gate Pass Report", "HostelGatepassDetailsReport.rpt");
+        if (Convert.ToDateTime(txtFromDate.Text) < Convert.ToDateTime(txtToDate.Text))
+        {
+
+            ShowReport("Gate Pass Report", "HostelGatepassDetailsReport.rpt");
+        }
+        else
+        {
+            objCommon.DisplayMessage("From Date Should Not Be Greater Than To date.", this);
+            return;
+        }
     }
     protected void btnExcelReport_Click(object sender, EventArgs e)
     {
         try
         {
+            if (Convert.ToDateTime(txtFromDate.Text) > Convert.ToDateTime(txtToDate.Text))
+            {
+                objCommon.DisplayMessage("From Date Should Not Be Greater Than To date.", this);
+                return;
+            }
             //@P_APPLYDATE=" + Applydate + ",@P_PURPOSE=" + Purpose + ",@P_STATUS=" + Status + ",@P_GATEPASSCODE=" + Gatepassno + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
             string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? "01/01/1999" : Convert.ToString(txtApplyDate.Text);
             int Purpose = Convert.ToInt32(ddlPurpose.SelectedValue);

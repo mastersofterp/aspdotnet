@@ -718,8 +718,77 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
             objCommon.DisplayMessage("Gate Pass Not Found. Wait For Approval.", this);
             return;
         }
-        ShowReport("Gate Pass Report", "HostelGatePassReport.rpt");
-        //ShowGeneralReport("~,Reports,Hostel,HostelGatePassReport.rpt", "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_GATEPASSNO=" + Convert.ToInt32(ViewState["gatepass_no"]));
+        //ShowReport("Gate Pass Report", "HostelGatePassReport.rpt");
+        ShowGeneralReport("~,Reports,Hostel,HostelGatePassReport.rpt", "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_GATEPASSNO=" + Convert.ToInt32(gatepass_no));
+    }
+    private void ShowGeneralReport(string path, string paramString)
+    {
+        /// Set Report
+        ReportDocument customReport = new ReportDocument();
+        string reportPath = Server.MapPath(path.Replace(",", "\\"));
+        customReport.Load(reportPath);
+
+        /// Assign parameters to report document        
+        char ch = ',';
+        string[] val = paramString.Split(ch);
+        if (customReport.ParameterFields.Count > 0)
+        {
+            for (int i = 0; i < val.Length; i++)
+            {
+                int indexOfEql = val[i].IndexOf('=');
+                int indexOfStar = val[i].IndexOf('*');
+
+                string paramName = string.Empty;
+                string value = string.Empty;
+                string reportName = "MainRpt";
+
+                paramName = val[i].Substring(0, indexOfEql);
+
+                /// if report name is not passed with the parameter(means indexOfSlash will be -1) then 
+                /// handle the scenario to work properly.
+                if (indexOfStar > 0)
+                {
+                    value = val[i].Substring(indexOfEql + 1, ((indexOfStar - 1) - indexOfEql));
+                    reportName = val[i].Substring(indexOfStar + 1);
+                }
+                else
+                {
+                    value = val[i].Substring(indexOfEql + 1);
+                }
+
+                if (reportName == "MainRpt")
+                {
+                    if (value == "null")
+                    {
+                        customReport.SetParameterValue(paramName, null);
+                    }
+                    else
+                        customReport.SetParameterValue(paramName, value);
+                }
+                else
+                    customReport.SetParameterValue(paramName, value, reportName);
+            }
+        }
+
+        /// set login details & db details for report document
+        this.ConfigureCrystalReports(customReport);
+
+        /// set login details & db details for each subreport 
+        /// inside main report document.
+        for (int i = 0; i < customReport.Subreports.Count; i++)
+        {
+            ConfigureCrystalReports(customReport.Subreports[i]);
+        }
+
+        ////Export to PDF
+        customReport.ExportToHttpResponse(ExportFormatType.PortableDocFormat, System.Web.HttpContext.Current.Response, true, "HostelGatePass");
+    }
+
+    private void ConfigureCrystalReports(ReportDocument customReport)
+    {
+        ////SET Login Details & DB DETAILS
+        ConnectionInfo connectionInfo = Common.GetCrystalConnection();
+        Common.SetDBLogonForReport(connectionInfo, customReport);
     }
     private void ShowReport(string reportTitle, string rptFileName)
     {
