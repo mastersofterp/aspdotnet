@@ -469,7 +469,7 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
         string call_valueHead =string.Empty;
         string result = string.Empty;
 
-        if (Convert.ToInt32(ddlconversion.SelectedValue)==1)
+        if (Convert.ToInt32(ddlconversion.SelectedValue) == 3)
         {
             //PKG_ACD_EXAM_WISE_MARK_CONVERSION_RCPIPER
             sp_name = "PKG_ACD_EXAM_WISE_MARK_CONVERSION";
@@ -477,7 +477,7 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
             call_valueHead = "" + ddlSession.SelectedValue + "," + ddlsubjecttype.SelectedValue + "," + Convert.ToInt32(ViewState["college_id"].ToString()) + "," + Ids + "," + ddlExamName.SelectedValue + "," + txtmarks.Text + "," + ipadd + "," + uano + "," + 0;
             result = objCommon.DynamicSPCall_IUD(sp_name, param, call_valueHead, true);
         }
-        if (Convert.ToInt32(ddlconversion.SelectedValue) == 2 || Convert.ToInt32(ddlconversion.SelectedValue) == 3)
+        if (Convert.ToInt32(ddlconversion.SelectedValue) == 1 || Convert.ToInt32(ddlconversion.SelectedValue) == 2)
         {
             sp_name = "PKG_ACD_EXAM_WISE_MARK_CONVERSION_RCPIPER";
             param = "@P_SESSIONNO,@P_COURSENO,@P_COLLEGE_ID ,@P_STUDIDS,@P_EXAMNO,@P_IPADD,@P_UANO,@P_CONVERSION_TYPE,@P_OUT ";
@@ -539,7 +539,7 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
             // url += "&param=@P_COLLEGE_CODE=" + collegecode + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
-            url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + ddlsubjecttype.SelectedValue + ",@P_EXAMNO=" + ddlExamName.SelectedValue + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + ddlsubjecttype.SelectedValue + ",@P_EXAMNO=" + ddlExamName.SelectedValue + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
