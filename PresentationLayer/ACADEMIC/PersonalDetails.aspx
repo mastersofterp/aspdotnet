@@ -702,13 +702,13 @@
                                                     <div class="form-group col-lg-3 col-md-6 col-6" id="divABCCId" runat="server">
                                                         <div class="label-dynamic">
                                                             <sup id="supABCCId" runat="server">* </sup>
-                                                            <label id="lblAbccId">ABCC ID</label>
+                                                            <label id="lblAbccId">ABC ID</label>
                                                         </div>
 
-                                                        <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABCC ID" MaxLength="20"
-                                                            TabIndex="19" placeholder="Enter ABCC ID" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
+                                                        <asp:TextBox ID="txtABCCId" runat="server" CssClass="form-control" ToolTip="Please Enter ABC ID" MaxLength="20"
+                                                            TabIndex="19" placeholder="Enter ABC ID" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="rfvtABCCId" runat="server" ControlToValidate="txtABCCId"
-                                                            Display="None" ErrorMessage="Please Enter ABCC ID" SetFocusOnError="True"
+                                                            Display="None" ErrorMessage="Please Enter ABC ID" SetFocusOnError="True"
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
 
@@ -721,6 +721,18 @@
                                                             TabIndex="19" placeholder="Enter DTE Application ID" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="rfvDTEAppId" runat="server" ControlToValidate="txtDTEAppId"
                                                             Display="None" ErrorMessage="Please Enter DTE Application ID" SetFocusOnError="True"
+                                                            ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-3 col-md-6 col-6" id="divUEN" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supUEN" runat="server">* </sup>
+                                                            <label id="lblUEN">University Eligibility Number</label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtUEN" runat="server" CssClass="form-control" ToolTip="Please Enter University Eligibility Number" MaxLength="15"
+                                                            TabIndex="19" placeholder="Enter University Eligibility Number" onkeypress="return allowNumeric(event)"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="rfvUEN" runat="server" ControlToValidate="txtUEN"
+                                                            Display="None" ErrorMessage="Please Enter University Eligibility Number" SetFocusOnError="True"
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </div>
@@ -1273,6 +1285,20 @@
         }
 
     </script>
+
+    <script>
+        function allowNumeric(event) {  // Added By Shrikant W. on 16/12/2023
+            var key = event.keyCode || event.which;
+            var charStr = String.fromCharCode(key);
+
+            if (!/\d/.test(charStr)) {
+                event.preventDefault();
+                return false;
+            }
+        }
+    </script>
+
+    
     <div id="divMsg" runat="server">
     </div>
 

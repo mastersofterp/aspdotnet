@@ -526,6 +526,10 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         {
             ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
         }
+        else if (Convert.ToInt32(Session["OrgId"]) == 10)//PRMIT
+        {
+            ShowReport("CourseRegistration", "rptExam_registrationStudent_PRMITR.rpt");
+        }
         else {
 
 

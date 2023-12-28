@@ -489,7 +489,8 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + IDNO ));
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + IDNO));
             int branchno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "BRANCHNO", "IDNO=" + IDNO));
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ACADEMIC")));
+            //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("ACADEMIC")));
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
@@ -1295,7 +1296,7 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
         }
         else
         {
-            ShowReport("BacklogRegistration", "rptBacklog_Reg.rpt");
+            ShowReport("BacklogRegistration", "rptBacklog_Registration_CC.rpt");
         }
     }
 
@@ -2322,20 +2323,31 @@ public partial class Academic_Backlog_ExamRegistration_CC : System.Web.UI.Page
                 HiddenField hdfexreg = (HiddenField)e.Item.FindControl("hdfExamRegistered");
                 HiddenField hdftxn = (HiddenField)e.Item.FindControl("hdfextind");
                 CheckBox chkhead = lvFailCourse.FindControl("chkAll") as CheckBox;
-                if (hdftxn.Value == "1")
-                {
+             //   if (hdftxn.Value == "1" && hdfexreg.Value=="1")
+                   
+                     if(hdftxn.Value == "1" && hdfexreg.Value == "1")
+                    {
+                        chk.Checked = true;
+                        chk.Enabled = false;
+                        chkhead.Checked = false;
+                        chkhead.Enabled = false;
+                        chk.BackColor = System.Drawing.Color.Green;
+
+                    }
+                    else if (hdftxn.Value == "1" )
+                    {
                     chk.Checked = true;
-                    //chk.Enabled = false;
+                   // chk.Enabled = false;
                     chkhead.Checked = false;
                     //chkhead.Enabled = false;
 
-                }
-                else
-                {
-                    chk.Checked = false;
-                   // chk.Enabled = false;
+                     }
+                    else
+                    {
+                        chk.Checked = false;
+                        chkhead.Checked = false;
 
-                }
+                    }
             }
 
 

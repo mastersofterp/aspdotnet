@@ -511,14 +511,14 @@
                                                 <div class="row mt-3">
                                                     <div class="col-md-12">
                                                         <div class="sub-heading">
-                                                            <h5><b>Sport Achievement Information</b></h5>
+                                                            <h5><b>Sports / Cultural Achievement Information</b></h5>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup></sup>
-                                                            <label>Sports Name</label>
+                                                            <label>Sports / Cultural Name</label>
                                                         </div>
                                                         <asp:TextBox ID="txtSportName" runat="server" CssClass="form-control"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtSportName"
@@ -528,7 +528,7 @@
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup></sup>
-                                                            <label>Sports Level</label>
+                                                            <label>Sports / Cultural Level</label>
                                                         </div>
                                                         <%--<asp:TextBox ID="txtSportLevel" runat="server" CssClass="form-control" ToolTip="Please Enter Sports Level"></asp:TextBox>--%>
                                                         <asp:DropDownList ID="ddlSportLevel" runat="server" CssClass="form-control" ToolTip="Please Select Sports Level" AppendDataBoundItems="true" data-select2-enable="true">
@@ -545,7 +545,7 @@
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup></sup>
-                                                            <label>Sports Achievement Details</label>
+                                                            <label>Sports / Cultural Achievement Details</label>
                                                         </div>
                                                         <asp:TextBox ID="txtSportAchieve" runat="server" TextMode="MultiLine" TabIndex="98" Rows="1" CssClass="form-control" ToolTip="Please Enter Designation."></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtSportAchieve"

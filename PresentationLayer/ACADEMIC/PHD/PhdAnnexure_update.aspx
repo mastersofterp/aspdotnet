@@ -255,6 +255,11 @@
 
                                                                 </a>
                                                             </li>
+                                                             <li class="list-group-item"><b>Branch Name :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblBranch" runat="server" Font-Bold="true"></asp:Label>                                                                   
+                                                                </a>
+                                                            </li>
                                                             <li class="list-group-item"><b>Mobile No :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblMobileNo" runat="server" Font-Bold="true"></asp:Label>

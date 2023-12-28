@@ -176,13 +176,14 @@ namespace IITMS
                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                        SqlParameter[] objParams = null;
                        //Add New BUDGETHEAD
-                       objParams = new SqlParameter[5];                     
+                       objParams = new SqlParameter[6];                     
                        objParams[0] = new SqlParameter("@P_QUOTNO", objPFentry.QUOTNO) ;
                        objParams[1] = new SqlParameter("@P_PNO", objPFentry.PNO );                      
                        objParams[2] = new SqlParameter("@P_COLLEGE_CODE", colcode);
-                       objParams[3] = new SqlParameter("@P_VENDOR_TAX_TBL", objPFentry.VENDOR_TAX_TBL); 
-                       objParams[4] = new SqlParameter("@P_PFNO", SqlDbType.Int);
-                       objParams[4].Direction = ParameterDirection.Output;
+                       objParams[3] = new SqlParameter("@P_VENDOR_TAX_TBL", objPFentry.VENDOR_TAX_TBL);
+                       objParams[4] = new SqlParameter("@P_VENDRQUOT_UPLOAD_FILE_TBL", objPFentry.VENDRQUOT_UPLOAD_FILE_TBL);  //12/12/223
+                       objParams[5] = new SqlParameter("@P_PFNO", SqlDbType.Int);
+                       objParams[5].Direction = ParameterDirection.Output;
 
                        retStatus = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_STR_PARTYFIELDENTRY_INSERT", objParams, true));
 

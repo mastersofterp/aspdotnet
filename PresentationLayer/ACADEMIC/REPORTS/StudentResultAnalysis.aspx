@@ -306,26 +306,25 @@
                                                 </li>
                                                 <li class=" nav selecttwo  list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Tr Excel(Grade)</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	 </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
                                                 <li class=" nav selectthree list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Faculty Wise Result Analysis</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	 </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
                                                 <li class=" nav selectfour list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Analysis Report</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Section </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Section </p>
                                                 </li>
                                                 <li class=" nav selectfive list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Exam Fees Paid Excel Report</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session</p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session </p>
                                                 </li>
-
 
                                                 <!----------new btn----------->
                                                 <li class="nav selectsix list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Degree Wise</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	</p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
                                                 <li class="nav selectseven list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Over All Percentage</a></b>
 
@@ -337,7 +336,7 @@
                                                 </li>
                                                 <li class="nav selectnine list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Branch Semester wise Result Analysis</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session</p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session </p>
                                                 </li>
                                                 <li class="nav selectten list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Result Analysis</a></b>
 
@@ -345,25 +344,26 @@
                                                 </li>
                                                 <li class="nav selecteleven list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Fail Student List</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	</p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
                                                 <li class="nav selecttwelve list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Course Wise Fail Student List</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester	<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Course </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Course </p>
                                                 </li>
-                                                <li class="nav selectthirteen list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Gpa Cgpa Report</a></b>
+                                                <li class="nav selectthirteen list-group-item-new "><b><a href="#" class="card-link"><i class="fa fa-file"></i>Sgpa Cgpa Report</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
 
                                                 <li class="nav selectfourteen list-group-item-new " id="pre_fourteen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Branch  Wise Result Analysis</a></b>
 
-                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester  </p>
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester </p>
                                                 </li>
                                                 <li class="nav selectfifteen list-group-item-new " id="pre_fifteen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Substitute Exam Registration Report</a></b>
 
                                                     <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session </p>
                                                 </li>
+                                                <li class="nav selectsixteen list-group-item-new " id="pre_sixteen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Internal Mark Entry Report</a></b>
 
                                                     <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Course </p>
                                                 </li>
@@ -414,6 +414,13 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator25" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="schemesession">
                                             </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator27" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="InternalmarkReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="rfvCnameAnalysisReport" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true" Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0"
+                                             ValidationGroup="AnalysisReport">
+                                            </asp:RequiredFieldValidator>
+
                                         </div>
 
 
@@ -455,6 +462,9 @@
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator26" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="schemesession">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="InternalmarkReport">
                                             </asp:RequiredFieldValidator>
                                         </div>
 
@@ -579,6 +589,9 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator23" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
                                             </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="schemesession">
+                                            </asp:RequiredFieldValidator>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divSection" runat="server">
 
@@ -675,6 +688,9 @@
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="InternalmarkReport">
                                             </asp:RequiredFieldValidator>
                                         </div>
 
@@ -805,7 +821,7 @@
                                     <asp:Button ID="btnGraderpt" runat="server" Text="Format - II Report" CssClass="btn btn-info" OnClick="btnGraderpt_Click" TabIndex="1" ValidationGroup="FormatIIReport" />
                                     <asp:Button ID="btntrexcel" runat="server" Text="TR EXCEL (GRADE)" CssClass="btn btn-info" OnClick="btntrexcel_Click" TabIndex="1" CausesValidation="false" />
 
-                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" TabIndex="1" Visible="true" CausesValidation="false" />
+                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" ValidationGroup="AnalysisReport" TabIndex="1" Visible="true" />
 
                                     <asp:Button ID="btnFaculty" runat="server" Text="Faculty Wise Result Analysis" CssClass="btn btn-info" OnClick="btnFaculty_Click" TabIndex="1" CausesValidation="false" Visible="false" />
                                     <asp:Button ID="btnAnalysis" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnAnalysis_Click" TabIndex="1" CausesValidation="false" Visible="false" />
@@ -851,12 +867,13 @@
                                     <asp:Button ID="btnFailStudentList" runat="server" TabIndex="1" Text="Fail Student List" CssClass="btn btn-info" OnClick="btnFailStudentList_Click" CausesValidation="false" />
                                     <asp:Button ID="btnCourceWiseFailStudList" Text="Course Wise Fail Student List" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourceWiseFailStudList_Click" ValidationGroup="CourseWiseFailStudList" />
                                     <%--ValidationGroup="Tabulation"--%>
-                                    <asp:Button ID="btnGetGpaReport" runat="server" TabIndex="1" Text="Gpa Cgpa Report" CssClass="btn btn-info" OnClick="btnGetGpaReport_Click" CausesValidation="false" />
+                                    <asp:Button ID="btnGetGpaReport" runat="server" TabIndex="1" Text="Sgpa Cgpa Report" CssClass="btn btn-info" OnClick="btnGetGpaReport_Click" ValidationGroup="schemesession" />
                                     <asp:Button ID="btnCGPAReport" runat="server" TabIndex="1" Text="CGPA Excel Report" CssClass="btn btn-info" Visible="false" OnClick="btnCGPAReport_Click" CausesValidation="false" />
                                     <asp:Button ID="btnBranchWiseResultAnalysis" runat="server" TabIndex="1" Text="Branch Wise Result Analysis" CssClass="btn btn-info" ValidationGroup="Branch" OnClick="btnBranchWiseResultAnalysis_Click" />
                                     <asp:Button ID="btnCourseWiseExamRegistartion" Text="Course Wise Exam Registration" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnCourseWiseExamRegistartion_Click" ValidationGroup="CourseWiseExamRegistartion" />
                                     <asp:Button ID="btnSubjectWiseResultanalysisReport" Text="Subject Wise Result Analysis Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSubjectWiseResultanalysisReport_Click" ValidationGroup="SubjectWiseResultanalysisReport" />
-                                   
+
+
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Branch" CausesValidation="false" />
                                     <asp:ValidationSummary ID="ValidationSummary8" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseFailStudList" CausesValidation="false" />
                                     <asp:ValidationSummary ID="ValidationSummary9" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="CourseWiseExamRegistartion" CausesValidation="false" />
@@ -869,10 +886,12 @@
                                     <asp:Button ID="btnIntEntRpt" Text="Internal Mark Entry Report" runat="server" TabIndex="1" ValidationGroup="CourseWiseExamRegistartion" CssClass="btn btn-info" OnClick="btnIntEntRpt_Click" Visible="false" />
                                     <asp:Button ID="btnsubtituteexamexcel" Text="Substitute Registration Excel" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnsubtituteexamexcel_Click" ValidationGroup="schemesession" />
                                     <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
+
+                                    <asp:ValidationSummary ID="ValidationSummary11" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="InternalmarkReport" CausesValidation="false" />
                                     <asp:ValidationSummary ID="valsumschemesession" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="schemesession" CausesValidation="false" />
+
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -1230,8 +1249,8 @@
                 });
 
                 $(".selectthirteen ").click(function () {
-                    $("#ctl00_ContentPlaceHolder1_ddlSession").removeClass("red-color");
-                    $("#ctl00_ContentPlaceHolder1_ddlSem").removeClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
                 });

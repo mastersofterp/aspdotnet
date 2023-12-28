@@ -427,9 +427,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         private int _defencequota = 0;
         private int _minorityquota = 0;
 
-        //methods
+        // Added by Shrikant Waghmare on 16-12-2023
+        private string _eligibiltyno = string.Empty;
 
-      
+        //methods
 
         #region Public Property Fields
         public decimal NataMarks //Added By Rishabh on 13/04/2022
@@ -2468,6 +2469,11 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
              set { _minorityquota = value; }
          }
         
-        
+        // Added By Shrikant W. on 16-12-2023
+         public string EligibilityNo
+         {
+             get { return _eligibiltyno; }
+             set { _eligibiltyno = value; }
+         }
     }
 }

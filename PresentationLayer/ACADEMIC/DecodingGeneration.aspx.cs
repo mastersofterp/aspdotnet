@@ -501,6 +501,7 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         BindListView();
     }
 
+
     private void BindListView()
     {
         DataSet ds = null;
@@ -1190,5 +1191,35 @@ public partial class ACADEMIC_DecodingGeneration : System.Web.UI.Page
         ViewState["genStatus"] = "NOTGENERATED";
         GetGridSDB();
 
+    }
+
+    // added by shubham on 12/12/2023
+    protected void btnExcel_Click(object sender, EventArgs e)
+    {
+
+        string sp_para = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_BRANCHNO";
+        string sp_call = "" + ddlSession.SelectedValue + "," + ViewState["schemeno"].ToString() + "," + ddlsemester.SelectedValue + "," + Convert.ToInt32(ViewState["branchno"].ToString());
+        string sp_name = "PKG_GET_DECODE_GENERATE_STUDENT_EXCEL_LIST";
+        DataSet ds = objCommon.DynamicSPCall_Select(sp_name, sp_para, sp_call);
+        GridView gv = new GridView();
+        if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+        {
+            gv.DataSource = ds;
+            gv.DataBind();
+            string Attachment = "Attachment;filename=StudentRollList.xls";
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", Attachment);
+            Response.ContentType = "application/ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            gv.HeaderStyle.Font.Bold = true;
+            gv.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(this, "No Data Found.", this.Page);
+        }
     }
 }

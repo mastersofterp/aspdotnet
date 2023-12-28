@@ -179,7 +179,20 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         {
             DataSet ds = new DataSet();
             int ua_no = ua_no = Convert.ToInt32(Session["userno"]);
-            int tutorial = Convert.ToInt32(ddlTutorial.SelectedValue);
+            //int tutorial = Convert.ToInt32(ddlTutorial.SelectedValue);
+            int tutorial = 0;
+            if (ddlTutorial.SelectedValue == "2" || (Convert.ToInt32(ViewState["IS_TUTORIAL"]) > 0 && Convert.ToInt32(ViewState["IS_PRACTICAL"]) == 0 && Convert.ToInt32(ViewState["IS_THEORY"]) == 0))
+            {
+                tutorial = 2;
+            }
+            else if (ddlTutorial.SelectedValue == "3" || (Convert.ToInt32(ViewState["IS_TUTORIAL"]) == 0 && Convert.ToInt32(ViewState["IS_PRACTICAL"]) > 0 && Convert.ToInt32(ViewState["IS_THEORY"]) == 0))
+            {
+                tutorial = 3;
+            }
+            else
+            {
+                tutorial = Convert.ToInt32(ddlTutorial.SelectedValue);
+            }
 
             ds = objTeachingPlanController.GetAllTEACHING_PLAN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["semesterno"].ToString()), ua_no, Convert.ToInt32(ViewState["courseno"].ToString()), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlBatch.SelectedValue), tutorial, Convert.ToInt32(ViewState["college_id"].ToString()), Convert.ToInt32(Session["OrgId"]));
             if (ds != null && ds.Tables.Count > 0)
@@ -3469,7 +3482,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         }
         else
         {
-           
+
             ddlTimeTableDateGlobal.Items.Clear();
             ddlTimeTableDateGlobal.Items.Add(new ListItem("Please Select", "0"));
             ddlGlobalSection.Items.Clear();
@@ -3715,7 +3728,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
                 for (int i = 1; i <= 80; i++)
                 {
-                    int count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "UA_NO =" + Session["userno"] + " AND COURSENO =" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND UNIT_NO=" + Convert.ToInt32(ddlUnitNoGlobal.SelectedValue) + " AND LECTURE_NO=" + Convert.ToInt32(i) + " AND TUTORIAL = 0  AND ISNULL(CANCEL,0)=0 AND SECTIONNO="+ Convert.ToInt32(ddlGlobalSection.SelectedValue) +" AND SESSIONNO IN( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ")"));
+                    int count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "UA_NO =" + Session["userno"] + " AND COURSENO =" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND UNIT_NO=" + Convert.ToInt32(ddlUnitNoGlobal.SelectedValue) + " AND LECTURE_NO=" + Convert.ToInt32(i) + " AND TUTORIAL = 0  AND ISNULL(CANCEL,0)=0 AND SECTIONNO=" + Convert.ToInt32(ddlGlobalSection.SelectedValue) + " AND SESSIONNO IN( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + ")"));
                     if (count == 0)
                     {
                         ddlLectureNoGlobal.Items.Add(new ListItem(i.ToString()));
@@ -4267,7 +4280,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         {
             string TP_NO = string.Empty;
 
-            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND SECTIONNO=" + Convert.ToInt32(ddlGlobalSection.SelectedValue)+ " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
+            TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN TP INNER JOIN ACD_SESSION_MASTER SM ON(TP.SESSIONNO=SM.SESSIONNO AND TP.COLLEGE_ID= SM.COLLEGE_ID)", "TP_NO", "TP.COURSENO=" + Convert.ToInt32(ViewState["globalcourseno"].ToString()) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSessionGlobal.SelectedValue) + " AND UNIT_NO=" + ddlUnitNoGlobal.SelectedValue + " AND LECTURE_NO=" + ddlLectureNoGlobal.SelectedValue + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + " AND SECTIONNO=" + Convert.ToInt32(ddlGlobalSection.SelectedValue) + " AND (TUTORIAL = 0 or TUTORIAL IS NULL)");
             if (TP_NO != null && TP_NO != string.Empty)
             {
                 flag = true;

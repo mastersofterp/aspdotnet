@@ -68,7 +68,25 @@ public partial class CourseWise_Registration : System.Web.UI.Page
                 btnCancel_Click(sender, e);
                 //Page Authorization
                 CheckPageAuthorization();
+
                 PopulateDropDown();
+
+                if (Session["usertype"].ToString() != "1")
+                {
+                    dvCollege.Visible = false;
+                    Div1.Visible = false;
+                    btnExcel.Visible = false;
+                    btnStudentAllotment.Visible = true;
+                }
+                else
+                {
+                    dvCollege.Visible = true;
+                    Div1.Visible = true;
+                    btnExcel.Visible = true;
+                    btnStudentAllotment.Visible = false;
+                    
+                }
+
             }
             divMsg.InnerHtml = string.Empty;
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -  Added By Rishabh on 22/12/2021
@@ -99,9 +117,15 @@ public partial class CourseWise_Registration : System.Web.UI.Page
     {
         try
         {
-            this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
-            ////Fill Dropdown Session 
-
+            if (Session["usertype"] != "1")
+            {
+                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID) INNER JOIN ACD_STUDENT_RESULT SR ON(SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1 AND (SR.UA_NO = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_PRAC = " + Convert.ToInt32(Session["userno"]) + " OR SR.UA_NO_TUTR = " + Convert.ToInt32(Session["userno"]) + ")", "S.SESSIONID DESC");
+            }
+            else
+            {
+                this.objCommon.FillDropDownList(ddlSession, "ACD_SESSION S INNER JOIN ACD_SESSION_MASTER SM ON(S.SESSIONID = SM.SESSIONID)", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "ISNULL(S.FLOCK,0)=1 AND ISNULL(S.IS_ACTIVE,0)=1", "S.SESSIONID DESC");
+                ////Fill Dropdown Session 
+            }
         }
         catch (Exception ex)
         {
@@ -975,5 +999,45 @@ public partial class CourseWise_Registration : System.Web.UI.Page
             }
     }
 
+    protected void btnStudentAllotment_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
+            int UA_NO = Convert.ToInt32(Session["userno"]);
+            DataSet dsAllotment = null;
+            string sp_Name = string.Empty; string sp_Call = string.Empty; string sp_Value = string.Empty;
+            sp_Name = "PKG_ACD_COURSE_REGISTRATION_ALLOTMENT_DETAILS_FOR_FACULTY";
+            sp_Call = "@P_SESSION_ID,@P_UA_NO";
+            sp_Value = "" + SessionNo + "," + UA_NO + "";
+            dsAllotment = objCommon.DynamicSPCall_Select(sp_Name, sp_Call, sp_Value);
+            if (dsAllotment.Tables[0].Rows.Count > 0)
+            {
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt in dsAllotment.Tables)
+                        wb.Worksheets.Add(dt);   //Add System.Data.DataTable as Worksheet.
+
+                    //Export the Excel file.
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=StudentRegistrationReport.xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }
+            }
+        }
+        catch
+        {
+        }
+    }
 }
 

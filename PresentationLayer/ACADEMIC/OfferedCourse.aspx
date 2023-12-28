@@ -134,7 +134,7 @@
 
                                                             <asp:ListBox ID="ddlSemester" runat="server" SelectionMode="Multiple"
                                                                 CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
-                                                           
+
 
                                                         </div>
                                                     </div>
@@ -159,15 +159,16 @@
                                                         ShowMessageBox="true" ShowSummary="false" ValidationGroup="offered" />
                                                 </div>
 
-                                                <div class="col-12 table-responsive" id="divCourseDetail" runat="server" visible="false">
+                                                <div class="col-12" id="divCourseDetail" runat="server" visible="false">
                                                     <asp:Panel ID="pnlCourse" runat="server">
                                                         <asp:ListView ID="lvCourse" runat="server" OnItemDataBound="lvCourse_ItemDataBound">
                                                             <LayoutTemplate>
                                                                 <div class="sub-heading">
                                                                     <h5>Course List</h5>
                                                                 </div>
-                                                                <table class="table table-striped table-bordered nowrap " style="width: 100%" id="tblCourseLst">
-                                                                    <thead class="bg-light-blue">
+                                                                <%--  <div class="" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">--%>
+                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%;" id="tblCourseLst">
+                                                                    <thead class="bg-light-blue" style="top: -15px !important;">
                                                                         <tr>
                                                                             <%--<th>Offered</th>--%>
                                                                             <th>
@@ -192,12 +193,13 @@
                                                                         <tr id="itemPlaceholder" runat="server" />
                                                                     </tbody>
                                                                 </table>
+                                                               <%-- </div>--%>
                                                             </LayoutTemplate>
                                                             <ItemTemplate>
                                                                 <tr>
                                                                     <td>
                                                                         <%--Enabled='<%# (Convert.ToInt32(Eval("REGISTERED") ) == 1 ?  false : true )%>'--%>
-                                                                        <asp:CheckBox ID="chkoffered" runat="server" ToolTip='<%# Eval("COURSENO") %>' onClick="totStudents(this);"/>
+                                                                        <asp:CheckBox ID="chkoffered" runat="server" ToolTip='<%# Eval("COURSENO") %>' onClick="totStudents(this);" />
                                                                     </td>
                                                                     <td><%# Eval("CCODE")%></td>
                                                                     <td><%# Eval("COURSE_NAME")%></td>
@@ -353,7 +355,7 @@
 
                                                         </div>
                                                         <asp:HiddenField ID="hftot" runat="server" />
-                                                        <asp:HiddenField ID="hftotN" runat="server"/>
+                                                        <asp:HiddenField ID="hftotN" runat="server" />
                                                     </div>
 
                                                     <div class="col-12 btn-footer">
@@ -1096,19 +1098,19 @@
         });
 
     </script>
-   <script type="text/javascript" language="javascript">
+    <script type="text/javascript" language="javascript">
 
-       function SelectAll(headchk) {
-           
-           debugger;
-           var i = 0;
-           var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
-           
-           var hftotN = document.getElementById('<%= hftotN.ClientID %>').value;
-          // alert(hftotN);
+        function SelectAll(headchk) {
+
+            debugger;
+            var i = 0;
+            var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
+
+            var hftotN = document.getElementById('<%= hftotN.ClientID %>').value;
+            // alert(hftotN);
             var count = 0;
             for (i = 0; i < Number(hftotN) ; i++) {
-               
+
                 //ctl00_ContentPlaceHolder1_lvCourse_ctrl0_chkoffered
                 var lst = document.getElementById('ctl00_ContentPlaceHolder1_lvCourse_ctrl' + i + '_chkoffered');
                 //alert(lst.typechk);
@@ -1127,14 +1129,14 @@
 
             if (headchk.checked == true) {
                 document.getElementById('<%= txtTotStud.ClientID %>').value = count;
-            }
-            else {
-                document.getElementById('<%= txtTotStud.ClientID %>').value = 0;
-            }
-        }
+           }
+           else {
+               document.getElementById('<%= txtTotStud.ClientID %>').value = 0;
+           }
+       }
 
-        function totStudents(chk) {
-            var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
+       function totStudents(chk) {
+           var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
 
             if (chk.checked == true)
                 txtTot.value = Number(txtTot.value) + 1;

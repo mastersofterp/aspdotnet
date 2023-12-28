@@ -378,7 +378,97 @@
                                     </div>
                                 </asp:Panel>
                             </div>
+                            <%--//=================================file upload ==================================================//--%>
 
+                             <div class="form-group col-lg-6 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Attach File</label>
+                                        </div>
+                                        <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+                                            <ContentTemplate>
+                                                <div class="input-group date">
+                                                    <asp:FileUpload ID="Uploadinvoice" runat="server" ValidationGroup="complaint" ToolTip="Select file to upload" TabIndex="9" />
+                                                    <div class="input-group-addon">
+                                                        <asp:Button ID="btnAdd" runat="server" Text="Add" OnClick="btnAdd_Click"
+                                                            CssClass="btn btn-primary"
+                                                            CausesValidation="False" TabIndex="10" ToolTip="Add Attach File" />
+                                                        <asp:Label ID="lblResult" runat="server" Font-Bold="true" ForeColor="Red"></asp:Label>
+                                                    </div>
+                                                </div>
+                                            </ContentTemplate>
+                                            <Triggers>
+                                                <asp:PostBackTrigger ControlID="btnAdd" />
+                                            </Triggers>
+                                        </asp:UpdatePanel>
+                                        <asp:UpdateProgress ID="UpdateProgress" runat="server" AssociatedUpdatePanelID="UpdatePanel3">
+                                            <ProgressTemplate>
+                                                <div class="overlay">
+                                                    <div style="z-index: 1000; margin-left: 350px; margin-top: 200px; opacity: 1; -moz-opacity: 1;">
+                                                        <img alt="" src="loader.gif" />
+                                                    </div>
+                                                </div>
+                                            </ProgressTemplate>
+                                        </asp:UpdateProgress>
+                                    </div>
+
+                             <div class="form-group col-12">
+                                        <div id="divAttch" runat="server" >
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto" Visible="false">
+                                                        <asp:ListView ID="lvCompAttach" runat="server">
+                                                            <LayoutTemplate>
+                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Delete</th>
+                                                                            <th >Attachments  
+                                                                            </th>
+                                                                            <th >Download
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </LayoutTemplate>
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/delete.png"
+                                                                            CommandArgument=' <%#Eval("FILENAME") %>' ToolTip="Delete Record"
+                                                                            OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="ImageButton1_Click" />
+                                                                    </td>
+                                   
+                                                                    <td >
+                                                                        <%# Eval("DisplayFileName")%></a>
+                                                                    </td>
+
+                                                                    <td style="text-align: center" >
+                                                                        <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                            <ContentTemplate>
+                                                                                     <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                                            </ContentTemplate>
+                                                                            <Triggers>
+                                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                            </Triggers>
+                                                                        </asp:UpdatePanel>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:ListView>
+                                                    </asp:Panel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                            <%--//====================================================================================//--%>
 
 
 
@@ -409,6 +499,20 @@
                                 <asp:HiddenField ID="hdnOthEdit" runat="server" Value="0" />
                             </div>
                         </div>
+
+                      <%--  //======================================================================//--%>
+                         <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                    </div>
+
+
+
+                      <%--  //===========================================================================//--%>
+
+
                     </div>
                 </div>
             </div>

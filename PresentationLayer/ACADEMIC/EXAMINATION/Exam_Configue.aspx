@@ -95,7 +95,7 @@
                                     <div class="form-group col-lg-2 col-md-2 col-12">
                                         <span>
                                             <label for="chk_Reg" style="font-size: small;">Exam Registration</label>
-                                        </span>
+                                        </ span>
                                     </div>
 
                                     <div class="form-group col-md-1">
@@ -477,6 +477,126 @@
                                             Display="Dynamic" />--%>
 
                                     </div>
+
+                                     <div class="form-group col-lg-1 col-md-1 col-12 ">
+                                       <%-- <span class="pr-6">
+                                            <label for="chk_intsubexam" style="font-size: small;"></label>
+                                        </span>--%>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_intsubexam" style="font-size: small;">Internal Subexam</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_intsubexam">
+                                            <label class="custom-control-label" for="chk_intsubexam"></label>
+                                            <asp:HiddenField ID="hdfintsubexam" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_intassessment" style="font-size: small;">Internal Assessment</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_intassessment">
+                                            <label class="custom-control-label" for="chk_intassessment"></label>
+                                            <asp:HiddenField ID="hdfintassessment" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_intexcelformat" style="font-size: small;">Internal Excelformat</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_intexcelformat">
+                                            <label class="custom-control-label" for="chk_intexcelformat"></label>
+                                            <asp:HiddenField ID="hdfintexcelformat" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_admissionstatus" style="font-size: small;">ADMISSION_STATUS</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_admissionstatus">
+                                            <label class="custom-control-label" for="chk_admissionstatus"></label>
+                                            <asp:HiddenField ID="hdfadmissionstatus" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_endsemcomponent" style="font-size: small;">MULTIPALE ENDSEM COMPONENT</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_endsemcomponent">
+                                            <label class="custom-control-label" for="chk_endsemcomponent"></label>
+                                            <asp:HiddenField ID="hdfendsemcomponent" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_adminexapproval" style="font-size: small;">ADMIN_EXAM_APPROVAL</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_adminexapproval">
+                                            <label class="custom-control-label" for="chk_adminexapproval"></label>
+                                            <asp:HiddenField ID="hdfadminexapproval" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_admincomponent" style="font-size: small;">ADMIN_COMPONENT</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_admincomponent">
+                                            <label class="custom-control-label" for="chk_admincomponent"></label>
+                                            <asp:HiddenField ID="hdfadmincomponent" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-lg-2 col-md-2 col-12 ">
+                                        <span class="pr-5">
+                                            <label for="chk_facultycomponent" style="font-size: small;">FACULTY_COMPONENT</label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="chk_facultycomponent">
+                                            <label class="custom-control-label" for="chk_facultycomponent"></label>
+                                            <asp:HiddenField ID="hdffacultycomponent" runat="server" ClientIDMode="Static" />
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -486,6 +606,7 @@
                                     <ContentTemplate>
                                         <div id="divlist">
                                             <asp:Panel ID="pnlBind" runat="server">
+
                                                 <asp:ListView ID="lvBinddata" runat="server">
                                                     <LayoutTemplate>
                                                         <div id="demo-grid">
@@ -516,7 +637,7 @@
                                                             <td><%# Container.DataItemIndex +1 %></td>
 
                                                             <td>
-
+                                                                 
                                                                 <asp:Label ID="lblsubid" runat="server" Text='<%# Eval("SUBID") %>'></asp:Label>
 
                                                             </td>
@@ -555,6 +676,7 @@
                         </div>
                     </div>
                 </div>
+                </span>
         </ContentTemplate>
         <Triggers>
             <%--<asp:AsyncPostBackTrigger ControlID="btnSave" />--%>
@@ -624,7 +746,14 @@
             var barcode = document.getElementById("chk_barcode");
             var feedback = document.getElementById("chk_feedback");
             var attendance = document.getElementById("chk_attendance");
-
+            var intsubexam = document.getElementById("chk_intsubexam");
+            var intassessment = document.getElementById("chk_intassessment");
+            var intexcelformat = document.getElementById("chk_intexcelformat");
+            var admissionstatus = document.getElementById("chk_admissionstatus");
+            var endsemcomponent = document.getElementById("chk_endsemcomponent");
+            var adminexapproval = document.getElementById("chk_adminexapproval");
+            var admincomponent = document.getElementById("chk_admincomponent");
+            var facultycomponent = document.getElementById("chk_facultycomponent");
 
             if (examreg.checked) {
                 $('#hdfexamregister').val(true);
@@ -829,6 +958,57 @@
             else
             {
                 $('#hdfattendance').val(false)
+            }
+            if (intsubexam.checked) {
+                $('#hdfintsubexam').val(true)
+            }
+            else
+            {
+                $('#hdfintsubexam').val(false)
+            }
+            if (intassessment.checked) {
+                $('#hdfintassessment').val(true)
+            }
+            else
+            {
+                $('#hdfintassessment').val(false)
+            }
+            if (intexcelformat.checked) {
+                $('#hdfintexcelformat').val(true)
+            }
+            else
+            {
+                $('#hdfintexcelformat').val(false)
+            }
+            if (admissionstatus.checked) {
+                $('#hdfadmissionstatus').val(true)
+            }
+            else {
+                $('#hdfadmissionstatus').val(false)
+            }
+            if (endsemcomponent.checked) {
+                $('#hdfendsemcomponent').val(true)
+            }
+            else {
+                $('#hdfendsemcomponent').val(false)
+            }
+            if (adminexapproval.checked) {
+                $('#hdfadminexapproval').val(true)
+            }
+            else {
+                $('#hdfadminexapproval').val(false)
+            }
+            if (admincomponent.checked) {
+                $('#hdfadmincomponent').val(true)
+            }
+            else {
+                $('#hdfadmincomponent').val(false)
+            }
+            if (facultycomponent.checked) {
+                $('#hdffacultycomponent').val(true)
+            }
+            else {
+                $('#hdffacultycomponent').val(false)
             }
      
         }

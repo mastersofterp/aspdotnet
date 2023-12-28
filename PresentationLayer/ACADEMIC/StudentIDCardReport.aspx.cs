@@ -276,6 +276,10 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                     {
                         ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
                     }
+                    else
+                    {
+                        ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
+                    }
                 }
 
                   //
@@ -306,11 +310,15 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                 {
                     ShowReport_ATLAS(ids, "Student_ID_Card_Report", "rpt_IdentityCard_PJLCOE.rpt");
                 }
+                else if (orgid == 11)
+                    {
+                    ShowReport_PRMCEM(ids, "Student_ID_Card_Report", "rpt_IdentityCard_PRMCEM.rpt");
+                    }
                 else
-                {
+                    {
                     // StudentIDCardFrontNew
                     ShowReportDefault(ids, "Student_ID_Card_Report", "StudentIDCardFrontNew.rpt");
-                }
+                    }
             }
             else
                 objCommon.DisplayMessage(this.updStudent, "Please Select Students!", this.Page);
@@ -492,6 +500,29 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
             throw;
         }
     }
+
+    private void ShowReport_PRMCEM(string param, string reportTitle, string rptFileName)
+        {
+        try
+            {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_IDNO=" + param + " ,@P_OrganizationId=" + Convert.ToInt32(Session["OrgId"]);
+            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            divMsg.InnerHtml += " </script>";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updStudent, this.updStudent.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+        catch (Exception ex)
+            {
+            throw;
+            }
+        }
 
 
     private void ShowReport_ATLAS(string param, string reportTitle, string rptFileName)

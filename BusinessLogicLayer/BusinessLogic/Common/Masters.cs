@@ -3269,6 +3269,32 @@ namespace IITMS
                             captions[1, 7] = "20";                                //Max length
                             captions[1, 8] = "List of Value Added Group";               //Report Title
                             break;
+
+
+                        //Added by Vipul Tichakule for ACD_Feedback_Report_Type on 21-11-2023
+                        case "acd_feedback_report_type":                                         //academic
+                            captions[0, 0] = "Feedback Report Type";                             //Label
+                            captions[0, 1] = "textbox";                                          //Control
+                            captions[0, 2] = "FEEBACKREPORTNAME";                               //FieldName
+                            captions[0, 3] = "FDID";                                             //id
+                            captions[0, 4] = "2";                                                //No of fields
+                            captions[0, 5] = "FDID,FEEBACKREPORTNAME,ACTIVESTATUS,COLLEGE_CODE";//FieldsNames
+                            captions[0, 6] = "string2";                                           //Validation Type
+                            captions[0, 7] = "100";                                               //Max Length
+                            captions[0, 8] = "List of Feedback Report Type";                     //Report Title
+
+                            captions[1, 0] = "Active Status";                                    //Label
+                            captions[1, 1] = "checkbox";                                         //Control
+                            captions[1, 2] = "ACTIVESTATUS";                                     //FieldName
+                            captions[1, 3] = "FDID";                                             //ID
+                            captions[1, 4] = "2";                                                //No of Fields
+                            captions[1, 5] = "FDID,FEEBACKREPORTNAME,ACTIVESTATUS,COLLEGE_CODE"; //FieldNames
+                            captions[1, 6] = "string";                                            //Validation Type
+                            captions[1, 7] = "100";                                                //Max length
+                            captions[1, 8] = "List of Feedback Report Type";
+                            break;
+                        //end
+
                         #endregion
 
                         #region HOSTEL

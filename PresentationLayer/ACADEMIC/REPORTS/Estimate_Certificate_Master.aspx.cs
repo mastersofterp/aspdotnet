@@ -51,7 +51,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         {
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0 AND ACTIVESTATUS=1", "DEGREENO");
             objCommon.FillDropDownList(ddlBank, "ACD_BANK", "BANKNO", "BANKCODE", "BANKNO>0 AND ACTIVESTATUS=1", "BANKNO");
-
+            objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO IN(1,2)", "IDTYPENO");
             //Fill Dropdown admbatch
             objCommon.FillDropDownList(ddldegreerc, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0 AND ACTIVESTATUS=1", "DEGREENO");
             objCommon.FillDropDownList(ddlAdmyear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1  ", "ACADEMIC_YEAR_NAME DESC");
@@ -1190,7 +1190,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         try
          {
 
-         DataSet dslist = objcerMasterController.GetParticularinfo(Convert.ToInt32(ddlAcadYear.SelectedValue), rbdExpenditure.SelectedValue, rbdstudentGender.SelectedValue, Convert.ToInt32(ddldegreerc.SelectedValue));
+             DataSet dslist = objcerMasterController.GetParticularinfo(Convert.ToInt32(ddlAcadYear.SelectedValue), rbdExpenditure.SelectedValue, rbdstudentGender.SelectedValue, Convert.ToInt32(ddldegreerc.SelectedValue), Convert.ToInt32(ddlAdmType.SelectedValue));
 
        if (dslist != null && dslist.Tables.Count > 0 && dslist.Tables[0].Rows.Count > 0)
             {
@@ -1271,7 +1271,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         int UaNO = Convert.ToInt32(Session["userno"]);
         int INSERT = Convert.ToInt32(ViewState["COUNT"]);
         string gender = rbdstudentGender.SelectedValue;
-        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno);
+        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno,Convert.ToInt32(ddlAdmType.SelectedValue));
         if (cs.Equals(CustomStatus.RecordSaved))
         {
             count++;
@@ -1299,7 +1299,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         int UaNO = Convert.ToInt32(Session["userno"]);
         int INSERT = Convert.ToInt32(ViewState["COUNT1"]);
         string gender = rbdstudentGender.SelectedValue;
-        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno);
+        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno, Convert.ToInt32(ddlAdmType.SelectedValue));
         if (cs.Equals(CustomStatus.RecordSaved))
         {
             count++;
@@ -1526,7 +1526,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         int UaNO = Convert.ToInt32(Session["userno"]);
         int INSERT = Convert.ToInt32(ViewState["COUNT"]);
         string gender = rbdstudentGender.SelectedValue;
-        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender,degreeno);
+        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender,degreeno,Convert.ToInt32(ddlAdmType.SelectedValue));
         if (cs.Equals(CustomStatus.RecordSaved))
         {
             count++;
@@ -1555,7 +1555,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
         int UaNO = Convert.ToInt32(Session["userno"]);
         int INSERT = Convert.ToInt32(ViewState["COUNT1"]);
         string gender = rbdstudentGender.SelectedValue;
-        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno);
+        CustomStatus cs = (CustomStatus)objcerMasterController.InsertExpe(Head, firstAmount, SecondAmount, thirdAmount, fourthAmount, EXPE_CODE, AcdYear, Convert.ToInt32(Session["OrgId"]), IpAddress, UaNO, INSERT, gender, degreeno,Convert.ToInt32(ddlAdmType.SelectedValue));
         if (cs.Equals(CustomStatus.RecordSaved))
         {
             count++;
@@ -2186,7 +2186,7 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
 
         try
         {
-         DataSet dslist = objcerMasterController.GetParticularinfo(Convert.ToInt32(ddlAcadYear.SelectedValue), rbdExpenditure.SelectedValue, rbdstudentGender.SelectedValue, Convert.ToInt32(ddldegreerc.SelectedValue));
+            DataSet dslist = objcerMasterController.GetParticularinfo(Convert.ToInt32(ddlAcadYear.SelectedValue), rbdExpenditure.SelectedValue, rbdstudentGender.SelectedValue, Convert.ToInt32(ddldegreerc.SelectedValue), Convert.ToInt32(ddlAdmType.SelectedValue));
               
             if (dslist != null && dslist.Tables.Count > 0 && dslist.Tables[0].Rows.Count > 0)
             {
@@ -2250,6 +2250,8 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
     {
         try
         {
+
+            
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
                 if (rbdExpenditure.SelectedValue == "A")
@@ -2323,9 +2325,19 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
             if (Convert.ToInt32(Session["OrgId"]) == 1)
             {
 
+                if (ddlAdmType.SelectedValue == "0")
+                {
+                    objCommon.DisplayMessage(UpdatePanel1, "Please Select Admission Type", this.Page);
+                    return;
+                }
                 if (ddlAcadYear.SelectedValue == "0")
                 {
                     objCommon.DisplayMessage(UpdatePanel1, "Please Select Academic Year", this.Page);
+                    rbdExpenditure.SelectedIndex = -1;
+                }
+                if (ddldegreerc.SelectedValue == "0")
+                {
+                    objCommon.DisplayMessage(UpdatePanel1, "Please Select Degree", this.Page);
                     rbdExpenditure.SelectedIndex = -1;
                 }
                 else
@@ -2524,6 +2536,19 @@ public partial class ACADEMIC_REPORTS_Estimate_Certificate_Master : System.Web.U
 
     #endregion
 
+      protected void ddlAdmType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+       rbdExpenditure.SelectedIndex = -1;
+        divgender.Visible = false;
+        rbdstudentGender.SelectedIndex = -1;
+        pnlStudInstitute.Visible = false;
+        pnlStudInstitute_mca.Visible = false;
+        divgender.Visible = false;
+        pnlStudInstitute.Visible = false;
+        pnlStudHostel.Visible = false;
+        pnlStudHostel_mca.Visible = false;
+      
+    }
 }
 
 

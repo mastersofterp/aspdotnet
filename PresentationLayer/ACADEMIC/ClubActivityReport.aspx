@@ -39,7 +39,7 @@
                                 <div class="col-12">
                                     <div class="row">
 
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="form-group col-lg-3 col-md-6 col-12" runat="server" style="display:none">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <%-- <label>Session</label>--%>
@@ -120,12 +120,12 @@
             var ddlSession = document.getElementById('<%= ddlSession.ClientID %>');
             var lstbxClub = document.getElementById('<%= lstbxClub.ClientID %>');
        
-            if (ddlSession != null) {
-                if (ddlSession.value === "0") {
-                    alert('Please select session.');
-                    return false;
-                }
-            }
+            //if (ddlSession != null) {
+            //    if (ddlSession.value === "0") {
+            //        alert('Please select session.');
+            //        return false;
+            //    }
+            //}
 
             if (lstbxClub != null) {
                 var selectedItems = 0;

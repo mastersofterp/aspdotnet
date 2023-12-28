@@ -1447,34 +1447,32 @@
             Obj.Ccode = $('#ctl00_ContentPlaceHolder1_hdnCcode').val();
             Obj.schemeno = $('#ctl00_ContentPlaceHolder1_hdfSchemeTest').val();
 
-            //alert(Obj.Ccode);
-
             $.ajax({
                 //url: "/QuestionWiseMarksEntry.aspx/SaveMarkEntry",
-                url: "<%=Page.ResolveClientUrl("QuestionWiseMarksEntry.aspx/SaveMarkEntry")%>",
-                //QuestionWiseMarksEntry.aspx/SaveMarkEntry
-                type: "POST",
-                data: JSON.stringify(Obj),
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
+                url: "<%=Page.ResolveClientUrl("QuestionWiseMarksEntry_Global.aspx/SaveMarkEntry")%>",
+               //QuestionWiseMarksEntry.aspx/SaveMarkEntry
+               type: "POST",
+               data: JSON.stringify(Obj),
+               dataType: "json",
+               contentType: "application/json;charset=utf-8",
 
-                success: function (data) {
-                    //alert('Abhi');
-                    var data = data['d'];
-                    CallBack(data);
+               success: function (data) {
+                   //alert('Abhi');
+                   var data = data['d'];
+                   CallBack(data);
 
-                    $(".loader-area, .loader").fadeOut('slow');
-                },
-                error: function (errResponse) {
-                    //alert(errResponse.d);
-                    console.log(errResponse);
-                    $(".loader-area, .loader").fadeOut('slow');
-                }
-            });
+                   $(".loader-area, .loader").fadeOut('slow');
+               },
+               error: function (errResponse) {
+                   //alert(errResponse.d);
+                   console.log(errResponse);
+                   $(".loader-area, .loader").fadeOut('slow');
+               }
+           });
 
 
-            $(".loader-area, .loader").fadeOut('slow');
-        };
+           $(".loader-area, .loader").fadeOut('slow');
+       };
 
         //var CallBack =
 

@@ -229,7 +229,7 @@
                                 <div class=" note-div">
                                     <h5 class="heading">Note</h5>
                                     <p><i class="fa fa-star" aria-hidden="true"></i><span> Only Academic Year Selection is Mandatory for Excel Report.</span>  </p>
-                                     <p><i class="fa fa-star" aria-hidden="true"></i><span> Sort by Selection is Only for Admission Role List  Report.</span>  </p>
+                                     <p><i class="fa fa-star" aria-hidden="true"></i><span> Sort by Selection is Only for Admission Roll List  Report.</span>  </p>
                                 </div>
                             </div>
                         </div>

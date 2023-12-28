@@ -92,16 +92,7 @@
                                             <div class="box-body">
                                                 <div class="col-12">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server">
-                                                            <div class="label-dynamic">
-                                                                <sup>* </sup>
-                                                                <label>Department</label>
-                                                            </div>
-                                                            <asp:DropDownList ID="ddlDepartment" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlDepartment_SelectedIndexChanged">
-                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
-                                                        </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div1" runat="server">
+                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Div1" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>College</label>
@@ -110,6 +101,15 @@
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
                                                         </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="Div2" runat="server">
+                                                            <div class="label-dynamic">
+                                                                <sup>* </sup>
+                                                                <label>Department</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlDepartment" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlDepartment_SelectedIndexChanged">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>                                                       
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="DivFacuilty" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
@@ -159,10 +159,10 @@
                                                                                 <th style="text-align: center;">Edit
                                                                                 </th>
                                                                                 <th>
-                                                                                    Department
+                                                                                     College
                                                                                 </th>
                                                                                 <th>
-                                                                                    College
+                                                                                    Department
                                                                                 </th>
                                                                                 <th>Faculty
                                                                                 </th>
@@ -184,10 +184,10 @@
                                                                                  CausesValidation="false" CommandArgument='<%#Eval("DESIG_UANO_ID")%>' />
                                                                         </td>
                                                                     <td>
-                                                                        <%# Eval("DEPTNAME")%>
+                                                                         <%# Eval("COLLEGE_NAME")%>
                                                                     </td>
                                                                         <td>
-                                                                            <%# Eval("COLLEGE_NAME")%>
+                                                                           <%# Eval("DEPTNAME")%>
                                                                         </td>
                                                                         <td>
                                                                             <%# Eval("FACULTY_NAME")%>
@@ -205,6 +205,7 @@
                                                 </div>
                                             </div>
                                         </ContentTemplate>
+                                       
                                     </asp:UpdatePanel>
                                 </div>
 

@@ -76,7 +76,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
                 PopulateDropDown();
 
-                objCommon.FillDropDownList(ddlFeedbackType, "ACD_FEEDBACK_MASTER", "FEEDBACK_NO", "FEEDBACK_NAME", "FEEDBACK_NO>0", "FEEDBACK_NO");
+                objCommon.FillDropDownList(ddlFeedbackReportType, "ACD_FEEDBACK_REPORT_TYPE", "FDID", "FEEBACKREPORTNAME", "ISNULL(ACTIVESTATUS,0)=1", "FDID");
 
                 FillDropDownList();
                 //to clear all controls
@@ -149,11 +149,6 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             ddlCollege.DataValueField = "SESSIONNO";
             ddlCollege.DataTextField = "COLLEGE_SESSION";
             ddlCollege.DataBind();
-
-
-
-
-
 
             // rdbReport.SelectedIndex = -1;
         }
@@ -262,6 +257,10 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
                         ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Crescent.rpt", param);
                     }
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
+                {
+                    ShowReport("Faculty_FeedBack_Report_Percentage_Wise", "PRMITR_Percentage_Report_1.rpt", param);
+                }
                 else
                 {
                     ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon.rpt", param);
@@ -351,15 +350,18 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     {
         if (rdotcpartfull.SelectedValue == "1")
         {
-            dvFaculttyFeedback.Visible = true;
+            dvFeedbackReport.Visible = true;
+            dvFaculttyFeedback.Visible = false;
             dvallfeedback.Visible = false;
             //divrdofeedback.Visible = false;
+            ddlFeedbackReportType.SelectedValue = "0";
         }
         if (rdotcpartfull.SelectedValue == "2")
         {
             dvallfeedback.Visible = true;
             dvFaculttyFeedback.Visible = false;
             //divrdofeedback.Visible = false;
+            dvFeedbackReport.Visible = false;
         }
 
     }
@@ -498,6 +500,124 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         {
             ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_rcpit.rpt", param);
         }
+    }
+    protected void ddlFeedbackReportType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+       
+        dvallfeedback.Visible = false;
+        //dvFeedbackReport.Visible = false;
+        if (ddlFeedbackReportType.SelectedValue == "1")
+        {
+            dvFaculttyFeedback.Visible = true;
+            btnFacultyFeedbackReport.Visible = true;
+            //btnFacultyFeedbackReportPercentageWise.Visible = false;
+            btnHODFeedbackReport.Visible = false;
+        }
+        //if (ddlFeedbackReportType.SelectedValue == "2")
+        //{
+        //    dvFaculttyFeedback.Visible = true;
+        //    btnFacultyFeedbackReport.Visible = false;
+        //    btnFacultyFeedbackReportPercentageWise.Visible = true;
+        //    btnHODFeedbackReport.Visible = false;
+        //}
+        if (ddlFeedbackReportType.SelectedValue == "2")
+        {
+            dvFaculttyFeedback.Visible = true;
+            btnFacultyFeedbackReport.Visible = false;
+            //btnFacultyFeedbackReportPercentageWise.Visible = false;
+            btnHODFeedbackReport.Visible = true;
+        }
+    }
+
+
+
+
+    /////// <summary>
+    /////// added by Amit B. on date 07-Nov-2023
+    /////// </summary>
+    /////// <param name="sender"></param>
+    /////// <param name="e"></param>
+    ////protected void btnFacultyFeedbackReportPercentageWise_Click(object sender, EventArgs e)
+    ////{
+    ////    try
+    ////    {
+
+    ////        DataSet ds = objSFBC.GetSubjectFeedbackCommonData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+    ////        string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + "";
+
+    ////        if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+    ////        {              
+    ////            if (Convert.ToInt32(Session["OrgId"]) == 2)
+    ////            {
+    ////                {
+    ////                    ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon_Crescent.rpt", param);
+    ////                }
+    ////            }
+    ////            else
+    ////            {
+    ////                ShowReport("Student_FeedBack_Count", "SubjectFacultyFeedbackCommon.rpt", param);
+    ////            }
+    ////        }
+    ////        else
+    ////        {
+    ////            objCommon.DisplayMessage(updFeed, "Record Not Found.", this.Page);
+    ////        }
+    ////    }
+    ////    catch
+    ////    {
+    ////        throw;
+    ////    }
+    ////}
+    protected void btnHODFeedbackReport_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            DataSet ds = objSFBC.GetSubjectFeedbackCommonData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + "";
+
+            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                if (Convert.ToInt32(Session["OrgId"]) == 10 || Convert.ToInt32(Session["OrgId"]) == 11 || Convert.ToInt32(Session["OrgId"]) == 12 || Convert.ToInt32(Session["OrgId"]) == 13 || Convert.ToInt32(Session["OrgId"]) == 14)
+                {
+                    ShowhodfeedbackReport("HOD_FEEDBACK_REPORT", "PRMITR_HODFeedbackReport.rpt", param);
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(updFeed, "Record Not Found.", this.Page);
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    //function to show report
+    private void ShowhodfeedbackReport(string reportTitle, string rptFileName, string param)
+    {
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        if (Convert.ToInt32(Session["OrgId"]) == 2 )
+        {
+            url += "&param=" + param + "";
+        }
+        else
+        {
+            url += "&param=" + param + ",@P_COLLEGE_CODE=" +Convert.ToInt32(ViewState["college_id"]);
+        }
+        divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+        divMsg.InnerHtml += " window.open('" + url + "','Student_FeedBack','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        divMsg.InnerHtml += " </script>";
+        ////To open new window from Updatepanel
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+        ScriptManager.RegisterClientScriptBlock(this.updFeed, this.updFeed.GetType(), "controlJSScript", sb.ToString(), true);
     }
 }
 

@@ -67,6 +67,20 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     else
                     { divPrintReport.Visible = false; }
 
+                    if (orgID == 15)
+                    {
+                        txtDateOfBirth.Enabled = false;
+                        ddlBloodGroupNo.Enabled = false;
+                        ddladmthrough.Enabled = false;
+                        rdobtn_Gender.Enabled = false;
+                        rdbTransport.SelectedValue = "0";
+                        rdbTransport.Enabled = false;
+                        fuPhotoUpload.Enabled = false;
+                        btnPhotoUpload.Visible = false;
+                        fuSignUpload.Enabled = false;
+                        btnSignUpload.Visible = false;
+                    }
+
                     //divPrintReport.Visible = true;
                     // btnGohome.Visible = false;
                     divhome.Visible = false;
@@ -131,61 +145,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                                 fuSignUpload.Enabled = false;
                                 btnSignUpload.Visible = false;
                             }
-                        }
-
-                        // Added By Shrikant W. on 08-09-2023 For DAIICT                    
-                        if (orgID == 15)
-                        {
-                            txtDateOfBirth.Enabled = false;
-                            ddlBloodGroupNo.Enabled = false;
-                            rdobtn_Gender.Enabled = false;
-                            rdbTransport.SelectedValue = "0";
-                            rdbTransport.Enabled = false;
-
-
-                            if (final_submit == "1")
-                            {
-                                if (txtDateOfBirth.Text != string.Empty)
-                                {
-                                    txtDateOfBirth.Enabled = false;
-                                }
-
-                                if (ddlNationality.SelectedValue != "0")
-                                {
-                                    ddlNationality.Enabled = false;
-                                }
-
-                                if (ddlClaimedcategory.SelectedValue != "0")
-                                {
-                                    ddlClaimedcategory.Enabled = false;
-                                }
-
-                                rdobtn_Gender.Enabled = false;
-                                rdoHosteler.Enabled = false;
-                                rdoInternationalStu.Enabled = false;
-                                rdbTransport.Enabled = false;
-
-                                ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), "");
-
-                                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                                {
-                                    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
-                                    string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();
-
-                                    if (photo != string.Empty)
-                                    {
-                                        fuPhotoUpload.Enabled = false;
-                                        btnPhotoUpload.Visible = false;
-                                    }
-
-                                    if (sign != string.Empty)
-                                    {
-                                        fuSignUpload.Enabled = false;
-                                        btnSignUpload.Visible = false;
-                                    }
-                                }
-                            }
-                        }
+                        }                 
                     }
                     CheckFinalSubmission(); // Added by Bhagyashree on 30052023
                 }
@@ -692,6 +652,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                 txtABCCId.Text = dtr["ABCC_ID"] == null ? string.Empty : dtr["ABCC_ID"].ToString();
                 txtDTEAppId.Text = dtr["DTE_APPLICATION_ID"] == null ? string.Empty : dtr["DTE_APPLICATION_ID"].ToString();
+                txtUEN.Text = dtr["ELIGIBILITY_NO"] == null ? string.Empty : dtr["ELIGIBILITY_NO"].ToString();
 
 
                 string idno = objCommon.LookUp("ACD_STUD_PHOTO", "IDNO", "IDNO=" + Convert.ToInt32(txtIDNo.Text.Trim()));
@@ -1035,7 +996,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 
                     objS.AbccId = txtABCCId.Text;
                     objS.DteAppId = txtDTEAppId.Text;
-
+                    objS.EligibilityNo = txtUEN.Text;
+                   
                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentPersonalInformation(objS, objSAddress, objSPhoto, objSQualExam, MotherMobile, MotherOfficeNo, IndusEmail, Convert.ToInt32(Session["usertype"]), father_alive, mother_alive, parent_alive);
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {

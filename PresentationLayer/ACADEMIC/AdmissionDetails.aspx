@@ -443,6 +443,15 @@
                                                         </asp:DropDownList>
                                                     </div>
 
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divDTEAppId" runat="server">
+                                                        <div class="label-dynamic">
+                                                            <sup id="supDTEAppId" runat="server">* </sup>
+                                                            <label>DTE Application ID </label>
+                                                        </div>
+                                                        <asp:TextBox ID="txtDTEAppId" runat="server" CssClass="form-control" MaxLength="20"
+                                                            TabIndex="19" Enabled="false" ValidationGroup="Academic"></asp:TextBox>
+                                                    </div>
+
                                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none">
                                                         <div class="label-dynamic">
                                                             <sup></sup>

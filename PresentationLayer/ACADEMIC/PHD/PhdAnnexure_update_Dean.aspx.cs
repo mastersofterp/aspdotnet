@@ -333,12 +333,14 @@ public partial class ACADEMIC_PHD_PhdAnnexure_update_Dean : System.Web.UI.Page
                 lbladmbatch.Text = dtr["ADMBATCHNAME"].ToString();
                 lblnames.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
                 lblfathername.Text = dtr["FATHERNAME"] == null ? string.Empty : dtr["FATHERNAME"].ToString().ToUpper();
-                lbljoiningdate.Text = dtr["ADMDATE"] == DBNull.Value ? "" : Convert.ToDateTime(dtr["ADMDATE"]).ToString("dd/MM/yyyy");
-                lblDepartment.Text = dtr["BRANCHNAME"].ToString();
+                lbljoiningdate.Text = dtr["ADMDATE"] == DBNull.Value ? "" : Convert.ToDateTime(dtr["ADMDATE"]).ToString("dd/MM/yyyy");              
                 lblModeOfStudy.Text = dtr["PHD_MODE"] == null ? string.Empty : dtr["PHD_MODE"].ToString();
                 lblEmailID.Text = dtr["EMAILID"] == null ? string.Empty : dtr["EMAILID"].ToString();
                 lblSession.Text = dtr["ADMISSION_SESSION_NAME"] == null ? string.Empty : dtr["ADMISSION_SESSION_NAME"].ToString();
                 lblMobileNo.Text = dtr["STUDENTMOBILE"].ToString();
+                lblBranch.Text = dtr["BRANCHNAME"].ToString();
+                // lblDepartment.Text = dtr["DEPARTMENTNAME"].ToString();
+
                 string SEMESTERNO = objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
                 int count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO =" + Convert.ToInt32(Session["idno"]) + "AND SEMESTERNO =" + Convert.ToInt16(SEMESTERNO) + "AND ISNULL(CANCEL,0)=0"));
                 if (count > 0)

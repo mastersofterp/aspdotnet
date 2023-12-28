@@ -118,14 +118,14 @@ namespace IITMS
 
                 //-----------start--Shaikh Juned 27-10-2022-Dead Stock Insert Method
 
-                public int AddDeadStockEntry(Str_SerialNumber objLM, int orgId, int createdBy, DateTime CreatedDate, DateTime TranDate, int DSTKID, int modifyby)
+                public int AddDeadStockEntry(Str_SerialNumber objLM, int orgId, int createdBy, DateTime CreatedDate, DateTime TranDate, int DSTKID, int modifyby, string deadstockno, string status)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objparams = null;
-                        objparams = new SqlParameter[10];
+                        objparams = new SqlParameter[12];
                         //  objparams[0] = new SqlParameter("@P_ISSUE_DTAE", objLM.ISSUE_DATE);
                         if (objLM.ISSUE_DATE == DateTime.MinValue)
                         {
@@ -150,8 +150,10 @@ namespace IITMS
                         {
                             objparams[8] = new SqlParameter("@P_MODIFIED_BY", DBNull.Value);
                         }
-                        objparams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objparams[9].Direction = ParameterDirection.Output;
+                        objparams[9] = new SqlParameter("@P_DEAD_STOCK_NO", deadstockno); //add 17-02-2023 for dead stock number
+                        objparams[10] = new SqlParameter("@P_STATUS", status); //add 17-02-2023 for dead stock number
+                        objparams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objparams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STORE_INS_DEAD_STOCK_ENTRY", objparams, true);
 
                         //if (Convert.ToInt32(ret) == -99)
@@ -172,14 +174,14 @@ namespace IITMS
 
                 //-----------start--Shaikh Juned 27-10-2022-Dead Stock Update Method
 
-                public int UpdDeadStockEntry(Str_SerialNumber objLM, int orgId, int createdBy, DateTime CreatedDate, int ModifyBy, DateTime TranDate, int DSTKID)
+                public int UpdDeadStockEntry(Str_SerialNumber objLM, int orgId, int createdBy, DateTime CreatedDate, int ModifyBy, DateTime TranDate, int DSTKID, string deadstockno, string status)
                 {
                     int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objparams = null;
-                        objparams = new SqlParameter[10];
+                        objparams = new SqlParameter[12];
                         //  objparams[0] = new SqlParameter("@P_ISSUE_DTAE", objLM.ISSUE_DATE);
                         if (objLM.ISSUE_DATE == DateTime.MinValue)
                         {
@@ -211,8 +213,10 @@ namespace IITMS
                         objparams[6] = new SqlParameter("@P_TranDate", TranDate);
                         objparams[7] = new SqlParameter("@P_DSTKID", DSTKID);
                         objparams[8] = new SqlParameter("@P_MODIFIED_BY", ModifyBy);
-                        objparams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objparams[9].Direction = ParameterDirection.Output;
+                        objparams[9] = new SqlParameter("@P_DEAD_STOCK_NO", deadstockno); //add 17-02-2023 for dead stock number
+                        objparams[10] = new SqlParameter("@P_STATUS", status); //add 17-02-2023 for dead stock number
+                        objparams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objparams[11].Direction = ParameterDirection.Output;
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_STORE_INS_DEAD_STOCK_ENTRY", objparams, true);
 
                         //if (Convert.ToInt32(ret) == -99)
@@ -230,6 +234,56 @@ namespace IITMS
                 }
 
                 //----------end-----Shaikh Juned 27-10-2022--
+
+                //---------start-----Shaikh Juned 21-11-2023 - Dead Stock Generate Nonconsumable Items
+                public DataSet GetDeadStockItems(int item_no, string item_name, int Qty, decimal rate)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null; ;
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_ITEM_NO", item_no);
+                        objParams[1] = new SqlParameter("@P_ITEM_NAME", item_name);
+                        objParams[2] = new SqlParameter("@P_QTY", Qty);
+                        objParams[3] = new SqlParameter("@P_RATE", rate);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STORE_CREATE_NONCONSUMABLE_ITEM", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.DeletePAPath->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                //---------start-----Shaikh Juned 21-11-2023 - Dead Stock Generate Number
+                public DataSet GetDeadStockNumber()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null; ;
+                        objParams = new SqlParameter[0];
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_STORE_AUTO_GENRATE_DEAD_STOCK_NUMBER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.DeletePAPath->" + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                //---------end------Shaikh Juned 21-11-2023
+
+                //---------end------Shaikh Juned 21-11-2023
             }
         }
     }

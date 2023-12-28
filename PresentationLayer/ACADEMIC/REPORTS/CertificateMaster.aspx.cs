@@ -93,7 +93,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     {
                         btnStatsticalReport.Visible = false;
                     }
-                    
+
 
                 }
             }
@@ -211,7 +211,10 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
             collegeNo = Convert.ToInt32(ddlCollege.SelectedValue);
             if (Convert.ToInt32(Session["OrgId"]) == 2)
             {
-                if (rdotcpartfull.SelectedValue != "") tcpartfullno = Convert.ToInt32(rdotcpartfull.SelectedValue); else tcpartfullno = 0;
+                if (rdotcpartfull.SelectedValue != "")
+                    tcpartfullno = Convert.ToInt32(rdotcpartfull.SelectedValue);
+                else
+                    tcpartfullno = 0;
 
             }
             int certno = Convert.ToInt32(ddlCert.SelectedValue);
@@ -301,7 +304,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
 
             }
-            else 
+            else
             {
                 ds = objcertMasterController.GetStudentListForBC(admbatchNo, sessionNo, collegeNo, degreeNo, branchNo, semesterNo, CertShortName, tcpartfullno, certno);
                 if (ds.Tables[0].Rows.Count > 0)
@@ -364,6 +367,21 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         else
                         {
                             ScriptManager.RegisterStartupScript(this, GetType(), "Javascript", "$('#thconduct').hide();$('td:nth-child(9)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thconduct').hide();$('td:nth-child(9)').hide();});", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun1", "$('#thcount').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').hide();$('td:nth-child(10)').hide();});", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thGReg').hide();$('td:nth-child(11)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thGReg').hide();$('td:nth-child(11)').hide();});", true);
+                        }
+                    }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20 || Convert.ToInt32(Session["OrgId"]) == 21)
+                    {
+                        if (CertShortName == "LC")
+                        {
+                            ScriptManager.RegisterStartupScript(this, GetType(), "Javascript", "$('#thconduct').hide();$('td:nth-child(9)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thconduct').show();$('td:nth-child(9)').show();});", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun1", "$('#thcount').show();$('td:nth-child(10)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').show();$('td:nth-child(10)').show();});", true);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thGReg').hide();$('td:nth-child(11)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thGReg').hide();$('td:nth-child(11)').hide();});", true);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, GetType(), "Javascript", "$('#thconduct').show();$('td:nth-child(9)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thconduct').hide();$('td:nth-child(9)').hide();});", true);
                             ScriptManager.RegisterStartupScript(this, GetType(), "myfun1", "$('#thcount').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').hide();$('td:nth-child(10)').hide();});", true);
                             ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thGReg').hide();$('td:nth-child(11)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thGReg').hide();$('td:nth-child(11)').hide();});", true);
                         }
@@ -460,30 +478,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         if (Session["OrgId"].ToString() == "2")
         {
 
-           //if (ddlCert.SelectedValue == "2")    //ADDED BY VINAY MISHRA ON 28082023 FOR TICKET 47439 - Only for TC
-           //{
-                if (rdotcpartfull.SelectedValue == "")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Select Certificate!", this.Page);
-                    return;
-                }
-                //else
+            //if (ddlCert.SelectedValue == "2")    //ADDED BY VINAY MISHRA ON 28082023 FOR TICKET 47439 - Only for TC
+            //{
+            if (rdotcpartfull.SelectedValue == "")
+            {
+                objCommon.DisplayUserMessage(updpnlExam, "Please Select Certificate!", this.Page);
+                return;
+            }
+            //else
+            //{
+            if (txtissuedate.Text == "")
+            {
+                objCommon.DisplayUserMessage(updpnlExam, "Please Enter Date of Issue", this.Page);
+                return;
+            }
+            //}
+            if (Chkstatus.Checked == true)
+            {
+                //if (txtbranchcode.Text == "")
                 //{
-                if (txtissuedate.Text == "")
-                {
-                    objCommon.DisplayUserMessage(updpnlExam, "Please Enter Date of Issue", this.Page);
-                    return;
-                }
+                //    objCommon.DisplayUserMessage(updpnlExam, "Please Enter Branch/Programme", this.Page);
+                //    return;
                 //}
-                if (Chkstatus.Checked == true)
-                {
-                    //if (txtbranchcode.Text == "")
-                    //{
-                    //    objCommon.DisplayUserMessage(updpnlExam, "Please Enter Branch/Programme", this.Page);
-                    //    return;
-                    //}
-                }
-           //}
+            }
+            //}
 
         }
         //if (Session["OrgId"].ToString() == "6")
@@ -567,23 +585,21 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         }
                     }
 
-
-
-                     //Added by pooja for estimate certificate for prmitr ON ADTE 01-08-2023
-                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + studentIds.TrimEnd('$') +"");
-                        if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11")
+                    if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11")
+                    {
+                        //Added by pooja for estimate certificate for prmitr ON ADTE 01-08-2023
+                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + studentIds.TrimEnd('$') + "");
+                        if (CertShortName == "EC")
                         {
-                            if (CertShortName == "EC")
-                            {
                             //string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + IDNO + "");
-                                if (demand == string.Empty)
-                                {
-                                    objCommon.DisplayMessage(this.Page, "Please Create Demand for Estimate Certificate..!!!", this.Page);
-                                    return;
-                                }
+                            if (demand == string.Empty)
+                            {
+                                objCommon.DisplayMessage(this.Page, "Please Create Demand for Estimate Certificate..!!!", this.Page);
+                                return;
                             }
-
                         }
+
+                    }
                     HiddenField hfRow = (dataitem.FindControl("hidIdNo")) as HiddenField;
                     objcertMaster.IdNo = Convert.ToInt32(hfRow.Value);
                     objcertMaster.IssueStatus = 1;
@@ -630,11 +646,26 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
                     objcertMaster.Reason = ddlreason.SelectedItem.Text.Trim();
 
-                    if (txtTuitionFee.Text.Trim() != "") TuitionFee = Convert.ToDecimal(txtTuitionFee.Text.Trim()); else TuitionFee = 0.0m;
-                    if (txtExamFee.Text.Trim() != "") ExamFee = Convert.ToDecimal(txtExamFee.Text.Trim()); else ExamFee = 0.0m;
-                    if (txtOtherFee.Text.Trim() != "") OtherFee = Convert.ToDecimal(txtOtherFee.Text.Trim()); else OtherFee = 0.0m;
-                    if (txtHostelFee.Text.Trim() != "") HostelFee = Convert.ToDecimal(txtHostelFee.Text.Trim()); else HostelFee = 0.0m;
-                    if (rdotcpartfull.SelectedValue != "") tcpartfull = Convert.ToInt32(rdotcpartfull.SelectedValue); else tcpartfull = 0;
+                    if (txtTuitionFee.Text.Trim() != "")
+                        TuitionFee = Convert.ToDecimal(txtTuitionFee.Text.Trim());
+                    else
+                        TuitionFee = 0.0m;
+                    if (txtExamFee.Text.Trim() != "")
+                        ExamFee = Convert.ToDecimal(txtExamFee.Text.Trim());
+                    else
+                        ExamFee = 0.0m;
+                    if (txtOtherFee.Text.Trim() != "")
+                        OtherFee = Convert.ToDecimal(txtOtherFee.Text.Trim());
+                    else
+                        OtherFee = 0.0m;
+                    if (txtHostelFee.Text.Trim() != "")
+                        HostelFee = Convert.ToDecimal(txtHostelFee.Text.Trim());
+                    else
+                        HostelFee = 0.0m;
+                    if (rdotcpartfull.SelectedValue != "")
+                        tcpartfull = Convert.ToInt32(rdotcpartfull.SelectedValue);
+                    else
+                        tcpartfull = 0;
 
 
                     //insert bc certificate
@@ -1066,8 +1097,8 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     }
                     else
                     {
-                        
-                         ShowReport_TC_CERT(GetStudentIDs(), "Transfer_Certificate", "CrystalReport_LC_RCPIT.rpt");
+
+                        ShowReport_TC_CERT(GetStudentIDs(), "Transfer_Certificate", "CrystalReport_LC_RCPIT.rpt");
                         //ShowReport_TC_CERT(GetStudentIDs(), "Transfer_Certificate", "rpt_TransferCertificate_PRMITR.rpt");
                     }
 
@@ -1085,7 +1116,6 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     }
                     else
                     {
-                       
                         ShowReport_TC_CERT(GetStudentIDs(), "Transfer_Certificate", "rpt_TransferCertificate_PRMITR.rpt");
                     }
 
@@ -1106,7 +1136,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     }
 
                 }
-                
+
 
                 //ADDED BY POOJA  FOR CPUK and amhirpur reports ON DATE 16-06-2023
                 else if (Session["OrgId"].ToString() == "3")
@@ -1122,7 +1152,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     {
 
                         ShowReport_TC_CERT_CPUKH(GetStudentIDs(), "Transfer_Certificate", "Migration_TC_CPUK.rpt");
-                       
+
                     }
 
                 }
@@ -1197,9 +1227,20 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 {
                     ShowReport_BCMAHER(GetStudentIDs(), "Bonafide_Certificate", "BC_Passport_Visa_Other_Maher.rpt");
                 }
-                //
+                else if (Session["OrgId"].ToString() == "19")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Bonafide_Certificate", "rpt_Bonafied_PCEN.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "20")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Bonafide_Certificate", "rpt_Bonafied_PJLCE.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "21")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Bonafide_Certificate", "rpt_Bonafied_Certificate_TGPCET.rpt");
+                }
+
             }
-           
            //Added by pooja on date 05-05-2023 for maher bonafide certificates
 
             else if (CertShortName == "BC1")
@@ -1220,13 +1261,49 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         //
             else if (CertShortName == "LC")
             {
-                if (ddlAcademicYear.SelectedIndex == 0)
+                if (Session["OrgId"].ToString() == "1")
                 {
-                    objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
-                    ddlAcademicYear.Focus();
-                    return;
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC(GetStudentIDs(), "Bonafide_Certificate", "CrystalReport_LC_RCPIT.rpt");
                 }
-                ShowReport_BC(GetStudentIDs(), "Bonafide_Certificate", "CrystalReport_LC_RCPIT.rpt");
+                else if (Session["OrgId"].ToString() == "19")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC(GetStudentIDs(), "Bonafide_Certificate", "rptTC_Report_PCEN.rpt");
+
+                }
+                else if (Session["OrgId"].ToString() == "20")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC(GetStudentIDs(), "Bonafide_Certificate", "rptTC_Report_PJLCE.rpt");
+
+                }
+                else if (Session["OrgId"].ToString() == "21")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC(GetStudentIDs(), "Bonafide_Certificate", "rptTC_Report_TGPCET.rpt");
+
+                }
             }
 
             //Added by pooja on date 16-06-2023 PRMITR certificates
@@ -1245,10 +1322,8 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 else if (Session["OrgId"].ToString() == "11")
                 {
                     ShowReport_BCPRMITR(GetStudentIDs(), "Appearance_Certificate", "rptAppearanceCert_PRMCEM.rpt");
- 
                 }
             }
-
             else if (CertShortName == "EC")
             {
                 if (Session["OrgId"].ToString() == "10")
@@ -1278,6 +1353,18 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 else if (Session["OrgId"].ToString() == "4")   //amhirpur
                 {
                     ShowReport_CC_CPUH(GetStudentIDs(), "Character_Certificate", "CrystalReport_CharacterCertificate_CPUH.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "19")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Character_Certificate", "rptCharacterCertificate_PCEN.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "20")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Character_Certificate", "rptCharacterCertificate_PJLCE.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "21")
+                {
+                    ShowReport_BCPRMITR(GetStudentIDs(), "Character_Certificate", "rpt_CharacterCertificate_TGPCET.rpt");
                 }
             }
         }
@@ -1438,7 +1525,15 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     }
                     else if (CertShortName == "LC")
                     {
-                        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + "";
+                        if ((Session["OrgId"].ToString() == "1"))
+                        {
+                            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + "";
+                        }
+                        else
+                        {
+                            url += "&param=@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + "";
+
+                        }
                     }
                     else
                         //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue);
@@ -1468,7 +1563,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         //
     }
 
-//Added by pooja on date 05-05-2023 for bonafide passport certificate
+    //Added by pooja on date 05-05-2023 for bonafide passport certificate
 
     private void ShowReport_BCMAHER(string param, string reportTitle, string rptFileName)
     {
@@ -1630,9 +1725,6 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         //
     }
 
-
-
-
     //
     private void ShowReport_BCPRMITR(string param, string reportTitle, string rptFileName)
     {
@@ -1706,8 +1798,6 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
 
         // string idno = objCommon.LookUp("ACD_CERT_TRAN", "IDNO", "IDNO IN(" + studentIds + ") AND CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue));
-
-
         //if (idno == "")
         ////if (idno != studentIds)
         //{
@@ -1845,7 +1935,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         //url += "&param=@P_IDNO=" + param + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ""; ;
                     }
 
-                    else 
+                    else
                     {
                         url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + "";
                     }
@@ -2244,9 +2334,17 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 }
                 else if (CertShortName == "LC")
                 {
-                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + ",@P_LEAVE_DATE=" + txtleaving.Text + ",@P_REASON=" + ddlreason.SelectedItem.Text + ",@P_REMARK=" + txtRemark.Text;
+                    if ((Session["OrgId"].ToString() == "1"))
+                    {
+                        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + ",@P_LEAVE_DATE=" + txtleaving.Text + ",@P_REASON=" + ddlreason.SelectedItem.Text + ",@P_REMARK=" + txtRemark.Text;
+                    }
+                    else
+                    {
+                        url += "&param=@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_ACADEMIC_YEAR=" + Convert.ToInt32(ddlAcademicYear.SelectedValue) + ",@P_LEAVE_DATE=" + txtleaving.Text + ",@P_REASON=" + ddlreason.SelectedItem.Text + ",@P_REMARK=" + txtRemark.Text;
+
+                    }
                 }
-               
+
                 else
                     //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue);
                     url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + param + ",@P_ADMBATCHNO=" + Convert.ToInt32(ddlAdmBatch.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + ",@P_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "";
@@ -2496,13 +2594,28 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
 
 
-                        if (txtTuitionFee.Text.Trim() != "") TuitionFee = Convert.ToDecimal(txtTuitionFee.Text.Trim()); else TuitionFee = 0.0m;
-                        if (txtExamFee.Text.Trim() != "") ExamFee = Convert.ToDecimal(txtExamFee.Text.Trim()); else ExamFee = 0.0m;
-                        if (txtOtherFee.Text.Trim() != "") OtherFee = Convert.ToDecimal(txtOtherFee.Text.Trim()); else OtherFee = 0.0m;
-                        if (txtHostelFee.Text.Trim() != "") HostelFee = Convert.ToDecimal(txtHostelFee.Text.Trim()); else HostelFee = 0.0m;
+                        if (txtTuitionFee.Text.Trim() != "")
+                            TuitionFee = Convert.ToDecimal(txtTuitionFee.Text.Trim());
+                        else
+                            TuitionFee = 0.0m;
+                        if (txtExamFee.Text.Trim() != "")
+                            ExamFee = Convert.ToDecimal(txtExamFee.Text.Trim());
+                        else
+                            ExamFee = 0.0m;
+                        if (txtOtherFee.Text.Trim() != "")
+                            OtherFee = Convert.ToDecimal(txtOtherFee.Text.Trim());
+                        else
+                            OtherFee = 0.0m;
+                        if (txtHostelFee.Text.Trim() != "")
+                            HostelFee = Convert.ToDecimal(txtHostelFee.Text.Trim());
+                        else
+                            HostelFee = 0.0m;
 
                         objcertMaster.IssueStatus = 1;
-                        if (rdotcpartfull.SelectedValue != "") tcpartfull = Convert.ToInt32(rdotcpartfull.SelectedValue); else tcpartfull = 0;
+                        if (rdotcpartfull.SelectedValue != "")
+                            tcpartfull = Convert.ToInt32(rdotcpartfull.SelectedValue);
+                        else
+                            tcpartfull = 0;
                         //insert Leaving certificate
                         CustomStatus cs = (CustomStatus)objcertMasterController.AddBonafideCertificate(objcertMaster, TuitionFee, ExamFee, OtherFee, HostelFee, tcpartfull, orgid, Status, Branchcode);
                         if (cs.Equals(CustomStatus.RecordSaved))
@@ -2632,7 +2745,10 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         string semesterNo = objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "(DURATION*2)", "DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + "");
 
         ddlSemester.SelectedIndex = -1;
-        if (semesterNo == "") { semesterNo = "0"; } //ADDED BY VINAY MISHRA ON 28082023 FOR TICKET 47439
+        if (semesterNo == "")
+        {
+            semesterNo = "0";
+        } //ADDED BY VINAY MISHRA ON 28082023 FOR TICKET 47439
         if (ddlCert.SelectedIndex > 0)
         {
             if (Session["OrgId"].ToString() == "1")
@@ -2741,7 +2857,8 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
             lblConvocation.Visible = false;
             txtConvocation.Visible = false;
             chkAddTextOption.Visible = false;
-            lblClass.Visible = false; ;
+            lblClass.Visible = false;
+            ;
             txtClass.Visible = true;
             lvStudentRecords.Visible = false;
         }
@@ -2821,7 +2938,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
             if (CertShortName == "TC")
             {
                 divAcademic.Visible = true;
-                
+
             }
             if (CertShortName == "MC")
             {
@@ -2842,7 +2959,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 btnView.Visible = true;
             }
 
-            
+
 
         }
         //added by pooja on adte 17-06-2023
@@ -2882,13 +2999,17 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
 
         }
 
-        if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11" || Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")
+        if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11" || Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20" || Session["OrgId"].ToString() == "21")
         {
             if (CertShortName == "LC")
             {
                 divAcademic.Visible = true;
                 btnView.Visible = true;
                 //rdotcpartfull.SelectedValue = "0";
+            }
+            else
+            {
+                btnView.Visible = false;
             }
 
             if (CertShortName == "TC")
@@ -2964,8 +3085,6 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     lvIssueCertBona.DataBind();
 
                 }
-
-
             }
             else
             {
@@ -3168,13 +3287,47 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
             string CertShortName = objCommon.LookUp("ACD_CERTIFICATE_MASTER", "CERT_SHORT_NAME", "CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "");
             if (CertShortName == "LC")
             {
-                if (ddlAcademicYear.SelectedIndex == 0)
+                if (Session["OrgId"].ToString() == "1")
                 {
-                    objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
-                    ddlAcademicYear.Focus();
-                    return;
+
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC_View(GetStudentIDs(), "Leaving_Certificate", "CrystalReport_LC_RCPIT_View.rpt");
                 }
-                ShowReport_BC_View(GetStudentIDs(), "Bonafide_Certificate", "CrystalReport_LC_RCPIT_View.rpt");
+                else if (Session["OrgId"].ToString() == "19")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC_View(GetStudentIDs(), "Leaving_Certificate", "rptTC_Report_PCEN_View.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "20")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC_View(GetStudentIDs(), "Leaving_Certificate", "rptTC_Report_PJLCE_View.rpt");
+                }
+                else if (Session["OrgId"].ToString() == "21")
+                {
+                    if (ddlAcademicYear.SelectedIndex == 0)
+                    {
+                        objCommon.DisplayMessage(this.updpnlExam, "Please Select Academic Year", this);
+                        ddlAcademicYear.Focus();
+                        return;
+                    }
+                    ShowReport_BC_View(GetStudentIDs(), "Leaving_Certificate", "rpt_TC_Report_TGPCET_View.rpt");
+                }
             }
 
 

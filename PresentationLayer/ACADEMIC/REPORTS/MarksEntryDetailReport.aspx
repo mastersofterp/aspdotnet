@@ -431,9 +431,29 @@
 
                                                                                                         <asp:TemplateField HeaderText="M6" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="7%" HeaderStyle-HorizontalAlign="Center">
                                                                                                             <ItemTemplate>
+                                                                                                                <%-- <%# Eval("BINDS5") %>--%>
+                                                                                                                <asp:Label ID="lblBINDSR6" runat="server" Text='<%# Eval("BINDS6") %>' Visible='<%# Eval("BINDL6").ToString() == "0" ? true : false %>' ForeColor="Red"></asp:Label>
+                                                                                                                <asp:Label ID="lblBINDSG6" runat="server" Text='<%# Eval("BINDS6") %>' Visible='<%# Eval("BINDL6").ToString() == "1" ? true : false %>' ForeColor="Green"></asp:Label>
+                                                                                                            </ItemTemplate>
+                                                                                                            <HeaderStyle HorizontalAlign="Center" />
+                                                                                                            <ItemStyle Width="7%" />
+                                                                                                        </asp:TemplateField>
+
+                                                                                                        <asp:TemplateField HeaderText="M7" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="7%" HeaderStyle-HorizontalAlign="Center">
+                                                                                                            <ItemTemplate>
+                                                                                                                <%-- <%# Eval("BINDS5") %>--%>
+                                                                                                                <asp:Label ID="lblBINDSR7" runat="server" Text='<%# Eval("BINDS7") %>' Visible='<%# Eval("BINDL7").ToString() == "0" ? true : false %>' ForeColor="Red"></asp:Label>
+                                                                                                                <asp:Label ID="lblBINDSG7" runat="server" Text='<%# Eval("BINDS7") %>' Visible='<%# Eval("BINDL7").ToString() == "1" ? true : false %>' ForeColor="Green"></asp:Label>
+                                                                                                            </ItemTemplate>
+                                                                                                            <HeaderStyle HorizontalAlign="Center" />
+                                                                                                            <ItemStyle Width="7%" />
+                                                                                                        </asp:TemplateField>
+
+                                                                                                        <asp:TemplateField HeaderText="M8" Visible="false" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="7%" HeaderStyle-HorizontalAlign="Center">
+                                                                                                            <ItemTemplate>
                                                                                                                 <%-- <%# Eval("BINDS6") %>--%>
-                                                                                                                <asp:Label ID="lblBINDSR6" runat="server" Text='<%# Eval("BINDS6") %>' Visible='<%# Eval("BINDL6").ToString() == "0" &&  Eval("PUB_STATUS").ToString() == "1" ? true : false %>' ForeColor="Red"></asp:Label>
-                                                                                                                <asp:Label ID="lblBINDSG6" runat="server" Text='<%# Eval("BINDS6") %>' Visible='<%# Eval("BINDL6").ToString() == "1" &&  Eval("PUB_STATUS").ToString() == "1" ? true : false %>' ForeColor="Green"></asp:Label>
+                                                                                                                <asp:Label ID="lblBINDSR8" runat="server" Text='<%# Eval("BINDS8") %>' Visible='<%# Eval("BINDL8").ToString() == "0" &&  Eval("PUB_STATUS").ToString() == "1" ? true : false %>' ForeColor="Red"></asp:Label>
+                                                                                                                <asp:Label ID="lblBINDSG8" runat="server" Text='<%# Eval("BINDS8") %>' Visible='<%# Eval("BINDL8").ToString() == "1" &&  Eval("PUB_STATUS").ToString() == "1" ? true : false %>' ForeColor="Green"></asp:Label>
                                                                                                             </ItemTemplate>
                                                                                                             <HeaderStyle HorizontalAlign="Center" />
                                                                                                             <ItemStyle Width="7%" />

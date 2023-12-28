@@ -219,8 +219,8 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     #region Internal
     private void PopulateDropDown()
     {
-        objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
-
+        objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 ", "CDB.COLLEGE_ID DESC");
+        //objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
@@ -250,11 +250,15 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
                     objCommon.DisplayMessage(this.updInternalMember, "Record Saved successfully", this.Page);
                     BindListViewMapping();
                     lboFacuilty.DataSource = null;
-                    lboFacuilty.Items.Clear();
+                    lboFacuilty.Items.Clear();                   
                     ddlDesignation.SelectedIndex = 0;
-                    ddlDepartment.SelectedIndex = 0;
-                    ddlInsName.Items.Clear();
-                    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                    ddlDepartment.SelectedIndex = 0;                 
+                    //Added By Vipul T on dated 22-12-2023
+                    ddlInsName.SelectedIndex = 0;
+                    ddlDepartment.Items.Clear();
+                    ddlDepartment.Items.Add(new ListItem("Please Select", "0"));
+                    //ddlInsName.Items.Clear();
+                   // ddlInsName.Items.Add(new ListItem("Please Select", "0"));
                     ViewState["id"] = "0";
                     //clear();
                   
@@ -268,9 +272,11 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
                     lboFacuilty.DataSource = null;
                     lboFacuilty.Items.Clear();
                     ddlDesignation.SelectedIndex = 0;
-                    ddlDepartment.SelectedIndex = 0;
-                    ddlInsName.Items.Clear();
-                    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                    ddlDepartment.SelectedIndex = 0;                  
+                    //Added By Vipul T on dated 22-12-2023
+                    ddlInsName.SelectedIndex = 0;
+                    ddlDepartment.Items.Clear();
+                    ddlDepartment.Items.Add(new ListItem("Please Select", "0"));                   
                     ViewState["id"] = "0";
                     
                 }
@@ -285,10 +291,13 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
                     BindListViewMapping();
                     lboFacuilty.DataSource = null;
                     lboFacuilty.Items.Clear();
+                    ddlInsName.SelectedIndex = 0;
                     ddlDesignation.SelectedIndex = 0;
                     ddlDepartment.SelectedIndex = 0;
-                    ddlInsName.Items.Clear();
-                    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                    //Added By Vipul T on dated 22-12-2023
+                    ddlInsName.SelectedIndex = 0;
+                    ddlDepartment.Items.Clear();
+                    ddlDepartment.Items.Add(new ListItem("Please Select", "0"));
                     ViewState["id"] = "0";
 
                 }
@@ -300,8 +309,12 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
                     lboFacuilty.Items.Clear();
                     ddlDesignation.SelectedIndex = 0;
                     ddlDepartment.SelectedIndex = 0;
-                    ddlInsName.Items.Clear();
-                    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                    //Added By Vipul T on dated 22-12-2023
+                    ddlInsName.SelectedIndex = 0;
+                    ddlDepartment.Items.Clear();
+                    ddlDepartment.Items.Add(new ListItem("Please Select", "0"));
+
+                   
                     ViewState["id"] = "0";
                    
                 }
@@ -365,12 +378,15 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     {
         if (ddlInsName.SelectedIndex > 0)
         {
-            objCommon.FillListBox(lboFacuilty, "user_acc", "ua_no", "UA_FULLNAME", "ua_type IN (3,5) and isnull(ua_status,0)=0 and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,','))", "ua_no");
+            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT d inner  join acd_college_master c  on (d.organizationid=c.organizationid)", "DEPTNO", "DEPTNAME", "isnull(d.ActiveStatus,0)=1 and c.college_id=" + ddlInsName.SelectedValue + "", "DEPTNO DESC");
+            //objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
         }
         else
         {
             lboFacuilty.DataSource = null;
             lboFacuilty.Items.Clear();
+            ddlDepartment.Items.Clear();
+            ddlDepartment.Items.Add(new ListItem("Please Select", "0"));
         }
     }
 
@@ -379,7 +395,8 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     {
         if (ddlDepartment.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
+            objCommon.FillListBox(lboFacuilty, "USER_ACC UA INNER JOIN ACD_PHD_INTERNAL_MEMBER I ON(UA.UA_NO=I.UANO) INNER JOIN PAYROLL_EMPMAS P ON UA.UA_IDNO = P.IDNO", "distinct ua_no", "UA_FULLNAME + ' - '+EmployeeId", "UA.ua_type IN (3,5) and isnull(ua_status,0)=0  and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,',')) ", "ua_no");
+            //objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
         }
         else
         {
@@ -393,43 +410,46 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
     protected void btnEdit_Click1(object sender, ImageClickEventArgs e)
     {
+
         try
         {
+
             String FacuiltyNO = string.Empty;
             ImageButton btnEdit = sender as ImageButton;
             int ID = Convert.ToInt32(btnEdit.CommandArgument);
             ViewState["id"] = Convert.ToInt32(btnEdit.CommandArgument);
-            DataSet ds = objPhDController.EditInternalMemberMappingData(ID);
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
+            DataSet ds = objPhDController.EditInternalMemberMappingData(ID);       
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    //Commented By Vipul T on Date 06-11-2023 for Removing the Condition
+                    //if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
+                    //{
+                    //    //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
+                    //    objCommon.DisplayMessage(this.updInternalMember, "The supervisor has already been allotted to a student So it can not be edit", this.Page); // Commented By Vipul T 
+                    //    BindListViewMapping();
+                    //    lboFacuilty.DataSource = null;
+                    //    lboFacuilty.Items.Clear();
+                    //    ddlDesignation.SelectedIndex = 0;
+                    //    ddlDepartment.SelectedIndex = 0;
+                    //    ddlInsName.Items.Clear();
+                    //    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
+                    //    ViewState["id"] = "0";
+                    //    return;
+                    //}
+                    //else
+                    //{
 
+                    //}
 
-                //Commented By Vipul T on Date 06-11-2023 for Removing the Condition
-                //if (ds.Tables[1] != null && ds.Tables[1].Rows.Count > 0)
-                //{
-                //    //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
-                //    objCommon.DisplayMessage(this.updInternalMember, "The supervisor has already been allotted to a student So it can not be edit", this.Page); // Commented By Vipul T 
-                //    BindListViewMapping();
-                //    lboFacuilty.DataSource = null;
-                //    lboFacuilty.Items.Clear();
-                //    ddlDesignation.SelectedIndex = 0;
-                //    ddlDepartment.SelectedIndex = 0;
-                //    ddlInsName.Items.Clear();
-                //    ddlInsName.Items.Add(new ListItem("Please Select", "0"));
-                //    ViewState["id"] = "0";
-                //    return;
-                //}
-                //else
-                //{
-    
-                //}
-
-                ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPTNO"].ToString();
-                objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");            
-                ddlInsName.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
-                objCommon.FillListBox(lboFacuilty, "user_acc", "ua_no", "UA_FULLNAME", "ua_type IN (3,5) and isnull(ua_status,0)=0 and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,','))", "ua_no");
-                lboFacuilty.SelectedValue = ds.Tables[0].Rows[0]["UANO"].ToString();
-                ddlDesignation.SelectedValue = ds.Tables[0].Rows[0]["DESIGNATIONNO"].ToString();
+                       //Added By Vipul On Dated 22-12-2023 as per Tno:- 
+                    objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 ", "CDB.COLLEGE_ID DESC");                   
+                    ddlInsName.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();                  
+                    objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
+                    ddlDepartment.SelectedValue = ds.Tables[0].Rows[0]["DEPTNO"].ToString();//end                    
+                    objCommon.FillListBox(lboFacuilty, "user_acc", "ua_no", "UA_FULLNAME", "ua_type IN (3,5) and isnull(ua_status,0)=0 and " + ddlInsName.SelectedValue + " in (select value from dbo.Split(UA_COLLEGE_NOS,',')) AND " + ddlDepartment.SelectedValue + " in (select value from dbo.Split(UA_DEPTNO,','))", "ua_no");
+                    lboFacuilty.SelectedValue = ds.Tables[0].Rows[0]["UANO"].ToString();
+                    ddlDesignation.SelectedValue = ds.Tables[0].Rows[0]["DESIGNATIONNO"].ToString();
+                
             }
 
         }

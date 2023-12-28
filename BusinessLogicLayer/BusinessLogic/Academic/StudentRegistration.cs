@@ -4044,6 +4044,46 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return retStatus;
 
         }
+
+
+
+        public int GenereateRollNo_TGPCET(int admbatch, int clg, int degree, int branch, int idtype, int semester, int section, int sort)
+            {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                objParams = new SqlParameter[9];
+                objParams[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+                objParams[1] = new SqlParameter("@P_COLLEGEID", clg);
+                objParams[2] = new SqlParameter("@P_DEGREENO", degree);
+                objParams[3] = new SqlParameter("@P_BRANCHNO", branch);
+                objParams[4] = new SqlParameter("@P_IDTYPE", idtype);
+                objParams[5] = new SqlParameter("@P_SEMESTERNO", semester);
+                objParams[6] = new SqlParameter("@P_SECTIONNO", section);
+                objParams[7] = new SqlParameter("@P_SORT", sort);
+                objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[8].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_BULK_ROLLNO_GENERATION_NEW_TGPCET", objParams, false);
+
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                }
+            catch (Exception ex)
+                {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddFailSubjects-> " + ex.ToString());
+                }
+
+            return retStatus;
+
+            }
         public int AddCourseDetendinfo(StudentRegist objSR, int orgid, int detain_type)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -6393,6 +6433,45 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[7].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_BULK_RR_GENERATION_MAHER", objParams, false);
+
+                if (Convert.ToInt32(ret) == -99)
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                else
+                    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                }
+            catch (Exception ex)
+                {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
+                }
+
+            return retStatus;
+
+            }
+
+
+        public int GenereateRRNoForTGPCET(int admbatch, int clg, int degree, int branch, int semester, int sort, int idtype,int Year)
+            {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+                {
+                SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                SqlParameter[] objParams = null;
+
+                objParams = new SqlParameter[9];
+                objParams[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+                objParams[1] = new SqlParameter("@P_COLLEGEID", clg);
+                objParams[2] = new SqlParameter("@P_DEGREENO", degree);
+                objParams[3] = new SqlParameter("@P_BRANCHNO", branch);
+                objParams[4] = new SqlParameter("@P_SEMESTERNO", semester);
+                objParams[5] = new SqlParameter("@P_SORT", sort);
+                objParams[6] = new SqlParameter("@P_ID_TYPE", idtype);
+                objParams[7] = new SqlParameter("@P_YEAR", Year);
+                objParams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[8].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_BULK_RRNO_GENERATION_TGPCET", objParams, false);
 
                 if (Convert.ToInt32(ret) == -99)
                     retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
