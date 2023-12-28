@@ -4,7 +4,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
         function totAllSubjects(headchk) {
             var frm = document.forms[0]
             for (i = 0; i < document.forms[0].elements.length; i++) {
@@ -17,6 +17,7 @@
                 }
             }
         }
+
 
     </script>
     <style>
@@ -59,10 +60,9 @@
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblStuType" runat="server" Font-Bold="true">Student Type</asp:Label>
-                                                <%--  <label>College</label>--%>
-                                            </div>
+                                           </div>
                                             <asp:DropDownList ID="ddlStuType" runat="server" TabIndex="1" ToolTip="Please Select Student Type." AppendDataBoundItems="true" AutoPostBack="true"
-                                                CssClass="form-control" data-select2-enable="true" >
+                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlStuType_SelectedIndexChanged" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rvfStuType" runat="server" ControlToValidate="ddlStuType"
@@ -72,36 +72,52 @@
                                             <br /><br /><br /> 
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
-                                                <asp:Label ID="lblCollege" runat="server" Font-Bold="true">College Name</asp:Label>
-                                                <%--  <label>College</label>--%>
+                                                <asp:Label ID="lblHostel" runat="server" Font-Bold="true">Hostel</asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlCollege" runat="server" TabIndex="1" ToolTip="Please Select College." AppendDataBoundItems="true" AutoPostBack="true"
-                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlCollege_SelectedIndexChanged">
+                                            <asp:DropDownList ID="ddlHostel" runat="server" TabIndex="4" ToolTip="Please Select Hostel." AppendDataBoundItems="true" AutoPostBack="true"
+                                                CssClass="form-control" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rvfCollege" runat="server" ControlToValidate="ddlCollege"
-                                                Display="None" ErrorMessage="Please Select College." SetFocusOnError="true"
+                                            <asp:RequiredFieldValidator ID="rfvHostel" runat="server" ControlToValidate="ddlHostel"
+                                                Display="None" ErrorMessage="Please Select Hostel." SetFocusOnError="true"
                                                 ValidationGroup="AAPath" InitialValue="0">
                                             </asp:RequiredFieldValidator>
                                             <br /><br /><br />
-                                             <div class="label-dynamic">
+                                            <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblApprover1" runat="server" Font-Bold="true" ></asp:Label>
-                                                <%-- <label>Approval 1 </label>--%>
                                             </div>
-                                            <asp:DropDownList ID="ddlAA1" runat="server" ToolTip="Please Select Approval_1" CssClass="form-control"  AppendDataBoundItems="true" 
+                                            <asp:DropDownList ID="ddlAA1" runat="server" ToolTip="Please Select Approval_1" TabIndex="6" CssClass="form-control"  AppendDataBoundItems="true" 
                                                 AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA1_SelectedIndexChanged" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="14">Parent</asp:ListItem>
                                             </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvapprovalauth1" runat="server" ControlToValidate="ddlAA1"
+                                                Display="None" ErrorMessage="Please Select  Approval 1" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="14">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:DropDownList ID="ddlAA1parent" runat="server" AppendDataBoundItems="true" TabIndex="7" ToolTip="Please Select Approval 2" CssClass="form-control"
+                                                Enabled="false" AutoPostBack="True" data-select2-enable="true" Visible="false"  >
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="14">Parent</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvapprovalauth1parent" runat="server" ControlToValidate="ddlAA1parent"
+                                                Display="None" ErrorMessage="Please Select  Approval 2" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
                                             <br /><br /><br />
-                                             <div class="label-dynamic">
+                                            <div class="label-dynamic">
+                                                <%--<sup>* </sup>--%>
                                                 <asp:Label ID="lblApprover4" runat="server" Font-Bold="true"></asp:Label>
-                                                <%--<label>Approval 3 </label>--%>
                                             </div>
-                                            <asp:DropDownList ID="ddlAA4" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="6" ToolTip="Please Select Approval 4"
-                                                Enabled="false" AutoPostBack="True" data-select2-enable="true">
+                                            <asp:DropDownList ID="ddlAA4" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="9" ToolTip="Please Select Approval 4"
+                                                Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA4_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
+                                            <%--<asp:RequiredFieldValidator ID="rfvapprovalauth4" runat="server" ControlToValidate="ddlAA4"
+                                                Display="None" ErrorMessage="Please Select  Approval 4" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>--%>
                                         </div>
 
                                         <div class="form-group col-lg-4 col-md-6 col-12">
@@ -113,72 +129,94 @@
                                             <asp:DropDownList ID="ddlApp" runat="server" TabIndex="2"
                                                 ToolTip="Please Select  Authority Approval Type" AppendDataBoundItems="true"
                                                 AutoPostBack="true" 
-                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlApp_SelectedIndexChanged">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlApp_SelectedIndexChanged" Enabled="False">
+                                                <%--<asp:ListItem Value="0">Please Select</asp:ListItem>--%>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvDept" runat="server" ControlToValidate="ddlApp"
+                                            <asp:RequiredFieldValidator ID="rfvApp" runat="server" ControlToValidate="ddlApp"
                                                 Display="None" ErrorMessage="Please Select Authority Approval Type." SetFocusOnError="true"
                                                 ValidationGroup="AAPath" InitialValue="0">
                                             </asp:RequiredFieldValidator>
                                             <br /><br /><br />
                                             <div class="label-dynamic">
-                                                <%-- <sup>* </sup>--%>
+                                                <sup>* </sup>
                                                 <asp:Label ID="lblDYddlDeptName" runat="server" Font-Bold="true">Department</asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddldepartment" runat="server" TabIndex="4" ToolTip="Please Select Approval_1" AppendDataBoundItems="true" CssClass="form-control"
+                                            <asp:DropDownList ID="ddldepartment" runat="server" TabIndex="5" ToolTip="Please Select Approval_1" AppendDataBoundItems="true" CssClass="form-control"
                                                 AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddldepartment_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <%--        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddldepartment"
-                                                Display="None" ErrorMessage="Please select  Department." SetFocusOnError="true"
+                                            <asp:RequiredFieldValidator ID="rfvdepartment" runat="server" ControlToValidate="ddldepartment"
+                                                Display="None" ErrorMessage="Please Select Department." SetFocusOnError="true"
                                                 ValidationGroup="AAPath" InitialValue="0">
-                                            </asp:RequiredFieldValidator>--%>
+                                            </asp:RequiredFieldValidator>
                                             <br /><br /><br />
-                                            <div class="label-dynamic">
+                                             <div class="label-dynamic">
+                                                 <sup>* </sup>
                                                 <asp:Label ID="lblApprover2" runat="server" Font-Bold="true"></asp:Label>
-                                                <%-- <label>Approval 2</label>--%>
                                             </div>
-                                            <asp:DropDownList ID="ddlAA2" runat="server" AppendDataBoundItems="true" TabIndex="5" ToolTip="Please Select Approval 2" CssClass="form-control"
+                                            <asp:DropDownList ID="ddlAA2" runat="server" AppendDataBoundItems="true" TabIndex="7" ToolTip="Please Select Approval 2" CssClass="form-control"
                                                 Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA2_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <br /><br />
+                                            <asp:RequiredFieldValidator ID="rfvapprovalauth2" runat="server" ControlToValidate="ddlAA2"
+                                                Display="None" ErrorMessage="Please Select  Approval 2" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:DropDownList ID="ddlAA2Parent" runat="server" AppendDataBoundItems="true" TabIndex="7" ToolTip="Please Select Approval 2" CssClass="form-control" Visible="false"
+                                                Enabled="false" AutoPostBack="True" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="14">Parent</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvapprovalauth2parent" runat="server" ControlToValidate="ddlAA2Parent" Visible="false"
+                                                Display="None" ErrorMessage="Please Select  Approval 2" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                            <br /><br /><br />
+                                             
+                                            
                                             <div class="label-dynamic">
-                                                <asp:Label ID="lblApprovalpath" runat="server" Font-Bold="true">Passing Path</asp:Label>
-                                                <%-- <label>Approval Path </label>--%>
+                                                <asp:Label ID="lblApprover5" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:TextBox ID="txtAAPath" runat="server" ReadOnly="true" TextMode="MultiLine"
-                                                Rows="1" TabIndex="7" ToolTip="Path" Height="45px"></asp:TextBox>
-                                        </div>
-
-                                         <div class="form-group col-lg-4 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>*</sup>
-                                            <label>Days</label>
-                                        </div>
-                                        <asp:Panel ID="pnlDays" runat="server" TabIndex="3">
-                                            <div class="form-group col-md-12 checkbox-list-box">
-
-                                                <asp:CheckBox ID="chkDays" runat="server" AutoPostBack="true" OnCheckedChanged="chkDays_CheckedChanged" />
-                                                Select All 
-                                                <br />
-
-                                                <asp:CheckBoxList ID="cblstDays" runat="server" RepeatColumns="1"
-                                                    RepeatDirection="Horizontal" Width="100%" CssClass="checkbox-list-style" ToolTip="Click to Select Days">
-                                                </asp:CheckBoxList>
-                                            </div>
-                                        </asp:Panel>
-                                             <br />
-                                             <div class="label-dynamic">
-                                                <asp:Label ID="lblApprover3" runat="server" Font-Bold="true"></asp:Label>
-                                                <%--<label>Approval 3 </label>--%>
-                                            </div>
-                                            <asp:DropDownList ID="ddlAA3" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="6" ToolTip="Please Select Approval 3"
-                                                Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA3_SelectedIndexChanged">
+                                            <asp:DropDownList ID="ddlAA5" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="10" ToolTip="Please Select Approval 5"
+                                                Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA5_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                         </div>
-
+                                         <div class="form-group col-lg-4 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <asp:Label ID="lblDays" runat="server" Font-Bold="true">Days Type</asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlDays" runat="server" ToolTip="Please Select Days Type." TabIndex="3" AppendDataBoundItems="true" 
+                                                CssClass="form-control" data-select2-enable="true" AutoPostBack="True" OnSelectedIndexChanged="ddlDays_SelectedIndexChanged" >
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvDays" runat="server" ControlToValidate="ddlDays"
+                                                Display="None" ErrorMessage="Please Select Days Type." SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                            <br /><br /><br /> 
+                                           <br /><br /><br /> 
+                                            <br /><br />
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <asp:Label ID="lblApprover3" runat="server" Font-Bold="true"></asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlAA3" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="8" ToolTip="Please Select Approval 3"
+                                                Enabled="false" AutoPostBack="True" data-select2-enable="true" OnSelectedIndexChanged="ddlAA3_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                             <asp:RequiredFieldValidator ID="rfvapprovalauth3" runat="server" ControlToValidate="ddlAA3"
+                                                Display="None" ErrorMessage="Please Select  Approval 3" SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                            <br /><br /><br />
+                                             <div class="label-dynamic">
+                                                <asp:Label ID="lblApprovalpath" runat="server" Font-Bold="true">Passing Path</asp:Label>
+                                            </div>
+                                            <asp:TextBox ID="txtAAPath" runat="server" ReadOnly="true" TextMode="MultiLine"
+                                                Rows="1" TabIndex="7" ToolTip="Path" Height="67px"></asp:TextBox>
+                                        </div>
                                     </div>
                                 </div>
                             </asp:Panel>
@@ -186,29 +224,13 @@
                              <asp:Panel ID="pnlauthority" runat="server">
                                 <div class="col-12">
                                     <div class="row">
-                                        <div class="form-group col-lg-3 col-md-6 col-12" style="display:none;" >
-                                               <sup>* </sup>
-                                             <label>Approval Type</label>
-                                            <asp:DropDownList ID="ddlauthorityapproval" runat="server" TabIndex="2"
-                                                ToolTip="Please Select  Authority Approval Type" AppendDataBoundItems="true"
-                                                AutoPostBack="true" 
-                                                CssClass="form-control" data-select2-enable="true">
-                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                <asp:ListItem Value="1">Approval 1</asp:ListItem>
-                                                <asp:ListItem Value="2">Approval 2</asp:ListItem>
-                                                <asp:ListItem Value="3">Approval 3</asp:ListItem>
-                                            </asp:DropDownList>
-                                        </div>
-
-
-                                                
-                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                       <div class="form-group col-lg-4 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <asp:Label ID="lblStuTypeAuth" runat="server" Font-Bold="true">Student Type</asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlStuTypeAuth" runat="server" TabIndex="1" ToolTip="Please Select Student Type." AppendDataBoundItems="true" 
-                                                CssClass="form-control" data-select2-enable="true" >
+                                            <asp:DropDownList ID="ddlStuTypeAuth" runat="server" ToolTip="Please Select Student Type." AppendDataBoundItems="true" 
+                                                CssClass="form-control" data-select2-enable="true" AutoPostBack="True" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
                                             <asp:RequiredFieldValidator ID="rvfStuTypeAuth" runat="server" ControlToValidate="ddlStuTypeAuth"
@@ -217,10 +239,25 @@
                                             </asp:RequiredFieldValidator>
                                         </div>
 
+                                        <div class="form-group col-lg-4 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <asp:Label ID="lblDaysAuth" runat="server" Font-Bold="true">Days Type</asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlDaysAuth" runat="server" ToolTip="Please Select Days Type." AppendDataBoundItems="true" 
+                                                CssClass="form-control" data-select2-enable="true" AutoPostBack="True" >
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem></asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvDaysAuth" runat="server" ControlToValidate="ddlDaysAuth"
+                                                Display="None" ErrorMessage="Please Select Days Type." SetFocusOnError="true"
+                                                ValidationGroup="AAPath" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                        </div>
                                              <div class="form-group col-lg-4 col-md-6 col-12">
                                                <sup>* </sup>
-                                             <label>Approval 1</label>
-                                              <asp:TextBox ID="txtauthapproval1" runat="server"  CssClass="form-control"   />
+                                             <label >Approval 1</label>
+                                              <asp:TextBox ID="txtauthapproval1" runat="server"  CssClass="form-control"  AutoPostBack="true" />
                                                                     <asp:RequiredFieldValidator ID="rfvapproval1" runat="server" ControlToValidate="txtauthapproval1"
                                                                         Display="None" ErrorMessage="Please Enter Approval 1" ValidationGroup="AAPath" />
                                               </div>
@@ -228,7 +265,7 @@
                                               <div class="form-group col-lg-4 col-md-6 col-12">
                                                <sup>* </sup>
                                                <label>Approval 2</label>
-                                              <asp:TextBox ID="txtauthapproval2" runat="server"  CssClass="form-control"   />
+                                              <asp:TextBox ID="txtauthapproval2" runat="server"  CssClass="form-control"  AutoPostBack="true" />
                                                                     <asp:RequiredFieldValidator ID="rfvapproval2" runat="server" ControlToValidate="txtauthapproval2"
                                                                         Display="None" ErrorMessage="Please Enter Approval 2" ValidationGroup="AAPath" />
                                                </div>
@@ -236,15 +273,22 @@
                                               <div class="form-group col-lg-4 col-md-6 col-12">
                                                <sup>* </sup>
                                              <label>Approval 3</label>
-                                              <asp:TextBox ID="txtauthapproval3" runat="server"  CssClass="form-control"   />
+                                              <asp:TextBox ID="txtauthapproval3" runat="server"  CssClass="form-control"  AutoPostBack="true" />
                                                                     <asp:RequiredFieldValidator ID="rfvapproval3" runat="server" ControlToValidate="txtauthapproval3"
                                                                         Display="None" ErrorMessage="Please Enter Approval 3" ValidationGroup="AAPath" />
                                               </div>
 
                                             <div class="form-group col-lg-4 col-md-6 col-12">
-                                               <sup>* </sup>
+                                               <%--<sup>* </sup>--%>
                                              <label>Approval 4</label>
-                                              <asp:TextBox ID="txtauthapproval4" runat="server"  CssClass="form-control"   />
+                                              <asp:TextBox ID="txtauthapproval4" runat="server"  CssClass="form-control"  AutoPostBack="true" />
+                                                <%--<asp:RequiredFieldValidator ID="rfvapproval4" runat="server" ControlToValidate="txtauthapproval4"
+                                                                        Display="None" ErrorMessage="Please Enter Approval 4" ValidationGroup="AAPath" />--%>
+                                              </div>
+                                            <div class="form-group col-lg-4 col-md-6 col-12">
+                                               <sup></sup>
+                                             <label>Approval 5</label>
+                                              <asp:TextBox ID="txtauthapproval5" runat="server"  CssClass="form-control"  AutoPostBack="true" />
                                               </div>
                                     </div>
                                 </div>
@@ -317,24 +361,24 @@
                                 </asp:Panel>
 
                                 <asp:Panel ID="pnlbtn" runat="server">
-                                    <asp:Button ID="btnSave" runat="server" Text="Submit" TabIndex="13" ToolTip="Click here to Submit" ValidationGroup="AAPath" 
+                                    <asp:Button ID="btnSave" runat="server" Text="Submit" ToolTip="Click here to Submit" ValidationGroup="AAPath" 
                                         CssClass="btn btn-primary" Onclick="btnSave_Click" />
 
-                                    <asp:Button ID="btnCancel" runat="server" TabIndex="14" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
+                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
                                         CssClass="btn btn-warning" OnClick="btnCancel_Click" />&nbsp;
-                                       <asp:Button ID="btnBack" runat="server" TabIndex="15" Text="Back" ToolTip="Click here to go back to previous" CausesValidation="false" 
+                                       <asp:Button ID="btnBack" runat="server" Text="Back" ToolTip="Click here to go back to previous" CausesValidation="false" 
                                            CssClass="btn btn-info" Onclick="btnBack_Click"/>
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="AAPath"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </asp:Panel>
 
                                   <asp:Panel ID="pnlauthoritybtn" runat="server">
-                                    <asp:Button ID="btnauthSave" runat="server" Text="Submit" TabIndex="15" ToolTip="Click here to Submit" ValidationGroup="AAPath"
+                                    <asp:Button ID="btnauthSave" runat="server" Text="Submit" ToolTip="Click here to Submit" ValidationGroup="AAPath"
                                         CssClass="btn btn-primary" OnClick="btnauthSave_Click" />
 
-                                    <asp:Button ID="btnauthCancel" runat="server" TabIndex="14" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
+                                    <asp:Button ID="btnauthCancel" runat="server" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
                                         CssClass="btn btn-warning" OnClick="btnauthCancel_Click" />&nbsp;
-                                       <asp:Button ID="btnauthBack" runat="server" TabIndex="16" Text="Back" ToolTip="Click here to go back to previous" CausesValidation="false"
+                                       <asp:Button ID="btnauthBack" runat="server" Text="Back" ToolTip="Click here to go back to previous" CausesValidation="false"
                                            CssClass="btn btn-info" Onclick="btnauthBack_Click" />
                                     
                                       <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="AAPath"
@@ -342,7 +386,7 @@
                                 </asp:Panel>
                             </div>
 
-                            <div class="col-12 table-club">
+                           <div class="col-12 table-club">
                                 <asp:Panel ID="pnlAAPaList" runat="server">
                                     <asp:ListView ID="lvAAPath" runat="server" EnableModelValidation="True">
                                         <EmptyDataTemplate>
@@ -358,12 +402,15 @@
                                                 <thead class="bg-light-blue">
                                                     <tr>
                                                         <th>Action</th>
-                                                        <th>Authority Type </th>
-                                                        <th>College/School</th>
-                                                      <th><asp:Label ID="lblappproval1" runat="server"></asp:Label></th>
-                                                      <th><asp:Label ID="lblappproval2" runat="server"></asp:Label></th>
-                                                      <th><asp:Label ID="lblappproval3" runat="server"></asp:Label></th>
-                                                      <th>Department</th>
+                                                        <th>Authority Type</th>
+                                                        <th>Student Type</th>
+                                                        <th>Days Type</th>
+                                                        <th>Department</th>
+                                                        <th>Approval 1</th>
+                                                        <th>Approval 2</th>
+                                                        <th>Approval 3</th>
+                                                        <th>Approval 4</th>
+                                                        <th>Approval 5</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -375,35 +422,49 @@
                                             <tr>
                                                 <td>
                                                     <asp:ImageButton ID="btnauthappEdit" runat="server" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("APP_NO") %>'
-                                                        AlternateText="Edit Record" ToolTip="Edit Record" TabIndex="17" Onclick="btnauthappEdit_Click"/>
+                                                        AlternateText="Edit Record" ToolTip="Edit Record" TabIndex="17" OnClick="btnauthappEdit_Click" />
                                                     <asp:ImageButton ID="btnDelete" Visible="false" runat="server" ImageUrl="~/images/delete.gif" CommandArgument='<%# Eval("APP_NO") %>'
-                                                        AlternateText="Delete Record" ToolTip="Delete Record"
-                                                        OnClientClick="showConfirmDel(this); return false;" />
+                                                        AlternateText="Delete Record" ToolTip="Delete Record" OnClientClick="showConfirmDel(this); return false;" />
                                                 </td>
-
                                                 <td>
                                                     <%# Eval("AUTHORITY_TYPE") %>
                                                 </td>
                                                 <td>
-                                                    <%# Eval("COLLEGE_NAME")%>
+                                                    <%# Eval("STUDENT_TYPE") %>
                                                 </td>
                                                 <td>
-                                                    <%# Eval("APPROVAL_1_UA_NAME")%>
+                                                    <%# Eval("DAY_TYPE_NAME") %>
                                                 </td>
                                                 <td>
-                                                    <%# Eval("APPROVAL_2_UA_NAME")%>
+                                                    <%# Eval("DEPTNAME") %>
                                                 </td>
                                                 <td>
-                                                    <%# Eval("APPROVAL_3_UA_NAME")%>
+                                                    <%# Eval("APPROVAL_1_UANO").ToString() == "14" ? "Parents" : (!String.IsNullOrEmpty(Eval("APPROVAL1") as string) ? Eval("APPROVAL1") : "") + "  -  " + (!String.IsNullOrEmpty(Eval("APPROVAL_1_UA_NAME") as string) ? Eval("APPROVAL_1_UA_NAME") : "") %>
+
+                                                    
                                                 </td>
                                                 <td>
-                                                    <%# Eval("DEPTNAME")%>
+                                                     <%# Eval("APPROVAL_2_UANO").ToString() == "14" ? "Parents" : (!String.IsNullOrEmpty(Eval("APPROVAL2") as string) ? Eval("APPROVAL2") : "") + "  -  " + (!String.IsNullOrEmpty(Eval("APPROVAL_2_UA_NAME") as string) ? Eval("APPROVAL_2_UA_NAME") : "") %>
+                                                  
+                                                </td>
+                                                <td>
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL3") as string) ? Eval("APPROVAL3") : "" %>  -  
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL_3_UA_NAME") as string) ? Eval("APPROVAL_3_UA_NAME") : "" %>
+                                                </td>
+                                                <td>
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL4") as string) ? Eval("APPROVAL4") : "" %>  -  
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL_4_UA_NAME") as string) ? Eval("APPROVAL_4_UA_NAME") : "" %>
+                                                </td>
+                                                <td>
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL5") as string) ? Eval("APPROVAL5") : "" %>  -  
+                                                    <%# !String.IsNullOrEmpty(Eval("APPROVAL_5_UA_NAME") as string) ? Eval("APPROVAL_5_UA_NAME") : "" %>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
                                 </asp:Panel>
-                            </div>
+                            </div >
+
 
                               <div class="col-12 table-club">
                                 <asp:Panel ID="pnlAuthapprovalList" runat="server">
@@ -421,10 +482,13 @@
                                                 <thead class="bg-light-blue">
                                                     <tr>
                                                         <th>Action</th>
+                                                        <th>Student Type</th>
+                                                        <th>Days Type</th>
                                                         <th>Approval 1</th>
                                                         <th>Approval 2</th>
                                                         <th>Approval 3 </th>
                                                         <th>Approval 4 </th>
+                                                        <th>Approval 5 </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -438,7 +502,13 @@
                                                     <asp:ImageButton ID="Edit" runat="server" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("APP_NO") %>'
                                                         AlternateText="Edit Record" ToolTip="Edit Record" TabIndex="18" OnClick="Edit_Click"/>
                                                 </td>
-                                               <td>
+                                                <td>
+                                                    <%# Eval("STUDENT_TYPE")%>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("DAYS_TYPE")%>
+                                                </td>
+                                                <td>
                                                     <%# Eval("APPROVAL1")%>
                                                 </td>
                                                 <td>
@@ -449,6 +519,9 @@
                                                 </td>
                                                 <td>
                                                     <%# Eval("APPROVAL4")%>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("APPROVAL5")%>
                                                 </td>
                                             </tr>
                                         </ItemTemplate>
@@ -470,6 +543,12 @@
             <asp:PostBackTrigger ControlID="ddlAA1" />
             <asp:PostBackTrigger ControlID="ddlAA2" />
             <asp:PostBackTrigger ControlID="ddlAA3" />
+            <asp:PostBackTrigger ControlID="ddlAA4" />
+            <asp:PostBackTrigger ControlID="ddlAA5" />
+            <asp:PostBackTrigger ControlID="ddlStuTypeAuth" />
+            <asp:PostBackTrigger ControlID="ddlStuType" />
+            <asp:PostBackTrigger ControlID="ddlDaysAuth" />
+            <asp:PostBackTrigger ControlID="ddlDays" />
         </Triggers>
     </asp:UpdatePanel>
     <div id="divMsg" runat="server">

@@ -18,16 +18,16 @@ namespace IITMS
             {
                 private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-                public int Insert_Update_GatePassRequest(GatePassRequest objGatePassRequest)
+                public int Insert_Update_GatePassRequest(GatePassRequest objGatePassRequest, int hostel)
                 {
-                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    int retStatus = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
 
                         //Add Block info 
-                        objParams = new SqlParameter[16];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_IDNO", objGatePassRequest.IDNO);
                         objParams[1] = new SqlParameter("@P_HGP_ID", objGatePassRequest.GatePassNo);
                         objParams[2] = new SqlParameter("@P_OUTDATE", objGatePassRequest.OutDate);
@@ -43,11 +43,15 @@ namespace IITMS
                         objParams[12] = new SqlParameter("@P_REMARKS", objGatePassRequest.Remarks);
                         objParams[13] = new SqlParameter("@P_COLLEGE_CODE", Convert.ToInt32(System.Web.HttpContext.Current.Session["colcode"]));
                         objParams[14] = new SqlParameter("@P_ORGANIZATION", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
-                        objParams[15] = new SqlParameter("@P_Session", Convert.ToInt32(System.Web.HttpContext.Current.Session["hostel_session"]));
+                        objParams[15] = new SqlParameter("@P_SESSION", Convert.ToInt32(System.Web.HttpContext.Current.Session["hostel_session"]));
+                        objParams[16] = new SqlParameter("@P_HOSTEL", hostel);
+                        objParams[17] = new SqlParameter("@P_STUDTYPE", objGatePassRequest.StudType);
+                        //objParams[18] = new SqlParameter("@P_PATH", objGatePassRequest.ApprPath);
+                        objParams[18] = new SqlParameter("@P_ADMIN_UANO", objGatePassRequest.Admin_UANO);
+                        objParams[19]=new SqlParameter("@P_OUT",SqlDbType.Int);
+                        objParams[19].Direction= ParameterDirection.Output;
 
-                          
-                        if (objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_GATEPASSREQUEST_INSERT_UPDATE", objParams, false) != null)
-                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        retStatus=Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_HOSTEL_GATEPASSREQUEST_INSERT_UPDATE", objParams, true));
                     }
                     catch (Exception ex)
                     {
@@ -77,23 +81,22 @@ namespace IITMS
                     return ds;
                 }
 
-                public SqlDataReader GetGatePass(int gatepass_no)
+                public DataSet GetGatePass(int GatePassRequestNo)
                 {
-                    SqlDataReader dr = null;
+                    DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_HGP_ID", gatepass_no);
+                        objParams[0] = new SqlParameter("@P_HGP_NO", GatePassRequestNo);
 
-                        dr = objSQLHelper.ExecuteReaderSP("PKG_HOSTEL_GATEPASS_GET_BY_ID", objParams);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_HOSTEL_GATEPASS_REQUESTDETAILS_BY_ID", objParams);
                     }
                     catch (Exception ex)
                     {
-                        return dr;
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.PurposeController.GetPurpose-> " + ex.ToString());
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.GatePassRequestController.GetGatePass-> " + ex.ToString());
                     }
-                    return dr;
+                    return ds;
                 }
             }
         }

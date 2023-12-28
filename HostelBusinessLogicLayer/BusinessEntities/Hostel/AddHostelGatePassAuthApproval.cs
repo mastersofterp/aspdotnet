@@ -21,6 +21,10 @@ namespace IITMS
                 private int _APPROVAL_1;
                 private int _APPROVAL_2;
                 private int _APPROVAL_3;
+                private int _APPROVAL_4;
+                private int _APPROVAL_5;
+                private int _STUDTYPE;
+                private string _DAYS;
                 private string _AAPATH;
                 private int _CREATED_BY;
                 private DateTime _CREATED_DATE;
@@ -63,6 +67,30 @@ namespace IITMS
                 {
                     get { return this._APPROVAL_3; }
                     set { if ((this._APPROVAL_3 != value)) this._APPROVAL_3 = value; }
+                }
+
+                public int APPROVAL_4
+                {
+                    get { return this._APPROVAL_4; }
+                    set { if ((this._APPROVAL_4 != value)) this._APPROVAL_4 = value; }
+                }
+
+                public int APPROVAL_5
+                {
+                    get { return this._APPROVAL_5; }
+                    set { if ((this._APPROVAL_5 != value)) this._APPROVAL_5 = value; }
+                }
+
+                public int STUDTYPE
+                {
+                    get { return this._STUDTYPE; }
+                    set { if ((this._STUDTYPE != value)) this._STUDTYPE = value; }
+                }
+
+                public string DAYS
+                {
+                    get { return this._DAYS; }
+                    set { if ((this._DAYS != value)) this._DAYS = value; }
                 }
 
                 public string AAPATH
