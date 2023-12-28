@@ -138,6 +138,7 @@ public partial class ACADEMIC_FineAllotment : System.Web.UI.Page
                             lblAdmBatch.ToolTip = dsStudent.Tables[0].Rows[0]["ADMBATCH"].ToString();
                             lblSingCollege.Text = dsStudent.Tables[0].Rows[0]["COLLEGE_NAME"].ToString();
                             lblSingCollege.ToolTip = dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
+                            lblSessionName.Text = dsStudent.Tables[0].Rows[0]["SESSION"].ToString();
                             ViewState["ptype"] = dsStudent.Tables[0].Rows[0]["PTYPE"].ToString();
                             PopulateFeeItemsSection();
                             //imgPhoto.ImageUrl = "~/showimage.aspx?id=" + dsStudent.Tables[0].Rows[0]["IDNO"].ToString() + "&type=student";
