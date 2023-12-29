@@ -1,0 +1,45 @@
+﻿body {
+}
+.custom-progress {
+    .poll-details-heading {
+        color: #6777ef !important;
+    }
+
+    .custom-progress-bar {
+        display: flex;
+        align-items: center;
+        margin-bottom:15px;
+
+        .progress {
+            width: 60%;
+            height: 24px;
+            box-shadow: none;
+            border: 1px solid #6777ef;
+            position:relative;
+
+            .custom-progress-percent {
+                color: #34395E;
+                position:absolute;
+                right:10px;
+            }
+        }
+
+        h6 {
+            width: 25%;
+            font-size: 18px;
+            color: #34395E;
+        }
+
+        .resoponse-count {
+            width: 15%;
+            padding: 0 10px
+        }
+    }
+}
+
+.noResponseModal{
+
+    display:flex;
+    align-items:center;
+    position:absolute;  
+}

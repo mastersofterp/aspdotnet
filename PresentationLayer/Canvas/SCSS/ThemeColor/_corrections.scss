@@ -1,0 +1,24 @@
+.dark-sidebar .main-sidebar .sidebar-menu li ul.dropdown-menu a {
+    color: #a9b7d0 !important;
+}
+
+.dark-sidebar .main-sidebar .sidebar-menu li ul.dropdown-menu a.active-sub-link {
+    color: #fff !important;
+}
+
+.light-sidebar.sidebar-mini .main-sidebar .sidebar-menu li ul.dropdown-menu li a {
+    background-color: #fff !important;
+}
+
+.light-sidebar.sidebar-mini .main-sidebar .sidebar-menu li ul.dropdown-menu li:hover a {
+    background-color: rgba(103, 119, 239, 0.11) !important
+}
+
+.sidebar-mini .lvl-2-nav{
+    line-height: 15px;
+    //margin-bottom: 6px;
+}
+
+#lightMenu li a{
+	line-height:15px;
+} 

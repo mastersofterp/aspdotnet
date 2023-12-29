@@ -1,0 +1,37 @@
+.card-subheading {
+    position: relative;
+    padding-left: 10px;
+    color: #212529;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.custom-button-blue {
+    color: $purple;
+
+    &:hover {
+        color: $purple;
+        background-color: darken($white-smoke,3%) !important;
+    }
+}
+
+.bg-white-smoke {
+    background-color: $white-smoke;
+
+    &:hover {
+        background-color: $white-smoke !important;
+        color: $purple;
+    }
+}
+
+.bg-gray-d {
+    background-color: $white-smoke;
+}
+
+.discussion-reply {
+    background-color: $white-smoke;
+}
+
+.text-black {
+    color: $black;
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Canvas Integration</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <link rel="shortcut icon" type="image/x-icon" href="./Images/MasterSoft-Logo.svg">  
+    
+    <!-- intro js -->
+    
+    <link rel="stylesheet" href="./assets/css/app.min.css">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <!-- Custom style CSS -->
+    <link rel="stylesheet" href="./assets/css/custom.css">
+    <link rel="stylesheet" href="./node_modules/izitoast/dist/css/iziToast.min.css">
+    <link rel="stylesheet" href="./node_modules/tippy.js/dist/tippy.css">
+    <link rel="stylesheet" href="./node_modules/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw==" crossorigin="anonymous" referrerpolicy="no-referrer" defer/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.15/sweetalert2.min.css" integrity="sha512-NvuRGlPf6cHpxQqBGnPe7fPoACpyrjhlSNeXVUY7BZAj1nNhuNpRBq3osC4yr2vswUEuHq2HtCsY2vfLNCndYA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer />
+    <!-- bootstrap Icons -->
+    <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/filter-control/bootstrap-table-filter-control.min.css" integrity="sha512-IK+plgQ3Qomdj9Mzq2WbM5LF8JY0PPXHGGfiBqBkwhXUi1tVAIvIaLbt330r3t0Y4EUxqG0YGfEhRrQS0gKeYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.css" integrity="sha512-5RNDl2gYvm6wpoVAU4J2+cMGZQeE2o4/AksK/bi355p/C31aRibC93EYxXczXq3ja2PJj60uifzcocu2Ca2FBg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer />
+    
+  
+    <link rel="stylesheet" href="./SCSS/main.css">    
+</head>
+
+<body class=''>
+    <div class="minimize-left-panel"></div>
+    <div class="loader"></div>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            <div class="navbar-bg"></div>
+            <nav class="navbar navbar-expand-lg main-navbar sticky">
+                <div class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li><a href="#" data-bs-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+                        <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                                <i data-feather="maximize"></i>
+                            </a></li>
+                        <li>
+                            <form class="form-inline mr-auto">
+                                <div class="search-element">
+                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search"
+                                        >
+                                    <button class="btn" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="navbar-nav navbar-right">
+                   
+                </ul>
+            </nav>
+            <div class="main-sidebar sidebar-style-2 ">
+                <aside id="sidebar-wrapper" >
+                    <div class="sidebar-brand">
+                        <a href="index.html"> <img alt="image" src="../IMAGES/MasterSoft-Logo.svg" class="header-logo" /> <span
+                            class="logo-name">Mastersoft</span>
+                        </a>
+                    </div>     
+                    
+                    <span id="makeMenuHere"></span>
+                </aside>
+            </div>
+
+
+
+
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <section class="section" id="entireView">
+                    
+                   <div class="row">
+    <div class="col-lg-12 col-md-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Canvas Auth Creation</h4>
+                <div class="dropdown px-2 mt-1 dropdown-prerequisite">
+                    <a onclick="myFunction()" class="dropdown-toggle" data-bs-toggle="dropdown"
+                       title="click for more options" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-send"></i>
+                    </a>
+
+
+                    <div id="myDropdown" class="dropdown-menu dropdown-custom p-2">
+                        <h4><i>Prerequisite</i></h4>
+                        <ul class="list-group with-border-bottom fav-list" id="ulPrereq">
+                            <li class="list-group-item text-center">No Links to show</li>
+
+                        </ul>
+                        <h4><i>What Next ?</i></h4>
+                        <ul class="list-group with-border-bottom fav-list" id="ulNext">
+                            <li class="list-group-item text-center">No Links to show</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dropdown px-2 mt-1 dropdown-video">
+                    <a onclick="myFunction2()" class="dropbtn dropdown-toggle" data-bs-toggle="dropdown"
+                       title="Click for Video Help">
+                        <i class="bi bi-play-btn"></i>
+                    </a>
+
+                    <div id="myDropdown2" class="dropdown-menu  p-2">
+                        <h4><i>Video Help</i></h4>
+                        <ul class="list-group with-border-bottom fav-list" id="ulvideoLink">
+                            <li class="list-group-item text-center">
+                                No Links to show
+                            </li>
+
+                        </ul>
+
+                    </div>
+                </div><div class="px-2 mt-1 dropdown-tour">
+                    <a id="TabIntro" class="dropbtn" title="Click for Page Tour">
+                        <i class="bi bi-info-square"></i>
+
+                    </a>
+
+                </div>
+
+            </div><div class="card-body">                
+                <!-- Content here -->
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Authorization Code
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <div class="row">
+                            <!--  -->                           
+                            
+                            <!--  -->
+                            <div class="col-lg-4 col-md-4 col-12" id="">
+                                <div class="form-group">
+                                    <label id="lblOrg"> <sup>*</sup>Canvas Authorization Endpoint<code></code></label>
+                                    <select class="form-control select2 form-select required-select2-validation" id="ddlAuthEndpointAcc1" disabled>
+                                        <option value="0">Please Select</option>  
+                                        <option value="https://mastersofterp.instructure.com/login/oauth2/auth" selected>Canvas LMS</option>                                   
+                                    </select>
+                                </div>
+                            </div> 
+                            <!--  -->
+                            <div class="col-lg-4 col-md-4 col-12" id="">
+                                <div class="form-group">
+                                    <label><sup>*</sup>Canvas Client ID<code></code></label>
+                                    <input type="text" class="form-control" name="" id="txtClientIdAcc1" placeholder="e.g. 812741506391">
+                                </div>
+                            </div>
+                            <!--  -->
+                            <div class="col-lg-4 col-md-4 col-12" id="">
+                                <div class="form-group">
+                                    <label><sup>*</sup>Canvas Scope<code></code></label>
+                                    <input type="text" class="form-control" name="" id="txtScopeAcc1" placeholder="e.g. core:*:*" value="" disabled>
+                                </div>
+                            </div>
+                            <!--  -->
+                            <div class="col-lg-4 col-md-4 col-12" id="">
+                                <div class="form-group">
+                                    <label><sup>*</sup>State<code></code></label>
+                                    <input type="text" class="form-control" name="" id="txtStateAcc1" placeholder="e.g. wvpb7yh0tich0t6gk2355uxxausp7uo0mr4atrjnvuurmo78y6" disabled>
+                                </div>
+                            </div>
+                            <!--  -->
+                          </div>
+                            <div class='text-center' >                           
+                                <button type="button" tabindex="1" class="btn btn-primary common-submit-btn" id="btnSubmitTab1">Submit</button>
+                                <button type="button" class="btn btn-outline-danger common-cancel-btn" tabindex="1" id="btnClearTab1">Cancel</button>                           
+                            </div>
+                            <div class='row' >                           
+                                <h6 class="col-12 font-14">Authorization Code: <code>(valid only for one time)</code></h6>
+                                <p class="col-12" id="authCode">-</p>                          
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Access (and Refresh) Token via Authorization Code
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <!--  -->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label id="lblOrg"> <sup>*</sup>RF Organization Name<code></code></label>
+                                        <select class="form-control select2 form-select required-select2-validation" id="ddlOrgIdAcc2">
+                                            <option value="0">Please Select</option>  
+                                            <option value="155">MS Canvas</option>                                    
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--  -->
+                                <!-- <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label id="lblOrg"> <sup>*</sup>RF College Name<code></code></label>
+                                        <select class="form-control select2 form-select required-select2-validation" id="ddlCollegeIdAcc2">
+                                            <option value="0">Please Select</option>  
+                                            <option value="132">MS Canvas</option>                                    
+                                        </select>
+                                    </div>
+                                </div>-->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label id="lblOrg"> <sup>*</sup>RF Instance Name<code></code></label>
+                                        <select class="form-control select2 form-select required-select2-validation" id="ddlInstanceNameAcc2">
+                                            <option value="0">Please Select</option>                                     
+                                        </select>
+                                    </div>
+                                </div> 
+                                <!--  -->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label id="lblOrg"> <sup>*</sup>Canvas Token Endpoint<code></code></label>
+                                        <select class="form-control select2 form-select required-select2-validation" id="ddlTokenEndpointAcc2" disabled>
+                                            <option value="0">Please Select</option>  
+                                            <option value="https://mastersofterp.instructure.com/login/oauth2/token" selected>Canvas</option>                                   
+                                        </select>
+                                    </div>
+                                </div> 
+                                <!--  -->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label><sup>*</sup>Canvas Client ID<code></code></label>
+                                        <input type="text" class="form-control" name="" id="txtClientIdAcc2" placeholder="e.g. 812741506391.apps.googleusercontent.com">
+                                    </div>
+                                </div>
+                                <!--  -->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label><sup>*</sup>Canvas Client Secret<code></code></label>
+                                        <input type="text" class="form-control" name="" id="txtClientSecretAcc2" placeholder="e.g. abc123" >
+                                    </div>
+                                </div>
+                                <!--  -->
+                                <div class="col-lg-4 col-md-4 col-12" id="">
+                                    <div class="form-group">
+                                        <label><sup>*</sup>Canvas Authorization Code <code>(from previous accordion)</code></label>
+                                        <input type="text" class="form-control" name="" id="txtAuthCodeAcc2" placeholder="Code generated in the previous section." autocomplete="off">
+                                    </div>
+                                </div>                                
+                                <!--  -->
+                            </div>
+                            <div class='text-center' >                           
+                                <button type="button" tabindex="1" class="btn btn-primary common-submit-btn" id="btnSubmitAcc2">Submit</button>
+                                <button type="button" class="btn btn-outline-danger common-cancel-btn" tabindex="1" id="btnClearAcc2">Cancel</button>                           
+                            </div>
+                            <div class='row' >                           
+                                <h6 class="col-12 font-14">Access Token:</h6>
+                                <p class="col-12" id="accessToken">-</p>   
+                                <h6 class="col-12 font-14">Refresh Token:</h6>
+                                <p class="col-12" id="refreshToken">-</p>                          
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                <!-- Buttons here -->
+                 
+                <!-- Table here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                </section>               
+            </div>
+
+            
+
+
+<!-- Raise ticket modal End -->
+
+            <!-- need this for the sidebar for the settings same for all-->
+            <div class="settingSidebar toggleRightPanelZIndex">
+                <a href="javascript:void(0)" class="settingPanelToggle togglePanel" > <i class="fa fa-spin fa-cog"></i>
+                </a>
+                <div class="settingSidebar-body ps-container ps-theme-default">
+                    <div class=" fade show active">
+                        <div class="setting-panel-header">Setting Panel
+                        </div>
+                        <div class="">
+
+                        </div>
+                    </div>
+                </div>
+            </div>           
+
+            
+            <!-- main footer for the page same for all -->
+            <footer class="main-footer">
+                <div class="footer-left">
+                    <a href="https://www.iitms.co.in/">©Mastersoft ERP Solutions</a>
+                </div>
+                <div class="footer-right">
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+</body>
+
+
+
+<!-- General JS Scripts -->
+<script src="./assets/js/app.min.js"></script>
+<!-- Template JS File -->
+<script src="./assets/js/scripts.js"></script>
+<!-- Custom JS File -->
+<script src="./assets/js/custom.js"></script>
+<!-- Moment JS -->
+<script src="./node_modules/select2/dist/js/select2.full.min.js"></script>
+<script src="./node_modules/izitoast/dist/js/iziToast.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.js" integrity="sha512-Wm00XTqNHcGqQgiDlZVpK4QIhO2MmMJfzNJfh8wwbBC9BR0FtdJwPqDhEYy8jCfKEhWWZe/LDB6FwY7YE9QhMg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js" integrity="sha512-cjm1J28H+LM+85W7s6/fFHr3BsBomtRV/nOGFDAEmloV0E8jr382pUWezLsde1lQr+Ek+x6j1R1li07T3cY5pg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/extensions/export/bootstrap-table-export.min.js" integrity="sha512-cAMZL39BuY4jWHUkLWRS+TlHzd/riowdz6RNNVI6CdKRQw1p1rDn8n34lu6pricfL0i8YXeWQIDF5Xa/HBVLRg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
+<script src="./Plugins/bootstrap-table/dist/extensions/export/libs/FileSaver/FileSaver.min.js" defer></script>
+<script src="./Plugins/bootstrap-table/dist/extensions/export/libs/es6-promise/es6-promise.auto.min.js" defer></script>
+<script src="./Plugins/bootstrap-table/dist/extensions/export/libs/js-xlsx/xlsx.core.min.js" defer></script>
+<script src="./Plugins/bootstrap-table/dist/extensions/export/tableExport.min.js" defer></script>
+
+<script>
+    // $(document).ready(()=>{
+    //     $('#makeNewQuickForm').modal('show')
+    // })   
+    
+</script>
+<script src="./auth.js"></script>
+</html>

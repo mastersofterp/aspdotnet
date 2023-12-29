@@ -1,0 +1,17 @@
+.news-content{
+    .news-title{
+        font-weight: 700;
+        line-height: 20px;
+        color:$text-primary;    
+        transition: none;
+        &:hover{
+            cursor: pointer;
+            color: $purple;
+        }    
+        .news-time{        
+            color:$gray;
+            text-transform: lowercase;
+        }
+    }
+    
+}

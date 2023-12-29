@@ -1,0 +1,14 @@
+.viewBy-div {
+  position: absolute;
+  width: 60%;
+  top: 12px;
+}
+
+@media only screen and (max-width: 600px) {
+  .viewBy-div {
+    position: relative;
+    width: 100%;
+    top: 0px;
+    margin-top: 15px;
+  }
+}/*# sourceMappingURL=groups.css.map */

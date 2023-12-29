@@ -1,0 +1,250 @@
+$icon-color:#212529;
+$icon-bg:#f8f9fa;
+$input-bg:rgba(103, 119, 239, 0.11) !important;
+
+
+#newListIcon{
+    font-size:2.5rem;
+    padding: 0.5rem 1rem;
+    border-radius:15%;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+
+
+#listName{
+    background-color:$input-bg;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.todo-icons{
+    padding: 3px 9px;
+    border-radius: 50%;
+    font-size: 16px;
+}
+
+.list-element{
+    &:hover{
+        cursor:pointer;
+        background-color:$secondary-bg;
+    }
+}
+
+.list-count{
+    padding:4px 10px 4px 10px;
+    background-color:darken($secondary-bg,1.5%);
+}
+
+.todo-secondary-heading{
+    color:grey;
+}
+
+.todo-counts{
+    font-size:25px;
+}
+
+.todaysTask {
+    .linkToCalendar{
+        color:$dot-red !important;
+    }
+}
+
+#addmoreListItems, .addMoreItems, #editListItem, #removeListEditDetails {
+    &:hover {
+        color: $purple;
+        cursor: pointer;
+    }
+}
+
+.green-card{
+    &:hover{
+        background:$dot-green;
+        .todo-icons{
+            color:$dot-green;
+        }
+    }
+}
+
+.green-card.active{
+    background:$dot-green;
+    .todo-icons{
+        color:$dot-green;
+    }
+}
+
+.purple-card{
+    &:hover{
+        background:$dot-purple;
+        .todo-icons{
+            color:$dot-purple;
+        }
+    }
+}
+
+.purple-card.active{
+    background:$dot-purple;
+    .todo-icons{
+        color:$dot-purple;
+    }
+}
+
+.blue-card{
+    &:hover{
+        background:$dot-blue;
+        .todo-icons{
+            color:$dot-blue;
+        }
+    }
+}
+
+.blue-card.active{
+    background:$dot-blue;
+    .todo-icons{
+        color:$dot-blue;
+    }
+}
+
+.red-card{
+    &:hover{
+        background:$dot-red;
+        .todo-icons{
+            color:$dot-red;
+        }
+    }
+}
+
+.red-card.active{
+    background:$dot-red;
+    .todo-icons{
+        color:$dot-red;
+    }
+}
+
+.red-card,.blue-card,.purple-card,.green-card{
+    transition:all 0.2s ease-in;
+    .card-header{
+        border-bottom: none;
+    }
+    &:hover{
+        color:$white;
+        transition:all 0.2s ease-in;
+        .todo-icons{            
+            background-color:$white !important;
+        }
+        .todo-secondary-heading,.todo-counts{
+            color:$white;
+        }
+    } 
+}
+
+.red-card.active,.blue-card.active,.purple-card.active,.green-card.active{    
+    transition:all 0.2s ease-in;
+    .todo-icons{            
+        background-color:$white !important;
+    }
+    .todo-secondary-heading,.todo-counts{
+        color:$white;
+    }    
+}
+
+
+.todo-general-card{
+    border:1px solid transparent;
+    &:hover{
+        cursor:pointer;
+    }
+}
+
+.form-group{
+    .selectgroup.custom-icon-selectgroup{ 
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap; 
+        .selectgroup-button{
+            border: 1px solid transparent;
+            padding: 1rem;
+            background: $icon-bg;
+            color: $icon-color;
+            font-size: 20px;
+            padding:22px;
+            max-width: 65px;
+            border-radius:5px;
+            &:hover{
+                color:$purple;
+            }
+        }
+        .selectgroup-input-radio:focus + .selectgroup-button, .selectgroup-input-radio:checked + .selectgroup-button{
+            color:$purple;
+            border: 1px solid $purple;
+        }     
+    }    
+}
+
+
+
+.list-item,.list-element{
+    .options-container{
+        display:none;
+    }
+    .edit-icon{
+        &:hover{            
+            color:$dot-dark-blue;
+        }
+    }
+    .done-icon{
+        &:hover{            
+            color:$dot-green;
+        }
+    }
+    .calendar-icon{
+        &:hover{            
+            color:$dot-purple;
+        }
+    }
+    .delete-icon{
+        &:hover{            
+            color:$dot-red;
+        }
+    }
+    .option-icon{
+        &:hover{
+            cursor:pointer;
+        }
+    }
+    &:hover{
+        background:$secondary-bg;
+        .options-container{
+            display:inline-block;
+        }
+    }
+}
+
+
+.big-cb-16{
+    width:16px;
+    height:16px;
+}
+
+
+.list-content[contenteditable="true"]:active,
+.list-content[contenteditable="true"]:focus{
+  border:none;
+  outline:none;
+}
+
+.list-content{
+    border:1px solid transparent !important;    
+    &:focus{
+        border:1px solid $purple !important;
+    }
+}
+
+.list-content.editable{    
+    &:hover{
+        border:1px dashed $secondary-main !important;
+    }
+}
+
+.strikethrough{
+    text-decoration: line-through !important;
+}

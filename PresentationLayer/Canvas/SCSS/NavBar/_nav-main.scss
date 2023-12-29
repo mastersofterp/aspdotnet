@@ -1,0 +1,12 @@
+@import './badge';
+@import './alerts';
+.bottom-fixed-content{
+    position: fixed;
+    bottom: 10px;
+    width: 265px;
+}
+
+.fixed-scroll-for-panel{
+    max-height:calc(100vh - 180px);
+    overflow-y:scroll;
+}

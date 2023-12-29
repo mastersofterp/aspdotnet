@@ -1,0 +1,29 @@
+﻿.second-lvl-dropdown {
+    display: none
+}
+
+.dopen {
+    position: relative;
+}
+
+.dopen:hover > .second-lvl-dropdown, .dopen:focus > .second-lvl-dropdown {
+    display: block;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    background: #fff;
+    //box-shadow: 0 0 30px rgb(0 0 0 / 10%);
+    border: none;
+    width: 260px;
+    min-width: 10rem;
+    font-size: 1rem;
+    color: #212529;
+    border-radius: 0.25rem;
+    padding: 0.5rem 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .dopen:hover > .second-lvl-dropdown {
+        right: 0%;
+    }
+}

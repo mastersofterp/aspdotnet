@@ -1,0 +1,19 @@
+.error-container {
+    position:relative;
+    input, select, textarea, .select2-container .select2-selection--single {
+        border-color: #dc3545;
+        color: #dc3545b0;
+
+        &::placeholder {
+       //     color: #dc3545;
+        }
+    }
+
+    .error-span {
+        color: #dc3545;
+        font-size: 11px;
+        display: block;
+        bottom: -21px;
+        position: absolute;
+    }
+}

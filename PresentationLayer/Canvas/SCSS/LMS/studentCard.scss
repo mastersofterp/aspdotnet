@@ -1,0 +1,60 @@
+.student-card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #e7ebeea3;
+   // border: 1px solid #ddd;
+    padding: 7px 7px 7px 7px;
+    height: 114px;
+    margin: 5px 0;
+    cursor: pointer;
+
+    .student-card-icon {
+        padding-right: 10px;
+
+        i {
+            font-size: 25px;
+            color: $purple;
+        }
+    }
+
+    .student-card-details {
+
+        h6 {
+            font: normal normal normal 14px/19px Nunito;
+            color: $purple;
+            margin-bottom: 0;
+            padding-right: 0;
+        }
+
+        p {
+            margin-bottom: 0;
+            color: #202020;
+            font-size: 13px;
+        }
+    }
+}
+
+
+.badge-sm {
+    padding: 4px 8px !important;
+}
+
+
+
+
+
+
+
+
+.lms-menu .list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.lms-menu .list-group-item span {
+    padding-left: 6px;
+    font-size: 13px;
+}

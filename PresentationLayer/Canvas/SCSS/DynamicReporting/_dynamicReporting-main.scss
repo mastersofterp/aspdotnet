@@ -1,0 +1,86 @@
+.saveAndSharePanelToggle {
+    top: calc(30% - 40px) !important;
+    background: #e56b6f !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.tablePanelToggle {
+    top: 30% !important;
+    background: #e56b6f !important;
+    border-bottom-left-radius: 0px !important;
+    // border-top-left-radius: 0px !important;
+}
+
+.graphPanelToggle {
+    top: calc(30% + 40px) !important;
+    background: #b56576 !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.filterPanelToggle {
+    top: calc(30% + 80px) !important;
+    background: #6d597a !important;
+    border-top-left-radius: 0px !important;
+}
+
+.deletionLabel, .dropdown-item {
+    &:hover {
+        .deleteIcon, .settingsIcon, .excelIcon {
+            display: inline-block;
+        }
+    }
+}
+
+.deleteIcon {
+    color: gray;
+    font-size: 16px;
+    display: none;
+
+    &:hover {
+        cursor: pointer;
+        color: red;
+    }
+}
+
+.settingsIcon {
+    color: gray;
+    font-size: 16px;
+    display: none;
+
+    &:hover {
+        cursor: pointer;
+        color: $purple;
+    }
+}
+
+.excelIcon {
+    color: gray;
+    font-size: 16px;
+    display: none;
+
+    &:hover {
+        cursor: pointer;
+        color: #01cc36;
+    }
+}
+
+.custom-dropdown {
+    border: 1px solid $purple !important;
+    border-top: none !important;
+    top: -2px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0,0.5) 0px 1px 1px 0px !important;
+}
+
+
+
+
+.generatedTable, .generatedGraph {
+    h6 {
+        &:hover {
+            cursor: move;
+        }
+    }
+}

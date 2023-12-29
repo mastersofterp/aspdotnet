@@ -1,0 +1,72 @@
+﻿.client-menu {
+    .parent-menu-heading{
+        padding-inline-start: 0px;
+    }
+    ul {
+        list-style-type: none;
+
+        .parent-menu {
+            // font-size: 16px;
+            // font-weight: 600;
+            // align-items: center;
+            background: rgba(103, 119, 239, 0.09);
+            padding: 2px 10px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            color: rgba(0,0,0,.87);
+            font-family: Roboto,Helvetica,Arial,sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            
+    padding: 2px 4px;
+
+            span {
+                padding-left: 6px;
+            }
+            .child-menu-name{
+                   width: 360px;
+            }
+            .checked-date{
+              width: 200px;
+            }
+            .uat-checked-date{
+                 margin-left:5%
+            }
+        }
+
+        .child-menu {
+            font-size: 14px;
+            font-weight: 400;
+
+            input {
+                margin-right: 6px;
+            }
+        }
+    }
+}
+
+
+
+  .note-box {
+        border-top: 3px solid #00bcd4;
+        padding: 14px 20px;
+        border-radius: 6px;
+        box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105,  .10), 0 0.9375rem 1.40625rem rgba(90, 97, 105, .10), 0 0.25rem 0.53125rem rgba(90, 97, 105,  .12), 0 0.125rem 0.1875rem rgba(90, 97, 105,  .10);
+    }
+
+    .label-hed {
+        margin-bottom: 0;
+        font-weight: 700 !important;
+    }
+
+    .text-container {
+        margin-bottom: 8px;
+    }
+
+    .date-container {
+        margin-bottom: 8px;
+    }

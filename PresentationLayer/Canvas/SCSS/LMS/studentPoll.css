@@ -1,0 +1,90 @@
+.student-poll {
+  width: 100%;
+}
+.student-poll h6 {
+  color: #6f7ef0;
+  font: normal normal bold 16px/28px Nunito;
+}
+.student-poll p {
+  color: #202020;
+  font-weight: 600 !important;
+}
+.student-poll .student-poll-options {
+  /* .custom-radio {
+      padding: 6px;
+      margin: 4px 0;
+      display: flex;
+      cursor: pointer;
+
+
+
+      &:hover input[type=radio]:checked {
+          color: #FBFCFD;
+      }
+
+      &:hover .custom-control-label {
+          color: $purple;
+      }
+
+      .custom-control-label {
+          padding-left: 8px;
+          font-size: 16px !important;
+          font-weight: 500 !important;
+          color: #202020;
+          width: 100%;
+      }
+  }*/
+}
+.student-poll .student-poll-options .custom-radio:has(input:checked) {
+  background: #EFF9F1;
+  color: #37AB4B;
+}
+.student-poll .student-poll-options .custom-radio:has(input:checked) .custom-control-label {
+  color: #37AB4B;
+}
+.student-poll .student-poll-options .custom-radio:has(input:checked) .custom-control-radio + .custom-control-label:before {
+  border: 2px solid #EFF9F1;
+}
+.student-poll .student-poll-options .custom-radio {
+  padding: 6px;
+  margin: 4px 0;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-radio {
+  opacity: 0;
+  position: absolute;
+  margin: 4px 0;
+  padding: 6px;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-radio, .student-poll .student-poll-options .custom-radio .custom-control-label {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+  cursor: pointer;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-label {
+  position: relative;
+  font-size: 14px !important;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-radio + .custom-control-label:before {
+  content: "";
+  background: #fff;
+  border: 2px solid #ddd;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  font-size: 17px;
+  padding: 0px;
+  margin-right: 10px;
+  text-align: center;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-radio + .custom-control-label:before {
+  border-radius: 50%;
+}
+.student-poll .student-poll-options .custom-radio .custom-control-radio:checked + .custom-control-label:before {
+  content: "\f26a";
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  color: #37AB4B;
+}/*# sourceMappingURL=studentPoll.css.map */
