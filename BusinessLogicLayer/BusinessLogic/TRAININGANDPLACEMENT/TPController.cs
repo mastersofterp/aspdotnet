@@ -11814,6 +11814,60 @@ namespace IITMS
                 }
 
 
+                //----21-12-2023 --Get Exam Details----
+                public DataSet BindExamDetails(int idno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_TP_EXAMDETAILS_BINDLV", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.GetJobLoc-> " + ex.ToString());
+
+                    }
+                    return ds;
+                }
+
+                public int InsExamDetails(TPTraining objTPT, int org, int id, int IDNO)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_ID", id);
+                        objParams[1] = new SqlParameter("@P_IDNO", IDNO);
+                        objParams[2] = new SqlParameter("@P_GAP", objTPT.GAP);
+                        objParams[3] = new SqlParameter("@P_ISGAP", objTPT.IS_GAP);
+                        objParams[4] = new SqlParameter("@P_OrganizationId", org);
+                        objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[5].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_ACD_EXAMDETAILS", objParams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else if (Convert.ToInt32(ret) == 2)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        else if (Convert.ToInt32(ret) == 1)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.AddJobLoc-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
             }
 
         }

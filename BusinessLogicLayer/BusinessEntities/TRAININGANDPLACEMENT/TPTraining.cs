@@ -1258,6 +1258,23 @@ namespace IITMS
 
                     #endregion
 
+                    #region Exam Details
+                    int _GAP = 0;
+                    private System.Nullable<bool> _IS_GAP;
+
+                    public int GAP
+                    {
+                        get { return _GAP; }
+                        set { _GAP = value; }
+                    }
+
+                    public System.Nullable<bool> IS_GAP
+                    {
+                        get { return _IS_GAP; }
+                        set { _IS_GAP = value; }
+                    }
+                    #endregion
+
                     #region
                     string _ReleventDocument8 = string.Empty;
                     int _IsBlob1 = 0;

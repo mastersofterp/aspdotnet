@@ -157,36 +157,39 @@
                                             <a class="nav-link active" data-toggle="tab" href="#tab_0">Basic Details </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#tab_1">Exam Details </a>
+                                        </li>
+                                        <li class="nav-item">
                                    <%--        <asp:LinkButton ID="btnlinkfirsttab" runat="server"  OnClick="btnlinkfirsttab_Click" Text="Work Experience"  ></asp:LinkButton>--%>
-                                            <a class="nav-link" data-toggle="tab" href="#tab_1" onclick="fireServerButtonEvent()">Work Experience </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_2" onclick="fireServerButtonEvent()">Work Experience </a>
                                         <asp:HiddenField id="hdWorkExp" runat="server" Value=0/>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_2">Technical Skills </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_3">Technical Skills </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_3">Projects </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_4">Projects </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_4">Certifications </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_5">Certifications </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_5">Languages </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_6">Languages </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_6">Awards & Recognitions </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_7">Awards & Recognitions </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_7">Competitions </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_8">Competitions </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_8">Training & Workshop </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_9">Training & Workshop </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_9">Test Scores </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_10">Test Scores </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tab_10">Build Resume </a>
+                                            <a class="nav-link" data-toggle="tab" href="#tab_11">Build Resume </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -516,7 +519,181 @@
                                             </div>
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_1">
+                                         <div class="tab-pane fade" id="tab_1">
+                                            <div class="col-12 mt-3">
+                                                <div class="12">
+                                                     <div class="box-title">
+                                                            <h5>Exam Details</h5>
+                                                        </div>
+                                                <div class="row">
+                                                     <div class="col-12 mt-12">
+                                                <div class="row">
+                                                    <div class="col-12 mt-3">
+                                                        <div class="sub-heading">
+                                                            <h5>Arrear Details</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>History of Arrear :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblHArrear" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>Current Arrear :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblCArrear" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-12 mt-3">
+                                                        <div class="sub-heading">
+                                                            <h5>Gap in Education Details</h5>
+                                                        </div>
+                                                    </div>
+                                                   <%-- <div class="col-lg-12 col-md-12 col-12">
+                                                        <ul class="list-group list-group-unbordered">
+                                                            <li class="list-group-item"><b>SGPA :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblSGPA" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                            <li class="list-group-item"><b>CGPA :</b>
+                                                                <a class="sub-label">
+                                                                    <asp:Label ID="lblCGPA" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>--%>
+                                                       <asp:Panel ID="pnlExamGPA" runat="server" Width="80%">
+                                                                <asp:ListView ID="lvExamGPA" runat="server">
+                                                                    <LayoutTemplate>
+                                                                        <div class="vista-grid">
+                                                                            <div class="titlebar">
+                                                                             <b>Semester wise SGPA CGPA Details</b>
+                                                                            </div>
+                                                                            <%--<br />--%>
+                                                                            <table class="table table-hover table-bordered">
+                                                                                <thead>
+                                                                                    <tr class="bg-light-blue">
+                                                                                          <th>Semester</th>
+                                                                                          <th>SGPA</th>
+                                                                                          <th>CGPA</th>
+                                                                                         <%-- <th>GAP</th>--%>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </LayoutTemplate>
+                                                                    <ItemTemplate>
+                                                                        <tr>
+                                                                            <td id="qualifyno" runat="server">
+                                                                                <asp:Label runat="server" ID="lblSem" Text='<%# Eval("SEMESTERNO") %>'></asp:Label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <asp:Label runat="server" ID="lblSGPA" Text='<%# Eval("SGPA") %>'></asp:Label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <asp:Label runat="server" ID="lblCGPA" Text='<%# Eval("CGPA") %>'></asp:Label>
+                                                                            </td>
+                                                                            <%--<td>
+                                                                                <asp:Label runat="server" ID="Label2" Text='<%# Eval("GAP") %>'></asp:Label>
+                                                                            </td>--%>
+                                                                        </tr>
+                                                                    </ItemTemplate>
+                                                                </asp:ListView>
+                                                            </asp:Panel>
+                                                    <div class="form-group col-md-12 col-12 mt-3">
+                                                    <div class="row">
+                                                    <div class="form-group col-md-4 col-12">
+                                                        <div class="sub-heading" >
+                                                            <%--<sup>*</sup>--%>
+                                                           <h7><b>Gap in Education </b></h7> 
+                                                        </div>
+                                                        <asp:RadioButtonList ID="rbGap" runat="server" OnSelectedIndexChanged="rbGap_SelectedIndexChanged" AutoPostBack="true">
+                                                             <asp:ListItem Value="1">Yes</asp:ListItem>
+                                                             <asp:ListItem Selected="True" Value="2">No</asp:ListItem>
+                                                        </asp:RadioButtonList>
+                                                    </div>
+                                                    <div class="col-md-8 col-12 mt-2" runat="server" id="divGap" visible="false">
+                                                          <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <label>Gap Years </label>
+                                                          </div>
+                                                          <div class="col-md-6 col-12">
+                                                              <asp:TextBox ID="txtGapYear" runat="server" ToolTip="Enter No of Gap Years" MaxLength="2" onkeypress="return CheckNumeric(event,this);" CssClass="form-control" />
+                                                              <asp:RequiredFieldValidator ID="rfvGapYears" runat="server" ControlToValidate="txtGapYear" ValidationGroup="Exam"
+                                                              ErrorMessage="Please Enter Gap Year " SetFocusOnError="true" Display="None"></asp:RequiredFieldValidator>
+                                                              <asp:HiddenField ID="hdnGapID" runat="server" Visible="false"/>
+                                                          </div>
+                                                     </div>
+                                                     </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                </div>
+                                                    </div>
+                                            </div>
+
+                                            <div class="col-12 btn-footer" runat="server" id="divGapBtn" visible="false">
+                                                <asp:LinkButton ID="btnSubmitExamDetails" runat="server" CssClass="btn btn-outline-info" OnClick="btnSubmitExamDetails_Click" OnClientClick="return validateProficiency();" ValidationGroup="Exam">Submit</asp:LinkButton>
+                                                <asp:LinkButton ID="btnCancelExamDetails" runat="server" CssClass="btn btn-outline-danger" OnClick="btnCancelExamDetails_Click">Cancel</asp:LinkButton>
+                                                <asp:ValidationSummary ID="ValidationSummary7" runat="server" ValidationGroup="Exam"
+                                                        ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                              
+                                                  <asp:ListView ID="ListView1" runat="server">
+                                                <LayoutTemplate>
+                                                    <div class="sub-heading">
+                                                        <h5>Technical Skill List</h5>
+                                                    </div>
+
+                                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                        <thead class="bg-light-blue">
+                                                           <tr>
+                                                            <th>Edit</th>
+                                                            <th>Skill Name</th>
+                                                            <th>Proficiency</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                      
+                                                        <td>
+                                                                <asp:ImageButton ID="LinkButton2" runat="server" ImageUrl="~/Images/edit.png" CssClass="fa fa-pencil-square-o" ToolTip="Edit Record" CommandArgument='<%# Eval("ID") %>' OnClick="LinkButton2_Click"></asp:ImageButton></td>
+                                                            <td> <%# Eval("SKILLS")%></td>
+                                                            <td> <%# Eval("PROFICIENCY")%></td>
+
+                                                    </tr>
+                                                </ItemTemplate>
+                                                <AlternatingItemTemplate>
+                                                    <tr>
+                                                       <td>
+                                                                 <asp:ImageButton ID="LinkButton2" runat="server" ImageUrl="~/Images/edit.png" CssClass="fa fa-pencil-square-o" ToolTip="Edit Record" CommandArgument='<%# Eval("ID") %>' OnClick="LinkButton2_Click"></asp:ImageButton></td>
+                                                            <td> <%# Eval("SKILLS")%></td>
+                                                            <td> <%# Eval("PROFICIENCY")%></td>
+
+                                                    </tr>
+                                                </AlternatingItemTemplate>
+                                            </asp:ListView>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="tab_2">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -936,7 +1113,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_2">
+                                        <div class="tab-pane fade" id="tab_3">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -1034,7 +1211,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_3">
+                                        <div class="tab-pane fade" id="tab_4">
                                             <div class="col-12 mt-3">
                                                   <div class="12">
                                                      <div class="sub-heading">
@@ -1241,7 +1418,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_4">
+                                        <div class="tab-pane fade" id="tab_5">
                                             <div class="col-12 mt-3">
                                                  <div class="12">
                                                      <div class="sub-heading">
@@ -1435,7 +1612,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_5">
+                                        <div class="tab-pane fade" id="tab_6">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -1547,7 +1724,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_6">
+                                        <div class="tab-pane fade" id="tab_7">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -1697,7 +1874,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_7">
+                                        <div class="tab-pane fade" id="tab_8">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -1914,7 +2091,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_8">
+                                        <div class="tab-pane fade" id="tab_9">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -2104,7 +2281,7 @@
 
                                         </div>
 
-                                        <div class="tab-pane fade" id="tab_9">
+                                        <div class="tab-pane fade" id="tab_10">
                                             <div class="col-12 mt-3">
                                                 <div class="12">
                                                      <div class="sub-heading">
@@ -2271,7 +2448,7 @@
                                              </div>
                                        
                                         
-                                         <div class="tab-pane fade" id="tab_10">
+                                         <div class="tab-pane fade" id="tab_11">
                                             <div class="col-12">
                                         <div class="12">
                                                      <div class="sub-heading">
@@ -2502,7 +2679,26 @@
             }
         }
     </script>
-   
+<script type="text/javascript">
+ function CheckNumeric(event, obj) {
+ var k = (window.event) ? event.keyCode : event.which;
+ //alert(k);
+ if (k == 8 || k == 9 || k == 43 || k == 95 || k == 0) {
+     obj.style.backgroundColor = "White";
+     return true;
+ }
+ if (k > 45 && k < 58) {
+     obj.style.backgroundColor = "White";
+     return true;
+
+ }
+ else {
+     alert('Please Enter numeric Value');
+     obj.focus();
+ }
+    return false;
+ }
+ </script>   
 
 </asp:Content>
 
