@@ -120,17 +120,23 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     {
         try
         {
-            if (lvCompAttach.Items.Count > 0)
-            {
+            //if (FileUpload1.HasFile)
+            //{
+            //    if (FileUpload1.FileContent.Length >= 1024 * 10000)
+            //    {
 
-            }
-            else
-            {
-                objCommon.DisplayMessage("Please select a file to attach.", this);
-                // Clear();
-                return;
-            }
-
+            //        MessageBox("File Size Should Not Be Greater Than 10 Mb");
+            //        FileUpload1.Dispose();
+            //        FileUpload1.Focus();
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    objCommon.DisplayMessage("Please select a file to attach.", this);
+            //    return;
+            //}
+           
 
             if (lblBlobConnectiontring.Text == "")
             {
@@ -741,12 +747,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
         string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
-        if (string.Equals(selectedDocumentTypeName, "Sale Deed", StringComparison.OrdinalIgnoreCase) ||
-    string.Equals(selectedDocumentTypeName, "Settlement Deed", StringComparison.OrdinalIgnoreCase) ||
-    string.Equals(selectedDocumentTypeName, "Sale Agreement", StringComparison.OrdinalIgnoreCase) ||
-    string.Equals(selectedDocumentTypeName, "Gift Deed", StringComparison.OrdinalIgnoreCase) ||
-    string.Equals(selectedDocumentTypeName, "Partition Deed", StringComparison.OrdinalIgnoreCase) ||
-    string.Equals(selectedDocumentTypeName, "Power Of Attorney", StringComparison.OrdinalIgnoreCase))
+        if (selectedDocumentTypeName == "Sale Deed" || selectedDocumentTypeName == "Settlement Deed" || selectedDocumentTypeName == "Sale Agreement" || selectedDocumentTypeName == "Gift Deed" || selectedDocumentTypeName == "Partition Deed" || selectedDocumentTypeName == "Power Of Attorney")
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -768,10 +769,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        else if (string.Equals(selectedDocumentTypeName, "Patta", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Chitta", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Adangal", StringComparison.OrdinalIgnoreCase) ||
-       string.Equals(selectedDocumentTypeName, "Property Tax Receipt", StringComparison.OrdinalIgnoreCase))
+        else if (selectedDocumentTypeName == "Patta" || selectedDocumentTypeName == "Chitta" || selectedDocumentTypeName == "Adangal" || selectedDocumentTypeName == "Property Tax Receipt" )
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -793,7 +791,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        else if (string.Equals(selectedDocumentTypeName, "Encumbarence Certificate", StringComparison.OrdinalIgnoreCase))
+        else if (selectedDocumentTypeName == "Encumbarence")
         {
             divEcNo.Visible = true;
             divFDate.Visible = true;
@@ -892,15 +890,6 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 objDocType.FILENAME = filename;
                 objDocType.FILEPTH = FileUpload1.FileName;
 
-                int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "'"));
-
-
-                DataSet dsPURPOSE = new DataSet();
-
-                dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "EXTENTION_DOCSCAN", "EXTENTION_DOCSCAN=1", "");
-
-                if (count != 0)
-                {
                     string filePath = file_path + "DOCUMENTANDSCANNING" + fileName;
 
 
@@ -930,7 +919,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                             HttpPostedFile file = FileUpload1.PostedFile;
                             FileUpload1.SaveAs(filePath);
 
-                            objDocType.FILEPTH = file_path + "DOCUMENTANDSCANNING" + fileName;
+                              objDocType.FILEPTH =  file_path + "DOCUMENTANDSCANNING" + fileName;
 
                         }
 
@@ -1271,15 +1260,14 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 dt = ((DataTable)Session["Attachments"]);
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
-                // this.BindListView_Attachments(dt);
-                if (dt.Rows.Count > 0)
+                if (dt.Rows.Count == 0)
                 {
-                    this.BindListView_Attachments(dt);
+                    lvCompAttach.DataSource = string.Empty;
+                    lvCompAttach.DataBind();
                 }
                 else
                 {
-                    lvCompAttach.DataSource = null;
-                    lvCompAttach.DataBind();
+                    this.BindListView_Attachments(dt);
                 }
             }
 
