@@ -2439,7 +2439,7 @@
                     return false;
                 }
 
-                var ddlSemester = $("[id*=ctl00_ContentPlaceHolder1_ddlToSemester]").val(); //select2 - ctl00_ContentPlaceHolder1_ddlToSemester - container
+                var ddlSemester = $("[id*=ctl00_ContentPlaceHolder1_ddlSemester]").val(); //select2 - ctl00_ContentPlaceHolder1_ddlToSemester - container
                 if (ddlSemester == 0) {
                     alert('Please Select  Offered To Semester', 'Warning!');
                     $(ddlSemester).focus();
