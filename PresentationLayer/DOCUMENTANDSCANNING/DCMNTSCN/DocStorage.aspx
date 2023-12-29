@@ -289,8 +289,8 @@
                                 <div>
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divAttach" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup></sup>
-                                            <label>Attach</label>
+                                            <sup>*</sup><label>Attach</label>
+                              
                                         </div>
                                         <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="14" />
                                         <asp:Label ID="lblFileName" runat="server" Text="" Visible="false"></asp:Label>
@@ -468,7 +468,7 @@
                                             <%# Eval("SURVEYNO")%>
                                         </td>
                                         <td>
-                                            <%# Eval("FILE_NAME")%>
+                                            <%# Eval("FILE_PATH")%>
                                         </td>
                                        
                                              <td style="text-align: center" id="tdBlob1" runat="server" visible="false">

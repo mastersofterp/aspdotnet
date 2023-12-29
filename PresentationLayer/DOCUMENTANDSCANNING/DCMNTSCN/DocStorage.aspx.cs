@@ -110,22 +110,22 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     {
         try
         {
-            if (FileUpload1.HasFile)
-            {
-                if (FileUpload1.FileContent.Length >= 1024 * 10000)
-                {
+            //if (FileUpload1.HasFile)
+            //{
+            //    if (FileUpload1.FileContent.Length >= 1024 * 10000)
+            //    {
 
-                    MessageBox("File Size Should Not Be Greater Than 10 Mb");
-                    FileUpload1.Dispose();
-                    FileUpload1.Focus();
-                    return;
-                }
-                else
-                {
-                    objCommon.DisplayMessage("Please select a file to attach.", this);
-                }
-               
-            }
+            //        MessageBox("File Size Should Not Be Greater Than 10 Mb");
+            //        FileUpload1.Dispose();
+            //        FileUpload1.Focus();
+            //        return;
+            //    }
+            //}
+            //else
+            //{
+            //    objCommon.DisplayMessage("Please select a file to attach.", this);
+            //    return;
+            //}
            
 
             if (lblBlobConnectiontring.Text == "")
@@ -529,7 +529,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
     protected void ddldoctype_SelectedIndexChanged(object sender, EventArgs e)
     {
         BindListView(Convert.ToInt32(ddldoctype.SelectedValue));
-        if (Convert.ToInt32(ddldoctype.SelectedValue) == 1 || Convert.ToInt32(ddldoctype.SelectedValue) == 2 || Convert.ToInt32(ddldoctype.SelectedValue) == 3 || Convert.ToInt32(ddldoctype.SelectedValue) == 4 || Convert.ToInt32(ddldoctype.SelectedValue) == 5)
+        string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
+        if (selectedDocumentTypeName == "Sale Deed" || selectedDocumentTypeName == "Settlement Deed" || selectedDocumentTypeName == "Sale Agreement" || selectedDocumentTypeName == "Gift Deed" || selectedDocumentTypeName == "Partition Deed" || selectedDocumentTypeName == "Power Of Attorney")
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -551,7 +552,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        else if (Convert.ToInt32(ddldoctype.SelectedValue) == 7 || Convert.ToInt32(ddldoctype.SelectedValue) == 8 || Convert.ToInt32(ddldoctype.SelectedValue) == 9 || Convert.ToInt32(ddldoctype.SelectedValue) == 10)
+        else if (selectedDocumentTypeName == "Patta" || selectedDocumentTypeName == "Chitta" || selectedDocumentTypeName == "Adangal" || selectedDocumentTypeName == "Property Tax Receipt" )
         {
             Divdate.Visible = true;
             divDocNo.Visible = true;
@@ -573,7 +574,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             ClearData();
             return;
         }
-        else if (Convert.ToInt32(ddldoctype.SelectedValue) == 11)
+        else if (selectedDocumentTypeName == "Encumbarence")
         {
             divEcNo.Visible = true;
             divFDate.Visible = true;
@@ -639,13 +640,13 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             if (FileUpload1.HasFile)
             {
 
-                string DOCFOLDER = file_path + "DOCUMENTANDSCANNING\\upload_files\\Document";
+                string DOCFOLDER = file_path + "DOCUMENTANDSCANNING";
 
-                if (!System.IO.Directory.Exists(DOCFOLDER))
-                {
-                    System.IO.Directory.CreateDirectory(DOCFOLDER);
+                //if (!System.IO.Directory.Exists(DOCFOLDER))
+                //{
+                //    System.IO.Directory.CreateDirectory(DOCFOLDER);
 
-                }
+                //}
                 string fileName = System.Guid.NewGuid().ToString() + FileUpload1.FileName.Substring(FileUpload1.FileName.IndexOf('.'));
 
                 string contentType = contentType = FileUpload1.PostedFile.ContentType;
@@ -668,7 +669,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 objDocType.FILENAME = filename;
                 objDocType.FILEPTH = FileUpload1.FileName;
 
-                    string filePath = file_path + "DOCUMENTANDSCANNING\\upload_files\\Document\\" + fileName;
+                    string filePath = file_path + "DOCUMENTANDSCANNING" + fileName;
 
 
                     if (FileUpload1.PostedFile.ContentLength <= 1024 * 10000)
@@ -697,7 +698,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                             HttpPostedFile file = FileUpload1.PostedFile;
                             FileUpload1.SaveAs(filePath);
 
-                              objDocType.FILEPTH =  file_path + "DOCUMENTANDSCANNING\\upload_files\\Document\\" + fileName;
+                              objDocType.FILEPTH =  file_path + "DOCUMENTANDSCANNING" + fileName;
 
                         }
 
@@ -931,14 +932,22 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 dt = ((DataTable)Session["Attachments"]);
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
-                this.BindListView_Attachments(dt);
+                if (dt.Rows.Count == 0)
+                {
+                    lvCompAttach.DataSource = string.Empty;
+                    lvCompAttach.DataBind();
+                }
+                else
+                {
+                    this.BindListView_Attachments(dt);
+                }
             }
 
             //to permanently delete from database in case of Edit
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
 
-                string count = objCommon.LookUp("ADMN_DC_DOCUMENT_UPLOAD", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                string count = objCommon.LookUp("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
                 if (count != "")
                 {
                     int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);

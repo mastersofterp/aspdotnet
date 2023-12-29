@@ -57,7 +57,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[19];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_DOC_ID", objDocType.DOCDIDDATA );
                         objParams[1] = new SqlParameter("@P_DOC_TYPE",objDocType.DOCTYPE );
                         if (objDocType.DOCDATE == DateTime.MinValue)
@@ -101,8 +101,17 @@ namespace IITMS
                           objParams[16] = new SqlParameter("@P_ATTACHTABLE", objDocType.AttachTable);
                           objParams[17] = new SqlParameter("@P_ISBLOB", objDocType.ISBLOB);
                           objParams[18] = new SqlParameter("@P_OTHER_DOCTYPE", objDocType.OTHERDOCTYPE);
+                          objParams[19] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                          objParams[19].Direction = ParameterDirection.Output;
                           object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ADMN_DC_ASSEST_DOCUMENT_STORAGE_INSERT", objParams, true);
-                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                          if (Convert.ToInt32(ret) == -99)
+                              retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                          else if (Convert.ToInt32(ret) == 2)
+                              retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                          else if (Convert.ToInt32(ret) == 1)
+                              retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                          else
+                              retStatus = Convert.ToInt32(CustomStatus.RecordExist);
                     }
                     catch (Exception ex)
                     {
