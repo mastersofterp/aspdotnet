@@ -918,10 +918,10 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
         #endregion
 
         #region SignatureHead
-       //   string[] FooterHead = { "Prepared by", "Head of the Department", "Accounts Section", "Principal", "Secretary", "Treasurer" };    // 24/03/2023 by shabina for crescent requirement.
+       //   string[] FooterHead = { "Prepared by", "Head of the Department", "Accounts Section", "Principal", "Secretary", "Treasurer" };    // 24/03/2023 by   for crescent requirement.
         string[] FooterHead = { "Prepared by", "Checked by", "Approved by" };    /// Modified on 24/03/2023 
         GridViewRow HeaderGridRow12 = new GridViewRow(12, 0, DataControlRowType.Header, DataControlRowState.Insert);
-        //  for (int i = 0; i < 6; i++)                  //-----------// 24/03/2023 by shabi------
+        //  for (int i = 0; i < 6; i++)                  //-----------// 24/03/2023 by  ------
         for (int i = 0; i < 3; i++)             //----modified       24/03/2023
         {
             TableCell HeaderCell11 = new TableCell();
@@ -936,7 +936,7 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
             gvBudgetReport.Controls[0].Controls.AddAt(rows + (4 + count), HeaderGridRow12);
         }
         GridViewRow HeaderGridRow11 = new GridViewRow(13, 0, DataControlRowType.Header, DataControlRowState.Insert);
-        // for (int i = 0; i < 5; i++)   //=--// 24/03/2023 by shabina
+        // for (int i = 0; i < 5; i++)   //=--// 24/03/2023 by  
         for (int i = 0; i < 3; i++)    //----Modified 
         {
             TableCell HeaderCell11 = new TableCell();
@@ -1595,6 +1595,7 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
                     HiddenField hdnItemTaxableAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTaxableAmt");
                     HiddenField hdnItemTaxAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTaxAmt");
                     HiddenField hdnItemTotalAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTotalAmt");
+                    HiddenField hdnIsTaxInclusive = grdItemList.Rows[i].FindControl("hdnIsTaxInclusive") as HiddenField;
 
                     objPIEntry.ITEM_REMARK = hdnOthItemRemark.Value;
                     objPIEntry.TECHSPECH = hdnTechSpec.Value;
@@ -1619,6 +1620,8 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
                     objPIEntry.QUOTNO = lstQtNo.SelectedValue;
                     objPIEntry.MDNO = Convert.ToInt32(Session["strdeptcode"].ToString());
                     objPIEntry.PNO = Convert.ToInt32(lstVendor.SelectedValue);
+
+                    objPIEntry.IsTaxInclusive = hdnIsTaxInclusive.Value == "" ? 0 : Convert.ToInt32(hdnIsTaxInclusive.Value);    //28122023
 
                     
 
@@ -1938,13 +1941,17 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
         {
             TextBox txtTaxAmt = (TextBox)grdItemList.Rows[i].FindControl("txtTaxAmt");
             TextBox txtTotalAmt = (TextBox)grdItemList.Rows[i].FindControl("txtTotalAmt");
+            TextBox txtTaxableAmt = grdItemList.Rows[i].FindControl("txtTaxableAmt") as TextBox;  //20/12/2023
 
             HiddenField hdnItemTaxAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTaxAmt");
             HiddenField hdnItemTotalAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTotalAmt");
+            HiddenField hdnItemTaxableAmt = grdItemList.Rows[i].FindControl("hdnItemTaxableAmt") as HiddenField;    //20/12/2023
+            HiddenField hdnIsTaxInclusive = grdItemList.Rows[i].FindControl("hdnIsTaxInclusive") as HiddenField;
 
             txtTaxAmt.Text = hdnItemTaxAmt.Value;
             txtTotalAmt.Text = hdnItemTotalAmt.Value;
-
+            txtTaxableAmt.Text = hdnItemTaxableAmt.Value;        //20/12/2023
+            hdnIsTaxInclusive.Value = hdnIsTaxInclusive.Value;
         }
         //if (ViewState["TaxEdit"] == null)
         // {

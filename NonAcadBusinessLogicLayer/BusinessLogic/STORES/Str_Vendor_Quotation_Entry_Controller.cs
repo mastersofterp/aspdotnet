@@ -128,7 +128,7 @@ namespace IITMS
                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                        SqlParameter[] objParams = null;
                        //Add New BUDGETHEAD
-                       objParams = new SqlParameter[18];
+                       objParams = new SqlParameter[19];
                        
                        objParams[0] = new SqlParameter("@P_QUOTNO", objPItem.QUOTNO);
                        objParams[1] = new SqlParameter("@P_ITEM_NO", objPItem.ITEM_NO);                      
@@ -147,13 +147,14 @@ namespace IITMS
                        objParams[13] = new SqlParameter("@P_TAX_AMT", objPItem.TAX_AMT);
                        objParams[14] = new SqlParameter("@P_ITEM_REMARK", objPItem.ITEM_REMARK);
                        objParams[15] = new SqlParameter("@P_QUALITY_QTY_SPEC", objPItem.QUALITY_QTY_SPEC);
+                       objParams[16] = new SqlParameter("@P_IsTaxInclusive", objPItem.IsTaxInclusive);
                        if (objPItem.TECHSPECH == null)
                        {
                            objPItem.TECHSPECH = "-";
                        }
-                       objParams[16] = new SqlParameter("@P_TECHSPECH", objPItem.TECHSPECH);   
-                       objParams[17] = new SqlParameter("@P_PINO", SqlDbType.Int);
-                       objParams[17].Direction = ParameterDirection.Output;
+                       objParams[17] = new SqlParameter("@P_TECHSPECH", objPItem.TECHSPECH);   
+                       objParams[18] = new SqlParameter("@P_PINO", SqlDbType.Int);
+                       objParams[18].Direction = ParameterDirection.Output;
 
                        retStatus = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_STR_PARTYITEMENTRY_INSERT", objParams, true));
 
@@ -462,7 +463,8 @@ namespace IITMS
                        new SqlParameter("@P_ITEM_REMARK", objPItem.ITEM_REMARK),
                        new SqlParameter("@P_QUALITY_QTY_SPEC", objPItem.QUALITY_QTY_SPEC),
                        new SqlParameter("@P_TECHSPECH", objPItem.TECHSPECH),
-                       new SqlParameter("@P_TAX_AMT", objPItem.TAX_AMT)
+                       new SqlParameter("@P_TAX_AMT", objPItem.TAX_AMT),
+                       new SqlParameter("@P_IsTaxInclusive", objPItem.IsTaxInclusive)         //28122023
                        
                    };
                        retStatus = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_STR_PARTYITEMENTRY_UPDATE", objParams, true));
