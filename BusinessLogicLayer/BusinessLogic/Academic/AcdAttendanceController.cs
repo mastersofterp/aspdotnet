@@ -217,6 +217,101 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        /// <summary>
+        /// Added By Rishabh on 29122023
+        /// </summary>
+        /// <param name="objAtt"></param>
+        /// <returns></returns>
+        public DataSet InsUpdAttendanceConfig(Attendance.AttendanceConfig objAtt)
+        {
+            DataSet ds = null;
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                //Add
+                objParams = new SqlParameter[13];
+                objParams[0] = new SqlParameter("@P_SESSION_ID", objAtt.SessionId);
+                objParams[1] = new SqlParameter("@P_COLLEGE_ID", objAtt.College_Ids);
+                objParams[2] = new SqlParameter("@P_DEGREENO", objAtt.DegreeNos);
+                objParams[3] = new SqlParameter("@P_SCHEMETYPE", objAtt.SchemeType);
+                objParams[4] = new SqlParameter("@P_SEMESTERNO", objAtt.SemesterNos);
+                objParams[5] = new SqlParameter("@P_ATT_STARTDATE", objAtt.StartDate);
+                objParams[6] = new SqlParameter("@P_ATT_ENDDATE", objAtt.EndDate);
+                objParams[7] = new SqlParameter("@P_ATT_LOCKDAY", objAtt.AttLockDays);
+                objParams[8] = new SqlParameter("@P_SMS_FACILITY", objAtt.SMSFacility);
+                objParams[9] = new SqlParameter("@P_EMAIL_FACILITY", objAtt.EmailFacility);
+                objParams[10] = new SqlParameter("@P_TEACH", objAtt.TeachingPlan);
+                objParams[11] = new SqlParameter("@P_ACTIVE", objAtt.ActiveStatus);
+                objParams[12] = new SqlParameter("@P_ORGANIZATIONID", objAtt.OrgId);
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_ATT_CONFIG_INSERT_UPDATE", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.InsUpdAttendanceConfig-> " + ex.ToString());
+            }
+            return ds;
+        }
+
+        /// <summary>
+        /// Added By Rishabh on 29122023
+        /// </summary>
+        /// <param name="ua_type"></param>
+        /// <param name="colgids"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public DataSet GetAttendanceConfigData(int ua_type, string colgids, int flag)
+        {
+            DataSet ds = null;
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[3];
+                objParams[0] = new SqlParameter("@UA_TYPE", ua_type);
+                objParams[1] = new SqlParameter("@P_COLLEGE_IDS", colgids);
+                objParams[2] = new SqlParameter("@P_FLAG", flag);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ATTENDANCE_CONFIGDATA", objParams);
+            }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.GetSubjectWiseAttPer-> " + ex.ToString());
+            }
+            return ds;
+        }
+
+        /// <summary>
+        /// Added By Rishabh on 29122023
+        /// </summary>
+        /// <param name="ua_no"></param>
+        /// <param name="sessionid"></param>
+        /// <param name="flag"></param>
+        /// <param name="CollegeIds"></param>
+        /// <returns></returns>
+        public DataSet BindMastersAttendanceConfig(int ua_no, int sessionid, int flag, string CollegeIds)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[4];
+                objParams[0] = new SqlParameter("@P_UA_NO", ua_no);
+                objParams[1] = new SqlParameter("@P_SESSIONID", sessionid);
+                objParams[2] = new SqlParameter("@P_FLAG", flag);
+                objParams[3] = new SqlParameter("@P_COLLEGE_IDS", CollegeIds);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_ALL_MASTERS_DATA", objParams);
+            }
+            catch (Exception ex)
+            {
+                return ds;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.BindMastersAttendanceConfig-> " + ex.ToString());
+            }
+            return ds;
+        }
+
         #endregion
 
         #region BulkCourse Teacher allotment

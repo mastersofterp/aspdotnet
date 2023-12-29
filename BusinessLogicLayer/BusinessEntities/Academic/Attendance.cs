@@ -30,7 +30,7 @@ namespace IITMS
                 private int _classType = 0;
                 private string _collegeCode = string.Empty;
                 //Added by Nikhil Vinod Lambe on 21022020
-                
+
                 private DateTime _fromDate = DateTime.MinValue;
                 private DateTime _toDate = DateTime.MinValue;
                 private int _sectionno = 0;
@@ -41,8 +41,8 @@ namespace IITMS
                 private int _branchno = 0;
                 private string _percentageFrom = string.Empty;
                 private string _percentageTo = string.Empty;
-              #endregion
-              
+                #endregion
+
                 #region Public Property Fields
 
                 public int AttNo
@@ -140,7 +140,7 @@ namespace IITMS
                 }
 
                 //Added by Nikhil Vinod Lambe on 21022020
-               
+
                 public DateTime FromDate
                 {
                     get { return _fromDate; }
@@ -196,40 +196,94 @@ namespace IITMS
                 private int _Flag;
                 private int _StatusNo;
                 public string Status
-                    {
+                {
                     get
-                        {
+                    {
                         return _Status;
-                        }
-                    set
-                        {
-                        _Status = value;
-                        }
                     }
+                    set
+                    {
+                        _Status = value;
+                    }
+                }
 
                 public int Flag
-                    {
+                {
                     get
-                        {
+                    {
                         return _Flag;
-                        }
-                    set
-                        {
-                        _Flag = value;
-                        }
                     }
+                    set
+                    {
+                        _Flag = value;
+                    }
+                }
 
                 public int StatusNo
-                    {
+                {
                     get
-                        {
+                    {
                         return _StatusNo;
-                        }
-                    set
-                        {
-                        _StatusNo = value;
-                        }
                     }
+                    set
+                    {
+                        _StatusNo = value;
+                    }
+                }
+
+                /// <summary>
+                /// Added By Rishabh B. 29122023
+                /// </summary>
+                public class BindCollege
+                {
+                    public string College_Name { get; set; }
+                    public int College_Id { get; set; }
+                }
+
+                /// <summary>
+                /// Added By Rishabh B. 29122023
+                /// </summary>
+                public class BindDegree
+                {
+                    public int DegreeNo { get; set; }
+                    public string Degree_Name { get; set; }
+                }
+
+                /// <summary>
+                /// Added By Rishabh B. 29122023
+                /// </summary>
+                public class AttendanceConfig
+                {
+                    public int SessionId { get; set; }
+                    public string College_Ids { get; set; }
+                    public string DegreeNos { get; set; }
+                    public int SchemeType { get; set; }
+                    public string SemesterNos { get; set; }
+                    public DateTime StartDate { get; set; }
+                    public DateTime EndDate { get; set; }
+                    public string AttLockDays { get; set; }
+                    public bool SMSFacility { get; set; }
+                    public bool EmailFacility { get; set; }
+                    public bool TeachingPlan { get; set; }
+                    public bool ActiveStatus { get; set; }
+                    public int OrgId { get; set; }
+
+                    public string SessionName { get; set; }
+                    public string CollegeName { get; set; }
+                    public string SchemetypeName { get; set; }
+
+
+                    public string StartDateN { get; set; }
+                    public string EndDateN { get; set; }
+                    public string DegreeName { get; set; }
+                    public string SemesterName { get; set; }
+
+                    public string SmsFacility_Str { get; set; }
+                    public string EmailFacility_Str { get; set; }
+                    public string TeachingPlan_Str { get; set; }
+                    public string ActiveStatus_Str { get; set; }
+
+                }
                 #endregion
             }
         }
