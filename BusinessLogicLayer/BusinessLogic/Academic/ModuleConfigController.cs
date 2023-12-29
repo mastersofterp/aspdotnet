@@ -23,20 +23,20 @@ namespace IITMS
                 /// <returns></returns>
                 /// //
                 /// 
-                /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) 
+                /// Modified By Vinay Mishra on 01/08/2023(New Flag Course Related) , Rishabh B. (Added student attendance dashboard flag)
                 public int SaveModuleConfiguration(ModuleConfig objConfig, int UANO, string IPAddress, string Mac_Address, bool trisem, bool chkoutsatnding,
                 bool sempromdemand, bool semadmissionoffbtn, bool semadmbeforesempromotion, bool semadmissionaftersempromotion, bool studReactvationlarefine,
                 bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
                     bool Seatcapacitynewstud, string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory,
                     string UserLoginNos, string CourseLocked, bool DisplayStudLoginDashboard, bool DisplayReceiptInHTMLFormat, bool chkValueAddedCTAllotment,
-                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos)
-                    {
+                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids, string college_ids)
+                {
                     int status = 0;
                     try
-                        {
+                    {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[55];
+                        sqlParams = new SqlParameter[57];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -95,19 +95,21 @@ namespace IITMS
                         sqlParams[51] = new SqlParameter("@P_FEE_HEAD_GROUP", objConfig.FEE_HEAD_GROUP);
                         sqlParams[52] = new SqlParameter("@P_FEE_RECEIPT_COPIES", objConfig.FEE_RECEIPT_COPIES);
                         sqlParams[53] = new SqlParameter("@P_TOSHOW_FEEREC_STUDLOGIN", objConfig.TOSHOW_FEEREC_STUDLOGIN);
-                        sqlParams[54] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[54].Direction = ParameterDirection.Output;
+                        sqlParams[54] = new SqlParameter("@P_SESSION_IDS", session_ids);
+                        sqlParams[55] = new SqlParameter("@P_COLLEGE_IDS", college_ids);
+                        sqlParams[56] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[56].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);
-                        }
+                    }
                     catch (Exception ex)
-                        {
+                    {
                         status = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ModuleConfigController.SaveModuleConfiguration() --> " + ex.Message + " " + ex.StackTrace);
-                        }
-                    return status;
                     }
+                    return status;
+                }
 
 
                 /// <summary>
