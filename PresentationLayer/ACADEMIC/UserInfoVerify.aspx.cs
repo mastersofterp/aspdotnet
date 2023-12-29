@@ -1319,8 +1319,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 byte[] data = webClient.DownloadData(path);
                 byte[] signdata = webClient.DownloadData(SIGNPATH);
 
-                imageaftercompress = ImageCompression.CompressImage(image, 150);
-
+               
                 objstud.IdNo = userno;
 
                 //Photo Conversion
