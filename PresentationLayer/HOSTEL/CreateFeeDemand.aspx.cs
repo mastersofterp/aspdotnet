@@ -137,7 +137,7 @@ public partial class Hostel_CreateFeeDemand : System.Web.UI.Page
                     ShowMessage("Unable to create demand for following students.\\nEnrollment No.: " + response + "\\nStandard fees is not defined for fees criteria applicable to these students.");
                 else
                     ShowMessage("Demand successfully created for all students.");
-
+                    FillStudentList();// addede by Himanshu on [30-12-2023] 
 
                 //this.ShowReport(demandCriteria, "Fee_Demand_Report", "FeeDemandReport_Detailed.rpt");
             }
