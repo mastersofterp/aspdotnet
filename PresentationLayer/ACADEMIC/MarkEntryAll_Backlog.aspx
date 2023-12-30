@@ -149,8 +149,10 @@
 
                                                     <td>
                                                         <%-- <center>--%>
-                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
-                                                        <%--</center>--%>
+                                                        <%--<asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>--%>
+                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("SECTIONNO")+","+Eval("semesterno")+","+Eval("COURSENAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+ 
+                                                                                                               <%--</center>--%>
                                                     </td>
 
 
@@ -166,8 +168,10 @@
                                                     </td>
                                                     <td>
                                                         <%-- <center>--%>
-                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
-                                                        <%--</center>--%>
+                                                        <%--<asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>--%>
+                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("SECTIONNO")+","+Eval("semesterno")+","+Eval("COURSENAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+ 
+                                                                                                               <%--</center>--%>
                                                     </td>
                                                 </tr>
                                             </AlternatingItemTemplate>
