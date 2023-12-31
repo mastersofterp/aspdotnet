@@ -227,7 +227,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
             // objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME", "DISTINCT EXAMNO", " EXAMNAME", "EXAMNO > 0 and PATTERNNO=1", "EXAMNO DESC");
 
-            objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME E, ACD_SCHEME S", "DISTINCT EXAMNO", " EXAMNAME", "EXAMNO > 0 and S.PATTERNNO=E.PATTERNNO AND S.OrganizationId=E.OrganizationId AND S.COLLEGE_CODE=E.COLLEGE_CODE  AND ISNULL(E.EXAMNAME,'')<>'' AND ISNULL(E.ACTIVESTATUS,0)=1", "EXAMNO DESC");
+            //objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME E, ACD_SCHEME S", "DISTINCT EXAMNO", " EXAMNAME", "EXAMNO > 0 and S.PATTERNNO=E.PATTERNNO AND S.OrganizationId=E.OrganizationId AND S.COLLEGE_CODE=E.COLLEGE_CODE  AND ISNULL(E.EXAMNAME,'')<>'' AND ISNULL(E.ACTIVESTATUS,0)=1", "EXAMNO DESC"); // SM
 
             // objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME E, ACD_EXAM_PATTERN P", "DISTINCT EXAMNO", " EXAMNAME", "EXAMNO > 0 and E.PATTERNNO=P.PATTERNNO ", "EXAMNO DESC");
 
@@ -318,24 +318,38 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         //Response.Redirect(Request.Url.ToString());
-        ddlClgname.SelectedIndex = 0;
+
         ddlClgname.Focus();
+
+        //ddlClgname.Items.Clear();
+        ddlClgname.Items.Add("Please Select");
+        ddlClgname.SelectedIndex = 0;
+
         ddlSem.Items.Clear();
         ddlSem.Items.Add("Please Select");
-        ddlSem.SelectedItem.Value = "0";
+        ddlSem.SelectedIndex = 0;
+
         ddlSession.Items.Clear();
         ddlSession.Items.Add("Please Select");
-        ddlSession.SelectedItem.Value = "0";
+        ddlSession.SelectedIndex = 0;
+
+        ddlSection.Items.Clear();
+        ddlSection.Items.Add("Please Select");
+        ddlSection.SelectedIndex = 0;
+
+        ddlExam.Items.Clear();
+        ddlExam.Items.Add("Please Select");
+        ddlExam.SelectedIndex = 0;
+
+        ddlSubExam.Items.Clear();
+        ddlSubExam.Items.Add("Please Select");
+        ddlSubExam.SelectedIndex = 0;
+
         ddlcourse.Items.Clear();
         ddlcourse.Items.Add("Please Select");
-        ddlcourse.SelectedItem.Value = "0";
+        ddlcourse.SelectedIndex = 0;
 
-
-        ddlSection.SelectedIndex = 0;
-        ddlExam.SelectedIndex = 0;
         ddlStudType.SelectedIndex = 0;
-
-
     }
 
     private void ClearAllDropDowns()
@@ -352,11 +366,11 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlSem.Items.Clear();
-        ddlSem.Items.Add(new System.Web.UI.WebControls.ListItem("Please Select", "0"));
-        ddlSection.SelectedIndex = 0;
-        ddlExam.SelectedIndex = 0;
-        ddlStudType.SelectedIndex = 0;
+        //ddlSem.Items.Clear();
+        //ddlSem.Items.Add(new System.Web.UI.WebControls.ListItem("Please Select", "0"));
+        //ddlSection.SelectedIndex = 0;
+        //ddlExam.SelectedIndex = 0;
+        //ddlStudType.SelectedIndex = 0;
 
         //ddlSection.Items.Clear();
         //ddlSection.Items.Add("Please Select");
@@ -364,9 +378,9 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         //ddlExam.Items.Clear();
         //ddlExam.Items.Add("Please Select");
         //ddlExam.SelectedItem.Value = "0";
-        ddlcourse.Items.Clear();
-        ddlcourse.Items.Add("Please Select");
-        ddlcourse.SelectedItem.Value = "0";
+        //ddlcourse.Items.Clear();
+        //ddlcourse.Items.Add("Please Select");
+        //ddlcourse.SelectedItem.Value = "0";
         //ddlStudType.Items.Clear();
         //ddlStudType.Items.Add("Please Select");
         //ddlStudType.SelectedItem.Value = "0";
@@ -377,6 +391,33 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlcourse, "ACD_STUDENT_RESULT R WITH (NOLOCK) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON (R.CCODE = C.CCODE AND R.SCHEMENO = C.SCHEMENO AND R.COURSENO=C.COURSENO)", "DISTINCT CAST(C.COURSENO AS VARCHAR) As COURSENO", "C.CCODE+'-'+COURSE_NAME As COURSENAME", "R.SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(EXAM_REGISTERED,0) = 1 AND ISNULL(CANCEL,0)= 0 AND ISNULL(REGISTERED,0)=1 AND R.SCHEMENO=" + ViewState["schemeno"] + "", "COURSENO");
             //ISNULL(ACCEPTED,0)=1 AND ISNULL(R.DETAIND,0)=0 AND
             ddlSem.Focus();
+        }
+        else
+        {
+            ddlSession.Focus();
+
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add("Please Select");
+            ddlSem.SelectedIndex = 0;
+
+            ddlSection.Items.Clear();
+            ddlSection.Items.Add("Please Select");
+            ddlSection.SelectedIndex = 0;
+
+            ddlcourse.Items.Clear();
+            ddlcourse.Items.Add("Please Select");
+            ddlcourse.SelectedIndex = 0;
+
+            ddlExam.Items.Clear();
+            ddlExam.Items.Add("Please Select");
+            ddlExam.SelectedIndex = 0;
+
+            ddlSubExam.Items.Clear();
+            ddlSubExam.Items.Add("Please Select");
+            ddlSubExam.SelectedIndex = 0;
+
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -574,7 +615,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"].ToString());
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1472,21 +1513,21 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlSem.Items.Clear();
-        ddlSem.Items.Add("Please Select");
-        ddlSem.SelectedItem.Value = "0";
-        ddlSection.SelectedIndex = 0;
-        ddlExam.SelectedIndex = 0;
-        ddlStudType.SelectedIndex = 0;
+        //ddlSem.Items.Clear();
+        //ddlSem.Items.Add("Please Select");
+        //ddlSem.SelectedItem.Value = "0";
+        //ddlSection.SelectedIndex = 0;
+        //ddlExam.SelectedIndex = 0;
+        //ddlStudType.SelectedIndex = 0;
         //ddlSection.Items.Clear();
         //ddlSection.Items.Add("Please Select");
         //ddlSection.SelectedItem.Value = "0";
         //ddlExam.Items.Clear();
         //ddlExam.Items.Add("Please Select");
         //ddlExam.SelectedItem.Value = "0";
-        ddlcourse.Items.Clear();
-        ddlcourse.Items.Add("Please Select");
-        ddlcourse.SelectedItem.Value = "0";
+        //ddlcourse.Items.Clear();
+        //ddlcourse.Items.Add("Please Select");
+        //ddlcourse.SelectedItem.Value = "0";
         //ddlStudType.Items.Clear();
         //ddlStudType.Items.Add("Please Select");
         //ddlStudType.SelectedItem.Value = "0";
@@ -1511,11 +1552,40 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         }
         else
         {
+            //ddlSession.Items.Clear();
+            //ddlSession.Items.Add("Please Select");
+            //ddlSession.SelectedItem.Value = "0";
+            //objCommon.DisplayMessage("Please Select " + lblDYddlColgScheme.Text + "", this.Page);
+            //ddlClgname.Focus();
+
+            ddlClgname.Focus();
+
             ddlSession.Items.Clear();
             ddlSession.Items.Add("Please Select");
-            ddlSession.SelectedItem.Value = "0";
-            objCommon.DisplayMessage("Please Select " + lblDYddlColgScheme.Text + "", this.Page);
-            ddlClgname.Focus();
+            ddlSession.SelectedIndex = 0;
+
+            ddlSem.Items.Clear();
+            ddlSem.Items.Add("Please Select");
+            ddlSem.SelectedIndex = 0;
+
+            ddlSection.Items.Clear();
+            ddlSection.Items.Add("Please Select");
+            ddlSection.SelectedIndex = 0;
+
+            ddlcourse.Items.Clear();
+            ddlcourse.Items.Add("Please Select");
+            ddlcourse.SelectedIndex = 0;
+
+            ddlExam.Items.Clear();
+            ddlExam.Items.Add("Please Select");
+            ddlExam.SelectedIndex = 0;
+
+            ddlSubExam.Items.Clear();
+            ddlSubExam.Items.Add("Please Select");
+            ddlSubExam.SelectedIndex = 0;
+
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -1543,12 +1613,23 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME E INNER JOIN ACD_SCHEME S ON (S.PATTERNNO=E.PATTERNNO AND S.SCHEMENO= " + ViewState["schemeno"].ToString() + ")", "DISTINCT EXAMNO", " EXAMNAME", "EXAMNO > 0 AND ISNULL(E.EXAMNAME,'')<>'' AND ISNULL(E.ACTIVESTATUS,0)=1", "EXAMNO DESC"); // BY SACHIN A
             ddlExam.Focus();
         }
+        else
+        {
+            ddlSection.Focus();
+            ddlExam.Items.Clear();
+            ddlExam.Items.Add("Please Select");
+            ddlExam.SelectedIndex = 0;
+            ddlSubExam.Items.Clear();
+            ddlSubExam.Items.Add("Please Select");
+            ddlSubExam.SelectedIndex = 0;
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
+        }
     }
 
     //added by prafull 010322
     protected void btnExelrpt_Click(object sender, EventArgs e)
     {
-
         if (ddlClgname.SelectedIndex == 0)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select " + lblDYddlColgScheme.Text + "');", true);
@@ -1577,7 +1658,15 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
         GridView GVStudData = new GridView();
 
-        DataSet ds = objCommon.GetInternalMarksExcel(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue));
+        //DataSet ds = objCommon.GetInternalMarksExcel(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue));
+
+        string SP_Name = "PKG_INTERNAL_MARKS_EXCEL_REPORT";
+        string SP_Parameters = "@P_SCHEMENO,@P_SESSIONNO,@P_SEMESTERNO,@P_SECTIONNO,@P_SUBEXAMNO";
+        string Call_Values = "" + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Convert.ToInt32(ddlSubExam.SelectedValue) + "";
+
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
         if (ds.Tables.Count > 0)
         {
             if (ds.Tables[0].Rows.Count > 0)
@@ -1806,7 +1895,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
             string SP_Name = "PKG_CLASSWISE_RESULT_ANALYSIS";
             string SP_Parameters = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SEMESTERNO,@P_SECTIONO,@P_UA_NO,@P_UA_TYPE";
-            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ViewState["degreeno"] + "," + ViewState["branchno"] + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Session["userno"] + "," + Session["usertype"]+"";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ViewState["degreeno"] + "," + ViewState["branchno"] + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Session["userno"] + "," + Session["usertype"] + "";
             DataSet ds = null;
             ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
 
@@ -2904,11 +2993,26 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         }
         else
         {
+            ddlSem.Focus();
+
+            ddlSection.Items.Clear();
+            ddlSection.Items.Add("Please Select");
+            ddlSection.SelectedIndex = 0;
+
             ddlcourse.Items.Clear();
             ddlcourse.Items.Add("Please Select");
-            ddlcourse.SelectedItem.Value = "0";
+            ddlcourse.SelectedIndex = 0;
 
-            ddlSem.Focus();
+            ddlExam.Items.Clear();
+            ddlExam.Items.Add("Please Select");
+            ddlExam.SelectedIndex = 0;
+
+            ddlSubExam.Items.Clear();
+            ddlSubExam.Items.Add("Please Select");
+            ddlSubExam.SelectedIndex = 0;
+
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
         }
     }
 
@@ -3067,5 +3171,61 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         }
     }
 
+    protected void ddlExam_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlExam.SelectedIndex > 0)
+        {
+            // objCommon.FillDropDownList(ddlExam, "ACD_EXAM_NAME", "EXAMNO", "EXAMNAME", "EXAMNO > 0", "EXAMNO DESC");
+            objCommon.FillDropDownList(ddlSubExam, "ACD_SCHEME S WITH (NOLOCK) INNER JOIN ACD_EXAM_NAME ED WITH (NOLOCK) ON (ED.PATTERNNO=S.PATTERNNO) INNER JOIN ACD_SUBEXAM_NAME SE WITH (NOLOCK) ON (SE.EXAMNO = ED.EXAMNO AND ED.PATTERNNO=SE.PATTERNNO) INNER JOIN ACD_SUBJECTTYPE ST ON ST.SUBID=SE.SUBEXAM_SUBID", "DISTINCT SE.SUBEXAMNO", "SE.SUBEXAMNAME+'-'+ST.SUBNAME AS SUBEXAMNAME", "ED.EXAMNAME<>'' AND SE.SUBEXAMNAME<>'' AND ISNULL(SE.ACTIVESTATUS,0)=1  AND SE.EXAMNO='" + ddlExam.SelectedValue + "'", "SE.SUBEXAMNO DESC"); // BY SACHIN A
+            ddlSubExam.Focus();
+        }
+        else
+        {
+            ddlExam.Focus();
+
+            ddlSubExam.Items.Clear();
+            ddlSubExam.Items.Add("Please Select");
+            ddlSubExam.SelectedIndex = 0;
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
+        }
+    }
+    protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlcourse.SelectedIndex > 0)
+        {
+            ddlStudType.Focus();
+        }
+        else
+        {
+            ddlcourse.Focus();
+            ddlStudType.SelectedIndex = 0;
+        }
+    }
+    protected void ddlStudType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlStudType.SelectedIndex > 0)
+        {
+            btnInternalMarkReg.Focus();
+        }
+        else
+        {
+            ddlStudType.Focus();
+            ddlStudType.SelectedIndex = 0;
+        }
+    }
+    protected void ddlSubExam_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlSubExam.SelectedIndex > 0)
+        {
+            ddlcourse.Focus();
+        }
+        else
+        {
+            ddlSubExam.Focus();
+            ddlcourse.SelectedIndex = 0;
+            ddlStudType.SelectedIndex = 0;
+        }
+    }
 }
 

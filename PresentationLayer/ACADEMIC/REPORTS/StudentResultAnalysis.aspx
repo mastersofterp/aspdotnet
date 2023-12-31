@@ -393,7 +393,7 @@
                                                 ValidationGroup="offered" OnSelectedIndexChanged="ddlClgname_SelectedIndexChanged" TabIndex="1">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname"
+                                            <asp:RequiredFieldValidator ID="rfvCname" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="Rank">
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="rfvCname1" runat="server" ControlToValidate="ddlClgname"
@@ -418,9 +418,11 @@
                                                 Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0" ValidationGroup="InternalmarkReport">
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="rfvCnameAnalysisReport" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true" Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0"
-                                             ValidationGroup="AnalysisReport">
+                                                ValidationGroup="AnalysisReport">
                                             </asp:RequiredFieldValidator>
-
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlClgname" SetFocusOnError="true" Display="None" ErrorMessage="Please Select College & Scheme" InitialValue="0"
+                                                ValidationGroup="InternalReport">
+                                            </asp:RequiredFieldValidator>
                                         </div>
 
 
@@ -438,7 +440,7 @@
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="report"></asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSession"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="AnalysisReport"></asp:RequiredFieldValidator>
-                                            <asp:RequiredFieldValidator ID="rfvrank" runat="server" ControlToValidate="ddlSession"
+                                            <asp:RequiredFieldValidator ID="rfvrank" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Rank"></asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="rfvOverallsession" runat="server" ControlToValidate="ddlSession"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="Overall"></asp:RequiredFieldValidator>
@@ -465,6 +467,9 @@
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator28" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="InternalmarkReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlSession" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="InternalReport">
                                             </asp:RequiredFieldValidator>
                                         </div>
 
@@ -568,7 +573,7 @@
                                             <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1" AutoPostBack="True" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem"
+                                            <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="Rank">
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlSem"
@@ -592,6 +597,9 @@
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator30" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="schemesession">
                                             </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator31" runat="server" ControlToValidate="ddlSem" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Semester" InitialValue="0" ValidationGroup="InternalReport">
+                                            </asp:RequiredFieldValidator>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divSection" runat="server">
 
@@ -606,7 +614,7 @@
                                             <asp:DropDownList ID="ddlSection" runat="server" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1" AutoPostBack="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSection"
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSection" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="Rank">
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="ddlSection"
@@ -614,6 +622,9 @@
                                             </asp:RequiredFieldValidator>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlSection"
                                                 Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="FormatIIReport">
+                                            </asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator32" runat="server" ControlToValidate="ddlSection" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="InternalReport">
                                             </asp:RequiredFieldValidator>
                                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator24" runat="server" ControlToValidate="ddlSection"
                                             Display="None" ErrorMessage="Please Select Section" InitialValue="0" ValidationGroup="SubjectWiseResultanalysisReport">
@@ -623,14 +634,14 @@
 
                                             <div class="label-dynamic">
 
-                                                <sup></sup>
+                                                <sup>*</sup>
 
                                                 <%--<label>Exam</label>--%>
                                                 <asp:Label ID="lblDYddlExam" runat="server" Font-Bold="true"></asp:Label>
 
                                             </div>
 
-                                            <asp:DropDownList ID="ddlExam" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1">
+                                            <asp:DropDownList ID="ddlExam" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1" OnSelectedIndexChanged="ddlExam_SelectedIndexChanged" AutoPostBack="true">
 
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <%-- <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -639,6 +650,35 @@
                                             <asp:ListItem Value="3">CAT 3</asp:ListItem>
                                             <asp:ListItem Value="4">MODEL EXAM</asp:ListItem>--%>
                                             </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvddlExam" runat="server" ControlToValidate="ddlExam" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" ValidationGroup="InternalReport">
+                                            </asp:RequiredFieldValidator>
+                                            <%--<asp:RequiredFieldValidator ID="rfvddlExam" runat="server" ControlToValidate="ddlExam" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select Exam Name" InitialValue="0" ValidationGroup="Rank">
+                                            </asp:RequiredFieldValidator>--%>
+                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlExam"
+                                            Display="None" ErrorMessage="Please Select Exam" InitialValue="0" ValidationGroup="AnalysisReport">
+                                        </asp:RequiredFieldValidator>--%>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="div3" runat="server">
+
+                                            <div class="label-dynamic">
+
+                                                <sup>*</sup>
+
+                                                <%--<label>Exam</label>--%>
+                                                <asp:Label ID="lblDYddlSubExam" runat="server" Font-Bold="true"></asp:Label>
+
+                                            </div>
+
+                                            <asp:DropDownList ID="ddlSubExam" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1" OnSelectedIndexChanged="ddlSubExam_SelectedIndexChanged" AutoPostBack="true">
+
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvddlSubExam" runat="server" ControlToValidate="ddlSubExam" SetFocusOnError="True"
+                                                Display="None" ErrorMessage="Please Select SubExam Name" InitialValue="0" ValidationGroup="InternalReport">
+                                            </asp:RequiredFieldValidator>
                                             <%--<asp:RequiredFieldValidator ID="rfvddlExam" runat="server" ControlToValidate="ddlExam"
                                             Display="None" ErrorMessage="Please Select Exam" InitialValue="0" ValidationGroup="Rank">
                                         </asp:RequiredFieldValidator>
@@ -669,17 +709,17 @@
                                                 <%--<label>Course</label>--%>
                                                 <asp:Label ID="lblDYddlCourse" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlcourse" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1">
+                                            <asp:DropDownList ID="ddlcourse" runat="server" AppendDataBoundItems="True" CssClass="form-control" TabIndex="1" OnSelectedIndexChanged="ddlcourse_SelectedIndexChanged" AutoPostBack="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcourse"
+                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlcourse" 
                                                 Display="None" ErrorMessage="Please Select Course" InitialValue="0">
                                             <%--ValidationGroup="Rank"--%>
-                                            </asp:RequiredFieldValidator>
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlcourse"
+                                            <%--</asp:RequiredFieldValidator>--%>
+                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlcourse"
                                                 Display="None" ErrorMessage="Please Select Course" InitialValue="0">
                                             <%--ValidationGroup="AnalysisReport"--%>
-                                            </asp:RequiredFieldValidator>
+                                            <%--</asp:RequiredFieldValidator>--%>
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ControlToValidate="ddlcourse" SetFocusOnError="True"
                                                 Display="None" ErrorMessage="Please Select Course" InitialValue="0" ValidationGroup="CourseWiseFailStudList">
                                             </asp:RequiredFieldValidator>
@@ -723,7 +763,7 @@
 
                                             </div>
 
-                                            <asp:DropDownList ID="ddlStudType" runat="server" AppendDataBoundItems="True" Class="form-control" TabIndex="1">
+                                            <asp:DropDownList ID="ddlStudType" runat="server" AppendDataBoundItems="True" Class="form-control" TabIndex="1" OnSelectedIndexChanged="ddlStudType_SelectedIndexChanged" AutoPostBack="true">
                                                 <asp:ListItem Value="-1">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="0">Regular</asp:ListItem>
                                                 <asp:ListItem Value="1">Arrear</asp:ListItem>
@@ -812,11 +852,11 @@
                             <asp:Button ID="btnExamWiseReport" runat="server" OnClick="btnExamWiseReport_Click" Text="Examwise Report" CssClass="btn btn-primary"
                                 ValidationGroup="report" Visible="false" />--%>
                                     <%--  <asp:Button ID="btnRank" runat="server" OnClick="btnRank_Click" Text="Rank Report" ValidationGroup="Rank" CssClass="btn btn-info" style="display:none"/>--%>
-                                    <asp:Button ID="btnInternalMarkReg" runat="server" OnClick="btnInternalMarkReg_Click" ValidationGroup="Rank" Text="Overall Internal Mark" CssClass="btn btn-info" TabIndex="1" CausesValidation="false" />
+                                    <asp:Button ID="btnInternalMarkReg" runat="server" OnClick="btnInternalMarkReg_Click" ValidationGroup="Rank" Text="Overall Internal Mark" CssClass="btn btn-info" TabIndex="1" />
                                     <asp:Button ID="btnConsolidatedInternalTestMarkReport" runat="server" OnClick="btnConsolidatedInternalTestMarkReport_Click" Text="CAT wise Report" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" CausesValidation="false" />
                                     <asp:Button ID="btnCATInternalMarks" runat="server" OnClick="btnCATInternalMarks_Click" Text="CAT Internal Marks" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" CausesValidation="false" />
 
-                                    <asp:Button ID="btnExelrpt" runat="server" Text="Internal Report" CssClass="btn btn-info" OnClick="btnExelrpt_Click" TabIndex="1" CausesValidation="false" />
+                                    <asp:Button ID="btnExelrpt" runat="server" Text="Internal Report" CssClass="btn btn-info" OnClick="btnExelrpt_Click" TabIndex="1" ValidationGroup="InternalReport" />
 
                                     <asp:Button ID="btnGraderpt" runat="server" Text="Format - II Report" CssClass="btn btn-info" OnClick="btnGraderpt_Click" TabIndex="1" ValidationGroup="FormatIIReport" />
                                     <asp:Button ID="btntrexcel" runat="server" Text="TR EXCEL (GRADE)" CssClass="btn btn-info" OnClick="btntrexcel_Click" TabIndex="1" CausesValidation="false" />
@@ -889,6 +929,8 @@
 
                                     <asp:ValidationSummary ID="ValidationSummary11" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="InternalmarkReport" CausesValidation="false" />
                                     <asp:ValidationSummary ID="valsumschemesession" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="schemesession" CausesValidation="false" />
+
+                                    <asp:ValidationSummary ID="ValidationSummary12" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="InternalReport" CausesValidation="false" />
 
                                 </div>
                             </div>
@@ -1104,9 +1146,9 @@
                                 <div class="row">
                                     <div class="col-md-8 col-md-offset-2">
                                         <center>
-                                            <asp:LinkButton ID="lbtn_ConsoReport_Print" runat="server" CssClass="btn btn-info" onclick="lbtn_ConsoReport_Print_Click">
+                                            <asp:LinkButton ID="lbtn_ConsoReport_Print" runat="server" CssClass="btn btn-info" onclick="lbtn_ConsoReport_Print_Click" CausesValidation="false" >
                                                 <i class="fa fa-print" aria-hidden="true"></i> Print</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_ConsoReport_Excel" runat="server" CssClass="btn btn-info" OnClick="lbtn_ConsoReport_Excel_Click">
+                                            <asp:LinkButton ID="lbtn_ConsoReport_Excel" runat="server" CssClass="btn btn-info" OnClick="lbtn_ConsoReport_Excel_Click" CausesValidation="false">
                                                 <i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</asp:LinkButton>
                                         </center>
                                     </div>
