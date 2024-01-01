@@ -188,9 +188,19 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
     private void ClearControls()
     {
         lvStudents.Visible = false;
+
+        ddlSem.Items.Clear();
+        ddlSem.Items.Add("Please Select");
         ddlSem.SelectedIndex = 0;
+
+        ddlSession.Items.Clear();
+        ddlSession.Items.Add("Please Select");
         ddlSession.SelectedIndex = 0;
+
+        ddlCourse.Items.Clear();
+        ddlCourse.Items.Add("Please Select");
         ddlCourse.SelectedIndex = 0;
+
         ddlClgname.SelectedIndex = 0;
         btnReport.Visible = false;
         btnSubmit.Visible = false;
@@ -643,11 +653,18 @@ public partial class ACADEMIC_AuditCourseGradeAllotment : System.Web.UI.Page
     }
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
+        if (ddlCourse.SelectedIndex > 0)
+        {
+            btnShowResult.Focus();
+        }
+        else
+        {
+            ddlCourse.Focus();
+        }
+
         btnReport.Visible = false;
         btnLock.Visible = false;
         btnSubmit.Visible = false;
         lvStudents.Visible = false;
-
-        btnShowResult.Focus();
     }
 }
