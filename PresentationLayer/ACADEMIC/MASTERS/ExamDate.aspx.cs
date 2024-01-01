@@ -988,6 +988,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet.rpt");
                 }
             }
+            else if (Convert.ToInt32(Session["OrgId"]) == 22) //For ADCET Added by Tejas 22_12_2023
+            {
+                ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet_ADCET.rpt");
+            }
             else
             {
                 ShowReportDailyAttendenceCupKota("Student_Daily_Attendence_Report", "rptAttendancesheet.rpt");
