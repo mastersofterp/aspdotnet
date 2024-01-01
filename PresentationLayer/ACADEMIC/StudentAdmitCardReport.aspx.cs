@@ -77,6 +77,19 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                         divRemark.Visible = true;
                     }
                 }
+
+                #region Only for PRMITR
+                if (Convert.ToInt32(Session["OrgId"]) == 10)
+                {
+                    btnAttendance.Visible = true;
+                }
+                else
+                {
+                    btnAttendance.Visible = false;
+                }
+                #endregion
+
+
             }
             // lblSession.Text = Convert.ToString(Session["sessionname"]);
 
@@ -590,6 +603,14 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                 {
                     ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_JECRC.rpt");
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 22) //ADCET Added by Tejas 22_12_2023
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_ADCET.rpt");
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 15) //DAIICT Added by Tejas 22_12_2023
+                {
+                    ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamHallTicket_DAIICT.rpt");
+                }
                 else
                 {
                     //ShowReport(ids, "Student_Admit_Card_Report", "rptBulkExamRegslip.rpt");  
@@ -973,9 +994,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
         lvStudentRecords.DataBind();
     }
 
-
-
-
     //This Method Generate QR-CODE FOR RCPIPER & also  save image in ACD_HALLTICKET_QRCODE Table & QR-Code Files Folder. Added by Shubham on 24/12/23
     private void GenerateQrCode_RCPIPER(int idno)
     {
@@ -1043,6 +1061,86 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
+
+    }
+
+    private void ShowReportattednce(string param, string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string examno = objCommon.LookUp("ACD_EXAM_NAME WITH (NOLOCK)", "DISTINCT FLDNAME", "EXAMNO = " + ddlExamname.SelectedValue + "");
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_IDNO=" + param + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_USER_FUll_NAME=" + Session["userfullname"] + ",@P_EXAMNO=" + Convert.ToInt32(ddlExamname.SelectedValue) + ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterStartupScript(this.updtime, this.updtime.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex) { }
+    }
+    protected void btnAttendance_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string ids = GetStudentIDs();
+
+            if (!string.IsNullOrEmpty(ids))
+            {
+                string studentIds = string.Empty;
+
+
+                //   COMMENTED BY PRAFULL ON DT-26-06-2023 AS PER DISCUSSION 
+
+                foreach (ListViewDataItem lvItem in lvStudentRecords.Items)
+                {
+                    CheckBox chkBox = lvItem.FindControl("chkReport") as CheckBox;
+                    CheckBox chk1 = lvStudentRecords.Controls[0].FindControl("chkIdentityCard") as CheckBox;
+
+
+                    if (chk1.Checked == true)
+                    {
+                        studentIds = chkBox.ToolTip;
+                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip) + ""));
+
+                        ids = "0";
+                        int OrgID = Convert.ToInt32(Session["OrgId"]);
+
+                    }
+                    else if (chkBox.Checked == true)
+                    {
+                        studentIds = chkBox.ToolTip;
+                        string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip) + ""));
+
+                        int OrgID = Convert.ToInt32(Session["OrgId"]);
+
+                    }
+                    else
+                    {
+
+                    }
+
+                }
+
+            }
+            else
+            {
+                objCommon.DisplayMessage("Please Select Students!", this.Page);
+                return;
+            }
+
+            ShowReportattednce(ids, "Attendance_Report", "AttendanceReportPRMITR.rpt");
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_StudentIDCardReport.btnPrintReport_Click --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable");
+        }
+
 
     }
 
