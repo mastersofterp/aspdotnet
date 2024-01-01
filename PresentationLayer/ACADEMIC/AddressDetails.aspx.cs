@@ -8,13 +8,18 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Linq;
-
+using System.Collections.Generic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 
 public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
+    ModuleConfigController objConfig = new ModuleConfigController();
+
+    List<string> validationErrors = new List<string>();
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -33,9 +38,10 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                 //  CheckPageAuthorization();
                 ViewState["usertype"] = Session["usertype"];
                 this.FillDropDown();
+                StudentConfiguration();
                 if (ViewState["usertype"].ToString() == "2")
                 {
-                    ShowStudentDetails();
+                    ShowStudentDetails();                    
                     divadmissiondetails.Visible = false;
                     divAdmissionApprove.Visible = false;
                     divhome.Visible = false;
@@ -135,6 +141,167 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
         }
     }
 
+    #region Student Related Configuration
+    protected void StudentConfiguration()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "AddressDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string isActive = row["ISACTIVE"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string controlToMandatory = row["CONTROL_TO_MANDATORY"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string divID = string.Empty;
+            Control control = null, control2 = null, control3 = null;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+                divID = values[1].Trim();
+
+            }
+
+            if (values.Length == 2)
+            {
+                control = FindControlRecursive(Page, divID);
+                control3 = FindControlRecursive(Page, controlID);
+            }
+            else
+            {
+                control = FindControlRecursive(Page, controlToHide);
+            }
+
+            control2 = FindControlRecursive(Page, controlToMandatory);
+
+
+            if (control != null)
+            {
+                if (isActive == "checked" && isMandatory == "checked")
+                {
+                    control.Visible = true;
+                    control2.Visible = true;
+
+                }
+                else if (isActive == "checked" && controlToMandatory != null)
+                {
+                    control.Visible = true;
+                    control2.Visible = false;
+                }
+                else
+                {
+                    control.Visible = false;
+                    control2.Visible = false;
+
+                    if (values.Length == 2)
+                    {
+                        ClearControlValue(control3);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private Control FindControlRecursive(Control parentControl, string controlId)
+    {
+        if (parentControl == null)
+        {
+            return null;
+        }
+
+        Control control = parentControl.FindControl(controlId);
+
+        if (control == null)
+        {
+            foreach (Control childControl in parentControl.Controls)
+            {
+                control = FindControlRecursive(childControl, controlId);
+                if (control != null)
+                {
+                    return control;
+                }
+            }
+        }
+        return control;
+    }
+
+    private void ClearControlValue(Control control)
+    {
+        if (control is TextBox)
+        {
+            ((TextBox)control).Text = string.Empty;
+        }
+        else if (control is DropDownList)
+        {
+            ((DropDownList)control).SelectedIndex = 0;
+        }
+
+    }
+
+    public string ValidationAlert()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "AddressDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        validationErrors.Add("Please Enter " + captionName);
+                    }
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    if (dropdownlist.SelectedIndex == 0)
+                    {
+                        validationErrors.Add("Please Select " + captionName);
+                    }
+                }
+            }
+
+        }
+
+        if (validationErrors.Count > 0)
+        {
+            string errorMessage = string.Join(",", validationErrors);
+            return errorMessage;
+        }
+        return string.Empty;
+    }
+    #endregion Student Related Configuration     // Added By Shrikant W. on 05-09-2023
     
     public void FillDropDown()
     {
@@ -406,125 +573,133 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        StudentController objSC = new StudentController();
-        Student objS = new Student(); 
-        StudentPhoto objSPhoto = new StudentPhoto();
-        StudentAddress objSAddress = new StudentAddress();
-        StudentQualExm objSQualExam = new StudentQualExm();
-        try
+        string errorString = ValidationAlert();      // Added By Shrikant W. on 25-12-2023
+
+        if (errorString != string.Empty)
         {
-            if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
+            ClientScript.RegisterStartupScript(this.GetType(), "alertmessage", "alertmessage('" + errorString + "');", true);
+        }
+        else
+        {
+            StudentController objSC = new StudentController();
+            Student objS = new Student();
+            StudentPhoto objSPhoto = new StudentPhoto();
+            StudentAddress objSAddress = new StudentAddress();
+            StudentQualExm objSQualExam = new StudentQualExm();
+            try
             {
-
-                //17-05-2018 visible false (Not Necesscary for Indus Uni)
-                // if (!txtLocalEmail.Text.Trim().Equals(string.Empty)) objSAddress.LEMAIL = txtLocalEmail.Text.Trim();
-                //if (!txtCorresAddress.Text.Trim().Equals(string.Empty)) objS.Corres_address = txtCorresAddress.Text.Trim();
-                //if (!txtCorresPin.Text.Trim().Equals(string.Empty)) objS.Corres_pin = txtCorresPin.Text.Trim();
-                //if (!txtCorresMob.Text.Trim().Equals(string.Empty)) objS.Corres_mob = txtCorresMob.Text.Trim();
-                //if (!txtPermTehsil.Text.Trim().Equals(string.Empty)) objSAddress.PTEHSIL = txtPermTehsil.Text.Trim();             
-                //if (!txtPermEmailId.Text.Trim().Equals(string.Empty)) objSAddress.PEMAIL = txtPermEmailId.Text.Trim();
-
-
-                //Local Address
-                if (ViewState["usertype"].ToString() == "2")
+                if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
                 {
-                    objS.IdNo = Convert.ToInt32(Session["idno"]);
-                }
-                else
-                {
-                    objS.IdNo = Convert.ToInt32(Session["stuinfoidno"]);
-                }
 
-                if (!txtLocalAddress.Text.Trim().Equals(string.Empty)) objSAddress.LADDRESS = Convert.ToString(txtLocalAddress.Text.Trim());
-                objSAddress.LCITY = Convert.ToInt32(ddlLocalCity.SelectedValue);
-                objSAddress.LSTATE = Convert.ToInt32(ddlLocalState.SelectedValue);
-                objSAddress.LCOUNTRY = Convert.ToString(ddlLocalCountry.SelectedValue);
-
-                if (!txtLocalPIN.Text.Trim().Equals(string.Empty)) objSAddress.LPINCODE = txtLocalPIN.Text.Trim();
-                if (!txtLocalLandlineNo.Text.Trim().Equals(string.Empty)) objSAddress.LTELEPHONE = txtLocalLandlineNo.Text.Trim();
-                if (!txtLocalMobileNo.Text.Trim().Equals(string.Empty)) objSAddress.LMOBILE = txtLocalMobileNo.Text.Trim();
-                if (!txtpostoff.Text.Trim().Equals(string.Empty)) objSAddress.LPOSTOFF = txtpostoff.Text.Trim();
-                if (!txtpolicestation.Text.Trim().Equals(string.Empty)) objSAddress.LPOLICESTATION = txtpolicestation.Text.Trim();
-
-                //Permenent Address
-                if (!txtPermAddress.Text.Trim().Equals(string.Empty)) objSAddress.PADDRESS = txtPermAddress.Text.Trim();
-                objSAddress.PCOUNTRY = Convert.ToString(ddlPermCountry.SelectedValue);
-                objSAddress.PCITY = Convert.ToInt32(ddlPermCity.SelectedValue);
-                objSAddress.PSTATE = Convert.ToInt32(ddlPermState.SelectedValue);
-                objSAddress.PDISTRICT = ddlPdistrict.SelectedValue;
-                objSAddress.PTEHSIL = txtPTaluka.Text.Trim();     
-                //objSAddress.PTEHSIL = ddlptaluka.SelectedValue;
-                if (chkcopypermanentadress.Checked == true)
-                {
-                    objSAddress.LDISTRICT = ddlPdistrict.SelectedValue;
-                  //  objSAddress.LTEHSIL = ddlLtaluka.SelectedValue;
-                    objSAddress.LTEHSIL = txtLTaluka.Text.Trim();                         //Added By Ruchika dhakate on 16.09.2022
-                }
-                else
-                {
-                    objSAddress.LDISTRICT = ddlLdistrict.SelectedValue;
-                    //objSAddress.LTEHSIL = ddlLtaluka.SelectedValue;
-                    objSAddress.LTEHSIL = txtLTaluka.Text.Trim();   
-                }
-                if (!txtPermPIN.Text.Trim().Equals(string.Empty)) objSAddress.PPINCODE = txtPermPIN.Text.Trim();
-                if (!txtLocalNo.Text.Trim().Equals(string.Empty)) objSAddress.PTELEPHONE = txtLocalNo.Text.Trim();
-                if (!txtMobileNo.Text.Trim().Equals(string.Empty)) objSAddress.PMOBILE = txtMobileNo.Text.Trim();
-                if (!txtTehsil.Text.Trim().Equals(string.Empty)) objSAddress.LTEHSIL = txtTehsil.Text.Trim();
-                if (!txtpermpostOff.Text.Trim().Equals(string.Empty)) objSAddress.PPOSTOFF = txtpermpostOff.Text.Trim();
-                if (!txtPermPoliceStation.Text.Trim().Equals(string.Empty)) objSAddress.PPOLICESTATION = txtPermPoliceStation.Text.Trim();
-
-                //Guardian's Address
-                if (!txtGuardianAddress.Text.Trim().Equals(string.Empty)) objSAddress.GADDRESS = txtGuardianAddress.Text.Trim();
-                if (!txtGuardianName.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANNAME = txtGuardianName.Text.Trim();
-                if (!txtGuardianLandline.Text.Trim().Equals(string.Empty)) objSAddress.GPHONE = txtGuardianLandline.Text.Trim();
-                objSAddress.ANNUAL_INCOME = txtAnnualIncome.Text.Trim();
-                if (!txtRelationWithGuardian.Text.Trim().Equals(string.Empty)) objSAddress.RELATION_GUARDIAN = txtRelationWithGuardian.Text.Trim();
-                if (!txtGoccupationName.Text.Trim().Equals(string.Empty)) objSAddress.GOCCUPATIONNAME = txtGoccupationName.Text.Trim();
-                if (!txtGDesignation.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANDESIGNATION = txtGDesignation.Text.Trim();
+                    //17-05-2018 visible false (Not Necesscary for Indus Uni)
+                    // if (!txtLocalEmail.Text.Trim().Equals(string.Empty)) objSAddress.LEMAIL = txtLocalEmail.Text.Trim();
+                    //if (!txtCorresAddress.Text.Trim().Equals(string.Empty)) objS.Corres_address = txtCorresAddress.Text.Trim();
+                    //if (!txtCorresPin.Text.Trim().Equals(string.Empty)) objS.Corres_pin = txtCorresPin.Text.Trim();
+                    //if (!txtCorresMob.Text.Trim().Equals(string.Empty)) objS.Corres_mob = txtCorresMob.Text.Trim();
+                    //if (!txtPermTehsil.Text.Trim().Equals(string.Empty)) objSAddress.PTEHSIL = txtPermTehsil.Text.Trim();             
+                    //if (!txtPermEmailId.Text.Trim().Equals(string.Empty)) objSAddress.PEMAIL = txtPermEmailId.Text.Trim();
 
 
-
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]));
-                if (cs.Equals(CustomStatus.RecordUpdated))
-                {
-                    ShowStudentDetails();
-                    // objCommon.DisplayMessage(updAddressDetails, "Address Details Updated Successfully!!", this.Page);
-
-                    if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "8")
+                    //Local Address
+                    if (ViewState["usertype"].ToString() == "2")
                     {
-                        // divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Address Details Updated Successfully!!'); </script>";
-
-                        //string strScript = "<SCRIPT language='javascript'>window.location='DASAStudentInformation.aspx';</SCRIPT>";
-                        //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
-                        Response.Redirect("~/academic/UploadDocument.aspx");
-                        //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Address Details Updated Successfully!!'); location.href='UploadDocument.aspx';", true);
+                        objS.IdNo = Convert.ToInt32(Session["idno"]);
                     }
                     else
                     {
-                        //divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Address Details Updated Successfully!!'); </script>";
-                        //string strScript = "<SCRIPT language='javascript'>window.location='AdmissionDetails.aspx';</SCRIPT>";
-                        //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
-                        Response.Redirect("~/academic/AdmissionDetails.aspx");
-                        //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Address Details Updated Successfully!!'); location.href='AdmissionDetails.aspx';", true);
+                        objS.IdNo = Convert.ToInt32(Session["stuinfoidno"]);
                     }
+
+                    if (!txtLocalAddress.Text.Trim().Equals(string.Empty)) objSAddress.LADDRESS = Convert.ToString(txtLocalAddress.Text.Trim());
+                    objSAddress.LCITY = Convert.ToInt32(ddlLocalCity.SelectedValue);
+                    objSAddress.LSTATE = Convert.ToInt32(ddlLocalState.SelectedValue);
+                    objSAddress.LCOUNTRY = Convert.ToString(ddlLocalCountry.SelectedValue);
+
+                    if (!txtLocalPIN.Text.Trim().Equals(string.Empty)) objSAddress.LPINCODE = txtLocalPIN.Text.Trim();
+                    if (!txtLocalLandlineNo.Text.Trim().Equals(string.Empty)) objSAddress.LTELEPHONE = txtLocalLandlineNo.Text.Trim();
+                    if (!txtLocalMobileNo.Text.Trim().Equals(string.Empty)) objSAddress.LMOBILE = txtLocalMobileNo.Text.Trim();
+                    if (!txtpostoff.Text.Trim().Equals(string.Empty)) objSAddress.LPOSTOFF = txtpostoff.Text.Trim();
+                    if (!txtpolicestation.Text.Trim().Equals(string.Empty)) objSAddress.LPOLICESTATION = txtpolicestation.Text.Trim();
+
+                    //Permenent Address
+                    if (!txtPermAddress.Text.Trim().Equals(string.Empty)) objSAddress.PADDRESS = txtPermAddress.Text.Trim();
+                    objSAddress.PCOUNTRY = Convert.ToString(ddlPermCountry.SelectedValue);
+                    objSAddress.PCITY = Convert.ToInt32(ddlPermCity.SelectedValue);
+                    objSAddress.PSTATE = Convert.ToInt32(ddlPermState.SelectedValue);
+                    objSAddress.PDISTRICT = ddlPdistrict.SelectedValue;
+                    objSAddress.PTEHSIL = txtPTaluka.Text.Trim();
+                    //objSAddress.PTEHSIL = ddlptaluka.SelectedValue;
+                    if (chkcopypermanentadress.Checked == true)
+                    {
+                        objSAddress.LDISTRICT = ddlPdistrict.SelectedValue;
+                        //  objSAddress.LTEHSIL = ddlLtaluka.SelectedValue;
+                        objSAddress.LTEHSIL = txtLTaluka.Text.Trim();                         //Added By Ruchika dhakate on 16.09.2022
+                    }
+                    else
+                    {
+                        objSAddress.LDISTRICT = ddlLdistrict.SelectedValue;
+                        //objSAddress.LTEHSIL = ddlLtaluka.SelectedValue;
+                        objSAddress.LTEHSIL = txtLTaluka.Text.Trim();
+                    }
+                    if (!txtPermPIN.Text.Trim().Equals(string.Empty)) objSAddress.PPINCODE = txtPermPIN.Text.Trim();
+                    if (!txtLocalNo.Text.Trim().Equals(string.Empty)) objSAddress.PTELEPHONE = txtLocalNo.Text.Trim();
+                    if (!txtMobileNo.Text.Trim().Equals(string.Empty)) objSAddress.PMOBILE = txtMobileNo.Text.Trim();
+                    if (!txtTehsil.Text.Trim().Equals(string.Empty)) objSAddress.LTEHSIL = txtTehsil.Text.Trim();
+                    if (!txtpermpostOff.Text.Trim().Equals(string.Empty)) objSAddress.PPOSTOFF = txtpermpostOff.Text.Trim();
+                    if (!txtPermPoliceStation.Text.Trim().Equals(string.Empty)) objSAddress.PPOLICESTATION = txtPermPoliceStation.Text.Trim();
+
+                    //Guardian's Address
+                    if (!txtGuardianAddress.Text.Trim().Equals(string.Empty)) objSAddress.GADDRESS = txtGuardianAddress.Text.Trim();
+                    if (!txtGuardianName.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANNAME = txtGuardianName.Text.Trim();
+                    if (!txtGuardianLandline.Text.Trim().Equals(string.Empty)) objSAddress.GPHONE = txtGuardianLandline.Text.Trim();
+                    objSAddress.ANNUAL_INCOME = txtAnnualIncome.Text.Trim();
+                    if (!txtRelationWithGuardian.Text.Trim().Equals(string.Empty)) objSAddress.RELATION_GUARDIAN = txtRelationWithGuardian.Text.Trim();
+                    if (!txtGoccupationName.Text.Trim().Equals(string.Empty)) objSAddress.GOCCUPATIONNAME = txtGoccupationName.Text.Trim();
+                    if (!txtGDesignation.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANDESIGNATION = txtGDesignation.Text.Trim();
+
+
+
+                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]));
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        ShowStudentDetails();
+                        // objCommon.DisplayMessage(updAddressDetails, "Address Details Updated Successfully!!", this.Page);
+
+                        if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "8")
+                        {
+                            // divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Address Details Updated Successfully!!'); </script>";
+
+                            //string strScript = "<SCRIPT language='javascript'>window.location='DASAStudentInformation.aspx';</SCRIPT>";
+                            //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
+                            Response.Redirect("~/academic/UploadDocument.aspx");
+                            //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Address Details Updated Successfully!!'); location.href='UploadDocument.aspx';", true);
+                        }
+                        else
+                        {
+                            //divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Address Details Updated Successfully!!'); </script>";
+                            //string strScript = "<SCRIPT language='javascript'>window.location='AdmissionDetails.aspx';</SCRIPT>";
+                            //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
+                            Response.Redirect("~/academic/AdmissionDetails.aspx");
+                            //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Address Details Updated Successfully!!'); location.href='AdmissionDetails.aspx';", true);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updAddressDetails, "Error Occured While Updating Address Details!!", this.Page);
+                    }
+
                 }
                 else
                 {
-                    objCommon.DisplayMessage(updAddressDetails, "Error Occured While Updating Address Details!!", this.Page);
+                    objCommon.DisplayMessage("You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
+
                 }
-
             }
-            else
+            catch (Exception Ex)
             {
-                objCommon.DisplayMessage("You Are Not Authorised Person For This Form.Contact To Administrator.", this.Page);
-
+                throw;
             }
         }
-        catch (Exception Ex)
-        {
-            throw;
-        }
-
     }
 
     protected void btnGohome_Click(object sender, EventArgs e)
