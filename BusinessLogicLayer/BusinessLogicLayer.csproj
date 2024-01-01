@@ -200,6 +200,7 @@
     <Compile Include="BusinessEntities\Academic\Tally\Ent_Acd_TransferRecordsToTally.cs" />
     <Compile Include="BusinessEntities\Academic\TemplateType.cs" />
     <Compile Include="BusinessEntities\Academic\TestPrepThroughtMISEntity.cs" />
+    <Compile Include="BusinessEntities\Academic\TracknPayRequeryModel.cs" />
     <Compile Include="BusinessEntities\Academic\User.cs" />
     <Compile Include="BusinessEntities\Common\Access_Link.cs" />
     <Compile Include="BusinessEntities\Common\Acc_Section.cs" />
