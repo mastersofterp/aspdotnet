@@ -232,6 +232,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             ddlDegree.Items.Clear();
             ddlDegree.Items.Add(new ListItem("Please Select", "0"));
             DataSet ds1 = objADEController.Get_College_Session(4, Session["college_nos"].ToString());
+            DataSet ds2 = objADEController.Get_College_Session(5, Session["college_nos"].ToString());
             if (ds1.Tables[0].Rows.Count > 0)
             {
                 //Global Tab Session Drop Down
@@ -239,11 +240,13 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 ddlSession1.DataValueField = ds1.Tables[0].Columns[0].ToString();
                 ddlSession1.DataTextField = ds1.Tables[0].Columns[1].ToString();
                 ddlSession1.DataBind();
-
+            }
+            if (ds2.Tables[0].Rows.Count > 0)
+            {
                 //Common Tab Session Drop Down
-                ddlSession2.DataSource = ds1;
-                ddlSession2.DataValueField = ds1.Tables[0].Columns[0].ToString();
-                ddlSession2.DataTextField = ds1.Tables[0].Columns[1].ToString();
+                ddlSession2.DataSource = ds2;
+                ddlSession2.DataValueField = ds2.Tables[0].Columns[0].ToString();
+                ddlSession2.DataTextField = ds2.Tables[0].Columns[1].ToString();
                 ddlSession2.DataBind();
             }
         }
@@ -312,7 +315,6 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     //Added By Hemanth G
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-
         try
         {
 
@@ -526,7 +528,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     {
                         ddlDegree.Items.Clear();
                         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE B ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND B.COLLEGE_ID = " + Convert.ToInt32(ddlCollege.SelectedValue), "A.DEGREENAME");
-                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");
+                        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");
                         //ddlDegree.Focus();
                         ddlSession.Focus();
                     }
@@ -914,7 +916,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
             //============ NEW FOR COMMONCODE CLIENT BATCH AND SECTION ADDED BY INJAMAM ANSARI
             int th_pr = Convert.ToInt32(objCommon.LookUp("ACD_SUBJECTTYPE", "TH_PR", "SUBID=" + Convert.ToInt32(ddlSubjecttype.SelectedValue)));
-            if (th_pr > 1)                          //FOR PRACTICAL COURSE 
+            if (th_pr > 1 && divbatch.Visible == true)                          //FOR PRACTICAL COURSE 
             {
                 if (Convert.ToInt32(Session["OrgId"]) == 6)  //RCPIPER
                 {
@@ -942,6 +944,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 else if (Convert.ToInt32(Session["OrgId"]) == 6)  //RCPIPER
                 {
                     this.ShowReport("TimeTable_Report", "rptTimeTable_rcpiper.rpt");
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)  //PCEN & JL Added by Injamam on 10_12_2023
+                {
+                    this.ShowReport("TimeTable_Report", "rptTimeTable_PJLCOE.rpt");
                 }
                 else
                 {
@@ -1358,8 +1364,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     ",@P_SECTIONNO=" + Sectionno +
                     ",@P_PREV_STATUS=" + Convert.ToInt32(0) +
                     ",@P_SUBID=" + SubId +
-                    ",@P_COLLEGE_ID=" + ViewState["college_id"] +  ",@P_BATCHNO=" + Convert.ToInt32(ddlbatch.SelectedValue);
-                   
+                    ",@P_COLLEGE_ID=" + ViewState["college_id"] + ",@P_BATCHNO=" + Convert.ToInt32(ddlbatch.SelectedValue);
+
                 //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
                 //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 //divMsg.InnerHtml += " </script>";
@@ -1540,6 +1546,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     {
         try
         {
+            int count = 0;
             foreach (ListViewDataItem dataitem in lvCourse.Items)
             {
 
@@ -1547,7 +1554,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
                 if (chkBox.Checked)
                 {
-
+                    count++;
                     ImageButton ibtnEvalDelete = sender as ImageButton;
                     int exdtno = int.Parse(ibtnEvalDelete.CommandArgument);
 
@@ -1564,11 +1571,11 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     GetCourses();
                     btnViewLogin.Visible = true;
                 }
-                else
-                {
-                    objCommon.DisplayMessage(this.updExamdate, "Select CheckBox to delete Time Table", this.Page);
-                    btnViewLogin.Visible = false;
-                }
+            }
+            if (count == 0)
+            {
+                objCommon.DisplayMessage(this.updExamdate, "Select CheckBox to delete Time Table", this.Page);
+                btnViewLogin.Visible = false;
             }
         }
         catch (Exception ex)
@@ -1775,7 +1782,18 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 try
                 {
-                    DateTime date1 = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
+                    string date = (dataitem.FindControl("txtExamDate") as TextBox).Text;
+                    DateTime date1;
+                    if (DateTime.TryParseExact(date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
+                    {
+                        date1 = DateTime.ParseExact(date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + date + "');", true);
+                        (dataitem.FindControl("txtExamDate") as TextBox).Text = "";
+                        return false;
+                    }
                     if (date1 < DateTime.Now)
                     {
                         stat = false;
@@ -1892,7 +1910,17 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 course = Convert.ToInt32((item.FindControl("lblCourseno") as Label).ToolTip);
                 elect1 = Convert.ToString(objCommon.LookUp("ACD_COURSE", "ELECT", "COURSENO=" + course + ""));
                 textdate = txtDate.Text;
-                DateTime date = DateTime.ParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime date;
+                if (DateTime.TryParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+                {
+                    date = DateTime.ParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + textdate + "');", true);
+                    txtDate.Text = "";
+                    return;
+                }
                 formattedDate = date.ToString("yyyy-MM-dd");
                 txtDate.Enabled = true;
             }
@@ -1968,7 +1996,23 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         currentdate.Enabled = true;
         string elect1 = null;
         int slotno = 0;
-        DateTime date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        //DateTime date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime date;
+        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        {
+            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + currentdate.Text + "');", true);
+            currentdate.Text = "";
+            return;
+        }
+        if (date < DateTime.Now)
+        {
+            currentdate.Text = "";
+            return;
+        }
         string formattedDate = date.ToString("yyyy-MM-dd");
         int course = 0;
         foreach (ListViewDataItem item in lvCourse.Items)
@@ -2447,7 +2491,18 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 try
                 {
-                    DateTime date1 = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
+                    string date = (dataitem.FindControl("txtExamDate") as TextBox).Text;
+                    DateTime date1;
+                    if (DateTime.TryParseExact(date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
+                    {
+                        date1 = DateTime.ParseExact(date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + date + "');", true);
+                        (dataitem.FindControl("txtExamDate") as TextBox).Text = "";
+                        return false;
+                    }
                     if (date1 < DateTime.Now)
                     {
                         stat = false;
@@ -2522,6 +2577,17 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 TextBox txtDate = item.FindControl("txtExamDate") as TextBox;
                 textdate = txtDate.Text;
+                DateTime date;
+                if (DateTime.TryParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+                {
+                    date = DateTime.ParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + textdate + "');", true);
+                    txtDate.Text = "";
+                    return;
+                }
                 //DateTime date = DateTime.ParseExact(textdate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
                 //formattedDate = date.ToString("yyyy-MM-dd");
                 txtDate.Enabled = true;
@@ -2568,6 +2634,22 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         string selecteddate = currentdate.Text;
         string drpslot = null;
         currentdate.Enabled = true;
+        DateTime date;
+        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        {
+            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+            currentdate.Text = "";
+            return;
+        }
+        if (date < DateTime.Now)
+        {
+            currentdate.Text = "";
+            return;
+        }
         //int slotno = 0;
         //int course = 0;
         //DateTime date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
@@ -3175,7 +3257,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             ListBox ddlschemelist = dataitem.FindControl("ddlschemelist") as ListBox;
             ListBox ddlsectionlist = dataitem.FindControl("ddlsectionlist") as ListBox;
 
-            objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND ISNULL(SR.EXAM_REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
+            objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=SR.SCHEMENO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND SC.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
 
             objCommon.FillDropDownList(ddlSlot1, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
 
@@ -3303,7 +3385,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 ListBox ddlschemelist = items.FindControl("ddlschemelist") as ListBox;
                 ImageButton imgbtnrowremove = items.FindControl("imgbtnrowremove") as ImageButton;
                 ImageButton imgaddcourse = items.FindControl("imgaddcourse") as ImageButton;
-                objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND ISNULL(SR.EXAM_REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
+                objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=SR.SCHEMENO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND SC.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
 
                 objCommon.FillDropDownList(ddlSlot1, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
                 if (ddlcommoncourse.Items.Count == 1 & count == 0)
@@ -3566,6 +3648,25 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         }
     }
 
+    protected void txtExamDate1_TextChanged1(object sender, EventArgs e)
+    {
+        TextBox currentdate = (TextBox)sender;
+        ListViewItem currentItem = (ListViewItem)currentdate.NamingContainer;
+        int currentIndex = currentItem.DisplayIndex;
+        string selecteddate = currentdate.Text;
+        currentdate.Enabled = true;
+        DateTime date;
+        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        {
+            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+            currentdate.Text = "";
+            return;
+        }
+    }
     #endregion common Time Table End
 
 }
