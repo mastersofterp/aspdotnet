@@ -96,7 +96,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <p style="color: red; padding-top: 5px">Note: Please save the images either by Registration No. or Roll No. with a minimum size of 50kb before uploading</p>
+                                                <p style="color: red; padding-top: 5px">Note: Please save the images either by Registration No. or Roll No. with a minimum size of 150kb before uploading.</p>
                                             </div>
                                         </div>
                                     </ContentTemplate>
