@@ -233,9 +233,9 @@
                                         CssClass="btn btn-primary" OnClick="btnexcelbutton_Click" Visible="false" />
                                     <asp:Button ID="btnbuildingchart" runat="server" OnClick="btnbuildingchart_Click" Text="Building Chart" ToolTip="Click Here To Generate Buliding Chart" TabIndex="11"
                                         CssClass="btn btn-primary" ValidationGroup="Submit" hidden />
-                                    <asp:Button ID="btnDispatchSlip" runat="server" Text="Dispatch Slip" ValidationGroup="Submit" TabIndex="1" CssClass="btn btn-primary" OnClick="btnDispatchSlip_Click" />
+                                    <asp:Button ID="btnDispatchSlip" runat="server" Text="Dispatch Slip" ValidationGroup="Submit1" TabIndex="1" CssClass="btn btn-primary" OnClick="btnDispatchSlip_Click" />
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                        ShowSummary="false" ValidationGroup="Submit" />
+                                        ShowSummary="false" ValidationGroup="Submit1" />
 
                                     <p>
                                         &nbsp;<asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Submit" />

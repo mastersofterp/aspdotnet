@@ -504,6 +504,7 @@ public partial class examseatingreports : System.Web.UI.Page
     {
         if (rdbSingle.Checked)
         {
+            ViewState["DoubleSeating"] = "1";
             if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
                 ShowReportMaster("Master_Seating_Plan", "rptMasterSeatingPlan_ForExam_RCPIPER.rpt");
@@ -606,7 +607,7 @@ public partial class examseatingreports : System.Web.UI.Page
                 url += "&path=~,Reports,Academic," + rptFileName;
                 // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_EXAMDATE=" + (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + ddlslot.SelectedValue + ",@P_PREV_STATUS=" + ddlExamType.SelectedValue;
 
-                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_EXAMDATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + Convert.ToInt32(ddlslot.SelectedValue) + ",@P_PREV_STATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_EXAMDATE=" + Convert.ToDateTime(ddlExamdate.SelectedItem.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_SLOT_NO=" + Convert.ToInt32(ddlslot.SelectedValue) + ",@P_PREV_STATUS=" + Convert.ToInt32(ddlExamType.SelectedValue) + ",@P_SEAT_STATUS=" + Convert.ToInt32(ViewState["DoubleSeating"]);
 
 
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -1197,25 +1198,33 @@ public partial class examseatingreports : System.Web.UI.Page
     }
     protected void ddlExamdate_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //   string EXAMDATE = (Convert.ToDateTime(txtExamDate.Text)).ToString("yyyy-MM-dd");
 
-        string EXAMDAT = Convert.ToString(ddlExamdate.SelectedItem);
-        string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("dd/MM/yyyy");
 
-        //  string EXAMDATE = (Convert.ToDateTime(ddlExamdate.Text)).ToString("yyyy-MM-dd");
+        //string EXAMDAT = Convert.ToString(ddlExamdate.SelectedItem) == "Please Select" ? "" : Convert.ToString(ddlExamdate.SelectedItem);
 
-        string a = objCommon.LookUp(" ACD_EXAM_DATE", "COUNT(1)", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'");
+        //string EXAMDATE = (Convert.ToString(EXAMDAT)) == "" ? "" : Convert.ToDateTime(EXAMDAT).ToString("dd/MM/yyyy");
 
-        if (a.ToString() == "0")
+        if (ddlExamdate.SelectedIndex>0)
         {
-            objCommon.DisplayUserMessage(updBarcode, "No Exams Are Conducted on Selected Date", this.Page);
-            ddlslot.SelectedValue = "0";
 
+            string a = objCommon.LookUp(" ACD_EXAM_DATE", "COUNT(1)", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + Convert.ToString(ddlExamdate.SelectedItem) + "'");
+
+            if (a.ToString() == "0")
+            {
+                objCommon.DisplayUserMessage(updBarcode, "No Exams Are Conducted on Selected Date", this.Page);
+                ddlslot.SelectedValue = "0";
+
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlslot, "ACD_EXAM_DATE AED INNER JOIN ACD_EXAM_TT_SLOT AEIS ON AEIS.SLOTNO=AED.SLOTNO", "distinct aed.SLOTNO", "SLOTNAME", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + Convert.ToString(ddlExamdate.SelectedItem) + "'", "SLOTNO ASC");
+                //ddlslot.SelectedIndex = 0;
+            }
         }
         else
         {
-            objCommon.FillDropDownList(ddlslot, "ACD_EXAM_DATE AED INNER JOIN ACD_EXAM_TT_SLOT AEIS ON AEIS.SLOTNO=AED.SLOTNO", "distinct aed.SLOTNO", "SLOTNAME", "CONVERT(VARCHAR(50),EXAMDATE,103)='" + EXAMDATE + "'", "SLOTNO ASC");
-            //ddlslot.SelectedIndex = 0;
+
+            objCommon.DisplayUserMessage(updBarcode, "Please Select Date", this.Page);
         }
     }
     #endregion
