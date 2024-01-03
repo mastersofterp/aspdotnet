@@ -3102,7 +3102,14 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
 
                         }
                         //ds = objApp.GetNoofdays(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), rblleavetype.SelectedValue, stno, calholy, Convert.ToInt32(ViewState["COLLEGE_NO"]), Convert.ToInt32(ddlLeaveFNAN.SelectedValue));
-                        ds = objApp.GetNoofdays(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), rblleavetype.SelectedValue, stno, calholy, Convert.ToInt32(ViewState["COLLEGE_NO"]), Convert.ToInt32(ddlLeaveFNAN.SelectedValue), empid);
+                        if (Is_SHift_mgt == true)   //Added for Shift Management
+                        {
+                            ds = objApp.GetNoofdays_Shift(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), rblleavetype.SelectedValue, calholy, Convert.ToInt32(ddlLeaveFNAN.SelectedValue), empid);
+                        }
+                        else
+                        {
+                            ds = objApp.GetNoofdays(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), rblleavetype.SelectedValue, stno, calholy, Convert.ToInt32(ViewState["COLLEGE_NO"]), Convert.ToInt32(ddlLeaveFNAN.SelectedValue), empid);
+                        }
                         DataSet ds2 = null;
                         if (ds.Tables[0].Rows.Count > 0)
                         {
@@ -3275,7 +3282,15 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_Leave_Application : Syste
                             objlv.COLLEGE_NO = Convert.ToInt32(ViewState["COLLEGE_NO"].ToString());
                             bool isAllowedBeforeApplication = Convert.ToBoolean(objCommon.LookUp("PAYROLL_LEAVE", "isnull(IsAllowBeforeApplication,0) as IsAllowBeforeApplication", "LNO=" + Convert.ToInt32(Session["LNO"])));
                             objlv.IsAllowBeforeApplication = isAllowedBeforeApplication;
-                            int allow_days = objApp.GetAllowDays(objlv);
+                            int allow_days = 0;
+                            if (Is_SHift_mgt == true)
+                            {
+                                allow_days = objApp.GetAllowDays_Shift(objlv);
+                            }
+                            else
+                            {
+                                 allow_days = objApp.GetAllowDays(objlv);
+                            }
                             DateTime CheckDate;
                             if (isAllowedBeforeApplication == true)
                             {
