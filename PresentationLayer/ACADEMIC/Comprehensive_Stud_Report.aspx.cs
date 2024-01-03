@@ -598,13 +598,13 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                             {
                                 lvProt.DataSource = dsStudentPro;
                                 lvProt.DataBind();//added by lalit 
-                              
+
                             }
                             else
                             {
                                 lvProt.DataSource = null;
                                 lvProt.DataBind();
-                               
+
                             }
                         }
 
@@ -870,7 +870,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 }
 
             }
-          
+
             DataSet dsCourse = objSC.RetrieveRegDetailsByIdnoAndSession(idno, Convert.ToInt32(ddlSession.SelectedValue));
             if (dsCourse != null && dsCourse.Tables.Count > 0 && dsCourse.Tables[0].Rows.Count > 0)
             {
@@ -884,7 +884,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             }
 
             ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
-           
+
         }
         catch (Exception ex)
         {
@@ -2538,7 +2538,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
-               // url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_SCHEMENO=" + scheme + ",@P_SEMESTERNO=" + sem + ",@P_YEAR=" + 0 + ",@P_STUDTYPE=" + studtype + ",@P_DATEOFISSUE=" + DateTime.Today.Date + ",@P_IDNO=" + idno;
+                // url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_SCHEMENO=" + scheme + ",@P_SEMESTERNO=" + sem + ",@P_YEAR=" + 0 + ",@P_STUDTYPE=" + studtype + ",@P_DATEOFISSUE=" + DateTime.Today.Date + ",@P_IDNO=" + idno;
 
                 url += "&param=@P_SESSIONNO=" + Convert.ToInt32(session) + ",@P_DEGREENO=" + degree + ",@P_BRANCHNO=" + branch + ",@P_SEMESTERNO=" + sem + ",@P_IDNO=" + idno; //Added by lalit regarding dt15/12/20236
 
@@ -2661,15 +2661,60 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
             ds = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
 
 
-            if (ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables[1].Rows.Count > 0)
             {
-                lvCourseAtt.DataSource = ds;
-                lvCourseAtt.DataBind();
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
-            }
-            else
-            {
-                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+
+                string sessionValue = ds.Tables[1].Rows[0]["SESSION_VALUE"].ToString();
+                string collegeValue = ds.Tables[1].Rows[0]["COLLEGE_VALUE"].ToString();
+
+                if (sessionValue != "" && collegeValue != "")
+                {
+                    if (ds.Tables[2].Rows.Count > 0)
+                    {
+                        int studcolg = Convert.ToInt32(ds.Tables[2].Rows[0]["STUDENT_COLLEGE"]);
+
+                        string att_collegeids = ds.Tables[2].Rows[0]["ATT_COLLEGEIDS"].ToString();
+                        string att_sessionos = ds.Tables[2].Rows[0]["SESSIONNO"].ToString();
+                        int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+
+                        if (att_collegeids.Contains(studcolg.ToString()) && att_sessionos.Contains(sessionno.ToString()))
+                        {
+                            if (ds.Tables[0].Rows.Count > 0)
+                            {
+                                lvCourseAtt.DataSource = ds;
+                                lvCourseAtt.DataBind();
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+                            }
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(UpdatePanel2, "Activity disabled by admin !!", this.Page);
+                    }
+                }
+                else
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        lvCourseAtt.DataSource = ds;
+                        lvCourseAtt.DataBind();
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalCourse();", true);
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(UpdatePanel2, "No Data Found.", this.Page);
+                    }
+
+                }
+
             }
         }
     }
