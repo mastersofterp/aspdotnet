@@ -31,11 +31,8 @@
                     </h3>
                 </div>
                 <div class="box-body">
-                    <div class="row">
+                   <%-- <div class="row">
                         <div class="form-group col-lg-3 col-md-6 col-12">
-                            <%-- <sup>*</sup>--%>
-                            <%--<label></label>--%>
-
                             <asp:RadioButtonList ID="rdoDataValidate" runat="server" RepeatDirection="Horizontal"
                                 AutoPostBack="True" OnSelectedIndexChanged="rdoPurpose_SelectedIndexChanged">
                                 <asp:ListItem Selected="True" Value="1">Student Wise Query</asp:ListItem>
@@ -58,7 +55,7 @@
                                 ToolTip="Show " OnClick="btnCheckHealth_Click" ValidationGroup="show" CssClass="btn btn-primary" Visible="false" />
                         </div>
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="show" ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                    </div>
+                    </div>--%>
                 </div>
 
                 <asp:ListView ID="Lvdatav" runat="server" EnableModelValidation="True">

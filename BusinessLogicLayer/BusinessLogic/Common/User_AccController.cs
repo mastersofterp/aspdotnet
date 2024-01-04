@@ -2822,15 +2822,15 @@ namespace IITMS
                 /// Added by Vipul Tichakule on 16-11-2023
                 /// </summary>
                 /// <returns></returns>
-                public DataSet GetDataValidation(string queryname)
+                public DataSet GetDataValidation() //string queryname
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
+                        SqlParameter[] objParams = new SqlParameter[0];
                         //objParams[0] = new SqlParameter("@P_DATE",);
-                        objParams[0] = new SqlParameter("@P_QUERYNAME", queryname);
+                       // objParams[0] = new SqlParameter("@P_QUERYNAME", queryname);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_DATA_VALIDATION_CHECK", objParams);
                     }
@@ -2873,16 +2873,16 @@ namespace IITMS
                 /// Added by Vipul Tichakule on 16-11-2023
                 /// </summary>
                 /// <returns></returns>
-                public DataSet Downloaddatavalidate(int ID, int sessionno)
+                public DataSet Downloaddatavalidate(int ID) // int sessionno
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(uaims_constr);
-                        SqlParameter[] objParams = new SqlParameter[2];
+                        SqlParameter[] objParams = new SqlParameter[1];
                         //objParams[0] = new SqlParameter("@P_DATE",);
                         objParams[0] = new SqlParameter("@P_ID", ID);
-                        objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        //objParams[1] = new SqlParameter("@P_SESSIONNO", sessionno);
 
                         ds = objSQLHelper.ExecuteDataSetSP("ACD_PKG_QUERY_TO_DOWNLOAD_DATAVALIDATION", objParams);
                     }

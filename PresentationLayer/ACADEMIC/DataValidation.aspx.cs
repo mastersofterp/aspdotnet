@@ -31,66 +31,66 @@ public partial class ACADEMIC_DataValidation : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
-            rdoPurpose_SelectedIndexChanged(sender, e);
+            BindListView();
     }
 
 
-    protected void rdoPurpose_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        dvSession.Visible = false;
-        btnShow_Click(sender, e);
-        //if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 1)
-        //{
-        //    Lvdatav.DataSource = null;
-        //    Lvdatav.DataBind();              
-        //    Lvdatav.Visible = true;
+    //protected void rdoPurpose_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    dvSession.Visible = false;
+    //    btnShow_Click(sender, e);
+    //    //if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 1)
+    //    //{
+    //    //    Lvdatav.DataSource = null;
+    //    //    Lvdatav.DataBind();              
+    //    //    Lvdatav.Visible = true;
            
-        //}
-        //else if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 2)
-        //{
-        //    Lvdatav.Visible = false;
-        //   // dvSession.Visible = true;
-        //    this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT S INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONNO=SM.SESSIONNO INNER JOIN ACD_SESSION SD ON SM.SESSIONID=SD.SESSIONID",
-        //        "DISTINCT SD.SESSIONID", "SD.SESSION_NAME", "ISNULL(SM.FLOCK,0)=1 AND ISNULL(S.CANCEL,0)=0", "SD.SESSIONID DESC");
-        //}
-    }
+    //    //}
+    //    //else if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 2)
+    //    //{
+    //    //    Lvdatav.Visible = false;
+    //    //   // dvSession.Visible = true;
+    //    //    this.objCommon.FillDropDownList(ddlSession, "ACD_STUDENT_RESULT S INNER JOIN ACD_SESSION_MASTER SM ON S.SESSIONNO=SM.SESSIONNO INNER JOIN ACD_SESSION SD ON SM.SESSIONID=SD.SESSIONID",
+    //    //        "DISTINCT SD.SESSIONID", "SD.SESSION_NAME", "ISNULL(SM.FLOCK,0)=1 AND ISNULL(S.CANCEL,0)=0", "SD.SESSIONID DESC");
+    //    //}
+    //}
 
-    protected void btnShow_Click(object sender, EventArgs e)
-    {
-        //btnCheckHealth.Visible = true;
-        //if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 1)
-        BindListView(rdoDataValidate.SelectedValue, 0);
-    }
+    //protected void btnShow_Click(object sender, EventArgs e)
+    //{
+    //    //btnCheckHealth.Visible = true;
+    //    //if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 1)
+    //    BindListView(rdoDataValidate.SelectedValue, 0);
+    //}
 
-    protected void btnCheckHealth_Click(object sender, EventArgs e)
-    {
-        string value = string.Empty;       
-        foreach (ListViewDataItem items in Lvdatav.Items)
-        {
-            Label checkdate = (Label)items.FindControl("lblCurrentd");
-            CheckBox checkdataV = (CheckBox)items.FindControl("CheckDV");
-            HiddenField hdvalue = (HiddenField)items.FindControl("hdid");
-            if (checkdataV.Checked)
-            {
-                //checkdate.Text = Convert.ToString(DateTime.Now);    
-                value += hdvalue.Value + ",";
-            }
-        }
-        value = value.TrimEnd(',');
+    //protected void btnCheckHealth_Click(object sender, EventArgs e)
+    //{
+    //    string value = string.Empty;       
+    //    foreach (ListViewDataItem items in Lvdatav.Items)
+    //    {
+    //        Label checkdate = (Label)items.FindControl("lblCurrentd");
+    //        CheckBox checkdataV = (CheckBox)items.FindControl("CheckDV");
+    //        HiddenField hdvalue = (HiddenField)items.FindControl("hdid");
+    //        if (checkdataV.Checked)
+    //        {
+    //            //checkdate.Text = Convert.ToString(DateTime.Now);    
+    //            value += hdvalue.Value + ",";
+    //        }
+    //    }
+    //    value = value.TrimEnd(',');
 
-        int rresult = checkdv.UpdateDataValidation(value);
-    }
+    //    int rresult = checkdv.UpdateDataValidation(value);
+    //}
 
 
     protected void btnDownload_Click(object sender, ImageClickEventArgs e)
     {
         ImageButton btndownload = sender as ImageButton;
         int ID = int.Parse(btndownload.CommandArgument);
-        int sessionno = 0;
-        if (Convert.ToInt32(rdoDataValidate.SelectedValue) != 0)
-            sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+        //int sessionno = 0;
+        //if (Convert.ToInt32(rdoDataValidate.SelectedValue) != 1)
+        //    sessionno = Convert.ToInt32(ddlSession.SelectedValue);
 
-        DataSet ds = checkdv.Downloaddatavalidate(ID, sessionno);
+        DataSet ds = checkdv.Downloaddatavalidate(ID);
         GridView GV = new GridView();
         if (ds != null && ds.Tables.Count > 0)
         {
@@ -123,20 +123,20 @@ public partial class ACADEMIC_DataValidation : System.Web.UI.Page
             return;
         }
     }
-    protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlSession.SelectedIndex > 0)
-        {
-            if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 2)
-                BindListView(rdoDataValidate.SelectedValue, Convert.ToInt16(ddlSession.SelectedIndex));
-        }
-    }
+    //protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
+    //{
+    //    if (ddlSession.SelectedIndex > 0)
+    //    {
+    //        if (Convert.ToInt32(rdoDataValidate.SelectedValue) == 2)
+    //            BindListView(rdoDataValidate.SelectedValue, Convert.ToInt16(ddlSession.SelectedIndex));
+    //    }
+    //}
 
-    private void BindListView(string QueryNameID,int sessionNo)
+    private void BindListView()
     {
         try
         {
-            DataSet ds = checkdv.GetDataValidation(QueryNameID);
+            DataSet ds = checkdv.GetDataValidation();
             if (ds.Tables[0].Rows.Count > 0)
             {
                 Lvdatav.DataSource = null;
