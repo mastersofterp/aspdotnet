@@ -21,6 +21,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
     StudentController studCont = new StudentController();
     Exam objExam = new Exam();
 
+    StudentRegistration objSReg = new StudentRegistration();
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -156,7 +157,17 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objExamController.GetExamRegStud(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue),Convert.ToInt32(ddlSession.SelectedValue),Convert.ToInt32(rdoDegree.SelectedValue));
+            DataSet ds = null;
+            if (ddlStudetType.SelectedValue == "0")
+            {
+                 ds = objExamController.GetExamRegStud(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(rdoDegree.SelectedValue));
+            }
+            else {
+
+                 ds = objExamController.GetExamRegStudBacklog(Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(rdoDegree.SelectedValue));
+
+            }
+
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 //if (Convert.ToInt32(Session["OrgId"]) == 1)
@@ -421,7 +432,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                 return;
             }
             #endregion
-
+       //  string que_out=string.Empty;
 
             foreach (ListViewDataItem dataitem in lvStudentRecords.Items)
             {
@@ -433,20 +444,58 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                     Label idno = dataitem.FindControl("lblstudname") as Label;
                     Label semester = dataitem.FindControl("lblsem") as Label;
                     Label lblCCode = dataitem.FindControl("lblccode") as Label;
+                   Label lblregno = dataitem.FindControl("REGNO") as Label;
                     idnos = Convert.ToInt32(idno.ToolTip);
                     courseno = lblCCode.ToolTip;// +",";
                     // courseno = "3683. 3684. 3685. 3686";
                     sem = Convert.ToInt32(semester.ToolTip);
-
-                    string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN";
-                    string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO,@P_UANO,@P_OUT";
-                    string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(sem) + "," + courseno + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Session["userno"] + ",0";
-                    string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
-                    if (que_out == "1")
+                   
+                    if (ddlStudetType.SelectedValue == "0")
                     {
-                        objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
-                        BindListView();
+                        string SP_Name = "PKG_UPDATE_EXAM_REGISTRATION_STUDENT_BYADMIN";
+                        string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO,@P_COURSENO,@P_SCHEMENO,@P_UANO,@P_OUT";
+                        string Call_Values = "" + Convert.ToInt32(idnos) + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(sem) + "," + courseno + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Session["userno"] + ",0";
+                        string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                         if (que_out == "1")
+                         {
+                             objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
+                             BindListView();
+                         }
                     }
+                    else 
+                    {
+
+                        // objParams[0] = new SqlParameter("@P_SESSIONNO", objSR.SESSIONNO);
+                        // objParams[1] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
+                        // objParams[2] = new SqlParameter("@P_SEMESTERNO", objSR.SEMESTERNO);
+                        // objParams[3] = new SqlParameter("@P_BACK_COURSENOS", objSR.COURSENOS);
+                        // objParams[4] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
+                        // objParams[5] = new SqlParameter("@P_IDNOS", objSR.IDNO);
+                        // objParams[6] = new SqlParameter("@P_REGNO", objSR.REGNO);
+                        // objParams[7] = new SqlParameter("@P_ROLLNO", objSR.ROLLNO);
+                        // objParams[8] = new SqlParameter("@P_UA_NO", objSR.UA_NO);
+                        // objParams[9] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
+                        // objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        #region 
+                        string ROLLNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + Convert.ToInt32(idno.ToolTip));
+                       //int ua_no=Convert.ToInt32(Session["userno"].ToString())
+                       //ddlSession.SelectedValue,Convert.ToInt32(ViewState["schemeno"]),ddlSemester.SelectedValue,    lblCCode.ToolTip, "::1",
+                       //idno.ToolTip,lblregno.ToolTip,ROLLNO,Session["colcode"].ToString(),
+                       //
+
+                         //public int AddExamRegisteredBacklaog_CC_ADMIN(int SESSIONNO, int SCHEMENO, int SEMESTERNO, string COURSENOS, string IPADDRESS, int IDNO, string REGNO, string ROLLNO, int UA_NO, string COLLEGE_CODE)
+
+                        int ret = objExamController.AddExamRegisteredBacklaog_CC_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSemester.SelectedValue), lblCCode.ToolTip, "::1", Convert.ToInt32(idno.ToolTip), ROLLNO, "0", Convert.ToInt32(Session["userno"].ToString()), Session["colcode"].ToString());
+                        if (ret == 1)
+                        {
+                            objCommon.DisplayMessage(this, "Course Registration Done Sucessfully", this.Page);
+                            BindListView();
+                        }
+                        #endregion
+                    }
+                    
+                   // }
+                   
 
 
                 }
@@ -481,6 +530,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         rdoDegree.SelectedValue = null;
         btnsubmit.Enabled = false;
         lvStudentRecords.Visible = false;
+        ddlStudetType.SelectedIndex = -1;
        //   lvStudentRecords.DataBind();
     }
 
@@ -494,48 +544,79 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
        LinkButton lbtn = (LinkButton)(sender);
        Session["idno"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);    
       // ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
+       // if()
+       //if (Session["OrgId"].ToString() == "9")//ATLAS
+       //{
+       //    ShowReport("BacklogRegistration", "rptBacklog_Reg_ATLAS.rpt");
+       //}
+       //if (Session["OrgId"].ToString() == "6")//RCPIPER 
+       //{
+       //    //ShowReport("BacklogRegistration", "rptBacklog_Reg_RCPIPER.rpt");
+       //    ShowReport("BacklogRegistration", "rptBckExam_registrationStudent_RCPIPER.rpt");
+       //}
+       //else
+       //{
+       //    ShowReport("BacklogRegistration", "rptBacklog_Registration_CC.rpt");
+       //}
+
+       if (ddlStudetType.SelectedValue == "0")
+       {
+           if (Convert.ToInt32(Session["OrgId"]) == 9)
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent.rpt");
+           }
+           else if (Convert.ToInt32(Session["OrgId"]) == 8)//MIT
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
+           }
+           //
+           else if (Convert.ToInt32(Session["OrgId"]) == 7)//RAJAGIRI
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_Rajagiri.rpt");
+           }
+           else if (Convert.ToInt32(Session["OrgId"]) == 6)//RCPIPER
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_RCPIPER.rpt");
+
+               // HideClm();
+           }
+           else if (Convert.ToInt32(Session["OrgId"]) == 17) //UTKAL
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
+           }
+
+           else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PRIYADARSHNAI
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
+           }
+           else if (Convert.ToInt32(Session["OrgId"]) == 10)//PRMIT
+           {
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_PRMITR.rpt");
+           }
+           else
+           {
 
 
-
-
-        if (Convert.ToInt32(Session["OrgId"]) == 9)
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent.rpt");
-        }
-        else if (Convert.ToInt32(Session["OrgId"]) == 8)//MIT
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
-        }
-        //
-        else if (Convert.ToInt32(Session["OrgId"]) == 7)//RAJAGIRI
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_Rajagiri.rpt");
-        }
-        else if (Convert.ToInt32(Session["OrgId"]) == 6)//RCPIPER
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_RCPIPER.rpt");
-          
-           // HideClm();
-        }
-        else if (Convert.ToInt32(Session["OrgId"]) == 17) //UTKAL
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_UTKAL.rpt");
-        }
-
-        else if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20) //PRIYADARSHNAI
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_PCEN.rpt");
-        }
-        else if (Convert.ToInt32(Session["OrgId"]) == 10)//PRMIT
-        {
-            ShowReport("CourseRegistration", "rptExam_registrationStudent_PRMITR.rpt");
-        }
-        else {
-
-
-              ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
-        }
-        
+               ShowReport("CourseRegistration", "rptExam_registrationStudent_MIT.rpt");
+           }
+       }
+       else
+       {
+           if (Session["OrgId"].ToString() == "9")//ATLAS
+           {
+               ShowReport("BacklogRegistration", "rptBacklog_Reg_ATLAS.rpt");
+           }
+           else if (Session["OrgId"].ToString() == "6")//RCPIPER 
+           {
+               //ShowReport("BacklogRegistration", "rptBacklog_Reg_RCPIPER.rpt");
+               ShowReport("BacklogRegistration", "rptBckExam_registrationStudent_RCPIPER.rpt");
+           }
+           else
+           {
+               ShowReport("BacklogRegistration", "rptBacklog_Registration_CC.rpt");
+           }
+       
+       }
  //   }
 
 
@@ -566,11 +647,18 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Collegeid + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(degreeno) + ",@P_BRANCHNO=" + Convert.ToInt32(branchno) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
+            if (ddlStudetType.SelectedValue == "0")
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Collegeid + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(degreeno) + ",@P_BRANCHNO=" + Convert.ToInt32(branchno) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]);
+            }
+            else {
+                url += "&param=@P_COLLEGE_CODE=" + Collegeid + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(degreeno) + ",@P_BRANCHNO=" + Convert.ToInt32(branchno) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])+",@P_SEMESTERNO=" +Convert.ToInt32(ddlSemester.SelectedValue);
+            }
             //  tring call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "";
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
+
           //  ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
 
         }
@@ -583,6 +671,12 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         }
     }
 
-
+    protected void ddlStudetType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //ddlStudetType_SelectedIndexChanged
+        lvStudentRecords.DataSource = null;
+        lvStudentRecords.DataBind();
+        rdoDegree.SelectedValue = null;
+    }
 
 }

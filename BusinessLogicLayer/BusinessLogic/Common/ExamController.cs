@@ -8161,8 +8161,77 @@ namespace IITMS
                     return retStatus;
                 }
                 #endregion
+                #region ADDED BY GAURAV 04_01_2004 for admin exam reg approval page 
+                public DataSet GetExamRegStudBacklog(int schemeno, int semesterno, int sessionno, int Examreg)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParams[1] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[2] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[3] = new SqlParameter("@P_STUD_EXAM_REGISTERED", Examreg);
 
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_EXAM_REGISTER_STUDENT_BACKLOG", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.GetCourses-> " + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
 
+                #endregion
+
+                #region ADDED BY GAURAV FOR BACKLOG ADMIN REG  
+                public int AddExamRegisteredBacklaog_CC_ADMIN(int SESSIONNO, int SCHEMENO, int SEMESTERNO, string COURSENOS, string IPADDRESS, int IDNO, string REGNO, string ROLLNO, int UA_NO, string COLLEGE_CODE)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = null;
+
+                        //Add New eXAM Registered Subject Details
+                        objParams = new SqlParameter[11];
+
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", SESSIONNO);
+                        objParams[1] = new SqlParameter("@P_SCHEMENO", SCHEMENO);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+                        objParams[3] = new SqlParameter("@P_BACK_COURSENOS", COURSENOS);
+                        objParams[4] = new SqlParameter("@P_IPADDRESS", IPADDRESS);
+                        objParams[5] = new SqlParameter("@P_IDNOS", IDNO);
+                        objParams[6] = new SqlParameter("@P_REGNO", REGNO);
+                        objParams[7] = new SqlParameter("@P_ROLLNO", ROLLNO);
+                        objParams[8] = new SqlParameter("@P_UA_NO", UA_NO);
+                        objParams[9] = new SqlParameter("@P_COLLEGE_CODE", COLLEGE_CODE);
+                        objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[10].Direction = ParameterDirection.Output;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EXAM_RESULT_INSERT_FAIL_LIST_BACKLOG_REG_CC_ADMIN", objParams, true);
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
+                    }
+
+                    return retStatus;
+
+                }
+                #endregion
             }
         }
     }
