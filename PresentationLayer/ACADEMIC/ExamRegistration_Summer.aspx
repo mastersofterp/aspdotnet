@@ -446,7 +446,10 @@
                 <div id="div2" runat="server"></div>
                 <div class="box-header with-border">
                     <%--<h3 class="box-title">SESSION CREATION</h3>--%>
-                    <h3 class="box-title">EXAM REGISTRATION</h3>
+                    <h3 class="box-title">
+                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label>
+
+                    </h3>
                 </div>
 
                <%-- <-----------------------------------------Added By Rohit--------------------------------------------------->--%>
@@ -515,6 +518,10 @@
                                                 <a class="sub-label">
                                                     <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                             </li>
+                                             <li class="list-group-item"><b>Session Name :</b>
+                                                    <a class="sub-label">
+                                                    <asp:Label ID="lblsessionno" runat="server" Font-Bold="true" /></a>
+                                             </li>
                                         </ul>
                                     </div>
                                     <div class="col-lg-5 col-md-6 col-12">
@@ -548,7 +555,12 @@
                                                 <a class="sub-label">
                                                     <asp:Label ID="FinalTotal" runat="server" Font-Bold="true" /></a>
                                                     <asp:HiddenField ID="hdfCreditTotal" runat="server" />
-                                            </li>                                         
+                                            </li>
+                                             <li class="list-group-item"><b>Paid Fee :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="PaidTotal" runat="server" Font-Bold="true" /></a>
+                                                    <asp:HiddenField ID="hdfPaidTotal" runat="server" />
+                                            </li>                                           
 
                                         </ul>
                                     </div>
@@ -714,7 +726,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>
-                                                               <asp:CheckBox ID="chkAll" Checked="false" runat="server" OnCheckedChanged="chkAll_CheckedChanged" AutoPostBack="true" />
+                                                               <asp:CheckBox ID="chkAll" Checked="false" runat="server" OnCheckedChanged="chkAll_CheckedChanged"  AutoPostBack="true" />
                                                                 All
                                                             </th>
                                                             <th>COURSE CODE
@@ -752,7 +764,7 @@
 
 
                                                     <%--<asp:CheckBox ID="chkAccept" runat="server" Enabled='<%#Eval("STUD_EXAM_REGISTERED").ToString()=="1" ? false : true%>' Checked='<%# Eval("STUD_EXAM_REGISTERED").ToString() == "1" ? true : false %>'/>--%>
-                                                    <asp:CheckBox ID="chkAccept" runat="server" Checked="false" AutoPostBack="true" OnCheckedChanged="chkaccept_checkedchanged" />
+                                                    <asp:CheckBox ID="chkAccept" runat="server" Checked="true" AutoPostBack="true" OnCheckedChanged="chkaccept_checkedchanged" />
 
                                                   <%-- <asp:checkbox id="chkAccept" runat="server" checked="false" autopostback="true" onclick="exefunction(this);" />--%>
 
