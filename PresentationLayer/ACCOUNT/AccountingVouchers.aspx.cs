@@ -17266,23 +17266,30 @@ public partial class AccountingVouchers : System.Web.UI.Page
             ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('Please Enter Amount.');", true);
             return;
         }
-
-        if (Convert.ToInt32(txtccAmount.Text) > Convert.ToInt32(txtTranAmt.Text))
+        if (txtTranAmt.Text != "")
         {
-            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('The Cost Center Amount Should be Less than or Equal to Transaction Amount.');", true);
+            if (Convert.ToDouble(txtccAmount.Text) > Convert.ToDouble(txtTranAmt.Text))
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('The Cost Center Amount Should be Less than or Equal to Transaction Amount.');", true);
+                return;
+            }
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('Please Enter Amount.');", true);
             return;
         }
         foreach (ListViewDataItem lvItem in lvMultiCC.Items)
         {
-            int totalCCAmount = 0;
+            double totalCCAmount = 0;
             HiddenField PartyNo = lvItem.FindControl("hdMulticcPartyId") as HiddenField;
             Label lblAmount = lvItem.FindControl("lblAmount") as Label;
             if (txtAcc.Text != "")
             {
                 if(Convert.ToInt32(txtAcc.Text.ToString().Trim().Split('*')[1])==Convert.ToInt32(PartyNo.Value))
                 {
-                    totalCCAmount = totalCCAmount + Convert.ToInt32(lblAmount.Text) + Convert.ToInt32(txtccAmount.Text);
-                    if (Convert.ToInt32(totalCCAmount) > Convert.ToInt32(txtTranAmt.Text))
+                    totalCCAmount = totalCCAmount + Convert.ToInt32(lblAmount.Text) + Convert.ToDouble(txtccAmount.Text);
+                    if (Convert.ToInt32(totalCCAmount) > Convert.ToDouble(txtTranAmt.Text))
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('The Total Cost Center Amount Should be Less than or Equal to Transaction Amount.');", true);
                         return;
@@ -17307,7 +17314,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
             dr["CostCenterID"] = ddlmuliicostcenter.SelectedValue;
             dr["PartyID"] = Convert.ToInt32(txtAcc.Text.ToString().Trim().Split('*')[1]);
             dr["PartyName"] = (txtAcc.Text.ToString());
-            dr["Amount"] = Convert.ToInt32(txtccAmount.Text);
+            dr["Amount"] = Convert.ToDouble(txtccAmount.Text);
 
 
             dtMuliccactivity.Rows.Add(dr);
@@ -17328,7 +17335,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
             dr["CostCenterID"] = ddlmuliicostcenter.SelectedValue;
             dr["PartyID"] = Convert.ToInt32(txtAcc.Text.ToString().Trim().Split('*')[1]);
             dr["PartyName"] = (txtAcc.Text.ToString());
-            dr["Amount"] = Convert.ToInt32(txtccAmount.Text);
+            dr["Amount"] = Convert.ToDouble(txtccAmount.Text);
 
             ViewState["CC_ID"] = Convert.ToInt32(ViewState["CC_ID"]) + 1;
             dtMuliccactivity.Rows.Add(dr);

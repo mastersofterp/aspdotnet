@@ -822,7 +822,7 @@ function calTdsOnIGstAmount() {
                                             <asp:ListItem>Dr</asp:ListItem>
                                             <asp:ListItem>Cr</asp:ListItem>
                                         </asp:DropDownList>
-                                    </div>trSposor
+                                    </div>
                                     <div id="Div5" class="col-md-1" runat="server" visible="false">
                                         <asp:TextBox ID="txtChqNo1" runat="server" ToolTip="Please Enter Account Name" Width="70%"
                                             Visible="False"></asp:TextBox>
