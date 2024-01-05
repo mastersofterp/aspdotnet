@@ -97,7 +97,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.Page_Load-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -122,56 +125,76 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
     #region Load and Reloading Listbox
     protected void ddlReceiptType_SelectedIndexChanged(object sender, EventArgs e)
     {
-
-        ddlSchClg.Items.Clear();
-        ddlSchClg.Items.Add(new ListItem("Please Select", "0"));
-        ddlBranch.Items.Clear();
-        ddlBranch.Items.Add(new ListItem("Please Select", "0"));
-        ddlBatch.Items.Clear();
-        ddlBatch.Items.Add(new ListItem("Please Select", "0"));
-        ddlDegree.Items.Clear();
-        ddlDegree.Items.Add(new ListItem("Please Select", "0"));
-        ddlPaymentType.Items.Clear();
-        ddlPaymentType.Items.Add(new ListItem("Please Select", "0"));
-        lv.DataSource = null;
-        lv.DataBind();
-        lv.Visible = false;
-        lblFeeName.Text = "";
-        if (ddlReceiptType.SelectedIndex > 0)
+        try 
         {
-            this._objCommon.FillDropDownList(ddlSchClg, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME ", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
-            ddlSchClg.Focus();
+            ddlSchClg.Items.Clear();
+            ddlSchClg.Items.Add(new ListItem("Please Select", "0"));
+            ddlBranch.Items.Clear();
+            ddlBranch.Items.Add(new ListItem("Please Select", "0"));
+            ddlBatch.Items.Clear();
+            ddlBatch.Items.Add(new ListItem("Please Select", "0"));
+            ddlDegree.Items.Clear();
+            ddlDegree.Items.Add(new ListItem("Please Select", "0"));
+            ddlPaymentType.Items.Clear();
+            ddlPaymentType.Items.Add(new ListItem("Please Select", "0"));
+            lv.DataSource = null;
+            lv.DataBind();
+            lv.Visible = false;
+            lblFeeName.Text = "";
+            if (ddlReceiptType.SelectedIndex > 0)
+            {
+                this._objCommon.FillDropDownList(ddlSchClg, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME ", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
+                ddlSchClg.Focus();
+            }
+            else
+            {
+                _objCommon.DisplayMessage(pnlFeeTable, "Please select receipt type.", Page);
+                ddlReceiptType.Focus();
+            }
+            this.Call_FillListbox();
         }
-        else
+        catch (Exception ex)
         {
-            _objCommon.DisplayMessage(pnlFeeTable, "Please select receipt type.", Page);
-            ddlReceiptType.Focus();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlReceiptType_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
-        this.Call_FillListbox();
     }
 
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ////this.Call_FillListbox();
-        ddlBranch.Items.Clear();
-        ddlBranch.Items.Add(new ListItem("Please Select", "0"));
-        ddlBatch.Items.Clear();
-        ddlBatch.Items.Add(new ListItem("Please Select", "0"));
-        ddlPaymentType.Items.Clear();
-        ddlPaymentType.Items.Add(new ListItem("Please Select", "0"));
-        lv.DataSource = null;
-        lv.DataBind();
-        lv.Visible = false;
-        lblFeeName.Text = "";
-        btnSubmit.Enabled = false;
-        if (ddlDegree.SelectedIndex > 0)
+        try 
         {
-            _objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT (A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO>0 and B.DEGREENO=" + ddlDegree.SelectedValue + " and B.COLLEGE_ID = " + Convert.ToInt32(ddlSchClg.SelectedValue), "A.LONGNAME");
-            this.Call_FillListbox();
+            ////this.Call_FillListbox();
+            ddlBranch.Items.Clear();
+            ddlBranch.Items.Add(new ListItem("Please Select", "0"));
+            ddlBatch.Items.Clear();
+            ddlBatch.Items.Add(new ListItem("Please Select", "0"));
+            ddlPaymentType.Items.Clear();
+            ddlPaymentType.Items.Add(new ListItem("Please Select", "0"));
+            lv.DataSource = null;
+            lv.DataBind();
+            lv.Visible = false;
+            lblFeeName.Text = "";
+            btnSubmit.Enabled = false;
+            if (ddlDegree.SelectedIndex > 0)
+            {
+                _objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT (A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO>0 and B.DEGREENO=" + ddlDegree.SelectedValue + " and B.COLLEGE_ID = " + Convert.ToInt32(ddlSchClg.SelectedValue), "A.LONGNAME");
+                this.Call_FillListbox();
+            }
+            else
+            {
+                _objCommon.DisplayMessage(pnlFeeTable, "Please select degree.", Page);
+            }
+
         }
-        else
+        catch (Exception ex)
         {
-            _objCommon.DisplayMessage(pnlFeeTable, "Please select degree.", Page);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlDegree_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -200,26 +223,40 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlBatch_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
     protected void ddlPaymentType_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ////this.Call_FillListbox();
-        lv.DataSource = null;
-        lv.DataBind();
-        lblFeeName.Text = "";
-        btnSubmit.Enabled = false;
-        if (ddlPaymentType.SelectedIndex > 0)
+        try 
         {
-            this.Call_FillListbox();
+            ////this.Call_FillListbox();
+            lv.DataSource = null;
+            lv.DataBind();
+            lblFeeName.Text = "";
+            btnSubmit.Enabled = false;
+            if (ddlPaymentType.SelectedIndex > 0)
+            {
+                this.Call_FillListbox();
+            }
+            else
+            {
+                _objCommon.DisplayMessage("Please select payment type.", Page);
+                ddlPaymentType.Focus();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _objCommon.DisplayMessage("Please select payment type.", Page);
-            ddlPaymentType.Focus();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlPaymentType_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+       
     }
 
     private void Call_FillListbox()
@@ -244,7 +281,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.Call_FillListbox-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -277,7 +317,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.FillListbox-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     #endregion
@@ -314,7 +357,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnShow_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -357,7 +403,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.lstFeesItems_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -376,7 +425,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.DisplayFeeDefinitionGrid-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -392,7 +444,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.BindListView-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -426,7 +481,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ShowFeeTotal-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     #endregion
@@ -454,12 +512,19 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
 
             DataSet ds = (DataSet)ViewState["STD"];
             DataTable dt =(ds!=null && ds.Tables.Count>0 && ds.Tables[0].Rows.Count>0) ? ds.Tables[0] :null;
-            string Condition="RECIEPT_CODE='"+ddlReceiptType.SelectedValue+"' AND PAYTYPENO="+ddlPaymentType.SelectedValue+" AND CUR_NO=1";
+
+           //string Condition="RECIEPT_CODE='"+ddlReceiptType.SelectedValue+"' AND PAYTYPENO="+ddlPaymentType.SelectedValue+" AND CUR_NO=1";
+
+           int curno = Convert.ToInt32(ds.Tables[0].Rows[0]["CUR_NO"].ToString().Trim());
+
+            string Condition="RECIEPT_CODE='"+ddlReceiptType.SelectedValue+"' AND PAYTYPENO="+ddlPaymentType.SelectedValue+" AND CUR_NO="+ curno ;
+
             if (dt != null && dt.Rows.Count > 0 && (dt.Select(Condition).Length == 0))
             {
                 _objCommon.DisplayMessage(this.updProg, "Did not found the Currency Mapping for " + ddlReceiptType.SelectedItem.Text + " and Payment Type " + ddlPaymentType.SelectedItem.Text + ".Kindly do the Currency Mapping.", this.Page);
                 return;
             }
+
             foreach (ListViewDataItem dataRow in lv.Items)
             {
                 feeCatNo = this.UpdateStandardFeeItem(dataRow, feeCatNo);
@@ -491,7 +556,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -602,7 +670,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.UpdateStandardFeeItem-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
         return feeItem.FeeCatNo;
         //return output;//**************
@@ -669,7 +740,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnCancel_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -728,7 +802,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlBranch_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     protected void txtSearchBox_TextChanged(object sender, EventArgs e)
@@ -787,50 +864,70 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
 
     protected void btnCopy_Click(object sender, EventArgs e)
     {
-        pnlCopy.Visible = true;
-        this.btnSubmit.Enabled = true;
-        //ddlRecieptCopy.SelectedValue = ddlReceiptType.SelectedValue;
-        lv.Visible = false;
-        lv.DataSource = null;
-        btnSubmit.Visible = false;
-        btnCancel.Visible = false;
-        idFeesName.Visible = false;       
-        btnCancelCopy.Visible = true;
-        ddlRecieptCopy.Focus();
-       
-
-        if (rdbCopyStanderdFees.SelectedValue == "1")
+        try 
         {
-            divAdmBatch.Visible = true;
-            divBranch.Visible = false;
-            btnSubmitCopy.Visible = true;
-            btnSubmitCopyDiv.Visible = false;
-            clearcopy();
-     
+            pnlCopy.Visible = true;
+            this.btnSubmit.Enabled = true;
+            //ddlRecieptCopy.SelectedValue = ddlReceiptType.SelectedValue;
+            lv.Visible = false;
+            lv.DataSource = null;
+            btnSubmit.Visible = false;
+            btnCancel.Visible = false;
+            idFeesName.Visible = false;
+            btnCancelCopy.Visible = true;
+            ddlRecieptCopy.Focus();
+
+
+            if (rdbCopyStanderdFees.SelectedValue == "1")
+            {
+                divAdmBatch.Visible = true;
+                divBranch.Visible = false;
+                btnSubmitCopy.Visible = true;
+                btnSubmitCopyDiv.Visible = false;
+                clearcopy();
+
+            }
+
+            if (rdbCopyStanderdFees.SelectedValue == "2")
+            {
+                divAdmBatch.Visible = false;
+                divBranch.Visible = true;
+                btnSubmitCopyDiv.Visible = true;
+                btnSubmitCopy.Visible = false;
+
+            }
         }
-
-        if (rdbCopyStanderdFees.SelectedValue == "2")
+        catch (Exception ex)
         {
-            divAdmBatch.Visible = false;
-            divBranch.Visible = true;
-            btnSubmitCopyDiv.Visible = true;
-            btnSubmitCopy.Visible = false;
-            
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnCopy_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
     protected void clearcopy()
     {
-
-        ddlReceiptTypeRbd.SelectedIndex = 0;
-        ddlAdmBatchFrom.SelectedIndex = 0;
-        ddlCollegeFrom.SelectedIndex = 0;
-        ddlDegreeFrom.SelectedIndex = 0;
-        ddlBranchFrom.SelectedIndex = 0;
-        ddlAdmBatchTo.SelectedIndex = 0;
-        ddlCollegeTo.SelectedIndex = 0;
-        ddlDegreeTo.SelectedIndex = 0;
-        lboBranchTo.Items.Clear();
+        try 
+        {
+            ddlReceiptTypeRbd.SelectedIndex = 0;
+            ddlAdmBatchFrom.SelectedIndex = 0;
+            ddlCollegeFrom.SelectedIndex = 0;
+            ddlDegreeFrom.SelectedIndex = 0;
+            ddlBranchFrom.SelectedIndex = 0;
+            ddlAdmBatchTo.SelectedIndex = 0;
+            ddlCollegeTo.SelectedIndex = 0;
+            ddlDegreeTo.SelectedIndex = 0;
+            lboBranchTo.Items.Clear();
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.clearcopy-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
+       
     }
 
     protected void ddlRecieptCopy_SelectedIndexChanged(object sender, EventArgs e)
@@ -851,54 +948,76 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
     }
     protected void ddlColgCopy_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlBranchCopy.Items.Clear();
-        ddlBranchCopy.Items.Add(new ListItem("Please Select", "0"));
-        //ddlBatch.Items.Clear();
-        //ddlBatch.Items.Add(new ListItem("Please Select", "0"));
-        ddlDegreeCopy.Items.Clear();
-        ddlDegreeCopy.Items.Add(new ListItem("Please Select", "0"));
-        ddlPaymentCopy.Items.Clear();
-        ddlPaymentCopy.Items.Add(new ListItem("Please Select", "0"));
-        //lv.DataSource = null;
-        //lv.DataBind();
-        //lv.Visible = false;
-        //lblFeeName.Text = "";
-        if (ddlColgCopy.SelectedIndex > 0)
+        try
         {
-            this._objCommon.FillDropDownList(ddlDegreeCopy, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE B ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND B.COLLEGE_ID = " + Convert.ToInt32(ddlColgCopy.SelectedValue), "A.DEGREENAME");
-            ddlDegreeCopy.Focus();
+            ddlBranchCopy.Items.Clear();
+            ddlBranchCopy.Items.Add(new ListItem("Please Select", "0"));
+            //ddlBatch.Items.Clear();
+            //ddlBatch.Items.Add(new ListItem("Please Select", "0"));
+            ddlDegreeCopy.Items.Clear();
+            ddlDegreeCopy.Items.Add(new ListItem("Please Select", "0"));
+            ddlPaymentCopy.Items.Clear();
+            ddlPaymentCopy.Items.Add(new ListItem("Please Select", "0"));
+            //lv.DataSource = null;
+            //lv.DataBind();
+            //lv.Visible = false;
+            //lblFeeName.Text = "";
+            if (ddlColgCopy.SelectedIndex > 0)
+            {
+                this._objCommon.FillDropDownList(ddlDegreeCopy, "ACD_DEGREE A INNER JOIN ACD_COLLEGE_DEGREE B ON (A.DEGREENO=B.DEGREENO)", "DISTINCT(A.DEGREENO)", "A.DEGREENAME", "A.DEGREENO > 0 AND B.COLLEGE_ID = " + Convert.ToInt32(ddlColgCopy.SelectedValue), "A.DEGREENAME");
+                ddlDegreeCopy.Focus();
+            }
+            else
+            {
+                //ddlDegree.Items.Clear();
+                //ddlDegree.Items.Add(new ListItem("Please Select", "0"));
+                _objCommon.DisplayMessage("Please select college/school.", Page);
+                ddlColgCopy.Focus();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            //ddlDegree.Items.Clear();
-            //ddlDegree.Items.Add(new ListItem("Please Select", "0"));
-            _objCommon.DisplayMessage("Please select college/school.", Page);
-            ddlColgCopy.Focus();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlColgCopy_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+      
     }
     protected void ddlDegreeCopy_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ////this.Call_FillListbox();
-        ddlBranchCopy.Items.Clear();
-        ddlBranchCopy.Items.Add(new ListItem("Please Select", "0"));
-        //ddlBatch.Items.Clear();
-        //ddlBatch.Items.Add(new ListItem("Please Select", "0"));
-        ddlPaymentCopy.Items.Clear();
-        ddlPaymentCopy.Items.Add(new ListItem("Please Select", "0"));
-        //lv.DataSource = null;
-        //lv.DataBind();
-        //lv.Visible = false;
-        lblFeeSNameCopy.Text = "";
-        btnSubmit.Enabled = true;
-        if (ddlDegreeCopy.SelectedIndex > 0)
+        try
         {
-            _objCommon.FillDropDownList(ddlBranchCopy, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT (A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO>0 and B.DEGREENO=" + ddlDegreeCopy.SelectedValue + " ", "A.LONGNAME");
-            this.Call_FillListbox_Copy();
+            ////this.Call_FillListbox();
+            ddlBranchCopy.Items.Clear();
+            ddlBranchCopy.Items.Add(new ListItem("Please Select", "0"));
+            //ddlBatch.Items.Clear();
+            //ddlBatch.Items.Add(new ListItem("Please Select", "0"));
+            ddlPaymentCopy.Items.Clear();
+            ddlPaymentCopy.Items.Add(new ListItem("Please Select", "0"));
+            //lv.DataSource = null;
+            //lv.DataBind();
+            //lv.Visible = false;
+            lblFeeSNameCopy.Text = "";
+            btnSubmit.Enabled = true;
+            if (ddlDegreeCopy.SelectedIndex > 0)
+            {
+                _objCommon.FillDropDownList(ddlBranchCopy, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "DISTINCT (A.BRANCHNO)", "A.LONGNAME", "A.BRANCHNO>0 and B.DEGREENO=" + ddlDegreeCopy.SelectedValue + " ", "A.LONGNAME");
+                this.Call_FillListbox_Copy();
+            }
+            else
+            {
+                _objCommon.DisplayMessage(pnlFeeTable, "Please select degree.", Page);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _objCommon.DisplayMessage(pnlFeeTable, "Please select degree.", Page);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlDegreeCopy_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+      
     }
     protected void ddlBranchCopy_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -926,7 +1045,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlBranchCopy_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     protected void ddlBatchCopy_SelectedIndexChanged(object sender, EventArgs e)
@@ -954,26 +1076,40 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlBatchCopy_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     protected void ddlPaymentCopy_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ////this.Call_FillListbox();
-        //lv.DataSource = null;
-        //lv.DataBind();
-        lblFeeSNameCopy.Text = "";
-        btnSubmit.Enabled = true;
-        if (ddlPaymentCopy.SelectedIndex > 0)
+        try
         {
-            this.Call_FillListbox_Copy();
-            DisplayFeeNameCopy();
+            ////this.Call_FillListbox();
+            //lv.DataSource = null;
+            //lv.DataBind();
+            lblFeeSNameCopy.Text = "";
+            btnSubmit.Enabled = true;
+            if (ddlPaymentCopy.SelectedIndex > 0)
+            {
+                this.Call_FillListbox_Copy();
+                DisplayFeeNameCopy();
+            }
+            else
+            {
+                _objCommon.DisplayMessage("Please select payment type.", Page);
+                ddlPaymentCopy.Focus();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _objCommon.DisplayMessage("Please select payment type.", Page);
-            ddlPaymentCopy.Focus();
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.ddlPaymentCopy_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
+      
     }
 
     private void Call_FillListbox_Copy()
@@ -997,28 +1133,41 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.Call_FillListbox_Copy-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
     private void DisplayFeeNameCopy()
     {
-        string Coll_Code = _objCommon.LookUp("ACD_COLLEGE_MASTER", "+'('+ SHORT_NAME+ '-' +code + ')'   as College_code", "COLLEGE_ID=" + ddlColgCopy.SelectedValue);
-        if (ddlDegreeCopy.SelectedIndex > 0)
+        try
         {
-            lblFeeSNameCopy.Text = ddlDegreeCopy.SelectedItem.Text + " ";
-            lblFeeSNameCopy.Text += Coll_Code + "";
-            lblFeeSNameCopy.Text += ddlBatchCopy.SelectedItem.Text + " ";
-            lblFeeSNameCopy.Text += ddlPaymentCopy.SelectedItem.Text + " ";
-            lblFeeSNameCopy.Text += ddlRecieptCopy.SelectedItem.Text;
-        }
-        else
-        {
-            lblFeeSNameCopy.Text += Coll_Code + "";
-            lblFeeSNameCopy.Text += ddlBatchCopy.SelectedItem.Text + " ";
-            lblFeeSNameCopy.Text += ddlPaymentCopy.SelectedItem.Text + " ";
-            lblFeeSNameCopy.Text += ddlRecieptCopy.SelectedItem.Text;
-        }
+            string Coll_Code = _objCommon.LookUp("ACD_COLLEGE_MASTER", "+'('+ SHORT_NAME+ '-' +code + ')'   as College_code", "COLLEGE_ID=" + ddlColgCopy.SelectedValue);
+            if (ddlDegreeCopy.SelectedIndex > 0)
+            {
+                lblFeeSNameCopy.Text = ddlDegreeCopy.SelectedItem.Text + " ";
+                lblFeeSNameCopy.Text += Coll_Code + "";
+                lblFeeSNameCopy.Text += ddlBatchCopy.SelectedItem.Text + " ";
+                lblFeeSNameCopy.Text += ddlPaymentCopy.SelectedItem.Text + " ";
+                lblFeeSNameCopy.Text += ddlRecieptCopy.SelectedItem.Text;
+            }
+            else
+            {
+                lblFeeSNameCopy.Text += Coll_Code + "";
+                lblFeeSNameCopy.Text += ddlBatchCopy.SelectedItem.Text + " ";
+                lblFeeSNameCopy.Text += ddlPaymentCopy.SelectedItem.Text + " ";
+                lblFeeSNameCopy.Text += ddlRecieptCopy.SelectedItem.Text;
+            }
 
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.DisplayFeeNameCopy-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
     }
     private void FillListbox_Copy(string recieptCode, int degreeNo, int branchno, int batchNo, int payTypeNo)
     {
@@ -1033,7 +1182,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.FillListbox_Copy-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1097,7 +1249,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnSubmitCopy_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1179,48 +1334,61 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnCancelCopy_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
 
     protected void rdbCopyStanderdFees_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (rdbCopyStanderdFees.SelectedValue == "1")
+        try
         {
-            divAdmBatch.Visible = true;
-            divBranch.Visible = false;
-            btnSubmitCopyDiv.Visible = false;
-            btnSubmitCopy.Visible = true;
-            btnCancelCopy.Visible = true;
-         
-            ddlReceiptTypeRbd.SelectedIndex = 0;
-            ddlAdmBatchFrom.SelectedIndex = 0;
-            ddlCollegeFrom.SelectedIndex = 0;
-            ddlDegreeFrom.SelectedIndex = 0;
-            ddlBranchFrom.SelectedIndex = 0;
-            ddlAdmBatchTo.SelectedIndex = 0;
-            ddlCollegeTo.SelectedIndex = 0;
-            ddlDegreeTo.SelectedIndex = 0;
-            lboBranchTo.Items.Clear();
-        }
-       
-        if (rdbCopyStanderdFees.SelectedValue == "2")
-        {
-            divAdmBatch.Visible = false;
-            divBranch.Visible = true;
-            btnSubmitCopyDiv.Visible = true;
-            btnSubmitCopy.Visible = false;
-            btnCancelCopy.Visible = true;
+            if (rdbCopyStanderdFees.SelectedValue == "1")
+            {
+                divAdmBatch.Visible = true;
+                divBranch.Visible = false;
+                btnSubmitCopyDiv.Visible = false;
+                btnSubmitCopy.Visible = true;
+                btnCancelCopy.Visible = true;
 
-            ddlRecieptCopy.SelectedIndex = 0;
-            ddlAdmissionBatchFrom.SelectedIndex = 0;
-            ddlBatchCopy.SelectedIndex = 0;
+                ddlReceiptTypeRbd.SelectedIndex = 0;
+                ddlAdmBatchFrom.SelectedIndex = 0;
+                ddlCollegeFrom.SelectedIndex = 0;
+                ddlDegreeFrom.SelectedIndex = 0;
+                ddlBranchFrom.SelectedIndex = 0;
+                ddlAdmBatchTo.SelectedIndex = 0;
+                ddlCollegeTo.SelectedIndex = 0;
+                ddlDegreeTo.SelectedIndex = 0;
+                lboBranchTo.Items.Clear();
+            }
 
-            this._objCommon.FillDropDownList(ddlAdmBatchFrom, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNAME DESC");
-            this._objCommon.FillDropDownList(ddlAdmBatchTo, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNAME DESC");            
-        }
+            if (rdbCopyStanderdFees.SelectedValue == "2")
+            {
+                divAdmBatch.Visible = false;
+                divBranch.Visible = true;
+                btnSubmitCopyDiv.Visible = true;
+                btnSubmitCopy.Visible = false;
+                btnCancelCopy.Visible = true;
+
+                ddlRecieptCopy.SelectedIndex = 0;
+                ddlAdmissionBatchFrom.SelectedIndex = 0;
+                ddlBatchCopy.SelectedIndex = 0;
+
+                this._objCommon.FillDropDownList(ddlAdmBatchFrom, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNAME DESC");
+                this._objCommon.FillDropDownList(ddlAdmBatchTo, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNAME DESC");
+            }
         
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.rdbCopyStanderdFees_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
+        }
     }
 
 
@@ -1348,7 +1516,10 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnSubmitCopyDiv_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1388,9 +1559,11 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                _objUaimsCommon.ShowError(Page, "Payments_StandardFeeDefinition.btnExcel_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                _objUaimsCommon.ShowError(Page, "Server UnAvailable");
         }
-
     }
 
 

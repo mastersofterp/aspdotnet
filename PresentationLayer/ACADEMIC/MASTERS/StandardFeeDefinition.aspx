@@ -15,7 +15,7 @@
                 <div id="preloader">
                     <div id="loader-img">
                         <div id="loader">
-                        </div>
+                        </div>`
                         <p class="saving">Loading<span>.</span><span>.</span><span>.</span></p>
                     </div>
                 </div>
@@ -590,7 +590,7 @@
                                                             <tr>
                                                                 <td>TOTAL:
                                                                 </td>
-                                                                <td>INR</td>
+                                                                <td></td>
                                                                 <td>
                                                                     <asp:TextBox ID="txtSem1TotalAmt" onkeydown="javascript:return false;" runat="server"
                                                                         AutoCompleteType="Disabled" CssClass="form-control" Font-Bold="true" />

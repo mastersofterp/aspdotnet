@@ -40,6 +40,17 @@
                                     Display="None" ControlToValidate="ddlPayType" InitialValue="0" SetFocusOnError="true"
                                     ValidationGroup="Fees" />
                             </div>
+
+                             <div class="form-group col-lg-3 col-md-6 col-12" id="divCurencyType" runat="server" visible="false">
+                                <div class="label-dynamic">
+                                    <sup></sup>
+                                    <label>Currency Type</label>
+                                </div>
+                                  <asp:DropDownList ID="ddlCurrency" runat="server" CssClass="form-control"  AppendDataBoundItems="true"  data-select2-enable="true">
+                                       <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                  </asp:DropDownList>                           
+                            </div>
+
                         </div>
                     </div>
 
@@ -58,7 +69,7 @@
 
                     <div class="col-12">
                         <asp:Panel ID="pnlfees" runat="server">
-                            <asp:ListView ID="lvFeesHead" runat="server" OnItemDataBound="lvFeesHead_ItemDataBound">
+                            <asp:ListView ID="lvFeesHead" runat="server" >
                                 <LayoutTemplate>
                                     <div class="sub-heading">
                                         <h5>Currency Heads Defination</h5>
@@ -103,8 +114,9 @@
                                                  CssClass="form-control" />
                                         </td>
                                         <td>
-                                            <asp:DropDownList ID="ddlCurrency" runat="server" CssClass="form-control" data-select2-enable="true">
-                                            </asp:DropDownList>
+<%--                                            <asp:DropDownList ID="ddlCurrency" runat="server" CssClass="form-control" data-select2-enable="true">
+                                            </asp:DropDownList>--%>
+                                           <asp:Label ID="lblstatus" runat="server" Text='<%#Eval("CUR_NAME")%>'></asp:Label> 
                                         </td>
                                     </tr>
                                 </ItemTemplate>
