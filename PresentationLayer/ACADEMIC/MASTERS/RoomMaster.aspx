@@ -30,8 +30,8 @@
                 scrollCollapse: true,
                 paging: true, // Added by Gaurav for Hide pagination
                 lengthMenu: [
-                [50, 100, 150, 500,1000,2000],
-                 [50, 100, 150, 500,1000,2000,'All'],
+                [50, 100, 150, 500, 1000, 2000],
+                 [50, 100, 150, 500, 1000, 2000, 'All'],
                 ],
                 dom: 'lBfrtip',
                 buttons: [
@@ -195,8 +195,8 @@
                     scrollCollapse: true,
                     paging: true, // Added by Gaurav for Hide pagination
                     lengthMenu: [
-            [50, 100, 150, 500,1000,2000],
-              [50, 100, 150, 500,1000,2000,'All'],
+            [50, 100, 150, 500, 1000, 2000],
+              [50, 100, 150, 500, 1000, 2000, 'All'],
                     ],
                     dom: 'lBfrtip',
                     buttons: [
@@ -471,63 +471,68 @@
                             <div>
                                 <div class="col-12  mt-3">
                                     <asp:Panel ID="pnlAssessment" runat="server">
-                                            <asp:ListView ID="lvAssessment" runat="server" AutoGenerateColumns="false"
-                            ShowFooter="true" OnItemDataBound="lvAssessment_ItemDataBound">
-                                                <LayoutTemplate>
-                                                    <div class="table-responsive" style="height: 250px; overflow: scroll; border-top: 1px solid #e5e5e5;">
-                                                        <table class="table table-striped table-bordered nowrap " style="width: 100%;" id="MainLeadTable">
-                                                            <thead class="bg-light-blue">
-                                                                <tr>
-                                                                    <th>Sr No</th>
-                                                                    <th>Room Name</th>
-                                                                    <th>Room Capacity</th>
-                                                                    <th>Status</th>
-                                                                    <th>Delete</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr id="itemPlaceholder" runat="server" />
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td style="text-align: center">
-                                                                <%# Container.DataItemIndex + 1 %>
-                                                                <asp:HiddenField ID="hfsrno" runat="server" Value='<%# Container.DataItemIndex + 1 %>' />
-                                                                <asp:HiddenField ID="hfdValue" runat="server" Value="0" />
-                                                            </td>
+                                        <asp:ListView ID="lvAssessment" runat="server" AutoGenerateColumns="false"
+                                            ShowFooter="true" OnItemDataBound="lvAssessment_ItemDataBound">
+                                            <LayoutTemplate>
+                                                <div class="table-responsive" style="height: 250px; overflow: scroll; border-top: 1px solid #e5e5e5;">
+                                                    <table class="table table-striped table-bordered nowrap " style="width: 100%;" id="MainLeadTable">
+                                                        <thead class="bg-light-blue">
+                                                            <tr>
+                                                                <th>Sr No</th>
+                                                                <th>Room Name</th>
+                                                                <th>Room Capacity</th>
+                                                                <th>Status</th>
+                                                                <th>Delete</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </LayoutTemplate>
+                                            <ItemTemplate>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="text-align: center">
+                                                            <%# Container.DataItemIndex + 1 %>
+                                                            <asp:HiddenField ID="hfsrno" runat="server" Value='<%# Container.DataItemIndex + 1 %>' />
+                                                            <asp:HiddenField ID="hfdValue" runat="server" Value="0" />
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txtRoomName" runat="server" CssClass="form-control" Width="300px" placeholder="Please Enter" TabIndex="4" MaxLength="30"></asp:TextBox></td>
+
+
+
+                                                        </td>
+
                                                             <td>
-                                                                <asp:TextBox ID="txtRoomName" runat="server" CssClass="form-control" Width="300px" placeholder="Please Enter" TabIndex="4"></asp:TextBox></td>
-                                                            <td>
-                                                                <asp:TextBox ID="txtRoomCapacity" runat="server" CssClass="form-control"  Width="200px" placeholder="Please Enter" TabIndex="5"></asp:TextBox></td>
-                                                             <ajaxToolkit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtRoomCapacity"
-                                                              ValidChars="1234567890" FilterMode="ValidChars" />
-                                                             <td>
-                                                                <asp:CheckBox ID="chkStatus" runat="server" TabIndex="6" /></td>
-                                                            <td> 
-                                                             <asp:ImageButton ID="lnkRemove" runat="server"
-                                            ImageUrl="~/IMAGES/delete.png" AlternateText="Remove Row" OnClick="lnkRemove_Click"
-                                            OnClientClick="return UserDeleteConfirmation();"></asp:ImageButton>
-                                                                </td>
+                                                                <asp:TextBox ID="txtRoomCapacity" runat="server" CssClass="form-control" Width="200px" placeholder="Please Enter" TabIndex="5" MaxLength="5"></asp:TextBox></td>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtRoomCapacity" 
+                                                            ValidChars="1234567890" FilterMode="ValidChars" />
+                                                        <td>
+                                                            <asp:CheckBox ID="chkStatus" runat="server" TabIndex="6" /></td>
+                                                        <td>
+                                                            <asp:ImageButton ID="lnkRemove" runat="server"
+                                                                ImageUrl="~/IMAGES/delete.png" AlternateText="Remove Row" OnClick="lnkRemove_Click"
+                                                                OnClientClick="return UserDeleteConfirmation();"></asp:ImageButton>
+                                                        </td>
 
 
-                                                            <%--placeholder="25"--%>
-                                                        </tr>
+                                                        <%--placeholder="25"--%>
+                                                    </tr>
 
-                                                    </tbody>
-                                                </ItemTemplate>
-                                            </asp:ListView>
-                                      
+                                                </tbody>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+
                                     </asp:Panel>
                                 </div>
 
 
                             </div>
                             <div class="col-12 btn-footer">
-                                 <asp:Button ID="btnadd" runat="server" Text="Add" CssClass="btn btn-primary" Onclick="btnadd_Click" TabIndex="7" />
+                                <asp:Button ID="btnadd" runat="server" Text="Add" CssClass="btn btn-primary" OnClick="btnadd_Click" TabIndex="7" ValidationGroup="Submit" />
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" ValidationGroup="Submit"
                                     TabIndex="8" OnClick="btnSubmit_Click" />
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="9" CssClass="btn btn-warning" OnClick="btnCancel_Click" />
@@ -628,12 +633,16 @@
 
 
 
+
+
     <script type="text/javascript">
         //  keeps track of the delete button for the row
         //  that is going to be removed
         var _source;
         // keep track of the popup div
         var _popup;
+
+
 
         function showConfirmDel(source) {
             this._source = source;
@@ -661,9 +670,9 @@
         function enforceMaxLength(textbox, maxLength) {
             if (textbox.value.length > maxLength) {
                 textbox.value = textbox.value.slice(0, maxLength);
-
+            }
+        }
     </script>
-
 
 
 

@@ -241,7 +241,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         if (btnSubmit.Text == "Update")
                         {
                             int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
-                            if (cnt < 0)
+                            if (cnt > 0)
                             {
                                 objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
                                 return;
@@ -335,7 +335,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                                     {
 
                                         objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
-
+                                        this.BindRooms();
+                                        ClearControls();
 
                                     }
                                     else if (cs.Equals(CustomStatus.TransactionFailed))
@@ -498,11 +499,40 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         try
         {
             ImageButton btnEdit = sender as ImageButton;
-            int ROOMNO = int.Parse(btnEdit.CommandArgument);
+            int ROOMNAME = int.Parse(btnEdit.CommandArgument);
+
+            bool recordExists = false;
+            foreach (ListViewDataItem item in lvAssessment.Items)
+            {
+                HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
+                int existingROOMNAME = int.Parse(hfdValue.Value);
+
+                if (existingROOMNAME == ROOMNAME)
+                {
+                    recordExists = true;
+                    break;
+                }
+            }
+            if (!recordExists)
+            {
+                // Proceed with updating the record
+                ViewState["roomno"] = ROOMNAME;
+                ViewState["action"] = "edit";
+                btnSubmit.Text = "Update";
+                this.ShowDetails(ROOMNAME);
+                btnadd.Visible = false;
+            }
+            else
+            {
+                // The record is already in the ListView, you may display a message or take other actions.
+                // For example:
+                objCommon.DisplayMessage(this.updRoom, "The selected room is already being edited.", this.Page);
+            }
+
             ViewState["roomno"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             btnSubmit.Text = "Update";
-            this.ShowDetails(ROOMNO);
+            this.ShowDetails(ROOMNAME);
             btnadd.Visible = false;
         }
         catch (Exception ex)
