@@ -820,22 +820,19 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
                 if (hodApprovedCount > 0)
                 {
-                    // CheckDemandStatus();
+                   // CheckDemandStatus();
                     btnStudSubmit.Visible = false;
+                    btnPrintRegSlip.Visible = true;
                     int payStatus = Convert.ToInt32(objCommon.LookUp("ACD_DCR", "COUNT(IDNO)", "ISNULL(RECON,0)=1 AND ISNULL(DELET,0)=0 AND ISNULL(CAN,0)=0 AND IDNO = " + Convert.ToInt32(Session["idno"]) + " AND SEMESTERNO =" + lblSemester.ToolTip + " AND RECIEPT_CODE='RRF'"));
                     if (payStatus > 0)
                     {
                         objCommon.DisplayMessage("Redo/Backlog Course Registration payment already done.", this.Page);
                         btnPayment.Visible = false;
-                        btnPrintRegSlip.Visible = true;
                         return;
                     }
-
                     GenerateDemand();
-                    objCommon.DisplayMessage("Registered Courses Approved By HOD. Now You can do the payment...", this.Page);
-                    btnPayment.Visible = true;
-                    btnStudSubmit.Visible = false;
-                    CheckDemandStatus();
+                    objCommon.DisplayMessage("Registered Courses Approved By HOD. Now You can do the payment...", this.Page);                    
+
                 }
                 else
                     btnPrintRegSlip.Visible = false;
@@ -1461,7 +1458,6 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                 {
                     objCommon.DisplayMessage("Fees not defined or In-active, Kindly contact Admin.!!!", this.Page);
                     btnPayment.Visible = false;
-                    btnPrintRegSlip.Visible = false;
                     return;
                 }
 
@@ -1470,7 +1466,6 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                     if (Convert.ToInt16(rows["HOD_APPROVAL_STATUS"]) == 1)
                     {
                         decimal feesCourseTypeWise = 0;
-                        #region Commented Code
                         /* code commented by Shailendra K on dated 06012023 as per T-53196.
                             DataRow[] dr = null;
                         if (string.IsNullOrEmpty(subids))
@@ -1511,8 +1506,6 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                         }
                          */
 
-                        #endregion
-
                         var feesCourseTypeWise1 = (from r in ds_feesForRedoCrs.Tables[0].AsEnumerable() where Convert.ToDecimal(r["SUBID"]) == Convert.ToInt16(rows["SUBID"].ToString()) select r).CopyToDataTable();   //   == + Convert.ToInt16(subids)) )   Convert.ToDecimal(ds_feesForRedoCrs.Tables[0].where("SUBID=" + Convert.ToInt16(subids)));
                         feesCourseTypeWise = Convert.ToDecimal(feesCourseTypeWise1.Rows[0]["FEE"]);
 
@@ -1538,7 +1531,15 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                 return;
             }
 
-            CheckDemandStatus();
+            lblDemandAmt.Text = totalFees.ToString();
+            //CheckDemandStatus();
+
+            if (dt!=null && dt.Rows.Count > 0)
+            {
+                lvFailCourse.DataSource = dt;
+                lvFailCourse.DataBind();
+            }
+
 
            // totalFees = 1; //TESTING PURPOSE
             CustomStatus cs = CustomStatus.Others;
