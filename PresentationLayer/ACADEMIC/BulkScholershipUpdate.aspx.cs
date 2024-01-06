@@ -13,7 +13,7 @@ using System.Drawing;
 
 using System.Transactions;
 using CrystalDecisions.Shared;
-using System.IO;
+using System.IO;   
 using System.Net.Mail;
 using System.Text;
 using System.Web.Mail;
@@ -142,7 +142,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
     {
         try
         {
-            // FILL DROPDOWN SCHEME TYPE
+            // FILL DROPDOWN SCHEME TYPEbtnShow_Click
             //objCommon.FillDropDownList(ddlSchemetype, "ACD_SCHEMETYPE", "SCHEMETYPENO", "SCHEMETYPE", "SCHEMETYPENO > 0", "SCHEMETYPENO");
             // FILL DROPDOWN BATCH
             //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO>0", "DEGREENO");
@@ -158,7 +158,6 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
             objCommon.FillDropDownList(ddlScholarShipsType, "ACD_SCHOLORSHIPTYPE", "SCHOLORSHIPTYPENO", "SCHOLORSHIPNAME", "SCHOLORSHIPTYPENO > 0  AND ACTIVESTATUS=1 ", "SCHOLORSHIPTYPENO");  // added on 2020 feb 11
             objCommon.FillDropDownList(ddlAcdYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1", "ACADEMIC_YEAR_ID DESC");
             // FILL DROPDOWN ADMISSION BATCH
-
         }
         catch (Exception ex)
         {
@@ -229,9 +228,9 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
             {
                 ds = studCont.GetStudentScholershipDetails(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlYear.SelectedValue), Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), prev_status, Convert.ToInt32(ddlAcdYear.SelectedValue), Convert.ToInt32(ddlColg.SelectedValue), Convert.ToInt32(ddlScholarShipsType.SelectedValue), ScholarshipMode, AmtPercent, Sort);
             }
-            
 
-            if (ds.Tables[0].Rows.Count > 0)
+
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 divNote.Visible = true;
                 divSchltype.Visible = true;
@@ -260,6 +259,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     //ddl.SelectedValue = lblDDLData.Text;
                    // ddl.SelectedIndex = 2;
 
+
                     //Above Commented as per dissussion with Manoj Shanti Sir 
 
                     //string count = objCommon.LookUp("ACD_DCR", "COUNT(1)", "IDNO=" + hdidno.Value + "  AND BRANCHNO= " + hdfBranchno.Value + "  AND DEGREENO=" + lblDegreeno.ToolTip + "AND SEMESTERNO=" + lblDegreeno.Text + " AND  PAY_MODE_CODE='SA' AND RECON=1 AND CAN=0");
@@ -277,6 +277,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     //    chk.Checked = false;
                     //    chk.Enabled = true;
                     //}
+                    
 
                     string count = objCommon.LookUp("ACD_STUDENT_SCHOLERSHIP", "COUNT(1)", "IDNO=" + hdidno.Value + "  AND BRANCHNO= " + hdfBranchno.Value + "  AND DEGREENO=" + lblDegreeno.ToolTip + "AND  YEAR=" + lblDegreeno.Text + " AND  SCHOLARSHIP_ID=" + Convert.ToInt32(ddlScholarShipsType.SelectedValue));
 
@@ -289,6 +290,22 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                     }
                     else
                     {
+                        if (Session["OrgId"].ToString() =="1" || Session["OrgId"].ToString() == "6")// For RCPIT and RCPIPER)
+                        {
+                            divamount.Visible = false;
+                        }
+                        else
+                        {
+                            if (ddlSchMode.SelectedValue == "2")
+                            {
+                                divamount.Visible = true;
+                                txtSchAmt.Text = txtAmountsch.Text;
+                            }
+                            else if (ddlSchMode.SelectedValue == "2")
+                            {
+                                divamount.Visible = false;
+                            }
+                        }
                         txtSchAmt.Enabled = true;
                         //ddl.Enabled = true;
                         chk.Checked = false;
@@ -960,9 +977,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
         lvStudentRecords.DataBind();
         divNote.Visible = false;
         ddlScholarShipsType.SelectedIndex = 0;
-        divSchltype.Visible = false;
-        
-                                         
+        divSchltype.Visible = false;                                               
     }
     protected void btnSearch_Click(object sender, EventArgs e)
     {
@@ -1036,15 +1051,27 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
 
     protected void ddlSchMode_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if(ddlSchMode.SelectedValue == "1")
+        try 
         {
-            divAmt.Visible = true;
+            if (ddlSchMode.SelectedValue == "1")
+            {
+                divAmt.Visible = true;
+                divamount.Visible = false;
+            }
+            else
+            {
+                divAmt.Visible = false;
+                divamount.Visible = true;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            divAmt.Visible = false;
-
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.ddlSchMode_SelectedIndexChanged-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
+       
     }
 
    
@@ -1150,7 +1177,10 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.ShowDetails-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1226,12 +1256,13 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                 Label lblTxt2 = (Label)e.Row.FindControl("lblTxt2");
                 // ViewState["amount_textbox"] = txt;
                 objCommon.FillDropDownList(ddlAcadYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1", "ACADEMIC_YEAR_ID DESC");
-
+                
                 if (dtdata.Rows.Count > 0)
                 {
                     foreach (DataRow dr in dtdata.Rows)
                     {
                         string amt = dr["SCHL_AMOUNT"].ToString();
+                     
                         string semno = string.Empty;
                         string count = string.Empty;
                         string dcrno = string.Empty;
@@ -1259,8 +1290,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                                 semno = dr["YEAR"].ToString();
                                 yearsem = dr["SEMESTERNO"].ToString();
                                 count = objCommon.LookUp("ACD_DCR", "COUNT(1)", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid + " AND PAY_MODE_CODE='SA' AND RECON=1 AND CAN=0");
-                                dcrno = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid + " AND PAY_MODE_CODE='SA' AND RECON=1 AND CAN=0 ");
-                            
+                                dcrno = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid + " AND PAY_MODE_CODE='SA' AND RECON=1 AND CAN=0 ");                           
                             }
                             else
                             {
@@ -1274,7 +1304,6 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                         {
                             allotCount = objCommon.LookUp("ACD_STUDENT_SCHOLERSHIP", "COUNT(1)", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid);
                             Schlshipno = objCommon.LookUp("ACD_STUDENT_SCHOLERSHIP", "SCHLSHPNO", "IDNO=" + ViewState["idno"] + " AND BRANCHNO=" + lblBranch.ToolTip + " AND DEGREENO=" + lblDegrreno.ToolTip + " AND SEMESTERNO=" + yearsem + " AND SCHOLARSHIP_ID=" + Scholarshipid);
-
                         }
                         else
                         {
@@ -1319,7 +1348,8 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                         {
                             txt.Text = amt.ToString();
                             ddlAcadYear.SelectedValue = dr["ACADEMIC_YEAR_ID"].ToString();
-                            // lblTxt.ToolTip = txt.ToString();
+
+                            //lblTxt.ToolTip = txt.ToString();
                             //ViewState["semesterno"] = semno;
 
                         }
@@ -1366,23 +1396,25 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                                     lblTxt2.Visible = false;
                                     btnDeleteAllotment.ToolTip = Schlshipno;
                                     btnDeleteAllotment.Visible = true;
-                                }
-
+                                }   
                             }
                             else
                             {
                                 lblTxt2.Visible = true;
                                 btnDeleteAllotment.Visible = false;
                             }
-                        }
-                        
+
+                        }                       
                     }
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.gvSemesters_RowDataBound-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1564,7 +1596,10 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.btnSubmitForSingleStu_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1609,7 +1644,6 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                 if (retStatus == Convert.ToInt32(CustomStatus.RecordUpdated))
                 {
                     objCommon.DisplayMessage(this.updtime, "Scholarship Adjustment Deleted Successfully!", this.Page);
-
                     BindSemesters(Convert.ToInt16(objS.IdNo));
                 }
                 else
@@ -1620,7 +1654,10 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.btnDelete_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1704,15 +1741,15 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.updtime, "Error occurred!", this.Page);
-
                 }
-            }
-            
-
+            }           
         }
         catch (Exception ex)
         {
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_BulkScholershipUpdate.btnDeleteAllotment_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
 
@@ -1762,6 +1799,7 @@ public partial class ACADEMIC_BulkScholershipUpdate : System.Web.UI.Page
             idno = studCont.GetStudentIdByEnrollmentNo(txtEnrollno.Text);
             this.BindSemesters(Convert.ToInt16(idno));
         }
+     
     }
 
     
