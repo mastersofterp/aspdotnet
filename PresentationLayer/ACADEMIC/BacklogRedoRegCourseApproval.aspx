@@ -121,7 +121,7 @@
                                             <%--<label>Branch Name</label>--%>  <sup>*</sup>
                                             <asp:Label ID="lblddlSemester" runat="server" Text="Semester" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control" AutoPostBack="true"
+                                        <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True" TabIndex="6" CssClass="form-control" 
                                             data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
@@ -294,52 +294,16 @@
             catch (e) {
                 alert(e);
             }
-        }
-        function showConfirm() {
-            var ret = confirm('Do you Really want to Confirm/Submit this Course for Course Approval?');
-            if (ret == true)
-                return true;
-            else
-                return false;
-        }
+        }    
 
-        function validateAssign() {
-            debugger;
-            var numberOfChecked = $('[id*=tblCurrentSubjects] input:checkbox:checked').length;
-
-            if (numberOfChecked == 0)
-                numberOfChecked = $('[id*=tblUniCoreSub] input:checkbox:checked').length;
-
-            if (numberOfChecked == 0)
-                numberOfChecked = $('[id*=tblGlobalSubjects] input:checkbox:checked').length;
-
-            if (numberOfChecked == 0)
-                numberOfChecked = $('[id*=tblValueAddedGroup] input:checkbox:checked').length;
-
-            if (numberOfChecked == 0) {
-                alert('Please select atleast one course from the course list for course registration..!!');
-                return false;
-            }
-            else {
-
-                var regcredits = $('#ctl00_ContentPlaceHolder1_lblTotalRegCredits').text(); //$("[id*=ctl00_ContentPlaceHolder1_lblTotalRegCredits]").text();
-                var maxcredits = $('#ctl00_ContentPlaceHolder1_lblOfferedRegCredits').text(); //$("[id*=ctl00_ContentPlaceHolder1_lblOfferedRegCredits]").text();
-                var mincredits = $('#ctl00_ContentPlaceHolder1_lblOfferedRegCreditsFrom').text(); //$("[id*=ctl00_ContentPlaceHolder1_lblOfferedRegCreditsFrom]").text();
-                if ((parseFloat(maxcredits) >= parseFloat(regcredits) && parseFloat(mincredits) <= parseFloat(regcredits)) == false) {
-                    alert("Total register credits should be between Minimum Credits Limit and Maximum Credits Limit.");
-                    return false;
-                }
-                else {
-                    if (confirm('Are you sure you want to register and approved for the selected courses?')) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            }
-            return false;
-        }
+        //function HideColumn(orgID) {
+        //    if (orgID != 2) {
+        //        tbl = document.getElementById('tblApproveCourse');
+        //        var dataCols = tbl.getElementsByTagName('th');
+        //        alert(dataCols[6].id);
+        //        dataCols[6].style.visibility = 'hidden';
+        //    }
+        //}
     </script>
 
 </asp:Content>

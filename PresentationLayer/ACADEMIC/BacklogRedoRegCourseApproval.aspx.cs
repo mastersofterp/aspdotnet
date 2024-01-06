@@ -109,17 +109,6 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
                 objCommon.DisplayMessage(uplReg, "Please Select Branch", this.Page);
                 ddlDegree.Focus();
             }
-
-            if (ddlDegree.SelectedIndex > 0)
-            {
-                objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER  WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", " SEMESTERNO > 0 AND  ACTIVESTATUS = 1 AND SEMESTERNO <=(SELECT DISTINCT DURATION_LAST_SEM FROM ACD_COLLEGE_DEGREE_BRANCH WHERE DEGREENO = " + Convert.ToInt32(ddlDegree.SelectedValue) + ")", "SEMESTERNO");            
-            }
-            else
-            {
-                objCommon.DisplayMessage(uplReg, "Please Select Semester", this.Page);
-                ddlDegree.Focus();
-            }
-
         }
         catch (Exception ex)
         {
@@ -129,6 +118,18 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
 
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
+        if (ddlBranch.SelectedIndex > 0)
+        {
+            objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER  WITH (NOLOCK)", "SEMESTERNO",
+                "SEMESTERNAME",
+                " SEMESTERNO > 0 AND  ACTIVESTATUS = 1 AND SEMESTERNO <=(SELECT DISTINCT DURATION_LAST_SEM FROM ACD_COLLEGE_DEGREE_BRANCH WHERE DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) +
+                " AND  BRANCHNO = " + Convert.ToInt32(ddlBranch.SelectedValue) + ")", "SEMESTERNO");
+        }
+        else
+        {
+            objCommon.DisplayMessage(uplReg, "Please Select Semester", this.Page);
+            ddlBranch.Focus();
+        }
         lvApproveCourse.DataSource = null;
         lvApproveCourse.DataBind();
         lvApproveCourse.Visible = false;

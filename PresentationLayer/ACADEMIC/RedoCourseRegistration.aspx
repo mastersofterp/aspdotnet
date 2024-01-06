@@ -318,6 +318,11 @@
                                             <a class="sub-label">
                                                 <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                         </li>
+
+                                         <li id="liDemandAmount" runat="server" class="list-group-item"><b>Demand Amount :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblDemandAmt" runat="server" Font-Bold="true" /></a>
+                                        </li>
                                        <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
                                             <%--<a class="sub-label">
                                                 <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
@@ -437,7 +442,8 @@
                                                                 <th>Course Name</th>
                                                                 <th style="text-align: center; display: none"">Semester</th>
                                                                 <th style="text-align: center">Course Type</th>
-                                                                <th style="text-align: center; display: none">Grade</th>
+                                                                <th style="text-align: center">Credits</th>
+                                                                <th>Amount</th>
                                                             </tr>
                                                             <tr id="itemPlaceholder" runat="server" />
                                                         </thead>
@@ -463,8 +469,11 @@
                                                     <td align="center">
                                                         <%# Eval("SUBNAME") %>
                                                     </td>
-                                                    <td align="center" style="display: none">
-                                                        <%# Eval("GRADE") %>
+                                                    <td align="center">
+                                                        <%# Eval("CREDITS") %>
+                                                    </td>
+                                                     <td>
+                                                        <asp:Label ID="lblDemandAmount" runat="server" Text='<%# Eval("DEMAND_AMT") %>' />
                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
