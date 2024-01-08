@@ -86,7 +86,7 @@
                                         <div class="input-group-addon" id="imgToDate">
                                             <i class="fa fa-calendar text-blue"></i>
                                         </div>
-                                        <asp:TextBox ID="txtToDate" runat="server" ToolTip="Enter To Date" CssClass="form-control" TabIndex="3" on OnTextChanged="txtToDate_TextChanged" Text=""></asp:TextBox>
+                                        <asp:TextBox ID="txtToDate" runat="server" ToolTip="Enter To Date" CssClass="form-control" TabIndex="3" Text=""></asp:TextBox>
                                         <%-- <div class="input-group-addon">
                                                                     <asp:ImageButton ID="imgToDate" runat="server" ImageUrl="~/IMAGES/calendar.png" TabIndex="7" />
                                                                 </div>--%>
