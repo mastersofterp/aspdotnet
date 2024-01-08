@@ -752,6 +752,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
     {
         try
         {
+            int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + ViewState["idno"]));
             int COLLEGE_ID = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -764,7 +765,7 @@ public partial class ACADEMIC_EXAMINATION_TranscriptReportUG : System.Web.UI.Pag
 
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + ViewState["idno"]));
 
-            url += "&param=@P_COLLEGE_CODE=" + COLLEGE_ID + ",@P_IDNO=" + ViewState["idno"].ToString();
+            url += "&param=@P_COLLEGE_CODE=" + COLLEGE_ID + ",@P_IDNO=" + ViewState["idno"].ToString() + ",@P_SCHEMENO=" + SCHEMENO;
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
