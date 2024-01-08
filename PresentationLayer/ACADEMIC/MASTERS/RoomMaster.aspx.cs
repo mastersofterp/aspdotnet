@@ -211,6 +211,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 {
                     HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
                     TextBox txtGradeReleaseName = item.FindControl("txtRoomName") as TextBox;
+                    TextBox txtRoomCapacity = item.FindControl("txtRoomCapacity") as TextBox;
+                    
                     TextBox txtOutOfMarks = item.FindControl("txtRoomCapacity") as TextBox;
                     CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
                     //if (txtGradeReleaseName.Text == "")
@@ -240,7 +242,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         }
                         if (btnSubmit.Text == "Update")
                         {
-                            int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
+                            int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMCAPACITY='" + txtRoomCapacity.Text + "' and ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
                             if (cnt > 0)
                             {
                                 objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
@@ -415,8 +417,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
                         txtGradeReleaseName.Text = dr["ROOMNAME"] == null ? string.Empty : dr["ROOMNAME"].ToString();
                         ViewState["roomname"] = txtGradeReleaseName.Text.Trim();
-                        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNAME ASC");
-
+                       objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNAME ASC");
                         ddlFloorNo.SelectedValue = dr["FLOORNO"].ToString();
                         //   int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
                         objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1", "BLOCKNAME ASC");
@@ -508,7 +509,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 int existingROOMNAME = int.Parse(hfdValue.Value);
 
                 if (existingROOMNAME == ROOMNAME)
-                {
+                 {
                     recordExists = true;
                     break;
                 }
@@ -519,7 +520,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 ViewState["roomno"] = ROOMNAME;
                 ViewState["action"] = "edit";
                 btnSubmit.Text = "Update";
-                this.ShowDetails(ROOMNAME);
+                //this.ShowDetails(ROOMNAME);
                 btnadd.Visible = false;
             }
             else
@@ -626,7 +627,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
     protected void ddlBlock_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+       
     }
     protected void ddlFloorNo_SelectedIndexChanged(object sender, EventArgs e)
     {
