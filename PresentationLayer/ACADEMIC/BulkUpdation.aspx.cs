@@ -420,7 +420,7 @@ public partial class ACADEMIC_BulkUpdation : System.Web.UI.Page
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO,S.STUDNAME,S.MOTHERMOBILE AS COLUMNNAME , S.IDNO AS COLUMNID , '' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
-            else if (rdbCat.SelectedValue == "34")  // Added by Shrikant W. on 28-12-2023 for ABCC ID
+            else if (rdbCat.SelectedValue == "34")  // Added by Shrikant W. on 28-12-2023 for ABC ID
             {
                 ds = objCommon.FillDropDown("ACD_STUDENT S WITH (NOLOCK)", "S.IDNO", "S.REGNO, S.STUDNAME,S.ABCC_ID AS COLUMNNAME, S.IDNO AS COLUMNID,'' AS PCOLUMNNAME", "S.DEGREENO =" + ddlDegree.SelectedValue + " AND S.SEMESTERNO=" + ddlSemester.SelectedValue + " AND  ADMBATCH=" + ddlAdmBatch.SelectedValue + " AND ADMCAN=0 AND CAN=0 AND BRANCHNO=" + ddlBranch.SelectedValue, "S.REGNO");
             }
