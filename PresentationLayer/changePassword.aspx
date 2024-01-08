@@ -93,9 +93,13 @@
                                 <div class=" note-div">
                                     <h5 class="heading">Note</h5>
                                     <p><i style="color: red" class="fa fa-star" aria-hidden="true"></i><span  style="font-weight:bold">Marked Fields Are Mandatory.</span> </p>
-                                       <p><i style="color: red" class="fa fa-star" aria-hidden="true"></i><span style="font-weight:bold">Password Should Be At Least 10 Characters,
-                                        Must Contain At Least One  Lower Case Letter, One Upper Case Letter, One Digit And One Special Character.</span> </p>
-                                    </div>
+                                      <%-- <p><i style="color: red" class="fa fa-star" aria-hidden="true"></i><span style="font-weight:bold">Password Should Be At Least 10 Characters,
+                                        Must Contain At Least One  Lower Case Letter <i style="color: red" [a-z]></i>, One Upper Case Letter [A-Z], One Digit And One Special Character [@#$%^&+=].</span> </p>--%>
+
+                                    <p> <i style="color: red" class="fa fa-star" aria-hidden="true"></i><span style="font-weight:bold">Password Should Be At Least 10 Characters,Must Contain At Least One Lower Case Letter <span style="color: red"> [a-z] </span>, One Upper Case Letter<span style="color: red"> [A-Z] </span> , One Digit And.</span></p>
+                                     <p><i style="color: red" class="fa fa-star" aria-hidden="true"></i><b>One Special Character<span style="color: red"> [@#$%^&+=].</b> </span></p>&nbsp;
+                                 
+
                                     <div class="col-md-12">
                                         <asp:Label ID="lblHelp" runat="server" />
                                     </div>
