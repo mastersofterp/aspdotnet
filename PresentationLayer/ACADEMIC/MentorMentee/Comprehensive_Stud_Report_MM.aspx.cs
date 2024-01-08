@@ -881,7 +881,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
     {
 
         BindListView();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow();</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'>TabShow('" + hdfDyanamicTabId.Value + "');</script>", false);
     }
     private void BindListView()
     {
@@ -1545,6 +1545,61 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
     }
     #endregion
 
+    //protected void lnkRecieptNo_Click(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+
+    //        LinkButton lnkRecieptNo = sender as LinkButton;
+    //        //Session["CANCEL_REC"] = ;
+    //        //lnkRecieptNo.CommandArgument=
+    //        //int.Parse(lnkRecieptNo.CommandArgument);
+    //        //lnkRecieptNo.ToolTip = (lnkRecieptNo.ToolTip);
+    //        if (lnkRecieptNo.ToolTip == "True")
+    //        {
+    //            Session["CANCEL_REC"] = 1;
+    //        }
+    //        else if (lnkRecieptNo.ToolTip == "False")
+    //        {
+    //            Session["CANCEL_REC"] = 0;
+    //        }
+    //        else
+    //        {
+    //            Session["CANCEL_REC"] = 0;
+    //        }
+    //        Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+    //        LinkButton btnPrint = sender as LinkButton;
+    //        if (btnPrint.CommandArgument != string.Empty)
+    //        {
+    //            if (Convert.ToInt32(Session["OrgId"]) == 1)
+    //            {
+    //                ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+    //            }
+    //            else if (Convert.ToInt32(Session["OrgId"]) == 2)
+    //            {
+    //                ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_crescent.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+    //            }
+    //            else if (Convert.ToInt32(Session["OrgId"]) == 6)
+    //            {
+    //                ShowReportPrevious2("OnlineFeePayment", "FeeCollectionReceiptForCash_RCPIPER.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(Session["CANCEL_REC"]));
+    //            }
+    //            else if (Convert.ToInt32(Session["OrgId"]) == 8)
+    //            {
+    //                ShowReportPrevious1("OnlineFeePayment", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString());
+    //            }
+    //            else if (Convert.ToInt32(Session["OrgId"]) == 5)
+    //            {
+    //                ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_JECRC.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+    //            }
+    //        }
+    //    }
+    //    catch
+    //    {
+    //        throw;
+    //    }
+    //}
+
+
     protected void lnkRecieptNo_Click(object sender, EventArgs e)
     {
         try
@@ -1568,20 +1623,48 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                 Session["CANCEL_REC"] = 0;
             }
             Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+            int ReportFlag = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(DISPLAY_HTML_REPORT,0) AS DISPLAY_HTML_REPORT", "OrganizationId=" + Session["OrgId"].ToString()));
             LinkButton btnPrint = sender as LinkButton;
             if (btnPrint.CommandArgument != string.Empty)
             {
                 if (Convert.ToInt32(Session["OrgId"]) == 1)
                 {
-                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+
+                    if (ReportFlag == 1)
+                    {
+                        // Below Code added by Rohit M. on dated 26.06.2023 
+                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                        url += "Reports/Academic/Fees/RcpitReceipt.html?";
+                        url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(Session["stuinfoidno"]) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+                        // Above Code added by Rohit M. on dated 26.06.2023 
+                    }
+                    else
+                    {
+                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2)
                 {
+
                     ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_crescent.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 6)
                 {
-                    ShowReportPrevious2("OnlineFeePayment", "FeeCollectionReceiptForCash_RCPIPER.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(Session["CANCEL_REC"]));
+                    if (ReportFlag == 1)
+                    {
+                        // Below Code added by Rohit M. on dated 26.06.2023 
+                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                        url += "Reports/Academic/Fees/RCPIPERReceipt.html?";
+                        url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(Session["stuinfoidno"]) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+
+                        // Above Code added by Rohit M. on dated 26.06.2023 
+                    }
+                    else
+                    {
+                        ShowReportPrevious2("OnlineFeePayment", "FeeCollectionReceiptForCash_RCPIPER.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 8)
                 {
@@ -1589,7 +1672,60 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                 }
                 else if (Convert.ToInt32(Session["OrgId"]) == 5)
                 {
-                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_JECRC.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    if (ReportFlag == 1)
+                    {
+                        //// Below Code added by Rohit M. on dated 29.05.2023 
+                        //string url = Request.Url.ToString();
+                        //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
+                        //// Response.Redirect(url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["username"].ToString() +"&Idno=" + Int32.Parse(GetViewStateItem("StudentId")) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]));
+                        //string urlForReceipt = string.Empty;
+                        //urlForReceipt = url + "?ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(Session["stuinfoidno"]) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                        //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + urlForReceipt + "');", true);
+                        //// Above Code added by Rohit M. on dated 29.05.2023 
+
+                        // // Below Code added by ROHIT M. on dated 01.06.2023 
+                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                        url += "Reports/Academic/Fees/FeeReceipt.html?";
+                        url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(Session["stuinfoidno"]) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+
+                        //  // Above Code added by ROHIT M. on dated 01.06.2023
+                    }
+                    else
+                    {
+                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_JECRC.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+
+                    }
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
+                {
+                    if (ReportFlag == 1)
+                    {
+                        // Below Code added by Rohit M. on dated 21.06.2023
+                        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                        url += "Reports/Academic/Fees/CpuKota.html?";
+                        url += "ClgID=" + Session["colcode"].ToString() + "&UA_NAME=" + Session["UAFULLNAME"].ToString() + "&Idno=" + Convert.ToInt32(Session["stuinfoidno"]) + "&DcrNo=" + Int32.Parse(btnPrint.CommandArgument) + "&Cancel=" + Convert.ToInt32(Session["CANCEL_REC"]);
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
+
+                        // // Above Code added by Rohit M. on dated 21.06.2023
+                    }
+                    else
+                    {
+                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_cpukota.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
+                }
+                //else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                //{
+                //    this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                //}
+
+
+
+
+
+                else
+                {
+                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
                 }
             }
         }
@@ -1598,6 +1734,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
             throw;
         }
     }
+
 
     private void ShowReportPrevious(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username, int Cancel)
     {

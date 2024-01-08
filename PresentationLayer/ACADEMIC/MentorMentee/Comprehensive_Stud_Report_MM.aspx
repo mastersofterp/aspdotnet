@@ -310,7 +310,8 @@
                                                                 <a class="nav-link active" data-toggle="tab" href="#tab_1">Student Information</a>
                                                             </li>
                                                             <li class="nav-item" runat="server" id="divYearWiseFees" visible="false">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_YearWiseFees">Year Wise Fee Details</a>
+                                                                <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_YearWiseFees" onclick="return Checktabid(this)">Year Wise Fee Details</a>
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_2">Fees Details</a>
@@ -319,7 +320,8 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_3">Certificates Details</a>
                                                             </li>
                                                             <li class="nav-item" runat="server" id="divOtherFees" visible="false">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_OtherFees">Other Fee Details</a>
+                                                                 <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_OtherFees" onclick="return Checktabid(this)">Other Fee Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_4">Student Refund</a>
@@ -2019,8 +2021,11 @@
                                                                                 <%# Eval("YEAR1") %>
                                                                             </td>
                                                                             <td><%--style="width:15%"--%>
-                                                                                <%# Eval("REMARKS") %>
+                                                                                <%# Eval("PROVISIONAL REMARK") %>
                                                                             </td>
+
+
+
                                                                         </tr>
                                                                     </ItemTemplate>
                                                                 </asp:ListView>
