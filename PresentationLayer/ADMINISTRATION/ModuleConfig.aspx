@@ -2132,10 +2132,11 @@
     <script>
         $(document).ready(function () {
             var sessionvalue = "<%=Session["OrgId"]%>";
-            BindStudentconfig(sessionvalue,"73","NULL");
+            BindStudentconfig(sessionvalue,"","AddressDetails.aspx");
         });
         function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
+            debugger;
             //var OrgID_="";
             //var PageNo_="";
             //var PageName_="";
@@ -2548,13 +2549,26 @@
             var pageNo = "";
             var pageName = "";
 
-            if (selectedText === "Add Student") {
+            if (selectedText === "New Student") {
                 pageNo = "73";
-            } else if (selectedText === "Personal Details") {
+            } 
+            else if (selectedText === "Personal Details") {
                 pageName = "PersonalDetails.aspx";
             }
             else if(selectedText === "Admission Details"){
                 pageName = "AdmissionDetails.aspx";
+            }
+            else if(selectedText === "Address Details")
+            {
+                pageName = "AddressDetails.aspx";
+            }
+            else if(selectedText === "Qualification Details")
+            {
+                pageName = "QualificationDetails.aspx";
+            }
+            else if(selectedText === "Other Information")
+            {
+                pageName = "OtherInformation.aspx";
             }
             // Perform an AJAX request
             $.ajax({

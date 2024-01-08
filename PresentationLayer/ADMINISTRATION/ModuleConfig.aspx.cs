@@ -40,7 +40,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             objCommon.FillListBox(ddlAttendanceuser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14)", "USERTYPEID");
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
-            objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL", "DISPLAYPAGENAME ASC");
+            objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT MIN(ORGANIZATION_ID) AS ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL GROUP BY DISPLAYPAGENAME", string.Empty);
             BindAttDropDown();
             objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
