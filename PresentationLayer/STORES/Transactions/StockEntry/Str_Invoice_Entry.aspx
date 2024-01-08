@@ -1059,7 +1059,8 @@
                                         <td>
                                             <%-- <asp:Button ID="btnAddTax" runat="server" CommandArgument='<%#Eval("ITEM_NO")%>' CssClass="btn btn-primary" Text="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />--%>
                                             <asp:ImageButton runat="server" ID="btnAddTax" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />
-                                        </td>
+                                       <asp:HiddenField ID="hdnIsTaxInclusive" runat="server" Value='<%#Eval("IsTaxInclusive") %>' />   <%--30/12/2023--%>
+                                             </td>
                                         <td>
                                             <asp:TextBox ID="lblTaxAmount" runat="server" Enabled="false" Text='<%# Eval("TAX_AMT")%>' CssClass="form-control"></asp:TextBox>
                                             <asp:HiddenField ID="hdnIsTax" runat="server" Value='<%# Eval("IS_TAX")%>' />
@@ -1283,6 +1284,20 @@
                                                 </div>
 
                                             </div>
+
+
+                                                 <%-- //=================================================================30/12/2023--%>
+                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label> </label>
+                                                </div>
+                                                <asp:CheckBox ID="chkTaxInclusive" runat="server" checked="false"/>
+                                                        <label>Is Tax Inclusive</label>
+                                            </div>
+                                            <%-- //================================================================30/12/2023--%>
+
+
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup></sup>
@@ -1642,14 +1657,61 @@
         function GetTotTaxAmt() {
             debugger;
 
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+           // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+           // var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
 
-            var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
 
-            var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+            //===========================30/12/2023==========================//
+            if (document.getElementById('<%=chkTaxInclusive.ClientID%>').checked == false) {
 
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+                var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+                var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 0;   //30/12/2023
+
+
+
+                //alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value);
+            }
+            else {
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+               // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+                var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                var TaxableAmt = document.getElementById('<%=hdnBasicAmt.ClientID%>').value - document.getElementById('<%=hdnDiscAmt.ClientID%>').value
+
+                var deductAmt = Number(TaxableAmt) - Number(TotTaxAmt);
+              // alert('TaxableAmt=' + TaxableAmt);
+              // alert('TotTaxAmt=' + TotTaxAmt);
+              // alert('deductAmt=' + deductAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value = Number(deductAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(deductAmt) + Number(TotTaxAmt); //30/12/2023
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 1;   //30/12/2023
+              //  alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value);
+
+
+
+                //alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value);
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblInvoiceQty').disabled = false;
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblRate').disabled = false;

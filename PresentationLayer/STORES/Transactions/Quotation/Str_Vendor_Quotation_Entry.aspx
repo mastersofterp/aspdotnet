@@ -506,6 +506,7 @@
                             <div>
                                 <asp:HiddenField ID="hdnIndex" runat="server" />
                                 <asp:HiddenField ID="hdnBasicAmt" runat="server" />
+                                 <asp:HiddenField ID="hdnDiscAmt" runat="server" Value="0" />
                                 <asp:HiddenField ID="hdnTaxableAmt" runat="server" Value="0" />
                                 <asp:HiddenField ID="hdnOthEdit" runat="server" Value="0" />
                             </div>
@@ -708,7 +709,8 @@
 
                 document.getElementById('<%=hdnTaxableAmt.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + index + '_hdnItemTaxableAmt').value;
                 document.getElementById('<%=hdnIndex.ClientID%>').value = index;
-                document.getElementById('<%=hdnBasicAmt.ClientID%>').value = (Number(Rate) * Number(Qty)).toFixed(2);                
+                document.getElementById('<%=hdnBasicAmt.ClientID%>').value = (Number(Rate) * Number(Qty)).toFixed(2);  
+                var hdnDiscAmt = document.getElementById('<%=hdnDiscAmt.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + index + '_txtDiscAmt').value;  //30/12/2023
             }
             else {
                 alert("Please Enter Rate And Discount Before Adding Taxes.");
@@ -724,6 +726,7 @@
             document.getElementById('<%=txtTechSpec.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnTechSpec').value;
             document.getElementById('<%=txtQualityQtySpec.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnQualityQtySpec').value;
             document.getElementById('<%=txtItemRemarkOth.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnOthItemRemark').value;
+            document.getElementById('<%=hdnDiscAmt.ClientID%>').value = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + index + '_txtDiscAmt').value;
         }
 
         function GetTotTaxAmt() {
@@ -746,13 +749,20 @@
             ////-----------------------------------------------------------------------//
                 
                 document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxAmt').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
-                var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value;
+              //  var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value;
                 var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+                var TaxableAmt = document.getElementById('<%=hdnBasicAmt.ClientID%>').value - document.getElementById('<%=hdnDiscAmt.ClientID%>').value
                 var deductAmt = Number(TaxableAmt) - Number(TotTaxAmt);
+               //  alert('TaxableAmt=' + TaxableAmt);
+               //  alert('TotTaxAmt=' + TotTaxAmt);
+               //  alert('deductAmt=' + deductAmt);
                 document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value = deductAmt;       
                 document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 1;
+                document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_txtTotalAmt').value = Number(deductAmt) + Number(TotTaxAmt);
+
+                document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTotalAmt').value = Number(deductAmt) + Number(TotTaxAmt);
               //  alert('222');
-              //  alert(document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value);
+              //   alert(document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTotalAmt').value);
             }
 
             // var IncTaxableAmt = document.getElementById('<%=hdnTaxableAmt.ClientID%>').value; //document.getElementById('ctl00_ContentPlaceHolder1_grdItemList_ctl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt')

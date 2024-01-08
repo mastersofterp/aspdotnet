@@ -1727,11 +1727,13 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
                 int CollegeState = Convert.ToInt32(objCommon.LookUp("STORE_REFERENCE", "STATENO", ""));
                 if (VendorState == CollegeState)
                 {
-                    ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
+                   // ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);  //30/12/2023
+                    ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
                 }
                 else
                 {
-                    ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
+                   // ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);  //30/12/2023
+                    ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
                 }
                 lvTax.DataSource = ds.Tables[0];
                 lvTax.DataBind();
@@ -1803,11 +1805,14 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
         int CollegeState = Convert.ToInt32(objCommon.LookUp("STORE_REFERENCE", "STATENO", ""));
         if (VendorState == CollegeState)
         {
-            ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
+          
+           // ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1); 30/12/2023
+            ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
         }
         else
         {
-            ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
+           // ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0); 30/12/2023
+            ds = objVQtEntry.GetTaxes(lstQtNo.SelectedValue, Convert.ToInt32(lstVendor.SelectedValue), Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
         }
         if (ViewState["TaxTable"] != null)
         {
@@ -1942,17 +1947,48 @@ public partial class Stores_Transactions_Quotation_Str_Vendor_Quotation_Entry : 
             TextBox txtTaxAmt = (TextBox)grdItemList.Rows[i].FindControl("txtTaxAmt");
             TextBox txtTotalAmt = (TextBox)grdItemList.Rows[i].FindControl("txtTotalAmt");
             TextBox txtTaxableAmt = grdItemList.Rows[i].FindControl("txtTaxableAmt") as TextBox;  //20/12/2023
+            TextBox txtRate = grdItemList.Rows[i].FindControl("txtRate") as TextBox;
+            TextBox txtBillAmt = grdItemList.Rows[i].FindControl("txtTotalAmt") as TextBox;
+
 
             HiddenField hdnItemTaxAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTaxAmt");
             HiddenField hdnItemTotalAmt = (HiddenField)grdItemList.Rows[i].FindControl("hdnItemTotalAmt");
             HiddenField hdnItemTaxableAmt = grdItemList.Rows[i].FindControl("hdnItemTaxableAmt") as HiddenField;    //20/12/2023
             HiddenField hdnIsTaxInclusive = grdItemList.Rows[i].FindControl("hdnIsTaxInclusive") as HiddenField;
+            HiddenField hdnItemDiscAmt=grdItemList.Rows[i].FindControl("hdnItemDiscAmt") as HiddenField;
+            HiddenField hdQty = grdItemList.Rows[i].FindControl("hdQty") as HiddenField;
+            HiddenField lblBillAmt = grdItemList.Rows[i].FindControl("hdnItemTotalAmt") as HiddenField;
+
+            string hdnBasicAmt = Convert.ToString(Convert.ToDecimal(hdQty.Value) * Convert.ToDecimal(txtRate.Text));
 
             txtTaxAmt.Text = hdnItemTaxAmt.Value;
             txtTotalAmt.Text = hdnItemTotalAmt.Value;
             txtTaxableAmt.Text = hdnItemTaxableAmt.Value;        //20/12/2023
             hdnIsTaxInclusive.Value = hdnIsTaxInclusive.Value;
+
+          //  lblTaxableAmt.Text = hdnItemTaxableAmt.Value;        //30/12/2023
+            hdnIsTaxInclusive.Value = hdnIsTaxInclusive.Value;     //30/12/2023
+            if (hdnIsTaxInclusive.Value == "0")
+            {
+                txtTaxableAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt) - Convert.ToDecimal(hdnItemDiscAmt.Value));
+
+                // lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+                lblBillAmt.Value = Convert.ToString(Convert.ToDecimal(hdnBasicAmt) - Convert.ToDecimal(hdnItemDiscAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+                txtBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt) - Convert.ToDecimal(hdnItemDiscAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+            }
+            else
+            {
+                txtTaxableAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt) - Convert.ToDecimal(hdnItemDiscAmt.Value) - Convert.ToDecimal(txtTotTaxAmt.Text));
+                lblBillAmt.Value = Convert.ToString(Convert.ToDecimal(hdnItemTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));  //30/12/2023
+                txtBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnItemTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));  //30/12/2023
+            }
         }
+
+         
+
+
+
+
         //if (ViewState["TaxEdit"] == null)
         // {
         if (ViewState["TaxTable"] != null && ((DataTable)ViewState["TaxTable"]) != null)
