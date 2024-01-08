@@ -1067,36 +1067,53 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
     {
         try
         {
+            // Initialize variables
             StudentController objEc = new StudentController();
             Student objstud = new Student();
+            byte[] image = null;
+            byte[] imageaftercompress = null;
             string ext = System.IO.Path.GetExtension(fuPhotoUpload.PostedFile.FileName);
 
-            // string ext = System.IO.Path.GetExtension(fuPhotoUpload.FileName);
-
-            //  string ext = System.IO.Path.GetExtension(this.fuPhotoUpload.FileName);
+            // Check if file is uploaded
             if (fuPhotoUpload.HasFile)
             {
+                // Check file extension and size
                 if (ext.ToUpper().Trim() == ".JPG" || ext.ToUpper().Trim() == ".PNG" || ext.ToUpper().Trim() == ".JPEG" || ext.ToUpper().Trim() == ".GIF")
                 {
-
-                    //if (fuPhotoUpload.PostedFile.ContentLength < 40960)
                     if (fuPhotoUpload.PostedFile.ContentLength < 150000)
                     {
-                        //objstud.StudPhoto = this.ResizePhoto(fuPhotoUpload);
-                        //objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
+                        using (Stream fs = fuPhotoUpload.PostedFile.InputStream)
+                        {
+                            using (BinaryReader br = new BinaryReader(fs))
+                            {
+                                image = br.ReadBytes((Int32)fs.Length);
+                                imageaftercompress = ImageCompression.CompressImage(image, 150);
+                            }
+                        }
 
-                        byte[] resizephoto = ResizePhoto(fuPhotoUpload);
-
-                        //if (resizephoto.LongLength >= 40960)
-                        if (resizephoto.LongLength >= 150000)
+                        // Check compressed image size
+                        if (imageaftercompress != null && imageaftercompress.LongLength >= 150000)
                         {
                             objCommon.DisplayMessage(this.updpersonalinformation, "File size must be less or equal to 150kb", this.Page);
                             return;
                         }
+
+                        // Assign the compressed image to objstud.StudPhoto
+                        objstud.StudPhoto = imageaftercompress;
+                        objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
+
+                        // Update Student Photo
+                        CustomStatus cs = (CustomStatus)objEc.UpdateStudPhoto(objstud);
+                        if (cs.Equals(CustomStatus.RecordUpdated))
+                        {
+                            objCommon.DisplayMessage(this.updpersonalinformation, "Photo uploaded Successfully!!", this.Page);
+                            ViewState["StudPhoto"] = 1;
+                            showstudentphoto();
+                        }
                         else
                         {
-                            objstud.StudPhoto = this.ResizePhoto(fuPhotoUpload);
-                            objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
+                            ViewState["StudPhoto"] = 0;
+                            objCommon.DisplayMessage("Error!!", this.Page);
                         }
                     }
                     else
@@ -1107,38 +1124,15 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this.updpersonalinformation, "Only JPG,JPEG,PNG files are allowed!", this.Page);
+                    objCommon.DisplayMessage(this.updpersonalinformation, "Only JPG, JPEG, PNG files are allowed!", this.Page);
                     return;
                 }
             }
             else
             {
-                objCommon.DisplayMessage(this.updpersonalinformation, "Please select file!", this.Page);
-                //System.IO.FileStream ff = new System.IO.FileStream(System.Web.HttpContext.Current.Server.MapPath("~/images/logo.gif"), System.IO.FileMode.Open);
-                //int ImageSize = (int)ff.Length;
-                //byte[] ImageContent = new byte[ff.Length];
-                //ff.Read(ImageContent, 0, ImageSize);
-                //ff.Close();
-                //ff.Dispose();
-                //objstud.StudSign = ImageContent;
-                // objCommon.DisplayMessage(this.updpersonalinformation, "Please select file!", this.Page);
+                objCommon.DisplayMessage(this.updpersonalinformation, "Please select a file!", this.Page);
                 return;
             }
-
-            CustomStatus cs = (CustomStatus)objEc.UpdateStudPhoto(objstud);
-            if (cs.Equals(CustomStatus.RecordUpdated))
-            {
-                objCommon.DisplayMessage(this.updpersonalinformation, "Photo uploaded Successfully!!", this.Page);
-                ViewState["StudPhoto"] = 1;
-                showstudentphoto();
-
-            }
-            else
-            {
-                ViewState["StudPhoto"] = 0;
-                objCommon.DisplayMessage("Error!!", this.Page);
-            }
-
         }
         catch (Exception ex)
         {
@@ -1200,6 +1194,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         {
             StudentController objEc = new StudentController();
             Student objstud = new Student();
+            byte[] image = null;
+            byte[] imageaftercompress = null;
             string ext = System.IO.Path.GetExtension(this.fuSignUpload.PostedFile.FileName);
 
             // string ext = System.IO.Path.GetExtension(this.fuSignUpload.FileName);
@@ -1220,19 +1216,25 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     if (fuSignUpload.PostedFile.ContentLength < 150000)
                     {
 
-                        byte[] resizephoto = ResizePhoto(fuSignUpload);
+                        //byte[] resizephoto = ResizePhoto(fuSignUpload);
 
-                        //if (resizephoto.LongLength >= 25600)
-                        if (resizephoto.LongLength >= 150000)
+                        using (Stream fs = fuSignUpload.PostedFile.InputStream)
+                        {
+                            using (BinaryReader br = new BinaryReader(fs))
+                            {
+                                image = br.ReadBytes((Int32)fs.Length);
+                                imageaftercompress = ImageCompression.CompressImage(image, 150);
+                            }
+                        }
+
+                        if (imageaftercompress != null && imageaftercompress.LongLength >= 150000)
                         {
                             objCommon.DisplayMessage(this.updpersonalinformation, "File size must be less or equal to 150kb", this.Page);
                             return;
                         }
-                        else
-                        {
-                            objstud.StudSign = this.ResizePhoto(fuSignUpload);
-                            objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
-                        }
+
+                        objstud.StudSign = imageaftercompress;
+                        objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
                     }
                     else
                     {
