@@ -152,7 +152,7 @@ namespace IITMS
                     new SqlParameter("@P_PARENTMOBILENO", parentmobileno),
                     new SqlParameter("@P_USERTYPE",usertype),
                     new SqlParameter("@P_IDNO",idno),
-                    new SqlParameter("@P_MSGTYPE",MSGTYPE),               
+                    new SqlParameter("@P_MSGTYPE",MSGTYPE),
                     new SqlParameter("@P_MSGID", status)
                 };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -1440,7 +1440,7 @@ namespace IITMS
                     try
                     {
                         SQLHelper objDataAccess = new SQLHelper(_uaims_constr);
-                        SqlParameter[] sqlParams = new SqlParameter[] 
+                        SqlParameter[] sqlParams = new SqlParameter[]
                         {
                             new SqlParameter("@P_SESSIONNO", sessionno),
                             new SqlParameter("@P_MAXMARK", maxmark),
@@ -1466,7 +1466,7 @@ namespace IITMS
                     try
                     {
                         SQLHelper objDataAccess = new SQLHelper(_uaims_constr);
-                        SqlParameter[] sqlParams = new SqlParameter[] 
+                        SqlParameter[] sqlParams = new SqlParameter[]
                         {
                             new SqlParameter("@P_SESSIONNO", sessionno),
                             new SqlParameter("@P_CCODE", ccode),
@@ -2760,7 +2760,7 @@ namespace IITMS
                         new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode),
                         new SqlParameter("@P_SUBEXAM_NAME",objExam.SubExamname),
                        // new SqlParameter("@P_FIELD_NAME",objExam.FieldName),
-                        new SqlParameter("@P_PATTERNNO", objExam.PATTERNNO),   
+                        new SqlParameter("@P_PATTERNNO", objExam.PATTERNNO),
                         new SqlParameter("@P_ORGID", objExam.OrgId),
                         new SqlParameter("@P_STATUS",objExam.ActiveStatus),
                         new SqlParameter("@P_MAX_MARK", objExam.MAXMARKS),
@@ -2768,7 +2768,7 @@ namespace IITMS
                         new SqlParameter("@P_FIXED",Sub_Fixed),
                         new SqlParameter("@P_OUTPUT", status)
 
-                        
+
                       };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -2791,8 +2791,8 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] sqlParams = new SqlParameter[]
-                    {                    
-                   
+                    {
+
                     new SqlParameter("@P_SUBEXAMNO", objExam.SubExamNo),
                     new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode),
                     new SqlParameter("@P_EXAMNO", objExam.ExamNo),
@@ -2805,7 +2805,7 @@ namespace IITMS
                     new SqlParameter("@P_SUBID", objExam.Subid),
                     new SqlParameter("@P_FIXED",Sub_Fixed),
                     new SqlParameter("@P_OUTPUT",status)
-                    
+
                     };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -3032,24 +3032,27 @@ namespace IITMS
                 //    return retStatus;
                 //}
 
-                public int CreateBundle(int bundleno, int courseno, string regfrom, string regto, int sessionid, int branchno, int collegeid, int Count)
+                // added 2 new parameter of SeatFrom and SeatTO by Shubham on 08-01-24
+                public int CreateBundle(int bundleno, int courseno, string regfrom, string regto, string SeatFrom, string Seatto, int sessionid, int branchno, int collegeid, int Count)
                 {
                     int retStatus = Convert.ToInt32(CustomStatus.Others);
                     try
                     {
                         SQLHelper objDataAccess = new SQLHelper(_uaims_constr);
                         SqlParameter[] sqlParams = new SqlParameter[]
-                        { 
-                            new SqlParameter("@P_BUNDLENO", bundleno),
-                            new SqlParameter("@P_COURSENO", courseno),
-                            new SqlParameter("@P_REGNOFROM", regfrom),
-                            new SqlParameter("@P_REGNOTO",regto),
-                            new SqlParameter("@P_SESSIONID",sessionid),
-                            new SqlParameter("@P_BRANCHNO",branchno),
-                            new SqlParameter("@P_COLLEGEID",collegeid),
-                            new SqlParameter("@P_COUNT",Count),
-                            new SqlParameter("@P_OUT", SqlDbType.Int) 
-                        };
+                        {
+                            new SqlParameter("@P_BUNDLENO", bundleno),
+                            new SqlParameter("@P_COURSENO", courseno),
+                            new SqlParameter("@P_REGNOFROM", regfrom),
+                            new SqlParameter("@P_REGNOTO",regto),
+                            new SqlParameter("@P_SEATNOFROM", SeatFrom),
+                            new SqlParameter("@P_SEATNOTO",Seatto),
+                            new SqlParameter("@P_SESSIONID",sessionid),
+                            new SqlParameter("@P_BRANCHNO",branchno),
+                            new SqlParameter("@P_COLLEGEID",collegeid),
+                            new SqlParameter("@P_COUNT",Count),
+                            new SqlParameter("@P_OUT", SqlDbType.Int)
+                        };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output; object ret = objDataAccess.ExecuteNonQuerySP("PKG_ACAD_INS_BUNDLE", sqlParams, true); if (Convert.ToInt32(ret) == -99)
                             retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
                         else if (Convert.ToInt32(ret) == 1)
@@ -3063,7 +3066,8 @@ namespace IITMS
                     {
                         retStatus = Convert.ToInt32(CustomStatus.Error);
                         throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.PreExamController.CreateBundle-> " + ex.ToString());
-                    } return retStatus;
+                    }
+                    return retStatus;
                 }
 
                 /// <summary>
@@ -3110,13 +3114,13 @@ namespace IITMS
                     {
                         SQLHelper objDataAccess = new SQLHelper(_uaims_constr);
                         SqlParameter[] sqlParams = new SqlParameter[]
-                        { 
+                        {
                             new SqlParameter("@P_SESSIONID",sessionId),
                             new SqlParameter("@P_COURSENO", Courseno),
                             new SqlParameter("@P_BUNDLENO", bundleno),
                             new SqlParameter("@P_UA_NO", valuer),
                             new SqlParameter("@P_ISSUE_DATE",dtIssue),
-                            new SqlParameter("@P_OUT",SqlDbType.Int) 
+                            new SqlParameter("@P_OUT",SqlDbType.Int)
                         };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
 
@@ -3728,7 +3732,7 @@ namespace IITMS
                         SQLHelper objSqlHelper = new SQLHelper(_uaims_constr);
 
                         SqlParameter[] objParams = new SqlParameter[]
-                        { 
+                        {
                              new SqlParameter("@P_SESSIONNO",Sessionno),
                              new SqlParameter("@P_CLGID ",ClgId),
                              new SqlParameter("@UA_SECTION", UA_SECTION),
@@ -4028,14 +4032,14 @@ namespace IITMS
                         new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode),
                         new SqlParameter("@P_SUBEXAM_NAME",objExam.SubExamname),
                        // new SqlParameter("@P_FIELD_NAME",objExam.FieldName),
-                        new SqlParameter("@P_PATTERNNO", objExam.PATTERNNO),   
+                        new SqlParameter("@P_PATTERNNO", objExam.PATTERNNO),
                         new SqlParameter("@P_ORGID", objExam.OrgId),
                         new SqlParameter("@P_STATUS",objExam.ActiveStatus),
                         new SqlParameter("@P_MAX_MARK", objExam.MAXMARKS),
                         new SqlParameter("@P_SUBID", objExam.Subid),
                         new SqlParameter("@P_OUTPUT", status)
 
-                        
+
                       };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -4059,8 +4063,8 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
                         SqlParameter[] sqlParams = new SqlParameter[]
-                    {                    
-                   
+                    {
+
                     new SqlParameter("@P_SUBEXAMNO", objExam.SubExamNo),
                     new SqlParameter("@P_COLLEGE_CODE", objExam.CollegeCode),
                     new SqlParameter("@P_EXAMNO", objExam.ExamNo),
@@ -4072,7 +4076,7 @@ namespace IITMS
                     new SqlParameter("@P_MAX_MARK", objExam.MAXMARKS),
                     new SqlParameter("@P_SUBID", objExam.Subid),
                     new SqlParameter("@P_OUTPUT",status)
-                    
+
                     };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -4376,7 +4380,7 @@ namespace IITMS
                         {
                             new SqlParameter("@P_Date", objExam.Examdate),
                             new SqlParameter("@P_SEMESTERNO",objExam.SemesterNo),
-                            new SqlParameter("@P_SLOTNO",objExam.Slot),  
+                            new SqlParameter("@P_SLOTNO",objExam.Slot),
                             new SqlParameter("@P_SESSIONNO",objExam.SessionNo)
                         };
                         //  ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_EXAM_TIMETABLE_CHECKDATE", objParams);          //PKG_ACD_EXAM_CHECKDATE
@@ -4528,7 +4532,7 @@ namespace IITMS
                         SqlParameter[] sqlParams = new SqlParameter[]
                 {
                     new SqlParameter("@P_REDOFEE",RedoFee),
-                   
+
                     new SqlParameter("@P_OUT", status)
                 };
                         sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.InputOutput;
@@ -5319,7 +5323,7 @@ namespace IITMS
                     new SqlParameter("@P_COLLEGE_ID",College),
                     new SqlParameter("@P_SESSIONNO", Session),
                     new SqlParameter("@P_FEETYPE", ExamType),
-                 
+
                     new SqlParameter("@P_FeeAmt", FeeAmt),
                     new SqlParameter("@P_DEGREENO", degreeno),
                     new SqlParameter("@P_TEMPSEM", TempSem),
@@ -6119,9 +6123,9 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_EXDTNO", exdtno),                             
+                               new SqlParameter("@P_EXDTNO", exdtno),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -6223,7 +6227,7 @@ namespace IITMS
                     {
 
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParams = new SqlParameter[] 
+                        SqlParameter[] objParams = new SqlParameter[]
                     {
                         new SqlParameter("@P_SESSIONNO", sessionno),
                         new SqlParameter("@P_COURSENO", courseno),
@@ -6505,9 +6509,9 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_EXDTNO", allexdtno),                             
+                               new SqlParameter("@P_EXDTNO", allexdtno),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -6607,11 +6611,11 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_SUBEXAMNO", subexamno),                             
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -6712,11 +6716,11 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_EXAMNO", examno),                             
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_EXAMNO", examno),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7070,15 +7074,15 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_SUBEXAMNO", subexamno),                             
-                               new SqlParameter("@P_SUBID", subid),                             
-                               new SqlParameter("@P_SCHEMENO", schemeno),                             
-                               new SqlParameter("@P_DATE", date),                             
-                               new SqlParameter("@P_SLOT", slot),                                  
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),
+                               new SqlParameter("@P_SUBID", subid),
+                               new SqlParameter("@P_SCHEMENO", schemeno),
+                               new SqlParameter("@P_DATE", date),
+                               new SqlParameter("@P_SLOT", slot),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7109,15 +7113,15 @@ namespace IITMS
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_SUBEXAMNO", subexamno),                             
-                               new SqlParameter("@P_SUBID", subid),                             
-                               new SqlParameter("@P_SCHEMENO", schemeno),                             
-                               new SqlParameter("@P_DATE", date),                             
-                               new SqlParameter("@P_SLOT", slot),                                  
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),
+                               new SqlParameter("@P_SUBID", subid),
+                               new SqlParameter("@P_SCHEMENO", schemeno),
+                               new SqlParameter("@P_DATE", date),
+                               new SqlParameter("@P_SLOT", slot),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7213,7 +7217,7 @@ namespace IITMS
                 #endregion
 
                 #region Added By Rohit Diwate on date 21092023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode,int feedback)
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback)
                 {
                     int status = 0;
                     try
@@ -7246,7 +7250,7 @@ namespace IITMS
                         objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
                         objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
                         objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
-                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback); 
+                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback);
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -7472,16 +7476,16 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_EXAMNO", examno),                             
-                               new SqlParameter("@P_SUBID", subid),                             
-                               new SqlParameter("@P_SCHEMENO", schemeno),                             
-                               new SqlParameter("@P_DATE", date),                             
-                               new SqlParameter("@P_SLOT", slot),                                  
-                               new SqlParameter("@P_SECTIONNO", sectionno),                                  
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_EXAMNO", examno),
+                               new SqlParameter("@P_SUBID", subid),
+                               new SqlParameter("@P_SCHEMENO", schemeno),
+                               new SqlParameter("@P_DATE", date),
+                               new SqlParameter("@P_SLOT", slot),
+                               new SqlParameter("@P_SECTIONNO", sectionno),
                                new SqlParameter("@P_UA_NO", ua_no),
                                new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
@@ -7513,16 +7517,16 @@ namespace IITMS
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_EXAMNO", examno),                             
-                               new SqlParameter("@P_SUBID", subid),                             
-                               new SqlParameter("@P_SCHEMENO", schemeno),                             
-                               new SqlParameter("@P_DATE", date),                             
-                               new SqlParameter("@P_SLOT", slot),                                  
-                               new SqlParameter("@P_SECTIONNO", sectionno),        
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_EXAMNO", examno),
+                               new SqlParameter("@P_SUBID", subid),
+                               new SqlParameter("@P_SCHEMENO", schemeno),
+                               new SqlParameter("@P_DATE", date),
+                               new SqlParameter("@P_SLOT", slot),
+                               new SqlParameter("@P_SECTIONNO", sectionno),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7639,11 +7643,11 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_EXDTNO", exdtno),                             
-                               new SqlParameter("@P_UA_NO", ua_no),                             
-                               new SqlParameter("@P_IPADRESS", ip_adress),                             
+                               new SqlParameter("@P_EXDTNO", exdtno),
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7716,13 +7720,13 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_EXAMNO", examno),                             
-                               new SqlParameter("@P_UA_NO", ua_no),                             
-                               new SqlParameter("@P_IPADRESS", ip_adress),                             
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_EXAMNO", examno),
+                               new SqlParameter("@P_UA_NO", ua_no),
+                               new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7796,11 +7800,11 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_EXDTNO", allexdtno),     
+                               new SqlParameter("@P_EXDTNO", allexdtno),
                                new SqlParameter("@P_UA_NO", ua_no),
-                               new SqlParameter("@P_IPADRESS", ip_adress),  
+                               new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7874,13 +7878,13 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_SUBEXAMNO", subexamno), 
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),
                                new SqlParameter("@P_UA_NO", ua_no),
-                               new SqlParameter("@P_IPADRESS", ip_adress),  
+                               new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 
@@ -7955,17 +7959,17 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
 
-                        SqlParameter[] objParams = new SqlParameter[]                   
+                        SqlParameter[] objParams = new SqlParameter[]
                         {
-                               new SqlParameter("@P_CCODE", ccode),                             
-                               new SqlParameter("@P_SESSIONID", sessionid),                             
-                               new SqlParameter("@P_SUBEXAMNO", subexamno),                             
-                               new SqlParameter("@P_SUBID", subid),                             
-                               new SqlParameter("@P_SCHEMENO", schemeno),                             
-                               new SqlParameter("@P_DATE", date),                             
-                               new SqlParameter("@P_SLOT", slot), 
+                               new SqlParameter("@P_CCODE", ccode),
+                               new SqlParameter("@P_SESSIONID", sessionid),
+                               new SqlParameter("@P_SUBEXAMNO", subexamno),
+                               new SqlParameter("@P_SUBID", subid),
+                               new SqlParameter("@P_SCHEMENO", schemeno),
+                               new SqlParameter("@P_DATE", date),
+                               new SqlParameter("@P_SLOT", slot),
                                new SqlParameter("@P_UA_NO", ua_no),
-                               new SqlParameter("@P_IPADRESS", ip_adress),                                  
+                               new SqlParameter("@P_IPADRESS", ip_adress),
                                new SqlParameter("@P_OUTPUT", SqlDbType.Int)
                         };
 

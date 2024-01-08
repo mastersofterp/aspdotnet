@@ -1,5 +1,6 @@
 ﻿using IITMS;
 using IITMS.UAIMS;
+using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using DynamicAL_v2;
 
 public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 {
@@ -16,6 +18,9 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     ExamController objExamController = new ExamController();
+    DynamicControllerAL AL = new DynamicControllerAL();
+    string que_out;
+    string a;
 
     #region "Page Event"
     protected void Page_PreInit(object sender, EventArgs e)
@@ -68,7 +73,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
                 }
                 PopulateDropDown();
                 FillDropdown();
-                
+
             }
             divMsg.InnerHtml = string.Empty;
         }
@@ -105,7 +110,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
             // To Fill Dropdown of Session
 
-           // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "FLOCK = 1", "SESSIONNO DESC");
+            // objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "FLOCK = 1", "SESSIONNO DESC");
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 1", "SESSIONNO DESC");
             //objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID"); 
             int userno = Convert.ToInt32(Session["userno"]);//int onlyrtm = Convert.ToInt32(objCommon.LookUp("USER_ACC", "ISNULL(ONLY_RTM,0) ONLY_RTM", "UA_NO=" + userno));
@@ -113,7 +118,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
             //String deptno = Session["userdeptno"].ToString();
             string usename = Session["username"].ToString();
             //objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT", "SLOTNO AS SLOT", "SLOTNAME", "SLOTNO>0", "SLOTNO");
-            
+
         }
         catch (Exception ex)
         {
@@ -128,14 +133,15 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 
     #region "SelectedIndexChanged"
 
-   
+
     // Slot Selection Change
     protected void ddlSlot_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlSlot.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.CCODE = C.CCODE AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO)", "A.CCODE", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME)COURSE_NAME", "SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND EXAMDATE = CONVERT(DATETIME,'" + txtDtOfPaper.Text + "',103)", "COURSE_NAME");
-            objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.COURSENO = C.COURSENO AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO) INNER JOIN ACD_SESSION_MASTER SM ON (A.SESSIONNO = SM.SESSIONNO) INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO = S.SEMESTERNO)", " DISTINCT C.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME + ' - ' + S.SEMESTERNAME)COURSE_NAME", "C.SUBID = 1 AND SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + " AND A.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "COURSE_NAME");
+            //objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.COURSENO = C.COURSENO AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO) INNER JOIN ACD_SESSION_MASTER SM ON (A.SESSIONNO = SM.SESSIONNO) INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO = S.SEMESTERNO)", " DISTINCT C.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME + ' - ' + S.SEMESTERNAME)COURSE_NAME", "C.SUBID = 1 AND SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + " AND A.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "COURSE_NAME");
+            objCommon.FillDropDownList(ddlCourse, "ACD_EXAM_DATE A INNER JOIN ACD_COURSE C ON (A.COURSENO = C.COURSENO AND A.SCHEMENO = C.SCHEMENO AND A.SEMESTERNO = C.SEMESTERNO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = A.BRANCHNO) INNER JOIN ACD_SESSION_MASTER SM ON (A.SESSIONNO = SM.SESSIONNO) INNER JOIN ACD_SEMESTER S ON (A.SEMESTERNO = S.SEMESTERNO) INNER JOIN ACD_SUBJECTTYPE ST ON (C.SUBID = ST.SUBID)", " DISTINCT C.COURSENO", "(C.CCODE + ' - ' + C.COURSE_NAME + ' - ' + B.SHORTNAME + ' - ' + S.SEMESTERNAME)COURSE_NAME", "ST.TH_PR =1 AND SLOTNO= " + Convert.ToInt32(ddlSlot.SelectedValue) + " AND SM.SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND A.DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + " AND A.BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + " AND EXAMDATE = CONVERT(DATETIME,'" + ddlDate.SelectedValue.ToString() + "',103)", "COURSE_NAME");
             lvBundleList.DataSource = null;
             lvBundleList.DataBind();
             lvBundleList.Visible = false;
@@ -165,9 +171,48 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 
     private void BindBundleList()
     {
+        DataSet ds;
         string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
         //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), ddlCourse.SelectedValue, Convert.ToDateTime(txtDtOfPaper.Text), Convert.ToInt32(ddlBranch.SelectedValue));
-        DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+        //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+        //if (ddlBranch.SelectedIndex > 0)
+        //{
+        //    //string sp_procedure = "PKG_SPECIALISATION_COURSE_STUDENT_LIST";
+        //    //string sp_parameters = "@P_SCHEMENO,@P_BRANCHNO,@P_DEGREENO";
+        //    //string sp_callValues = "" + Convert.ToInt32(ddlScheme.SelectedValue) + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + Convert.ToInt32(ddlDegree.SelectedValue) + "";
+
+        //    //ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+        //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+        //}
+        //else
+        //{
+
+        // added by shubham on Excel as per PCEN Requirement
+        string SchBranchnos = "";
+        DataSet dsBranchnos = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO = SR.IDNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO = SR.SCHEMENO) INNER JOIN ACD_BRANCH BR ON (BR.BRANCHNO = S.BRANCHNO)", "DISTINCT BR.BRANCHNO", "BR.LONGNAME", "SR.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND  SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(S.CAN,0)=0 AND ISNULL(S.ADMCAN,0)=0", "BR.BRANCHNO");
+
+        if (dsBranchnos.Tables.Count > 0) 
+        {
+            if(dsBranchnos.Tables[0].Rows.Count > 0)
+            {
+                foreach(DataRow row in dsBranchnos.Tables[0].Rows)
+                {
+                    SchBranchnos += row["BRANCHNO"].ToString() + "$";
+                }
+                SchBranchnos = SchBranchnos.TrimEnd('$');
+            }
+        }
+        DateTime selectedDate = Convert.ToDateTime(ddlDate.SelectedValue);
+        string formattedDate = selectedDate.ToString("dd/MMM/yyyy").ToUpper();
+        string sp_procedure = "PKG_ACAD_GET_BUNDLENO_SEATNO_NEW";
+        string sp_parameters = "@P_SESSIONID,@P_COURSENO,@P_EXAMDATE,@P_BRANCHNO,@P_BRANCHNO_S,@P_BUNDLENO";
+        string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + formattedDate + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + SchBranchnos.ToString() + "," + Convert.ToInt32(txtStudPerBundle.Text.Trim()) + "";
+        ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+        //int brchno = Convert.ToInt32(ddlBranch.SelectedValue);
+        //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+        //}
+
+        // end here by Shubham as per PCEN Requirement
         if (ds != null && ds.Tables.Count > 0)
         {
             if (ds.Tables[0].Rows.Count > 0)
@@ -202,10 +247,11 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
     {
         try
         {
+
             if (ddlDate.SelectedIndex > 0)
             {
                 CustomStatus cs = CustomStatus.Error;
-
+                
 
                 foreach (ListViewDataItem item in lvBundleList.Items)
                 {
@@ -213,13 +259,23 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
                     Label lblCourseNo = item.FindControl("lblCoursrNo") as Label;
                     Label lblRegFrom = item.FindControl("lblRegNoFrom") as Label;
                     Label lblRegTo = item.FindControl("lblRegNoTo") as Label;
+                    Label lblSeatFrom = item.FindControl("lblSeatNoFrom") as Label;
+                    Label lblSeatto = item.FindControl("lblSeatNoTo") as Label;
                     Label lblBranchno = item.FindControl("lblBranch") as Label;
                     Label lblBundleCount = item.FindControl("lblBundleCount") as Label;
 
-                    cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), Convert.ToInt32(lblCourseNo.ToolTip), (lblRegFrom.ToolTip).ToString(), (lblRegTo.ToolTip).ToString(), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblBranchno.ToolTip), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(lblBundleCount.ToolTip));
+                    cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), Convert.ToInt32(lblCourseNo.ToolTip), (lblRegFrom.ToolTip).ToString(), (lblRegTo.ToolTip).ToString(), (lblSeatFrom.ToolTip).ToString(), (lblSeatto.ToolTip).ToString(), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblBranchno.ToolTip), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(lblBundleCount.ToolTip));
+                    // cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), Convert.ToInt32(lblCourseNo.ToolTip), (lblRegFrom.ToolTip).ToString(), (lblRegTo.ToolTip).ToString(), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblBranchno.ToolTip), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(lblBundleCount.ToolTip));
                     // cs = (CustomStatus)objExamController.CreateBundle(Convert.ToInt32(lblBundle.ToolTip), ddlCourse.SelectedValue, Convert.ToInt32(lblSeatFrom.ToolTip), Convert.ToInt32(lblSeatTo.ToolTip), Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue));
+                    //string SP_Name = "PKG_ACAD_INS_BUNDLE";
+                    //string SP_Parameters = "@P_BUNDLENO,@P_COURSENO,@P_REGNOFROM,@P_REGNOTO,@P_SEATNOFROM,@P_SEATNOTO,@P_SESSIONID,@P_BRANCHNO,@P_COLLEGEID,@P_COUNT,@P_OUT";
+                    //string Call_Values = "" + Convert.ToInt32(lblBundle.ToolTip) + "," + Convert.ToInt32(lblCourseNo.ToolTip) + "," + (lblRegFrom.ToolTip).ToString() + "," + (lblRegTo.ToolTip).ToString() + "," + (lblSeatFrom.ToolTip).ToString() + "," + (lblSeatto.ToolTip).ToString() + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(lblBranchno.ToolTip) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(lblBundleCount.ToolTip) + "," + ",1";
+                   
 
+                     //que_out = AL.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true, 1);
+                     //a = que_out;
                 }
+
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     objCommon.DisplayMessage(updExam, "Bundle Creation Done Successfuly..!!", this.Page);
@@ -561,8 +617,12 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         if (ddlSession.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlDate, "ACD_EXAM_DATE E INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO = E.SESSIONNO)", "DISTINCT CONVERT(NVARCHAR,E.EXAMDATE,103)DATE", "CONVERT(NVARCHAR,E.EXAMDATE,103)EXAMDATE", "SM.SESSIONID =" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SM.COLLEGE_ID =" + Convert.ToInt32(ViewState["college_id"]) + " AND E.SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "DATE");
+            int SessionNo = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]) + " AND IS_ACTIVE = 1"));
+            ViewState["SESSIONNO"] = SessionNo;
+            objCommon.FillDropDownList(ddlBranch, "ACD_STUDENT S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO = SR.IDNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO = SR.SCHEMENO) INNER JOIN ACD_BRANCH BR ON (BR.BRANCHNO = S.BRANCHNO)", "DISTINCT BR.BRANCHNO", "BR.LONGNAME", "SR.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND  SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(S.CAN,0)=0 AND ISNULL(S.ADMCAN,0)=0", "BR.BRANCHNO");
+
         }
-        else 
+        else
         {
             ddlSession.SelectedIndex = 0;
         }
@@ -576,6 +636,55 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         else
         {
             ddlDate.SelectedIndex = 0;
+        }
+    }
+    protected void btnExcel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string proc_name = "PKG_ACD_ANSWERSHEET_BUNDLE_STUD_GETLIST_PCEN";
+            string param = "@P_SESSIONNO";
+            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
+            GridView dg = new GridView();
+            if (ds.Tables.Count > 0)
+            {
+                dg.DataSource = ds.Tables[0];
+                dg.DataBind();
+                //AddReportHeader(dg);
+                string attachment = "attachment; filename=" + "Bundle_Details " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
+            }
+            else
+            {
+                objCommon.DisplayMessage(this, "No Data Found for this selection.", this.Page);
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+        }
+    protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try 
+        {
+            if(ddlBranch.SelectedIndex > 0)
+            {
+                BindBundleList();
+            }
+        }catch(Exception ex)
+        {
         }
     }
 }
