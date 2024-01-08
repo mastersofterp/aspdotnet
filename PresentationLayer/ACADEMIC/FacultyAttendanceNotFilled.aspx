@@ -209,7 +209,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="dvSession" visible="false">
                                         <div class="">
                                             <sup>*</sup>
-                                            <asp:Label ID="Label1" runat="server" Font-Bold="true">Session</asp:Label>
+                                            <asp:Label runat="server" >Session</asp:Label>
                                         </div>
                                         <asp:DropDownList ID="ddlSessionn" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
