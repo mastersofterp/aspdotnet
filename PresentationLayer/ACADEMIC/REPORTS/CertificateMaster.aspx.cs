@@ -465,6 +465,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
     protected void btnConfirm_BC_Click(object sender, EventArgs e)
     {
         string studentIds = string.Empty;
+        string idno = string.Empty;
         //Get Student Details from lvStudent
         string CertShortName = objCommon.LookUp("ACD_CERTIFICATE_MASTER", "CERT_SHORT_NAME", "CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "");
         decimal TuitionFee = 0.0m;
@@ -552,6 +553,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 if (cbRow.Checked == true)
                 {
                     studentIds += cbRow.ToolTip + "$";
+                    idno = cbRow.ToolTip;
 
                     if (Session["OrgId"].ToString() == "2")
                     {
@@ -588,7 +590,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11")
                     {
                         //Added by pooja for estimate certificate for prmitr ON ADTE 01-08-2023
-                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + studentIds.TrimEnd('$') + "");
+                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + idno + "");
                         if (CertShortName == "EC")
                         {
                             //string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + IDNO + "");
@@ -1749,6 +1751,22 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         if (chkAddTextOption.Checked == true)
         {
             bonafiedOption = 1;
+        }
+
+        foreach (ListViewDataItem item in lvStudentRecords.Items)
+        {
+            CheckBox chk = item.FindControl("chkReport") as CheckBox;
+            int idno = 0;
+            if ((item.FindControl("chkReport") as CheckBox).Checked)
+            {
+                idno = Convert.ToInt32(objCommon.LookUp("ACD_CERT_TRAN", "COUNT(IDNO)", "IDNO=" + chk.ToolTip + "AND CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
+                if (idno == 0)
+                //if (idno != studentIds)btnConfirm_BC
+                {
+                    objCommon.DisplayMessage(this.updpnlExam, "Please Confirm Student First!!", this.Page);
+                    return;
+                }
+            }
         }
 
         foreach (ListViewDataItem item in lvStudentRecords.Items)
