@@ -199,8 +199,11 @@
                                             </asp:Panel>
                                         </div>
                                     </ContentTemplate>
-
+                                   <%-- <Triggers>
+                                        <asp:PostBackTrigger ControlID="lvStudent" />
+                                    </Triggers>--%>
                                 </asp:UpdatePanel>
+
                             </div>
                             <%--Search Pannel End--%>
 

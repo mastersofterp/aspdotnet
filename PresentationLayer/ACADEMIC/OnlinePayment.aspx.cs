@@ -1553,6 +1553,15 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
+                }
+            else if (Session["OrgId"].ToString() == "15")
+            {
+                int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                Session["payactivityno"] = activityno;
+            }
+            else
+            {
+                Session["payactivityno"] = 1;
             }
 
             DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
@@ -1667,6 +1676,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
         //Server.Transfer("PersonalDetails.aspx", false);
         DisplayInformation(Convert.ToInt32(Session["stuinfoidno"]));
+        divDirectPayment.Visible = true;
+        div_Studentdetail.Visible = true;
         lvStudent.Visible = false;
         lvStudent.DataSource = null;
         lblNoRecords.Visible = false;
@@ -1795,6 +1806,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         btnPayment.Visible = false;
         btnReciept.Visible = false;
         divPreviousReceipts.Visible = false;
+        div_Studentdetail.Visible = false;
+        divInstallmentPayment.Visible = false;
         //if (value == "BRANCH")
         //{
         //    divbranch.Attributes.Add("style", "display:block");
