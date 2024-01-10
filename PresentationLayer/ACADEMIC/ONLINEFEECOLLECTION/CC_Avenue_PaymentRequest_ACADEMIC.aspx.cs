@@ -401,7 +401,7 @@ public partial class CC_Avenue_PaymentRequest : System.Web.UI.Page
             data.Add("merchant_param3", installno);
             data.Add("merchant_param4", studPhone);
             data.Add("merchant_param5", Session["idno"]);
-            data.Add("merchant_param6", installno);
+            data.Add("merchant_param6", Session["regno"].ToString());
             data.Add("merchant_param7", txnid1);
             //data.Add("promo_code", "");
             //data.Add("customer_identifier", userno);
