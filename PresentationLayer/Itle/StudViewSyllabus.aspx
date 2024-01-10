@@ -64,16 +64,16 @@
                                         <%--<asp:Button ID="btnViewSyllabus" runat="server" Text="View Syllabus" BackColor="#9ba7c6"
                                                             OnClick="btnViewSyllabus_Click" BorderColor="#000066" ToolTip="Click here to View Syllabus" />--%>
                                     </div>
-                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                    <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                    <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                    <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                    <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                    </div>
 
                                 </asp:Panel>
                             </div>
-                          
+
                             <div class="col-12">
                                 <div id="DivSyllabusList" runat="server" visible="false">
                                     <div class="sub-heading">
@@ -91,10 +91,10 @@
                                                             <th>Unit Name</th>
                                                             <th>Topic Name</th>
                                                             <th>Plan Date</th>
-                                                             <th id="divDownload" runat="server" visible="false">Attachment
-                                                        </th>
-                                                        <th id="divBlobDownload" runat="server" visible="false">Attachment
-                                                        </th>
+                                                            <th id="divDownload" runat="server" visible="false">Attachment
+                                                            </th>
+                                                            <th id="divBlobDownload" runat="server" visible="false">Attachment
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -121,19 +121,19 @@
                                                         <asp:LinkButton ID="lnkDownload" runat="server" Text='<%# Eval("ATTACHMENT") %>'
                                                             ToolTip='<%# Eval("ATTACHMENT")%>' OnClick="lnkDownload_Click" CommandArgument='<%#Eval("SUB_NO")%>'>
                                                         </asp:LinkButton>
-                                                        </td>
+                                                    </td>
                                                     <td style="text-align: center" id="tdBlob" runat="server" visible="false">
                                                         <asp:UpdatePanel ID="UpdatePanel3" runat="server">
-                                                                <ContentTemplate>
-                                                        <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("File_Path") %>'
-                                                                        data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("File_Path") %>' Visible='<%# Convert.ToString(Eval("File_Path"))==string.Empty?false:true %>'></asp:ImageButton>
-                                                                    </ContentTemplate>
-                                                                <Triggers>
-                                                                    <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                                    
-                                                                </Triggers>
-                                                            </asp:UpdatePanel>
-                                                       
+                                                            <ContentTemplate>
+                                                                <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("File_Path") %>'
+                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("File_Path") %>' Visible='<%# Convert.ToString(Eval("File_Path"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                            </ContentTemplate>
+                                                            <Triggers>
+                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+
+                                                            </Triggers>
+                                                        </asp:UpdatePanel>
+
                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
@@ -147,7 +147,15 @@
                 </div>
             </div>
         </div>
-        
+        <script type="text/javascript">
+            function CloseModal() {
+                $("#preview").modal("hide");
+            }
+            function ShowModal() {
+                $("#preview").modal("show");
+            }
+</script>
+
     </asp:Panel>
     <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
         <div class="modal-dialog text-center">
@@ -170,7 +178,10 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <%-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="BTNCLOSE" runat="server" Text="CLOSE" OnClick="BTNCLOSE_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                         </div>
                     </div>
                     </div>
@@ -179,6 +190,6 @@
         </div>
     </div>
 
-    
+
 </asp:Content>
 

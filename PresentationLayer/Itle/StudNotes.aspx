@@ -282,7 +282,14 @@
                                 </div>
                             </asp:Panel>
                         </div>
-
+                        <script type="text/javascript">
+                            function CloseModal() {
+                                $("#preview").modal("hide");
+                            }
+                            function ShowModal() {
+                                $("#preview").modal("show");
+                            }
+                        </script>
 
                         <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
                             <div class="modal-dialog text-center">
@@ -305,7 +312,9 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                <%--<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+                                                <asp:HiddenField ID="hdnfilename" runat="server" />
+                                                <asp:Button ID="btnclodedoc" runat="server" Text="CLOSE" OnClick="btnclodedoc_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                                             </div>
                                         </div>
                                         </div>
