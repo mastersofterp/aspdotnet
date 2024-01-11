@@ -218,6 +218,35 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 }
             }
 
+            DataSet dsAlreadyCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
+                        "CCODE", "COURSENO,COUNT(1) TIMES",
+                        "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO < " + Convert.ToInt32(objSR.SESSIONNO)
+                        + " AND IDNO = " + objSR.IDNO +
+                        "  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE", "CCODE,COURSENO");
+
+            if (dsAlreadyCrs != null && dsAlreadyCrs.Tables[0].Rows.Count > 0)
+            {
+                string alreadyCrs = string.Empty, alreadyCrsNo = string.Empty;
+                foreach (DataRow row in dsAlreadyCrs.Tables[0].Rows)
+                    alreadyCrsNo += row["COURSENO"] + ", ";
+
+                DataSet ds2 = (DataSet)ViewState["dsCurrCourses"];
+                if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow row1 in ds2.Tables[0].Rows)
+                    {
+                        if (alreadyCrsNo.Contains(row1["COURSENO"].ToString()))
+                            alreadyCrs += row1["COURSE_NAME"] + ", ";
+                    }
+                }
+                if (!string.IsNullOrEmpty(alreadyCrs))
+                {
+                    alreadyCrs = alreadyCrs.TrimEnd(',');
+                    objCommon.DisplayMessage(updReg, "Selected " + alreadyCrs + " Courses already registered in previous Session/ Semester.", this.Page);
+                    return;
+                }
+            }
+
             DataSet dsRegdCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT SR INNER JOIN ACD_COURSE C ON C.COURSENO=SR.COURSENO",
                         "DISTINCT SR.COURSENO", "SR.CCODE,ISNULL(C.CREDITS,0)CREDITS,ISNULL(C.ELECT,0)ELECT,ISNULL(C.GLOBALELE,0)GLOBALELE",
                         "ISNULL(SR.REGISTERED,0) = 1 AND ISNULL(SR.CANCEL,0) = 0 AND ISNULL(SR.PREV_STATUS,0) = 0 AND SR.SESSIONNO = " + Convert.ToInt32(objSR.SESSIONNO)
@@ -658,6 +687,8 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         ////dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER ", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1", "C.CCODE");
 
         dsCurrCourses = objSReg.GetAvailableCourseListForModified(Convert.ToInt16(lblScheme.ToolTip), Convert.ToInt16(lblSemester.ToolTip), Convert.ToInt32(ViewState["currentsession"]));
+        ViewState["dsCurrCourses"] = dsCurrCourses;
+
         if (dsCurrCourses != null && dsCurrCourses.Tables.Count > 0 && dsCurrCourses.Tables[0].Rows.Count > 0)
         {
             btnSubmit.Enabled = true;
@@ -712,7 +743,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@UserName=" + Session["username"].ToString();
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["CLG_ID"].ToString() + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@UserName=" + Session["username"].ToString();
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1558,20 +1589,16 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
             objSR.EXAM_REGISTERED = 0;
 
-            foreach (ListItem Item in lboOfferCourse.Items)
-            {
-                if (Item.Selected)
-                {
-                    //objSR.COURSENOS += Item.Value + "$";
-                    count++;
-                }
-            }
+            //foreach (ListItem Item in lboOfferCourse.Items)
+            //{
+            //    if (Item.Selected)
+            //    {
+            //        //objSR.COURSENOS += Item.Value + "$";
+            //        count++;
+            //    }
+            //}
 
-            if (count <= 0)
-            {
-                objCommon.DisplayMessage(this.Page, "Please Check atleast one Course.", this.Page);
-                return;
-            }
+
             count = 0;
             double globalCredits = 0;
             double electiveCredits = 0;
@@ -1601,55 +1628,62 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 }
             }
 
+            if (string.IsNullOrEmpty(objSR.COURSENOS))
+            {
+                objCommon.DisplayMessage(this.Page, "Please Check atleast one Course.", this.Page);
+                return;
+            }
+
             objSR.SCHEMENO = Convert.ToInt32(ViewState["schemeno"]);
             objSR.SEMESTERNO = Convert.ToInt32(ddlSemester.SelectedValue);
-            //if (coreCredits > 0 || electiveCredits > 0 || globalCredits > 0)
-            //{
-            //    DataSet dsCredits = objCommon.FillDropDown("ACD_DEFINE_TOTAL_CREDIT WITH (NOLOCK)", "ISNULL(CORE_CREDIT,0)CORE_CREDIT", "ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT", "SCHEMENO =" + objSR.SCHEMENO + " AND TERM = " + objSR.SEMESTERNO, "");
-            //    double totGlobalCredits = 0;
-            //    double totElectiveCredits = 0;
-            //    double totCoreCredits = 0;
-            //    if (dsCredits.Tables[0].Rows.Count > 0)
-            //    {
-            //        totCoreCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["CORE_CREDIT"].ToString());
-            //        totElectiveCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["ELECTIVE_CREDIT"].ToString());
-            //        totGlobalCredits = Convert.ToDouble(dsCredits.Tables[0].Rows[0]["GLOBAL_CREDIT"].ToString());
-            //    }
-            //    else
-            //    {
-            //        objCommon.DisplayUserMessage(this.updBulkReg, "Please define Credit limit", this.Page);
-            //        return;
-            //    }
 
-            //    if (coreCredits > 0 && coreCredits > totCoreCredits)
-            //    {
-            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum Core Credit is " + electiveCredits, this.Page);
-            //        return;
-            //    }
-
-            //    if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
-            //    {
-            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum elective Credit is " + electiveCredits, this.Page);
-            //        return;
-            //    }
-
-            //    if (globalCredits > 0 && globalCredits > totGlobalCredits)
-            //    {
-            //        objCommon.DisplayMessage(updBulkReg, "You have reached maximum Global Credit is " + electiveCredits, this.Page);
-            //        return;
-            //    }
-            //}
-
+            string studIDs = string.Empty;
             foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
             {
                 CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
-                if (cbRow.Checked == true) count++;
+                if (cbRow.Checked == true)
+                {
+                    studIDs += ((dataitem.FindControl("lblIDNo")) as Label).ToolTip + "$";
+                    count++;
+                }
             }
             
             if (count <= 0)
             {
                 objCommon.DisplayMessage(this.Page, "Please Check atleast one Student.", this.Page);
                 return;
+            }
+
+            objSR.SESSIONNO = Convert.ToInt32(ddlBulkSession.SelectedValue);
+
+            DataSet dsAlreadyCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
+                      "CCODE", "COURSENO,COUNT(1) TIMES",
+                      "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO <= " + Convert.ToInt32(objSR.SESSIONNO)
+                      + " AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + studIDs + "','$'))  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO", "CCODE");
+
+            if (dsAlreadyCrs != null && dsAlreadyCrs.Tables[0].Rows.Count > 0)
+            {
+                DataSet ds1 = (DataSet)ViewState["OfferedCourseList"];
+                string alreadyCrs = string.Empty, alreadyCrsNo = string.Empty;
+               
+                foreach (DataRow row in dsAlreadyCrs.Tables[0].Rows)
+                    alreadyCrsNo += row["COURSENO"] + ", ";
+
+                if (ds1 != null && ds1.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow row1 in ds1.Tables[0].Rows)
+                    {
+                        if (alreadyCrsNo.Contains(row1["COURSENO"].ToString()))
+                            alreadyCrs += row1["COURSE_NAME"] + ", ";
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(alreadyCrs))
+                {
+                    alreadyCrs = alreadyCrs.TrimEnd(',');
+                    objCommon.DisplayMessage(updBulkReg, "Selected " + alreadyCrs + " courses already registered in previous Session/ Semester.", this.Page);
+                    return;
+                }
             }
 
             foreach (ListViewDataItem dataitem in lvStudentBulk.Items)
@@ -1659,8 +1693,6 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 if (cbRow.Checked == true)
                 {
                     //Add registered 
-
-                    objSR.SESSIONNO = Convert.ToInt32(ddlBulkSession.SelectedValue);
                     objSR.IDNO = Convert.ToInt32(((dataitem.FindControl("lblIDNo")) as Label).ToolTip);
                     objSR.REGNO = ((dataitem.FindControl("lblIDNo")) as Label).Text;
                     objSR.IPADDRESS = Session["ipAddress"].ToString();
