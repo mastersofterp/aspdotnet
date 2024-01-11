@@ -10351,6 +10351,38 @@ namespace IITMS
                 }
 
                 #endregion
+
+                #region Leave Balance Report
+
+                public DataSet LeaveEmployeeBalanceForExport(int idno, int lvno, int Year, int periodno, int stno, int deptno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objparams = null;
+                        objparams = new SqlParameter[6];
+                        objparams[0] = new SqlParameter("@P_IDNO", idno);
+                        objparams[1] = new SqlParameter("@P_LVNO ", lvno);
+                        objparams[2] = new SqlParameter("@P_YEAR", Year);
+                        objparams[3] = new SqlParameter("@P_PERIOD", periodno);
+                        objparams[4] = new SqlParameter("@P_STNO", stno);
+                        objparams[5] = new SqlParameter("@P_Deptno", deptno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_BALANCE_REPORT_TOEXCEL", objparams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavesController.GetLeavesStatus->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                #endregion 
             }
         }
     }
