@@ -75,7 +75,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocumentType : System.Web.UI.P
 
                 if (ViewState["action"].ToString().Equals("add"))
                 {
-                    DataSet ds = objCommon.FillDropDown("ADMN_DC_DOCUMENT_STORAGE_DOCUMENT_TYPE", "DOC_ID", "ADMN_DC_DOCUMENT_STORAGE_DOCUMENT_TYP", "DOCUMENT_TYPE='" + txtdoctype.Text + "' AND DOC_ID!=" + Convert.ToInt32(ViewState["docid"]), "");
+                    DataSet ds = objCommon.FillDropDown("ADMN_DC_DOCUMENT_STORAGE_DOCUMENT_TYPE", "DOC_ID", "DOCUMENT_TYPE", "DOCUMENT_TYPE='" + txtdoctype.Text + "' AND DOC_ID!=" + Convert.ToInt32(ViewState["docid"]), "");
                     if (ds.Tables[0].Rows.Count > 0)
                     {
                         objCommon.DisplayMessage("Record Already Exist.", this.Page);
