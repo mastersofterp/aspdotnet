@@ -7,12 +7,11 @@
     <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
     <style>
-        .dataTables_scrollHeadInner 
-        {
+        .dataTables_scrollHeadInner {
             width: max-content !important;
         }
-        .table 
-        {
+
+        .table {
             width: auto !important;
         }
     </style>
@@ -202,10 +201,22 @@
                                             <asp:ListItem Selected="True" Value="1">&nbsp;Attendance Tracker&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                             <asp:ListItem Value="2">&nbsp;Attendance Marked & Not-Marked &nbsp;&nbsp;&nbsp;</asp:ListItem>
                                             <asp:ListItem Value="3">&nbsp;Attendance register & Consolidated Attendance&nbsp;&nbsp;&nbsp;</asp:ListItem>
+                                            <asp:ListItem Value="4">&nbsp;Class Attendance Entry Report Of Faculty&nbsp;&nbsp;&nbsp;</asp:ListItem>
                                         </asp:RadioButtonList>
-                                        <%--Attendance register & Consolidated Attendance--%> 
+                                        <%--Attendance register & Consolidated Attendance--%>
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divsession" visible="false" style="display:none">
+                                    <%-- dvSession Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="dvSession" visible="false">
+                                        <div class="">
+                                            <sup>*</sup>
+                                            <asp:Label runat="server" >Session</asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSessionn" runat="server" AppendDataBoundItems="true" AutoPostBack="true" TabIndex="1" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divsession" visible="false" style="display: none">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
@@ -304,7 +315,7 @@
                                             AutoPostBack="True" OnSelectedIndexChanged="ddlTeacher_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                    </div> 
+                                    </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divcourse" runat="server" visible="false">
                                         <div class="label-dynamic">
@@ -319,7 +330,7 @@
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
 
-                                    </div> 
+                                    </div>
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divSection" visible="false">
                                         <div class="label-dynamic">
@@ -331,16 +342,16 @@
                                             AutoPostBack="True">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                    </div> 
+                                    </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="calender">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <label>Attendance Start Date</label>
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon" id="txtStartDate1" runat="server">
-                                                <i class="fa fa-calendar"></i>
+                                                <i class="fa fa-calendar" runat="server"></i>
                                             </div>
                                             <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="6" CssClass="form-control" placeholder="DD/MM/YYYY" />
                                             <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
@@ -358,16 +369,16 @@
                                                 ValidationGroup="submit" />
                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtStartDate" Display="None" SetFocusOnError="True" ValidationGroup="ShowStudent" />
                                         </div>
-                                    </div> 
+                                    </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="calender1">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
                                             <label>Attendance End Date</label>
                                         </div>
                                         <div class="input-group">
                                             <div class="input-group-addon" id="txtEndDate1" runat="server">
-                                                <i class="fa fa-calendar"></i>
+                                                <i class="fa fa-calendar" runat="server"></i>
                                             </div>
                                             <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="7" CssClass="form-control" placeholder="DD/MM/YYYY" />
                                             <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
@@ -395,12 +406,17 @@
                                     Text="Attendance Marked-Not Marked Report" ValidationGroup="show" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnAttTracker" runat="server" OnClick="btnAttTracker_Click" TabIndex="9" OnClientClick="return validate1();"
                                     Text="Attendance Tracker Report" CssClass="btn btn-info" Visible="false" />
-                                <asp:Button ID="btnAttRegister" runat="server" TabIndex="5" Text="Attendance Register Report" OnClientClick="return validate2();" 
+                                <asp:Button ID="btnAttRegister" runat="server" TabIndex="5" Text="Attendance Register Report" OnClientClick="return validate2();"
                                     CssClass="btn btn-info" Visible="false" OnClick="btnAttRegister_Click" />
                                 <asp:Button ID="btnConAtt" runat="server" TabIndex="6" Text="Consolidated Attendance Report" OnClientClick="return validate2();"
                                     CssClass="btn btn-info" Visible="false" OnClick="btnConAtt_Click" />
+
+                                <%-- btnExcel Added By Vipul T on dated 22-12-2023 as per Tno:- --%>
+                                <asp:Button ID="btnExcel" runat="server" TabIndex="6" Text="Report (Excel)" OnClick="btnExcel_Click" 
+                                    CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" TabIndex="10"
                                     Text="Cancel" CssClass="btn btn-warning" />
+
                                 <asp:ValidationSummary ID="vsShow" runat="server" ShowMessageBox="True"
                                     ShowSummary="False" ValidationGroup="show" />
                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ShowMessageBox="True"
@@ -418,6 +434,7 @@
             <asp:PostBackTrigger ControlID="btnAttTracker" />
             <asp:PostBackTrigger ControlID="btnAttRegister" />
             <asp:PostBackTrigger ControlID="btnConAtt" />
+            <asp:PostBackTrigger ControlID="btnExcel" />
         </Triggers>
     </asp:UpdatePanel>
     <div id="divMsg" runat="server">
@@ -451,7 +468,7 @@
             var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
             var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
             var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
-           
+
             if (collegeid == "0") {
                 alert("Please Select School/Institute.");
                 return false;
@@ -478,38 +495,38 @@
             });
         });
     </script>
-     <script>
-         function validate2() {
-             var college = document.getElementById("ctl00_ContentPlaceHolder1_ddlClgname").value;
-             var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
-             var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
-             var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
+    <script>
+        function validate2() {
+            var college = document.getElementById("ctl00_ContentPlaceHolder1_ddlClgname").value;
+            var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
+            var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
+            var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
 
-             if (college == "0") {
-                 alert("Please Select College & Scheme");
-                 return false;
-             }
-             if (session == "0") {
-                 alert("Please Select Session.");
-                 return false;
-             }
-             if (AttStartDate == "" || AttStartDate == "DD/MM/YYYY") {
-                 alert("Please Enter Attendance Start Date.");
-                 return false;
-             }
-             if (AttEndDtae == "" || AttEndDtae == "DD/MM/YYYY") {
-                 alert("Please Enter Attendance End Date.");
-                 return false;
-             }
-         }
-         var prm = Sys.WebForms.PageRequestManager.getInstance();
-         prm.add_endRequest(function () {
-             $(function () {
-                 $('#btnAttReport').click(function () {
-                     validate();
-                 });
-             });
-         });
+            if (college == "0") {
+                alert("Please Select College & Scheme");
+                return false;
+            }
+            if (session == "0") {
+                alert("Please Select Session.");
+                return false;
+            }
+            if (AttStartDate == "" || AttStartDate == "DD/MM/YYYY") {
+                alert("Please Enter Attendance Start Date.");
+                return false;
+            }
+            if (AttEndDtae == "" || AttEndDtae == "DD/MM/YYYY") {
+                alert("Please Enter Attendance End Date.");
+                return false;
+            }
+        }
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_endRequest(function () {
+            $(function () {
+                $('#btnAttReport').click(function () {
+                    validate();
+                });
+            });
+        });
     </script>
     <script>
         function validate1() {

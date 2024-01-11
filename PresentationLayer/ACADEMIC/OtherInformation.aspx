@@ -266,9 +266,9 @@
                                                         </asp:RadioButtonList>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divMotherTongue" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supMotherTongue" runat="server">* </sup>
                                                             <label>Mother Tongue</label>
                                                         </div>
 
@@ -276,9 +276,9 @@
                                                             ToolTip="Please Select Mother Tounge" TabIndex="81" data-select2-enable="true">
                                                         </asp:DropDownList>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divOtherLanguage" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supOtherLanguage" runat="server">* </sup>
                                                             <label>Other Language</label>
                                                         </div>
 
@@ -288,9 +288,9 @@
                                                             TargetControlID="txtOtherLangauge" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_+=./:;<>?'{}[]\|-&&quot;'" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divIdentificationMark" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supIdentificationMark" runat="server">* </sup>
                                                             <label>Identification Mark</label>
                                                         </div>
 
@@ -300,9 +300,9 @@
                                                             TargetControlID="txtIdentiMark" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divHeight" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supHeight" runat="server">* </sup>
                                                             <label>Height (In cm)</label>
                                                         </div>
 
@@ -310,9 +310,9 @@
                                                             ToolTip="Please Enter Height" MaxLength="3" TabIndex="88" />
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divWeight" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supWeight" runat="server">* </sup>
                                                             <label>Weight (In Kg)</label>
                                                         </div>
 
@@ -422,9 +422,9 @@
                                                             <h5><b>Bank Details</b></h5>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBankName" runat="server">
                                                         <div class="label-dynamic">
-                                                         <%--   <sup>* </sup>--%>
+                                                            <sup id="supBankName" runat="server">* </sup>
                                                             <label>Bank Name</label>
                                                         </div>
 
@@ -435,9 +435,9 @@
                                                             Display="None" ErrorMessage="Please select Bank" SetFocusOnError="True"
                                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBankAccNo" runat="server">
                                                         <div class="label-dynamic">
-                                                          <%--  <sup>* </sup>--%>
+                                                            <sup id="supBankAccNo" runat="server">* </sup>
                                                             <label>Bank Account No</label>
                                                         </div>
 
@@ -453,9 +453,9 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
 
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divIfscCode" runat="server">
                                                         <div class="label-dynamic">
-                                                         <%--   <sup>* </sup>--%>
+                                                            <sup id="supIfscCode" runat="server">* </sup>
                                                             <label>IFSC Code</label>
                                                         </div>
 
@@ -470,9 +470,9 @@
                                                 TargetControlID="txtIFSC" />--%>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBankAddress" runat="server">
                                                         <div class="label-dynamic">
-                                                          <%--  <sup>* </sup>--%>
+                                                            <sup id="supBankAddress" runat="server">* </sup>
                                                             <label>Bank Address</label>
                                                         </div>
 
@@ -515,19 +515,19 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSportsName" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supSportsName" runat="server">* </sup>
                                                             <label>Sports / Cultural Name</label>
                                                         </div>
                                                         <asp:TextBox ID="txtSportName" runat="server" CssClass="form-control"></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtSportName"
+                                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtSportName"
                                                             Display="None" ErrorMessage="Please Enter Sports Name" SetFocusOnError="True"
-                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>
+                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSportsLevel" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supSportsLevel" runat="server">* </sup>
                                                             <label>Sports / Cultural Level</label>
                                                         </div>
                                                         <%--<asp:TextBox ID="txtSportLevel" runat="server" CssClass="form-control" ToolTip="Please Enter Sports Level"></asp:TextBox>--%>
@@ -538,19 +538,19 @@
                                                             <asp:ListItem Value="3">National</asp:ListItem>
                                                             <asp:ListItem Value="4">International</asp:ListItem>
                                                         </asp:DropDownList>
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSportLevel"
+                                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlSportLevel"
                                                             Display="None" ErrorMessage="Please Enter Sports Level" SetFocusOnError="True"
-                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>
+                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>--%>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSportsAchievement" runat="server">
                                                         <div class="label-dynamic">
-                                                            <sup></sup>
+                                                            <sup id="supSportsAchievement" runat="server">* </sup>
                                                             <label>Sports / Cultural Achievement Details</label>
                                                         </div>
                                                         <asp:TextBox ID="txtSportAchieve" runat="server" TextMode="MultiLine" TabIndex="98" Rows="1" CssClass="form-control" ToolTip="Please Enter Designation."></asp:TextBox>
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtSportAchieve"
+                                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtSportAchieve"
                                                             Display="None" ErrorMessage="Please Enter Sports Achievement Details" SetFocusOnError="True"
-                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>
+                                                            ValidationGroup="Sport"></asp:RequiredFieldValidator>--%>
                                                     </div>
 
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -953,6 +953,14 @@
         //    }
         //}
     </script>
+
+   <script type="text/javascript" >
+       function ErrorMessage(errorString) {
+           debugger;
+           var errorString = errorString.replace(/,/g, '\n');
+           alert(errorString)
+       }
+</script>
     <div id="divMsg" runat="server"></div>
 
 </asp:Content>

@@ -1,0 +1,28 @@
+.subcard-warning {
+  border-color: #ffc107;
+  margin-bottom: 10px;
+}
+.subcard-warning .subCard-header {
+  background: #FFF4E8 0% 0% no-repeat padding-box;
+  color: #F8961E;
+}
+.subcard-warning .subCard-body p {
+  color: #34395e;
+}
+
+.subcard-success {
+  border-color: #73B100;
+  margin-bottom: 10px;
+}
+.subcard-success .subCard-header {
+  background: rgba(115, 177, 0, 0.1019607843) 0% 0% no-repeat padding-box;
+  color: #73B100;
+}
+.subcard-success .subCard-body p {
+  color: #34395e;
+}
+
+.subCard-content {
+  max-height: 90px;
+  overflow-y: hidden;
+}/*# sourceMappingURL=studentAnnouncements.css.map */

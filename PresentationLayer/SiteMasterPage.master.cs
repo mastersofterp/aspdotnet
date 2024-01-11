@@ -24,7 +24,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     private string uaims_constr = ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
-    private string rfcconstr = ConfigurationManager.ConnectionStrings["UAIMS_RFCCONFIG"].ConnectionString; 
+    private string rfcconstr = ConfigurationManager.ConnectionStrings["UAIMS_RFCCONFIG"].ConnectionString;
     bool connection;
     private static string isServer = System.Configuration.ConfigurationManager.AppSettings["isServer"].ToString();
     protected void Page_Load(object sender, EventArgs e)
@@ -199,7 +199,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                     else
                     {
                         Fill_menu(mainMenu);
-                        
+
                         Fill_menu1(mainMenu1);// Added By Swapnil Prachand - 13112021
                     }
                     /// Added by Pritish S. for menu tab on 09/04/2021
@@ -328,7 +328,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         //Response.Write("Current Page: " + currentPageName);
         //objCommon.DisplayMessage("Current Page: " + currentPageName, this.Page);
         GetPdfPath();
-        
+
     }
     public class Packet
     {
@@ -529,7 +529,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 {
                     HeadName = ds.Tables[0].Rows[i]["LINK_HEADER"].ToString();
                     LinkName = ds.Tables[0].Rows[i]["AL_LINK"].ToString();
-                    Href = "http://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath + "/" + ds.Tables[0].Rows[i]["AL_URL1"].ToString();
+                    Href = "https://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath + "/" + ds.Tables[0].Rows[i]["AL_URL1"].ToString();
 
                     if (HeadCount == 0)
                     {
@@ -549,7 +549,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
 
                     HeadName = ds.Tables[0].Rows[i]["LINK_HEADER"].ToString();
                     LinkName = ds.Tables[0].Rows[i]["AL_LINK"].ToString();
-                    Href = "http://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath + "/" + ds.Tables[0].Rows[i]["AL_URL1"].ToString();
+                    Href = "https://" + HttpContext.Current.Request.Url.Authority + HttpContext.Current.Request.ApplicationPath + "/" + ds.Tables[0].Rows[i]["AL_URL1"].ToString();
 
                     yourHTMLstring += @"<li class='list-group-item'><span><a href='#'>" + HeadName + "</a></span><ul>";
 
@@ -1399,7 +1399,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         try
         {
             LogFile objLog = new LogFile();
-            if ((Session["username"] != null && Session["logid"] !=null) || Convert.ToString(Session["username"]) != string.Empty && Convert.ToString(Session["logid"])!=string.Empty)
+            if ((Session["username"] != null && Session["logid"] != null) || Convert.ToString(Session["username"]) != string.Empty && Convert.ToString(Session["logid"]) != string.Empty)
             {
                 objLog.Ua_Name = Convert.ToString(Session["username"]);
                 objLog.LogoutTime = DateTime.Now;
@@ -1407,12 +1407,12 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 LogTableController.UpdateLog(objLog);
                 if (isServer == "true")
                 {
-                  //  Response.Redirect("~/default.aspx");
-                    Response.Redirect("~/default.aspx",false);
+                    //  Response.Redirect("~/default.aspx");
+                    Response.Redirect("~/default.aspx", false);
                 }
                 else
                 {
-                   // Response.Redirect("~/default_crescent.aspx");
+                    // Response.Redirect("~/default_crescent.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
             }
@@ -1420,17 +1420,17 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
             {
                 if (isServer == "true")
                 {
-                   // Response.Redirect("~/default.aspx");
+                    // Response.Redirect("~/default.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
                 else
                 {
-                  //  Response.Redirect("~/default_crescent.aspx");
+                    //  Response.Redirect("~/default_crescent.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             //Response.Redirect("~/default.aspx");
         }

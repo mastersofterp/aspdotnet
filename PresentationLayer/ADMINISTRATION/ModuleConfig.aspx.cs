@@ -41,6 +41,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
             objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL", "DISPLAYPAGENAME ASC");
+            BindAttDropDown();
             objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
             BindCourseExamRegConfig();
@@ -52,12 +53,34 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             //        CheckPageAuthorization();
             //        }
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID > 0 AND ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
-
         }
 
         ViewState["action"] = "add";
     }
 
+    private void BindAttDropDown()
+    {
+        string SP_Parameters = ""; string Call_Values = ""; string SP_Name = "";
+        Common objCommon = new Common();
+
+        DataSet ds = new DataSet();
+        SP_Name = "PKG_ACD_GET_SESSION_COLLEGE_FOR_MC";
+        SP_Parameters = "@P_MODE";
+        Call_Values = "1";
+        ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+        if (ds.Tables[0].Rows.Count > 0 && ds.Tables[1].Rows.Count > 0)
+        {
+            lstSession.DataSource = ds.Tables[0];
+            lstSession.DataTextField = "SESSION_NAME";
+            lstSession.DataValueField = "SESSIONID";
+            lstSession.DataBind();
+
+            lstCollege.DataSource = ds.Tables[1];
+            lstCollege.DataTextField = "COLLEGE_NAME";
+            lstCollege.DataValueField = "COLLEGE_ID";
+            lstCollege.DataBind();
+        }
+    }
     private void BindData()
     {
         try
@@ -232,7 +255,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     if (ds.Tables[0].Rows[0]["FEES_COLL_USER_CREATION"].ToString() != null && ds.Tables[0].Rows[0]["FEES_COLL_USER_CREATION"].ToString() == "1")
                     {
                         // rdID = "chkUserCreationonFee"; 
-                         hfchkUserCreationonFee.Value = "true";
+                        hfchkUserCreationonFee.Value = "true";
                         ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "alertscript13", "Feescollusercreation(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "SetActive(" + rdID + ",'true');", true);
                     }
@@ -361,7 +384,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
                     if (ds.Tables[0].Rows[0]["SEM_ADM_OFF_PAY_BTN"].ToString() != null && ds.Tables[0].Rows[0]["SEM_ADM_OFF_PAY_BTN"].ToString() == "1")
                     {
-                        rdID = "hfchkafteresempromotion";   
+                        rdID = "hfchkafteresempromotion";
                         hfchksendemailonstudentry.Value = "true";
                         hfSemadmOfflinebtn.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
@@ -400,7 +423,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
 
                     if (ds.Tables[0].Rows[0]["SEM_PROM_AFTER_SEM_ADM"].ToString() != null && ds.Tables[0].Rows[0]["SEM_PROM_AFTER_SEM_ADM"].ToString() == "1")
                     {
-                        rdID = "hfchkafteresempromotion"; 
+                        rdID = "hfchkafteresempromotion";
                         hfchkafteresempromotion.Value = "true";
                         // ScriptManager.RegisterStartupScript(this, GetType(), "Src7", "newstuduser(true);", true);
                         //ScriptManager.RegisterStartupScript(this, GetType(), "Src", "newstuduser(true);", true);
@@ -628,6 +651,43 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                             }
                         }
                     }
+
+
+                    string att_SessionIds = ds.Tables[0].Rows[0]["ATT_SESSION_IDS"].ToString();
+                    string[] Session_Ids = att_SessionIds.Split(',');
+
+                    for (int j = 0; j < Session_Ids.Length; j++)
+                    {
+                        for (int i = 0; i < lstSession.Items.Count; i++)
+                        {
+                            if (Session_Ids[j] == lstSession.Items[i].Value)
+                            {
+                                lstSession.Items[i].Selected = true;
+                            }
+                        }
+                    }
+
+
+                    string att_CollegeIds = ds.Tables[0].Rows[0]["ATT_COLLEGE_IDS"].ToString();
+                    string[] CollegeIds = att_CollegeIds.Split(',');
+
+                    for (int j = 0; j < CollegeIds.Length; j++)
+                    {
+                        for (int i = 0; i < lstCollege.Items.Count; i++)
+                        {
+                            if (CollegeIds[j] == lstCollege.Items[i].Value)
+                            {
+                                lstCollege.Items[i].Selected = true;
+                            }
+                        }
+                    }
+
+
+
+
+
+
+
 
                     //Added By Vinay Mishra on 01/08/2023 - To Add New Flags & Submission
                     string tpslotsuserc = ds.Tables[0].Rows[0]["USER_TYPES_COURSE_CREATION"] == DBNull.Value ? "0" : ds.Tables[0].Rows[0]["USER_TYPES_COURSE_CREATION"].ToString();
@@ -921,7 +981,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             bool createprnt = false;
             bool CreateRegno = false;
             bool AttTeaching = false;
-                    
+
             if (hfchkcreateusernewstudentry.Value == "true")
             {
                 objMod.NewStudUserCreation = true;
@@ -1078,6 +1138,34 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 attendanceusertype = attendanceusertype.Remove(attendanceusertype.Length - 1);
             }
 
+            //Added by Rishabh on 25/12/2023
+            string sessionids = ""; string college_ids = "";
+            foreach (ListItem items in lstSession.Items)
+            {
+                if (items.Selected == true)
+                {
+                    sessionids += items.Value + ',';
+                }
+            }
+            if (sessionids != "")
+            {
+                sessionids = sessionids.Remove(sessionids.Length - 1);
+            }
+
+            foreach (ListItem items in lstCollege.Items)
+            {
+                if (items.Selected == true)
+                {
+                    college_ids += items.Value + ',';
+                }
+            }
+            if (college_ids != "")
+            {
+                college_ids = college_ids.Remove(college_ids.Length - 1);
+            }
+            //End  25/12/2023
+
+
             //Added By Vinay Mishra on 01/08/2023 - To Add New Flag For Course Creation View in Module Config Page
             foreach (ListItem items in ddlCourseUser.Items)
             {
@@ -1144,7 +1232,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             {
                 objMod.FEE_RECEIPT_COPIES = 1;
             }
-            else 
+            else
             {
                 objMod.FEE_RECEIPT_COPIES = Convert.ToInt32(txtFeeReceiptCopies.Text);
             }
@@ -1167,7 +1255,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
 
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
@@ -1838,11 +1926,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+           
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);

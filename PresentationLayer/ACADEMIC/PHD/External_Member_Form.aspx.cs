@@ -378,7 +378,9 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     {
         if (ddlInsName.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT d inner  join acd_college_master c  on (d.organizationid=c.organizationid)", "DEPTNO", "DEPTNAME", "isnull(d.ActiveStatus,0)=1 and c.college_id=" + ddlInsName.SelectedValue + "", "DEPTNO DESC");
+            //added by vipul Tichakule on dated 29-12-2023 
+            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT d inner join acd_college_degree_branch c on (d.deptno=c.deptno) inner join acd_college_master cc on (c.college_id=cc.college_id)", "distinct d.DEPTNO", "d.DEPTNAME", "isnull(d.ActiveStatus,0)=1 and cc.college_id=" + ddlInsName.SelectedValue + "", "d.DEPTNO");
+             // objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT d inner  join acd_college_master c  on (d.organizationid=c.organizationid)", "DEPTNO", "DEPTNAME", "isnull(d.ActiveStatus,0)=1 and c.college_id=" + ddlInsName.SelectedValue + "", "DEPTNO DESC");
             //objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "isnull(ActiveStatus,0)=1", "DEPTNO DESC");
         }
         else

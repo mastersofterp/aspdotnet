@@ -107,6 +107,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 and OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "DISTINCT SECTIONNO", "SECTIONNAME", "SECTIONNO>0 and ISNULL(ACTIVESTATUS,0)=1", "SECTIONNO");
+            objCommon.FillDropDownList(ddlSessionn, "ACD_SESSION", "DISTINCT SESSIONID", "SESSION_PNAME", "SESSIONID>0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONID");
             //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             //objCommon.FillDropDownList(ddlSession, "ACd_STUDENT_RESULT SR WITH (NOLOCK) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO = SR.SESSIONNO)", "DISTINCT SR.SESSIONNO", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO DESC");
             //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENAME DESC");
@@ -144,7 +145,6 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-
 
     #region Page comment
     //protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
@@ -371,7 +371,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
     protected void rdbReports_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (rdbReports.SelectedValue == "1")
-        {
+        {         
             divsession.Visible = false;
             divCollege.Visible = true;
             divDegree.Visible = true;
@@ -390,6 +390,9 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             btnAttRegister.Visible = false;
             btnConAtt.Visible = false;
             ddlSchool.SelectedIndex = 0;
+
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
 
         }
         else if (rdbReports.SelectedValue == "2")
@@ -414,6 +417,8 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             btnAttRegister.Visible = false;
             btnConAtt.Visible = false;
             divCollege.Visible = true;
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
         }
         else if (rdbReports.SelectedValue == "3")
         {
@@ -433,8 +438,38 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
             btnAttReport.Visible = false;
             btnAttRegister.Visible = true;
             btnConAtt.Visible = true;
+            dvSession.Visible = false;
+            btnExcel.Visible = false;
             ddlSession.SelectedIndex = 0;
         }
+        else if (rdbReports.SelectedValue == "4")
+        {
+            divsession.Visible = true;
+            txtEndDate.Text = string.Empty;
+            txtStartDate.Text = string.Empty;
+            divCollege.Visible = false;
+            divDegree.Visible = false;
+            divBranch.Visible = false;
+            divSem.Visible = false;
+            divsession.Visible = false;
+            btnAttTracker.Visible = false;
+            DivSession1.Visible = false;
+            divClg.Visible = false;
+            divTeacher.Visible = false;
+            divcourse.Visible = false;
+            divSection.Visible = false;
+            btnAttReport.Visible = false;
+            btnAttRegister.Visible = false;
+            btnConAtt.Visible = false;
+            txtStartDate.Visible = false;
+            txtEndDate.Visible = false;
+            calender.Visible = false;
+            calender1.Visible = false;
+            dvSession.Visible = true;
+            btnExcel.Visible = true;
+            ddlSession.SelectedIndex = 0;
+        }
+
     }
     protected void btnAttTracker_Click(object sender, EventArgs e)
             {
@@ -633,7 +668,7 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     DataSet DS = acdatt.RetrieveAttRegister_Report(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(Session["userno"]), schemeno, session, courseno, section);
                     DataGrid dg = new DataGrid();
 
-                    if (DS.Tables[0].Rows.Count > 0)
+                    if (DS != null && DS.Tables.Count > 0 && DS.Tables[0].Rows.Count > 0)
                     {
                         string attachment = "attachment; filename= STUDENT_ATTENDANCE_REGISTER_REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
 
@@ -713,6 +748,41 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
         catch (Exception ex)
         {
             throw;
+        }
+    }
+    protected void btnExcel_Click(object sender, EventArgs e)
+    {
+        if (ddlSessionn.SelectedIndex==0)
+        {
+            objCommon.DisplayMessage(this, "Please Select Session.", this.Page);
+            return;
+        }
+        else
+        {
+        DataSet DS = acdatt.GetFacultyLectureCount(Convert.ToInt32(ddlSessionn.SelectedValue));
+        DataGrid dg = new DataGrid();
+
+        if (DS.Tables[0].Rows.Count > 0)
+        {
+            string attachment = "attachment; filename= Faculty_Lecture_Count_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+
+            Response.ClearContent();
+            Response.AddHeader("content-disposition", attachment);
+            Response.ContentType = "application/" + "ms-excel";
+            StringWriter sw = new StringWriter();
+            HtmlTextWriter htw = new HtmlTextWriter(sw);
+            dg.DataSource = DS.Tables[0];
+            dg.DataBind();
+            dg.HeaderStyle.Font.Bold = true;
+            dg.RenderControl(htw);
+            Response.Write(sw.ToString());
+            Response.End();
+        }
+        else
+        {
+            objCommon.DisplayMessage(this, "Record Not Found!!", this.Page);
+            return;
+        }
         }
     }
 }

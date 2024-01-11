@@ -20966,6 +20966,137 @@ namespace IITMS
 
                      return ds;
                  }
+
+                //Added BY Ro-hit More on 27-12-2023
+                 public DataSet GetStudentOnlinePaymentLog(int CollegeID, int Degreeno, int Branchno, int Semesterno, string ReceiptType)
+                     {
+                     DataSet ds = null;
+                     try
+                         {
+                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+
+                         SqlParameter[] objParams = new SqlParameter[5];
+                         objParams[0] = new SqlParameter("@P_COLLEGEID", CollegeID);
+                         objParams[1] = new SqlParameter("@P_DEGREENO", Degreeno);
+                         objParams[2] = new SqlParameter("@P_BRANCHNO", Branchno);
+                         objParams[3] = new SqlParameter("@P_SEMESTERNO", Semesterno);
+                         objParams[4] = new SqlParameter("@P_RECIEPT_TYPE", ReceiptType);
+
+                         ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_ONLINE_PAYMENT_TRANSACTION_LOG_DETAILS", objParams);
+                         }
+                     catch (Exception ex)
+                         {
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                         }
+
+                     return ds;
+                     }
+					 
+					  //ADDED BY VIPUL TICHAKULE ON DATE 25-12-2023
+                 public DataSet BindBlobStorageActivity()
+                 {
+                     DataSet ds = null;
+                     try
+                     {
+                         SQLHelper objSH = new SQLHelper(_UAIMS_constr);
+                         SqlParameter[] objParam = new SqlParameter[0];
+                         ds = objSH.ExecuteDataSetSP("PKG_BIND_BLOB_STORAGE_ACTIVITY", objParam);
+                     }
+                     catch (Exception ex)
+                     {
+                         return ds;
+                         throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.BindActivity-> " + ex.ToString());
+                     }
+                     return ds;
+                 }
+				 
+				 //ADDED BY VIPUL TICHAKULE ON DATE 25-12-2023
+                public int AddBlobConfigActivity(int activityno, string name, string code, int activestatus)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[5];
+                        objParams[0] = new SqlParameter("@P_ACTIVITYNO", activityno);
+                        objParams[1] = new SqlParameter("@P_ACTIVITY_NAME", name);
+                        objParams[2] = new SqlParameter("@P_COLLEGECODE", code);
+                        objParams[3] = new SqlParameter("@P_ACTIVE", activestatus);
+                        objParams[4] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[4].Direction = ParameterDirection.Output;
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_SP_INSERT_BLOB_STORAGE_NEW", objParams, true);
+
+                        if (obj.ToString().Equals("-1001"))
+                            status = 2627;
+                        else
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddBlobConfig-> " + ex.ToString());
+                    }
+                    return status;
+
+
+
+                }
+				
+				//ADDED BY VIPUL TICHAKULE ON DATE 25-12-2023
+                public int UpdatedBlobStorageActivity(int activityno, string name, string code, int activestatus)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_ACTIVITYNO", activityno);
+                        objParams[1] = new SqlParameter("@P_ACTIVITY_NAME", name);
+                        objParams[2] = new SqlParameter("@P_COLLEGECODE", code);
+                        objParams[3] = new SqlParameter("@P_ACTIVE", activestatus);
+                        //objParams[4] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        //objParams[4].Direction = ParameterDirection.Output;
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_UPDATE_BLOB_STORAGE_ACTIVITY", objParams, false) != null)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddBlobConfig-> " + ex.ToString());
+                    }
+                    return status;
+                }
+				
+				//ADDED BY VIPUL TICHAKULE ON DATED 25-12-2023
+                public SqlDataReader GetActivityDetails(int ID)
+                {
+                    SqlDataReader dr = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        { 
+                            new SqlParameter("@P_ACTIVITY_NO", ID) 
+                        };
+
+                        dr = objSQLHelper.ExecuteReaderSP("PKG_EDIT_BLOB_STORAGE_ACTIVITY", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetActivityDetails() --> " + ex.Message + " " + ex.StackTrace);
+                    }
+                    return dr;
+                }
             }
 
 

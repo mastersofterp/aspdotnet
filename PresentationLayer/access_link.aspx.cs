@@ -219,13 +219,16 @@ public partial class access_links : System.Web.UI.Page
                 objAL.MastNo = mastno;
 
                 // Added By Anurag B. on 31-10-2023
-                objAL.Al_PdfName = FilePDF.FileName;
-                string directoryPath = Server.MapPath("~/UserManual");
-                if (!Directory.Exists(directoryPath))
+                if (FilePDF.HasFile)
                 {
-                    Directory.CreateDirectory(directoryPath);
+                    objAL.Al_PdfName = FilePDF.FileName;
+                    string directoryPath = Server.MapPath("~/UserManual");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+                    FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
                 }
-                FilePDF.SaveAs(Server.MapPath("~") + "//UserManual//" + FilePDF.FileName);
                 // End Anurag B. on 31-10-2023
 
                 

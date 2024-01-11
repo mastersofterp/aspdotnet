@@ -134,13 +134,13 @@
                                         <%-- <label><span style="color: red;">*</span>Exam  Slot :</label>--%>
                                         <sup>* </sup>
                                         <asp:Label ID="lblDYlvExamSlot" runat="server" Font-Bold="true"></asp:Label>
-                                       <%-- <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" data-select2-enable="true" AutoPostBack="true" OnTextChanged="ddlslot_TextChanged" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged">
+                                        <%-- <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" data-select2-enable="true" AutoPostBack="true" OnTextChanged="ddlslot_TextChanged" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged">
                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList >
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlslot"
                                             Display="None" ErrorMessage="Please Select Exam Slot" InitialValue="0" ValidationGroup="Submit"></asp:RequiredFieldValidator>--%>
 
-                                        <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" AppendDataBoundItems="True" data-select2-enable="true" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged"  AutoPostBack="true">
+                                        <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" AppendDataBoundItems="True" data-select2-enable="true" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged" AutoPostBack="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlslot"
@@ -151,24 +151,24 @@
                                     Display="None" ErrorMessage="Please Select Exam Slot" InitialValue="0" ValidationGroup="chart"></asp:RequiredFieldValidator>--%>
                                     </div>
 
-                                     <div class="col-lg-3 col-md-6 col-12">
-                                                <ul class="list-group list-group-unbordered">
-                                                    <li class="list-group-item pl-md-0 pr-md-0"><b>Seating Plan:</b>
-                                                        <a class="sub-label">
-                                                            <asp:RadioButton ID="rdbSingle" AutoPostBack="true" runat="server" Text="Single" GroupName="SeatingPlan" OnCheckedChanged="RadioButton1_CheckedChanged" />&nbsp;&nbsp;
+                                    <div class="col-lg-3 col-md-6 col-12">
+                                        <ul class="list-group list-group-unbordered">
+                                            <li class="list-group-item pl-md-0 pr-md-0"><b>Seating Plan:</b>
+                                                <a class="sub-label">
+                                                    <asp:RadioButton ID="rdbSingle" AutoPostBack="true" runat="server" Text="Single" GroupName="SeatingPlan" OnCheckedChanged="RadioButton1_CheckedChanged" />&nbsp;&nbsp;
                                                             <asp:RadioButton ID="rdbDouble" runat="server" AutoPostBack="true" Text="Double" GroupName="SeatingPlan" OnCheckedChanged="RadioButton2_CheckedChanged" />&nbsp;&nbsp;
                                                             <asp:RadioButton ID="rdbTriple" runat="server" AutoPostBack="true" Text="Triple" GroupName="SeatingPlan" Visible="false" OnCheckedChanged="RadioButton3_CheckedChanged" />&nbsp;&nbsp;
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                </a>
+                                            </li>
+                                        </ul>
 
-                                            </div>
-                                       <div id="divBlockSet" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
+                                    </div>
+                                    <div id="divBlockSet" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
 
                                         <%-- <label><span style="color: red;">*</span>Exam  Slot :</label>--%>
-                                        
+
                                         <asp:Label ID="lblDyanamicBlockname" runat="server" Font-Bold="true"></asp:Label>
-                                       <%-- <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" data-select2-enable="true" AutoPostBack="true" OnTextChanged="ddlslot_TextChanged" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged">
+                                        <%-- <asp:DropDownList ID="ddlslot" runat="server" TabIndex="5" data-select2-enable="true" AutoPostBack="true" OnTextChanged="ddlslot_TextChanged" OnSelectedIndexChanged="ddlslot_SelectedIndexChanged">
                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList >
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlslot"
@@ -177,7 +177,7 @@
                                         <asp:DropDownList ID="ddlBlock" runat="server" TabIndex="5" AppendDataBoundItems="True" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                       <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlBlock"
+                                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlBlock"
                                             Display="None" ErrorMessage="Please Select " InitialValue="0" ValidationGroup="Submit"></asp:RequiredFieldValidator>--%>
 
 
@@ -229,12 +229,13 @@
                                     <asp:Button ID="txtstudeattendence" runat="server" Text="Student Attendence" ValidationGroup="Submit" TabIndex="9"
                                         CssClass="btn btn-primary" OnClick="txtstudeattendence_Click" />
 
-                                      <asp:Button ID="btnexcelbutton" runat="server" Text="Block Excel Report" ValidationGroup="Submit" TabIndex="10"
-                                        CssClass="btn btn-primary" OnClick="btnexcelbutton_Click" Visible="false"  />
-                                    <asp:Button   ID="btnbuildingchart"  runat="server" OnClick="btnbuildingchart_Click" Text="Building Chart" ToolTip="Click Here To Generate Buliding Chart" TabIndex="11"
-                                        CssClass="btn btn-primary" ValidationGroup="Submit"  hidden/>
+                                    <asp:Button ID="btnexcelbutton" runat="server" Text="Block Excel Report" ValidationGroup="Submit" TabIndex="10"
+                                        CssClass="btn btn-primary" OnClick="btnexcelbutton_Click" Visible="false" />
+                                    <asp:Button ID="btnbuildingchart" runat="server" OnClick="btnbuildingchart_Click" Text="Building Chart" ToolTip="Click Here To Generate Buliding Chart" TabIndex="11"
+                                        CssClass="btn btn-primary" ValidationGroup="Submit" hidden />
+                                    <asp:Button ID="btnDispatchSlip" runat="server" Text="Dispatch Slip" ValidationGroup="Submit1" TabIndex="1" CssClass="btn btn-primary" OnClick="btnDispatchSlip_Click" />
                                     <asp:ValidationSummary ID="ValidationSummary2" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                        ShowSummary="false" ValidationGroup="Submit" />
+                                        ShowSummary="false" ValidationGroup="Submit1" />
 
                                     <p>
                                         &nbsp;<asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Submit" />
@@ -268,7 +269,7 @@
             <%--   <asp:PostBackTrigger ControlID="btnQPReportExcel" />--%>
             <asp:PostBackTrigger ControlID="btnblockarrangementExcel" />
             <asp:PostBackTrigger ControlID="btnbuildingchart" />
-            
+
             <asp:PostBackTrigger ControlID="btnexcelbutton" />
         </Triggers>
     </asp:UpdatePanel>

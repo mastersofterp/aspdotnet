@@ -186,6 +186,7 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
     }
     protected void btnShow_Click(object sender, EventArgs e)
     {
+        #region Old Code
         try
         {
             ds.Columns.Add("SRNO");
@@ -197,17 +198,18 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
             byte[] bytes;
             int flag = 0;
             long checkSize = 0;
-
+            byte[] imageaftercompress;
+            long AftercheckSize = 0;
             int ddlValue = Convert.ToInt32(ddlcategory.SelectedValue);
             int srno = 1;
-            
+
             if (fuStudPhoto.HasFile)
             {
                 HttpFileCollection hfc = Request.Files;
                 for (int i = 0; i < hfc.Count; i++)
                 {
-                //foreach (HttpPostedFile postedFile in fuStudPhoto.PostedFiles)
-                //{
+                    //foreach (HttpPostedFile postedFile in fuStudPhoto.PostedFiles)
+                    //{
                     HttpPostedFile postedFile = hfc[i];
                     string filename = Path.GetFileNameWithoutExtension(postedFile.FileName);
 
@@ -218,19 +220,25 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
                         {
 
                             image = br.ReadBytes((Int32)fs.Length);
-                            checkSize += image.Length;
-                            if (checkSize > 1073714824)
+                            checkSize = image.Length;
+                            if (checkSize > 150000)
                             {
                                 flag = 1;
-                                lblmessageShow.Text = "Images Size exceed 1 GB !";
+                                lblmessageShow.Text = "Images Size exceed 150kb !";
+                                ListView1.DataSource = null;
+                                ListView1.DataBind();
                                 lblmessageShow.ForeColor = System.Drawing.Color.OrangeRed;
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
                                 break;
                             }
-                            bytes = ResizePhoto(image);
-                            int size1 = bytes.Length;
-                            int size = size1 / 1024;
-                            ds.Rows.Add(new object[] { srno, filename, bytes, size + "kb", filename });
+                            //bytes = ResizePhoto(image);
+                            //int size1 = bytes.Length;
+                            //int size = size1 / 1024;
+                            imageaftercompress = ImageCompression.CompressImage(image, 150);
+
+                            AftercheckSize = imageaftercompress.Length;
+                            string AferResize = (AftercheckSize / 1024).ToString();
+                            ds.Rows.Add(new object[] { srno, filename, imageaftercompress, AferResize + "kb", filename });
                             srno++;
                         }
                     }
@@ -249,10 +257,90 @@ public partial class ACADEMIC_StudentBulkPhotoUpload : System.Web.UI.Page
                 image = null;
             }
         }
-        catch 
+        catch
         {
             throw;
         }
+        #endregion
+
+        //try
+        //{
+        //    DataTable ds = new DataTable();
+        //    ds.Columns.Add("SRNO");
+        //    ds.Columns.Add("NAME");
+        //    ds.Columns.Add("IMAGE", typeof(SqlBinary));
+        //    ds.Columns.Add("SIZE");
+        //    ds.Columns.Add("ACTION");
+
+        //    byte[] image;
+        //    byte[] imageaftercompress;
+        //    byte[] bytes;
+        //    int flag = 0;
+        //    long checkSize = 0;
+        //    long AftercheckSize = 0;
+
+
+        //    int srno = 1;
+
+        //    if (fuStudPhoto.HasFile)
+        //    {
+        //        HttpFileCollection hfc = Request.Files;
+        //        for (int i = 0; i < hfc.Count; i++)
+        //        {
+        //            //foreach (HttpPostedFile postedFile in fuStudPhoto.PostedFiles)
+        //            //{
+        //            HttpPostedFile postedFile = hfc[i];
+        //            string filename = Path.GetFileNameWithoutExtension(postedFile.FileName);
+
+        //            string contentType = postedFile.ContentType;
+        //            using (Stream fs = postedFile.InputStream)
+        //            {
+        //                using (BinaryReader br = new BinaryReader(fs))
+        //                {
+
+        //                    image = br.ReadBytes((Int32)fs.Length);
+        //                    checkSize += image.Length;
+        //                    string beforeResize = (checkSize / 1024).ToString();
+        //                    //objCommon.DisplayMessage(this.Page, "Before Resize length : " + beforeResize, this.Page);
+        //                    if (checkSize > 1073714824)
+        //                    {
+        //                        flag = 1;
+        //                        // ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModal();", true);
+        //                        break;
+        //                    }
+        //                    imageaftercompress = ImageCompression.CompressImage(image, 150);
+
+        //                    AftercheckSize = imageaftercompress.Length;
+        //                    string AferResize = (AftercheckSize / 1024).ToString();
+        //                    //objCommon.DisplayMessage(this.Page, "Before After length : " + AferResize, this.Page);
+        //                    //bytes = ResizePhoto(image);                         
+        //                    //int size1 = bytes.Length;                           
+        //                    //int size = size1 / 1024;
+        //                    //lblAfterResize.Text = size + " kb";
+        //                    //objCommon.DisplayMessage(this.Page, "Resize length : " + size.ToString(), this.Page);
+        //                    ds.Rows.Add(new object[] { srno, filename, imageaftercompress, AferResize + "kb", filename });
+        //                    //srno++;
+        //                }
+        //            }
+        //        }
+        //        if (flag != 1)
+        //        {
+        //            Session["studentTbl"] = ds;
+        //            ListView1.DataSource = ds;
+        //            ListView1.DataBind();
+        //            btnSave.Enabled = true;
+        //            objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), ListView1);//Set label - 
+        //        }
+        //    }
+        //    else
+        //    {
+        //        image = null;
+        //    }
+        //}
+        //catch
+        //{
+        //    throw;
+        //}
     }
 
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)

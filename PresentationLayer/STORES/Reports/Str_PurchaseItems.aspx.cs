@@ -203,7 +203,7 @@ public partial class STORES_Reports_Str_PurchaseItems : System.Web.UI.Page
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,STORES," + rptFileName;
-            url += "&param=@P_ReportName=" + reportTitle + ",@P_ITEMGROUP=" + rblGroup.SelectedValue + ",@P_ITEMWISE=" + rblSelectAllItem.SelectedValue + ",@P_ITEMNO=" + itemno + ",@P_FDATE=" + Fdate + ",@P_TDATE=" + Ldate;
+            url += "&param=@P_ReportName=" + reportTitle + ",@P_ITEMGROUP=" + rblGroup.SelectedValue + ",@P_ITEMWISE=" + rblSelectAllItem.SelectedValue + ",@P_ITEMNO=" + itemno + ",@P_FDATE=" + Fdate + ",@P_TDATE=" + Ldate + ",@P_MDNO=0";
             Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
         }

@@ -49,9 +49,9 @@ public partial class principalHome : System.Web.UI.Page
     {
         try
         {
-      
+
             if (!Page.IsPostBack)
-            {                          
+            {
                 //Check Session
                 if (Session["userno"] == null || Session["username"] == null ||
                     Session["usertype"] == null || Session["userfullname"] == null)
@@ -59,7 +59,7 @@ public partial class principalHome : System.Web.UI.Page
                     Response.Redirect("~/default.aspx");
                 }
                 else
-                {                  
+                {
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
 
@@ -67,7 +67,7 @@ public partial class principalHome : System.Web.UI.Page
                     if (Request.QueryString["pageno"] != null)
                     {
                     }
-             
+
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     Show_Notice();
                 }
@@ -75,7 +75,7 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            
+
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUCommon.ShowError(Page, "Academic_StudentIDCardReport.Page_Load-> " + ex.Message + " " + ex.StackTrace);
             else
@@ -101,7 +101,7 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-          
+
         }
     }
     //public string GetFileNamePath(object filename)
@@ -206,7 +206,7 @@ public partial class principalHome : System.Web.UI.Page
     public static string ShowMaleCount()
     {
         principalHome p = new principalHome();
-        string count =  p.getMaleCountDetail();
+        string count = p.getMaleCountDetail();
         return count;
     }
 
@@ -229,6 +229,21 @@ public partial class principalHome : System.Web.UI.Page
         string femaleCount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) FEMALECOUNT", "SEX='F' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
         return femaleCount;
     }
+
+    //other count - Added By Rishabh on 02012024
+    [WebMethod]
+    public static string ShowOtherCount()
+    {
+        principalHome p = new principalHome();
+        string count = p.getOtherCountDetail();
+        return count;
+    }
+    private string getOtherCountDetail()
+    {
+        string othercount = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) OTHERCOUNT", "SEX='O' AND ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
+        return othercount;
+    }
+
 
     //Method to get active user count
     [WebMethod]
@@ -258,7 +273,7 @@ public partial class principalHome : System.Web.UI.Page
         string count = objCommon.LookUp("ACD_STUDENT ASTUD LEFT OUTER JOIN USER_ACC UA ON (ASTUD.IDNO = UA.UA_IDNO)", "COUNT(DISTINCT IDNO) STUDENT", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(UA_STATUS,0) = 0 AND ISNULL(UA_TYPE,0)=2");
         return count;
     }
-    
+
     // To Get Admission Batch wise Students count
     [WebMethod]
     public static List<PrincipalDashboardModel.StudentsCount> BindStudentsCount()
@@ -286,7 +301,8 @@ public partial class principalHome : System.Web.UI.Page
                                         Year = dr["YEAR"].ToString(),
                                         Count = dr["STUDCOUNT"].ToString()
                                     }).ToList();
-                }else
+                }
+                else
                 {
                     objStudCount = null;
                 }
@@ -296,7 +312,7 @@ public partial class principalHome : System.Web.UI.Page
                 objStudCount = null;
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
@@ -331,7 +347,8 @@ public partial class principalHome : System.Web.UI.Page
                                    EndDate = dr["END_DATE"].ToString(),
                                    ActivityStatus = dr["Activity_Status"].ToString()
                                }).ToList();
-            }else
+            }
+            else
             {
                 objActivity = null;
             }
@@ -423,16 +440,17 @@ public partial class principalHome : System.Web.UI.Page
             if (dsNews != null && dsNews.Tables[0] != null && dsNews.Tables[0].Rows.Count > 0)
             {
                 newsList = (from DataRow dr in dsNews.Tables[0].Rows
-                                       select new PrincipalDashboardModel.PrincipalNews
-                                       {
-                                           Day = dr["DD"].ToString(),
-                                           Month = dr["MM"].ToString(),
-                                           //Link = dr["LINK"].ToString(),
-                                           Link = checkFile(dr["FILENAME"].ToString()),
-                                           Title = dr["TITLE"].ToString(),
-                                           NewsDesc = dr["NEWSDESC"].ToString()
-                                       }).ToList();
-            }else
+                            select new PrincipalDashboardModel.PrincipalNews
+                            {
+                                Day = dr["DD"].ToString(),
+                                Month = dr["MM"].ToString(),
+                                //Link = dr["LINK"].ToString(),
+                                Link = checkFile(dr["FILENAME"].ToString()),
+                                Title = dr["TITLE"].ToString(),
+                                NewsDesc = dr["NEWSDESC"].ToString()
+                            }).ToList();
+            }
+            else
             {
                 newsList = null;
             }
@@ -465,15 +483,15 @@ public partial class principalHome : System.Web.UI.Page
             if (dsNews != null && dsNews.Tables[1] != null && dsNews.Tables[1].Rows.Count > 0)
             {
                 ExpirednewsList = (from DataRow dr in dsNews.Tables[1].Rows
-                            select new PrincipalDashboardModel.PrincipalNews
-                            {
-                                Day = dr["DD"].ToString(),
-                                Month = dr["MM"].ToString(),
-                                //Link = dr["LINK"].ToString(),
-                                Link = checkFile(dr["FILENAME"].ToString()),
-                                Title = dr["TITLE"].ToString(),
-                                NewsDesc = dr["NEWSDESC"].ToString()
-                            }).ToList();
+                                   select new PrincipalDashboardModel.PrincipalNews
+                                   {
+                                       Day = dr["DD"].ToString(),
+                                       Month = dr["MM"].ToString(),
+                                       //Link = dr["LINK"].ToString(),
+                                       Link = checkFile(dr["FILENAME"].ToString()),
+                                       Title = dr["TITLE"].ToString(),
+                                       NewsDesc = dr["NEWSDESC"].ToString()
+                                   }).ToList();
             }
             else
             {
@@ -522,7 +540,7 @@ public partial class principalHome : System.Web.UI.Page
                 //hdnField.FindControl("hdnCount");
                 //hdnField.Value = count;
                 //string head =Convert.ToString(tHead);
-               
+
                 if (count == "8")
                 {
                     tBody = (from DataRow dr in ds.Tables[0].Rows
@@ -538,7 +556,7 @@ public partial class principalHome : System.Web.UI.Page
                                  //Sem4 = dr[10].ToString()
                              }).ToList();
                 }
-               else if (count == "9")
+                else if (count == "9")
                 {
                     tBody = (from DataRow dr in ds.Tables[0].Rows
                              select new PrincipalDashboardModel.ResultBody
@@ -595,7 +613,7 @@ public partial class principalHome : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-          
+
         }
         return ResultData;
     }
@@ -948,7 +966,7 @@ public partial class principalHome : System.Web.UI.Page
     }
 
 
-   
+
 
     #region BlogStorage
     public int Blob_UploadDepositSlip(string ConStr, string ContainerName, string DocName, FileUpload FU, byte[] ChallanCopy)
@@ -962,11 +980,7 @@ public partial class principalHome : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+           
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;
@@ -1136,5 +1150,5 @@ public partial class principalHome : System.Web.UI.Page
     //    }
 
     //}
-  
+
 }

@@ -29,8 +29,15 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
  private decimal _TAX;
  private string _QUALITY_QTY_SPEC;
  private string _ITEM_REMARK;
+ private int _IsTaxInclusive;
 
  private string _TECHSPEC;
+
+ public int IsTaxInclusive
+ {
+     get {return _IsTaxInclusive ;}
+     set { _IsTaxInclusive = value; }
+ }
 
  public string TECHSPEC
  {

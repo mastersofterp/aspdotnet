@@ -2696,17 +2696,18 @@ namespace IITMS
                     return ds;
                 }
 
-                public DataSet GetNoofdaysOD(DateTime Frdate, DateTime Todate, int stno)
+                public DataSet GetNoofdaysOD(DateTime Frdate, DateTime Todate, int stno, int collegeno)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[3];
+                        objParams = new SqlParameter[4];
                         objParams[0] = new SqlParameter("@P_FRDATE", Frdate);
                         objParams[1] = new SqlParameter("@P_TODATE", Todate);
                         objParams[2] = new SqlParameter("@P_STNO", stno);
+                        objParams[3] = new SqlParameter("@P_COLLEGE_NO", collegeno); 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_OD_NO_OF_DAYS", objParams);
                     }
                     catch (Exception ex)

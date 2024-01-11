@@ -1,0 +1,6 @@
+.selectgroup-input-radio:focus+.selectgroup-button, .selectgroup-input-radio:checked+.selectgroup-button {
+    background-color: #f0f3ff;
+    color: #fff;
+    z-index: 1;
+    border-color: $purple;
+}

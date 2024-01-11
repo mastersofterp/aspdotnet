@@ -420,8 +420,8 @@
                                                         <div class="form-inline">
                                                             <asp:TextBox ID="txtFeeReceiptCopies" MaxLength="1" runat="server" CssClass="form-control"> </asp:TextBox>
                                                             <label style="color: red">Note: Allows only 1, 2 and 3 numbers</label>
-                                                            <asp:RangeValidator ID="rvtxtFeeReceiptCopies" runat="server" ErrorMessage="Enter only in 1, 2 and 3 numbers" ForeColor="Red" ControlToValidate="txtFeeReceiptCopies" ValidationGroup="Submit" MinimumValue="1" MaximumValue="3"  Type="Integer" SetFocusOnError="True"></asp:RangeValidator>
-                                                           <ajaxToolKit:FilteredTextBoxExtender ID="ftext" runat="server"  TargetControlID="txtFeeReceiptCopies" FilterType="Numbers" ValidChars="123" FilterMode="ValidChars">
+                                                            <asp:RangeValidator ID="rvtxtFeeReceiptCopies" runat="server" ErrorMessage="Enter only in 1, 2 and 3 numbers" ForeColor="Red" ControlToValidate="txtFeeReceiptCopies" ValidationGroup="Submit" MinimumValue="1" MaximumValue="3" Type="Integer" SetFocusOnError="True"></asp:RangeValidator>
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="ftext" runat="server" TargetControlID="txtFeeReceiptCopies" FilterType="Numbers" ValidChars="123" FilterMode="ValidChars">
                                                             </ajaxToolKit:FilteredTextBoxExtender>
                                                         </div>
 
@@ -661,7 +661,7 @@
                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                             <sup>*</sup>
-                                                            <asp:Label ID="Label25" runat="server" Font-Bold="true">Yes, If Allow to display Student Login Dashboard.</asp:Label>
+                                                            <asp:Label ID="Label25" runat="server" Font-Bold="true">Yes, If disable Student Login Dashboard.</asp:Label>
                                                         </div>
                                                         <div class="switch form-inline">
                                                             <input type="checkbox" id="chkAllowToDisplayStudLoginDashboard" name="chkAllowToDisplayStudLoginDashboard" />
@@ -695,6 +695,26 @@
                                                         <div class="switch form-inline">
                                                             <input type="checkbox" id="chkslotmand" name="chkslotmand" />
                                                             <label data-on="Yes" tabindex="22" data-off="No" for="chkslotmand"></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="Label33" runat="server" Font-Bold="true">Select to show Attendance in Student's Login</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <asp:Label ID="Label34" runat="server" Font-Bold="true">Session</asp:Label>
+                                                            </div>
+                                                            <asp:ListBox ID="lstSession" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+                                                        </div>
+
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <asp:Label ID="Label36" runat="server" Font-Bold="true">School/College</asp:Label>
+                                                            </div>
+                                                            <asp:ListBox ID="lstCollege" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
                                                         </div>
                                                     </div>
 
@@ -1328,7 +1348,7 @@
                 <asp:HiddenField ID="hfchkOutstandingFeeCollection" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hfchkFeeHeadGroup" runat="server" ClientIDMode="Static" />
                 <asp:HiddenField ID="hftxtFeeReceiptCopies" runat="server" ClientIDMode="Static" />
-                <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />            
+                <asp:HiddenField ID="hfchkScholarshipConAdj" runat="server" ClientIDMode="Static" />
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
@@ -1423,24 +1443,24 @@
             $.ajax({
                 type: "POST",
                 url: '<%= ResolveUrl("ModuleConfig.aspx/SaveUpdateStudentconfig") %>',
-                    data: JData,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (data) {
-                        debugger;
-                        var Jdata = data.d;
-                        alert(Jdata);
-                    },
-                    failure: function (response) {
-                        alert("failure");
-                    },
-                    error: function (response) {
-                        //debugger
-                        alert("error");
-                        alert(response.responseText);
-                    }
-                });
-            }
+                data: JData,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    var Jdata = data.d;
+                    alert(Jdata);
+                },
+                failure: function (response) {
+                    alert("failure");
+                },
+                error: function (response) {
+                    //debugger
+                    alert("error");
+                    alert(response.responseText);
+                }
+            });
+        }
     </script>
     <script type="text/javascript">
         $(function () {
@@ -2524,85 +2544,85 @@
             debugger;
             var selectedText = document.getElementById('<%= ddlPageName.ClientID %>').options[document.getElementById('<%= ddlPageName.ClientID %>').selectedIndex].text.trim();
 
-        var orgID = '<%= Session["OrgId"] %>';
-        var pageNo = "";
-        var pageName = "";
+            var orgID = '<%= Session["OrgId"] %>';
+            var pageNo = "";
+            var pageName = "";
 
-        if (selectedText === "Add Student") {
-            pageNo = "73";
-        } else if (selectedText === "Personal Details") {
-            pageName = "PersonalDetails.aspx";
-        }
-        else if(selectedText === "Admission Details"){
-            pageName = "AdmissionDetails.aspx";
-        }
-        // Perform an AJAX request
-        $.ajax({
-            type: "POST",
-            url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',
-            data: JSON.stringify({ OrgID: orgID, PageNo: pageNo, PageName: pageName }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                debugger;
-                var Jdata = JSON.parse(data.d);
-
-                var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>";
-                htmlpage += "<thead class='bg-light-blue'><tr>";
-                htmlpage += "<th hidden>STUDCONFIG_ID</th>";
-                htmlpage += "<th>Caption Name</th>";
-                htmlpage += "<th>Is Active</th>";
-                htmlpage += "<th>Is Mandatory</th>";
-                htmlpage += "<th hidden>Organization ID</th>";
-                htmlpage += "<th hidden>Page No</th>";
-                htmlpage += "<th hidden>Page Name</th>";
-                htmlpage += "</tr></thead><tbody>";
-
-                var output = Jdata.map(function (i) {
-                    return "<tr>" +
-                        "<td hidden>" + i.STUDCONFIG_ID + "</td>" +
-                        "<td>" + i.CAPTION_NAME + "</td>" +
-                        "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
-                        "<input type='checkbox' id='rdISACTIVE" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudent(" + i.STUDCONFIG_ID + ");' " + i.ISACTIVE + "/>" +
-                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE" + i.STUDCONFIG_ID + "' ></label></td>" +
-                        "<td><div class='switch form-inline'>" +
-                        "<input type='checkbox' id='rdISMANDATORY" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudentCheckbox(this);' " + i.ISMANDATORY + "/>" +
-                        "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY" + i.STUDCONFIG_ID + "' ></label></td>" +
-                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>" +
-                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>" +
-                        "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>";
-                });
-
-                for (var i = 0; i < output.length; i++) {
-                    htmlpage += output[i];
-                }
-
-                htmlpage += '</tbody></table>';
-
-                $('#divStudentConfig').html('');
-                $('#divStudentConfig').append(htmlpage);
-
-                for (var i = 0; i < Jdata.length; i++) {
-                    if (Jdata[i].ISMANDATORY !== 'checked' && Jdata[i].ISACTIVE !== 'checked') {
-                        $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
-                        $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
-                    }
-                }
-            },
-            failure: function (response) {
-                alert("failure");
-            },
-            error: function (response) {
-                alert("error");
-                alert(response.responseText);
+            if (selectedText === "Add Student") {
+                pageNo = "73";
+            } else if (selectedText === "Personal Details") {
+                pageName = "PersonalDetails.aspx";
             }
-        });
+            else if(selectedText === "Admission Details"){
+                pageName = "AdmissionDetails.aspx";
+            }
+            // Perform an AJAX request
+            $.ajax({
+                type: "POST",
+                url: '<%= ResolveUrl("ModuleConfig.aspx/GetStudentConfigData") %>',
+                data: JSON.stringify({ OrgID: orgID, PageNo: pageNo, PageName: pageName }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    var Jdata = JSON.parse(data.d);
 
-        $('#Tabs a[href="#' + tabName + '"]').tab('show');
-        $("#Tabs a").click(function () {
-            $("[id*=-]").val($(this).attr("href").replace("#", ""));
-        });
-    }
+                    var htmlpage = "<table class='table table-striped table-bordered nowrap ' id='StudentConfig'>";
+                    htmlpage += "<thead class='bg-light-blue'><tr>";
+                    htmlpage += "<th hidden>STUDCONFIG_ID</th>";
+                    htmlpage += "<th>Caption Name</th>";
+                    htmlpage += "<th>Is Active</th>";
+                    htmlpage += "<th>Is Mandatory</th>";
+                    htmlpage += "<th hidden>Organization ID</th>";
+                    htmlpage += "<th hidden>Page No</th>";
+                    htmlpage += "<th hidden>Page Name</th>";
+                    htmlpage += "</tr></thead><tbody>";
+
+                    var output = Jdata.map(function (i) {
+                        return "<tr>" +
+                            "<td hidden>" + i.STUDCONFIG_ID + "</td>" +
+                            "<td>" + i.CAPTION_NAME + "</td>" +
+                            "<td class='text-center; vertical-align:middle'><div class='switch form-inline'>" +
+                            "<input type='checkbox' id='rdISACTIVE" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudent(" + i.STUDCONFIG_ID + ");' " + i.ISACTIVE + "/>" +
+                            "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISACTIVE" + i.STUDCONFIG_ID + "' ></label></td>" +
+                            "<td><div class='switch form-inline'>" +
+                            "<input type='checkbox' id='rdISMANDATORY" + i.STUDCONFIG_ID + "' name='switch' onclick='return SetStudentCheckbox(this);' " + i.ISMANDATORY + "/>" +
+                            "<label data-on='Yes' class='newAddNew Tab'  data-off='No' for='rdISMANDATORY" + i.STUDCONFIG_ID + "' ></label></td>" +
+                            "<td style='text-align:center; vertical-align:middle' hidden>" + i.ORGANIZATION_ID + "</td>" +
+                            "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NO + "</td>" +
+                            "<td style='text-align:center; vertical-align:middle' hidden>" + i.PAGE_NAME + "</td></tr>";
+                    });
+
+                    for (var i = 0; i < output.length; i++) {
+                        htmlpage += output[i];
+                    }
+
+                    htmlpage += '</tbody></table>';
+
+                    $('#divStudentConfig').html('');
+                    $('#divStudentConfig').append(htmlpage);
+
+                    for (var i = 0; i < Jdata.length; i++) {
+                        if (Jdata[i].ISMANDATORY !== 'checked' && Jdata[i].ISACTIVE !== 'checked') {
+                            $('#rdISMANDATORY' + Jdata[i].STUDCONFIG_ID).prop('checked', false);
+                            $("#rdISMANDATORY" + Jdata[i].STUDCONFIG_ID).attr("disabled", true);
+                        }
+                    }
+                },
+                failure: function (response) {
+                    alert("failure");
+                },
+                error: function (response) {
+                    alert("error");
+                    alert(response.responseText);
+                }
+            });
+
+            $('#Tabs a[href="#' + tabName + '"]').tab('show');
+            $("#Tabs a").click(function () {
+                $("[id*=-]").val($(this).attr("href").replace("#", ""));
+            });
+        }
     </script>
 
     <script>

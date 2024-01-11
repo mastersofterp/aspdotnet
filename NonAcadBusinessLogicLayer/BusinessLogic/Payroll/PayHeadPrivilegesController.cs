@@ -309,6 +309,38 @@ namespace IITMS
 
                 //---------end 05-11-2022 Shaikh Juned
 
+                //---------START  02-01-2024 SHAIKH JUNED
+
+                public DataSet GetMasterData()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_PAYROLL_EMPLOYEE_MASTER_DATA", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.PayHeadPrivilegesController.GetPayHeadUser-> " + ex.ToString());
+                    }
+                    finally
+                    {
+
+
+                        ds.Dispose();
+
+                    }
+                    return ds;
+
+                }
+
+
+
+              
+                //---------END----02-01-2024----SHAIKH JUNDED
+
             }
         }
     }

@@ -30,6 +30,7 @@
                 }
                 if (email.value == "") {
                     alerMsg += "Please enter email id.\n";
+
                 }
 
                 if (desig.value == "") {

@@ -1368,12 +1368,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                                             if (dsStudent.Tables[0].Rows[0]["GRADE"].ToString() != string.Empty && dsStudent.Tables[0].Rows[0]["LOCK"].ToString() == "True")
                                                             {
 
-                                                                if(ViewState["Faculty_grade"]=="1")
+                                                                if(ViewState["Faculty_grade"].ToString()=="1")
                                                                 {
                                                                   btnReGrade.Enabled = true;
                                                                   btnReGrade.Visible = true;
                                                                 }
-                                                                else if (ViewState["admin_grade"] == "1")
+                                                                else if (ViewState["admin_grade"].ToString() == "1")
                                                                 {
                                                                     btnReGrade.Enabled = true;
                                                                     btnReGrade.Visible = true;
@@ -1392,12 +1392,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                                                 btnReGrade.Enabled = false;
                                                                 btnReGrade.Visible = false;
 
-                                                                if (ViewState["Faculty_grade"] == "1")
+                                                                if (ViewState["Faculty_grade"].ToString() == "1")
                                                                 {
                                                                     btnGrade.Enabled = true;
                                                                     btnGrade.Visible = true;
                                                                 }
-                                                                else if (ViewState["admin_grade"] == "1")
+                                                                else if (ViewState["admin_grade"].ToString() == "1")
                                                                 {
                                                                     btnGrade.Enabled = true;
                                                                     btnGrade.Visible = true;
@@ -2624,11 +2624,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         if (count > 0)
                         {
 
-                            //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
-                            // ddlSession.Focus();
-
                             objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
                             ddlSession.Focus();
+
+                            //string examno = objCommon.LookUp("ACD_SESSION_MASTER", "DISTINCT EXAMNO", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')");
+                            //ViewState["Exam_Activity"] = examno.ToString();
+                            
                         }
                         else
                         {
@@ -3706,7 +3707,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     //    //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
     //    CloudBlobContainer container = client.GetContainerReference(Name);
     //    System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    //    container.CreateIfNotExists();
+  
     //}
 
     //private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
@@ -3744,7 +3745,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     //    {
     //        DeleteIFExits(FileName);
     //        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    //        container.CreateIfNotExists();
+    
     //        container.SetPermissions(new BlobContainerPermissions
     //        {
     //            PublicAccess = BlobContainerPublicAccessType.Blob
@@ -3916,13 +3917,23 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         {
             GridView GVStudData = new GridView();
 
+            //string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue));
+
+            //string SP_Name = "PKG_INTERNAL_EXTERNAL_MARK_GRADE_EXCEL_REPORT";
+            //string SP_Parameters = "@P_SESSIONNO, @P_COURSENO, @P_SEMESTERNO, @P_SUBID,@P_CCODE,@P_SCHEMENO";
+            //string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + ccode + "," + Convert.ToInt32(ViewState["schemeno"]) + "";
+
+            // ADDED ON DT 03012024 AS PER TKNO: 53026
+
             string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue));
 
-            string SP_Name = "PKG_INTERNAL_EXTERNAL_MARK_GRADE_EXCEL_REPORT";
-            string SP_Parameters = "@P_SESSIONNO, @P_COURSENO, @P_SEMESTERNO, @P_SUBID,@P_CCODE,@P_SCHEMENO";
+            string SP_Name = "PKG_ACD_EXAM_COMPONENTWISE_MARK_ENTRY_CC";
+            string SP_Parameters = "@P_SESSIONNO, @P_COURSENO, @P_SEMESTERNO,@P_SCHEMENO";
             //string Call_Values = "" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + "," + ddlcourseforabset.SelectedValue.Split('-')[0] + ",0," + ddlcourseforabset.SelectedValue.Split('-')[1] + "," + ddlcourseforabset.SelectedItem.Text.Split('-')[0] + ",0," + Examname + "," + Subexamname + ", " + Convert.ToInt32(Session["userno"]) + "";
 
-            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ddlSubjectType.SelectedValue) + "," + ccode + "," + Convert.ToInt32(ViewState["schemeno"]) + "";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + Convert.ToInt32(ddlsemester.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "";
+
+            // ADDED END HERE 
 
             DataSet ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
 

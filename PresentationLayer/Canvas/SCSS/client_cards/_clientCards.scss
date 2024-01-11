@@ -1,0 +1,36 @@
+﻿.client-cards {
+    display:flex;
+    justify-content:space-between;
+   // flex-wrap:wrap;
+    border-radius: 4px;
+     border:1px solid  rgba(103, 119, 239, 0.09);
+    padding: 14px 20px;
+    background-color: rgba(103, 119, 239, 0.09);
+        transition:  .3s ease-out;
+        cursor:pointer;
+
+    &:hover{
+        box-shadow: 0 10px 10px rgba(73,75,91,0.13);
+        border:1px solid rgba(103, 119, 239, 0.32);
+    }
+      &:hover h6.clientName{
+                color:#6777EF;
+            }
+    .clientDetails{
+            width: 80%;
+            
+    .client-label{
+        font-size: 12px !important;
+        //color: #212529;
+    }
+    h6{
+        font-size:14px;
+        font-weight:600;
+    }}
+    .client-img{
+        img{
+            width:60px
+        }
+
+    }
+}

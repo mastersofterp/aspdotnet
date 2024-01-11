@@ -96,7 +96,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
 
                 //string todt = "20" + "/" + month.ToString() + "/" + year.ToString();
                 //string todt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1).ToString();  
-                string todt = Convert.ToDateTime(System.DateTime.Now.ToShortDateString()).ToString();
+                string todt = Convert.ToDateTime(System.DateTime.Now.ToShortDateString()).AddDays(-1).ToString();
 
                 txtFromDt.Text = frmdt;
                 txtToDt.Text = todt;
@@ -1312,6 +1312,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                             //DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
                             //ddlAllow.SelectedValue = "N";
                         }
+                        ValidAllowNotAllow();
                     }
                     else
                     {
@@ -1360,6 +1361,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                                 DropDownList ddlAllow = lvitem.FindControl("ddlAllow") as DropDownList;
 
                             }
+                            ValidAllowNotAllow();
                         }
                         else
                         {
@@ -1456,6 +1458,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                         objCommon.FillDropDownList(ddlWorkType, "PAYROLL_WORKTYPE", "WTNO", "WORKTYPE", "WTNO>0", "WORKTYPE");
                         ddlWorkType.SelectedValue = "2";
                     }
+                    ValidAllowNotAllow();
                 }
                 else
                 {
@@ -1501,6 +1504,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                     {
                         MessageBox("You have entered date beyond todays date. Please enter valid date.");
                     }
+                    ValidAllowNotAllow();
                 }
                 else
                 {
@@ -1508,8 +1512,6 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
                     return;
                 }
             }
-
-
         }
         catch (Exception ex)
         {
@@ -2984,6 +2986,31 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             lvNREmpList.DataBind();
             lvEmpList.Visible = false; lvLateComers.Visible = false; lvEmpEarly.Visible = false; lvNREmpList.Visible = false;
             FillEmployee();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private void ValidAllowNotAllow()
+    {
+        try
+        {
+            int OrgID = Convert.ToInt32(objCommon.LookUp("REFF", "OrganizationId", ""));
+            //int OrgID = 5;
+            if (OrgID == 5)
+            {
+                foreach (ListViewDataItem lvItem in lvLateComers.Items)
+                {
+                    DropDownList ddlAllow = lvItem.FindControl("ddlAllow") as DropDownList;
+                    ddlAllow.SelectedIndex = 1;
+                }
+                foreach (ListViewDataItem lvItem in lvEmpEarly.Items)
+                {
+                    DropDownList ddlAllow = lvItem.FindControl("ddlAllow") as DropDownList;
+                    ddlAllow.SelectedIndex = 1;
+                }
+            }
         }
         catch (Exception ex)
         {

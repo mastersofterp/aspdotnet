@@ -1,0 +1,45 @@
+.change-width-grid {
+    width: 66px
+}
+
+.change-width-menu {
+    width: calc(100% - 66px)
+}
+
+.custom-menu-grid {
+    transition: all 0.4s ease;
+}
+
+.custom-content-grid {
+    transition: all 0.4s ease;
+}
+
+.change-width-grid a.subMenu:hover > span {
+    display: block !important;
+    background: #ffff;
+    padding: 3px 12px;
+    border-radius: 3px;
+    color: $purple !important;
+    margin-left: 10px;
+    max-width: 150px;
+    //box-shadow: 0 0 30px rgb(0 0 0 / 10%);
+}
+
+@media only screen and (max-width: 992px) {
+    .profile-menu {
+        margin-bottom: 14px;
+
+        .list-group {
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .subMenu {
+                width: 40px;
+
+                span {
+                    display: none
+                }
+            }
+        }
+    }
+}

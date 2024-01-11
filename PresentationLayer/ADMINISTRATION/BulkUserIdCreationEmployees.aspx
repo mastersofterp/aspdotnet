@@ -549,8 +549,8 @@
                                                                 </div>
                                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                                     <div class="label-dynamic">
-                                                                        <%--<label>Institute Name</label>--%>
-                                                                        <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
+                                                                        <label>School/Institute</label>
+<%--                                                                        <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>--%>
                                                                     </div>
                                                                     <asp:DropDownList ID="ddlCollege" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true">
                                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -833,7 +833,7 @@
                                                                                                                 <thead>
                                                                                                                     <tr class="bg-light-blue">
                                                                                                                         <th>Row No.</th>
-                                                                                                                        <th>Society Name</th>
+                                                                                                                       <%-- <th>Society Name</th>--%>
                                                                                                                         <th>College Name </th>
                                                                                                                         <th>Employee Id</th>
                                                                                                                         <th>RFIDNO</th>
@@ -892,11 +892,12 @@
                                                                                                     <ItemTemplate>
                                                                                                         <tr>
                                                                                                             <td><%# Container.DataItemIndex +1 %></td>
-                                                                                                            <td>
+                                                                                                       <%--     <td>
                                                                                                                 <asp:Label ID="lblSocietyName" runat="server" Text='<%# Eval("Society Name")%>'></asp:Label>
-                                                                                                            </td>
+                                                                                                            </td>--%>
                                                                                                             <td>
                                                                                                                 <asp:Label ID="lblSchoolName" runat="server" Text='<%# Eval("College Name")%>'></asp:Label>
+                                                                                                                <asp:HiddenField runat="server" ID="hdsocity" Value=""/>
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <asp:Label ID="lblEmployeeId" runat="server" Text='<%# Eval("Employee Id")%>'></asp:Label>

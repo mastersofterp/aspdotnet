@@ -1,0 +1,217 @@
+﻿.settingSidebar ul.choose-theme li div.light-blue {
+  background: #C2E7FF;
+  box-shadow: 4px 3px 6px 0 rgba(0, 0, 0, 0.2); }
+
+.theme-light-blue .btn-outline-primary:not([disabled]):not(.disabled):active, .theme-light-blue .btn-outline-primary.active:not([disabled]):not(.disabled), .theme-light-blue .show > .btn-outline-primary.dropdown-toggle {
+  color: #001d35;
+  background-color: #C2E7FF;
+  border-color: #C2E7FF; }
+
+.theme-light-blue.sidebar-mini .main-sidebar .sidebar-menu > li.active > a {
+  background-color: rgba(0, 0, 0, 0.14); }
+
+.theme-light-blue.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li.active > a:hover {
+  color: #C2E7FF; }
+
+.theme-light-blue .bg-primary {
+  background-color: #C2E7FF !important; }
+
+.theme-light-blue .text-primary {
+  color: #C2E7FF !important; }
+
+.theme-light-blue .btn-primary {
+  background-color: #C2E7FF;
+  border-color: transparent !important;
+  color: #001d35; }
+  .theme-light-blue .btn-primary:focus {
+    background-color: #e2f1fb !important; }
+    .theme-light-blue .btn-primary:focus:active {
+      background-color: #e2f1fb !important; }
+  .theme-light-blue .btn-primary:active {
+    background-color: #e2f1fb !important; }
+  .theme-light-blue .btn-primary:hover {
+    background-color: #e2f1fb !important;
+    color: #001d35; }
+  .theme-light-blue .btn-primary.disabled {
+    background-color: #C2E7FF;
+    border-color: #C2E7FF; }
+  .theme-light-blue .btn-primary:disabled {
+    background-color: #C2E7FF;
+    border-color: #C2E7FF; }
+
+.theme-light-blue .btn-outline-primary {
+  color: #C2E7FF;
+  background-color: transparent;
+  background-image: none;
+  border-color: #C2E7FF; }
+  .theme-light-blue .btn-outline-primary:hover {
+    color: #001d35;
+    background-color: #C2E7FF;
+    border-color: #C2E7FF; }
+  .theme-light-blue .btn-outline-primary.disabled {
+    color: #C2E7FF;
+    background-color: transparent; }
+  .theme-light-blue .btn-outline-primary:disabled {
+    color: #C2E7FF;
+    background-color: transparent; }
+
+.theme-light-blue .btn-link {
+  font-weight: 400;
+  color: #C2E7FF;
+  background-color: transparent; }
+  .theme-light-blue .btn-link:hover {
+    color: #e2f1fb; }
+
+.theme-light-blue .dropdown-item.active {
+  color: #001d35;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .dropdown-item:active {
+  color: #001d35;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .nav-pills .nav-link.active {
+  color: #001d35;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .nav-pills .show > .nav-link {
+  color: #001d35;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .page-link {
+  color: #C2E7FF;
+  background-color: #fff;
+  border: 1px solid #ededed; }
+  .theme-light-blue .page-link:focus {
+    color: #e2f1fb; }
+  .theme-light-blue .page-link:hover {
+    color: #e2f1fb;
+    background-color: #eaeaea; }
+
+.theme-light-blue .page-item .page-link {
+  color: #C2E7FF; }
+
+.theme-light-blue .page-item.active .page-link {
+  color: #fff;
+  background-color: #C2E7FF;
+  border-color: #C2E7FF; }
+
+.theme-light-blue .page-item.disabled .page-link {
+  color: #C2E7FF; }
+
+.theme-light-blue .progress-bar {
+  color: #fff;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .border-primary {
+  border-color: #C2E7FF !important; }
+
+.theme-light-blue .navbar {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .jqvmap-circle {
+  background-color: #C2E7FF;
+  border: 1px solid #000; }
+
+.theme-light-blue .dropzone {
+  border: 2px dashed #C2E7FF; }
+
+.theme-light-blue .custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #C2E7FF; }
+
+.theme-light-blue .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .list-group-item.active {
+  color: #fff;
+  background-color: #C2E7FF;
+  border-color: #C2E7FF; }
+
+.theme-light-blue .navbar.active {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .form-control:focus {
+  border-color: #C2E7FF; }
+
+.theme-light-blue .alert.alert-primary {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .card.card-primary {
+  border-top: 2px solid #C2E7FF; }
+
+.theme-light-blue .fc button.fc-state-active {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .weather ul li {
+  border: 2px solid #C2E7FF;
+  color: #C2E7FF; }
+
+.theme-light-blue .card-chat .chat-content .chat-item.chat-right .chat-details .chat-text {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .swal-button.swal-button--confirm {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .btn-group .btn.active {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .media .media-right {
+  color: #C2E7FF; }
+
+.theme-light-blue .selectric-items li.selected {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .selectric-items li.highlighted {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .accordion .accordion-header[aria-expanded="true"] {
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue .bootstrap-tagsinput .tag {
+  background-color: #C2E7FF; }
+
+.theme-light-blue body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu > li.active > a:before {
+  background-color: #C2E7FF; }
+
+.theme-light-blue body.sidebar-mini .main-sidebar .sidebar-menu > li.active > a {
+  box-shadow: 0 4px 8px #fdecec;
+  background-color: #C2E7FF;
+  color: #fff; }
+
+.theme-light-blue body.sidebar-mini .main-sidebar .sidebar-menu > li ul.dropdown-menu li.active > a {
+  color: #C2E7FF; }
+
+.theme-light-blue .activities .activity:before {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .settingSidebar .settingPanelToggle {
+  background: #C2E7FF; }
+  .theme-light-blue .settingSidebar .settingPanelToggle i {
+    color: #fff; }
+
+.theme-light-blue .sidebar-color .selectgroup-input:checked + .selectgroup-button {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .custom-switch-input:checked ~ .custom-switch-indicator {
+  background: #C2E7FF; }
+
+.theme-light-blue .selectgroup-input:focus + .selectgroup-button,
+.theme-light-blue .selectgroup-input:checked + .selectgroup-button {
+  background-color: #C2E7FF; }
+
+.theme-light-blue .selectgroup-input-radio:focus + .selectgroup-button,
+.theme-light-blue .selectgroup-input-radio:checked + .selectgroup-button {
+  background-color: #C2E7FF; }

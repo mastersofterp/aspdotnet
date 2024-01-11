@@ -8,12 +8,22 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Linq;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
+using System.Collections.Generic;
+using IITMS.SQLServer.SQLDAL;
+using System.Data.SqlClient;
 
 public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
+    ModuleConfigController objConfig = new ModuleConfigController();
+
+    List<string> validationErrors = new List<string>();
+
+    string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -31,15 +41,14 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 //Page Authorization
                 //  CheckPageAuthorization();
                 ViewState["usertype"] = Session["usertype"];
-
+                StudentConfiguration();
                 int orgID = Convert.ToInt32(objCommon.LookUp("REFF", "OrganizationId", ""));
 
-
                 hdnOrgId.Value = orgID.ToString();
-                if (orgID == 5)
-                { rfvMarksObtainedHssc.Visible = false;}
-                else
-                { rfvMarksObtainedHssc.Visible = true;}
+                //if (orgID == 5)
+                //{ rfvMarksObtainedHssc.Visible = false;}
+                //else
+                //{ rfvMarksObtainedHssc.Visible = true;}
 
 
                 //if (orgID == 12)
@@ -221,10 +230,204 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
 
         }
         //divStudentLastQualification.Visible=false;
-        SSC_10TH_QUALIFICATION();   
-        HSC_12TH_QUALIFICATION();
+        //SSC_10TH_QUALIFICATION();   
+        //HSC_12TH_QUALIFICATION();
 
     }
+
+    #region FilterData
+
+    private DataSet FilterDataByKeyword(DataSet originalDataSet, string keyword)
+    {
+        DataSet filteredDataSet = new DataSet();
+        DataTable filteredTable = originalDataSet.Tables[0].Clone();
+
+        foreach (DataRow row in originalDataSet.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+
+            if (captionName.ToLower().Contains(keyword.ToLower()))
+            {
+                filteredTable.ImportRow(row);
+            }
+        }
+
+        filteredDataSet.Tables.Add(filteredTable);
+        return filteredDataSet;
+    }
+
+    #endregion FilterData
+
+    #region Student Related Configuration
+
+    protected void StudentConfiguration()
+    {
+        DataSet ds = null;
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "QualificationDetails.aspx";
+        ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string isActive = row["ISACTIVE"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string controlToMandatory = row["CONTROL_TO_MANDATORY"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string divID = string.Empty;
+            Control control = null, control2 = null, control3 = null;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+                divID = values[1].Trim();
+
+            }
+
+            if (values.Length == 2)
+            {
+                control = FindControlRecursive(Page, divID);
+                control3 = FindControlRecursive(Page, controlID);
+            }
+            else
+            {
+                control = FindControlRecursive(Page, controlToHide);
+            }
+
+            control2 = FindControlRecursive(Page, controlToMandatory);
+
+
+            if (control != null)
+            {
+                if (isActive == "checked" && isMandatory == "checked")
+                {
+                    control.Visible = true;
+                    control2.Visible = true;
+
+                }
+                else if (isActive == "checked" && controlToMandatory != null)
+                {
+                    control.Visible = true;
+                    control2.Visible = false;
+                }
+                else
+                {
+                    control.Visible = false;
+                    control2.Visible = false;
+
+                    if (values.Length == 2)
+                    {
+                        ClearControlValue(control3);
+                    }
+
+                }
+            }
+        }
+    }
+
+    private Control FindControlRecursive(Control parentControl, string controlId)
+    {
+        if (parentControl == null)
+        {
+            return null;
+        }
+
+        Control control = parentControl.FindControl(controlId);
+
+        if (control == null)
+        {
+            foreach (Control childControl in parentControl.Controls)
+            {
+                control = FindControlRecursive(childControl, controlId);
+                if (control != null)
+                {
+                    return control;
+                }
+            }
+        }
+        return control;
+    }
+
+    private void ClearControlValue(Control control)
+    {
+        if (control is TextBox)
+        {
+            ((TextBox)control).Text = string.Empty;
+        }
+        else if (control is DropDownList)
+        {
+            ((DropDownList)control).SelectedIndex = 0;
+        }
+
+    }
+
+    #endregion Student Related Configuration
+
+    #region ValidationAlert
+
+    public string ValidationAlertForDetailsByKeyword(string keyword)
+    {
+        DataSet ds = null;
+        List<string> validationErrors = new List<string>();
+
+        int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+        string pageNo = "";
+        string pageName = "QualificationDetails.aspx";
+
+        // Filter data based on the provided keyword
+        ds = FilterDataByKeyword(objConfig.GetStudentConfigData(orgID, pageNo, pageName), keyword);
+
+        foreach (DataRow row in ds.Tables[0].Rows)
+        {
+            string captionName = row["CAPTION_NAME"].ToString();
+            string controlToHide = row["CONTROL_TO_HIDE"].ToString();
+            string isMandatory = row["ISMANDATORY"].ToString();
+            string controlID = string.Empty;
+            string[] values = controlToHide.Split(',');
+
+            if (values.Length == 2)
+            {
+                controlID = values[0].Trim();
+            }
+
+            if (isMandatory == "checked" && !string.IsNullOrEmpty(controlID))
+            {
+                Control control = FindControlRecursive(Page, controlID);
+
+                if (control is TextBox)
+                {
+                    TextBox textBox = (TextBox)control;
+                    if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        validationErrors.Add("Please Enter " + captionName);
+                    }
+                }
+
+                if (control is DropDownList)
+                {
+                    DropDownList dropdownlist = (DropDownList)control;
+                    if (dropdownlist.SelectedIndex == 0)
+                    {
+                        validationErrors.Add("Please Select " + captionName);
+                    }
+                }
+            }
+        }
+
+        if (validationErrors.Count > 0)
+        {
+            string errorMessage = string.Join(",", validationErrors);
+            return errorMessage;
+        }
+
+        return string.Empty;
+    }
+
+    #endregion ValidationAlert
 
     private void CheckFinalSubmission()
     {
@@ -238,57 +441,58 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
             btnAddEntranceExam.Visible = true;
         }
     }
-    private void SSC_10TH_QUALIFICATION()
-    {
-        string ParamValue = (objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME = 'ALLOW_STUD_INFO_VALIDATE_10TH_QUALIFICATION'"));
-        if (ParamValue == "1")
-        {
-            rfvSchoolName.Enabled = true;
-            rfvBoardSsc.Enabled = true;
-            rfvYearOfExamssc.Enabled = true;
-            rfvOutOfMarksSsc.Enabled = true;
 
-        }
-        else
-        {
-            if (ParamValue == "0")
-            {
-                rfvSchoolName.Enabled = false;
-                rfvBoardSsc.Enabled = false;
-                rfvYearOfExamssc.Enabled = false;
-                rfvOutOfMarksSsc.Enabled = false;
+    //private void SSC_10TH_QUALIFICATION()
+    //{
+    //    string ParamValue = (objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME = 'ALLOW_STUD_INFO_VALIDATE_10TH_QUALIFICATION'"));
+    //    if (ParamValue == "1")
+    //    {
+    //        rfvSchoolName.Enabled = true;
+    //        rfvBoardSsc.Enabled = true;
+    //        rfvYearOfExamssc.Enabled = true;
+    //        rfvOutOfMarksSsc.Enabled = true;
 
-            }
+    //    }
+    //    else
+    //    {
+    //        if (ParamValue == "0")
+    //        {
+    //            rfvSchoolName.Enabled = false;
+    //            rfvBoardSsc.Enabled = false;
+    //            rfvYearOfExamssc.Enabled = false;
+    //            rfvOutOfMarksSsc.Enabled = false;
+
+    //        }
        
         
-        }
+    //    }
        
-    }
+    //}
 
-    private void HSC_12TH_QUALIFICATION()
-    {
-        string ParamValue = (objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME = 'ALLOW_STUD_INFO_VALIDATED_12TH_QUALIFICATION'"));
-        if (ParamValue == "1")
-        {
-            rfvCollageName.Enabled = true;
-            rfvBoard.Enabled = true;
-            rfvExamYear.Enabled = true;
-            rfvMarksObtainedHssc.Enabled = true;
-        }
-        else
-        {
-            if (ParamValue == "0")
-            {
-                rfvCollageName.Enabled = false;
-                rfvBoard.Enabled = false;
-                rfvExamYear.Enabled = false;
-                rfvMarksObtainedHssc.Enabled = false;
-            }
+    //private void HSC_12TH_QUALIFICATION()
+    //{
+    //    string ParamValue = (objCommon.LookUp("ACD_PARAMETER", "PARAM_VALUE", "PARAM_NAME = 'ALLOW_STUD_INFO_VALIDATED_12TH_QUALIFICATION'"));
+    //    if (ParamValue == "1")
+    //    {
+    //        rfvCollageName.Enabled = true;
+    //        rfvBoard.Enabled = true;
+    //        rfvExamYear.Enabled = true;
+    //        rfvMarksObtainedHssc.Enabled = true;
+    //    }
+    //    else
+    //    {
+    //        if (ParamValue == "0")
+    //        {
+    //            rfvCollageName.Enabled = false;
+    //            rfvBoard.Enabled = false;
+    //            rfvExamYear.Enabled = false;
+    //            rfvMarksObtainedHssc.Enabled = false;
+    //        }
 
         
-        }
+    //    }
 
-    }
+    //}
 
 
 
@@ -317,221 +521,264 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
-        StudentController objSC = new StudentController();
-        Student objS = new Student();
-        StudentPhoto objSPhoto = new StudentPhoto();
-        StudentAddress objSAddress = new StudentAddress();
-        StudentQualExm objSQualExam = new StudentQualExm();
+        string errorStringSSC = ValidationAlertForDetailsByKeyword("ssc");
+        string combinedErrors = string.Empty;
 
-        try
+        if (!string.IsNullOrEmpty(errorStringSSC))
         {
-            //if (Convert.ToDecimal(txtOutOfMarksSsc.Text) < Convert.ToDecimal(txtMarksObtainedSsc.Text))     //Added by sachin on 29-07-2022
-            //{
-            //    objCommon.DisplayMessage(this, "  Marks/GPA Obtained Should not be greater than Out Of Marks/GPA!!", this.Page);
-            //    return;
-            //    return;
-            //}
-            if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
+            combinedErrors += errorStringSSC;
+        }
+
+        string keywordToValidate = string.Empty;
+
+        if (rdoHsc.Checked)
+        {
+            keywordToValidate = "hsc";
+        }
+        else if (rdoDiploma.Checked)
+        {
+            keywordToValidate = "diploma";
+        }
+
+        if (!string.IsNullOrEmpty(keywordToValidate))
+        {
+            string errorString = ValidationAlertForDetailsByKeyword(keywordToValidate);
+
+            if (!string.IsNullOrEmpty(errorString))
             {
-
-                if (ViewState["usertype"].ToString() == "2")
+                if (!string.IsNullOrEmpty(combinedErrors))
                 {
-                    objS.IdNo = Convert.ToInt32(Session["idno"]);
+                    combinedErrors += ","; 
                 }
-                else
-                {
-                    objS.IdNo = Convert.ToInt32(Session["stuinfoidno"]);
-                }
-                //SSC 
-                if (!txtSchoolCollegeNameSsc.Text.Trim().Equals(string.Empty)) objSQualExam.SchoolCollegeNameSsc = txtSchoolCollegeNameSsc.Text.Trim();
-                if (!txtBoardSsc.Text.Trim().Equals(string.Empty)) objSQualExam.BoardSsc = txtBoardSsc.Text.Trim();
-
-                //if (ddlBoardSsc.SelectedIndex == 0)
-                //{
-                //    objSQualExam.BoardSsc = "";
-                //}
-                //else
-                //{
-                //    objSQualExam.BoardSsc = ddlBoardSsc.SelectedItem.Text;
-                //}
-                if (!txtYearOfExamSsc.Text.Trim().Equals(string.Empty)) objSQualExam.YearOfExamSsc = txtYearOfExamSsc.Text.Trim();
-                if (!txtSSCMedium.Text.Trim().Equals(string.Empty)) objSQualExam.SSC_medium = txtSSCMedium.Text.Trim();
-                if (!txtMarksObtainedSsc.Text.Trim().Equals(string.Empty)) objSQualExam.MarksObtainedSsc = Convert.ToDecimal(txtMarksObtainedSsc.Text.Trim());
-                if (!txtOutOfMarksSsc.Text.Trim().Equals(string.Empty)) objSQualExam.OutOfMarksSsc = Convert.ToInt32(txtOutOfMarksSsc.Text.Trim());
-                if (!txtPercentageSsc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentageSsc = Convert.ToDecimal(txtPercentageSsc.Text.Trim());
-                if (!txtExamRollNoSsc.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNOSSC = txtExamRollNoSsc.Text.Trim();
-                if (!txtPercentileSsc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileSsc = Convert.ToDecimal(txtPercentileSsc.Text.Trim());
-                if (!txtGradeSsc.Text.Trim().Equals(string.Empty)) objSQualExam.GradeSsc = txtGradeSsc.Text.Trim();
-                if (!txtAttemptSsc.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptSsc = txtAttemptSsc.Text.Trim();
-                if (!txtSSCSchoolColgAdd.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_SSC = txtSSCSchoolColgAdd.Text.Trim();
-
-                //HSSC
-                if (!txtSchoolCollegeNameHssc.Text.Trim().Equals(string.Empty)) objSQualExam.SCHOOL_COLLEGE_NAME = txtSchoolCollegeNameHssc.Text.Trim();
-                if (!txtBoardHssc.Text.Trim().Equals(string.Empty)) objSQualExam.BOARD = txtBoardHssc.Text.Trim();
-
-                //if (ddlBoardHssc.SelectedIndex == 0)
-                //{
-                //    objSQualExam.BOARD = "";
-                //}
-                //else
-                //{
-                //    objSQualExam.BOARD = ddlBoardHssc.SelectedItem.Text;
-                //}
-                if (!txtYearOfExamHssc.Text.Trim().Equals(string.Empty)) objSQualExam.YEAR_OF_EXAMHSSC = txtYearOfExamHssc.Text.Trim();
-                if (!txtHSSCMedium.Text.Trim().Equals(string.Empty)) objSQualExam.HSSC_medium = txtHSSCMedium.Text.Trim();
-                txtMarksObtainedHssc.Enabled = true;
-
-                if (!txtMarksObtainedHssc.Text.Trim().Equals(string.Empty)) objSQualExam.MARKOBTAINED = Convert.ToDecimal(txtMarksObtainedHssc.Text.Trim());
-
-                txtMarksObtainedHssc.Enabled = false;
-                //if (txtVocationalmarktotal.Text == "0" || txtVocationalmarktotal.Text == string.Empty)
-                //    objSQualExam.OUTOFMARK = 300;
-                //else
-                //{
-                //    if (!txtOutOfMarksHssc.Text.Trim().Equals(string.Empty)) objSQualExam.OUTOFMARK = Convert.ToInt32(txtOutOfMarksHssc.Text.Trim());
-                //}
-
-                if (!txtOutOfMarksHssc.Text.Trim().Equals(string.Empty)) objSQualExam.OUTOFMARK = Convert.ToInt32(txtOutOfMarksHssc.Text.Trim());
-                if (!txtPercentageHssc.Text.Trim().Equals(string.Empty)) objSQualExam.PERCENTAGE = Convert.ToDecimal(txtPercentageHssc.Text.Trim());
-                if (!txtExamRollNoHssc.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNOHSSC = txtExamRollNoHssc.Text.Trim();
-                if (!txtPercentileHssc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileHSsc = Convert.ToDecimal(txtPercentileHssc.Text.Trim());
-                if (!txtGradeHssc.Text.Trim().Equals(string.Empty)) objSQualExam.GRADE = txtGradeHssc.Text.Trim();
-                if (!txtAttemptHssc.Text.Trim().Equals(string.Empty)) objSQualExam.ATTEMPT = txtAttemptHssc.Text.Trim();
-                if (!txtHSCColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_HSSC = txtHSCColgAddress.Text.Trim();
-
-                //Subject Wise Marks
-
-                //if (!txtHscChe.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHE = Convert.ToInt32(txtHscChe.Text.Trim());
-                //if (!txtHscCheMax.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHEMAX1 = Convert.ToInt32(txtHscCheMax.Text.Trim());
-                ////if (!txtHscPhy.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHY1 = Convert.ToInt32(txtHscPhy.Text.Trim());
-                //if (!txtHscPhyMax.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHYMAX1 = Convert.ToInt32(txtHscPhyMax.Text.Trim());
-                //if (!txtHscEngHssc.Text.Trim().Equals(string.Empty)) objSQualExam.ENG = Convert.ToInt32(txtHscEngHssc.Text.Trim());
-                //if (!txtHscEngMaxHssc.Text.Trim().Equals(string.Empty)) objSQualExam.HSCENGMAX = Convert.ToInt32(txtHscEngMaxHssc.Text.Trim());
-                //if (!txtHscMaths.Text.Trim().Equals(string.Empty)) objSQualExam.MATHS = Convert.ToInt32(txtHscMaths.Text.Trim());
-                //if (!txtHscMathsMax.Text.Trim().Equals(string.Empty)) objSQualExam.MATHSMAX = Convert.ToInt32(txtHscMathsMax.Text.Trim());
-
-                if (!txtchem.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHE = Convert.ToInt32(txtchem.Text.Trim());
-                if (!txtchemtot.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHEMAX1 = Convert.ToInt32(txtchemtot.Text.Trim());
-                if (!txtphymark.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHY1 = Convert.ToInt32(txtphymark.Text.Trim());
-                if (!txtphymarktotal.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHYMAX1 = Convert.ToInt32(txtphymarktotal.Text.Trim());
-                if (!txtVocationalmark.Text.Trim().Equals(string.Empty)) objSQualExam.ENG = Convert.ToInt32(txtVocationalmark.Text.Trim());
-                if (!txtVocationalmarktotal.Text.Trim().Equals(string.Empty)) objSQualExam.HSCENGMAX = Convert.ToInt32(txtVocationalmarktotal.Text.Trim());
-                if (!txtmaths.Text.Trim().Equals(string.Empty)) objSQualExam.MATHS = Convert.ToInt32(txtmaths.Text.Trim());
-                if (!txtmathstot.Text.Trim().Equals(string.Empty)) objSQualExam.MATHSMAX = Convert.ToInt32(txtmathstot.Text.Trim());
-                if (!txtbiology.Text.Trim().Equals(string.Empty)) objSQualExam.HSCBIO = Convert.ToInt32(txtbiology.Text.Trim());
-                if (!txtbiologytot.Text.Trim().Equals(string.Empty)) objSQualExam.HSCBIOMAX = Convert.ToInt32(txtbiologytot.Text.Trim());
-
-                //if (!txtPcmMarks.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCM = Convert.ToInt32(txtPcmMarks.Text.Trim());
-
-
-
-                //if (!txtPcmPerct.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(txtPcmPerct.Text.Trim());
-                // if (!txtPcmPerct.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(txtPcmPerct.Text.Trim());
-                if (!hfdPcmMarks.Value.Trim().Equals(string.Empty))
-                {
-                    objSQualExam.HSCPCM = Convert.ToInt32(hfdPcmMarks.Value.Trim()); // Added by hfdPcmPer sachin on 20-07-2022
-                } 
-                if (!hfdPcmPer.Value.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(hfdPcmPer.Value.Trim()); // Added by hfdPcmPer sachin on  20-07-2022
-                
-                
-
-                string Vocationalsub = string.Empty;
-                Vocationalsub = txtVocsub.Text.Trim();
-
-
-
-                objSQualExam.QUALIFYNO = Convert.ToInt32(ddlExamNo.SelectedValue);
-                if (!txtQExamRollNo.Text.Trim().Equals(string.Empty)) objS.QexmRollNo = txtQExamRollNo.Text.Trim();
-                if (!txtYearOfExam.Text.Trim().Equals(string.Empty)) objS.YearOfExam = txtYearOfExam.Text.Trim();
-                if (!txtPer.Text.Trim().Equals(string.Empty)) objS.Percentage = Convert.ToDecimal(txtPer.Text.Trim());
-                if (!txtPercentile.Text.Trim().Equals(string.Empty)) objSQualExam.PERCENTILE = Convert.ToDecimal(txtPercentile.Text.Trim());
-                if (!txtAllIndiaRank.Text.Trim().Equals(string.Empty)) objSQualExam.ALLINDIARANK = Convert.ToInt32(txtAllIndiaRank.Text.Trim());
-                if (!txtScore.Text.Trim().Equals(string.Empty)) objS.Score = Convert.ToDecimal(txtScore.Text.Trim());
-
-                int diplomastatus = 0;
-                if (rdoDiploma.Checked)
-                {
-                    diplomastatus = 1;
-                }
-                else
-                {
-                    diplomastatus = 0;
-                }
-                //DIPLOMA
-                if (!txtSchoolCollegeNameDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.SchoolCollegeNameDiploma = txtSchoolCollegeNameDiploma.Text.Trim();
-                if (!txtBoardDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.BoardDiploma = txtBoardDiploma.Text.Trim();
-
-                //if (ddlBoardDiploma.SelectedIndex == 0)
-                //{
-                //    objSQualExam.BoardDiploma = "";
-                //}
-                //else
-                //{
-                //    objSQualExam.BoardDiploma = ddlBoardDiploma.SelectedItem.Text;
-                //}
-                if (!txtYearOfExamDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.YearOfExamDiploma = txtYearOfExamDiploma.Text.Trim();
-                if (!txtDiplomaMedium.Text.Trim().Equals(string.Empty)) objSQualExam.Diploma_medium = txtDiplomaMedium.Text.Trim();
-                if (!txtMarksObtainedDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.MarksObtainedDiploma = Convert.ToDecimal(txtMarksObtainedDiploma.Text.Trim());
-                if (!txtOutOfMarksDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.OutOfMarksDiploma = Convert.ToInt32(txtOutOfMarksDiploma.Text.Trim());
-                if (!txtPercentageDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.PercentageDiploma = Convert.ToDecimal(txtPercentageDiploma.Text.Trim());
-                if (!txtExamRollNoDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNODiploma = txtExamRollNoDiploma.Text.Trim();
-                if (!txtPercentileDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileDiploma = Convert.ToDecimal(txtPercentileDiploma.Text.Trim());
-                if (!txtGradeDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.GradeDiploma = txtGradeDiploma.Text.Trim();
-                if (!txtAttemptDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptDiploma = txtAttemptDiploma.Text.Trim();
-                if (!txtDiplomaColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_Diploma = txtDiplomaColgAddress.Text.Trim();
-
-
-                objS.PGQUALIFYNO = Convert.ToInt32(ddlpgentranceno.SelectedValue);
-                if (!txtpgrollno.Text.Trim().Equals(string.Empty)) objS.PGENTROLLNO = txtpgrollno.Text.Trim();
-                if (!txtpgexamyear.Text.Trim().Equals(string.Empty)) objS.pgyearOfExam = txtpgexamyear.Text.Trim();
-                if (!txtpgpercentage.Text.Trim().Equals(string.Empty)) objS.pgpercentage = Convert.ToDecimal(txtpgpercentage.Text.Trim());
-                if (!txtpgpercentile.Text.Trim().Equals(string.Empty)) objS.pgpercentile = Convert.ToDecimal(txtpgpercentile.Text.Trim());
-                if (!txtpgrank.Text.Trim().Equals(string.Empty)) objS.PGRANK = Convert.ToInt32(txtpgrank.Text.Trim());
-                if (!txtpgscore.Text.Trim().Equals(string.Empty)) objS.pgscore = Convert.ToDecimal(txtpgscore.Text.Trim());
-
-                if (!txtNataMarks.Text.Trim().Equals(string.Empty)) objS.NataMarks = Convert.ToDecimal(txtNataMarks.Text.Trim());
-
-                QualifiedExam[] qualExams = null;
-                this.BindLastQualifiedExamData(ref qualExams);
-                objS.LastQualifiedExams = qualExams;
-
-                QualifiedExam[] EntranceExams = null;
-                this.BindEntranceExamData(ref EntranceExams);
-                objS.EntranceExams = EntranceExams;
-
-                CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus);
-                if (cs.Equals(CustomStatus.RecordUpdated))
-                {
-                    ShowStudentDetails();
-                    Session["entranceTbl"] = null;
-                    //objCommon.DisplayMessage(this,"Qualification Details Updated Successfully!!", this.Page);
-
-                    // divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Qualification Details Updated Successfully!!'); </script>";
-
-                    //string strScript = "<SCRIPT language='javascript'>window.location='OtherInformation.aspx';</SCRIPT>";
-                    //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
-
-                    Response.Redirect("~/academic/CovidVaccinationDetails.aspx", false);
-                    //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Qualification Details Updated Successfully!!'); location.href='CovidVaccinationDetails.aspx';", true);
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this, "Error Occured While Updating Qualification Details!!", this.Page);
-                }
-
-
+                combinedErrors += errorString;
             }
         }
-        catch (Exception Ex)
+
+        if (!string.IsNullOrEmpty(combinedErrors))
         {
-            throw;
+            ClientScript.RegisterStartupScript(this.GetType(), "alertmessage", "alertmessage('" + combinedErrors + "');", true);
+            return;
         }
+        else
+        {
 
-        this.fillDataTable();
-        Session["qualifyTbl"] = null;
-        this.fillEntranceDataTable();
-        Session["entranceTbl"] = null;
+            StudentController objSC = new StudentController();
+            Student objS = new Student();
+            StudentPhoto objSPhoto = new StudentPhoto();
+            StudentAddress objSAddress = new StudentAddress();
+            StudentQualExm objSQualExam = new StudentQualExm();
 
+            try
+            {
+                //if (Convert.ToDecimal(txtOutOfMarksSsc.Text) < Convert.ToDecimal(txtMarksObtainedSsc.Text))     //Added by sachin on 29-07-2022
+                //{
+                //    objCommon.DisplayMessage(this, "  Marks/GPA Obtained Should not be greater than Out Of Marks/GPA!!", this.Page);
+                //    return;
+                //    return;
+                //}
+                if (ViewState["usertype"].ToString() == "2" || ViewState["usertype"].ToString() == "1" || ViewState["usertype"].ToString() == "3" || ViewState["usertype"].ToString() == "7" || ViewState["usertype"].ToString() == "5" || ViewState["usertype"].ToString() == "8")
+                {
+
+                    if (ViewState["usertype"].ToString() == "2")
+                    {
+                        objS.IdNo = Convert.ToInt32(Session["idno"]);
+                    }
+                    else
+                    {
+                        objS.IdNo = Convert.ToInt32(Session["stuinfoidno"]);
+                    }
+                    //SSC 
+                    if (!txtSchoolCollegeNameSsc.Text.Trim().Equals(string.Empty)) objSQualExam.SchoolCollegeNameSsc = txtSchoolCollegeNameSsc.Text.Trim();
+                    if (!txtBoardSsc.Text.Trim().Equals(string.Empty)) objSQualExam.BoardSsc = txtBoardSsc.Text.Trim();
+
+                    //if (ddlBoardSsc.SelectedIndex == 0)
+                    //{
+                    //    objSQualExam.BoardSsc = "";
+                    //}
+                    //else
+                    //{
+                    //    objSQualExam.BoardSsc = ddlBoardSsc.SelectedItem.Text;
+                    //}
+                    if (!txtYearOfExamSsc.Text.Trim().Equals(string.Empty)) objSQualExam.YearOfExamSsc = txtYearOfExamSsc.Text.Trim();
+                    if (!txtSSCMedium.Text.Trim().Equals(string.Empty)) objSQualExam.SSC_medium = txtSSCMedium.Text.Trim();
+                    if (!txtMarksObtainedSsc.Text.Trim().Equals(string.Empty)) objSQualExam.MarksObtainedSsc = Convert.ToDecimal(txtMarksObtainedSsc.Text.Trim());
+                    if (!txtOutOfMarksSsc.Text.Trim().Equals(string.Empty)) objSQualExam.OutOfMarksSsc = Convert.ToInt32(txtOutOfMarksSsc.Text.Trim());
+                    if (!txtPercentageSsc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentageSsc = Convert.ToDecimal(txtPercentageSsc.Text.Trim());
+                    if (!txtExamRollNoSsc.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNOSSC = txtExamRollNoSsc.Text.Trim();
+                    if (!txtPercentileSsc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileSsc = Convert.ToDecimal(txtPercentileSsc.Text.Trim());
+                    if (!txtGradeSsc.Text.Trim().Equals(string.Empty)) objSQualExam.GradeSsc = txtGradeSsc.Text.Trim();
+                    if (!txtAttemptSsc.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptSsc = txtAttemptSsc.Text.Trim();
+                    if (!txtSSCSchoolColgAdd.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_SSC = txtSSCSchoolColgAdd.Text.Trim();
+
+                    //HSSC
+                    if (!txtSchoolCollegeNameHssc.Text.Trim().Equals(string.Empty)) objSQualExam.SCHOOL_COLLEGE_NAME = txtSchoolCollegeNameHssc.Text.Trim();
+                    if (!txtBoardHssc.Text.Trim().Equals(string.Empty)) objSQualExam.BOARD = txtBoardHssc.Text.Trim();
+
+                    //if (ddlBoardHssc.SelectedIndex == 0)
+                    //{
+                    //    objSQualExam.BOARD = "";
+                    //}
+                    //else
+                    //{
+                    //    objSQualExam.BOARD = ddlBoardHssc.SelectedItem.Text;
+                    //}
+                    if (!txtYearOfExamHssc.Text.Trim().Equals(string.Empty)) objSQualExam.YEAR_OF_EXAMHSSC = txtYearOfExamHssc.Text.Trim();
+                    if (!txtHSSCMedium.Text.Trim().Equals(string.Empty)) objSQualExam.HSSC_medium = txtHSSCMedium.Text.Trim();
+                    txtMarksObtainedHssc.Enabled = true;
+
+                    if (!txtMarksObtainedHssc.Text.Trim().Equals(string.Empty)) objSQualExam.MARKOBTAINED = Convert.ToDecimal(txtMarksObtainedHssc.Text.Trim());
+
+                    txtMarksObtainedHssc.Enabled = false;
+                    //if (txtVocationalmarktotal.Text == "0" || txtVocationalmarktotal.Text == string.Empty)
+                    //    objSQualExam.OUTOFMARK = 300;
+                    //else
+                    //{
+                    //    if (!txtOutOfMarksHssc.Text.Trim().Equals(string.Empty)) objSQualExam.OUTOFMARK = Convert.ToInt32(txtOutOfMarksHssc.Text.Trim());
+                    //}
+
+                    if (!txtOutOfMarksHssc.Text.Trim().Equals(string.Empty)) objSQualExam.OUTOFMARK = Convert.ToInt32(txtOutOfMarksHssc.Text.Trim());
+                    if (!txtPercentageHssc.Text.Trim().Equals(string.Empty)) objSQualExam.PERCENTAGE = Convert.ToDecimal(txtPercentageHssc.Text.Trim());
+                    if (!txtExamRollNoHssc.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNOHSSC = txtExamRollNoHssc.Text.Trim();
+                    if (!txtPercentileHssc.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileHSsc = Convert.ToDecimal(txtPercentileHssc.Text.Trim());
+                    if (!txtGradeHssc.Text.Trim().Equals(string.Empty)) objSQualExam.GRADE = txtGradeHssc.Text.Trim();
+                    if (!txtAttemptHssc.Text.Trim().Equals(string.Empty)) objSQualExam.ATTEMPT = txtAttemptHssc.Text.Trim();
+                    if (!txtHSCColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_HSSC = txtHSCColgAddress.Text.Trim();
+
+                    //Subject Wise Marks
+
+                    //if (!txtHscChe.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHE = Convert.ToInt32(txtHscChe.Text.Trim());
+                    //if (!txtHscCheMax.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHEMAX1 = Convert.ToInt32(txtHscCheMax.Text.Trim());
+                    ////if (!txtHscPhy.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHY1 = Convert.ToInt32(txtHscPhy.Text.Trim());
+                    //if (!txtHscPhyMax.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHYMAX1 = Convert.ToInt32(txtHscPhyMax.Text.Trim());
+                    //if (!txtHscEngHssc.Text.Trim().Equals(string.Empty)) objSQualExam.ENG = Convert.ToInt32(txtHscEngHssc.Text.Trim());
+                    //if (!txtHscEngMaxHssc.Text.Trim().Equals(string.Empty)) objSQualExam.HSCENGMAX = Convert.ToInt32(txtHscEngMaxHssc.Text.Trim());
+                    //if (!txtHscMaths.Text.Trim().Equals(string.Empty)) objSQualExam.MATHS = Convert.ToInt32(txtHscMaths.Text.Trim());
+                    //if (!txtHscMathsMax.Text.Trim().Equals(string.Empty)) objSQualExam.MATHSMAX = Convert.ToInt32(txtHscMathsMax.Text.Trim());
+
+                    if (!txtchem.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHE = Convert.ToInt32(txtchem.Text.Trim());
+                    if (!txtchemtot.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHEMAX1 = Convert.ToInt32(txtchemtot.Text.Trim());
+                    if (!txtphymark.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHY1 = Convert.ToInt32(txtphymark.Text.Trim());
+                    if (!txtphymarktotal.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPHYMAX1 = Convert.ToInt32(txtphymarktotal.Text.Trim());
+                    if (!txtVocationalmark.Text.Trim().Equals(string.Empty)) objSQualExam.ENG = Convert.ToInt32(txtVocationalmark.Text.Trim());
+                    if (!txtVocationalmarktotal.Text.Trim().Equals(string.Empty)) objSQualExam.HSCENGMAX = Convert.ToInt32(txtVocationalmarktotal.Text.Trim());
+                    if (!txtmaths.Text.Trim().Equals(string.Empty)) objSQualExam.MATHS = Convert.ToInt32(txtmaths.Text.Trim());
+                    if (!txtmathstot.Text.Trim().Equals(string.Empty)) objSQualExam.MATHSMAX = Convert.ToInt32(txtmathstot.Text.Trim());
+                    if (!txtbiology.Text.Trim().Equals(string.Empty)) objSQualExam.HSCBIO = Convert.ToInt32(txtbiology.Text.Trim());
+                    if (!txtbiologytot.Text.Trim().Equals(string.Empty)) objSQualExam.HSCBIOMAX = Convert.ToInt32(txtbiologytot.Text.Trim());
+
+                    //if (!txtPcmMarks.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCM = Convert.ToInt32(txtPcmMarks.Text.Trim());
+
+
+
+                    //if (!txtPcmPerct.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(txtPcmPerct.Text.Trim());
+                    // if (!txtPcmPerct.Text.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(txtPcmPerct.Text.Trim());
+                    if (!hfdPcmMarks.Value.Trim().Equals(string.Empty))
+                    {
+                        objSQualExam.HSCPCM = Convert.ToInt32(hfdPcmMarks.Value.Trim()); // Added by hfdPcmPer sachin on 20-07-2022
+                    }
+                    if (!hfdPcmPer.Value.Trim().Equals(string.Empty)) objSQualExam.HSCPCMPercentage = Convert.ToDecimal(hfdPcmPer.Value.Trim()); // Added by hfdPcmPer sachin on  20-07-2022
+
+
+
+                    string Vocationalsub = string.Empty;
+                    Vocationalsub = txtVocsub.Text.Trim();
+
+
+
+                    objSQualExam.QUALIFYNO = Convert.ToInt32(ddlExamNo.SelectedValue);
+                    if (!txtQExamRollNo.Text.Trim().Equals(string.Empty)) objS.QexmRollNo = txtQExamRollNo.Text.Trim();
+                    if (!txtYearOfExam.Text.Trim().Equals(string.Empty)) objS.YearOfExam = txtYearOfExam.Text.Trim();
+                    if (!txtPer.Text.Trim().Equals(string.Empty)) objS.Percentage = Convert.ToDecimal(txtPer.Text.Trim());
+                    if (!txtPercentile.Text.Trim().Equals(string.Empty)) objSQualExam.PERCENTILE = Convert.ToDecimal(txtPercentile.Text.Trim());
+                    if (!txtAllIndiaRank.Text.Trim().Equals(string.Empty)) objSQualExam.ALLINDIARANK = Convert.ToInt32(txtAllIndiaRank.Text.Trim());
+                    if (!txtScore.Text.Trim().Equals(string.Empty)) objS.Score = Convert.ToDecimal(txtScore.Text.Trim());
+
+                    int diplomastatus = 0;
+                    if (rdoDiploma.Checked)
+                    {
+                        diplomastatus = 1;
+                    }
+                    else
+                    {
+                        diplomastatus = 0;
+                    }
+                    //DIPLOMA
+                    if (!txtSchoolCollegeNameDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.SchoolCollegeNameDiploma = txtSchoolCollegeNameDiploma.Text.Trim();
+                    if (!txtBoardDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.BoardDiploma = txtBoardDiploma.Text.Trim();
+
+                    //if (ddlBoardDiploma.SelectedIndex == 0)
+                    //{
+                    //    objSQualExam.BoardDiploma = "";
+                    //}
+                    //else
+                    //{
+                    //    objSQualExam.BoardDiploma = ddlBoardDiploma.SelectedItem.Text;
+                    //}
+                    if (!txtYearOfExamDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.YearOfExamDiploma = txtYearOfExamDiploma.Text.Trim();
+                    if (!txtDiplomaMedium.Text.Trim().Equals(string.Empty)) objSQualExam.Diploma_medium = txtDiplomaMedium.Text.Trim();
+                    if (!txtMarksObtainedDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.MarksObtainedDiploma = Convert.ToDecimal(txtMarksObtainedDiploma.Text.Trim());
+                    if (!txtOutOfMarksDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.OutOfMarksDiploma = Convert.ToInt32(txtOutOfMarksDiploma.Text.Trim());
+                    if (!txtPercentageDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.PercentageDiploma = Convert.ToDecimal(txtPercentageDiploma.Text.Trim());
+                    if (!txtExamRollNoDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.QEXMROLLNODiploma = txtExamRollNoDiploma.Text.Trim();
+                    if (!txtPercentileDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.PercentileDiploma = Convert.ToDecimal(txtPercentileDiploma.Text.Trim());
+                    if (!txtGradeDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.GradeDiploma = txtGradeDiploma.Text.Trim();
+                    if (!txtAttemptDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptDiploma = txtAttemptDiploma.Text.Trim();
+                    if (!txtDiplomaColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_Diploma = txtDiplomaColgAddress.Text.Trim();
+
+
+                    objS.PGQUALIFYNO = Convert.ToInt32(ddlpgentranceno.SelectedValue);
+                    if (!txtpgrollno.Text.Trim().Equals(string.Empty)) objS.PGENTROLLNO = txtpgrollno.Text.Trim();
+                    if (!txtpgexamyear.Text.Trim().Equals(string.Empty)) objS.pgyearOfExam = txtpgexamyear.Text.Trim();
+                    if (!txtpgpercentage.Text.Trim().Equals(string.Empty)) objS.pgpercentage = Convert.ToDecimal(txtpgpercentage.Text.Trim());
+                    if (!txtpgpercentile.Text.Trim().Equals(string.Empty)) objS.pgpercentile = Convert.ToDecimal(txtpgpercentile.Text.Trim());
+                    if (!txtpgrank.Text.Trim().Equals(string.Empty)) objS.PGRANK = Convert.ToInt32(txtpgrank.Text.Trim());
+                    if (!txtpgscore.Text.Trim().Equals(string.Empty)) objS.pgscore = Convert.ToDecimal(txtpgscore.Text.Trim());
+
+                    if (!txtNataMarks.Text.Trim().Equals(string.Empty)) objS.NataMarks = Convert.ToDecimal(txtNataMarks.Text.Trim());
+
+                    QualifiedExam[] qualExams = null;
+                    this.BindLastQualifiedExamData(ref qualExams);
+                    objS.LastQualifiedExams = qualExams;
+
+                    QualifiedExam[] EntranceExams = null;
+                    this.BindEntranceExamData(ref EntranceExams);
+                    objS.EntranceExams = EntranceExams;
+
+                    CustomStatus cs = (CustomStatus)objSC.UpdateStudentQualifyingExamInformation(objS, objSQualExam, Convert.ToInt32(Session["usertype"]), Vocationalsub, diplomastatus);
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        ShowStudentDetails();
+                        Session["entranceTbl"] = null;
+                        //objCommon.DisplayMessage(this,"Qualification Details Updated Successfully!!", this.Page);
+
+                        // divMsg.InnerHtml += "<script type='text/javascript' language='javascript'> alert('Qualification Details Updated Successfully!!'); </script>";
+
+                        //string strScript = "<SCRIPT language='javascript'>window.location='OtherInformation.aspx';</SCRIPT>";
+                        //Page.ClientScript.RegisterStartupScript(this.GetType(), "strScript", strScript);
+
+                        Response.Redirect("~/academic/CovidVaccinationDetails.aspx", false);
+                        //ScriptManager.RegisterStartupScript(Page, Page.GetType(), "redirect script", "alert('Qualification Details Updated Successfully!!'); location.href='CovidVaccinationDetails.aspx';", true);
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(this, "Error Occured While Updating Qualification Details!!", this.Page);
+                    }
+
+
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw;
+            }
+
+
+            this.fillDataTable();
+            Session["qualifyTbl"] = null;
+            this.fillEntranceDataTable();
+            Session["entranceTbl"] = null;
+
+        }
     }
 
     protected void btnGohome_Click(object sender, EventArgs e)
@@ -555,180 +802,189 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
+        string errorString = ValidationAlertForDetailsByKeyword("last qualification");
 
-        ////if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]) != null)//***************
-        if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]).Rows.Count > 0 && ((DataTable)Session["qualifyTbl"]) != null)
+        if (errorString != string.Empty)
         {
-            DataTable dt = (DataTable)Session["qualifyTbl"];
-            //DataTable dt = new DataTable();
-            DataRow dr = dt.NewRow();
-            //DataRow [] dr1;
-            if (btnAdd.Text != "Update")
-            {
-                string expression = string.Empty;
-                expression = "QUALIFYNAME='" + ddldegree.SelectedItem.Text + "'";
-                DataRow[] dr1 = dt.Select(expression);
-                //dr1 = dt.Rows.Find(expression);
-                if (dr1.Length > 0)
-                {
-                    lvQualExm.DataSource = dt;
-                    lvQualExm.DataBind();
-                    ClearControls_QualDetails();
-                    objCommon.DisplayMessage(this, "Data for selected exam already exist!", this.Page);
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
-                    return;
-                }
-            }
-            ////dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
-            ////dr["QUALIFYNAME"] = ddlQualifyingNo.SelectedItem.Text;
-            ////dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim() == null ? string.Empty : txtSchoolCollegeNameQualifying.Text.Trim();
-            ////dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim() == "" ? string.Empty : txtYearOfExamQualifying.Text.Trim();
-            ////dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
-            ////dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
-            ////dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
-            ////dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
-            ////dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
-            ////dr["BOARD"] = txtBoardQualifying.Text.Trim();
-            ////dr["GRADE"] = txtGradeQualifying.Text.Trim();
-            ////dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
-            ////dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
-            ////dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
-
-            ////dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
-            ////dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
-            ////dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
-            ////dt.Rows.Add(dr);
-            ////Session["qualifyTbl"] = dt;
-            ////lvQualExm.DataSource = dt;
-            ////lvQualExm.DataBind();
-            ////ClearControls_QualDetails();
-            ////objCommon.DisplayMessage(updEdit,"Data saved successfully!", this.Page);
-
-            if (ddldegree.SelectedIndex > 0 && (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "") && (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "") && (txtBoardQualifying.Text != string.Empty || txtBoardQualifying.Text != ""))
-            {
-                dr["QUALIFYNO"] = Convert.ToInt32(ddldegree.SelectedValue);
-                dr["QUALIFYNAME"] = ddldegree.SelectedItem.Text;
-                dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim() == null ? string.Empty : txtSchoolCollegeNameQualifying.Text.Trim();
-                dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim() == "" ? string.Empty : txtYearOfExamQualifying.Text.Trim();
-                dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
-                dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
-                dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
-                dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
-                dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
-                dr["BOARD"] = txtBoardQualifying.Text.Trim();
-                dr["GRADE"] = txtGradeQualifying.Text.Trim();
-                dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
-                dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
-                dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
-
-                dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
-                dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
-                dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
-                dt.Rows.Add(dr);
-                Session["qualifyTbl"] = dt;
-                lvQualExm.DataSource = dt;
-                lvQualExm.DataBind();
-                ClearControls_QualDetails();
-                objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
-
-            }
-            else
-            {
-                //objCommon.DisplayMessage(this, " Please enter all below details \\n \\n School/College Name \\n Board Name \\n Qualifying Exam Name \\n Exam Roll No. \\n Year of Exam \\n Percentage", this.Page);
-                objCommon.DisplayMessage(this, "Please Enter all Student Last Qualification Details", this.Page);
-            }
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "ErrorMessage('" + errorString + "')", true);
         }
         else
         {
-            DataTable dt = this.GetDataTable();
-            DataRow dr = dt.NewRow();
-            ////dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
-            ////dr["QUALIFYNAME"] = Convert.ToString(ddlQualifyingNo.SelectedItem.Text);
-            ////dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
-            ////dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
-            ////dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
-            ////dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
-            ////dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
-            ////dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
-            ////dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
-            ////dr["BOARD"] = txtBoardQualifying.Text.Trim();
-            ////dr["GRADE"] = txtGradeQualifying.Text.Trim();
-            ////dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
-            ////dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
-            ////dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
-            ////dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
-            ////dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
-            ////dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
 
-            ////bool flag = false;//***************
-            ////if (ddlQualifyingNo.SelectedIndex > 0)
-            ////{
-            ////    dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
-            ////    dr["QUALIFYNAME"] = Convert.ToString(ddlQualifyingNo.SelectedItem.Text);
-            ////    flag = true;
-            ////}
-            ////if (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "")
-            ////{
-            ////    dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
-            ////    flag = true;
-            ////}
-            ////if (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "")
-            ////{
-            ////    dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
-            ////    flag = true;
-            ////}
-
-            ////if (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "")
-            ////{
-            ////    dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
-            ////    flag = true;
-            ////}
-            ////if (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "")
-            ////{
-            ////    dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
-            ////    flag = true;
-            ////}
-
-            if (ddldegree.SelectedIndex > 0 && (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "") && (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "") && (txtBoardQualifying.Text != string.Empty || txtBoardQualifying.Text != ""))
+            ////if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]) != null)//***************
+            if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]).Rows.Count > 0 && ((DataTable)Session["qualifyTbl"]) != null)
             {
-                dr["QUALIFYNO"] = Convert.ToInt32(ddldegree.SelectedValue);
-                dr["QUALIFYNAME"] = Convert.ToString(ddldegree.SelectedItem.Text);
-                dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
-                dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
-                dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
-                dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
-                dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
-                dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
-                dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
-                dr["BOARD"] = txtBoardQualifying.Text.Trim();
-                dr["GRADE"] = txtGradeQualifying.Text.Trim();
-                dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
-                dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
-                dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
-                dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
-                dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
-                dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+                DataTable dt = (DataTable)Session["qualifyTbl"];
+                //DataTable dt = new DataTable();
+                DataRow dr = dt.NewRow();
+                //DataRow [] dr1;
+                if (btnAdd.Text != "Update")
+                {
+                    string expression = string.Empty;
+                    expression = "QUALIFYNAME='" + ddldegree.SelectedItem.Text + "'";
+                    DataRow[] dr1 = dt.Select(expression);
+                    //dr1 = dt.Rows.Find(expression);
+                    if (dr1.Length > 0)
+                    {
+                        lvQualExm.DataSource = dt;
+                        lvQualExm.DataBind();
+                        ClearControls_QualDetails();
+                        objCommon.DisplayMessage(this, "Data for selected exam already exist!", this.Page);
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
+                        return;
+                    }
+                }
+                ////dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
+                ////dr["QUALIFYNAME"] = ddlQualifyingNo.SelectedItem.Text;
+                ////dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim() == null ? string.Empty : txtSchoolCollegeNameQualifying.Text.Trim();
+                ////dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim() == "" ? string.Empty : txtYearOfExamQualifying.Text.Trim();
+                ////dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
+                ////dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
+                ////dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
+                ////dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
+                ////dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
+                ////dr["BOARD"] = txtBoardQualifying.Text.Trim();
+                ////dr["GRADE"] = txtGradeQualifying.Text.Trim();
+                ////dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
+                ////dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
+                ////dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
 
-                dt.Rows.Add(dr);
-                Session["qualifyTbl"] = dt;
-                lvQualExm.DataSource = dt;
-                lvQualExm.DataBind();
-                ClearControls_QualDetails();
-                objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
+                ////dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
+                ////dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
+                ////dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+                ////dt.Rows.Add(dr);
+                ////Session["qualifyTbl"] = dt;
+                ////lvQualExm.DataSource = dt;
+                ////lvQualExm.DataBind();
+                ////ClearControls_QualDetails();
+                ////objCommon.DisplayMessage(updEdit,"Data saved successfully!", this.Page);
 
+                if (ddldegree.SelectedIndex > 0 && (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "") && (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "") && (txtBoardQualifying.Text != string.Empty || txtBoardQualifying.Text != ""))
+                {
+                    dr["QUALIFYNO"] = Convert.ToInt32(ddldegree.SelectedValue);
+                    dr["QUALIFYNAME"] = ddldegree.SelectedItem.Text;
+                    dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim() == null ? string.Empty : txtSchoolCollegeNameQualifying.Text.Trim();
+                    dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim() == "" ? string.Empty : txtYearOfExamQualifying.Text.Trim();
+                    dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
+                    dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
+                    dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
+                    dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
+                    dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
+                    dr["BOARD"] = txtBoardQualifying.Text.Trim();
+                    dr["GRADE"] = txtGradeQualifying.Text.Trim();
+                    dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
+                    dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
+                    dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
+
+                    dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
+                    dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
+                    dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+                    dt.Rows.Add(dr);
+                    Session["qualifyTbl"] = dt;
+                    lvQualExm.DataSource = dt;
+                    lvQualExm.DataBind();
+                    ClearControls_QualDetails();
+                    objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
+
+                }
+                else
+                {
+                    //objCommon.DisplayMessage(this, " Please enter all below details \\n \\n School/College Name \\n Board Name \\n Qualifying Exam Name \\n Exam Roll No. \\n Year of Exam \\n Percentage", this.Page);
+                    objCommon.DisplayMessage(this, "Please Enter all Student Last Qualification Details", this.Page);
+                }
             }
             else
             {
-                //objCommon.DisplayMessage(this, " Please enter all below details \\n \\n School/College Name \\n Board Name \\n Qualifying Exam Name \\n Exam Roll No. \\n Year of Exam \\n Percentage", this.Page);
-                objCommon.DisplayMessage(this, "Please Enter all Student Last Qualification Details", this.Page);
+                DataTable dt = this.GetDataTable();
+                DataRow dr = dt.NewRow();
+                ////dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
+                ////dr["QUALIFYNAME"] = Convert.ToString(ddlQualifyingNo.SelectedItem.Text);
+                ////dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
+                ////dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
+                ////dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
+                ////dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
+                ////dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
+                ////dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
+                ////dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
+                ////dr["BOARD"] = txtBoardQualifying.Text.Trim();
+                ////dr["GRADE"] = txtGradeQualifying.Text.Trim();
+                ////dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
+                ////dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
+                ////dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
+                ////dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
+                ////dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
+                ////dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+
+                ////bool flag = false;//***************
+                ////if (ddlQualifyingNo.SelectedIndex > 0)
+                ////{
+                ////    dr["QUALIFYNO"] = Convert.ToInt32(ddlQualifyingNo.SelectedValue);
+                ////    dr["QUALIFYNAME"] = Convert.ToString(ddlQualifyingNo.SelectedItem.Text);
+                ////    flag = true;
+                ////}
+                ////if (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "")
+                ////{
+                ////    dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
+                ////    flag = true;
+                ////}
+                ////if (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "")
+                ////{
+                ////    dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
+                ////    flag = true;
+                ////}
+
+                ////if (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "")
+                ////{
+                ////    dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
+                ////    flag = true;
+                ////}
+                ////if (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "")
+                ////{
+                ////    dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+                ////    flag = true;
+                ////}
+
+                if (ddldegree.SelectedIndex > 0 && (txtSchoolCollegeNameQualifying.Text != string.Empty || txtSchoolCollegeNameQualifying.Text != "") && (txtYearOfExamQualifying.Text != string.Empty || txtYearOfExamQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtPercentageQualifying.Text != string.Empty || txtPercentageQualifying.Text != "") && (txtQualExamRollNo.Text != string.Empty || txtQualExamRollNo.Text != "") && (txtBoardQualifying.Text != string.Empty || txtBoardQualifying.Text != ""))
+                {
+                    dr["QUALIFYNO"] = Convert.ToInt32(ddldegree.SelectedValue);
+                    dr["QUALIFYNAME"] = Convert.ToString(ddldegree.SelectedItem.Text);
+                    dr["SCHOOL_COLLEGE_NAME"] = txtSchoolCollegeNameQualifying.Text.Trim();
+                    dr["YEAR_OF_EXAMHSSC"] = txtYearOfExamQualifying.Text.Trim();
+                    dr["MARKS_OBTAINED"] = txtMarksObtainedQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtMarksObtainedQualifying.Text.Trim());
+                    dr["OUT_OF_MRKS"] = txtOutOfMarksQualifying.Text.Trim() == "" ? 0 : Convert.ToInt32(txtOutOfMarksQualifying.Text.Trim());
+                    dr["PER"] = txtPercentageQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentageQualifying.Text.Trim());
+                    dr["PERCENTILE"] = txtPercentileQualifying.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentileQualifying.Text.Trim());
+                    dr["ATTEMPT"] = txtAttemptQualifying.Text.Trim();
+                    dr["BOARD"] = txtBoardQualifying.Text.Trim();
+                    dr["GRADE"] = txtGradeQualifying.Text.Trim();
+                    dr["RES_TOPIC"] = txtResearchTopic.Text.Trim();
+                    dr["SUPERVISOR_NAME1"] = txtSupervisorName1.Text.Trim();
+                    dr["SUPERVISOR_NAME2"] = txtSupervisorName2.Text.Trim();
+                    dr["COLLEGE_ADDRESS"] = txtQualExmAddress.Text.Trim();
+                    dr["QUAL_MEDIUM"] = txtQualiMedium.Text.Trim();
+                    dr["QEXMROLLNO"] = txtQualExamRollNo.Text.Trim();
+
+                    dt.Rows.Add(dr);
+                    Session["qualifyTbl"] = dt;
+                    lvQualExm.DataSource = dt;
+                    lvQualExm.DataBind();
+                    ClearControls_QualDetails();
+                    objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
+
+                }
+                else
+                {
+                    //objCommon.DisplayMessage(this, " Please enter all below details \\n \\n School/College Name \\n Board Name \\n Qualifying Exam Name \\n Exam Roll No. \\n Year of Exam \\n Percentage", this.Page);
+                    objCommon.DisplayMessage(this, "Please Enter all Student Last Qualification Details", this.Page);
+                }
+
+
             }
 
-
+            btnAdd.Text = "Add";
         }
-
-        btnAdd.Text = "Add";
 
     }
     private DataTable GetDataTable()
@@ -1391,86 +1647,96 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
     }
     protected void btnAddEntranceExam_Click(object sender, EventArgs e)
     {
-        ////if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]) != null)//***************
-        if (Session["entranceTbl"] != null && ((DataTable)Session["entranceTbl"]).Rows.Count > 0 && ((DataTable)Session["entranceTbl"]) != null)
+        string errorString = ValidationAlertForDetailsByKeyword("entrance");      // Added By Shrikant W. on 27-12-2023
+
+        if (errorString != string.Empty)
         {
-            DataTable dt = (DataTable)Session["entranceTbl"];
-            //DataTable dt = new DataTable();
-            DataRow dr = dt.NewRow();
-            //DataRow [] dr1;
-            if (btnAddEntranceExam.Text != "Update")
-            {
-                string expression = string.Empty;
-                expression = "QUALIFYNAME='" + ddlExamNo.SelectedItem.Text + "'";
-                DataRow[] dr1 = dt.Select(expression);
-                //dr1 = dt.Rows.Find(expression);
-                if (dr1.Length > 0)
-                {
-                    lvEntranceExm.DataSource = dt;
-                    lvEntranceExm.DataBind();
-                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
-                    //ClearControls_QualDetails();
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
-                    objCommon.DisplayMessage(this, "Data for selected exam already exist!", this.Page);
-                    return;
-                }
-            }
-
-
-            if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty || txtQExamRollNo.Text != "") && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != ""))
-            {
-                dr["QUALIFYNO"] = Convert.ToInt32(ddlExamNo.SelectedValue);
-                dr["QUALIFYNAME"] = ddlExamNo.SelectedItem.Text;
-                dr["YEAR_OF_EXAM"] = txtYearOfExam.Text.Trim() == "" ? string.Empty : txtYearOfExam.Text.Trim();
-                dr["PER"] = txtPer.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPer.Text.Trim());
-                dr["CGPA"] = txtPercentile.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentile.Text.Trim());
-                dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
-                dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
-                dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
-                dt.Rows.Add(dr);
-                Session["entranceTbl"] = dt;
-                lvEntranceExm.DataSource = dt;
-                lvEntranceExm.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
-                ClearControls_Entrance();
-                // objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
-            }
-            else
-            {
-                objCommon.DisplayMessage(this, "Please enter all details.", this.Page);
-            }
+            ClientScript.RegisterStartupScript(this.GetType(), "alertmessage", "alertmessage('" + errorString + "');", true);
         }
         else
         {
-            DataTable dt = this.GetEntranceDataTable();
-            DataRow dr = dt.NewRow();
 
-            if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty) && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != ""))
+            ////if (Session["qualifyTbl"] != null && ((DataTable)Session["qualifyTbl"]) != null)//***************        
+            if (Session["entranceTbl"] != null && ((DataTable)Session["entranceTbl"]).Rows.Count > 0 && ((DataTable)Session["entranceTbl"]) != null)
             {
-                dr["QUALIFYNO"] = Convert.ToInt32(ddlExamNo.SelectedValue);
-                dr["QUALIFYNAME"] = ddlExamNo.SelectedItem.Text;
-                dr["YEAR_OF_EXAM"] = txtYearOfExam.Text.Trim() == "" ? string.Empty : txtYearOfExam.Text.Trim();
-                dr["PER"] = txtPer.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPer.Text.Trim());
-                dr["CGPA"] = txtPercentile.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentile.Text.Trim());
-                dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
-                dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
-                dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
+                DataTable dt = (DataTable)Session["entranceTbl"];
+                //DataTable dt = new DataTable();
+                DataRow dr = dt.NewRow();
+                //DataRow [] dr1;
+                if (btnAddEntranceExam.Text != "Update")
+                {
+                    string expression = string.Empty;
+                    expression = "QUALIFYNAME='" + ddlExamNo.SelectedItem.Text + "'";
+                    DataRow[] dr1 = dt.Select(expression);
+                    //dr1 = dt.Rows.Find(expression);
+                    if (dr1.Length > 0)
+                    {
+                        lvEntranceExm.DataSource = dt;
+                        lvEntranceExm.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
+                        //ClearControls_QualDetails();
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
+                        objCommon.DisplayMessage(this, "Data for selected exam already exist!", this.Page);
+                        return;
+                    }
+                }
 
-                dt.Rows.Add(dr);
-                Session["entranceTbl"] = dt;
-                lvEntranceExm.DataSource = dt;
-                lvEntranceExm.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
-                ClearControls_Entrance();
-                // objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
+
+                if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty || txtQExamRollNo.Text != "") && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != ""))
+                {
+                    dr["QUALIFYNO"] = Convert.ToInt32(ddlExamNo.SelectedValue);
+                    dr["QUALIFYNAME"] = ddlExamNo.SelectedItem.Text;
+                    dr["YEAR_OF_EXAM"] = txtYearOfExam.Text.Trim() == "" ? string.Empty : txtYearOfExam.Text.Trim();
+                    dr["PER"] = txtPer.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPer.Text.Trim());
+                    dr["CGPA"] = txtPercentile.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentile.Text.Trim());
+                    dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
+                    dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
+                    dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
+                    dt.Rows.Add(dr);
+                    Session["entranceTbl"] = dt;
+                    lvEntranceExm.DataSource = dt;
+                    lvEntranceExm.DataBind();
+                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
+                    ClearControls_Entrance();
+                    // objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this, "Please enter all details.", this.Page);
+                }
             }
             else
             {
-                objCommon.DisplayMessage(this, " Please enter all details.", this.Page);
+                DataTable dt = this.GetEntranceDataTable();
+                DataRow dr = dt.NewRow();
+
+                if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty) && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != ""))
+                {
+                    dr["QUALIFYNO"] = Convert.ToInt32(ddlExamNo.SelectedValue);
+                    dr["QUALIFYNAME"] = ddlExamNo.SelectedItem.Text;
+                    dr["YEAR_OF_EXAM"] = txtYearOfExam.Text.Trim() == "" ? string.Empty : txtYearOfExam.Text.Trim();
+                    dr["PER"] = txtPer.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPer.Text.Trim());
+                    dr["CGPA"] = txtPercentile.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtPercentile.Text.Trim());
+                    dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
+                    dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
+                    dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
+
+                    dt.Rows.Add(dr);
+                    Session["entranceTbl"] = dt;
+                    lvEntranceExm.DataSource = dt;
+                    lvEntranceExm.DataBind();
+                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvEntranceExm);//Set label 
+                    ClearControls_Entrance();
+                    // objCommon.DisplayMessage(this, "Data saved successfully!", this.Page);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this, " Please enter all details.", this.Page);
+                }
             }
+            btnAddEntranceExam.Text = "Add";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
         }
-        btnAddEntranceExam.Text = "Add";
-        Page.ClientScript.RegisterStartupScript(this.GetType(), "function()", "PCMTotal()", true);  //Added by sachin 28-10-2022
     }
     protected void btnEditEntranceDetail_Click(object sender, ImageClickEventArgs e)
     {

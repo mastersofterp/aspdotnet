@@ -185,10 +185,14 @@ public partial class PAYROLL_TRANSACTIONS_ExelPayHeadImport : System.Web.UI.Page
 
                     for (i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                      //  objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString() == "" || ds.Tables[0].Rows[i]["PFILENO"].ToString() == null ? "0" : ds.Tables[0].Rows[i]["PFILENO"].ToString();
-                        objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString();
-                        objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Amount"] == "0.0" || ds.Tables[0].Rows[i]["Amount"] == DBNull.Value ? Convert.ToDecimal("0") : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"]);
-                        cs = (CustomStatus)objEPIC.UpdatePayHeadsByExcel(objPayroll);
+                        objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString() == "" || ds.Tables[0].Rows[i]["PFILENO"].ToString() == null ? "0" : ds.Tables[0].Rows[i]["PFILENO"].ToString();
+                        // objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString();
+                        objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Amount"] == "0.0" || ds.Tables[0].Rows[i]["Amount"] == DBNull.Value || ds.Tables[0].Rows[i]["Amount"] == "" ? Convert.ToDecimal("0") : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"]);
+                        //objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Amount"] == "" || ds.Tables[0].Rows[i]["Amount"] == null ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"]);
+                        if (objPayroll.PFILENO != "0" && objPayroll.TOTAMT != 0)
+                        {
+                            cs = (CustomStatus)objEPIC.UpdatePayHeadsByExcel(objPayroll);
+                        }
                     }
                     if (cs.Equals(CustomStatus.RecordUpdated))
                     {

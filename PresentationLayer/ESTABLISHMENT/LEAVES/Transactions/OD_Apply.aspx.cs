@@ -51,6 +51,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_OD_Apply : System.Web.UI.
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
+                int useridno = Convert.ToInt32(Session["idno"]);
+                ViewState["COLLEGE_NO"] = objCommon.LookUp("PAYROLL_EMPMAS", "COLLEGE_NO", "IDNO=" + useridno + " ");
                 pnlAdd.Visible = false;
                 //pnllist.Visible = true;
                 //pnlODStatus.Visible = false;
@@ -846,7 +848,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_OD_Apply : System.Web.UI.
             {
                 int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
 
-                ds = objApp.GetNoofdaysOD(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
+                ds = objApp.GetNoofdaysOD(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno, Convert.ToInt32(ViewState["COLLEGE_NO"]));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     txtNodays.Text = Convert.ToString(ds.Tables[0].Rows[0][0]);
@@ -951,7 +953,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_OD_Apply : System.Web.UI.
             {
                 int stno = Convert.ToInt32(objCommon.LookUp("PAYROLL_EMPMAS", "STNO", "IDNO=" + Convert.ToInt32(Session["idno"])));
 
-                ds = objApp.GetNoofdaysOD(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno);
+                ds = objApp.GetNoofdaysOD(Convert.ToDateTime(txtFromdt.Text), Convert.ToDateTime(txtTodt.Text), stno, Convert.ToInt32(ViewState["COLLEGE_NO"]));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     txtNodays.Text = Convert.ToString(ds.Tables[0].Rows[0][0]);

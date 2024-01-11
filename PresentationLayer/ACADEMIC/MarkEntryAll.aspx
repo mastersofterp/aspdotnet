@@ -147,8 +147,10 @@
                                                     </td>
                                                        <td>
                                                                         <%-- <center>--%>
-                                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
-                                                                        <%--</center>--%>
+                                                                        <%--<asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>--%>
+                                                                        <asp:LinkButton ID="LinkButton1" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("SECTIONNO")+","+Eval("semesterno")+","+Eval("COURSENAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+                                                                      
+                                                             <%--</center>--%>
                                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
@@ -162,8 +164,11 @@
                                                     </td>
                                                        <td>
                                                                         <%-- <center>--%>
-                                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
-                                                                        <%--</center>--%>
+
+                                                                        <%--<asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>--%>
+                                                                        <asp:LinkButton ID="lbtnPrint" runat="server" CssClass="btn btn-default" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("SECTIONNO")+","+Eval("semesterno")+","+Eval("COURSENAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+                                                           
+                                                                                                                                  <%--</center>--%>
                                                                     </td>
                                                 </tr>
                                             </AlternatingItemTemplate>
@@ -382,7 +387,7 @@
                                                                 <asp:TemplateField HeaderText="TH" Visible="false" ItemStyle-Width="10%" HeaderStyle-HorizontalAlign="Center">
                                                         <ItemTemplate>
 
-                                                            <asp:TextBox ID="txtESMarks" runat="server" Text='<%# Bind("EXTERMARK") %>' Width="80px"
+                                                            <asp:TextBox ID="txtESMarks" runat="server" Text='<%# Bind("EXTERMARK") %>' Width="80px" 
                                                                             MaxLength="5" Font-Bold="true"  Style="text-align: center;box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);"  />
                                                             <%--onkeyup="return CheckMark(this);"--%>
                                                                       <%--  <ajaxToolKit:FilteredTextBoxExtender ID="ftetxtESMarks" runat="server" FilterType="Custom"

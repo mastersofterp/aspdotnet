@@ -196,7 +196,7 @@
                                                             </td>
                                                             <td style="text-align: center">
 
-                                                                <asp:LinkButton ID="lbtnPrint" runat="server" OnClick="lbtnPrint_Click" CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO")+","+Eval("EXAMNO")+","+Eval("EXAMNAME")+","+Eval("FLDNAME") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
+                                                                <asp:LinkButton ID="lbtnPrint" runat="server" OnClick="lbtnPrint_Click" ToolTip='<%# Eval("SUBEXAMNO") %>' CommandArgument='<%# Eval("COURSENO")+","+Eval("COURSENAME")+","+Eval("semesterno")+","+Eval("SECTIONNO")+","+Eval("EXAMNO")+","+Eval("EXAMNAME")+","+Eval("FLDNAME")+","+Eval("FLDNAME2") %>'><i class="fa fa-print" aria-hidden="true"></i></asp:LinkButton>
 
                                                             </td>
                                                         </tr>

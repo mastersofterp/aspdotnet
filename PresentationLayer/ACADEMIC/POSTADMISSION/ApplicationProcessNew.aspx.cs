@@ -1298,11 +1298,7 @@ public partial class ACADEMIC_POSTADMISSION_ApplicationProcessNew : System.Web.U
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+           
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;

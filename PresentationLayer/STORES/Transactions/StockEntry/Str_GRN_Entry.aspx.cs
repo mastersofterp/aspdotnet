@@ -286,6 +286,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
             datarow["ITEM_REMARK"] = txtItemRemark.Text;
             datarow["PORDNO"] = 0;
             datarow["IS_TAX"] = 0;
+            datarow["IsTaxInclusive"] = 0;                 //30/12/2023
             datarow["TECH_SPEC"] = "";
             datarow["QUALITY_QTY_SPEC"] = "";
 
@@ -351,6 +352,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         dt.Columns.Add(new DataColumn("ITEM_REMARK", typeof(string)));
         dt.Columns.Add(new DataColumn("PORDNO", typeof(int)));
         dt.Columns.Add(new DataColumn("IS_TAX", typeof(int)));
+        dt.Columns.Add(new DataColumn("IsTaxInclusive", typeof(int)));          //30/12/2023
         dt.Columns.Add(new DataColumn("TECH_SPEC", typeof(string)));
         dt.Columns.Add(new DataColumn("QUALITY_QTY_SPEC", typeof(string)));
         return dt;
@@ -401,9 +403,11 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         
             HiddenField hdnPordno = i.FindControl("hdnPordno") as HiddenField;
             HiddenField hdnIsTax = i.FindControl("hdnIsTax") as HiddenField;
+            HiddenField hdnIsTaxInclusive = i.FindControl("hdnIsTaxInclusive") as HiddenField;          //30/12/2023
             HiddenField hdnTechSpec = i.FindControl("hdnTechSpec") as HiddenField;
             HiddenField hdnQualityQtySpec = i.FindControl("hdnQualityQtySpec") as HiddenField;
             HiddenField hdnOthItemRemark = i.FindControl("hdnOthItemRemark") as HiddenField;
+            
 
             //Adde by gopal anthati on 18/05/2022 to maintain the disable field values
 
@@ -455,8 +459,10 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
                 datarow["ITEM_REMARK"] = hdnOthItemRemark.Value;
                 datarow["PORDNO"] = hdnPordno.Value;
                 datarow["IS_TAX"] = hdnIsTax.Value;
+                datarow["IsTaxInclusive"] = hdnIsTaxInclusive.Value;                 // //30/12/2023
                 datarow["TECH_SPEC"] = hdnTechSpec.Value;
                 datarow["QUALITY_QTY_SPEC"] = hdnOthItemRemark.Value;
+                
 
                 dtItemTable.Rows.Add(datarow);
 
@@ -557,8 +563,12 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         lblTaxAmt.Text = hdnTaxAmt.Value;
         lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnTaxableAmt.Value) + Convert.ToDecimal(hdnTaxAmt.Value));
         lblDiscAmt.Text = hdnDiscAmt.Value;
-
-       
+        if (Convert.ToString(ViewState["Action"]) == "edit")   //30/12/2023
+        {
+            string basiamt = hdnBasicAmt.Value;
+           // lblTaxableAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value));
+        }
+    
         //DataTable dtTaxdup = null;
         ViewState["ItemNo"] = null;
         ImageButton btn = sender as ImageButton;
@@ -577,11 +587,13 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
                 int CollegeState = Convert.ToInt32(objCommon.LookUp("STORE_REFERENCE", "STATENO", ""));
                 if (VendorState == CollegeState)
                 {
-                    ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
+                    //ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);     //30/12/2023
+                    ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
                 }
                 else
                 {
-                    ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
+                    // ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);  //30/12/2023
+                    ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
                 }
                 lvTax.DataSource = ds.Tables[0];
                 lvTax.DataBind();
@@ -638,11 +650,13 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         int CollegeState = Convert.ToInt32(objCommon.LookUp("STORE_REFERENCE", "STATENO", ""));
         if (VendorState == CollegeState)
         {
-            ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
+            // ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);    //30/12/2023
+            ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 1);
         }
         else
         {
-            ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
+            // ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnTaxableAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);   //30/12/2023
+            ds = objGRNCon.GetTaxes(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value), Convert.ToDecimal(hdnBasicAmt.Value), Convert.ToInt32(ViewState["ItemNo"]), 0);
         }
         if (ds.Tables[0].Rows.Count > 0)
         {
@@ -678,10 +692,29 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         TextBox lblTaxAmt = lvItem.Items[Convert.ToInt32(hdnIndex.Value)].FindControl("lblTaxAmount") as TextBox;
         TextBox lblBillAmt = lvItem.Items[Convert.ToInt32(hdnIndex.Value)].FindControl("lblBillAmt") as TextBox;
         TextBox lblDiscAmt = lvItem.Items[Convert.ToInt32(hdnIndex.Value)].FindControl("lblDiscAmt") as TextBox;
+        HiddenField hdnItemTaxableAmt = lvItem.Items[Convert.ToInt32(hdnIndex.Value)].FindControl("hdnItemTaxableAmt") as HiddenField;    //30/12/2023
+        HiddenField hdnIsTaxInclusive = lvItem.Items[Convert.ToInt32(hdnIndex.Value)].FindControl("hdnIsTaxInclusive") as HiddenField;
         lblTaxableAmt.Text = hdnTaxableAmt.Value;
         lblTaxAmt.Text = txtTotTaxAmt.Text;
-        lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+      //  lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
         lblDiscAmt.Text = hdnDiscAmt.Value;
+
+        lblTaxableAmt.Text = hdnItemTaxableAmt.Value;        //30/12/2023
+        hdnIsTaxInclusive.Value = hdnIsTaxInclusive.Value;     //30/12/2023
+        if (hdnIsTaxInclusive.Value == "0")
+        {
+            lblTaxableAmt.Text =Convert.ToString(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value));
+
+           // lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+            lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));
+
+        }
+        else
+        {
+            lblTaxableAmt.Text = Convert.ToString(Convert.ToDecimal(hdnBasicAmt.Value) - Convert.ToDecimal(hdnDiscAmt.Value) - Convert.ToDecimal(txtTotTaxAmt.Text)); 
+            lblBillAmt.Text = Convert.ToString(Convert.ToDecimal(hdnItemTaxableAmt.Value) + Convert.ToDecimal(txtTotTaxAmt.Text));  //30/12/2023
+           
+        }
 
 
         if (ViewState["TaxTable"] != null && ((DataTable)ViewState["TaxTable"]) != null)
@@ -894,6 +927,7 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
         ViewState["Action"] = "Add";
         ViewState["TaxTable"] = null;
         ViewState["SRNO_TAX"] = null;
+        chkTaxInclusive.Checked = false;
 
     }
     protected void btnBack_Click(object sender, EventArgs e)
@@ -1024,6 +1058,14 @@ public partial class STORES_Transactions_StockEntry_Str_GRN_Entry : System.Web.U
             Session["dtItem"] = dtItemTable;
             CalItemCount();
             AddPONumber();
+            if (Convert.ToString(ds.Tables[1].Rows[0]["IsTaxInclusive"]) == "1")   //30/12/2023
+            {
+                chkTaxInclusive.Checked = true;
+            }
+            else
+            {
+                chkTaxInclusive.Checked = false;
+            }
         }
         if (ds.Tables[2].Rows.Count > 0)
         {

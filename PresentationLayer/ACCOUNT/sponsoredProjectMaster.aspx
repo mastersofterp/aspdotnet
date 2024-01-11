@@ -399,7 +399,7 @@
                                                                 <sup>*</sup>
                                                                 <label>Project Title</label>
                                                             </div>
-                                                            <asp:TextBox ID="txtProjName" runat="server" ValidationGroup="submit"></asp:TextBox>
+                                                            <asp:TextBox ID="txtProjName" runat="server" ValidationGroup="submit" MaxLength="1000"></asp:TextBox>
                                                             <asp:RequiredFieldValidator ID="rfvtxtProjName" runat="server" ValidationGroup="ProjHead" Display="None" ErrorMessage="Please Enter Project Title" ControlToValidate="txtProjName"></asp:RequiredFieldValidator>
 
                                                         </div>

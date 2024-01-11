@@ -476,6 +476,37 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
+
+        // ADDED by SHUBHAM on 22/12/23 for RCPIPER QR CODE ON REPORT
+        public int AddUpdateQrCodeHallTicket(int idno, byte[] QR_IMAGE, int sem, int schemeno, int sessionno)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                SqlParameter[] objParams = null;
+
+                objParams = new SqlParameter[6];
+                objParams[0] = new SqlParameter("@P_IDNO", idno);
+                objParams[1] = new SqlParameter("@P_QR_IMAGE", QR_IMAGE);
+                objParams[2] = new SqlParameter("@P_SEMESTERNO", sem);
+                objParams[3] = new SqlParameter("@P_SCHEMENO", schemeno);
+                objParams[4] = new SqlParameter("@P_SESSIONNO", sessionno);
+                objParams[5] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[5].Direction = ParameterDirection.Output;
+
+                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_INS_UPD_STUDENT_QRCODE_HALLTICKET", objParams, true);
+                retStatus = Convert.ToInt32(ret);
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.QrCodeController.AddUpdateQrCode -> " + ex.ToString());
+            }
+            return retStatus;
+        }
     }
 }
 

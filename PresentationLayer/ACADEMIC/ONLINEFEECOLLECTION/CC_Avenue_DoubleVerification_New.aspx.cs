@@ -267,7 +267,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_CC_Avenue_DoubleVerification_N
             {
 
               
-                output = objFees.InsertOnlinePayment_DCR(idno, ViewState["RECIEPTCODE"].ToString(), Label_MerchTxnRef.Text, Label_OrderInfo.Text, "O", string.Empty, Label_Amount.Text, "Success", lblEnrollNo.Text.ToString(), "");           
+                output = objFees.InsertOnlinePayment_DCR(idno, ViewState["RECIEPTCODE"].ToString(),Label_OrderInfo.Text,Label_MerchTxnRef.Text, "O", string.Empty, Label_Amount.Text, "Success", lblEnrollNo.Text.ToString(), "");           
 
 
 

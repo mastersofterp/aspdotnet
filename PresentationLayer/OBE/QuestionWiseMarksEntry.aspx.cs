@@ -354,24 +354,31 @@ public partial class OBE_QuestionWiseMarksEntry : System.Web.UI.Page
             
             if (Examname == "E" && USER_TYPE==3)
             {
-                DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["SectionId"]), Sessionno);//added on 26062023
-                if (Convert.ToInt32(checklock.Tables[0].Rows[0]["LOCK"]) == 0)
+                if (Org == 5)
                 {
 
-                    objCommon.DisplayMessage(this.Page, "FIRST COMPLETE YOUE INTERNAL COMPONENT MARKS ENTRY..!!!", this.Page);
-                    pnlSubjectDetail.Visible = true;
-                    divSession.Visible = true;
-                    pnlStudentMarksEntry.Visible = false;
-                    divScheme.Visible = true;
-                    divsubmarks.Visible = false;
-                    btnOperation.Visible = false;
-                    ltTable.Visible = false;
-                    ltrStatusCode.Visible = false;
-                    divStatusCode.Visible = false;
-                    divExcelExport.Visible = false;
-                    Label1.Visible = false;
-                    lblTotalCount.Visible = false;
-                    return;
+                }
+                else
+                {
+                    DataSet checklock = obeMarkEnrty.GETLOCKCOUNT(SCHEMENO, COURSENO, Convert.ToInt32(Session["userno"]), Convert.ToInt32(ViewState["SectionId"]), Sessionno);//added on 26062023
+                    if (Convert.ToInt32(checklock.Tables[0].Rows[0]["LOCK"]) == 0)
+                    {
+
+                        objCommon.DisplayMessage(this.Page, "FIRST COMPLETE YOUE INTERNAL COMPONENT MARKS ENTRY..!!!", this.Page);
+                        pnlSubjectDetail.Visible = true;
+                        divSession.Visible = true;
+                        pnlStudentMarksEntry.Visible = false;
+                        divScheme.Visible = true;
+                        divsubmarks.Visible = false;
+                        btnOperation.Visible = false;
+                        ltTable.Visible = false;
+                        ltrStatusCode.Visible = false;
+                        divStatusCode.Visible = false;
+                        divExcelExport.Visible = false;
+                        Label1.Visible = false;
+                        lblTotalCount.Visible = false;
+                        return;
+                    }
                 }
             }
             //*******************END****************************

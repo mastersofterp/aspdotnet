@@ -214,10 +214,10 @@
                                                                 <h5>Permanent Address</h5>
                                                             </div>
                                                         </div>
-
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <%--Added IDs to the div(s) and sup(s) by Shrikant W. on 25-12-2023--%>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divAddDetails" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supAddDetails" runat="server">* </sup>
                                                                 <label>Address Details </label>
                                                             </div>
                                                             <asp:ImageButton ID="imgbToCopyLocalAddress" Visible="false" runat="server" ImageUrl="~/images/copy.png"
@@ -225,9 +225,9 @@
                                                             <asp:TextBox ID="txtPermAddress" CssClass="form-control" runat="server" TextMode="MultiLine"
                                                                 Rows="1" MaxLength="200" ToolTip="Please Enter Permanent Address"
                                                                 TabIndex="12" />
-                                                            <asp:RequiredFieldValidator ID="rfvPermAddress" runat="server" ControlToValidate="txtPermAddress"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvPermAddress" runat="server" ControlToValidate="txtPermAddress"
                                                                 Display="None" ErrorMessage="Please Enter Permanent Address" SetFocusOnError="True"
-                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
 
                                                             <asp:TextBox ID="txtPdistrict" CssClass="form-control" runat="server" Visible="False"></asp:TextBox>
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server"
@@ -235,49 +235,50 @@
                                                         </div>
 
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPCountry" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supPCountry" runat="server">* </sup>
                                                                 <label>Country </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlPermCountry" CssClass="form-control" runat="server" AppendDataBoundItems="True" TabIndex="15"
                                                                 ToolTip="Please Select Country" AutoPostBack="True" OnSelectedIndexChanged="ddlPermCountry_SelectedIndexChanged" data-select2-enable="true" />
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlPermCountry"
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlPermCountry"
                                                                 Display="None" ErrorMessage="Please Select Permanent Country" SetFocusOnError="True"
-                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
 
 
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPState" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supPState" runat="server">* </sup>
                                                                 <label>State </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlPermState" CssClass="form-control" runat="server" AppendDataBoundItems="True" TabIndex="15"
                                                                 ToolTip="Please Select State" AutoPostBack="True" OnSelectedIndexChanged="ddlPermState_SelectedIndexChanged" data-select2-enable="true" />
-                                                            <asp:RequiredFieldValidator ID="rfvPermState" runat="server" ControlToValidate="ddlPermState"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvPermState" runat="server" ControlToValidate="ddlPermState"
                                                                 Display="None" ErrorMessage="Please Select Permanent State" SetFocusOnError="True"
-                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPDistrict" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supPDistrict" runat="server">* </sup>
                                                                 <label>District</label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlPdistrict" CssClass="form-control" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
                                                                 ToolTip="Please select district" TabIndex="14" data-select2-enable="true">
                                                             </asp:DropDownList>
                                                             <asp:HiddenField ID="hdn_Pdistrict" runat="server" />
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlPdistrict"
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlPdistrict"
                                                                 Display="None" ErrorMessage="Please Select Permanent District" SetFocusOnError="True"
-                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPTaluka" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supPTaluka" runat="server">* </sup>
                                                                 <label>Taluka </label>
                                                             </div>
                                                             <%-- <asp:DropDownList ID="ddlptaluka" CssClass="form-control" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
@@ -295,22 +296,22 @@
                                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPCity" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supPCity" runat="server">* </sup>
                                                                 <label>City/Village </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlPermCity" CssClass="form-control" runat="server" TabIndex="12" AppendDataBoundItems="True"
                                                                 ToolTip="Please Select City" data-select2-enable="true">
                                                             </asp:DropDownList>
-                                                            <asp:RequiredFieldValidator ID="rfvPermCity" runat="server" ControlToValidate="ddlPermCity"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvPermCity" runat="server" ControlToValidate="ddlPermCity"
                                                                 Display="None" ErrorMessage="Please select Permanent City/Village" SetFocusOnError="True"
-                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPPincode" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supPPincode" runat="server">* </sup>
                                                                 <label>Pin Code </label>
                                                             </div>
                                                             <asp:TextBox ID="txtPermPIN" CssClass="form-control" runat="server" TabIndex="16" ToolTip="Please Enter PIN"
@@ -318,13 +319,14 @@
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="ftrPermPIN" runat="server" FilterType="Numbers"
                                                                 TargetControlID="txtPermPIN">
                                                             </ajaxToolKit:FilteredTextBoxExtender>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtPermPIN"
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtPermPIN"
                                                                 Display="None" ErrorMessage="Please Enter Permanent Pin Code" SetFocusOnError="True"
-                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divPLandLineNo" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supPLandLineNo" runat="server">* </sup>
                                                                 <label>Landline No.</label>
                                                             </div>
                                                             <asp:TextBox ID="txtLocalNo" CssClass="form-control" runat="server" ToolTip="Please Enter Number"
@@ -372,8 +374,9 @@
                                                         ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-3 col-12">
+                                                        <div class="form-group col-lg-3 col-md-3 col-12" id="divPAreaPostOffice" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supAreaPostOffice" runat="server">* </sup>
                                                                 <label>Area Post Office </label>
                                                             </div>
                                                             <asp:TextBox ID="txtpermpostOff" CssClass="form-control" runat="server" MaxLength="150" TabIndex="19" ToolTip="Please Enter Post Office" onkeypress="return alphaOnly(event);" placeholder="Enter Area Post Office" />
@@ -385,8 +388,9 @@
                                                         ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divAreaPoliceStation" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supAreaPoliceStation" runat="server">* </sup>
                                                                 <label>Area Police Station </label>
                                                             </div>
                                                             <asp:TextBox ID="txtPermPoliceStation" CssClass="form-control" runat="server" MaxLength="150" TabIndex="20" onkeypress="return alphaOnly(event);" placeholder="Enter Area Police Station"
@@ -419,8 +423,9 @@
                                                             <asp:CheckBox ID="chkcopypermanentadress" onclick="copyPermanentlAddr(this)" runat="server" TabIndex="20" Text="&nbsp;&nbsp;Same as Permanent Address" />
                                                         </div>
 
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divLAddDetails" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLAddDetails" runat="server">* </sup>
                                                                 <label>Address Details </label>
                                                             </div>
                                                             <asp:TextBox ID="txtLocalAddress" CssClass="form-control" runat="server" TextMode="MultiLine"
@@ -435,9 +440,9 @@
                                                         </div>
 
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLCountry" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup></sup>
+                                                                <sup id="supLCountry" runat="server">* </sup>
                                                                 <label>Country </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlLocalCountry" CssClass="form-control" runat="server" AppendDataBoundItems="True" TabIndex="15"
@@ -449,8 +454,9 @@
 
 
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLState" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLState" runat="server">* </sup>
                                                                 <label>State </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlLocalState" CssClass="form-control" runat="server" AppendDataBoundItems="True" data-select2-enable="true"
@@ -460,8 +466,9 @@
                                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLDistrict" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLDistrict" runat="server">* </sup>
                                                                 <label>District </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlLdistrict" CssClass="form-control" runat="server" AppendDataBoundItems="True" AutoPostBack="True"
@@ -476,8 +483,9 @@
                                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLTaluka" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLTaluka" runat="server">* </sup>
                                                                 <label>Taluka </label>
                                                             </div>
                                                             <%-- <asp:DropDownList ID="ddlLtaluka" CssClass="form-control" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
@@ -494,8 +502,9 @@
                                                             ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLCity" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLCity" runat="server">* </sup>
                                                                 <label>City/Village </label>
                                                             </div>
                                                             <asp:DropDownList ID="ddlLocalCity" CssClass="form-control" runat="server" TabIndex="22" AppendDataBoundItems="true"
@@ -506,8 +515,9 @@
                                                             TabIndex="23" ValidationGroup="Academic" InitialValue="0"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLPin" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLPin" runat="server">* </sup>
                                                                 <label>ZIP/PIN </label>
                                                             </div>
                                                             <asp:TextBox ID="txtLocalPIN" CssClass="form-control" runat="server" TabIndex="26" MaxLength="6" placeholder="Enter ZIP/PIN" ToolTip="Please Enter PIN" />
@@ -519,8 +529,9 @@
                                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divLLandLineNo" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLLandLineNo" runat="server">* </sup>
                                                                 <label>Landline No.</label>
                                                             </div>
 
@@ -561,8 +572,9 @@
                                                         ValidationGroup="Academic" Visible="False"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-3 col-12">
+                                                        <div class="form-group col-lg-3 col-md-3 col-12" id="divLAreaPostOffice" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLAreaPostOffice" runat="server">* </sup>
                                                                 <label>Area Post Office </label>
                                                             </div>
                                                             <asp:TextBox ID="txtpostoff" CssClass="form-control" runat="server" MaxLength="150" TabIndex="28" ToolTip="Please Enter Post Office" onkeypress="return alphaOnly(event);" placeholder="Enter Area Post Office" />
@@ -574,8 +586,9 @@
                                                         ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divLAreaPoliceStation" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supLAreaPoliceStation" runat="server">* </sup>
                                                                 <label>Area Police Station </label>
                                                             </div>
                                                             <asp:TextBox ID="txtpolicestation" CssClass="form-control" runat="server" MaxLength="150" TabIndex="29" ToolTip="Please Enter Police Station" onkeypress="return alphaOnly(event);" placeholder="Enter Area Police Station" />
@@ -623,8 +636,9 @@
                                                             <asp:CheckBox ID="chkcopyperaddress" onclick="copyPermAddr(this)" TabIndex="30" runat="server" Text="&nbsp;&nbsp;Same as Permanent Address" />
                                                         </div>
 
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divGAddDetails" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supGAddDetails" runat="server">* </sup>
                                                                 <label>Address Details(Copy Permanent) </label>
                                                             </div>
                                                             <asp:ImageButton ID="imgCopyPermAddress" Visible="false" runat="server" ImageUrl="~/images/copy.png"
@@ -636,8 +650,9 @@
                                                         ValidationGroup="Academic" Visible="False"></asp:RequiredFieldValidator>--%>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGuardianName" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supGuardianName" runat="server">* </sup>
                                                                 <label>Guardian Name </label>
                                                             </div>
                                                             <asp:TextBox ID="txtGuardianName" CssClass="form-control" runat="server" ToolTip="Please Enter Guardian Name" onkeypress="return alphaOnly(event);" placeholder="Enter Guardian Name" TabIndex="32"></asp:TextBox>
@@ -646,8 +661,9 @@
                                                                 InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGPhoneNo" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supGPhoneNo" runat="server">* </sup>
                                                                 <label>Guardian Ph. No.</label>
                                                             </div>
 
@@ -670,8 +686,9 @@
                                                             </ajaxToolKit:FilteredTextBoxExtender>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGRelation" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supGRelation" runat="server">* </sup>
                                                                 <label>Guardian's Relation </label>
                                                             </div>
                                                             <asp:TextBox ID="txtRelationWithGuardian" CssClass="form-control" runat="server" ToolTip="Please Enter Relation" onkeypress="return alphaOnly(event);" placeholder="Enter Guardian's Relation" TabIndex="34"></asp:TextBox>
@@ -680,8 +697,9 @@
                                                                 InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divOccupation" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supOccupation" runat="server">* </sup>
                                                                 <label>Occupation</label>
                                                             </div>
                                                             <asp:TextBox ID="txtGoccupationName" CssClass="form-control" runat="server" ToolTip="Please Enter GOccupation"
@@ -702,8 +720,9 @@
                                                                 ErrorMessage="Please Enter Valid EmailID" ValidationGroup="Academic"></asp:RegularExpressionValidator>
                                                         </div>
 
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divGQual" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supGQual" runat="server">* </sup>
                                                                 <label>Guardian Qualification</label>
                                                             </div>
                                                             <asp:TextBox ID="txtGDesignation" CssClass="form-control" runat="server" ToolTip="Please Enter Guardian Qualification"
@@ -1000,5 +1019,14 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        function alertmessage(commaSeperatedString) {
+            var parts = commaSeperatedString.split(',');
+            var errorMessage = parts.join('\n');
+            alert(errorMessage);
+        }
+    </script>
+
     <div id="divMsg" runat="server"></div>
 </asp:Content>

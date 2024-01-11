@@ -134,6 +134,13 @@
                                                             <asp:Label ID="lblSingCollege" runat="server" Font-Bold="true"></asp:Label>
                                                         </a>
                                                     </li>
+                                                    <li class="list-group-item"><b>
+                                                        <asp:Label ID="lblSession" runat="server" Font-Bold="true" Text="Session"></asp:Label>
+                                                        :
+                                                        <a class="sub-label">
+                                                            <asp:Label ID="lblSessionName" runat="server" Font-Bold="true"></asp:Label>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

@@ -775,6 +775,64 @@
 
                                     </div>
 
+                                    <%--//------------------------------------------------------//--%>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Item Expiry Date </label>
+                                        </div>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon" id="div4">
+                                                <i class="fa fa-calendar text-blue"></i>
+                                            </div>
+                                             
+                                            <asp:TextBox ID="txtItemExpiryDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender3" runat="server" Enabled="true" EnableViewState="true"
+                                                Format="dd/MM/yyyy" PopupButtonID="div4" PopupPosition="BottomLeft" TargetControlID="txtItemExpiryDate">
+                                            </ajaxToolKit:CalendarExtender>
+
+                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender3" runat="server" AcceptNegative="Left"
+                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemExpiryDate">
+                                            </ajaxToolKit:MaskedEditExtender>
+
+                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="MaskedEditExtender3" ControlToValidate="txtItemExpiryDate"
+                                                 ErrorMessage="Please Enter Valid Item Expiry Date In [dd/MM/yyyy] format" 
+                                                InvalidValueMessage="Item Expiry Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
+                                                Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator> <%--EmptyValueMessage="Please Select Item Expiry Date" IsValidEmpty="true"--%>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup></sup>
+                                            <label>Item Warranty Date </label>
+                                        </div>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon" id="div5">
+                                                <i class="fa fa-calendar text-blue"></i>
+                                            </div>
+                                             
+                                            <asp:TextBox ID="txtItemWarrentyDate" runat="server" CssClass="form-control" ToolTip="Select Date"></asp:TextBox>
+
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender4" runat="server" Enabled="true" EnableViewState="true"
+                                                Format="dd/MM/yyyy" PopupButtonID="div5" PopupPosition="BottomLeft" TargetControlID="txtItemWarrentyDate">
+                                            </ajaxToolKit:CalendarExtender>
+
+                                            <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender4" runat="server" AcceptNegative="Left"
+                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                MessageValidatorTip="true" OnInvalidCssClass="errordate" TargetControlID="txtItemWarrentyDate">
+                                            </ajaxToolKit:MaskedEditExtender>
+
+                                            <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" ControlExtender="MaskedEditExtender4" ControlToValidate="txtItemExpiryDate"
+                                                IsValidEmpty="true" ErrorMessage="Please Enter Valid Item Warranty Date In [dd/MM/yyyy] format" 
+                                                InvalidValueMessage="Item Warranty Date Is Invalid  [Enter In dd/MM/yyyy Format]" Display="None" SetFocusOnError="true"
+                                                Text="*" ValidationGroup="Store"></ajaxToolKit:MaskedEditValidator> <%--EmptyValueMessage="Please Select Item Expiry Date"--%>
+                                        </div>
+                                    </div>
+
+                                    <%--//--------------------------------------------------------//--%>
+
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup></sup>
@@ -785,6 +843,8 @@
                                         <asp:HiddenField ID="hdnrowcount" runat="server" />
 
                                     </div>
+
+                                    
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divPONum" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <sup></sup>
@@ -999,7 +1059,8 @@
                                         <td>
                                             <%-- <asp:Button ID="btnAddTax" runat="server" CommandArgument='<%#Eval("ITEM_NO")%>' CssClass="btn btn-primary" Text="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />--%>
                                             <asp:ImageButton runat="server" ID="btnAddTax" ImageUrl="~/IMAGES/Addblue.PNG" Width="22PX" Height="22PX" CommandArgument='<%#Eval("ITEM_NO")%>' AlternateText="Add" OnClientClick="return GetTaxableAmt(this);" OnClick="btnAddTax_Click" />
-                                        </td>
+                                       <asp:HiddenField ID="hdnIsTaxInclusive" runat="server" Value='<%#Eval("IsTaxInclusive") %>' />   <%--30/12/2023--%>
+                                             </td>
                                         <td>
                                             <asp:TextBox ID="lblTaxAmount" runat="server" Enabled="false" Text='<%# Eval("TAX_AMT")%>' CssClass="form-control"></asp:TextBox>
                                             <asp:HiddenField ID="hdnIsTax" runat="server" Value='<%# Eval("IS_TAX")%>' />
@@ -1223,6 +1284,20 @@
                                                 </div>
 
                                             </div>
+
+
+                                                 <%-- //=================================================================30/12/2023--%>
+                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <sup></sup>
+                                                    <label> </label>
+                                                </div>
+                                                <asp:CheckBox ID="chkTaxInclusive" runat="server" checked="false"/>
+                                                        <label>Is Tax Inclusive</label>
+                                            </div>
+                                            <%-- //================================================================30/12/2023--%>
+
+
                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                 <div class="label-dynamic">
                                                     <sup></sup>
@@ -1582,14 +1657,61 @@
         function GetTotTaxAmt() {
             debugger;
 
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+           // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+           // var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+           // document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
 
-            var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
 
-            var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value
+            //===========================30/12/2023==========================//
+            if (document.getElementById('<%=chkTaxInclusive.ClientID%>').checked == false) {
 
-            document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+                var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+                var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(TaxableAmt) + Number(TotTaxAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 0;   //30/12/2023
+
+
+
+                //alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value);
+            }
+            else {
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxAmount').value = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTax').value = 1;
+               // var TaxableAmt = document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblTaxableAmt').value;
+                var TotTaxAmt = document.getElementById('<%=txtTotTaxAmt.ClientID%>').value;
+                var TaxableAmt = document.getElementById('<%=hdnBasicAmt.ClientID%>').value - document.getElementById('<%=hdnDiscAmt.ClientID%>').value
+
+                var deductAmt = Number(TaxableAmt) - Number(TotTaxAmt);
+              // alert('TaxableAmt=' + TaxableAmt);
+              // alert('TotTaxAmt=' + TotTaxAmt);
+              // alert('deductAmt=' + deductAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value = Number(deductAmt);
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value = Number(deductAmt) + Number(TotTaxAmt); //30/12/2023
+                document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnIsTaxInclusive').value = 1;   //30/12/2023
+              //  alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblBillAmt').value);
+
+
+
+                //alert(document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_hdnItemTaxableAmt').value);
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblInvoiceQty').disabled = false;
             //document.getElementById('ctl00_ContentPlaceHolder1_lvItem_ctrl' + document.getElementById('<%=hdnIndex.ClientID%>').value + '_lblRate').disabled = false;
@@ -1657,6 +1779,7 @@
         //(29/03/2022)
         function Validate(crl) {
 
+
             if (document.getElementById('<%= txtDMDate.ClientID %>').value == '') {
                 alert("Please Enter DM Date.");
                 return false;
@@ -1674,6 +1797,33 @@
                 alert("Please Select Vendor Name.");
                 return false;
             }
+
+            if ((document.getElementById('<%= txtItemExpiryDate.ClientID %>').value) == "99/99/9999")
+            {
+                alert("Item Expiry Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
+                return false;
+            }
+            if ((document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value) == "99/99/9999") {
+                alert("Item Warrenty Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
+                return false;
+            }
+            if ((document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value) > (document.getElementById('<%= txtItemExpiryDate.ClientID %>').value))
+
+            //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+          //  if (!(date_regex.test(document.getElementById('<%= txtItemExpiryDate.ClientID %>').value))) {
+            //    alert("Item Expiry Date Is Invalidddd (Enter In [dd/MM/yyyy] Format).");
+            //    return false;
+            //}
+            //var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+          //  if (!(date_regex.test(document.getElementById('<%= txtItemWarrentyDate.ClientID %>').value))) {
+            //    alert("Item Warranty Date Is Invalid (Enter In [dd/MM/yyyy] Format).");
+            //    return false;
+            //} 
+
+
+
+
+
 
             var ItemQtyCount = 0;
             var ROWS = Number(document.getElementById('<%=hdnrowcount.ClientID%>').value);

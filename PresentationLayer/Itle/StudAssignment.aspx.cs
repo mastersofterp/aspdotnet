@@ -647,6 +647,10 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
 
         if (Convert.ToInt16(ViewState["vsSubmit"]) == 1)
         {
+            if (!ValidDocType())
+            {
+                return;
+            }
             submitAssignReply();
             ViewState["vsSubmit"] = null;
             ViewState["asno"] = null;
@@ -664,6 +668,15 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
 
         string file = objCommon.LookUp("ACD_IASSIGNMASTER", "File_Type", "AS_NO=" + Convert.ToInt32(ViewState["asno"]) + "");
 
+        //if (file == string.Empty)
+        //{
+        //    divAttch.Visible = false;
+        //}
+        //else
+        //{
+        //    divAttch.Visible = true;
+        //}
+
         string file_name = "";
 
         string[] value = file.Split(',');
@@ -678,6 +691,21 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
 
         lblFiletype.Text = file_name.ToString();
 
+        DataTable dt;
+        dt = ((DataTable)Session["Attachments"]);
+        if (dt != null)
+        {
+            dt.Dispose();
+            divAttch.Visible = false;
+        }
+        else
+        {
+            divAttch.Visible = false;
+        }
+        if (file != string.Empty)
+        {
+            divAttch.Visible = true;
+        }
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -832,6 +860,7 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
 
                 if (filecount > 0)
                 {
+                    divAttch.Visible = true;
                     DataSet dsPURPOSE = new DataSet();
 
                     dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "", "", "");
@@ -993,6 +1022,10 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
                 this.BindListView_Attachments(dt);
+                if (dt.Rows.Count == 0)
+                {
+                    Session["Attachments"] = null;
+                }
             }
 
             //to permanently delete from database in case of Edit
@@ -1417,6 +1450,27 @@ public partial class Itle_StudAssignment : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+    private bool ValidDocType()
+    {
+        try
+        {
+            string doc_type = objCommon.LookUp("ACD_IASSIGNMASTER", "DOC_TYPE_ID", "AS_NO=" + Convert.ToInt32(ViewState["asno"]) + "");
+            string maxFile = objCommon.LookUp("ACD_IASSIGNMASTER", "MAX_NO_OF_FILE", "AS_NO=" + Convert.ToInt32(ViewState["asno"]) + "");
+
+            if (doc_type == "2" && Session["Attachments"] == null && ((DataTable)Session["Attachments"]) == null)
+            {
+                objCommon.DisplayUserMessage(updReplyAssign, "Assignment is Upload Based, Please upload Attachment !", this.Page);
+                btnSave.Enabled = false;
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+        return true;
     }
+}
 
 

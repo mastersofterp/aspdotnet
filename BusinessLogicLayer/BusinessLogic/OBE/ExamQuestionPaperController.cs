@@ -21,7 +21,28 @@ namespace IITMS.NITPRM.BusinessLayer.BusinessLogic
        CommonModel ObjComModel = new CommonModel();
        CommanController ObjComm = new CommanController();
        string _nitprm_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+       public int QuestionPaper_Unlock(string QuestionPaperId)
+       {
+           SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+           object ret = 0;
+           try
+           {
 
+               SqlParameter[] objParams = null;
+               //Changing Parameters for each form.
+               objParams = new SqlParameter[2];
+               objParams[0] = new SqlParameter("@P_QuestionPaperId", QuestionPaperId);
+               objParams[1] = new SqlParameter("@P_OUT", SqlDbType.Int);
+               objParams[1].Direction = ParameterDirection.Output;
+               ret = objSQLHelper.ExecuteNonQuerySP("sptblExamQuestionPaper_Unlock", objParams, true);
+               return Convert.ToInt32(ret);
+           }
+           catch (Exception ex)
+           {
+               throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamQuestionPaperController.QuestionPaper_Unlock-> " + ex.ToString());
+
+           }
+       }
        //added on 02112022 
        public DataSet CHECKCOURSE(int SessionId, int UserId)
        {

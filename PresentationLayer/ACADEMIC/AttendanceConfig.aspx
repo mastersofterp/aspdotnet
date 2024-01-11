@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" 
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true"
     ViewStateEncryptionMode="Always" EnableViewStateMac="true" CodeFile="AttendanceConfig.aspx.cs" Inherits="ACADEMIC_AttendanceConfig" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
@@ -7,171 +7,36 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("../plugins/multi-select/bootstrap-multiselect.js")%>"></script>
+
+    <asp:HiddenField ID="hfdSms" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdEmail" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdCourse" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdTeaching" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hfdHide" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hdnGlobalClgIds" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hdnGlobalDeg" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hdnEditMode" runat="server" ClientIDMode="Static" />
+
+
+
+
+
     <style>
         .dataTables_scrollHeadInner {
             width: max-content !important;
         }
-
-        .table {
-            width: auto !important;
-        }
-    </style>
-     <%--<style>
-        .multiselect-container {
-            position: absolute;
-            transform: translate3d(0px, -46px, 0px);
-            top: 0px;
-            left: 0px;
-            will-change: transform;
-            height: 200px;
-            overflow: auto;
-        }
-    </style>--%>
-
-
-     <%--<script>
-         $(document).ready(function () {
-             $('.multi-select-demo').multiselect({
-                 includeSelectAllOption: true,
-                 enableFiltering: true,
-                 filterPlaceholder: 'Search',
-                 enableCaseInsensitiveFiltering: true,
-                 enableHTML: true,
-                 templates: {
-                     filter: '<li class="multiselect-item multiselect-filter"><div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control multiselect-search" type="text" /></div></li>',
-                     filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default multiselect-clear-filter" style="height: 33px;" type="button"><i style="margin-right: 4px;" class="fa fa-eraser"></i></button></span>'
-                 }
-                 //dropRight: true,
-                 //search: true,
-             });
-         });
-
-         var parameter = Sys.WebForms.PageRequestManager.getInstance();
-         parameter.add_endRequest(function () {
-             $(document).ready(function () {
-                 $('.multi-select-demo').multiselect({
-                     includeSelectAllOption: true,
-                     enableFiltering: true,
-                     filterPlaceholder: 'Search',
-                     enableCaseInsensitiveFiltering: true,
-                     enableHTML: true,
-                     templates: {
-                         filter: '<li class="multiselect-item multiselect-filter"><div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control multiselect-search" type="text" /></div></li>',
-                         filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default multiselect-clear-filter" style="height: 33px;" type="button"><i style="margin-right: 4px;" class="fa fa-eraser"></i></button></span>'
-                     }
-                     //dropRight: true,
-                     //search: true,
-                 });
-             });
-         });
-         
-    </script>--%>
-
-     <style>
-        .ms-options-wrap {
-            position: relative;
-        }
-
-        .ms-options {
-            /*position:absolute;
-        bottom:10px;left:0;
-        width:100%;*/
-            min-height: inherit !important;
-        }
-
-        #example2_wrapper #example2_filter {
-            /*display: none;*/
-        }
     </style>
 
-    <style>
-        div.dd_chk_select {
-            height: 35px;
-            font-size: 14px !important;
-            padding-left: 12px !important;
-            line-height: 2.2 !important;
-            width: 100%;
-        }
-
-            div.dd_chk_select div#caption {
-                height: 35px;
-            }
-    </style>
-
-    <style type="text/css">
-        #load {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            z-index: 9999;
-            /*background: url("/images/loading_icon.gif") no-repeat center center rgba(0,0,0,0.25);*/
-        }
-    </style>
-
-    <style type="text/css">
-        .DefaultCheckBoxList li {
-            float: left;
-            list-style-type: none;
-        }
-
-        @media screen and (max-width: 300px) {
-            .DefaultCheckBoxList li {
-                float: none;
-            }
-        }
-    </style>
-
-   <%-- <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            //--*========Added by akhilesh on [2019-05-11]==========*--          
-            Sys.WebForms.PageRequestManager.getInstance().add_pageLoaded(InitAutoCompl)
-
-            //--*========Added by akhilesh on [2019-05-11]==========*--          
-            // if you use jQuery, you can load them when dom is read.          
-            var prm = Sys.WebForms.PageRequestManager.getInstance();
-            prm.add_initializeRequest(InitializeRequest);
-            prm.add_endRequest(EndRequest);
-
-            // Place here the first init of the autocomplete
-            InitAutoCompl();
-
-            function InitializeRequest(sender, args) {
-            }
-
-            function EndRequest(sender, args) {
-                // after update occur on UpdatePanel re-init the Autocomplete
-                InitAutoCompl();
-            }
-
-        });
-
-    </script>
-
-     <script type="text/javascript">
-         document.onreadystatechange = function () {
-             var state = document.readyState
-             if (state == 'interactive') {
-                 document.getElementById('contents').style.visibility = "hidden";
-             } else if (state == 'complete') {
-                 setTimeout(function () {
-                     document.getElementById('interactive');
-                     document.getElementById('load').style.visibility = "hidden";
-                     document.getElementById('contents').style.visibility = "visible";
-                 }, 1000);
-             }
-         }
-    </script>--%>
-    <%--===== Data Table Script added by gaurav =====--%>
     <script>
-        $(document).ready(function () {
-            var table = $('#tab-le').DataTable({
+        function BindTable() {
+            var table = $('#BindDynamicTable').DataTable({
                 responsive: true,
                 lengthChange: true,
                 scrollY: 320,
                 scrollX: true,
                 scrollCollapse: true,
+                paging: false, // Added by Gaurav for Hide pagination
 
                 dom: 'lBfrtip',
                 buttons: [
@@ -183,7 +48,7 @@
                             if (arr.indexOf(idx) !== -1) {
                                 return false;
                             } else {
-                                return $('#tab-le').DataTable().column(idx).visible();
+                                return $('#BindDynamicTable').DataTable().column(idx).visible();
                             }
                         }
                     },
@@ -191,109 +56,145 @@
                         extend: 'collection',
                         text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
                         buttons: [
-                                {
-                                    extend: 'copyHtml5',
-                                    exportOptions: {
-                                        columns: function (idx, data, node) {
-                                            var arr = [0];
-                                            if (arr.indexOf(idx) !== -1) {
-                                                return false;
-                                            } else {
-                                                return $('#tab-le').DataTable().column(idx).visible();
-                                            }
-                                        }
-                                    }
-                                },
-                                {
-                                    extend: 'excelHtml5',
-                                    exportOptions: {
-                                        columns: function (idx, data, node) {
-                                            var arr = [0];
-                                            if (arr.indexOf(idx) !== -1) {
-                                                return false;
-                                            } else {
-                                                return $('#tab-le').DataTable().column(idx).visible();
-                                            }
-                                        }
-                                    }
-                                },
+                           {
+                               extend: 'copyHtml5',
+                               exportOptions: {
+                                   columns: function (idx, data, node) {
+                                       var arr = [0];
+                                       if (arr.indexOf(idx) !== -1) {
+                                           return false;
+                                       } else {
+                                           return $('#BindDynamicTable').DataTable().column(idx).visible();
+                                       }
+                                   },
+                                   format: {
+                                       body: function (data, column, row, node) {
+                                           var nodereturn;
+                                           if ($(node).find("input:text").length > 0) {
+                                               nodereturn = "";
+                                               nodereturn += $(node).find("input:text").eq(0).val();
+                                           }
+                                           else if ($(node).find("input:checkbox").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("input:checkbox").each(function () {
+                                                   if ($(this).is(':checked')) {
+                                                       nodereturn += "On";
+                                                   } else {
+                                                       nodereturn += "Off";
+                                                   }
+                                               });
+                                           }
+                                           else if ($(node).find("a").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("a").each(function () {
+                                                   nodereturn += $(this).text();
+                                               });
+                                           }
+                                           else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                               nodereturn = "";
+                                               $(node).find("span").each(function () {
+                                                   nodereturn += $(this).text();
+                                               });
+                                           }
+                                           else if ($(node).find("select").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("select").each(function () {
+                                                   var thisOption = $(this).find("option:selected").text();
+                                                   if (thisOption !== "Please Select") {
+                                                       nodereturn += thisOption;
+                                                   }
+                                               });
+                                           }
+                                           else if ($(node).find("img").length > 0) {
+                                               nodereturn = "";
+                                           }
+                                           else if ($(node).find("input:hidden").length > 0) {
+                                               nodereturn = "";
+                                           }
+                                           else {
+                                               nodereturn = data;
+                                           }
+                                           return nodereturn;
+                                       },
+                                   },
+                               }
+                           },
+                           {
+                               extend: 'excelHtml5',
+                               exportOptions: {
+                                   columns: function (idx, data, node) {
+                                       var arr = [0];
+                                       if (arr.indexOf(idx) !== -1) {
+                                           return false;
+                                       } else {
+                                           return $('#BindDynamicTable').DataTable().column(idx).visible();
+                                       }
+                                   },
+                                   format: {
+                                       body: function (data, column, row, node) {
+                                           var nodereturn;
+                                           if ($(node).find("input:text").length > 0) {
+                                               nodereturn = "";
+                                               nodereturn += $(node).find("input:text").eq(0).val();
+                                           }
+                                           else if ($(node).find("input:checkbox").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("input:checkbox").each(function () {
+                                                   if ($(this).is(':checked')) {
+                                                       nodereturn += "On";
+                                                   } else {
+                                                       nodereturn += "Off";
+                                                   }
+                                               });
+                                           }
+                                           else if ($(node).find("a").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("a").each(function () {
+                                                   nodereturn += $(this).text();
+                                               });
+                                           }
+                                           else if ($(node).find("span").length > 0 && !($(node).find(".select2").length > 0)) {
+                                               nodereturn = "";
+                                               $(node).find("span").each(function () {
+                                                   nodereturn += $(this).text();
+                                               });
+                                           }
+                                           else if ($(node).find("select").length > 0) {
+                                               nodereturn = "";
+                                               $(node).find("select").each(function () {
+                                                   var thisOption = $(this).find("option:selected").text();
+                                                   if (thisOption !== "Please Select") {
+                                                       nodereturn += thisOption;
+                                                   }
+                                               });
+                                           }
+                                           else if ($(node).find("img").length > 0) {
+                                               nodereturn = "";
+                                           }
+                                           else if ($(node).find("input:hidden").length > 0) {
+                                               nodereturn = "";
+                                           }
+                                           else {
+                                               nodereturn = data;
+                                           }
+                                           return nodereturn;
+                                       },
+                                   },
+                               }
+                           },
+
                         ]
                     }
                 ],
                 "bDestroy": true,
             });
-        });
-        var parameter = Sys.WebForms.PageRequestManager.getInstance();
-        parameter.add_endRequest(function () {
-            $(document).ready(function () {
-                var table = $('#tab-le').DataTable({
-                    responsive: true,
-                    lengthChange: true,
-                    scrollY: 320,
-                    scrollX: true,
-                    scrollCollapse: true,
-
-                    dom: 'lBfrtip',
-                    buttons: [
-                        {
-                            extend: 'colvis',
-                            text: 'Column Visibility',
-                            columns: function (idx, data, node) {
-                                var arr = [0];
-                                if (arr.indexOf(idx) !== -1) {
-                                    return false;
-                                } else {
-                                    return $('#tab-le').DataTable().column(idx).visible();
-                                }
-                            }
-                        },
-                        {
-                            extend: 'collection',
-                            text: '<i class="glyphicon glyphicon-export icon-share"></i> Export',
-                            buttons: [
-                                    {
-                                        extend: 'copyHtml5',
-                                        exportOptions: {
-                                            columns: function (idx, data, node) {
-                                                var arr = [0];
-                                                if (arr.indexOf(idx) !== -1) {
-                                                    return false;
-                                                } else {
-                                                    return $('#tab-le').DataTable().column(idx).visible();
-                                                }
-                                            }
-                                        }
-                                    },
-                                    {
-                                        extend: 'excelHtml5',
-                                        exportOptions: {
-                                            columns: function (idx, data, node) {
-                                                var arr = [0];
-                                                if (arr.indexOf(idx) !== -1) {
-                                                    return false;
-                                                } else {
-                                                    return $('#tab-le').DataTable().column(idx).visible();
-                                                }
-                                            }
-                                        }
-                                    },
-                            ]
-                        }
-                    ],
-                    "bDestroy": true,
-                });
-            });
-        });
-
+        }
     </script>
-    <asp:HiddenField ID="hfdSms" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="hfdEmail" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="hfdCourse" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="hfdTeaching" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
-    <asp:HiddenField ID="hfdHide" runat="server" ClientIDMode="Static" />
+
+
+
     <div>
-        <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="updpnl"
+        <asp:UpdateProgress ID="UpdateProgress2" runat="server"
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
                 <div id="preloader">
@@ -316,586 +217,200 @@
                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label></h3>
                 </div>
                 <div class="box-body">
-                    <form role="form">
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="form-group col-lg-12">
-                                    <asp:UpdatePanel ID="updpnl" runat="server">
-                                        <ContentTemplate>
-                                            <div class="row">
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"
-                                                        AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" >
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                        <%--<asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>--%>
-                                                    <asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                                </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12">   <%-- style="display:none"--%>
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
-                                                    </div>
-                                                    <%--<asp:DropDownList ID="ddlSchoolInstitute" runat="server" TabIndex="1" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlSchoolInstitute_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select </asp:ListItem>
-                                                    </asp:DropDownList>--%>
-                                                    <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="lstbxSchool_SelectedIndexChanged"></asp:ListBox>
-                                                    <%-- <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1" AutoPostBack="true"></asp:ListBox>--%>
-                                                    <asp:RequiredFieldValidator ID="rfvlstbxSchool" runat="server" ControlToValidate="lstbxSchool"
-                                                        Display="None" ErrorMessage="Please Select School/Institute Name" InitialValue="" ValidationGroup="submit">
-                                                    </asp:RequiredFieldValidator>
-                                                </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
 
-                                                <%--<div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
-                                                    </div>
-                                                    <%--<asp:DropDownList ID="ddlSession" runat="server" TabIndex="1" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged"
-                                                        AppendDataBoundItems="true" AutoPostBack="true" CssClass="form-control" data-select2-enable="true" >
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>--%>
-                                                   <%-- <asp:ListBox ID="ddlSession" runat="server" SelectionMode="Multiple" AutoPostBack="true" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"  OnSelectedIndexChanged="ddlSession_SelectedIndexChanged1"></asp:ListBox>
-                                                    <%--<asp:RequiredFieldValidator ID="rfvSession" runat="server" ControlToValidate="ddlSession" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Session" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                                </div>--%>
+                                <div class="row">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1"
+                                            AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
 
-                                                <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divDepartment" visible="false">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlDeptName" runat="server" Font-Bold="true">Department</asp:Label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlDepartment" runat="server" TabIndex="1" AppendDataBoundItems="true" AutoPostBack="true" OnSelectedIndexChanged="ddlDepartment_SelectedIndexChanged" CssClass="form-control" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select </asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvDepartment" runat="server" ControlToValidate="ddlDepartment"
-                                                        Display="None" ErrorMessage="Please Select ddlDepartment" InitialValue="0" ValidationGroup="course">
-                                                    </asp:RequiredFieldValidator>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true">Degree</asp:Label>
-                                                    </div>
-                                                   <%-- <asp:DropDownList ID="ddlDegree" runat="server" AppendDataBoundItems="true" AutoPostBack="True" OnSelectedIndexChanged="ddlDegree_SelectedIndexChanged"
-                                                        CssClass="form-control" TabIndex="1" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select </asp:ListItem>
-                                                    </asp:DropDownList>--%>
-                                                     <asp:ListBox ID="ddlDegree" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="2" AutoPostBack="true"></asp:ListBox>
-                                                    <asp:RequiredFieldValidator ID="rfvDegree" runat="server" ControlToValidate="ddlDegree" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Degree" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12 ">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <label>Scheme Type</label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlSchemeType" runat="server" AppendDataBoundItems="true" AutoPostBack="True"
-                                                        CssClass="form-control" TabIndex="3" data-select2-enable="true">
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfvddlSchemeType" runat="server" ControlToValidate="ddlSchemeType" SetFocusOnError="true"
-                                                        Display="None" ErrorMessage="Please Select Scheme Type" InitialValue="0" ValidationGroup="submit"></asp:RequiredFieldValidator>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
-                                                    </div>
-                                                   <%-- <asp:DropDownList ID="ddlSemester" runat="server" AppendDataBoundItems="True"
-                                                        CssClass="form-control" TabIndex="1" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>--%>
-                                                    <asp:ListBox ID="ddlSemester" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="4" AutoPostBack="true"></asp:ListBox>
-                                                    <asp:RequiredFieldValidator ID="rfvSem" runat="server" ControlToValidate="ddlSemester"
-                                                        Display="None" ErrorMessage="Please Select Semester" InitialValue="" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <asp:Label ID="lblDYddlSchool" runat="server" Font-Bold="true"></asp:Label>
+                                        </div>
+                                        <asp:ListBox ID="lstbxSchool" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"
+                                            onchange="getSelectedIds(this);"></asp:ListBox>
+                                    </div>
 
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <label>Attendance Start Date</label>
-                                                    </div>
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon" id="txtStartDate1" runat="server">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </div>
-                                                        <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="5" CssClass="form-control" placeholder="DD/MM/YYYY" />
-                                                        <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
-                                                            TargetControlID="txtStartDate" PopupButtonID="txtStartDate1" />
-                                                        <ajaxToolKit:MaskedEditExtender ID="meeStartDate" runat="server" OnInvalidCssClass="errordate"
-                                                            TargetControlID="txtStartDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
-                                                            DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
-                                                        <ajaxToolKit:MaskedEditValidator ID="mevStartDate" runat="server" ControlExtender="meeStartDate"
-                                                            ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
-                                                            InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
-                                                            TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
-                                                            ValidationGroup="submit" SetFocusOnError="True" />
-                                                        <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
-                                                            Display="None" SetFocusOnError="True"
-                                                            ValidationGroup="submit" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <label>Attendance End Date</label>
-                                                    </div>
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon" id="txtEndDate1" runat="server">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </div>
-                                                        <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="6" CssClass="form-control" placeholder="DD/MM/YYYY" />
-                                                        <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
-                                                            TargetControlID="txtEndDate" PopupButtonID="txtEndDate1" />
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <asp:Label ID="lblDYddlDegree" runat="server" Font-Bold="true">Degree</asp:Label>
+                                        </div>
+                                        <asp:ListBox ID="ddlDegree" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
+                                    </div>
 
-                                                        <ajaxToolKit:MaskedEditExtender ID="meeEndDate" runat="server" OnInvalidCssClass="errordate"
-                                                            TargetControlID="txtEndDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
-                                                            DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
-                                                        <ajaxToolKit:MaskedEditValidator ID="mevEndDate" runat="server" ControlExtender="meeEndDate"
-                                                            ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter Attendance End Date"
-                                                            InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
-                                                            TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
-                                                            InvalidValueBlurredMessage="Invalid Date" ValidationGroup="submit" SetFocusOnError="True" />
+                                    <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Scheme Type</label>
+                                        </div>
+                                        <asp:DropDownList ID="ddlSchemeType" runat="server" AppendDataBoundItems="true" CssClass="form-control" TabIndex="1" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
 
-                                                        <asp:RequiredFieldValidator ID="rfvEndDate" runat="server" SetFocusOnError="True"
-                                                            ControlToValidate="txtEndDate" Display="None"
-                                                            ValidationGroup="submit" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-6 col-12 ">
-                                                    <div class="label-dynamic">
-                                                        <sup>*</sup>
-                                                        <label>Attendance Lock By Day</label>
-                                                    </div>
-                                                    <asp:TextBox ID="txtAttLockDay" runat="server" CssClass="form-control" TabIndex="7" MaxLength="3" />
-                                                    <asp:RequiredFieldValidator ID="rfvSessionLName" runat="server" SetFocusOnError="True"
-                                                        ErrorMessage="Please Enter Attendance Lock By Day" ControlToValidate="txtAttLockDay"
-                                                        Display="None" ValidationGroup="submit" />
-                                                    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
-                                                        TargetControlID="txtAttLockDay" />
-                                                </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true">Semester</asp:Label>
+                                        </div>
+                                        <asp:ListBox ID="ddlSemester" runat="server" CssClass="form-control multi-select-demo" SelectionMode="Multiple" AppendDataBoundItems="true" TabIndex="1"></asp:ListBox>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Attendance Start Date</label>
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" id="txtStartDate1" runat="server">
+                                                <i class="fa fa-calendar"></i>
                                             </div>
-                                        </ContentTemplate>
-                                    </asp:UpdatePanel>
+                                            <asp:TextBox ID="txtStartDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                            <ajaxToolKit:CalendarExtender ID="ceStartDate" runat="server" Format="dd/MM/yyyy"
+                                                TargetControlID="txtStartDate" PopupButtonID="txtStartDate1" />
+                                            <ajaxToolKit:MaskedEditExtender ID="meeStartDate" runat="server" OnInvalidCssClass="errordate"
+                                                TargetControlID="txtStartDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                            <ajaxToolKit:MaskedEditValidator ID="mevStartDate" runat="server" ControlExtender="meeStartDate"
+                                                ControlToValidate="txtStartDate" EmptyValueMessage="Please Enter Attendance Start Date" IsValidEmpty="false"
+                                                InvalidValueMessage="Start Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" ErrorMessage="Start Date is Invalid (Enter dd/mm/yyyy Format)"
+                                                TooltipMessage="Please Enter Start Date" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date"
+                                                ValidationGroup="submit" SetFocusOnError="True" />
+                                            <asp:RequiredFieldValidator ID="rfvStartDate" runat="server" ControlToValidate="txtStartDate"
+                                                Display="None" SetFocusOnError="True"
+                                                ValidationGroup="submit" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Attendance End Date</label>
+                                        </div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon" id="txtEndDate1" runat="server">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <asp:TextBox ID="txtEndDate" runat="server" ValidationGroup="submit" TabIndex="1" CssClass="form-control" placeholder="DD/MM/YYYY" />
+                                            <ajaxToolKit:CalendarExtender ID="CalendarExtender2" runat="server" Format="dd/MM/yyyy"
+                                                TargetControlID="txtEndDate" PopupButtonID="txtEndDate1" />
+
+                                            <ajaxToolKit:MaskedEditExtender ID="meeEndDate" runat="server" OnInvalidCssClass="errordate"
+                                                TargetControlID="txtEndDate" Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" OnFocusCssClass="MaskedEditFocus"
+                                                DisplayMoney="Left" AcceptNegative="Left" ErrorTooltipEnabled="True" />
+                                            <ajaxToolKit:MaskedEditValidator ID="mevEndDate" runat="server" ControlExtender="meeEndDate"
+                                                ControlToValidate="txtEndDate" EmptyValueMessage="Please Enter Attendance End Date"
+                                                InvalidValueMessage="End Date is Invalid (Enter dd/MM/yyyy Format)" Display="None" IsValidEmpty="false"
+                                                TooltipMessage="Please Enter Attendance End Date" EmptyValueBlurredText="Empty"
+                                                InvalidValueBlurredMessage="Invalid Date" ValidationGroup="submit" SetFocusOnError="True" />
+
+                                            <asp:RequiredFieldValidator ID="rfvEndDate" runat="server" SetFocusOnError="True"
+                                                ControlToValidate="txtEndDate" Display="None"
+                                                ValidationGroup="submit" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                        <div class="label-dynamic">
+                                            <sup>*</sup>
+                                            <label>Attendance Lock By Day</label>
+                                        </div>
+                                        <asp:TextBox ID="txtAttLockDay" runat="server" CssClass="form-control" TabIndex="1" MaxLength="3" />
+                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Numbers"
+                                            TargetControlID="txtAttLockDay" />
+                                    </div>
+
                                 </div>
-                                <%-- <div class="form-group col-md-4">
-                                    <span style="color: #FF0000; font-weight: bold">*</span>
-                                    <label for="city">Attendance Lock By Hours </label>
-                                    <asp:TextBox ID="txtAttLockHrs" runat="server" CssClass="form-control" placeholder="HH:MM" />
-                                    <ajaxToolKit:MaskedEditExtender ID="meeEnterTimeFrom" runat="server" ClearMaskOnLostFocus="false"
-                                        MaskType="Time" Mask="99:99" TargetControlID="txtAttLockHrs" Filtered=":" AcceptAMPM="false"
-                                        ClearTextOnInvalid="True" AutoCompleteValue="00:00">
-                                    </ajaxToolKit:MaskedEditExtender>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" SetFocusOnError="True"
-                                        ErrorMessage="Please Enter Attendance Lock By Hours" ControlToValidate="txtAttLockHrs"
-                                        Display="None" ValidationGroup="submit" />
-                                    <ajaxToolKit:MaskedEditValidator ID="mevFrom" runat="server" ControlExtender="meeEnterTimeFrom"
-                                        ControlToValidate="txtAttLockHrs" IsValidEmpty="False" EmptyValueMessage="Time is required"
-                                        InvalidValueMessage="Hours is invalid" Display="None" TooltipMessage="Input a time hours"
-                                        EmptyValueBlurredText="*" InvalidValueBlurredMessage="*" ValidationGroup="submit"
-                                        ErrorMessage="mevEnterTime" />
-
-                                </div>--%>
-                                <div class="form-group col-lg-2 col-md-6 col-6">
-                                    <div class="label-dynamic">
-                                        <sup>* </sup>
-                                        <label>SMS Facility</label>
-                                    </div>
-                                    <div class="switch form-inline">
-                                        <input type="checkbox" id="rdSMSYes" name="switch" checked />
-                                        <label data-on="Yes" data-off="No" for="rdSMSYes"></label>
-                                    </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-md-6 col-6">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>SMS Facility</label>
                                 </div>
-
-
-                                <div class="form-group col-lg-2 col-md-6 col-6">
-                                    <div class="label-dynamic">
-                                        <sup>* </sup>
-                                        <label>Email Facility</label>
-                                    </div>
-                                    <div class="switch form-inline">
-                                        <input type="checkbox" id="rdEmailYes" name="switch" checked />
-                                        <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
-                                    </div>
+                                <div class="switch form-inline">
+                                    <input type="checkbox" id="rdSMSYes" tabindex="1" name="switch" checked />
+                                    <label data-on="Yes" data-off="No" for="rdSMSYes"></label>
                                 </div>
+                            </div>
 
-
-                                <div class="form-group col-lg-2 col-md-6 col-6" style="display:none">
-                                    <div class="label-dynamic">
-                                        <sup>* </sup>
-                                        <label>Course Registration</label>
-                                    </div>
-                                    <div class="switch form-inline">
-                                        <input type="checkbox" id="rbCRegBefore" name="switch" checked />
-                                        <label data-on="Before" data-off="After" for="rbCRegBefore"></label>
-                                    </div>
+                            <div class="form-group col-lg-2 col-md-6 col-6">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Email Facility</label>
                                 </div>
-
-
-                                <div class="form-group col-lg-2 col-md-6 col-6">
-                                    <div class="label-dynamic">
-                                        <sup>* </sup>
-                                        <label>Teaching Plan</label>
-                                    </div>
-                                    <div class="switch form-inline">
-                                        <input type="checkbox" id="rdTeachYes" name="switch" checked />
-                                        <label data-on="Yes" data-off="No" for="rdTeachYes"></label>
-                                    </div>
+                                <div class="switch form-inline">
+                                    <input type="checkbox" id="rdEmailYes" tabindex="1" name="switch" checked />
+                                    <label data-on="Yes" data-off="No" for="rdEmailYes"></label>
                                 </div>
+                            </div>
 
+                            <div class="form-group col-lg-2 col-md-6 col-6">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Teaching Plan</label>
+                                </div>
+                                <div class="switch form-inline">
+                                    <input type="checkbox" id="rdTeachYes" tabindex="1" name="switch" checked />
+                                    <label data-on="Yes" data-off="No" for="rdTeachYes"></label>
+                                </div>
+                            </div>
 
-                                <div class="form-group col-lg-2 col-md-6 col-6">
-                                    <div class="label-dynamic">
-                                        <sup>* </sup>
-                                        <label>Check For Active</label>
-                                    </div>
-                                    <div class="switch form-inline">
-                                        <input type="checkbox" id="rdActive" name="switch" checked />
-                                        <label data-on="Active" data-off="Inactive" for="rdActive"></label>
-                                    </div>
+                            <div class="form-group col-lg-2 col-md-6 col-6">
+                                <div class="label-dynamic">
+                                    <sup>* </sup>
+                                    <label>Check For Active</label>
+                                </div>
+                                <div class="switch form-inline">
+                                    <input type="checkbox" id="rdActive" tabindex="1" name="switch" checked />
+                                    <label data-on="Active" data-off="Inactive" for="rdActive"></label>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-12 btn-footer">
-                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" TabIndex="1" ValidationGroup="submit" OnClientClick="return validate();" OnClick="btnSubmit_Click" class="btn btn-primary" />
-                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" TabIndex="1" OnClick="btnCancel_Click" class="btn btn-warning" />
-                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true"
-                                ShowSummary="false" DisplayMode="List" ValidationGroup="submit" />
-                        </div>
+                    <div class="col-12 btn-footer">
+                        <input id="btnSubmit" type="button" title="submit" value="Submit" class="btn btn-primary" tabindex="1" />
+                        <input id="btnCancel" type="button" title="Cancel" value="Cancel" class="btn btn-warning" tabindex="1" />
+                        <input id="btnReport" type="button" title="Report" value="Excel Report" class="btn btn-primary" tabindex="1" />
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-striped table-bordered nowrap" id="BindDynamicTable">
+                            <thead class="bg-light-blue">
+                                <tr>
+                                    <th>Edit</th>
+                                    <th>Session</th>
+                                    <th>School/Institute</th>
+                                    <th>Scheme Type</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Att Lock Days</th>
+                                    <th>SMS Facility</th>
+                                    <th>Email Facility</th>
+                                    <th>Teaching Plan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
 
-                        <div class="col-12">
-                            <%--<asp:ListView ID="lvAttConfig" runat="server">
-                                <LayoutTemplate>
-                                    <div id="demo-grid">
-                                        <div class="sub-heading">
-                                            <h5>Configuration List</h5>
-                                        </div>
-                                        <table class="table table-striped table-bordered nowrap" style="width: 100%" id="tab-le">
-                                            <thead>
-                                                <tr class="bg-light-blue">
-                                                    <th>Edit</th>
-                                                    <th>
-                                                        <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label></th>
-                                                    <th>
-                                                        <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label></th>
-                                                    <th>
-                                                        <asp:Label ID="lblDYlvDegree" runat="server" Font-Bold="true"></asp:Label></th>
-                                                    <th>
-                                                        <asp:Label ID="lblDYrdoSchemeType" runat="server" Font-Bold="true"></asp:Label></th>
-                                                    <th>
-                                                        <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label></th>
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>
-                                                    <th>SMS Facility</th>
-                                                    <th>Email Facility</th>
-                                                    <th>Att Lock Days</th>
-                                                    <%--  <th>Att Lock Hours</th>
-                                                    <th style="display:none">Course Reg.(Before/After)</th>
-                                                    <th>Teaching Plan</th>
-                                                    <th>Active</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr id="itemPlaceholder" runat="server" />
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </LayoutTemplate>
-                                <ItemTemplate>
-                                    <tr>
-                                        <td>
-                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" CommandArgument='<%# Eval("SRNO")%>' ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click" ToolTip="Edit Record" />
-                                        </td>
-                                        <td><%#Eval("SESSION_PNAME") %></td>
-                                        <td><%#Eval("COLLEGE_NAME") %></td>
-                                        <td><%#Eval("DEGREENAME")%></td>
-                                        <td><%#Eval("SCHEMETYPENAME")%></td>
-                                        <td><%#Eval("SEMESTERNAME")%></td>
-                                        <td><%#Eval("START_DATE")%></td>
-                                        <td><%#Eval("END_DATE")%></td>
-                                        <td><%#Eval("SMS_FACILITY")%></td>
-                                        <td><%#Eval("EMAIL_FACILITY")%></td>
-                                        <td><%#Eval("LOCK_ATT_DAYS")%></td>
-                                        <%-- <td><%#Eval("LOCK_ATT_HOURS")%></td>
-                                        <td style="display:none"><%#Eval("CREG_STATUS")%></td>
-                                        <td><%#Eval("TEACHING_PLAN")%></td>
-                                        <td><%#Eval("ACTIVE")%></td>
-                                    </tr>
-                                </ItemTemplate>
-                            </asp:ListView>--%>
-
-                            <asp:Panel ID="pnlAttConfig" runat="server">
-                                <asp:ListView ID="lvAttConfig" runat="server" OnItemDataBound="lvAttConfig_ItemDataBound">
-                                    <LayoutTemplate>
-                                        <%--<div id="demo-grid">--%>
-                                            <div class="sub-heading">
-                                                <h5>Configuration List</h5>
-                                            </div>
-                                            <table class="table table-striped table-bordered nowrap" style="width: 100%">  <%--id="tab-le"--%>
-                                                <thead>
-                                                    <tr class="bg-light-blue">
-                                                        <th style="text-align: center; width: 2%">Edit</th>
-                                                        <th style="text-align: center; width: 2%">Show</th>
-                                                        <th style="text-align: center; width: 5%">Unique Group No</th>
-                                                        <th style="text-align: center; width: 9%">
-                                                            <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <%--<th>
-                                                            <asp:Label ID="lblDYtxtSchoolname" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <th>
-                                                            <asp:Label ID="lblDYlvDegree" runat="server" Font-Bold="true"></asp:Label></th>--%>
-                                                        <th style="text-align: center; width: 15%">
-                                                            <asp:Label ID="lblDYrdoSchemeType" runat="server" Font-Bold="true"></asp:Label></th>
-                                                        <%--<th>
-                                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label></th>--%>
-                                                        <th style="text-align: center; width: 8%">Start Date</th>
-                                                        <th style="text-align: center; width: 8%">End Date</th>
-                                                        <th style="text-align: center; width: 6%">Att Lock Days</th>
-                                                        <th style="text-align: center; width: 4%">SMS Facility</th>
-                                                        <th style="text-align: center; width: 4%">Email Facility</th>
-                                                        
-                                                        <%--  <th>Att Lock Hours</th>--%>
-                                                        <%--<th style="display:none">Course Reg.(Before/After)</th>--%>
-                                                        <th style="text-align: center; width: 4%">Teaching Plan</th>
-                                                        <th style="text-align: center; width: 4%">Active</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="itemPlaceholder" runat="server" />
-                                                </tbody>
-                                            </table>
-                                        <%--</div>--%>
-                                    </LayoutTemplate>
-
-                                    <ItemTemplate>
-                                        <table class="table table-hover table-bordered mb-0">
-                                            <tr id="MAIN" runat="server" class="col-md-12 mb-0">
-                                                <td>
-                                                    <tr>
-                                                        <td style="text-align: center; width: 2%">
-                                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" CommandArgument='<%# Eval("GROUPID")%>' ImageUrl="~/Images/edit.png" OnClick="btnEdit_Click" ToolTip="Edit Record" />
-                                                        </td>
-                                                        <td style="text-align: center; width: 2%">
-                                                            <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
-                                                                <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
-                                                            </asp:Panel>
-                                                        </td>
-                                                        <td style="text-align: center; width: 5%">
-                                                            <asp:Label ID="lblGrpId" Text='<%# Eval("GROUPID")%>' runat="server"></asp:Label>
-                                                        </td>
-                                                        <td style="text-align: center; width: 8%"><%#Eval("SESSION_PNAME") %></td>
-                                                        <%-- <td><%#Eval("COLLEGE_NAME") %></td>
-                                                        <td><%#Eval("DEGREENAME")%></td>--%>
-                                                        <td style="text-align: center; width: 12%"><%#Eval("SCHEMETYPENAME")%></td>
-                                                        <%--<td><%#Eval("SEMESTERNAME")%></td>--%>
-                                                        <td style="text-align: center; width: 5%"><%#Eval("START_DATE")%></td>
-                                                        <td style="text-align: center; width: 5%"><%#Eval("END_DATE")%></td>
-                                                        <td style="text-align: center; width: 5%"><%#Eval("LOCK_ATT_DAYS")%></td>
-                                                        <td style="text-align: center; width: 4%"><%#Eval("SMS_FACILITY")%></td>
-                                                        <td style="text-align: center; width: 4%"><%#Eval("EMAIL_FACILITY")%></td>
-                                                        
-                                                        <%-- <td><%#Eval("LOCK_ATT_HOURS")%></td>--%>
-                                                        <%--<td style="display:none"><%#Eval("CREG_STATUS")%></td>--%>
-                                                        <td style="text-align: center; width: 4%"><%#Eval("TEACHING_PLAN")%></td>
-                                                        <td style="text-align: center; width: 4%">
-                                                            <asp:Label ID="lblActive" Text='<%#Eval("ACTIVE")%>' ForeColor='<%# Eval("ACTIVE").ToString().Equals("ACTIVE")?System.Drawing.Color.Green:System.Drawing.Color.Red %>' runat="server"></asp:Label>
-                                                        </td>
-                                                        <ajaxToolKit:CollapsiblePanelExtender ID="cpeCourt2" runat="server" CollapseControlID="pnlDetails"
-                                                            Collapsed="true" CollapsedImage="~/Images/action_down.png" ExpandControlID="pnlDetails"
-                                                            ExpandedImage="~/Images/action_up.png" ImageControlID="imgExp" TargetControlID="pnlShowCDetails">
-                                                        </ajaxToolKit:CollapsiblePanelExtender>
-                                                    </tr>
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                        <div class="col-12">
-                                            <asp:Panel ID="pnlShowCDetails" runat="server" CssClass="collapsePanel">
-                                                <asp:ListView ID="lvDetails" runat="server">
-                                                    <LayoutTemplate>
-                                                        <div class="table-responsive">
-                                                            <table class="table table-striped table-bordered nowrap" style="width: 100%">
-                                                                <thead class="b g-light-blue">
-                                                                    <tr>
-                                                                        <th style="text-align: left; width: 50%">School & Scheme</th>
-                                                                        <th style="text-align: left; width: 50%">Degree</th>
-                                                                        <%--<th>Branch</th>--%>
-                                                                        <th style="text-align: left; width: 50%">Semester</th>
-                                                                        <%--<th>Payment Applicable</th>
-                                                                        <th>Eligibility for Course Registration </th>--%>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr id="itemPlaceholder" runat="server">
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </LayoutTemplate>
-
-                                                    <EmptyDataTemplate>
-                                                        <div style="text-align: center; font-family: Arial; font-size: medium">
-                                                            No Record Found
-                                                        </div>
-                                                    </EmptyDataTemplate>
-
-                                                    <ItemTemplate>
-                                                        <tr>
-                                                            <td style="text-align: left; width: 50%"><%# Eval("COLLEGE_NAME")%></td>
-                                                            <td style="text-align: left; width: 50%"><%# Eval("DEGREENAME")%></td>
-                                                            <%--<td><%# Eval("LONGNAME")%></td>--%>
-                                                            <td style="text-align: left; width: 50%"><%# Eval("SEMESTERNAME")%></td>
-                                                            <%--<td><%# Eval("PAYMENT_APPLICABLE_FOR_SEM_WISE")%></td>
-                                                            <td><%# Eval("ELIGIBILITYFORCRSREG")%></td>--%>
-                                                        </tr>
-                                                    </ItemTemplate>
-                                                </asp:ListView>
-                                            </asp:Panel>
-                                        </div>
-                                    </ItemTemplate>
-                                </asp:ListView>
-                            </asp:Panel>
-                        </div>
-
-                    </form>
                 </div>
             </div>
         </div>
-        <!--academic Calendar-->
     </div>
 
-     
-
-    <script>
-        function SetStatSms(val) {
-            $('[id*=rdSMSYes]').prop('checked', val);
-        }
-        function SetStatEmail(val) {
-            $('[id*=rdEmailYes]').prop('checked', val);
-        }
-        function SetStatCourse(val) {
-            $('#rbCRegBefore').prop('checked', val);
-        }
-        function SetStatTeaching(val) {
-            $('#rdTeachYes').prop('checked', val);
-        }
-        function SetStatActive(val) {
-            $('#rdActive').prop('checked', val);
-        }
-
-        function validate() {
-            var school = document.getElementById("ctl00_ContentPlaceHolder1_lstbxSchool").value;
-            var session = document.getElementById("ctl00_ContentPlaceHolder1_ddlSession").value;
-            var degree = document.getElementById("ctl00_ContentPlaceHolder1_ddlDegree").value;
-            var schmType = document.getElementById("ctl00_ContentPlaceHolder1_ddlSchemeType").value;
-            var semester = document.getElementById("ctl00_ContentPlaceHolder1_ddlSemester").value;
-            var attLock = document.getElementById("ctl00_ContentPlaceHolder1_txtAttLockDay").value;
-            var AttStartDate = $("#ctl00_ContentPlaceHolder1_txtStartDate").val();
-            var AttEndDtae = document.getElementById("ctl00_ContentPlaceHolder1_txtEndDate").value;
-            if (school == "") {
-                alert("Please Select School/Institute Name.");
-                return false;
-            }
-            if (session == "0") {
-                alert("Please Select Session.");
-                return false;
-            }
-            if (degree == "") {
-                alert("Please Select Degree.");
-                return false;
-            }
-            if (schmType == "0") {
-                alert("Please Select Scheme Type.");
-                return false;
-            }
-            if (semester == "") {
-                alert("Please Select Semester.");
-                return false;
-            }
-            if (AttStartDate == "" || AttStartDate == "DD/MM/YYYY") {
-                alert("Please Enter Attendance Start Date.");
-                return false;
-            }
-            if (AttEndDtae == "" || AttEndDtae == "DD/MM/YYYY") {
-                alert("Please Enter Attendance End Date.");
-                return false;
-            }
-            if (attLock == "") {
-                alert("Please Select Attendance Lock By Day.");
-                return false;
-            }
-            //alert(school);
-            $('#hfdSms').val($('#rdSMSYes').prop('checked'));
-            $('#hfdEmail').val($('#rdEmailYes').prop('checked'));
-            $('#hfdCourse').val($('#rbCRegBefore').prop('checked'));
-            $('#hfdTeaching').val($('#rdTeachYes').prop('checked'));
-            $('#hfdActive').val($('#rdActive').prop('checked'));
-        }
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-        prm.add_endRequest(function () {
-            $(function () {
-                $('#btnSubmit').click(function () {
-                    validate();
-                });
-            });
-        });
-    </script>
-
-
-
-
-
-   <%-- <script>
-        //var MulSel = $.noConflict();
-        $(document).ready(function () {
-            $('.multi-select-demo').multiselect();
-            var prm = Sys.WebForms.PageRequestManager.getInstance();
-            prm.add_endRequest(function () {
-                $('.multi-select-demo').multiselect({
-                    includeSelectAllOption: true,
-                    enableFiltering: true,
-                    filterPlaceholder: 'Search',
-                    enableCaseInsensitiveFiltering: true,
-                    enableHTML: true,
-                    templates: {
-                        filter: '<li class="multiselect-item multiselect-filter"><div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input class="form-control multiselect-search" type="text" /></div></li>',
-                        filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default multiselect-clear-filter" style="height: 33px;" type="button"><i style="margin-right: 4px;" class="fa fa-eraser"></i></button></span>'
-                    }
-                    //dropRight: true,
-                    //search: true,
-                });
-
-            });
-        });
-    </script>--%>
-
-
-
-
-  <%-- <script>
-       $(document).ready(function () {
-           $('.multi-select-demo').multiselect({
-               includeSelectAllOption: true,
-               maxHeight: 200
-           });
-       });
-
-       var parameter = Sys.WebForms.PageRequestManager.getInstance();
-       parameter.add_endRequest(function () {
-           $(document).ready(function () {
-               $('.multi-select-demo').multiselect({
-                   includeSelectAllOption: true,
-                   maxHeight: 200
-               });
-           });
-       });
-    </script>--%>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -918,6 +433,505 @@
                     enableCaseInsensitiveFiltering: true,
                 });
             });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#<%=ddlSession.ClientID %>').change(function () {
+                //debugger;
+                var sessionids = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '<%=Page.ResolveUrl("~/ACADEMIC/AttendanceConfig.aspx/BindColleges")%>',
+                    data: '{ SessionId: "' + sessionids + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var lstbxSchool = $('#<%=lstbxSchool.ClientID %>');
+                        lstbxSchool.empty();
+                        $.each(data.d, function (index, item) {
+                            lstbxSchool.append($('<option>', {
+                                value: item.College_Id,
+                                text: item.College_Name
+                            }));
+                        });
+                        lstbxSchool.multiselect('refresh');
+                        lstbxSchool.multiselect('rebuild');
+                        //var test = $("#hdnGlobalClgIds").val();
+                        if ($("#hdnGlobalClgIds").val() != '') {
+
+                            $("#ctl00_ContentPlaceHolder1_lstbxSchool").multiselect('select', $("#hdnGlobalClgIds").val()).val();
+                            $("#ctl00_ContentPlaceHolder1_lstbxSchool").val($("#hdnGlobalClgIds").val()).change();
+
+                        }
+                        $("#hdnGlobalClgIds").val("");
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function getSelectedIds(chk) {
+            //debugger;
+            var collegeIds = $(chk).val();
+
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/ACADEMIC/AttendanceConfig.aspx/BindDegrees")%>',
+                data: '{ CollegeIds: "' + collegeIds + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var ddlDegree = $('#<%=ddlDegree.ClientID %>');
+                    ddlDegree.empty();
+                    $.each(data.d, function (index, item) {
+                        ddlDegree.append($('<option>', {
+                            value: item.DegreeNo,
+                            text: item.Degree_Name
+                        }));
+                    });
+                    ddlDegree.multiselect('refresh');
+                    ddlDegree.multiselect('rebuild');
+                    //var test = $("#hdnGlobalDeg").val();
+
+
+                    if ($("#hdnGlobalDeg").val() != '') {
+                        //$("#ctl00_ContentPlaceHolder1_ddlDegree").multiselect('select', $("#hdnGlobalDeg").val()).val();
+
+
+                        var degreenos = $("#hdnGlobalDeg").val().split(',');
+
+                        degreenos.forEach(function (value) {
+                            $("#ctl00_ContentPlaceHolder1_ddlDegree").multiselect('select', value);
+                        });
+                    }
+                    $("#hdnGlobalDeg").val("");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+            }
+    </script>
+
+    <script>
+
+        $('#btnSubmit').on('click', function () {
+            var msg = ''; var Obj = {}; var Colg = ''; var Deg = ''; var Sem = ''
+            var str = '';
+
+            //debugger;
+            Obj.Sessionno = $("#ctl00_ContentPlaceHolder1_ddlSession").val();
+
+            $.each($("#ctl00_ContentPlaceHolder1_lstbxSchool").find("option:selected"), function (index, value) {
+                Colg = Colg + $(value).val() + ",";
+            });
+            Colg = Colg.slice(0, -1);
+            Obj.College_ids = Colg;
+
+
+            $.each($("#ctl00_ContentPlaceHolder1_ddlDegree").find("option:selected"), function (index, value) {
+                Deg = Deg + $(value).val() + ",";
+            });
+            Deg = Deg.slice(0, -1);
+            Obj.Degreenos = Deg;
+
+            Obj.SchemeType = $("#ctl00_ContentPlaceHolder1_ddlSchemeType").val();
+
+
+            $.each($("#ctl00_ContentPlaceHolder1_ddlSemester").find("option:selected"), function (index, value) {
+                Sem = Sem + $(value).val() + ",";
+            });
+            Sem = Sem.slice(0, -1);
+            Obj.Semesternos = Sem;
+
+            Obj.txtStartDate = document.getElementById("<%=txtStartDate.ClientID%>").value;
+            Obj.txtEndDate = document.getElementById("<%=txtEndDate.ClientID%>").value;
+            Obj.lockbyday = document.getElementById("<%=txtAttLockDay.ClientID%>").value;
+            Obj.SmsFac = ($('#rdSMSYes').prop('checked'));
+            Obj.EmailFac = ($('#rdEmailYes').prop('checked'));
+            Obj.TeachingPlan = ($('#rdTeachYes').prop('checked'));
+            Obj.IsActive = ($('#rdActive').prop('checked'));
+
+            if (Obj.Sessionno == 0) {
+                alert("Please select Session !!");
+                return false;
+            }
+
+            if (Obj.College_ids == "") {
+                alert("Please select School/Institute !!");
+                return false;
+            }
+
+            if (Obj.Degreenos == "") {
+                alert("Please select Degree !!");
+                return false;
+            }
+
+            if (Obj.SchemeType == 0) {
+                alert("Please select Scheme Type !!");
+                return false;
+            }
+
+            if (Obj.Semesternos == "") {
+                alert("Please select Semester !!");
+                return false;
+            }
+
+            if (Obj.txtStartDate == '') {
+                alert('Please Enter Start Date');
+                document.getElementById("<%=txtStartDate.ClientID%>").focus();
+                return false;
+            }
+            if (Obj.txtEndDate == '') {
+                alert('Please Enter End Date');
+                document.getElementById("<%=txtEndDate.ClientID%>").focus();
+                return false;
+            }
+            if (Obj.lockbyday == '') {
+                alert('Please Enter Attendance Lock By Day');
+                //document.getElementById("<%=txtAttLockDay.ClientID%>").focus();
+                return false;
+            }
+
+            var startDate = new Date(Obj.txtStartDate);
+            var endDate = new Date(Obj.txtEndDate);
+
+            if (Obj.txtStartDate != '' && Obj.txtEndDate != '') {
+
+
+                var startDateParts = Obj.txtStartDate.split('/');
+                var endDateParts = Obj.txtEndDate.split('/');
+
+                var startDate = new Date(startDateParts[2], startDateParts[1] - 1, startDateParts[0]);
+                var endDate = new Date(endDateParts[2], endDateParts[1] - 1, endDateParts[0]);
+
+
+                if (startDate > endDate) {
+                    alert('Attendance End Date should be greater than Attendance Start Date');
+                    return false;
+                }
+            }
+            var i = JSON.stringify(Obj);
+            //alert(i);
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/ACADEMIC/AttendanceConfig.aspx/SaveAttendanceConfig")%>',
+                data: JSON.stringify(Obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+
+                    if ($("#hdnEditMode").val() == "1") {
+                        alert('Attendance Configuration Updated Successfully !!!');
+                    }
+                    else {
+                        alert('Attendance Configuration Added Successfully !!!');
+                    }
+
+
+                    if (response.d == '') {
+
+                        return false;
+                    } else {
+
+                        $("#BindDynamicTable").find("tbody").remove();
+
+                        //debugger;
+                        //str = '<thead class="bg-light-blue"><tr><th>Edit</th><th>Session</th><th>School/Institute</th><th>Scheme Type</th><th>Start Date</th><th>End Date</th><th>Att Lock Days</th><th>SMS Facility</th><th>Email Facility</th><th>Teaching Plan</th><th>Status</th></tr></thead><tbody>';
+                        str = '<tbody id="BindDynamicTable">';
+                        $.each(response.d, function (index, GetValue) {
+
+                            str = str + '<tr>'
+                            str = str + '<td><a id="btnEdit" class="fas fa-edit" title="Edit Record" href="#" onclick="EditClick(this)"></a>' +
+
+                            '<input type="hidden" id="hdnSessionId" value="' + GetValue.SessionId + '"/><input type="hidden" id="hdnSemesterNos" value="' + GetValue.SemesterNos + '"/><input type="hidden" id="hdnSchemetyp" value="' + GetValue.SchemeType + '"/><input type="hidden" id="hdnCollegeIds" value="' + GetValue.College_Ids + '"/><input type="hidden" id="hdnDegreenos" value="' + GetValue.DegreeNos + '"/></td>'
+                            str = str + '<td>' + GetValue.SessionName + '</td>'
+                            str = str + '<td>' + GetValue.CollegeName + '</td>'
+                            str = str + '<td>' + GetValue.SchemetypeName + '</td>'
+                            str = str + '<td>' + GetValue.StartDateN + '</td>'
+                            str = str + '<td>' + GetValue.EndDateN + '</td>'
+                            str = str + '<td>' + GetValue.AttLockDays + '</td>'
+
+                            if (GetValue.SMSFacility == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idSmsFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idSmsFacility" value="false"/></td>'
+                            }
+                            if (GetValue.EmailFacility == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idEmailFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idEmailFacility" value="false"/></td>'
+                            }
+
+                            if (GetValue.TeachingPlan == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idteachingFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idteachingFacility" value="false"/></td>'
+                            }
+
+                            if (GetValue.ActiveStatus == true) {
+                                str = str + '<td><span class="badge badge-success">Active</span>' +
+                                    '<input type="hidden" id="idIsActive" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">Inactive</span>' +
+                                    '<input type="hidden" id="idIsActive" value="false"/></td>'
+                            }
+                            str = str + '</tr>'
+
+                        });
+                        str = str + '</tbody>';
+
+                        $("#BindDynamicTable").append(str);
+                        BindTable();
+                        $('#btnCancel').click();
+                    }
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //debugger;
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/ACADEMIC/AttendanceConfig.aspx/BindList")%>',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.d == '') {
+                        return false;
+                    } else {
+
+                        // str = '<thead class="bg-light-blue"><tr><th>Edit</th><th>Session</th><th>School/Institute</th><th>Scheme Type</th><th>Start Date</th><th>End Date</th><th>Att Lock Days</th><th>SMS Facility</th><th>Email Facility</th><th>Teaching Plan</th><th>Status</th></tr></thead><tbody>';
+                        str = '<tbody>';
+                        $.each(response.d, function (index, GetValue) {
+
+                            str = str + '<tr>'
+                            str = str + '<td><a id="btnEdit" class="fas fa-edit" title="Edit Record" href="#" onclick="EditClick(this)"></a>' +
+
+                            '<input type="hidden" id="hdnSessionId" value="' + GetValue.SessionId + '"/><input type="hidden" id="hdnSemesterNos" value="' + GetValue.SemesterNos + '"/><input type="hidden" id="hdnSchemetyp" value="' + GetValue.SchemeType + '"/><input type="hidden" id="hdnCollegeIds" value="' + GetValue.College_Ids + '"/><input type="hidden" id="hdnDegreenos" value="' + GetValue.DegreeNos + '"/></td>'
+                            str = str + '<td>' + GetValue.SessionName + '</td>'
+                            str = str + '<td>' + GetValue.CollegeName + '</td>'
+                            str = str + '<td>' + GetValue.SchemetypeName + '</td>'
+                            str = str + '<td>' + GetValue.StartDateN + '</td>'
+                            str = str + '<td>' + GetValue.EndDateN + '</td>'
+                            str = str + '<td>' + GetValue.AttLockDays + '</td>'
+
+                            if (GetValue.SMSFacility == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idSmsFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idSmsFacility" value="false"/></td>'
+                            }
+                            if (GetValue.EmailFacility == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idEmailFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idEmailFacility" value="false"/></td>'
+                            }
+
+                            if (GetValue.TeachingPlan == true) {
+                                str = str + '<td><span class="badge badge-success">Yes</span>' +
+                                    '<input type="hidden" id="idteachingFacility" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">No</span>' +
+                                    '<input type="hidden" id="idteachingFacility" value="false"/></td>'
+                            }
+
+                            if (GetValue.ActiveStatus == true) {
+                                str = str + '<td><span class="badge badge-success">Active</span>' +
+                                    '<input type="hidden" id="idIsActive" value="true"/></td>'
+                            }
+                            else {
+                                str = str + '<td><span class="badge badge-danger">Inactive</span>' +
+                                    '<input type="hidden" id="idIsActive" value="false"/></td>'
+                            }
+                            str = str + '</tr>'
+
+                        });
+                        str = str + '</tbody>';
+
+                        $("#BindDynamicTable").append(str);
+                        BindTable();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function EditClick(ClickValue) {
+            try {
+                //debugger;
+                $("#hdnEditMode").val("1");
+                //alert($("#hdnEditMode").val());
+                var td = $("td", $(ClickValue).closest("tr"));
+
+                $("#ctl00_ContentPlaceHolder1_ddlSession").val($("[id*=hdnSessionId]", td).val()).change();
+
+                $("#hdnGlobalClgIds").val($("[id*=hdnCollegeIds]", td).val());
+
+                var degreenos = $("[id*=hdnDegreenos]", td).val();
+                var degreenosArray = degreenos.split(',');
+                var uniqueDegreenosArray = $.unique(degreenosArray);
+                //var uniqueDegreenosString = uniqueDegreenosArray.join(',');
+
+                $("#hdnGlobalDeg").val(uniqueDegreenosArray);
+
+                $("#ctl00_ContentPlaceHolder1_ddlSchemeType").val($("[id*=hdnSchemetyp]", td).val()).change();
+
+                var semesternos = $("[id*=hdnSemesterNos]", td).val();
+                var semesternosArray = semesternos.split(',');
+                var uniquesemesternosArray = $.unique(semesternosArray);
+
+                uniquesemesternosArray.forEach(function (value) {
+                    $("#ctl00_ContentPlaceHolder1_ddlSemester").multiselect('select', value);
+                });
+                $('#<%= txtStartDate.ClientID %>').val(td[4].innerText);
+                $('#<%= txtEndDate.ClientID %>').val(td[5].innerText);
+                $('#<%= txtAttLockDay.ClientID %>').val(td[6].innerText);
+
+                if ($("[id*=idSmsFacility]", td).val() == 'true') {
+                    $('#rdSMSYes').prop('checked', true);
+                }
+                else {
+                    $('#rdSMSYes').prop('checked', false);
+                }
+
+                if ($("[id*=idEmailFacility]", td).val() == 'true') {
+                    $('#rdEmailYes').prop('checked', true);
+                }
+                else {
+                    $('#rdEmailYes').prop('checked', false);
+                }
+
+
+                if ($("[id*=idteachingFacility]", td).val() == 'true') {
+                    $('#rdTeachYes').prop('checked', true);
+                }
+                else {
+                    $('#rdTeachYes').prop('checked', false);
+                }
+
+
+                if ($("[id*=idIsActive]", td).val() == 'true') {
+                    $('#rdActive').prop('checked', true);
+                }
+                else {
+                    $('#rdActive').prop('checked', false);
+                }
+
+
+            }
+            catch (ex) {
+            }
+        }
+
+    </script>
+
+    <script>
+        $('#btnCancel').on('click', function () {
+            //debugger;
+            $("#ctl00_ContentPlaceHolder1_ddlSession").val(0).change();
+            $("#ctl00_ContentPlaceHolder1_ddlSchemeType").val(0).change();
+
+            $('#ctl00_ContentPlaceHolder1_lstbxSchool').multiselect('deselectAll', false);
+            $("#ctl00_ContentPlaceHolder1_ddlSemester").multiselect('deselectAll', false);
+            $("#ctl00_ContentPlaceHolder1_ddlDegree").multiselect('deselectAll', false);
+            $('#ctl00_ContentPlaceHolder1_lstbxSchool').multiselect('updateButtonText');
+            $('#ctl00_ContentPlaceHolder1_ddlSemester').multiselect('updateButtonText');
+            $('#ctl00_ContentPlaceHolder1_ddlDegree').multiselect('updateButtonText');
+
+            $('#ctl00_ContentPlaceHolder1_ddlDegree').empty();
+
+            $('#<%= txtStartDate.ClientID %>').val('');
+            $('#<%= txtEndDate.ClientID %>').val('');
+            $('#<%= txtAttLockDay.ClientID %>').val('');
+
+
+            $('#rdSMSYes').prop('checked', true);
+            $('#rdEmailYes').prop('checked', true);
+            $('#rdTeachYes').prop('checked', true);
+            $('#rdActive').prop('checked', true);
+
+            $("#ctl00_ContentPlaceHolder1_lstbxSchool").val('').change();
+
+            $("#hdnEditMode").val("");
+            //alert($("#hdnEditMode").val());
+        });
+    </script>
+
+
+    <script>
+
+        $('#btnReport').on('click', function () {
+            //debugger;
+            $.ajax({
+                type: "POST",
+                url: '<%=Page.ResolveUrl("~/ACADEMIC/AttendanceConfig.aspx/AttendanceConfigExcel")%>',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.d == '') {
+                        alert('Data Not Found !!!');
+                        return false;
+                    } else {
+                        var jsonData = response.d;
+                        // Prepare the Excel content
+                        var excelContent = "Session\tSchool/Institute\tDegree\tSemester\tScheme Type\tStart Date\tEnd Date\tAttendance Lock Days\tSMS Facility\tEmail Facility\tTeaching Plan\tActive Status\t\n";
+                        var marks = "";
+                        jsonData.forEach(function (item) {
+                            excelContent += item.SessionName + "\t" + item.CollegeName + "\t" + item.DegreeName + "\t" + item.SemesterName + "\t" + item.SchemetypeName + "\t" + item.StartDateN + "\t" + item.EndDateN + "\t" + item.AttLockDays + "\t" + item.SmsFacility_Str + "\t" + item.EmailFacility_Str + "\t" + item.TeachingPlan_Str + "\t" + item.ActiveStatus_Str + "\n";
+                        });
+                        var blob = new Blob([excelContent], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+                        // Create a download link and trigger the download
+                        var excelFileName = "AttendanceConfiguration.xlsx";
+                        var link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = excelFileName;
+                        link.click();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
         });
     </script>
 

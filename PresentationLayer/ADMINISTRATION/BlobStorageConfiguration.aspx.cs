@@ -14,6 +14,7 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
+    StudentController objSC = new StudentController();
     static int BlobID;
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -33,10 +34,14 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
                 Page.Title = Session["coll_name"].ToString();
 
                 BindListView();
+                BindActivty();
             }
             ViewState["action"] = "add";
+            ViewState["Submit"] = btnSubmit.Text;
+            objCommon.FillDropDownList(ddlActivityy, "ACD_BLOB_STORAGE_ACTIVITY", "ACTIVITYNO", "ACTIVITY_NAME", "ACTIVITYNO>0", "ACTIVITYNO");
             objCommon.FillDropDownList(ddlActivity, "ACD_BLOB_STORAGE_ACTIVITY", "ACTIVITYNO", "ACTIVITY_NAME", "ACTIVITYNO>0 AND ACTIVE_STATUS=1", "ACTIVITYNO");
             objCommon.FillDropDownList(ddlInstances, "ACD_INSTANCES", "INSTANCENO", "INSTANCE_NAME", "", "");
+            BindActivty();
         }
     }
 
@@ -83,6 +88,9 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
             Response.Redirect("~/notauthorized.aspx?page=BlobStorageConfiguration.aspx");
         }
     }
+
+
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         int IsActive = 0;
@@ -139,7 +147,7 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
                     {
                         objCommon.DisplayMessage(this.updBlobConfig, "Record Updated Successfully!", this.Page);
                         this.ClearControls();
-                        btnSave.Text = "Submit";
+                      
 
                     }
                     else
@@ -172,11 +180,14 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
         objCommon.FillDropDownList(ddlInstances, "ACD_INSTANCES", "INSTANCENO", "INSTANCE_NAME", "", "");
         txtBlobStoragePath.Text = string.Empty;
         btnSave.Text = "Submit";
+      
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         ClearControls();
     }
+
+
 
     private void ShowDetail(int feedbackNo)
     {
@@ -236,5 +247,163 @@ public partial class ACADEMIC_BlobStorageConfiguration : System.Web.UI.Page
         {
             throw ex;
         }
+    }
+
+
+
+
+
+    //Added by Vipul Tichakule on dated 26-12-2023
+    protected void BindActivty()
+    {
+        DataSet ds = objSC.BindBlobStorageActivity();
+        lvActivity.DataSource = ds;
+        lvActivity.DataBind();
+
+        foreach (ListViewDataItem item in lvActivity.Items)
+        {
+            Label status = (Label)item.FindControl("lblStatus");
+            if (status.Text == "1")
+            {
+                status.Text = "Active";
+                status.ForeColor = System.Drawing.Color.Green;
+            }
+            else
+            {
+                status.Text = "InActive";
+                status.ForeColor = System.Drawing.Color.Red;
+            }
+        }
+
+
+    }
+
+    //Added by Vipul Tichakule on dated 26-12-2023
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        if (ddlActivityy.SelectedIndex != 0)
+        {
+            //objCommon.DisplayMessage(this.updBlobConfig, "Please Select Activity Type", this.Page);
+            //BindActivty();
+            //return;
+
+            int IsActive = 0;
+            if (checkActive.Checked)
+            {
+                IsActive = 1;
+            }
+            else
+            {
+                IsActive = 0;
+            }
+            string collegecode = objCommon.LookUp("REFF", "COLLEGE_CODE", "COLLEGE_CODE>0");
+            if (ViewState["Submit"] != null)
+            {
+                if (ViewState["Submit"].ToString().Equals("Submit"))
+                {
+                    int cs = objSC.AddBlobConfigActivity(Convert.ToInt32(ddlActivityy.SelectedValue), ddlActivityy.SelectedItem.Text, collegecode, IsActive);
+                    if (cs == 2627)
+                    {
+                        objCommon.DisplayMessage(this.updBlobConfig, "Record Already Exist", this.Page);
+
+                    }
+                    else if (cs.Equals(CustomStatus.RecordSaved))
+                    {
+
+                        this.ClearControls();
+                        objCommon.DisplayMessage(this.updBlobConfig, "Record Saved Successfully!", this.Page);
+                        BindActivty();
+                        Clear();
+                        // ViewState["Submit"] = "Edit";
+                    }
+                }
+                else
+                {
+                    int id = Convert.ToInt32(ViewState["activtyno"]);
+                    int cs = objSC.UpdatedBlobStorageActivity(id, ddlActivityy.SelectedItem.Text, collegecode, IsActive);
+                    if (cs == 2)
+                    {
+
+                        // this.ClearControls();
+                        objCommon.DisplayMessage(this.updBlobConfig, "Record Updated Successfully!", this.Page);
+                        BindActivty();
+                        Clear();
+                        ViewState["Submit"] = "Submit";
+                        btnSubmit.Text = "Submit";
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.updBlobConfig, "Please Select Activity Type", this.Page);
+            BindActivty();
+        }
+    }
+    //Added by Vipul Tichakule on dated 26-12-2023
+    protected void btn_editt_Click(object sender, ImageClickEventArgs e)
+    {
+        try
+        {
+            ImageButton btnEdit = sender as ImageButton;
+            int activityno = int.Parse(btnEdit.CommandArgument);
+            ViewState["activtyno"] = activityno;
+            ShowActivityDetail(activityno);
+            ViewState["Submit"] = "Edit";
+            btnSubmit.Text = "Update";
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+
+    //Added by Vipul Tichakule on dated 26-12-2023
+    protected void ShowActivityDetail(int activityno)
+    {
+        SqlDataReader dr = objSC.GetActivityDetails(activityno);
+
+        if (dr != null)
+        {
+            if (dr.Read())
+            {
+                if (dr["ACTIVITY_NAME"] == null | dr["ACTIVITY_NAME"].ToString().Equals(""))
+                    ddlActivityy.SelectedIndex = 0;
+                else
+                    ddlActivityy.SelectedItem.Text = dr["ACTIVITY_NAME"].ToString();
+                objCommon.FillDropDownList(ddlActivity, "ACD_BLOB_STORAGE_ACTIVITY", "ACTIVITYNO", "ACTIVITY_NAME", "ACTIVITYNO>0 AND ACTIVE_STATUS=1", "ACTIVITYNO");
+                //ddlActivityy.SelectedValue = dr["ACTIVITYNO"].ToString();
+
+                string statuss = dr["ACTIVE_STATUS"].ToString();
+
+                if (statuss == "1")
+                    checkActive.Checked = true;
+                else
+                    checkActive.Checked = false;
+
+            }
+        }
+
+        dr.Close();
+
+
+    }
+
+    //Added by Vipul Tichakule on dated 26-12-2023
+    protected void btnCancell_Click(object sender, EventArgs e)
+    {
+        Clear();
+    }
+
+    protected void Clear()
+    {
+        btnSubmit.Text = "Submit";
+        // ddlActivityy.ClearSelection();
+        ddlActivityy.Items.Clear();
+        ddlActivityy.Items.Add(new ListItem("Please Select", "-1"));
+        //  objCommon.FillDropDownList(ddlActivity, "ACD_BLOB_STORAGE_ACTIVITY", "ACTIVITYNO", "ACTIVITY_NAME", "ACTIVITYNO>0 AND ACTIVE_STATUS=1", "ACTIVITYNO");
+        //ddlActivityy.SelectedIndex = 0;
     }
 }

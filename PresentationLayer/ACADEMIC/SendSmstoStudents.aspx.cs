@@ -949,14 +949,19 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    string msg = "<h1>Greetings !!</h1>";
-                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg ="Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -1329,14 +1334,19 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
                                     string SENDGRID_STATUS = dsconfig.Tables[0].Rows[0]["SENDGRID_STATUS"].ToString();
 
                                     string path = Server.MapPath("~/TempDocument/");
-                                    string msg = "<h1>Greetings !!</h1>";
-                                    msg += "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
+                                    //string msg = "<h1>Greetings !!</h1>";
+                                    string msg = "Dear" + " " + "<b>" + studname + "," + "</b>";   //b
                                     msg += "<br />";
                                     msg += "<br />";
                                     msg += "<b>" + message + "</b>" + "<br/><br/>";
-                                    msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
-                                    msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
-                                    msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    ////msg += "<b>Total Amount:" + Total + "</b>" + "<br/>";//b
+                                    //msg += "<b>Paid Amount:" + PAID + "</b>" + "<br/>";//b
+                                    //msg += "<b>Outstanding Amount:" + Outstanding + "</b>" + "<br/>";//b
+                                    //Email Template has been change as per ticket 52890 and discuss with Shubham M. 
+                                    // Changes done by jay takalkhede on dated 03012023
+                                    msg += "<b>Fees to be paid:" + Total + "</b>" + "<br/>";//b
+                                    msg += "<b>Paid fees:" + PAID + "</b>" + "<br/>";//b
+                                    msg += "<b>Outstanding fees:" + Outstanding + "</b>" + "<br/>";//b
                                     msg += "This is an auto generated response to your email. Please do not reply to this mail.";
                                     msg += "<br /><br /><br /><br />Regards,<br />";   //bb
                                     msg += "" + CollegeName + "<br /><br />";   //bb
@@ -3582,7 +3592,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
             divAttStatus.Visible = false;
             pnlfirst.Visible = false;
             divFirstsms.Visible = false;
-            objCommon.DisplayMessage(this.updDetained, "Attendance Not Mark For Your Selection!", this.Page);
+            objCommon.DisplayMessage(this.updDetained, "No Absentees Found For Your Selection!", this.Page);
         }
 
         foreach (ListViewDataItem dataitem in lvfirstsms.Items)
@@ -3752,6 +3762,7 @@ public partial class ACADEMIC_SendSmstoStudents : System.Web.UI.Page
         }
 
     }
+
 
     private void GetParentsMeeting()
     {

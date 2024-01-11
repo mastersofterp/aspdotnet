@@ -1,0 +1,298 @@
+#newCommunityIcon{
+    font-size:2.5rem;
+    padding: 0.5rem 1rem;
+    border-radius:15%;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+
+#communityName{
+    background-color:$input-bg;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.community-element{
+    &:hover{
+        cursor:pointer;
+        background-color:$secondary-bg;
+    }
+}
+
+.community-element.active {
+    color: #6777ef;
+    background-color: #f0f3ff;
+    border-color: #6777ef !important;
+}
+
+.community-count{
+    padding:4px 10px 4px 10px;
+    background-color:darken($secondary-bg,1.5%);
+}
+
+img.msr-2.rounded{
+    object-fit: cover;
+}
+
+.member-container {
+    ul.list-unstyled {
+        max-height: calc(100vh - 150px) !important;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    li.items-list-compo {
+        padding: 5px 5px;
+        margin-bottom: 0px;
+        border-bottom: 1px solid $secondary-bg;
+
+        img {
+            max-height: 30px;
+            max-width: 30px;
+        }
+
+        svg {
+            width: 30px;
+            height: 30px;
+        }
+        .media-body{
+            font-size:13px;
+            text-transform:capitalize;
+        } 
+        &:hover {
+            cursor: pointer;
+            background-color: $secondary-bg;
+        }
+    }
+}
+
+
+
+.edit-icon{
+    &:hover{            
+        color:$dot-dark-blue;
+    }
+}
+.done-icon{
+    &:hover{            
+        color:$dot-green;
+    }
+}
+.calendar-icon{
+    &:hover{            
+        color:$dot-purple;
+    }
+}
+.warning-icon{
+    &:hover{            
+        color:$error-orange;
+    }
+}
+.delete-icon{
+    &:hover{            
+        color:$dot-red;
+    }
+}
+.option-icon{
+    &:hover{
+        cursor:pointer;
+    }
+}
+
+
+.post-type{
+    font-size: 14px;    
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    background-color:$light-steel;
+    &:hover{
+        cursor:pointer;
+        //color: $purple;
+    }
+}
+
+.secondary-text{
+    color:$gray;
+    font-size:10px;
+    font-weight: 700;
+}
+
+.text-primary-black{
+    color:$text-primary;
+}
+
+.bg-secondary{
+    background-color: $light-steel !important;
+}
+
+.reply-btn{
+    &:hover{
+        color:$purple;
+    }
+}
+
+.post-image{
+    width:50px;
+    height:50px;
+    object-fit: cover;
+}
+
+.post-image-sm{
+    width: 40px;
+    height:40px;
+}
+
+.blue-icon{   
+    color:$gray !important;  
+    &:hover{
+        color:$purple !important;
+        cursor:pointer;
+    }
+}
+
+svg.memberSvg,svg.memberVerifySvg{
+    height:40px;
+    width:40px;
+}
+
+.community-scroll-lg{
+    max-height:calc(100vh - 90px);
+    overflow-x:hidden;
+    overflow-y:scroll;
+}
+
+.green-icon{
+    
+    &:hover{
+        color:$dot-green;
+        cursor:pointer;
+    }
+}
+
+.purple-icon{
+    
+    &:hover{
+        color:$dot-purple;
+        cursor:pointer;
+    }
+}
+
+.orange-icon{
+    
+    &:hover{
+        color:$dot-orange;
+        cursor:pointer;
+    }
+}
+
+.preview-2-images{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.community-post-image{
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.post-others-messages {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.memberCommentSvg,.memberCommentImage{
+    height:25px;
+    width:30px;
+}
+
+.community-fit-image {
+    width: 50%;
+    height: 224px;
+    border: 2px solid #fff;
+    padding: 8px;
+    position:relative;
+    background: $black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.community-image-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #00000080;
+    font-size: 50px;
+    line-height: 200px;
+    cursor:pointer;
+    color:$white !important;
+}
+
+.preview-selected-image{
+    padding: 10px;
+    border: 4px dashed $purple;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4,1fr);
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    .previewImage{
+        .image-name{
+
+        }
+        .image-size{
+
+        }
+        &:hover{
+            .image-name{
+
+            }
+            .image-size{
+    
+            }
+        }
+    }
+    img{
+        max-width: 175px;
+    }
+}
+.lg-toolbar.lg-group{
+    #lg-share{
+        display:none;
+    }
+
+}
+
+
+.community-name-sticky{
+    position:sticky;
+    top:0px;
+    z-index:10;
+}
+
+// .new-post-sticky{
+//     position:sticky;
+//     top:51px;
+//     z-index:10;
+// }
+
+.toggle-flag-hover{
+    .col-1{
+        i{
+            display:none;
+        }        
+    }
+    &:hover{
+        .col-1{
+            i{
+                display:inline-block;
+            }        
+        }
+    }
+}
+
+
+

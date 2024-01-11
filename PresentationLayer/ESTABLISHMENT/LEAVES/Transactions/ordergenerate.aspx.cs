@@ -361,6 +361,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ordergenerate : System.We
         txtLeavebal.Text = string.Empty;
         ddlEmp.SelectedIndex = 0;
         ddlLName.SelectedIndex = 0;
+        
         //fillorder();
         bindOrderNo();
 
@@ -818,6 +819,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ordergenerate : System.We
     }
     protected void btnbac_Click(object sender, EventArgs e)
     {
+        ddlcollege2.SelectedIndex = 0;
+        ddlstafftype2.SelectedIndex = 0;
         ddlOrder.SelectedIndex = 0;
         ddlEname.SelectedIndex = 0;
         pnllist.Visible = true;

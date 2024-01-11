@@ -2772,7 +2772,7 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + "MarksEntryReport";
         url += "&path=~,Reports,Academic," + "rptMarksList.rpt";
-        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[0]) + ",@P_SECTIONNO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[3]) + ",@P_SEMESTERNO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[2]) + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_PREV_STATUS=0";
+        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[0]) + ",@P_SECTIONNO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[1]) + ",@P_SEMESTERNO=" + Convert.ToInt32(lnk.CommandArgument.Split(',')[2]) + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_PREV_STATUS=0";
 
         //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

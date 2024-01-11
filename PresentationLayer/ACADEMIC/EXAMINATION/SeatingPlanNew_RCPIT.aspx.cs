@@ -600,14 +600,14 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
             {
 
-                examno += ds.Tables[0].Rows[i]["EXAMNO"].ToString() + ",";
+                examno += ds.Tables[0].Rows[i]["EXAMNO"].ToString() + "$";
 
             }
-            examno = examno.TrimEnd(',');
+            examno = examno.TrimEnd('$');
         }
         string dates = DateTime.Now.ToString("yyyy-MM-dd");
-        if (Convert.ToInt32(Session["OrgId"]) == 1)
-        {
+        //if (Convert.ToInt32(Session["OrgId"]) == 1)
+        //{
             string proc_name = "PKG_GET_EXAM_DATE_FOR_DATE";
             string parameter = "@P_EXAMDATE,@P_EXAM_TT_TYPE,@P_SESSIONNO";
             string Call_values = "" + dates + "," + examno + "," + ddlSession.SelectedValue + "";
@@ -622,14 +622,14 @@ public partial class ACADEMIC_SEATINGARRANGEMENT_SeatingPlanNew : System.Web.UI.
             }
             ddlslot.Focus();
 
-        }
-        else
-        {
-            //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
-           // objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "  CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO");  // AND EXAM_TT_TYPE = 11" 
-            objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO"); 
+        //}
+        //else
+        //{
+        //    //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
+        //   // objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "  CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO");  // AND EXAM_TT_TYPE = 11" 
+        //    objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO"); 
             
-        }
+        //}
   
       }
     #endregion

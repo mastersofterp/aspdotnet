@@ -107,16 +107,25 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
             {
                 Choisefor = 0;
             }
+            int Status = 0;
+            if (chkActiveStatus.Checked == true)
+            {
+                Status = 1;
+            }
+            else
+            {
+                Status = 0;
+            }
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
                 if (ViewState["action"].ToString().Equals("add"))
                 {
                     //Add Batch
-                    CustomStatus cs = (CustomStatus)objSFC.AddFeedbackMaster(txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor);
-                    if (cs.Equals(CustomStatus.DuplicateRecord)) 
+                    CustomStatus cs = (CustomStatus)objSFC.AddFeedbackMaster(txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status);
+                    if (cs.Equals(CustomStatus.DuplicateRecord))
                     {
-                        objCommon.DisplayMessage(updGrade, "Record already exist", this.Page); 
+                        objCommon.DisplayMessage(updGrade, "Record already exist", this.Page);
                     }
                     else if (cs.Equals(CustomStatus.RecordSaved))
                     {
@@ -131,11 +140,11 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                 }
                 else
                 {
-                    CustomStatus cs = (CustomStatus)objSFC.UpdateFeedbackMaster(feedbackNo, txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor);
+                    CustomStatus cs = (CustomStatus)objSFC.UpdateFeedbackMaster(feedbackNo, txtFeedbackName.Text, Session["colcode"].ToString(), Convert.ToInt32(ddlfeedbackmode.SelectedValue), Coursetype, Choisefor, Status);
 
-                    if (cs.Equals(CustomStatus.DuplicateRecord))  
+                    if (cs.Equals(CustomStatus.DuplicateRecord))
                     {
-                        objCommon.DisplayMessage(updGrade, "Record already exist", this.Page); 
+                        objCommon.DisplayMessage(updGrade, "Record already exist", this.Page);
                     }
                     else if (cs.Equals(CustomStatus.RecordUpdated))
                     {
@@ -148,7 +157,7 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                     }
                     else
                     {
-                        objCommon.DisplayMessage(updGrade, "Error Adding Grade Type!", this.Page); 
+                        objCommon.DisplayMessage(updGrade, "Error Adding Grade Type!", this.Page);
                     }
 
                 }
@@ -253,6 +262,15 @@ public partial class ACADEMIC_MASTERS_FeedbackMaster : System.Web.UI.Page
                     rdoStudent.Checked = false;
                     rdoFaculty.Checked = false;
                     rdoNone2.Checked = true;
+                }
+
+                if (dr["IS_ACTIVE"].ToString().Equals("1"))
+                {
+                    chkActiveStatus.Checked = true;
+                }
+                else
+                {
+                    chkActiveStatus.Checked = false;
                 }
             }
         }

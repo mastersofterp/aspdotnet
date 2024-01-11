@@ -64,6 +64,22 @@
             padding: 0.375rem 0.15rem;
         }
     </style>
+    <script type="text/javascript" >
+        function ErrorMessage(errorString) {
+            debugger;
+            var errorString = errorString.replace(/,/g, '\n');
+            alert(errorString)
+        }
+</script>
+    <script type="text/javascript">
+        function alertmessage(commaSeparatedString) {
+            debugger;
+           
+            var parts = commaSeparatedString.split(',');
+            var errorMessage = parts.join('\n');           
+            alert(errorMessage);
+        }
+</script>
 
     <script type="text/javascript">
         function findTotal(val) {
@@ -242,16 +258,16 @@
             if (!var3) { var3 = 0; }
 
             var ansC = document.getElementById('<%=txtPcmMarks.ClientID%>');
-                    ansC.value = var1 + var2 + var3;
-                    document.getElementById("hfdPcmMarks").value = ansC.value;         //Added by sachin on 20-07-2022
-                    var marksPCB = ansC.value;
-                    var Percentage = 0.00;
+            ansC.value = var1 + var2 + var3;
+            document.getElementById("hfdPcmMarks").value = ansC.value;         //Added by sachin on 20-07-2022
+            var marksPCB = ansC.value;
+            var Percentage = 0.00;
             //alert(marksPCM);
             //var Percentage = (marksPCM * 100 / 300).toFixed(2);
-                    Percentage = Number((marksPCB / 300) * 100);
-                    var Per2 = Percentage.toFixed(2)
+            Percentage = Number((marksPCB / 300) * 100);
+            var Per2 = Percentage.toFixed(2)
             //alert(Percentage);
-                    document.getElementById('<%=txtPcmPerct.ClientID %>').value = Per2;
+            document.getElementById('<%=txtPcmPerct.ClientID %>').value = Per2;
                     document.getElementById("hfdPcmPer").value = Per2;
 
 
@@ -507,7 +523,7 @@
                                     </section>
                                 </aside>
                             </div>
-
+                            <%--Added IDs to the div(s) and sup(s) by Shrikant W. on 26-12-2023--%>
                             <div class="col-lg-10 col-md-8 col-12">
                                 <div class="col-12 pl-0 pr-0 pl-lg-2 pr-lg-2">
                                     <div id="divStudentLastQualification" runat="server">
@@ -521,9 +537,9 @@
 
                                                 <div class="col-md-12">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divSscCollegeName" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supSscSchoolName" runat="server">* </sup>
                                                                 <label>School/College Name</label>
                                                             </div>
                                                             <asp:TextBox ID="txtSchoolCollegeNameSsc" runat="server" CssClass="form-control"
@@ -532,36 +548,37 @@
                                                             <%-- <ajaxToolKit:FilteredTextBoxExtender ID="fteSchoolCollegeNameSsc" runat="server"
                                                     TargetControlID="txtSchoolCollegeNameSsc" FilterType="Custom" FilterMode="InvalidChars"
                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
-                                                            <asp:RequiredFieldValidator ID="rfvSchoolName" runat="server" ControlToValidate="txtSchoolCollegeNameSsc"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvSchoolName" runat="server" ControlToValidate="txtSchoolCollegeNameSsc"
                                                                 Display="None" ErrorMessage="Please Enter Secondary/10th School/College Name"
-                                                                SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscBoard" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supSscBoard" runat="server">* </sup>
                                                                 <label>Board </label>
                                                             </div>
                                                             <asp:TextBox ID="txtBoardSsc" runat="server" TabIndex="137" placeholder="Enter Board"
                                                                 ToolTip="Please Enter SSC Board" onkeypress="return alphaOnly(event);" CssClass="form-control"></asp:TextBox>
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="fteBoardSsc" runat="server" TargetControlID="txtBoardSsc"
                                                                 FilterType="Custom" FilterMode="InvalidChars" InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
-                                                            <asp:RequiredFieldValidator ID="rfvBoardSsc" runat="server" ControlToValidate="txtBoardSsc"
-                                                                Display="None" ErrorMessage="Please Enter SSC Board" SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                            <%--<asp:RequiredFieldValidator ID="rfvBoardSsc" runat="server" ControlToValidate="txtBoardSsc"
+                                                                Display="None" ErrorMessage="Please Enter SSC Board" SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscYearOfExam" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supSscYearOfExam" runat="server">* </sup>
                                                                 <label>Year Of Exam</label>
                                                             </div>
                                                             <asp:TextBox ID="txtYearOfExamSsc" runat="server" onkeyup="validateNumeric(this);"
                                                                 TabIndex="138" ToolTip="Please Enter Secondary/10th Year Of Exam" placeholder="Enter Year Of Exam"
                                                                 CssClass="form-control" MaxLength="4"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="rfvYearOfExamssc" runat="server" ControlToValidate="txtYearOfExamSsc"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvYearOfExamssc" runat="server" ControlToValidate="txtYearOfExamSsc"
                                                                 Display="None" ErrorMessage="Please Enter Secondary/10th Year Of Exam" SetFocusOnError="True"
-                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscMedium" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSscMedium" runat="server">* </sup>
                                                                 <label>Medium</label>
                                                             </div>
 
@@ -574,9 +591,9 @@
                                             Display="None" ErrorMessage="Please Enter SSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscMarksObtained" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supSscMarksObtained" runat="server">* </sup>
                                                                 <label>Marks/GPA Obtained </label>
                                                             </div>
                                                             <asp:TextBox ID="txtMarksObtainedSsc" onkeypress="return isNumberKey(this, event);;" runat="server"
@@ -585,26 +602,27 @@
                                                             <%--    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender57" runat="server"
                                                                 FilterType="Numbers" TargetControlID="txtMarksObtainedSsc">
                                                             </ajaxToolKit:FilteredTextBoxExtender>--%>
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtMarksObtainedSsc"
+                                                            <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtMarksObtainedSsc"
                                                                 Display="None" ErrorMessage="Please Enter Secondary/10th Obtained Marks" SetFocusOnError="True"
-                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             <%-- OnTextChanged="txtMarksObtainedSsc_TextChanged"--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscOutOfMarksObtained" runat="server">
                                                             <div class="label-dynamic">
-                                                                <sup>* </sup>
+                                                                <sup id="supOutOfMarksObtained" runat="server">* </sup>
                                                                 <label>Out Of Marks/GPA </label>
                                                             </div>
                                                             <asp:TextBox ID="txtOutOfMarksSsc" onkeyup="validateNumeric(this);" placeholder=" Enter Out Of Marks"
                                                                 ToolTip="Please Enter Out Of Marks" onchange="calc(1);" runat="server" MaxLength="3"
                                                                 TabIndex="141" CssClass="form-control"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="rfvOutOfMarksSsc" runat="server" ControlToValidate="txtOutOfMarksSsc"
+                                                            <%--<asp:RequiredFieldValidator ID="rfvOutOfMarksSsc" runat="server" ControlToValidate="txtOutOfMarksSsc"
                                                                 Display="None" ErrorMessage="Please Enter Secondary/10th Out Of Marks" SetFocusOnError="True"
-                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             <%-- onblur="calPercentage(this,'ssc'),validateSscMarksCam(this)"--%><%-- OnTextChanged="txtOutOfMarksSsc_TextChanged" AutoPostBack="true"--%>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscPercentage" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSscPercentage" runat="server">* </sup>
                                                                 <label>Percentage</label>
                                                             </div>
 
@@ -615,8 +633,9 @@
                                                                 Display="None" ErrorMessage="Please Enter Numeric Number" Operator="DataTypeCheck"
                                                                 SetFocusOnError="True" Type="Double" ValidationGroup="Academic"></asp:CompareValidator>
                                                         </div>
-                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divSscSeatNo" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSscSeatNo" runat="server">* </sup>
                                                                 <label>Seat No.</label>
                                                             </div>
 
@@ -664,8 +683,9 @@
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender46" runat="server"
                                                                 TargetControlID="txtAttemptSsc" FilterType="Numbers" />
                                                         </div>
-                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="form-group col-lg-6 col-md-6 col-12" id="divSscSchoolAddress" runat="server">
                                                             <div class="label-dynamic">
+                                                                <sup id="supSscSchoolAddress" runat="server">* </sup>
                                                                 <label>School/College Address </label>
                                                             </div>
                                                             <asp:TextBox ID="txtSSCSchoolColgAdd" runat="server" CssClass="form-control" TextMode="MultiLine"
@@ -697,9 +717,9 @@
 
                                                     <asp:Panel ID="pnlHsc" runat="server">
                                                         <div class="row">
-                                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divHscSchoolName" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>*</sup>
+                                                                    <sup id="supHscSchoolName" runat="server">*</sup>
                                                                     <label>School/College Name</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtSchoolCollegeNameHssc" runat="server" CssClass="form-control"
@@ -709,38 +729,38 @@
 
                                                                 <%--  <asp:TextBox ID="txtSchoolCollegeNameHssc" runat="server" CssClass="form-control"
                                                                     TabIndex="148" placeholder=" Enter School/College Name" ToolTip="Please Enter Higher Secondary/12th School/College Name" onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));"></asp:TextBox>--%>
-                                                                <asp:RequiredFieldValidator ID="rfvCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameHssc"
+                                                               <%--<asp:RequiredFieldValidator ID="rfvCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameHssc"
                                                                     Display="None" ErrorMessage="Please Enter Higher Secondary/12th School/College Name"
-                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
-
+                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divHscBoard" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supHscBoard" runat="server">* </sup>
                                                                     <label>Board </label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtBoardHssc" runat="server" placeholder="Enter Board" ToolTip="Please Enter Board"
                                                                     TabIndex="149" CssClass="form-control"></asp:TextBox>
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="fteBoardHssc" runat="server" TargetControlID="txtBoardHssc"
                                                                     FilterType="Custom" FilterMode="InvalidChars" InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'1234567890" />
-                                                                <asp:RequiredFieldValidator ID="rfvBoard" runat="server" ControlToValidate="txtBoardHssc"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvBoard" runat="server" ControlToValidate="txtBoardHssc"
                                                                     Display="None" ErrorMessage="Please Enter HSSC Board" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divHscYearOfExam" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supHscYearOfExam" runat="server">* </sup>
                                                                     <label>Year Of Exam </label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtYearOfExamHssc" placeholder="Enter Year Of Exam" onkeyup="validateNumeric(this);"
                                                                     runat="server" TabIndex="150" ToolTip="Please Enter Higher Secondary/12th Year Of Exam"
                                                                     CssClass="form-control" MaxLength="4"></asp:TextBox>
-                                                                <asp:RequiredFieldValidator ID="rfvExamYear" runat="server" ControlToValidate="txtYearOfExamHssc"
+                                                               <%--<asp:RequiredFieldValidator ID="rfvExamYear" runat="server" ControlToValidate="txtYearOfExamHssc"
                                                                     Display="None" ErrorMessage="Please enter Higher Secondary/12th Year Of Exam"
-                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divHscMedium" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supHscMedium" runat="server">* </sup>
                                                                     <label>Medium</label>
                                                                 </div>
 
@@ -754,8 +774,9 @@
                                             Display="None" ErrorMessage="Please Enter HSSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divHscSeatNo" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supHscSeatNo" runat="server">* </sup>
                                                                     <label>Seat No.</label>
                                                                 </div>
 
@@ -841,10 +862,10 @@
                                                                             </td>
                                                                             <td></td>
                                                                         </tr>
-<%--                                                                        <div style="clear:b"></div>--%>
-                                                                        <tr id="trBiology" runat="server" style="display:block">
+                                                                        <%--                                                                        <div style="clear:b"></div>--%>
+                                                                        <tr id="trBiology" runat="server" style="display: block">
                                                                             <td>Biology</td>
-                                                                           
+
                                                                             <td>
                                                                                 <asp:TextBox ID="txtbiology" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     onchange="findTotal(this);" onblur="TotPer(this);" TabIndex="153" placeholder="Enter Biology's Marks"
@@ -913,18 +934,17 @@
                                                                         </tr>
 
                                                                         <tr>
-                                                                            <td><sup>*</sup><b>Total Marks</b></td>
+                                                                            <td id="divHscTotalMarks" runat="server"><sup id="supHscTotalMarks" runat="server">*</sup><b>Total Marks</b></td>
                                                                             <td>
-
                                                                                 <asp:TextBox ID="txtMarksObtainedHssc" runat="server" CssClass="form-control" MaxLength="4"
                                                                                     TabIndex="162" placeholder="Enter Marks Obtained" ToolTip="Please Enter Marks Obtained"
                                                                                     name="txtMarksObtainedHssc" onkeyup="validateNumeric(this);" oninput="calculatePercentage();"></asp:TextBox>
                                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="txtmnarksobtain" runat="server" FilterType="Numbers"
                                                                                     TargetControlID="txtMarksObtainedHssc">
                                                                                 </ajaxToolKit:FilteredTextBoxExtender>
-                                                                                <asp:RequiredFieldValidator ID="rfvMarksObtainedHssc" runat="server" ControlToValidate="txtMarksObtainedHssc"
+                                                                                <%--<asp:RequiredFieldValidator ID="rfvMarksObtainedHssc" runat="server" ControlToValidate="txtMarksObtainedHssc"
                                                                                     Display="None" ErrorMessage="Please Enter Higher Secondary/12th Obtained Marks"
-                                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                                    SetFocusOnError="True" ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                                             </td>
 
                                                                             <td>
@@ -981,8 +1001,9 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender47" runat="server"
                                                                     TargetControlID="txtAttemptHssc" FilterType="Numbers" />
                                                             </div>
-                                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divHscCollegeAddress" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supHscCollegeAddress" runat="server">* </sup>
                                                                     <label>School/College Address</label>
                                                                 </div>
 
@@ -1109,22 +1130,22 @@
 
                                                     <div class="col-md-12">
                                                         <div class="row">
-                                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divDiplomaCollegeName" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supDiplomaCollegeName" runat="server">* </sup>
                                                                     <label>School/College Name</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtSchoolCollegeNameDiploma" runat="server" CssClass="form-control"
                                                                     TabIndex="166" placeholder=" Enter Diploma School/College Name" ToolTip="Please Enter Diploma School/College Name"></asp:TextBox>
                                                                 <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" TargetControlID="txtSchoolCollegeNameDiploma"
                                                         FilterType="Custom" FilterMode="InvalidChars" InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />--%>
-                                                                <asp:RequiredFieldValidator ID="rfvDipCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameDiploma"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvDipCollageName" runat="server" ControlToValidate="txtSchoolCollegeNameDiploma"
                                                                     Display="None" ErrorMessage="Please Enter Diploma School/College Name" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaBoard" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supDiplomaBoard" runat="server">* </sup>
                                                                     <label>Board</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtBoardDiploma" runat="server" placeholder="Enter Board" ToolTip="Please Enter Board"
@@ -1132,24 +1153,25 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" runat="server"
                                                                     TargetControlID="txtBoardDiploma" FilterType="Custom" FilterMode="InvalidChars"
                                                                     InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'1234567890" />
-                                                                <asp:RequiredFieldValidator ID="rfvBoardDip" runat="server" ControlToValidate="txtBoardDiploma"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvBoardDip" runat="server" ControlToValidate="txtBoardDiploma"
                                                                     Display="None" ErrorMessage="Please Enter Diploma Board" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaYearOfExam" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supDiplomaYearOfExam" runat="server">* </sup>
                                                                     <label>Year Of Exam</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtYearOfExamDiploma" onkeyup="validateNumeric(this);" placeholder="Year Of Exam"
                                                                     runat="server" TabIndex="168" ToolTip="Please Enter Diploma Year Of Exam" CssClass="form-control"
                                                                     MaxLength="4"></asp:TextBox>
-                                                                <asp:RequiredFieldValidator ID="rfvExamYearDiploma" runat="server" ControlToValidate="txtYearOfExamDiploma"
+                                                                <%--<asp:RequiredFieldValidator ID="rfvExamYearDiploma" runat="server" ControlToValidate="txtYearOfExamDiploma"
                                                                     Display="None" ErrorMessage="Please enter Diploma Year Of Exam" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaMedium" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supDiplomaMedium" runat="server">* </sup>
                                                                     <label>Medium</label>
                                                                 </div>
 
@@ -1163,9 +1185,9 @@
                                             Display="None" ErrorMessage="Please Enter HSSC Medium" SetFocusOnError="True"
                                             ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaMarksObtained" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supDiplomaMarksObtained" runat="server">* </sup>
                                                                     <label>Marks Obtained</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtMarksObtainedDiploma" runat="server" CssClass="form-control"
@@ -1174,26 +1196,27 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server"
                                                                     FilterType="Numbers" TargetControlID="txtMarksObtainedDiploma">
                                                                 </ajaxToolKit:FilteredTextBoxExtender>
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtMarksObtainedDiploma"
+                                                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtMarksObtainedDiploma"
                                                                     Display="None" ErrorMessage="Please Enter Diploma Obtained Marks" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator><%-- OnTextChanged="txtMarksObtainedDiploma_TextChanged" AutoPostBack="true" --%>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%><%-- OnTextChanged="txtMarksObtainedDiploma_TextChanged" AutoPostBack="true" --%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaOutOfMarks" runat="server">
                                                                 <div class="label-dynamic">
-                                                                    <sup>* </sup>
+                                                                    <sup id="supDiplomaOutOfMarks" runat="server">* </sup>
                                                                     <label>Out Of Marks</label>
                                                                 </div>
                                                                 <asp:TextBox ID="txtOutOfMarksDiploma" onkeyup="validateNumeric(this);" placeholder="Enter Out Of Marks"
                                                                     ToolTip="Please Enter Out Of Marks" onchange="calc(3);" runat="server" MaxLength="4"
                                                                     CssClass="form-control" TabIndex="171"></asp:TextBox>
-                                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="txtOutOfMarksDiploma"
+                                                                <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="txtOutOfMarksDiploma"
                                                                     Display="None" ErrorMessage="Please Enter Diploma Out Of Marks" SetFocusOnError="True"
-                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>
+                                                                    ValidationGroup="Academic"></asp:RequiredFieldValidator>--%>
                                                                 <%-- onblur="calPercentage(this,'diploma'),validateHscMarksCam(this)"--%>
                                                                 <%--OnTextChanged="txtOutOfMarksDiploma_TextChanged" AutoPostBack="true" --%>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaPercentage" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supDiplomaPercentage" runat="server">* </sup>
                                                                     <label>Percentage</label>
                                                                 </div>
 
@@ -1204,8 +1227,9 @@
                                                                     Display="None" ErrorMessage="Please Enter Numeric Number" Operator="DataTypeCheck"
                                                                     SetFocusOnError="True" Type="Double" ValidationGroup="Academic"></asp:CompareValidator>
                                                             </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="form-group col-lg-3 col-md-6 col-12" id="divDiplomaSeatNo" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supDiplomaSeatNo" runat="server">* </sup>
                                                                     <label>Seat No.</label>
                                                                 </div>
 
@@ -1249,8 +1273,9 @@
                                                                 <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender9" runat="server"
                                                                     TargetControlID="txtAttemptDiploma" FilterType="Numbers" />
                                                             </div>
-                                                            <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <div class="form-group col-lg-6 col-md-6 col-12" id="divDiplomaSchoolCollegeAddress" runat="server">
                                                                 <div class="label-dynamic">
+                                                                    <sup id="supDiplomaSchoolCollegeAddress" runat="server">* </sup>
                                                                     <label>School/College Address</label>
                                                                 </div>
 
@@ -1273,8 +1298,9 @@
 
                                             <div class="col-md-12">
                                                 <div class="row">
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divExamName" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supExamName" runat="server">* </sup>
                                                             <label>Exam Name</label>
                                                         </div>
 
@@ -1282,16 +1308,18 @@
                                                             AppendDataBoundItems="True" ToolTip="Please Select Exam no." TabIndex="175">
                                                         </asp:DropDownList>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divSeatNo" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supSeatNo" runat="server">* </sup>
                                                             <label>Seat No.</label>
                                                         </div>
 
                                                         <asp:TextBox ID="txtQExamRollNo" runat="server" placeholder=" Enter Seat No." CssClass="form-control" MaxLength="10"
                                                             ToolTip="Please Enter Qualifying Seat No" TabIndex="176"></asp:TextBox>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divYearOfExam" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supYearOfExam" runat="server">* </sup>
                                                             <label>Year of Exam</label>
                                                         </div>
                                                         <asp:TextBox ID="txtYearOfExam" runat="server" CssClass="form-control" placeholder=" Enter Year of Exam"
@@ -1312,8 +1340,9 @@
                                                         </ajaxToolKit:FilteredTextBoxExtender>
 
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divPercentage" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supPercentage" runat="server">* </sup>
                                                             <asp:Label ID="lblDYtxtPercentile" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
 
@@ -1332,8 +1361,9 @@
                                                             ValidationGroup="EntranceExam" Display="None" SetFocusOnError="true" InitialValue="0"
                                                             ErrorMessage="Please Select Exam Name"></asp:RequiredFieldValidator>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divRank" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supRank" runat="server">* </sup>
                                                             <label>Rank</label>
                                                         </div>
 
@@ -1564,16 +1594,18 @@
                                         <ContentTemplate>
                                             <div class="">
                                                 <div class="row">
-                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class="form-group col-lg-6 col-md-6 col-12" id="divQualCollegeName" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualCollegeName" runat="server">* </sup>
                                                             <label>School / College Name</label>
                                                         </div>
 
                                                         <asp:TextBox ID="txtSchoolCollegeNameQualifying" runat="server" CssClass="form-control"
                                                             placeholder="Enter School / College Name" TabIndex="181"></asp:TextBox>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualBoard" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualBoard" runat="server">* </sup>
                                                             <label>Board</label>
                                                         </div>
 
@@ -1583,8 +1615,9 @@
                                                             TargetControlID="txtBoardQualifying" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'1234567890" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualExam" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualExam" runat="server">* </sup>
                                                             <label>Qualifying Exam</label>
                                                         </div>
 
@@ -1603,8 +1636,9 @@
                                                             TargetControlID="txtQualiMedium" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'1234567890" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualSeatNo" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualSeatNo" runat="server">* </sup>
                                                             <label>Seat No.</label>
                                                         </div>
 
@@ -1616,16 +1650,18 @@
                                                             TargetControlID="txtQualExamRollNo" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_+=,./:;<>?'{}[]\|-&&quot;'" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualYearExam" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualYearExam" runat="server">* </sup>
                                                             <label>Year of Exam</label>
                                                         </div>
                                                         <asp:TextBox ID="txtYearOfExamQualifying" runat="server" ToolTip="Please Enter Year Of Exam"
                                                             placeholder="Enter Year Of Exam" onkeyup="validateNumeric(this);" CssClass="form-control"
                                                             MaxLength="4" TabIndex="185"></asp:TextBox>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualMarksObtained" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualMarksObtained" runat="server">* </sup>
                                                             <label>Marks Obtained</label>
                                                         </div>
 
@@ -1636,8 +1672,9 @@
                                                             FilterType="Numbers" TargetControlID="txtMarksObtainedQualifying">
                                                         </ajaxToolKit:FilteredTextBoxExtender>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualOutOfMarks" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualOutOfMarks" runat="server">* </sup>
                                                             <label>Out Of Marks</label>
                                                         </div>
 
@@ -1645,8 +1682,9 @@
                                                             onchange="calc1(4);" runat="server" MaxLength="4" placeholder="Enter Out Of Marks"
                                                             CssClass="form-control" TabIndex="187"></asp:TextBox>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualPercentage" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualPercentage" runat="server">* </sup>
                                                             <label>Percentage</label>
                                                         </div>
                                                         <asp:TextBox ID="txtPercentageQualifying" onkeyup="validateNumeric(this);" runat="server" MaxLength="4"
@@ -1659,8 +1697,9 @@
                                                             Display="None" ErrorMessage="Please Enter Numeric Number" Operator="DataTypeCheck"
                                                             SetFocusOnError="True" Type="Double" ValidationGroup="Qual"></asp:CompareValidator>
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualGrade" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualGrade" runat="server">* </sup>
                                                             <label>Grade</label>
                                                         </div>
 
@@ -1670,8 +1709,9 @@
                                                             TargetControlID="txtGradeQualifying" FilterType="Custom" FilterMode="InvalidChars"
                                                             InvalidChars="~`!@#$%^*()_=,./:;<>?'{}[]\|&&quot;'1234567890" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualCGPA" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualCGPA" runat="server">* </sup>
                                                             <label>DGPA/CGPA</label>
                                                         </div>
 
@@ -1692,8 +1732,9 @@
                                                         <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender54" runat="server"
                                                             TargetControlID="txtAttemptQualifying" FilterType="Numbers" />
                                                     </div>
-                                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divQualCollegeAddress" runat="server">
                                                         <div class="label-dynamic">
+                                                            <sup id="supQualCollegeAddress" runat="server">* </sup>
                                                             <label>School/College Address</label>
                                                         </div>
 
@@ -2136,72 +2177,72 @@
         }
     </script>
 
-     <script>
-         function validateSubjectTextBoxes() {
-             //debugger;
-             //alert('hi')
-         var numVal1 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").value);
-         var numVal2 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtchem").value);
-         var numVal3 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").value);
-         var numVal4 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
-         var numVal6 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
-         var numVal5 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtbiology").value);
-         var isHidden = document.getElementById("ctl00_ContentPlaceHolder1_trBiology");
-         var obtainedMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtMarksObtainedHssc").value);
-         var totalMarks =  Number(document.getElementById("ctl00_ContentPlaceHolder1_txtOutOfMarksHssc").value);
-         var vocSubName =  Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value);
-         var vocMarksObtained =  Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
-         var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
-         var orgid = $("#<%=hdnOrgId.ClientID %>").val();  
-             var degree = $("#<%=hdnDegree.ClientID %>").val();
+    <script>
+        function validateSubjectTextBoxes() {
+            //debugger;
+            //alert('hi')
+            var numVal1 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").value);
+            var numVal2 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtchem").value);
+            var numVal3 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").value);
+            var numVal4 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
+            var numVal6 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
+            var numVal5 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtbiology").value);
+            var isHidden = document.getElementById("ctl00_ContentPlaceHolder1_trBiology");
+            var obtainedMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtMarksObtainedHssc").value);
+            var totalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtOutOfMarksHssc").value);
+            var vocSubName = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value);
+            var vocMarksObtained = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").value);
+            var vocTotalMarks = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmarktotal").value);
+            var orgid = $("#<%=hdnOrgId.ClientID %>").val();
+         var degree = $("#<%=hdnDegree.ClientID %>").val();
              //alert(orgid + degree)
-         if (orgid != "5" && orgid == "6" && degree != "MASTER OF BUSINESS ADMINISTRATION") {    //Added by Bhagyashree on 12062023 //// Added by orgid and PG validation condiation Sachin Lohakare 11092023
-             if (numVal1 <= 0) {
-                 alert('Enter Valid Marks for Physics');
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
-                 return false;
-             }
-             if (numVal2 <= 0) {
-                 alert('Enter Valid Marks for Chemistry');
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtchem").focus();
-                 return false;
-             }
-             if (isHidden.style.display != "none") {
-                 if ((numVal3 <= 0 || numVal3 == '') && (numVal5 <= 0 || numVal5 == '')) {
-                     alert('Enter Valid Marks for Maths/Biology');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+            if ((orgid != "5" && orgid == "6" && degree != "MASTER OF BUSINESS ADMINISTRATION") || orgid == "19" || orgid == "20" || orgid == "21") {   // Added by Bhagyashree on 12062023 //// Added by orgid and PG validation condiation Sachin Lohakare 11092023
+                 if (numVal1 <= 0) {                                                                                                                   // Modified to Add Condition for PCEN, PJLCOE, TGPCET by Shrikant W. on 29-12-2023
+                     alert('Enter Valid Marks for Physics');
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").focus();
                      return false;
                  }
-             }
-             if (numVal4 <= 0 && numVal6 != 0) {
-                 alert('Enter Valid Marks for Vocational Subject');
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
-                 return false;
-             }
-             if (numVal6 != '' && numVal4 == '') {
-                 alert('Enter Valid Marks for Vocational Subject');
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
-                 return false;
-             }
-             if (isHidden.style.display === "none") {
-                 if (numVal3 <= 0 || numVal3 == '') {
-                     alert('Enter Valid Marks for Maths');
-                     document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                 if (numVal2 <= 0) {
+                     alert('Enter Valid Marks for Chemistry');
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtchem").focus();
                      return false;
                  }
-             }
-             if (vocMarksObtained != '' && vocTotalMarks != '' && vocSubName == '') {
-                 alert('Enter Vocational Subject Name');
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value = '';
-                 document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").focus();
-                 return false;
+                 if (isHidden.style.display != "none") {
+                     if ((numVal3 <= 0 || numVal3 == '') && (numVal5 <= 0 || numVal5 == '')) {
+                         alert('Enter Valid Marks for Maths/Biology');
+                         document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                         return false;
+                     }
+                 }
+                 if (numVal4 <= 0 && numVal6 != 0) {
+                     alert('Enter Valid Marks for Vocational Subject');
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                     return false;
+                 }
+                 if (numVal6 != '' && numVal4 == '') {
+                     alert('Enter Valid Marks for Vocational Subject');
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocationalmark").focus();
+                     return false;
+                 }
+                 if (isHidden.style.display === "none") {
+                     if (numVal3 <= 0 || numVal3 == '') {
+                         alert('Enter Valid Marks for Maths');
+                         document.getElementById("ctl00_ContentPlaceHolder1_txtmaths").focus();
+                         return false;
+                     }
+                 }
+                 if (vocMarksObtained != '' && vocTotalMarks != '' && vocSubName == '') {
+                     alert('Enter Vocational Subject Name');
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").value = '';
+                     document.getElementById("ctl00_ContentPlaceHolder1_txtVocsub").focus();
+                     return false;
+                 }
              }
          }
-     }
     </script>
 
 
-  <%--  <script>
+    <%--  <script>
         function validateSubjectTextBoxes() {
             debugger;
             var numVal1 = Number(document.getElementById("ctl00_ContentPlaceHolder1_txtphymark").value);
@@ -2274,7 +2315,7 @@
         }
     </script>--%>
 
-<%--    <script type="text/javascript">
+    <%--    <script type="text/javascript">
         function shouldValidate() {
             var orgid = $("#<%=hdnOrgId.ClientID %>").val();
         var degree = $("#<%=hdnDegree.ClientID %>").val();

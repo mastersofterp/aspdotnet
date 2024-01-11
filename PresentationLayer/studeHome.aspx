@@ -130,6 +130,24 @@
         }*/
     </style>
 
+    <script>            // Added By Shrikant W. on 12-12-2023
+        $(document).on('click', '#ulTasks a', function(event) {
+            event.preventDefault(); 
+
+            var clickedLink = event.target.href; 
+            var modifiedLink = removeUnwantedSegment(clickedLink);
+            window.open(modifiedLink, '_blank');
+        });
+
+
+        function removeUnwantedSegment(link) {
+            var linkParts = link.split('/'); 
+            var filteredLink = linkParts.filter(part => part !== 'iitmsBc7v'); 
+            var modifiedLink = filteredLink.join('/');
+            return modifiedLink;
+        }
+    </script>
+
     <script>
         $(document).ready(function () {
 
@@ -412,7 +430,7 @@
                                 Eg. href="'+item.Link+'?pageno='+item.PageNo+'"                --  Working in Both Local & Live
                                 Eg. href="' + item.Link + '?pageno=' + item.PageNo + '"        --  Working in Local but Issue in Live // Gives Error Unexpacted Token %
                                ************************************************************************************************************* */
-                            html += '<li class="list-group-item"><a href="' + item.Link == null ? '#' : item.Link + '?pageno=' + item.PageNo + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
+                            html += '<li class="list-group-item"><a href="' + (item.Link == null ? '#' : item.Link + '?pageno=' + item.PageNo) + '"  runat="server"  target="_blank"><i class="fa fa-star"></i>' + item.LinkName + '</a></li>';
                             LinkCount += 1;
                         });
                     } else {

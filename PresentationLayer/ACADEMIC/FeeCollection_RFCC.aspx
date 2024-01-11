@@ -491,7 +491,7 @@
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblSemester" Font-Bold="true" runat="server" /></a>
                                                             </li>
-                                                            <li class="list-group-item"><b> Selected Semester :</b>
+                                                            <li class="list-group-item"><b>Selected Semester :</b>
                                                                 <a class="sub-label">
                                                                     <asp:Label ID="lblseletedsem" Font-Bold="true" runat="server" /></a>
                                                             </li>
@@ -583,13 +583,14 @@
                                                             <%-- onblur="DevideTotalAmount(),passToDD(this),AdjustKeyPress(this.value);"--%>
                                                             <asp:TextBox ID="txtTotalAmount" onblur="DevideTotalAmount()" onkeyup="AdjustKeyPress(this.value),passToDD(this);"
                                                                 runat="server" ToolTip="Enter total fee amount to be paid." CssClass="form-control" AutoComplete="off"
-                                                                TabIndex="12" />
+                                                                TabIndex="12" MaxLength="15" />
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtTotalAmount" ValidChars="1234567890." />
                                                             <%--<asp:TextBox ID="txtTotalAmount" onkeyup="passToDD(this),AdjustKeyPress(this.value);"
                                                     runat="server" ToolTip="Enter total fee amount to be paid." CssClass="data_label"
                                                     TabIndex="12" />--%>
                                                             <asp:HiddenField ID="HdnTotalAmount" runat="server" />
                                                             <asp:RequiredFieldValidator ID="valTotalAmt" runat="server" ControlToValidate="txtTotalAmount"
-                                                                Display="None" ErrorMessage="Please enter Amount to be Paid" SetFocusOnError="true"
+                                                                Display="None" ErrorMessage="Please Enter Amount to be Paid." SetFocusOnError="true"
                                                                 ValidationGroup="submit" />
                                                             <asp:TextBox ID="lblamtpaid"
                                                                 runat="server" ToolTip="Enter total fee amount to be paid." Style="display: none" CssClass="data_label"
@@ -648,7 +649,7 @@
                                                                     InvalidValueBlurredMessage="*" Display="Dynamic" ValidationGroup="submit" />
                                                             </div>
                                                         </div>
-                                                         
+
 
                                                         <div class="form-group col-lg-3 col-md-6 col-12" runat="server" style="display: none;" id="divBank">
                                                             <div class="label-dynamic">
@@ -665,10 +666,10 @@
                                                             <asp:HiddenField runat="server" ID="hdAdjustExcess" />
                                                         </div>
                                                         <%-- below control added by Shailendra K on dated 18.05.2023 as per ticket No: 43569 discussed with Dr.Manoj sir --%>
-                                                         <div class="form-group col-lg-3 col-md-6 col-12"  runat="server" id="div1">
-                                                            <div class="label-dynamic">                                                              
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="div1">
+                                                            <div class="label-dynamic">
                                                             </div>
-                                                            <asp:Button id="lblCalculateLateFine" ForeColor="Green" Font-Size="Medium" Font-Bold="true" OnClick="lblCalculateLateFine_Click" runat="server" Text="Click To Calculate Late Fine" ></asp:Button>
+                                                            <asp:Button ID="lblCalculateLateFine" ForeColor="Green" Font-Size="Medium" Font-Bold="true" OnClick="lblCalculateLateFine_Click" runat="server" Text="Click To Calculate Late Fine"></asp:Button>
                                                         </div>
                                                         <%-- Above control added by Shailendra K on dated 18.05.2023 as per ticket No: 43569 discussed with Dr.Manoj sir --%>
                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="trExcesschk" runat="server" visible="true">
@@ -912,212 +913,212 @@
                                                 </asp:ListView>
 
                                             </div>
-                                            
-                                                <div id="divFeeItems" runat="server" visible="false">
-                                                    <div class="col-12">
-                                                        <%--<div class="sub-heading"><h5>Fee Items</h5></div>--%>
-                                                        <asp:ListView ID="lvFeeItems" runat="server">
-                                                            <LayoutTemplate>
-                                                                <div id="divlvFeeItems">
-                                                                    <div class="sub-heading">
-                                                                        <h5>Applicable Fees</h5>
-                                                                    </div>
-                                                                    <%--Available Fee Items--%>
-                                                                    <table id="tblFeeItems" runat="server" class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                                                        <thead class="bg-light-blue">
-                                                                            <tr>
-                                                                                <th>Sr. No. </th>
-                                                                                <th>Fee Heads </th>
-                                                                                <th>Currency </th>
-                                                                                <th>Demand Amount </th>
-                                                                                <th>DCR Amount </th>
-                                                                                <th style="text-align: right">Amount </th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr id="itemPlaceholder" runat="server" />
-                                                                        </tbody>
-                                                                    </table>
+
+                                            <div id="divFeeItems" runat="server" visible="false">
+                                                <div class="col-12">
+                                                    <%--<div class="sub-heading"><h5>Fee Items</h5></div>--%>
+                                                    <asp:ListView ID="lvFeeItems" runat="server">
+                                                        <LayoutTemplate>
+                                                            <div id="divlvFeeItems">
+                                                                <div class="sub-heading">
+                                                                    <h5>Applicable Fees</h5>
                                                                 </div>
-                                                            </LayoutTemplate>
-                                                            <ItemTemplate>
-                                                                <tr>
-                                                                    <td>
-                                                                        <asp:Label ID="lblFeeHeadSrNo" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
-                                                                        <%# Container.DataItemIndex + 1%></td>
-                                                                    <td><%# Eval("FEE_LONGNAME")%>
-                                                                        <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
-                                                                        <asp:HiddenField ID="hfFee_hd" runat="server" Value='<%# Eval("FEE_HEAD")%>' />
-                                                                    </td>
-                                                                    <td><%# Eval("CURRENCY")%></td>
-                                                                    <td>
-                                                                        <asp:Label ID="lblTotaldemandamt" runat="server" Text='<%# Eval("total_demand") %>' />
-                                                                        <%-- <%# Eval("total_demand")%>--%></td>
-                                                                    <td>
-                                                                        <asp:Label ID="lblTotaldcramt" runat="server" Text='<%# Eval("total_dcr") %>' />
-                                                                        <%-- <%# Eval("total_dcr")%>--%></td>
-                                                                    <td>
-                                                                        <asp:TextBox ID="txtFeeItemAmount" runat="server" CssClass="form-control" MaxLength="9" onblur="UpdateTotalAndBalance();" onkeyup="IsNumeric(this);" Style="text-align: right" Text=' <%#(Convert.ToDouble(Eval("AMOUNT1"))<0 ? 0.00 : Eval("AMOUNT1"))%>' />
-                                                                        <%--<asp:RegularExpressionValidator runat="server" ErrorMessage="Amount is Invalid" ID="RegularExpressionValidator1" ControlToValidate="txtFeeItemAmount"  ValidationExpression=".-{9}.*"
+                                                                <%--Available Fee Items--%>
+                                                                <table id="tblFeeItems" runat="server" class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <thead class="bg-light-blue">
+                                                                        <tr>
+                                                                            <th>Sr. No. </th>
+                                                                            <th>Fee Heads </th>
+                                                                            <th>Currency </th>
+                                                                            <th>Demand Amount </th>
+                                                                            <th>DCR Amount </th>
+                                                                            <th style="text-align: right">Amount </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </LayoutTemplate>
+                                                        <ItemTemplate>
+                                                            <tr>
+                                                                <td>
+                                                                    <asp:Label ID="lblFeeHeadSrNo" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
+                                                                    <%# Container.DataItemIndex + 1%></td>
+                                                                <td><%# Eval("FEE_LONGNAME")%>
+                                                                    <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
+                                                                    <asp:HiddenField ID="hfFee_hd" runat="server" Value='<%# Eval("FEE_HEAD")%>' />
+                                                                </td>
+                                                                <td><%# Eval("CURRENCY")%></td>
+                                                                <td>
+                                                                    <asp:Label ID="lblTotaldemandamt" runat="server" Text='<%# Eval("total_demand") %>' />
+                                                                    <%-- <%# Eval("total_demand")%>--%></td>
+                                                                <td>
+                                                                    <asp:Label ID="lblTotaldcramt" runat="server" Text='<%# Eval("total_dcr") %>' />
+                                                                    <%-- <%# Eval("total_dcr")%>--%></td>
+                                                                <td>
+                                                                    <asp:TextBox ID="txtFeeItemAmount" runat="server" CssClass="form-control" MaxLength="9" onblur="UpdateTotalAndBalance();" onkeyup="IsNumeric(this);" Style="text-align: right" Text=' <%#(Convert.ToDouble(Eval("AMOUNT1"))<0 ? 0.00 : Eval("AMOUNT1"))%>' />
+                                                                    <%--<asp:RegularExpressionValidator runat="server" ErrorMessage="Amount is Invalid" ID="RegularExpressionValidator1" ControlToValidate="txtFeeItemAmount"  ValidationExpression=".-{9}.*"
                                                                     Display="None" ValidationGroup="Academic"></asp:RegularExpressionValidator>--%>
-                                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtFeeItemAmount" ValidChars="1234567890." />
-                                                                        <asp:HiddenField ID="hidFeeItemAmount" runat="server" Value='<%# Eval("AMOUNT1") %>' />
-                                                                    </td>
-                                                                </tr>
-                                                            </ItemTemplate>
-                                                        </asp:ListView>
+                                                                    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtFeeItemAmount" ValidChars="1234567890." />
+                                                                    <asp:HiddenField ID="hidFeeItemAmount" runat="server" Value='<%# Eval("AMOUNT1") %>' />
+                                                                </td>
+                                                            </tr>
+                                                        </ItemTemplate>
+                                                    </asp:ListView>
+                                                </div>
+                                                <div class="col-12 mt-3">
+                                                    <div class="row">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>
+                                                                    Total Cash Amount</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtTotalCashAmt" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>
+                                                                    Total D.D. Amount</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtTotalDDAmount" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>
+                                                                    Total Fee Amount</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtTotalFeeAmount" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>
+                                                                    Excess/Deposit Amount</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtFeeBalance" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                            <%--<asp:CompareValidator ID="valFeeBalanceOrDiff" runat="server" ControlToValidate="txtFeeBalance"
+                                                ErrorMessage="Total fee amount is not equals to total paid amount. Please check and adjust the fee item amounts."
+                                                Operator="Equal" ValueToCompare="0" Display="None" />--%><%--commented by mahesh--%>
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>
+                                                                    Remark</label>
+                                                            </div>
+                                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" MaxLength="400" Rows="4" TabIndex="133" TextMode="MultiLine" />
+                                                        </div>
                                                     </div>
-                                                    <div class="col-12 mt-3">
+                                                </div>
+                                            </div>
+                                            <div id="divFeeCriteria" runat="server" visible="false">
+                                                <div class="col-12 mt-3">
+                                                    <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Fee Criteria
+                                                                <img alt="Show/Hide" src="../images/action_down.gif" onclick="ShowHideDiv('ctl00_ContentPlaceHolder1_divHidFeeCriteria', this);" style="display: none;" />
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div id="divHidFeeCriteria" runat="server" class="col-12" style="display: none;">
                                                         <div class="row">
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
                                                                     <label>
-                                                                        Total Cash Amount</label>
+                                                                        Payment Type</label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtTotalCashAmt" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                                <asp:DropDownList ID="ddlPaymentType" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" />
+                                                                <asp:RequiredFieldValidator ID="valddlPaymentType" runat="server" ControlToValidate="ddlPaymentType" Display="None" ErrorMessage="Please select payment type." InitialValue="0" SetFocusOnError="true" ValidationGroup="updateCritria" />
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
                                                                     <label>
-                                                                        Total D.D. Amount</label>
+                                                                        Scholarship Type</label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtTotalDDAmount" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
+                                                                <asp:DropDownList ID="ddlScholarship" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" />
+                                                                <asp:RequiredFieldValidator ID="valddlScholarship" runat="server" ControlToValidate="ddlScholarship" Display="None" ErrorMessage="Please select scholarship type." InitialValue="0" SetFocusOnError="true" ValidationGroup="updateCritria" />
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
                                                                     <label>
-                                                                        Total Fee Amount</label>
+                                                                    </label>
                                                                 </div>
-                                                                <asp:TextBox ID="txtTotalFeeAmount" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
-                                                            </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                                                <div class="label-dynamic">
-                                                                    <label>
-                                                                        Excess/Deposit Amount</label>
-                                                                </div>
-                                                                <asp:TextBox ID="txtFeeBalance" runat="server" CssClass="form-control" onkeydown="javascript:return false;" Text="0" />
-                                                                <%--<asp:CompareValidator ID="valFeeBalanceOrDiff" runat="server" ControlToValidate="txtFeeBalance"
-                                                ErrorMessage="Total fee amount is not equals to total paid amount. Please check and adjust the fee item amounts."
-                                                Operator="Equal" ValueToCompare="0" Display="None" />--%><%--commented by mahesh--%>
-                                                            </div>
-                                                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                                                <div class="label-dynamic">
-                                                                    <label>
-                                                                        Remark</label>
-                                                                </div>
-                                                                <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" MaxLength="400" Rows="4" TabIndex="133" TextMode="MultiLine" />
+                                                                <asp:Button ID="btnUpdateFeeCriteria" runat="server" CssClass="btn btn-primary" OnClick="btnUpdateFeeCriteria_Click" Text="Update Fee Criteria" ValidationGroup="updateCritria" />
+                                                                <asp:ValidationSummary ID="valSummary4" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="updateCritria" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div id="divFeeCriteria" runat="server" visible="false">
-                                                    <div class="col-12 mt-3">
-                                                        <div class="col-12">
-                                                            <div class="sub-heading">
-                                                                <h5>Fee Criteria
-                                                                <img alt="Show/Hide" src="../images/action_down.gif" onclick="ShowHideDiv('ctl00_ContentPlaceHolder1_divHidFeeCriteria', this);" style="display: none;" />
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                        <div id="divHidFeeCriteria" runat="server" class="col-12" style="display: none;">
-                                                            <div class="row">
-                                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                                    <div class="label-dynamic">
-                                                                        <label>
-                                                                            Payment Type</label>
-                                                                    </div>
-                                                                    <asp:DropDownList ID="ddlPaymentType" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" />
-                                                                    <asp:RequiredFieldValidator ID="valddlPaymentType" runat="server" ControlToValidate="ddlPaymentType" Display="None" ErrorMessage="Please select payment type." InitialValue="0" SetFocusOnError="true" ValidationGroup="updateCritria" />
-                                                                </div>
-                                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                                    <div class="label-dynamic">
-                                                                        <label>
-                                                                            Scholarship Type</label>
-                                                                    </div>
-                                                                    <asp:DropDownList ID="ddlScholarship" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" />
-                                                                    <asp:RequiredFieldValidator ID="valddlScholarship" runat="server" ControlToValidate="ddlScholarship" Display="None" ErrorMessage="Please select scholarship type." InitialValue="0" SetFocusOnError="true" ValidationGroup="updateCritria" />
-                                                                </div>
-                                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                                    <div class="label-dynamic">
-                                                                        <label>
-                                                                        </label>
-                                                                    </div>
-                                                                    <asp:Button ID="btnUpdateFeeCriteria" runat="server" CssClass="btn btn-primary" OnClick="btnUpdateFeeCriteria_Click" Text="Update Fee Criteria" ValidationGroup="updateCritria" />
-                                                                    <asp:ValidationSummary ID="valSummary4" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="updateCritria" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 btn-footer">
-                                                    <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Enabled="false" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="submit" />
-                                                    <%-- OnClientClick="getdata();"--%>
-                                                    <asp:Button ID="btnNewFee" runat="server" CausesValidation="false" CssClass="btn btn-primary" OnClick="btnNewFee_Click" Text="New Receipt" Visible="false" />
-                                                    <asp:Button ID="btnBack" runat="server" CausesValidation="false" CssClass="btn btn-primary" OnClick="btnBack_Click" Text="Back" />
-                                                    <asp:Button ID="btnReport" runat="server" CausesValidation="false" CssClass="btn btn-info" Enabled="false" OnClick="btnReport_Click" Text="Receipt Report" />
-                                                    <asp:Button ID="btnCancel" runat="server" CausesValidation="false" CssClass="btn btn-danger" OnClick="btnCancel_Click" Text="Cancel" />
-                                                    <asp:ValidationSummary ID="valSummery1" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="submit" />
-                                                </div>
+                                            </div>
+                                            <div class="col-12 btn-footer">
+                                                <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Enabled="false" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="submit" />
+                                                <%-- OnClientClick="getdata();"--%>
+                                                <asp:Button ID="btnNewFee" runat="server" CausesValidation="false" CssClass="btn btn-primary" OnClick="btnNewFee_Click" Text="New Receipt" Visible="false" />
+                                                <asp:Button ID="btnBack" runat="server" CausesValidation="false" CssClass="btn btn-primary" OnClick="btnBack_Click" Text="Back" />
+                                                <asp:Button ID="btnReport" runat="server" CausesValidation="false" CssClass="btn btn-info" Enabled="false" OnClick="btnReport_Click" Text="Receipt Report" />
+                                                <asp:Button ID="btnCancel" runat="server" CausesValidation="false" CssClass="btn btn-danger" OnClick="btnCancel_Click" Text="Cancel" />
+                                                <asp:ValidationSummary ID="valSummery1" runat="server" DisplayMode="List" ShowSummary="false" ValidationGroup="submit" />
+                                            </div>
 
-                                                <div id="divPreviousReceipts" runat="server" visible="false">
-                                                    <div class="col-12">
-                                                        <%--<div class="sub-heading">
+                                            <div id="divPreviousReceipts" runat="server" visible="false">
+                                                <div class="col-12">
+                                                    <%--<div class="sub-heading">
                                                         <h5>Previous Receipts
                                                 <img alt="Show/Hide" src="../images/action_down.gif" onclick="ShowHideDiv('ctl00_ContentPlaceHolder1_divHidPreviousReceipts', this);" style="display: none;" />
                                                         </h5>
                                                     </div>--%>
-                                                        <div id="divHidPreviousReceipts" runat="server">
-                                                            <%# Eval("DD_BANK")%>
-                                                            <asp:Panel ID="Panel2" runat="server">
-                                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
-                                                                    <asp:Repeater ID="lvPaidReceipts" runat="server">
-                                                                        <HeaderTemplate>
-                                                                            <div class="sub-heading">
-                                                                                <h5>Previous Receipts Information</h5>
-                                                                            </div>
-                                                                            <thead class="bg-light-blue">
-                                                                                <tr>
-                                                                                    <th>Print </th>
-                                                                                    <th>Receipt Type </th>
-                                                                                    <th>Receipt No </th>
-                                                                                    <th>Date </th>
-                                                                                    <th>Semester </th>
-                                                                                    <th>Pay Type </th>
-                                                                                    <th>Amount </th>
-                                                                                    <th>Receipt Status </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <%--<tr id="itemPlaceholder" runat="server" />--%>
-                                                                            </tbody>
-                                                                        </HeaderTemplate>
-                                                                        <ItemTemplate>
+                                                    <div id="divHidPreviousReceipts" runat="server">
+                                                        <%# Eval("DD_BANK")%>
+                                                        <asp:Panel ID="Panel2" runat="server">
+                                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                <asp:Repeater ID="lvPaidReceipts" runat="server">
+                                                                    <HeaderTemplate>
+                                                                        <div class="sub-heading">
+                                                                            <h5>Previous Receipts Information</h5>
+                                                                        </div>
+                                                                        <thead class="bg-light-blue">
                                                                             <tr>
-                                                                                <%--  <tr class="item">--%>
-                                                                                <td>
-                                                                                    <asp:ImageButton ID="btnPrintReceipt" runat="server" CausesValidation="False" CommandArgument='<%# Eval("DCR_NO") %>' ImageUrl="~/Images/print.png" OnClick="btnPrintReceipt_Click" ToolTip='<%# Eval("CAN")%>' />
-                                                                                    <asp:HiddenField ID="hdnReconStatus" runat="server" Value='<%# Eval("REFUND")%>' />
-                                                                                </td>
-                                                                                <td><%# Eval("RECIEPT_TITLE") %></td>
-                                                                                <td><%# Eval("REC_NO") %></td>
-                                                                                <td><%# (Eval("REC_DT").ToString() != string.Empty) ? ((DateTime)Eval("REC_DT")).ToShortDateString() : Eval("REC_DT") %></td>
-                                                                                <td><%# Eval("SEMESTERNAME") %></td>
-                                                                                <td><%# Eval("PAY_TYPE") %></td>
-                                                                                <td><%# Eval("TOTAL_AMT") %></td>
-                                                                                <td><%-- <%# Eval("TOTAL_AMT") %>--%><%-- <asp:Label ID="lblreconstatus" Text='<%# Convert.ToInt32(Eval("RECON"))==1 ?"Yes":"NO" %>' runat="server" Font-Bold="true" ForeColor="Green"></asp:Label>--%>
-                                                                                    <asp:Label ID="lblreconstatus" runat="server" Text='<%# Eval("RECON_STATUS")%>'></asp:Label>
-                                                                                </td>
+                                                                                <th>Print </th>
+                                                                                <th>Receipt Type </th>
+                                                                                <th>Receipt No </th>
+                                                                                <th>Date </th>
+                                                                                <th>Semester </th>
+                                                                                <th>Pay Type </th>
+                                                                                <th>Amount </th>
+                                                                                <th>Receipt Status </th>
                                                                             </tr>
-                                                                        </ItemTemplate>
-                                                                        <FooterTemplate>
-                                                                            </tbody>
-                                                                        </FooterTemplate>
-                                                                    </asp:Repeater>
-                                                                </table>
-                                                            </asp:Panel>
-                                                        </div>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <%--<tr id="itemPlaceholder" runat="server" />--%>
+                                                                        </tbody>
+                                                                    </HeaderTemplate>
+                                                                    <ItemTemplate>
+                                                                        <tr>
+                                                                            <%--  <tr class="item">--%>
+                                                                            <td>
+                                                                                <asp:ImageButton ID="btnPrintReceipt" runat="server" CausesValidation="False" CommandArgument='<%# Eval("DCR_NO") %>' ImageUrl="~/Images/print.png" OnClick="btnPrintReceipt_Click" ToolTip='<%# Eval("CAN")%>' />
+                                                                                <asp:HiddenField ID="hdnReconStatus" runat="server" Value='<%# Eval("REFUND")%>' />
+                                                                            </td>
+                                                                            <td><%# Eval("RECIEPT_TITLE") %></td>
+                                                                            <td><%# Eval("REC_NO") %></td>
+                                                                            <td><%# (Eval("REC_DT").ToString() != string.Empty) ? ((DateTime)Eval("REC_DT")).ToShortDateString() : Eval("REC_DT") %></td>
+                                                                            <td><%# Eval("SEMESTERNAME") %></td>
+                                                                            <td><%# Eval("PAY_TYPE") %></td>
+                                                                            <td><%# Eval("TOTAL_AMT") %></td>
+                                                                            <td><%-- <%# Eval("TOTAL_AMT") %>--%><%-- <asp:Label ID="lblreconstatus" Text='<%# Convert.ToInt32(Eval("RECON"))==1 ?"Yes":"NO" %>' runat="server" Font-Bold="true" ForeColor="Green"></asp:Label>--%>
+                                                                                <asp:Label ID="lblreconstatus" runat="server" Text='<%# Eval("RECON_STATUS")%>'></asp:Label>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ItemTemplate>
+                                                                    <FooterTemplate>
+                                                                        </tbody>
+                                                                    </FooterTemplate>
+                                                                </asp:Repeater>
+                                                            </table>
+                                                        </asp:Panel>
                                                     </div>
                                                 </div>
+                                            </div>
                                             </br>
                                             </br>
 
@@ -1225,11 +1226,11 @@
                 document.getElementById('ctl00_ContentPlaceHolder1_txtTotalAmount').value.trim() != '')
                     totalAmt = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_txtTotalAmount').value.trim());
                 //alert(totalAmt); 
-                if (totalAmt == 0) {
-                    alert("Please Enter Valid Amount");
-                    totalAmt = null;
-                    return;
-                }
+                //if (totalAmt == 0) {
+                //    alert("Please Enter Valid Amount");
+                //    totalAmt = null;
+                //    return;
+                //}
                 var dataRows = null;
                 if (document.getElementById('ctl00_ContentPlaceHolder1_lvFeeItems_tblFeeItems') != null)
                     dataRows = document.getElementById('ctl00_ContentPlaceHolder1_lvFeeItems_tblFeeItems').getElementsByTagName('tr');
@@ -1277,11 +1278,11 @@
                 document.getElementById('ctl00_ContentPlaceHolder1_txtTotalAmount').value.trim() != '')
                     totalAmt = parseFloat(document.getElementById('ctl00_ContentPlaceHolder1_txtTotalAmount').value.trim());
 
-                if (totalAmt == 0) {
-                    alert("Please Enter Valid Amount");
-                    totalAmt = null;
-                    return;
-                }
+                //if (totalAmt == 0) {
+                //    alert("Please Enter Valid Amount");
+                //    totalAmt = null;
+                //    return;
+                //}
                 var dataRows = null;
                 if (document.getElementById('ctl00_ContentPlaceHolder1_lvFeeItems_tblFeeItems') != null)
                     dataRows = document.getElementById('ctl00_ContentPlaceHolder1_lvFeeItems_tblFeeItems').getElementsByTagName('tr');
@@ -1520,7 +1521,7 @@
                             txtPayType.value = "C";
                             document.getElementById('ctl00_ContentPlaceHolder1_divCredit').style.display = "none";
                             document.getElementById('ctl00_ContentPlaceHolder1_divTrans').style.display = "none";
-                           // document.getElementById('ctl00_ContentPlaceHolder1_divtransdate').style.display = "none";
+                            // document.getElementById('ctl00_ContentPlaceHolder1_divtransdate').style.display = "none";
                             document.getElementById('ctl00_ContentPlaceHolder1_divBank').style.display = "none";
                             if (document.getElementById('ctl00_ContentPlaceHolder1_divDDDetails') != null &&
                                 document.getElementById('ctl00_ContentPlaceHolder1_divFeeItems') != null) {
@@ -1544,7 +1545,7 @@
                                     document.getElementById('ctl00_ContentPlaceHolder1_divDDDetails').style.display = "none";
                                 document.getElementById('ctl00_ContentPlaceHolder1_divCredit').style.display = "none";
                                 document.getElementById('ctl00_ContentPlaceHolder1_divTrans').style.display = "block";
-                               // document.getElementById('ctl00_ContentPlaceHolder1_divtransdate').style.display = "block";
+                                // document.getElementById('ctl00_ContentPlaceHolder1_divtransdate').style.display = "block";
 
 
                                 //txtPayType.value = "";
@@ -1697,7 +1698,7 @@
                     if (searchtxt == "" || searchtxt == null) {
                         alert('Please Enter Data you want to search..');
                         document.getElementById('<%=txtSearchPanel.ClientID %>').focus();
-                        return false;                  
+                        return false;
                     }
                     else {
                         __doPostBack(btnsearch, rbText + ',' + searchtxt);

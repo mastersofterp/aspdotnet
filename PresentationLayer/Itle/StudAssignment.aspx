@@ -7,19 +7,24 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <style>
-        .dataTables_scrollHeadInner {
+        .dataTables_scrollHeadInner
+        {
             width: max-content !important;
         }
     </style>
     <style type="text/css">
-        .hide_img {
+        .hide_img
+        {
             display: none;
         }
 
-        .show_img {
+        .show_img
+        {
             display: block;
         }
-          td .fa-eye {
+
+        td .fa-eye
+        {
             font-size: 18px;
             color: #0d70fd;
         }
@@ -36,7 +41,13 @@
             }
         });
     </script>
-   <%-- <script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
+        })
+    </script>
+    <%-- <script>
         function hideToolBarDiv(event) {
             // Select the correct toolbar DIV and hide it.
             //'event.editor.name' returns the name of the DIV receiving focus.
@@ -132,7 +143,8 @@ $(document).ready(function(){
 
 
     <style>
-        .list-group .list-group-item .sub-label {
+        .list-group .list-group-item .sub-label
+        {
             float: initial;
         }
     </style>
@@ -209,18 +221,18 @@ $(document).ready(function(){
                                             </div>
                                             <div runat="server" id="tdDescription">
 
-                                                 <div class="table table-responsive">
-                                            <CKEditor:CKEditorControl ID="divDescription" runat="server" Height="200"    ToolbarStartupExpanded="false" ToolbarCanCollapse="false" Enabled="false" 
-                                                BasePath="~/plugins/ckeditor" ToolTip="Enter Description" TabIndex="2">		                        
-                                            </CKEditor:CKEditorControl>
-                                            <%--<FTB:FreeTextBox ID="txtDescription" runat="server" Height="250px" Width="100%" Focus="true"
+                                                <div class="table table-responsive">
+                                                    <CKEditor:CKEditorControl ID="divDescription" runat="server" Height="200" ToolbarStartupExpanded="false" ToolbarCanCollapse="false" Enabled="false"
+                                                        BasePath="~/plugins/ckeditor" ToolTip="Enter Description" TabIndex="2">		                        
+                                                    </CKEditor:CKEditorControl>
+                                                    <%--<FTB:FreeTextBox ID="txtDescription" runat="server" Height="250px" Width="100%" Focus="true"
                                                     Text="&nbsp;">
                                                 </FTB:FreeTextBox>--%>
-                                            <%--<ajaxToolkit:CascadingDropDown ID="cddDept" runat="server" TargetControlID="ddlBranch"
+                                                    <%--<ajaxToolkit:CascadingDropDown ID="cddDept" runat="server" TargetControlID="ddlBranch"
                                                 Category="City" PromptText="Please Select" LoadingText="[Loading...]" 
                                                 ServicePath="~/WebService.asmx"
                                                 ServiceMethod="GetBranch" ParentControlID="ddlDept" />--%>
-                                        </div>
+                                                </div>
                                                 <%--<asp:Panel ID="pnlReplyDesc" runat="server" BorderColor="Navy" BorderWidth="3px"
                                                     Heigh="150px">
                                                     <div style="height: 150px; background-color: #D1EDD1; padding-top: 25px; padding-left: 5px; padding-left: 5px;">
@@ -267,7 +279,7 @@ $(document).ready(function(){
                                                         </td>
                                                         <td id="tdDownloadLink" runat="server" visible="false">
                                                             <asp:Image ID="Img2" runat="server" ImageUrl="~/Images/attachment.png" />
-                                                           <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                            <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
                                                             <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
                                                             --%>     <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
                                                         </td>
@@ -309,7 +321,8 @@ $(document).ready(function(){
                                         <div class="row">
                                             <div class="form-group col-lg-6 col-md-12 col-12">
                                                 <div class="label-dynamic">
-                                                    <label>Attachment &nbsp;&nbsp; (Upload File<asp:Label ID="lblFiletype" runat="server" Font-Bold="True" ForeColor="Blue"></asp:Label>
+                                                    <label>
+                                                        Attachment &nbsp;&nbsp; (Upload File<asp:Label ID="lblFiletype" runat="server" Font-Bold="True" ForeColor="Blue"></asp:Label>
                                                         )</label>
                                                 </div>
                                                 <asp:FileUpload ID="fuAssign" runat="server" />
@@ -358,13 +371,13 @@ $(document).ready(function(){
                                                                     </td>
                                                                     <td id="tdattach" runat="server" visible="false">
                                                                         <asp:Image ID="img3" runat="server" ImageUrl="~/Images/attachment.png" />
-                                                                       <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                                        <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
                                                                         <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
                                                                             <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
                                                   
                                                                     </td>
                                                                     <td id="tdattachblob" runat="server" visible="false">
-                                                                        
+
                                                                         <asp:Image ID="Img4" runat="server" ImageUrl="~/Images/attachment.png" />
                                                                         <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
                                                                         <%--  <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
@@ -444,7 +457,7 @@ $(document).ready(function(){
                                             </li>
                                         </ul>
                                     </div>
-                                   
+
                                     <div class="col-lg-3 col-md-6 col-12">
                                         <ul class="list-group list-group-unbordered">
                                             <li class="list-group-item"><b>Marks Obtained :</b>
@@ -463,11 +476,11 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div class="row">
-                                     
-                                          <div class="form-group col-lg-12 col-md-6 col-12 mt-3">
+
+                                    <div class="form-group col-lg-12 col-md-6 col-12 mt-3">
                                         <div class="label-dynamic">
-                                             <asp:Label ID="lblreplyans" runat="server" Font-Bold="true">Replied Answer :</asp:Label>
-                                            
+                                            <asp:Label ID="lblreplyans" runat="server" Font-Bold="true">Replied Answer :</asp:Label>
+
                                         </div>
                                         <asp:Panel ID="pnlRepliedAnswer" runat="server" BorderColor="Navy" BorderWidth="3px"
                                             Heigh="300px">
@@ -519,8 +532,9 @@ $(document).ready(function(){
                                         <ItemTemplate>
                                             <tr>
 
-                                                 <td class="text-center"><asp:LinkButton ID="btnEdit" runat="server" CssClass="fa fa-eye" CommandArgument='<%# Eval("AS_No") %>' OnClick="btnEdit_Click"></asp:LinkButton></td>
-                                   
+                                                <td class="text-center">
+                                                    <asp:LinkButton ID="btnEdit" runat="server" CssClass="fa fa-eye" CommandArgument='<%# Eval("AS_No") %>' OnClick="btnEdit_Click"></asp:LinkButton></td>
+
                                                 <%--<td>
                                                     <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit1.png" CommandArgument='<%# Eval("AS_No") %>'
                                                         ToolTip="Reply This Assignment" AlternateText="Edit Record" OnClick="btnEdit_Click" />
@@ -539,7 +553,7 @@ $(document).ready(function(){
                                                                 -
                                                                 <%# Eval("SUBMITDATE", "{0:hh:mm:ss tt}")%>
                                                 </td>
-                                              <%--  <td>
+                                                <%--  <td>
                                                     <asp:ImageButton ID="btnimgdow" runat="server" ImageUrl="~/Images/attachment.png" CommandArgument='<%# Eval("AS_No") %>' ToolTip="DownLoad Assignment" OnClick="btnimgdow_Click" />
 
                                                     <%-- <img alt="Attachment" src="../IMAGES/attachment.png" class='<%# (Convert.ToInt32(Eval("ATTACHMENT")) > 0)? "show_img": "hide_img" %>' />

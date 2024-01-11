@@ -179,7 +179,8 @@
                                                         <label>Sort By</label>
                                                     </div>
                                                     <asp:RadioButton ID="rbenroll" runat="server" GroupName="sort" Text="Enrollment No." Checked="True" OnCheckedChanged="rbenroll_CheckedChanged" AutoPostBack="true" />
-                                                    <asp:RadioButton ID="rbRegNo" runat="server" GroupName="sort" Text="PRN Number" OnCheckedChanged="rbRegNo_CheckedChanged" AutoPostBack="true" />
+                                                    <asp:RadioButton ID="rbRegNo" runat="server" GroupName="sort"  OnCheckedChanged="rbRegNo_CheckedChanged" AutoPostBack="true" />
+                                                    <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true" class="label-dynamic" ></asp:Label>
                                                     <asp:RadioButton ID="rbStudName" runat="server" GroupName="sort" Text="Student Name" OnCheckedChanged="rbStudName_CheckedChanged" AutoPostBack="true" />
                                                     <asp:RadioButton ID="rbAdmDate" runat="server" GroupName="sort" Text="Admission Date" OnCheckedChanged="rbAdmDate_CheckedChanged" AutoPostBack="true" />
                                                     <asp:RadioButton ID="rbmeritno" runat="server" GroupName="sort" Text="Merit No" OnCheckedChanged="rbmeritno_CheckedChanged" AutoPostBack="true" Visible="false" />
@@ -329,11 +330,12 @@
                                                                     <thead class="bg-light-blue">
                                                                         <tr>
                                                                             <th>Sr No.</th>
-                                                                            <th>
-                                                                                <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label></th>
+                                                                            
                                                                             <th>
                                                                                 <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th style="display: none">Roll No.</th>
+                                                                            <th>
+                                                                                <asp:Label ID="lblDYlvEnrollmentNo" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th>Student Name </th>
                                                                             <th>
                                                                                 <asp:Label ID="lblDYddlSemester_Tab" runat="server" Font-Bold="true"></asp:Label></th>
@@ -359,16 +361,17 @@
                                                                 <asp:HiddenField ID="hdfAdm" runat="server" Value='<%# Eval("ADMBATCH") %>' />
                                                                 <asp:Label ID="lblRegno" runat="server" Visible="false" Text='<%# Eval("ROLLNO") %>'></asp:Label>
                                                             </td>
-                                                            <td>
-                                                                <%# Eval("ENROLLNO") %>
-                                                            </td>
+                                                            <td><%# Eval("REGNO") %>
+                                                                <asp:HiddenField ID="lblprnno" runat="server" Value='<%# Eval("REGNO") %>' />
+                                                                <asp:Label ID="Label1" runat="server" Visible="false" Text='<%# Eval("REGNO") %>'></asp:Label></td>
+                                                            
                                                             <td style="display: none">
                                                                 <%# Eval("ROLLNO") %>
                                                                 <asp:HiddenField ID="hdfRollNO" runat="server" Value='<%# Eval("ROLLNO") %>' />
                                                             </td>
-                                                            <td><%# Eval("REGNO") %>
-                                                                <asp:HiddenField ID="lblprnno" runat="server" Value='<%# Eval("REGNO") %>' />
-                                                                <asp:Label ID="Label1" runat="server" Visible="false" Text='<%# Eval("REGNO") %>'></asp:Label></td>
+                                                            <td>
+                                                                <%# Eval("ENROLLNO") %>
+                                                            </td>
                                                             <td><%# Eval("STUDNAME")%></td>
                                                             <td><%# Eval("SEMESTERNAME")%></td>
                                                             <td><%# Eval("SECTIONNAME")%></td>

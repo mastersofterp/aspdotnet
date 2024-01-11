@@ -1,0 +1,128 @@
+.dropdown {
+    .dropdown-toggle {
+        &::after {
+            display: none;
+        }
+    }
+}
+
+
+
+
+.dashboardcode-bsmultiselect {
+    .dropdown-menu {
+        width: auto;
+        height: 400px;
+        overflow-y: auto;
+    }
+}
+
+.userdropdown-icons {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-direction: row;
+    padding: 0 10px;
+
+    a {
+         color: #fff !important;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    width: 35px;
+    height: 35px;
+    font-size:14px;
+     &:hover{
+         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .10) ;
+     }
+        i {
+            margin-left: 0 !important;
+        }
+
+        &.change-pass {
+            background: #6777ef;
+        }
+
+        &.help-page {
+            background: #ffa426;
+        }
+        &.logout-icon{
+            background:#dc3545
+        }
+    }
+}
+
+
+.version-disp{
+        padding: 0 0 14px 0;
+    code{
+            line-height: 0.5px;
+    font-size: 14px;
+        color: #d63384;
+    }
+    .release-note-text{
+        display: block;
+    font-size: 11px;
+    line-height: 1px;
+    color: gray;
+    }
+}
+
+
+
+.tippy-box[data-theme~='Logout'] {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.tippy-box[data-theme~='Logout'] > .tippy-arrow::before {
+  border-top-color:#dc3545;
+
+}
+
+
+.tippy-box[data-theme~='Help'] {
+  background-color: #ffa426;
+  color: #fff;
+}
+
+.tippy-box[data-theme~='Help'] > .tippy-arrow::before {
+  border-top-color:#ffa426;
+
+}
+
+.dropdown-list .dropdown-list-content:not(.is-end):after {
+    height: 0;
+    width: 0;
+}
+
+
+.select2-search--inline {
+    .select2-search__field {
+        padding-left: 13px !important;
+        padding-top: 2px !important;
+        margin-top: 2px !important;
+        width: 100% !important;
+
+        &::placeholder {
+            color: #444;
+        }
+    }
+}
+
+.select2-search--inline:after {
+    content: "";
+    border-color: #888 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0 4px;
+    height: 0;
+    // left: 50%;
+    right: 20px;
+    margin-left: -4px;
+    margin-top: -2px;
+    position: absolute;
+    top: 50%;
+    width: 0;
+}

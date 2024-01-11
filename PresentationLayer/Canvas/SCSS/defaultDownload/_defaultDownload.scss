@@ -1,0 +1,104 @@
+﻿.new-default-download i.bi.bi-file-earmark-excel {
+    background: #1D6F42 0% 0% no-repeat padding-box;
+    border: 1px solid #1D6F42;
+    border-radius: 2px;
+    padding: 2px 12px;
+    font-size: 23px;
+    color: #fff;
+    transition: all .4s ease-in-out;
+    margin-right: 14px;
+}
+
+.new-default-download {
+    transition: all .4s ease-in-out;
+}
+
+.new-default-download .form-control {
+    display: flex;
+    align-items: center;
+    transition: all .4s ease-in-out;
+    border-radius: 6px;
+    border: 1px solid #1D6F42;
+    padding: 10px 15px 10px 0 !important;
+}
+
+.new-default-download .default-label-icon {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    color: #1D6F42;
+    font-weight:600;
+    transition: all .4s ease-in-out;
+}
+
+.new-default-download:hover .default-label-icon {
+    color: #ffffff;
+}
+
+.new-default-download:hover .form-control {
+    border: 1px solid #1D6F42;
+    /*color:#1D6F42*/
+    background: #1D6F42;
+    color: #fff !important;
+}
+
+
+.new-default-download {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor:pointer
+}
+
+
+.new-default-download i.bi.bi-download {
+    background: $purple 0% 0% no-repeat padding-box;
+    border: 1px solid $purple;
+    border-radius: 2px;
+    padding: 2px 12px;
+    font-size: 23px;
+    color: #fff;
+    transition: all .4s ease-in-out;
+    margin-right: 14px;
+}
+
+.new-default-download .download-doc {
+    border: 1px solid $purple;
+    color: $purple !important;
+}
+.new-default-download:hover .download-doc {
+    border: 1px solid $purple;
+    /*color:#1D6F42*/
+   background: #fff;
+   // color: #fff !important;
+}
+
+.new-default-download:hover .download-doc .default-label-icon {
+    color: $purple;
+}
+
+.new-default-download .download-doc .default-label-icon {
+    color: $purple;
+}
+
+.btnDocDelete {
+    position: absolute;
+    right: 17px;
+    color: #b7bac9;
+    cursor: pointer;
+    top: 35px;
+}
+
+.btnDocDelete:hover {
+    display: block;
+    color: #dc3545;
+}
+
+.btnIconDocDelete {
+    color: #b7bac9;
+}
+
+.btnIconDocDelete:hover {
+    color: #dc3545;
+}

@@ -1319,6 +1319,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 byte[] data = webClient.DownloadData(path);
                 byte[] signdata = webClient.DownloadData(SIGNPATH);
 
+               
                 objstud.IdNo = userno;
 
                 //Photo Conversion
@@ -1326,7 +1327,8 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 double kilobytes = bytes / 1024.0;
                 if (kilobytes > 150)
                 {
-                    data = ResizePhoto(data);
+                    data = ImageCompression.CompressImage(data, 150);
+                    //data = ResizePhoto(data);
                     int fileSize2 = data.Length;
                 }
                 //END
@@ -1336,14 +1338,16 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
                 double kilobytessign = bytes / 1024.0;
                 if (kilobytessign > 150)
                 {
-                    signdata = ResizePhoto(signdata);
+                    signdata = ImageCompression.CompressImage(signdata, 150);
+                    //signdata = ResizePhoto(signdata);
                     int fileSize2 = signdata.Length;
                 }
                 //END
 
-                objstud.StudPhoto = data;
                 CustomStatus cs;
+                objstud.StudPhoto = data;
                 cs = (CustomStatus)objOAC.UpdateStudPhotoFromNpfPhotos(objstud, 100);
+                objstud.StudPhoto = null;
                 objstud.StudPhoto = signdata;
                 cs = (CustomStatus)objOAC.UpdateStudPhotoFromNpfPhotos(objstud, 1);
                 //if (cs.Equals(CustomStatus.RecordUpdated))
@@ -2000,11 +2004,7 @@ public partial class Academic_UserInfoVerify : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+            
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;

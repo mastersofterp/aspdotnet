@@ -1516,7 +1516,7 @@ public partial class Academic_FeeCollection : System.Web.UI.Page
             ////{
             ////    dcr.SessionNo = Convert.ToInt32(Session["currentsession"].ToString()) + 1;
             ////}
-            dcr.Currency = ((ddlCurrency.SelectedIndex > 0 && ddlCurrency.SelectedValue != string.Empty) ? Int32.Parse(ddlCurrency.SelectedValue) : 1);
+            dcr.Currency = ((ddlCurrency.SelectedIndex > 0) ? Int32.Parse(ddlCurrency.SelectedValue) : 1);
             dcr.FeeHeadAmounts = this.GetFeeItems();
 
             if (transdate.Text != string.Empty)

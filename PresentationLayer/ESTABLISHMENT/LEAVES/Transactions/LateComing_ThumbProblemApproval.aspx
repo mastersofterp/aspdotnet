@@ -443,8 +443,8 @@
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     CssClass="form-control" TabIndex="31" ToolTip="Select Allow/Not Allow">
                                                     <asp:ListItem Enabled="true" Text="Please Select" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true" Selected="True" Text="Allow" Value="A"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true"  Text="Not Allow" Value="N"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true"  Text="Allow" Value="A"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true" Selected="True" Text="Not Allow" Value="N"></asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidStatus" Value='<%# Eval("STATUS")%>' runat="server" />
                                             </td>
@@ -556,8 +556,8 @@
                                                 <asp:DropDownList ID="ddlAllow" runat="server" AppendDataBoundItems="true"
                                                     CssClass="form-control" ToolTip="Select Allow/Not Allow" TabIndex="41">
                                                     <asp:ListItem Enabled="true" Text="Please Select" Value="0"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true" Selected="True" Text="Allow" Value="A"></asp:ListItem>
-                                                    <asp:ListItem Enabled="true"  Text="Not Allow" Value="N"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true"  Text="Allow" Value="A"></asp:ListItem>
+                                                    <asp:ListItem Enabled="true" Selected="True" Text="Not Allow" Value="N"></asp:ListItem>
                                                 </asp:DropDownList>
                                                 <asp:HiddenField ID="hidStatus" Value='<%# Eval("STATUS")%>' runat="server" />
                                             </td>

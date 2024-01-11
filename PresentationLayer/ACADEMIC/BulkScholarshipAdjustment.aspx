@@ -319,6 +319,10 @@
                                                     <td>
                                                         <asp:CheckBox ID="chkReport" runat="server" onclick="totStudents(this);" ToolTip='<%# Eval("IDNO") %>' />
                                                         <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("IDNO") %>' />
+                                                        <asp:HiddenField ID="hdfBranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' />
+                                                        <asp:Label ID="lblname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("ENROLLNO") %>' Visible="false"></asp:Label>
+                                                        <%--<asp:HiddenField ID="hiddenBranch" runat="server" Value='<%#Eval ("BRANCHNO") %>' />--%>
+                                                        <asp:HiddenField ID="hfdyearname" runat="server" Value='<%# Eval("YEAR") %>' />
                                                     </td>
                                                     <td>
                                                         <%# Eval("REGNO")%>
@@ -376,10 +380,7 @@
 
                                                 </tr>
 
-                                                <asp:HiddenField ID="hdfBranchno" runat="server" Value='<%# Eval("BRANCHNO") %>' />
-                                                <asp:Label ID="lblname" runat="server" Text='<%# Eval("STUDNAME") %>' ToolTip='<%# Eval("ENROLLNO") %>' Visible="false"></asp:Label>
-                                                <%--<asp:HiddenField ID="hiddenBranch" runat="server" Value='<%#Eval ("BRANCHNO") %>' />--%>
-                                                <asp:HiddenField ID="hfdyearname" runat="server" Value='<%# Eval("YEAR") %>' />
+
                                                 <%--</ContentTemplate>
                                                 <Triggers>
                                                         <asp:PostBackTrigger ControlID="rdoYes" />

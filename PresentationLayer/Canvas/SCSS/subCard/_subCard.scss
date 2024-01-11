@@ -1,0 +1,27 @@
+.subCard{
+    border: 1px solid #6777EF;
+border-radius: 4px;
+.subCard-header{
+background: #F0F3FF 0% 0% no-repeat padding-box;
+border-radius: 3px 3px 0px 0px;
+padding: 7px 16px;
+color:#6777EF;
+}
+.subCard-body{
+    padding: 13px;
+}
+}
+
+.subCard-details {
+    .sub-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+
+        span {
+            &:last-child {
+                font-weight: 700;
+            }
+        }
+    }
+}

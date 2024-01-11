@@ -1,9 +1,9 @@
 ﻿//=================================================================================
-// PROJECT NAME  : U-AIMS                                                          
-// MODULE NAME   : ACADEMIC - MARK ENTRY                                           
-// CREATION DATE : 14-OCT-2009                                                     
-// CREATED BY    : NIRAJ D .PHALKE                                                 
-// MODIFIED BY   : 17-NOV-2009                                                     
+// PROJECT NAME  : COMMON CODE                                                          
+// MODULE NAME   : ACADEMIC - INTERNAL MARK ENTRY                                           
+// CREATION DATE :                                                      
+// CREATED BY    : PRAFULL MUKE                                              
+// MODIFIED BY   :                                                     
 // MODIFIED DESC : 
 //=================================================================================
 
@@ -1945,7 +1945,19 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
 
-        url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["CCODE"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(hdfSection.Value) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + Convert.ToString(ViewState["exam_name"]) + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + ",@P_SUB_EXAM=" + ddlSubExam.SelectedValue + "";
+        int collegeid = 0;
+        collegeid = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.COLLEGE_ID", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) UNION ALL SELECT 0 AS COLLEGE_ID"));
+        if (collegeid == 0)
+        {
+            collegeid = Convert.ToInt32(Session["colcode"].ToString());
+        }
+
+        //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["CCODE"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(hdfSection.Value) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + Convert.ToString(ViewState["exam_name"]) + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + ",@P_SUB_EXAM=" + ddlSubExam.SelectedValue + "";
+
+
+        url += "&param=@P_COLLEGE_CODE=" + collegeid + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["CCODE"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(hdfSection.Value) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + Convert.ToString(ViewState["exam_name"]) + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + ",@P_SUB_EXAM=" + ddlSubExam.SelectedValue + "";
+
+
 
         divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
         divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -2067,7 +2079,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             DataSet ds = objCommon.FillDropDown("Reff", "SMSSVCID", "SMSSVCPWD", "", "");
             if (ds.Tables[0].Rows.Count > 0)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
                 request.ContentType = "text/xml; charset=utf-8";
                 request.Method = "POST";
 
@@ -2155,7 +2167,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
     }
 
     protected void btnPrintReport_Click(object sender, EventArgs e)
-    {
+    { 
         int Gd = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "isnull(GRADEPATTERN,0) as GRADEPATTERN ", "SCHEMENO='" + ViewState["SCHEMENO"] + "'")));
         if (Gd == 1)
         {
@@ -2169,7 +2181,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
                 url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(hdfSection.Value) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + ",@P_EXAM_NAME=" + Convert.ToString(ViewState["MODEL_EXAM_NAME"]) + "";
-
+                
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
                 ScriptManager.RegisterClientScriptBlock(this.updpanle1, this.updpanle1.GetType(), "key", Print_Val, true);
             }
@@ -2219,7 +2231,9 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
 
     protected void lbtnPrint_Click(object sender, EventArgs e)
     {
+
         LinkButton lbtn = (LinkButton)(sender);
+
         ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
         lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
         ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
@@ -2227,33 +2241,86 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
         ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
         ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
+        ViewState["fldname1_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[7]);
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
+        ViewState["SUBEXAMNO"] = lbtn.ToolTip.ToString();
 
-        ddlExamPrint.Items.Clear();
-        ddlExamPrint.Items.Add(new ListItem("Please Select", "0"));
-        ddlExamPrint.Items.Add(new ListItem(ViewState["examName_POP"].ToString(), ViewState["examNo_POP"].ToString()));
-
-        ddlSubExamPrint.Items.Clear();
-        ddlSubExamPrint.Items.Add(new ListItem("Please Select", "0"));
+        string SubFldname = objCommon.LookUp("ACD_SUBEXAM_NAME", "FLDNAME +'-'+CAST(SUBEXAMNO AS VARCHAR) ", "SUBEXAMNO=" + Convert.ToInt32(ViewState["SUBEXAMNO"])+" AND ACTIVESTATUS=1");
 
 
-        if (Convert.ToString(ViewState["fldname_POP"]) == "S10")
-        {
-            ddlSubExamPrint.Visible = false;
-            lbl_SubExam_Print.Visible = false;
-            btnPrintFront.Enabled = true;
-        }
-        else
-        {
-            ddlSubExamPrint.Visible = true;
-            lbl_SubExam_Print.Visible = true;
-            ddlSubExamPrint.Enabled = false;
-            btnPrintFront.Enabled = false;
-        }
 
-        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#PrintModal').modal('show');</script>", false);
-        updPopUp.Update();
+         string rptFileName = string.Empty;
+
+            string reportTitle = "MarksListReport";
+            if (Convert.ToInt32(Session["OrgId"]) == 8)
+            {
+                rptFileName = "rptMarksList1_NEW_MIT.rpt";
+            }
+            else
+            {
+                rptFileName = "rptMarksList1_NEW.rpt";
+                //rptFileName = "rptMarksList1_NEW_MIT.rpt";
+            }
+            int collegeid = 0;
+            collegeid = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.COLLEGE_ID", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) UNION ALL SELECT 0 AS COLLEGE_ID"));
+            if (collegeid == 0)
+            {
+                collegeid = Convert.ToInt32(Session["colcode"].ToString());
+            }
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + ViewState["fldname1_POP"].ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + SubFldname + "";
+           // url += "&param=@P_COLLEGE_ID=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + ViewState["fldname1_POP"].ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + SubFldname + "";
+            url += "&param=@P_COLLEGE_CODE=" + collegeid + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + ViewState["fldname1_POP"].ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + SubFldname + "";
+
+
+
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            ScriptManager.RegisterClientScriptBlock(this.updpanle1, this.updpanle1.GetType(), "key", Print_Val, true);
+            
+
+
+
+
+
+        //LinkButton lbtn = (LinkButton)(sender);
+        //ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
+        //lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
+        //ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
+        //ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[3]);
+        //ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
+        //ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
+        //ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
+
+        //ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
+
+        //ddlExamPrint.Items.Clear();
+        //ddlExamPrint.Items.Add(new ListItem("Please Select", "0"));
+        //ddlExamPrint.Items.Add(new ListItem(ViewState["examName_POP"].ToString(), ViewState["examNo_POP"].ToString()));
+
+        //ddlSubExamPrint.Items.Clear();
+        //ddlSubExamPrint.Items.Add(new ListItem("Please Select", "0"));
+
+
+        //if (Convert.ToString(ViewState["fldname_POP"]) == "S10")
+        //{
+        //    ddlSubExamPrint.Visible = false;
+        //    lbl_SubExam_Print.Visible = false;
+        //    btnPrintFront.Enabled = true;
+        //}
+        //else
+        //{
+        //    ddlSubExamPrint.Visible = true;
+        //    lbl_SubExam_Print.Visible = true;
+        //    ddlSubExamPrint.Enabled = false;
+        //    btnPrintFront.Enabled = false;
+        //}
+
+        //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#PrintModal').modal('show');</script>", false);
+        //updPopUp.Update();
     }
 
     protected void ddlExamPrint_SelectedIndexChanged(object sender, EventArgs e)

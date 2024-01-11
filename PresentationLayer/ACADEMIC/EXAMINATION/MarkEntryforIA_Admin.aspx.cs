@@ -2134,7 +2134,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
         //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
         CloudBlobContainer container = client.GetContainerReference(Name);
         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-        container.CreateIfNotExists();
+        
     }
 
     private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
@@ -2172,11 +2172,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+           
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);

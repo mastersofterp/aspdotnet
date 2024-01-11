@@ -1270,6 +1270,28 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
     }
     protected void chkIssueSelect_CheckedChanged(object sender, EventArgs e)
     {
+        CheckBox chk = sender as CheckBox;
+       int Item_no= Convert.ToInt32(chk.ToolTip);
+       int Cons = Convert.ToInt32(objCommon.LookUp("STORE_MAIN_ITEM_GROUP", "MIGNO", "ITEM_TYPE='C'"));   //--getting Non consumable MIGNO 
+       int Iscons = Convert.ToInt32(objCommon.LookUp("STORE_ITEM", "Count(*)", "ITEM_NO =" + Item_no + " AND MIGNO=" + Cons));
+       if (Iscons > 0)
+       {
+           DataSet dss = objCommon.FillDropDown("STORE_INVOICE A INNER JOIN STORE_INVOICE_ITEM B ON (A.INVTRNO=B.INVTRNO)", "B.INVTRNO,ITEM_NO", "A.EXPIRYDATE,GETDATE() AS CURRENTDATE", "B.ITEM_NO =" + Item_no + " AND A.EXPIRYDATE IS NOT NULL", "");
+
+           if (dss != null && dss.Tables[0].Rows.Count>0)
+           {
+               string EXPIRYDATE = dss.Tables[0].Rows[0]["expirydate"].ToString();
+               string CURRENTDATE = dss.Tables[0].Rows[0]["CURRENTDATE"].ToString();
+               if (Convert.ToDateTime(EXPIRYDATE) < Convert.ToDateTime(CURRENTDATE))
+               {
+                   objCommon.DisplayMessage(this.Page, "This Item Has Been Expired.", this);
+                   chk.Checked = false;
+                   return;
+               }
+           }
+       }
+
+
         string ItemNo = string.Empty;
         foreach (ListViewItem lv in lvIssueItem.Items)
         {

@@ -90,7 +90,7 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[18];
+                        objParams = new SqlParameter[20];
                         objParams[0] = new SqlParameter("@P_INVTRNO", objINVEnt.INVTRNO);
                         objParams[1] = new SqlParameter("@P_GRNID", objINVEnt.GRN_NUM);
                         objParams[2] = new SqlParameter("@P_INVDATE", objINVEnt.INVDATE);
@@ -105,6 +105,7 @@ namespace IITMS
                         {
                             objParams[3] = new SqlParameter("@P_GRNDATE  ", objINVEnt.GRNDATE);
                         }
+
                         //------Shaikh Juned (31/03/2022)-----end----
 
                         objParams[4] = new SqlParameter("@P_INVNO", objINVEnt.INVNO);
@@ -120,8 +121,26 @@ namespace IITMS
                         objParams[14] = new SqlParameter("@P_MODIFIED_BY", objINVEnt.MODIFIED_BY);
                         objParams[15] = new SqlParameter("@P_NETAMOUNT", objINVEnt.NETAMOUNT); // Shaikh Juned 11-11-2022
                         objParams[16] = new SqlParameter("@P_INVOICE_UPLOAD_FILE_TBL", objINVEnt.INVOICE_UPLOAD_FILE_TBL); // 29-08-2023 enhancement according to Maher ticket 4748
-                        objParams[17] = new SqlParameter("@P_OUT ", SqlDbType.Int);
-                        objParams[17].Direction = ParameterDirection.Output;
+                                             
+                        if (objINVEnt.EXPIRYDATE==DateTime.MinValue)
+                        {
+                            objParams[17]=new SqlParameter ("@P_EXPIRYDATE",DBNull.Value);
+                        }
+                        else
+                        {
+                           objParams[17]=new SqlParameter("@P_EXPIRYDATE",objINVEnt.EXPIRYDATE);
+                        }
+                        if(objINVEnt.WARRANTYDATE==DateTime.MinValue)
+                        {
+                           objParams[18]=new SqlParameter("@P_WARRANTYDATE",DBNull.Value);
+                        }
+                        else
+                        {
+                           objParams[18]=new SqlParameter("@P_WARRANTYDATE", objINVEnt.WARRANTYDATE);
+                        }
+                         
+                        objParams[19] = new SqlParameter("@P_OUT ", SqlDbType.Int);
+                        objParams[19].Direction = ParameterDirection.Output;
                         if (objSQLHelper.ExecuteNonQuerySP("PKG_STR_INVOICE_INS_UPD", objParams, false) != null)
                             retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
