@@ -574,22 +574,22 @@ public partial class ACADEMIC_PG_Configuration_V2_aspx : System.Web.UI.Page
                             }
 
                             var collegeid = ddlCollegeV2.SelectedValue;
-                            if (collegeid == "" && collegeid == null) 
+                            if (collegeid == "" || collegeid == null) 
                             {
                                 collegeid = "0";
                             }
                             var degreeno = ddlDegreeV2.SelectedValue;
-                            if (degreeno == "" && degreeno == null)
+                            if (degreeno == "" || degreeno == null)
                             {
                                 degreeno = "0";
                             }
                             var branchno = ddlBranchV2.SelectedValue;
-                            if (branchno == "" && branchno == null)
+                            if (branchno == "" || branchno == null)
                             {
                                 branchno = "0";
                             }
                             var semesterno = ddlSemesterV2.SelectedValue;
-                            if (semesterno == "" && semesterno == null)
+                            if (semesterno == "" || semesterno == null)
                             {
                                 semesterno = "0";
                             }
