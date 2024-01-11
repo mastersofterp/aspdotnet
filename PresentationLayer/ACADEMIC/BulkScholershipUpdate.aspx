@@ -538,8 +538,8 @@
                                                 <sup></sup>
                                                 <label>Sort By</label>
                                             </div>
-                                            <asp:DropDownList ID="ddlSort" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
-                                                ValidationGroup="show">
+                                            <asp:DropDownList ID="ddlSort" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                ValidationGroup="show" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Regno</asp:ListItem>
                                                 <asp:ListItem Value="2">Category</asp:ListItem>
