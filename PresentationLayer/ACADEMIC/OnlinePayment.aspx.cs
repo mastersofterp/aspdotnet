@@ -279,20 +279,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 divHostelTransport.Visible = false;
             }
 
-            ds = GetFeeItems_Data(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                DataTable dt = ds.Tables[0];
-                lvfeehead.DataSource = ds;
-                lvfeehead.DataBind();
-                lvfeehead.Visible = true;
-            }
-            else
-            {
-                lvFeeItems.DataSource = null;
-                lvFeeItems.DataBind();
-                lvfeehead.Visible = false;
-            }
+            
         }
 
 
@@ -344,6 +331,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
     public void SemesterWiseFees()
     {
+
+        bindfeesdetails();
         DataSet ds = null;
         int IDNO = Convert.ToInt32(ViewState["StudId"].ToString());
         ds = objFee.GetStudentFeesforOnlinePayment(ddlReceiptType.SelectedValue, Convert.ToInt32(ddlSemester.SelectedValue), IDNO);
@@ -352,15 +341,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             decimal councellingamt = 0;
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO =" + IDNO));
             int paytype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO =" + IDNO));
-
             int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ADMBATCH", "IDNO =" + IDNO));
-
-
-
             decimal latefee = Convert.ToDecimal(ds.Tables[0].Rows[0]["LATE_FEE"].ToString());
-
             decimal total = ds.Tables[0].AsEnumerable().Sum(row => row.Field<decimal>("AMOUNTS"));
-
             total = total + latefee;
 
             if (total > 0)
@@ -1553,7 +1536,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
-                }
+            }
             else if (Session["OrgId"].ToString() == "15")
             {
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
@@ -2015,5 +1998,33 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+
+
+    public void bindfeesdetails()
+    {
+        try
+        {
+            DataSet ds = GetFeeItems_Data(Convert.ToInt32(ViewState["StudId"].ToString()), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                DataTable dt = ds.Tables[0];
+                lvfeehead.DataSource = ds;
+                lvfeehead.DataBind();
+                lvfeehead.Visible = true;
+            }
+            else
+            {
+                lvFeeItems.DataSource = null;
+                lvFeeItems.DataBind();
+                lvfeehead.Visible = false;
+            }
+        }
+        catch (Exception Ex)
+        {
+            
+        }
+    
+    
     }
 }
