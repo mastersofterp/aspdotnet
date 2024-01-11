@@ -7,7 +7,7 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <%--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <%--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="Content/jquery.js"></script>--%>
     <asp:HiddenField ID="hfdActive" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="hfdTrans" runat="server" ClientIDMode="Static" />
@@ -403,6 +403,7 @@
             }
         };
     </script>
+
 
     <script type="text/javascript" language="javascript">
         //function totAllSubjects(chklnkstatus) {

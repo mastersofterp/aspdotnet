@@ -3838,49 +3838,7 @@ namespace IITMS
                 //    return status;
                 //}
                 //added the temp parameter because controller contains the two functions with the same name and parameters
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp)
-                {
-                    int status = 0;
-                    try
-                    {
-
-
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[13];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
-                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
-
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-
-
+             
                 public int Add_SubjectWisePassingRule(string subid, string subname, string internalm, string external)
                 {
                     int status = 0;
@@ -4643,49 +4601,7 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int markentry_pattern, int orgid)
-                {
-                    int status = 0;
-                    try
-                    {
-
-
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[13];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_MARK_ENTRY", markentry_pattern);
-
-                        objParam[12] = new SqlParameter("@P_ORG_ID", orgid);
-
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-
+             
                 public DataSet GetAbsentEntryDetailsByAdmin(int Sessionno, int collegeid, int schemeno, int ua_no)
                 {
                     DataSet ds = null;
@@ -6904,99 +6820,7 @@ namespace IITMS
 
                 }
 
-
-                //FOR CREATION OF TIMETABLE SECTIONWISE & BATCHWISE TIME TABLE ADDED BY INJAMAM ANSARI 16-08-2023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch)
-                {
-                    int status = 0;
-                    try
-                    {
-
-
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[16];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
-                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
-                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
-                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
-                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
-
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange)
-                {
-                    int status = 0;
-                    try
-                    {
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[20];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
-                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
-                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
-                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
-                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
-                        objParam[16] = new SqlParameter("@P_ADMIN_GRADE", Gradeadmin);
-                        objParam[17] = new SqlParameter("@P_FACULTY_GRADE", GradeFaculty);
-                        objParam[18] = new SqlParameter("@P_GRAPH", graph);
-                        objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-
+            
 
                 #region Common Course Timetable For JECRC Added by Injamam 18_09_2023
                 public DataSet GetCommonCourseTimeTable(int sessionid, int subjecttype, int subexamno, int coursecat)
@@ -7216,119 +7040,7 @@ namespace IITMS
 
                 #endregion
 
-                #region Added By Rohit Diwate on date 21092023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback)
-                {
-                    int status = 0;
-                    try
-                    {
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[27];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
-                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
-                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
-                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
-                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
-                        objParam[16] = new SqlParameter("@P_ADMIN_GRADE", Gradeadmin);
-                        objParam[17] = new SqlParameter("@P_FACULTY_GRADE", GradeFaculty);
-                        objParam[18] = new SqlParameter("@P_GRAPH", graph);
-                        objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
-                        objParam[20] = new SqlParameter("@P_COLLEGE", college); //Added by Rohit Diwate on 150923
-                        objParam[21] = new SqlParameter("@P_SESSION", session); //Added by Rohit Diwate on 150923
-                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", feescollection); //Added by Rohit Diwate on 210923
-                        objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
-                        objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
-                        objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
-                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback);
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-                #endregion
-
-                #region Added By Rohit Diwate on date 16102023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage)
-                {
-                    int status = 0;
-                    try
-                    {
-                        SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[29];
-                        objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
-                        objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
-                        objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
-                        objParam[3] = new SqlParameter("@P_IMPROVEMENT", improvement);
-                        objParam[4] = new SqlParameter("@P_EXAM_PATTERN", exampattern);
-                        objParam[5] = new SqlParameter("@P_REVALUATION", revaluation);
-                        objParam[6] = new SqlParameter("@P_RESULT_OTP", result);
-                        objParam[7] = new SqlParameter("@P_CONDONATION", condonation);
-                        objParam[8] = new SqlParameter("@P_FEE_TYPE", feetype);
-                        objParam[9] = new SqlParameter("@P_PASS_RULE", passrule);
-                        objParam[10] = new SqlParameter("@P_EXAM_REG", examreg);
-                        objParam[11] = new SqlParameter("@P_DECODE_NUMBER", decode);
-                        objParam[12] = new SqlParameter("@P_SEAT_NUMBER", seat);
-                        objParam[13] = new SqlParameter("@P_EXCEL_MARK_ENTRY", excel);
-                        objParam[14] = new SqlParameter("@P_SECTIONWISE", sec);
-                        objParam[15] = new SqlParameter("@P_BATCHWISE", batch);
-                        objParam[16] = new SqlParameter("@P_ADMIN_GRADE", Gradeadmin);
-                        objParam[17] = new SqlParameter("@P_FACULTY_GRADE", GradeFaculty);
-                        objParam[18] = new SqlParameter("@P_GRAPH", graph);
-                        objParam[19] = new SqlParameter("@P_GRADE_RANGE", graderange);
-                        objParam[20] = new SqlParameter("@P_COLLEGE", college); //Added by Rohit Diwate on 150923
-                        objParam[21] = new SqlParameter("@P_SESSION", session); //Added by Rohit Diwate on 150923
-                        objParam[22] = new SqlParameter("@P_FEESCOLLECTION", feescollection); //Added by Rohit Diwate on 210923
-                        objParam[23] = new SqlParameter("@P_RELATIVE", relative);//Added by Rohit Diwate on 210923
-                        objParam[24] = new SqlParameter("@P_ABSOLUTE", absolute);//Added by Rohit Diwate on 210923
-                        objParam[25] = new SqlParameter("@P_BARCODE", barcode);//Added by Rohit Diwate on 011023
-                        objParam[26] = new SqlParameter("@P_FEEDBACK", feedback);
-                        objParam[27] = new SqlParameter("@P_ATTENDANCE", attendance);
-                        objParam[28] = new SqlParameter("@P_ATTENDANCE_PERCENTAGE", attendance_percentage);
-
-                        //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
-
-                        object obj = objHelp.ExecuteNonQuerySP("PKG_INS_EXAM_CONFIGURATION", objParam, true);
-                        //object obj = objHelp.ExecuteScalarSP("PKG_INS_EXAM_CONFIGURATION", objParam);
-
-                        if (obj != null)
-                            status = Convert.ToInt32(CustomStatus.RecordSaved);
-                        else
-                            status = Convert.ToInt32(CustomStatus.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
-                    }
-                    return status;
-                }
-                #endregion
-
-
+             
                 //---------------------- For Generate  Payment Demand---------------------------------------------- 
                 #region
 
@@ -8035,14 +7747,16 @@ namespace IITMS
                     return status;
                 }
 
-                #region Added By ROHIT on date 21_12_2023
-                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent)
+           
+
+                #region Added By Injamam on date 02_01_2024
+                public int Add_ExamConfiguration(int examrule, int garcerule, int latefee, int improvement, int exampattern, int revaluation, int result, int condonation, int feetype, int passrule, int examreg, int decode, int seat, int temp, int excel, int sec, int batch, int Gradeadmin, int GradeFaculty, int graph, int graderange, int college, int session, int feescollection, int relative, int absolute, int barcode, int feedback, int attendance, int attendance_percentage, int intsubexam, int intassessment, int intexcelformat, int admissionstatus, int endsemcomponent, int adminexapproval, int admincomponent, int facultycomponent, int exceltimetable, int intmarkpublish, int compwiseexcel)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objHelp = new SQLHelper(_uaims_constr);
-                        SqlParameter[] objParam = new SqlParameter[37];
+                        SqlParameter[] objParam = new SqlParameter[40];
                         objParam[0] = new SqlParameter("@P_EXAM_RULE", examrule);
                         objParam[1] = new SqlParameter("@P_GRACE_RULE", garcerule);
                         objParam[2] = new SqlParameter("@P_LATE_FEE", latefee);
@@ -8080,6 +7794,9 @@ namespace IITMS
                         objParam[34] = new SqlParameter("@P_ADMIN_EX_APPROVAL", adminexapproval);
                         objParam[35] = new SqlParameter("@P_ADMIN_COMPONENT", admincomponent);//Added by Hitesh 061223
                         objParam[36] = new SqlParameter("@P_FACULTY_COMPONENT", facultycomponent);//Added by Hitesh 061223
+                        objParam[37] = new SqlParameter("@P_EXCELTIMETABLE", exceltimetable);
+                        objParam[38] = new SqlParameter("@P_INTMARKPUBLISH", intmarkpublish);
+                        objParam[39] = new SqlParameter("@P_COMPWISEEXCEL", compwiseexcel);
 
                         //objParam[objParam.Length - 1].Direction = ParameterDirection.InputOutput;
 
@@ -8094,12 +7811,13 @@ namespace IITMS
                     catch (Exception ex)
                     {
                         status = Convert.ToInt32(CustomStatus.Error);
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ElectionController.AddElectionCategoryPostName() --> " + ex.Message + " " + ex.StackTrace);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamController.Add_ExamConfiguration() --> " + ex.Message + " " + ex.StackTrace);
                     }
                     return status;
                 }
                 #endregion
 
+                
 
             }
         }

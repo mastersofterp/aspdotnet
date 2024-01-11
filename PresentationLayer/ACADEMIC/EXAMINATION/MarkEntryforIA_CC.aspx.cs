@@ -1,9 +1,9 @@
 ﻿//=================================================================================
-// PROJECT NAME  : U-AIMS                                                          
-// MODULE NAME   : ACADEMIC - MARK ENTRY                                           
-// CREATION DATE : 14-OCT-2009                                                     
-// CREATED BY    : NIRAJ D .PHALKE                                                 
-// MODIFIED BY   : 17-NOV-2009                                                     
+// PROJECT NAME  : COMMON CODE                                                          
+// MODULE NAME   : ACADEMIC - INTERNAL MARK ENTRY                                           
+// CREATION DATE :                                                      
+// CREATED BY    : PRAFULL MUKE                                              
+// MODIFIED BY   :                                                     
 // MODIFIED DESC : 
 //=================================================================================
 
@@ -2079,7 +2079,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             DataSet ds = objCommon.FillDropDown("Reff", "SMSSVCID", "SMSSVCPWD", "", "");
             if (ds.Tables[0].Rows.Count > 0)
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("http://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(string.Format("https://" + "www.SMSnMMS.co.in/sms.aspx" + "?"));
                 request.ContentType = "text/xml; charset=utf-8";
                 request.Method = "POST";
 
@@ -2231,7 +2231,9 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
 
     protected void lbtnPrint_Click(object sender, EventArgs e)
     {
+
         LinkButton lbtn = (LinkButton)(sender);
+
         ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
         lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
         ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
@@ -2239,30 +2241,14 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
         ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
         ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
+        ViewState["fldname1_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[7]);
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
+        ViewState["SUBEXAMNO"] = lbtn.ToolTip.ToString();
 
-        ddlExamPrint.Items.Clear();
-        ddlExamPrint.Items.Add(new ListItem("Please Select", "0"));
-        ddlExamPrint.Items.Add(new ListItem(ViewState["examName_POP"].ToString(), ViewState["examNo_POP"].ToString()));
-
-        ddlSubExamPrint.Items.Clear();
-        ddlSubExamPrint.Items.Add(new ListItem("Please Select", "0"));
+        string SubFldname = objCommon.LookUp("ACD_SUBEXAM_NAME", "FLDNAME +'-'+CAST(SUBEXAMNO AS VARCHAR) ", "SUBEXAMNO=" + Convert.ToInt32(ViewState["SUBEXAMNO"])+" AND ACTIVESTATUS=1");
 
 
-        if (Convert.ToString(ViewState["fldname_POP"]) == "S10")
-        {
-            ddlSubExamPrint.Visible = false;
-            lbl_SubExam_Print.Visible = false;
-            btnPrintFront.Enabled = true;
-        }
-        else
-        {
-            ddlSubExamPrint.Visible = true;
-            lbl_SubExam_Print.Visible = true;
-            ddlSubExamPrint.Enabled = false;
-            btnPrintFront.Enabled = false;
-        }
 
          string rptFileName = string.Empty;
 
@@ -2977,7 +2963,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
     //    //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
     //    CloudBlobContainer container = client.GetContainerReference(Name);
     //    System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    
+    //    container.CreateIfNotExists();
     //}
 
     //private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
@@ -3015,7 +3001,11 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
     //    {
     //        DeleteIFExits(FileName);
     //        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    
+    //        container.CreateIfNotExists();
+    //        container.SetPermissions(new BlobContainerPermissions
+    //        {
+    //            PublicAccess = BlobContainerPublicAccessType.Blob
+    //        });
 
     //        CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
     //        cblob.UploadFromStream(FU.PostedFile.InputStream);

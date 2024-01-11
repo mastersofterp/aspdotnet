@@ -24,7 +24,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     private string uaims_constr = ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
-    private string rfcconstr = ConfigurationManager.ConnectionStrings["UAIMS_RFCCONFIG"].ConnectionString; 
+    private string rfcconstr = ConfigurationManager.ConnectionStrings["UAIMS_RFCCONFIG"].ConnectionString;
     bool connection;
     private static string isServer = System.Configuration.ConfigurationManager.AppSettings["isServer"].ToString();
     protected void Page_Load(object sender, EventArgs e)
@@ -199,7 +199,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                     else
                     {
                         Fill_menu(mainMenu);
-                        
+
                         Fill_menu1(mainMenu1);// Added By Swapnil Prachand - 13112021
                     }
                     /// Added by Pritish S. for menu tab on 09/04/2021
@@ -328,7 +328,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         //Response.Write("Current Page: " + currentPageName);
         //objCommon.DisplayMessage("Current Page: " + currentPageName, this.Page);
         GetPdfPath();
-        
+
     }
     public class Packet
     {
@@ -1399,7 +1399,7 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         try
         {
             LogFile objLog = new LogFile();
-            if ((Session["username"] != null && Session["logid"] !=null) || Convert.ToString(Session["username"]) != string.Empty && Convert.ToString(Session["logid"])!=string.Empty)
+            if ((Session["username"] != null && Session["logid"] != null) || Convert.ToString(Session["username"]) != string.Empty && Convert.ToString(Session["logid"]) != string.Empty)
             {
                 objLog.Ua_Name = Convert.ToString(Session["username"]);
                 objLog.LogoutTime = DateTime.Now;
@@ -1407,12 +1407,12 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 LogTableController.UpdateLog(objLog);
                 if (isServer == "true")
                 {
-                  //  Response.Redirect("~/default.aspx");
-                    Response.Redirect("~/default.aspx",false);
+                    //  Response.Redirect("~/default.aspx");
+                    Response.Redirect("~/default.aspx", false);
                 }
                 else
                 {
-                   // Response.Redirect("~/default_crescent.aspx");
+                    // Response.Redirect("~/default_crescent.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
             }
@@ -1420,17 +1420,17 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
             {
                 if (isServer == "true")
                 {
-                   // Response.Redirect("~/default.aspx");
+                    // Response.Redirect("~/default.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
                 else
                 {
-                  //  Response.Redirect("~/default_crescent.aspx");
+                    //  Response.Redirect("~/default_crescent.aspx");
                     Response.Redirect("~/default.aspx", false);
                 }
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             //Response.Redirect("~/default.aspx");
         }
@@ -3240,7 +3240,6 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
 
 
     protected DataSet GetPdfPath()  // Added By Anurag B. on 31-10-2023
-<<<<<<< HEAD
     {
         string currentPageName = Request.Url.Segments[Request.Url.Segments.Length - 1];
         DataSet ds = new DataSet();
@@ -3249,28 +3248,11 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
         try
         {
             if (currentPageName == "principalHome.aspx" || currentPageName == "homeFaculty.aspx" || currentPageName == "homeNonFaculty.aspx" || currentPageName == "studeHome.aspx" || currentPageName == "Links.aspx")
-=======
-    { 
-        string currentPageName = Request.Url.Segments[Request.Url.Segments.Length - 1];
-        //string AL_No = Request.QueryString["pageno"].ToString().Trim();
-        DataSet ds = new DataSet();
-        //DataSet ds = null;
-        try
-        {
-            // SQLHelper objDataAccess = new SQLHelper(System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString);
-            //SqlParameter[] sqlParams = new SqlParameter[]
-            //{
-            //    new SqlParameter("@P_AL_URL", currentPageName)
-            //};
-            //ds = objDataAccess.ExecuteDataSetSP("PKG_GET_PDF_NAME", sqlParams);
-            if (currentPageName == "principalHome.aspx" || currentPageName=="Links.aspx")
->>>>>>> 7631576f ([ENHANCEMENT] [47354] Added Information Panel in the SiteMaster Page)
             {
                 ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_URL='" + currentPageName + "' ", "");
             }
             else
             {
-<<<<<<< HEAD
                 if (AL_No != 0)
                 {
                     ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_No='" + AL_No + "' ", "");
@@ -3279,16 +3261,11 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 {
                     AL_No = 0;
                 }
-=======
-                string AL_No = Request.QueryString["pageno"].ToString().Trim();
-                ds = objCommon.FillDropDown("ACCESS_LINK", "AL_Link", "MANUAL_UPLOAD_FILENAME", "AL_No='" + AL_No + "' ", "");
->>>>>>> 7631576f ([ENHANCEMENT] [47354] Added Information Panel in the SiteMaster Page)
             }
         }
         catch (Exception ex)
         {
         }
-<<<<<<< HEAD
         if (AL_No != 0)
         {
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -3308,24 +3285,6 @@ public partial class SiteMasterPage : System.Web.UI.MasterPage
                 }
                 informationid.InnerText = "Help - " + ds.Tables[0].Rows[0]["AL_Link"].ToString() + "";
             }
-=======
-        if (ds != null && ds.Tables[0].Rows.Count > 0 )
-        {
-            string path = ds.Tables[0].Rows[0]["MANUAL_UPLOAD_FILENAME"].ToString();
-            string folderpath = Server.MapPath("~/UserManual/") + path; // Use Server.MapPath to get the physical path
-            if (!File.Exists(folderpath))
-            {
-                //pdfViewer.Src = "UserManual/Help Document Not.pdf" + "#toolbar=0&navpanes=0&scrollbar=0";
-                string textToDisplay = "<div style='text-align: center; font-size: 24px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'>Help Information for " + ds.Tables[0].Rows[0]["AL_Link"].ToString() + " Not Found.</div>";
-                pdfViewer.Attributes["srcdoc"] = textToDisplay;
-                btndownload.Visible = false;
-            }
-            else
-            {
-                pdfViewer.Src = ResolveUrl("~/UserManual/") + path + "#toolbar=0&navpanes=0&scrollbar=0";
-            }
-            informationid.InnerText = "Help - " + ds.Tables[0].Rows[0]["AL_Link"].ToString() + "";
->>>>>>> 7631576f ([ENHANCEMENT] [47354] Added Information Panel in the SiteMaster Page)
         }
         else
         {

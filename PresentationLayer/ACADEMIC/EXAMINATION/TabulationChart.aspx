@@ -893,14 +893,14 @@
                                 <asp:Button ID="btnLedger" runat="server" Text="Students Ledger Report" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="Ledger" OnClick="btnLedger_Click" />
                                 <asp:Button ID="btnGradeCardIssueRegister" runat="server" Text="Grade Card Issue Register" TabIndex="1" Visible="false" CssClass="btn btn-info" ValidationGroup="GradeCardIssueRegister" OnClick="btnGradeCardIssueRegister_Click" />
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 466119f3 ([ENHANCEMENT] [51044] FHS Grade Card format)
                                 <asp:Button ID="btnElibilityReport" Text="Eligibility Report" runat="server" TabIndex="1" CssClass="btn btn-info" Visible="false" ValidationGroup="ER" OnClick="btnElibilityReport_Click" />
 
                                 <asp:Button ID="btnCertificate" Text="Degree Certificate" runat="server" TabIndex="1" CssClass="btn btn-info"
                                     Visible="false" ValidationGroup="CPD" OnClick="btnCertificate_Click" />
+
+                                 <asp:Button ID="btnConsolidtedMPHRAM" Text="Consolidated (M.PHARM)" runat="server" TabIndex="32" CssClass="btn btn-info" Visible="false"
+                                      ValidationGroup="ConsoGradeCard" OnClick="btnConsolidtedMPHRAM_Click" />
+
                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />
                                 <asp:ValidationSummary ID="ValidationSummary15" runat="server" DisplayMode="List"

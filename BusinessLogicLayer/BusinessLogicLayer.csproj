@@ -367,6 +367,7 @@
     <Compile Include="BusinessLogic\Common\ExamController.cs" />
     <Compile Include="BusinessLogic\Common\FaqController.cs" />
     <Compile Include="BusinessLogic\Common\HelpController.cs" />
+    <Compile Include="BusinessLogic\Common\ImageCompression.cs" />
     <Compile Include="BusinessLogic\Common\ImportDataController.cs" />
     <Compile Include="BusinessLogic\Common\LogTableController.cs" />
     <Compile Include="BusinessLogic\Common\MappingController.cs" />

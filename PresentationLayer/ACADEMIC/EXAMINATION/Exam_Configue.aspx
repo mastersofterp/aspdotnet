@@ -407,6 +407,7 @@
                                             <asp:HiddenField ID="hdfrelative" runat="server" ClientIDMode="Static" />
                                         </div>
                                     </div>
+
                                     <div class="form-group col-lg-2 col-md-2 col-12 ">
                                         <span class="pr-5">
                                             <label for="chk_absolute" style="font-size: small;">Absolute</label>
@@ -983,7 +984,7 @@
             }
             if (attendance.checked) {
                 $('#hdfattendance').val(true)
-                if ($(this).is(':checked')) $('div.max_tickets').show();
+                // if ($(this).is(':checked')) $('div.max_tickets').show();
             }
             else {
                 $('#hdfattendance').val(false)
