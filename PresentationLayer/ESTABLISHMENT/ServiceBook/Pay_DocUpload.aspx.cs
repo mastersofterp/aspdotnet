@@ -344,11 +344,7 @@ public partial class ESTABLISHMENT_ServiceBook_Pay_DocUpload : System.Web.UI.Pag
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+            
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);

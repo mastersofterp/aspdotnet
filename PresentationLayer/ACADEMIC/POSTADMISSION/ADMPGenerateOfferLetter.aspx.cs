@@ -137,11 +137,7 @@ public partial class ACADEMIC_DAIICTPostAdmission_ADMPGenerateOfferLetter : Syst
 
             var FileName = "ADMP_OFFER_LETTER_" + userno + "_" + applicationid + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+            
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.Properties.ContentType = System.Net.Mime.MediaTypeNames.Application.Pdf;

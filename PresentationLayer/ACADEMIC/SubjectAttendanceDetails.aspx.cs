@@ -100,7 +100,7 @@ public partial class ACADEMIC_SubjectAttendanceDetails : System.Web.UI.Page
         if (ddlDepartment.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlFaculty, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=3 AND UA_DEPTNO=" + ddlDepartment.SelectedValue, "UA_NO");
-            objCommon.FillDropDownList(ddlFaculty, "USER_ACC WITH (NOLOCK)", "UA_NO", "UA_FULLNAME", "UA_TYPE=3 AND  UA_DEPTNO= '" + ddlDepartment.SelectedValue + "' AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "UA_FULLNAME");
+            objCommon.FillDropDownList(ddlFaculty, "USER_ACC WITH (NOLOCK)", "UA_NO", "UA_FULLNAME", "UA_TYPE=3 AND '" + ddlDepartment.SelectedValue + "' in (select value from dbo.Split(UA_DEPTNO, ',')) AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "UA_FULLNAME");
         }
         else
         {

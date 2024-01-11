@@ -72,7 +72,7 @@ public partial class Call_Blob_Storage : System.Web.UI.Page
         //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not  
         CloudBlobContainer container = client.GetContainerReference("cpukotadoctest");
         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-        container.CreateIfNotExists();  
+       
     }
 
     void Blob_Upload()
@@ -137,7 +137,7 @@ public partial class Call_Blob_Storage : System.Web.UI.Page
 
         CloudBlobContainer container = client.GetContainerReference(containerName);
         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-        //container.CreateIfNotExists();
+       
 
         //CloudBlockBlob blob = container.GetBlockBlobReference("hsncustorage");
 
@@ -297,11 +297,7 @@ public partial class Call_Blob_Storage : System.Web.UI.Page
             {
                 DeleteIFExits(FileName);
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-                container.CreateIfNotExists();
-                container.SetPermissions(new BlobContainerPermissions
-                {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                });
+               
 
                 CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
                 cblob.UploadFromStream(fuStudentPhoto1.PostedFile.InputStream);

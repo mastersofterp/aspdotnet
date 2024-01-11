@@ -1920,11 +1920,7 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
         {
            // DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
+            
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);
@@ -2384,7 +2380,6 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
                 }
 
                 blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
-
 
                 string embed = "<object data=\"{0}\" type=\"application/pdf\" width=\"500px\" height=\"400px\">";
                 embed += "If you are unable to view file, you can download from <a href = \"{0}\">here</a>";

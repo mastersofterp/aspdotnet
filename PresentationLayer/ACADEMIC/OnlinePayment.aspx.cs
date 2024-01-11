@@ -18,7 +18,7 @@ using System.Web.Services;
 using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
 public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
-    {
+{
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFee = new FeeCollectionController();
@@ -29,33 +29,33 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     int degreeno = 0;
     int college_id = 0;
     protected void Page_Load(object sender, EventArgs e)
-        {
+    {
 
         if (!Page.IsPostBack)
-            {
+        {
             // Check User Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
-                {
+            {
                 Response.Redirect("~/default.aspx");
-                }
+            }
             else
-                {
+            {
                 if (Session["payment"].ToString().Equals("payment"))
-                    {
+                {
                     Page.Title = Session["coll_name"].ToString();
-                    }
+                }
                 else
-                    { // Check User Authority 
+                { // Check User Authority 
                     this.CheckPageAuthorization();
-                    }
+                }
 
                 // Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 Session["payactivityno"] = "1";
                 int IDNO1 = 0;
                 if (Session["usertype"].ToString().Equals("2") || Session["usertype"].ToString().Equals("14"))
-                    {
+                {
 
                     //divEnrollment.Visible = false;
                     divReceiptType.Attributes.Add("class", "form-group col-lg-3 col-md-6 col-12");
@@ -67,9 +67,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     DisplayStudentInfo(IDNO1);
                     PopulateDropDown();
                     //divamount.Visible = false;
-                    }
+                }
                 else
-                    {
+                {
                     myModal2.Visible = true;
                     btnCancel.Visible = false;
 
@@ -88,24 +88,24 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     //ddlSearch_SelectedIndexChanged(sender, e);
                     //End Search Pannel Dropdowns
 
-                    }
-
-
-
                 }
+
+
+
             }
+        }
 
 
 
         if (Request.Params["__EVENTTARGET"] != null &&
                                Request.Params["__EVENTTARGET"].ToString() != string.Empty)
-            {
+        {
             if (Request.Params["__EVENTTARGET"].ToString() == "ModifyDemand")
-                {
+            {
                 this.ModifyDemand();
 
-                }
             }
+        }
         //else
         //{
         //    int count = 0;
@@ -149,28 +149,28 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         //    }
         //}
 
-       // lbltotals.Visible = false;
-       // divamount.Visible = false;
-        }
+        // lbltotals.Visible = false;
+        // divamount.Visible = false;
+    }
 
     protected void ddlSemester_OnSelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
 
 
         if (ddlSemester.SelectedIndex > 0)
-            {
+        {
             btnPayment.Visible = false;
-            divMSG.Visible = false;          
+            divMSG.Visible = false;
             int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
 
             if (HostelTypeSelection == 1)
-                {
+            {
                 divHostelTransport.Visible = true;
-                }
+            }
             else
-                {
+            {
                 divHostelTransport.Visible = false;
-                }
+            }
             //div_Studentdetail.Visible = false;
             DataSet ds = null;
             int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
@@ -182,11 +182,11 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             ViewState["pType"] = ptype;
 
             if (ddlSemester.SelectedIndex > 0)
-                {
+            {
                 int count = Convert.ToInt32(objCommon.LookUp("ACD_FEES_INSTALLMENT", "count(*)", "IDNO =" + IDNO + " AND SEMESTERNO =" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND RECIPTCODE = '" + Convert.ToString(ddlReceiptType.SelectedValue) + "'" + "AND ISNULL(INSTAL_CANCEL,0)=0"));
 
                 if (count > 0)
-                    {
+                {
 
                     divHostelTransport.Visible = false;
 
@@ -195,7 +195,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     divDirectPayment.Visible = false;
                     ds = objFee.GetStudentInstallmentDetails(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                        {
+                    {
                         lblRegno.Text = ds.Tables[0].Rows[0]["REGNO"].ToString();
                         lblName.Text = ds.Tables[0].Rows[0]["STUDNAME"].ToString();
                         lblRollNo.Text = ds.Tables[0].Rows[0]["ROLLNO"].ToString();
@@ -209,104 +209,104 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
                         lvInstallment.DataSource = ds;
                         lvInstallment.DataBind();
-                        }
                     }
+                }
                 else
-                    {
+                {
 
 
                     if (Hosteltype == 0)
-                        {
+                    {
                         if (HostelTypeSelection == 1)
-                            {
-                            divHostelTransport.Visible = true;
-                            }
-                        else
-                            {
-                            divHostelTransport.Visible = false;
-                            }
-
-                        }
-                    else
                         {
+                            divHostelTransport.Visible = true;
+                        }
+                        else
+                        {
+                            divHostelTransport.Visible = false;
+                        }
+
+                    }
+                    else
+                    {
                         divHostelTransport.Visible = false;
 
                         if (HostelTypeSelection == 1)
-                            {
+                        {
                             divhosteltype.Visible = true;
                             this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
                             ddlhosteltype.SelectedValue = Hosteltype.ToString();
                             ddlhosteltype.Enabled = false;
-                            }
                         }
+                    }
                     divInstallmentPayment.Visible = false;
                     divDirectPayment.Visible = true;
 
                     int checkprevsemoutstanding = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CHECK_PREV_SEM_OUTSNADING,0)", "ConfigNo>0"));
 
                     if (checkprevsemoutstanding == 1)
-                        {
+                    {
                         // DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 AND PAY_MODE_CODE<>'SA' AND ISNULL(SCH_ADJ_AMT,0)=0 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
                         DataSet dsDueFee = objCommon.FillDropDown("ACD_DEMAND D  LEFT OUTER JOIN (SELECT IDNO,SEMESTERNO, SUM(ISNULL(DR.TOTAL_AMT,0)) DRTOTAL_AMT FROM  ACD_DCR DR WHERE IDNO=" + IDNO + "  AND RECON=1 GROUP BY IDNO,SEMESTERNO )A  ON (A.IDNO=D.IDNO AND A.SEMESTERNO=D.SEMESTERNO)", "DISTINCT D.IDNO,D.SEMESTERNO,DBO.FN_DESC('SEMESTER',D.SEMESTERNO)SEMESTERNAME", "ISNULL(DRTOTAL_AMT,0)DRTOTAL_AMT,(ISNULL(D.TOTAL_AMT,0)) DTOTAL_AMT, (CASE WHEN D.RECIEPT_CODE = 'TF' THEN 'Admission Fees' ELSE 'Other Fees' END) FEE_TITLE", " D.IDNO = " + IDNO + " AND D.SEMESTERNO<" + ddlSemester.SelectedValue + " AND ISNULL(CAN,0)=0 AND ISNULL(DELET,0)=0", string.Empty);
                         if (dsDueFee.Tables[0].Rows.Count > 0)
-                            {
+                        {
                             for (int i = 0; i < dsDueFee.Tables[0].Rows.Count; i++)
-                                {
+                            {
                                 if (Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DRTOTAL_AMT"].ToString()) < Convert.ToDecimal(dsDueFee.Tables[0].Rows[i]["DTOTAL_AMT"].ToString()))
-                                    {
+                                {
                                     objCommon.DisplayMessage(this.Page, " Please Pay the Fees of " + dsDueFee.Tables[0].Rows[i]["FEE_TITLE"].ToString() + " Semester " + dsDueFee.Tables[0].Rows[i]["SEMESTERNAME"].ToString(), this.Page);
                                     return;
-                                    }
+                                }
                                 else
-                                    {
+                                {
 
-                                    }
                                 }
                             }
-                        else
-                            {
-
-                            }
                         }
-                    SemesterWiseFees();
+                        else
+                        {
+
+                        }
                     }
+                    SemesterWiseFees();
                 }
+            }
             else
-                {
+            {
                 divInstallmentPayment.Visible = false;
                 divDirectPayment.Visible = true;
                 btnCancel.Visible = true;
                 divHostelTransport.Visible = false;
-                }
+            }
 
-            ds = GetFeeItems_Data(IDNO,  Convert.ToInt32(ddlSemester.SelectedValue),Convert.ToString(ddlReceiptType.SelectedValue));
+            ds = GetFeeItems_Data(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 DataTable dt = ds.Tables[0];
                 lvfeehead.DataSource = ds;
                 lvfeehead.DataBind();
                 lvfeehead.Visible = true;
-                }
+            }
             else
-                {
+            {
                 lvFeeItems.DataSource = null;
                 lvFeeItems.DataBind();
                 lvfeehead.Visible = false;
-                }
             }
-
-
-        
         }
 
+
+
+    }
+
     public void DisplayStudentInfo(int idno)
-        {
+    {
         #region Display Student Information
         DataSet ds;
 
         ds = objFee.GetStudentInfoById(idno, Convert.ToInt32(Session["OrgId"].ToString()));
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
+        {
             div_Studentdetail.Visible = true;
             lblRegno.Text = ds.Tables[0].Rows[0]["REGNO"].ToString();
             lblStudName.Text = ds.Tables[0].Rows[0]["STUDNAME"].ToString();
@@ -329,26 +329,26 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             string yearNo = ds.Tables[0].Rows[0]["YEAR"].ToString();
             Session["YEARNO"] = yearNo;
             PopulateDropDown();
-            }
+        }
         else//MAKE CHANGE HERE
-            {
+        {
             div_Studentdetail.Visible = false;
             divReceiptType.Visible = false;
             divStudSemester.Visible = false;
             //divPreviousReceipts.Visible = false;
             //divHidPreviousReceipts.InnerHtml = "No Record Found.<br/>";
-            }
+        }
         //divPreviousReceipts.Visible = true;
         #endregion
-        }
+    }
 
     public void SemesterWiseFees()
-        {
+    {
         DataSet ds = null;
         int IDNO = Convert.ToInt32(ViewState["StudId"].ToString());
         ds = objFee.GetStudentFeesforOnlinePayment(ddlReceiptType.SelectedValue, Convert.ToInt32(ddlSemester.SelectedValue), IDNO);
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             decimal councellingamt = 0;
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO =" + IDNO));
             int paytype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO =" + IDNO));
@@ -364,7 +364,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             total = total + latefee;
 
             if (total > 0)
-                {
+            {
                 btnPayment.Visible = true;
                 btnReciept.Visible = false;
                 //div_Studentdetail.Visible = true;
@@ -399,9 +399,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 hdfAmount.Value = total.ToString();//ds.Tables[0].Rows[0]["FEESAMOUNT"].ToString();
 
                 //FeeItemsSection();   // Commented by swapnil
-                }
+            }
             else
-                {
+            {
                 // objCommon.DisplayMessage("Fees already paid for selected semester.", this.Page);
                 divMSG.Visible = true;
                 btnReciept.Visible = false;
@@ -409,43 +409,43 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 lblmsg.Attributes.Add("style", "color:green");
                 lblmsg.Text = "Fees already paid for selected semester.";
                 if (Session["OrgId"].ToString() == "5")
-                    {
+                {
                     int HostelTypeSelection = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(HOSTE_TYPE_ONLINE_PAY,0) as HOSTE_TYPE_ONLINE_PAY", ""));
 
                     if (HostelTypeSelection == 1)
-                        {
+                    {
                         divHostelTransport.Visible = true;
                         int currentsem = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"].ToString())));
                         if (currentsem == Convert.ToInt32(ddlSemester.SelectedValue))
-                            {
-                            divHostelTransport.Visible = true;
-                            }
-                        else
-                            {
-                            divHostelTransport.Visible = false;
-                            }
-                        }
-                    else
                         {
-                        divHostelTransport.Visible = false;
+                            divHostelTransport.Visible = true;
                         }
-                    return;
+                        else
+                        {
+                            divHostelTransport.Visible = false;
+                        }
                     }
+                    else
+                    {
+                        divHostelTransport.Visible = false;
+                    }
+                    return;
                 }
             }
+        }
         else
-            {
+        {
             // objCommon.DisplayMessage("", this.Page);
             divMSG.Visible = true;
             lblmsg.Attributes.Add("style", "color:red");
             lblmsg.Text = "Fees demand not Created for Selected Semester, Please Contact MIS Administrator!!";
             return;
-            }
         }
+    }
 
 
     protected void btnPayment_Click(object sender, EventArgs e)
-        {
+    {
 
         int status1 = 0;
         int Currency = 1;
@@ -453,7 +453,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         amount = Convert.ToString(hdfAmount.Value);
         //amount = Convert.ToString("1");
         try
-            {
+        {
             Session["ReturnpageUrl"] = HttpContext.Current.Request.Url.AbsoluteUri;
             int OrganizationId = Convert.ToInt32(Session["OrgId"]);
             DailyCollectionRegister dcr = this.Bind_FeeCollectionData();
@@ -479,82 +479,82 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             //Added by Nikhil L. on 23-08-2022 for getting response and request url as per degreeno for RCPIPER.
 
             if (Session["OrgId"].ToString() == "6")
-                {
+            {
                 degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                 if (ddlReceiptType.SelectedValue == "AEF" || ddlReceiptType.SelectedValue == "EF")
-                    {
+                {
                     int payactivityno = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME = 'Exam Registration'"));
 
                     Session["payactivityno"] = payactivityno;
-                    }
                 }
+            }
             else if (Session["OrgId"].ToString() == "16")
-                {
+            {
                 if (ddlReceiptType.SelectedValue == "EF")
-                    {
-                   // college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                {
+                    // college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='EXAM REG'"));
                     Session["payactivityno"] = activityno;
-                    }
+                }
                 else if (ddlReceiptType.SelectedValue == "AEF")
-                    {
+                {
                     //college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='EXAM REG'"));
                     Session["payactivityno"] = activityno;
-                    }
+                }
                 else
-                    {
+                {
                     college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                     Session["payactivityno"] = activityno;
-                    }
-
                 }
+
+            }
             else if (Session["OrgId"].ToString() == "15")
-                {
+            {
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
-                }
+            }
             else
-                {
+            {
                 Session["payactivityno"] = 1;
-                }
+            }
 
             if (Session["OrgId"].ToString() == "8")
-                {
+            {
                 college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                }
+            }
             //**********************************End by Nikhil L.********************************************//
 
 
             DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
             if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
-                {
+            {
                 if (ds1.Tables[0].Rows.Count > 1)
-                    {
+                {
 
-                    }
+                }
                 else
-                    {
+                {
                     Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
                     Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
-                    }
                 }
             }
-        catch (Exception ex)
-            {
-            Response.Write(ex.Message);
-            }
         }
+        catch (Exception ex)
+        {
+            Response.Write(ex.Message);
+        }
+    }
 
     private DailyCollectionRegister Bind_FeeCollectionData()
-        {
+    {
         /// Bind transaction related data from various controls.
         DailyCollectionRegister dcr = new DailyCollectionRegister();
         try
-            {
+        {
 
             //dcr.SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue.Trim());
             dcr.SemesterNo = ((ddlSemester.SelectedIndex > 0 && ddlSemester.SelectedValue != string.Empty) ? Int32.Parse(ddlSemester.SelectedValue) : 1);
@@ -610,20 +610,20 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
             //*****************
             foreach (ListViewDataItem item in lvFeeItems.Items)
-                {
+            {
                 string fee_head = string.Empty;//***************
                 fee_head = ((HiddenField)item.FindControl("hdnfld_FEE_LONGNAME")).Value;//*****************
                 string feeAmt = ((TextBox)item.FindControl("txtFeeItemAmount")).Text.Trim();
 
                 if (fee_head == "LATE FEE")
-                    {
+                {
                     if (feeAmt != null && feeAmt != string.Empty)
-                        {
+                    {
                         dcr.Late_fee = Convert.ToDouble(feeAmt);
 
-                        }
                     }
                 }
+            }
             //*****************
 
             //}
@@ -632,20 +632,20 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             //    dcr.ExcessAmount = 0.00;
             //    objCommon.DisplayMessage("Excess amount cannot maintain. Beacause not maintain the Uaims Configuration status", this.Page);
             //}
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return dcr;
         }
-    private FeeHeadAmounts GetFeeItems()
+        catch (Exception ex)
         {
+            throw;
+        }
+        return dcr;
+    }
+    private FeeHeadAmounts GetFeeItems()
+    {
         FeeHeadAmounts feeHeadAmts = new FeeHeadAmounts();
         try
-            {
+        {
             foreach (ListViewDataItem item in lvFeeItems.Items)
-                {
+            {
                 int feeHeadNo = 0;
                 double feeAmount = 0.00;
 
@@ -654,7 +654,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 CheckBox chkAmount = item.FindControl("chkFee") as CheckBox;
 
                 if (chkAmount.Checked)//*****************
-                    {
+                {
                     string feeHeadSrNo = chkAmount.ToolTip;
                     if (feeHeadSrNo != null && feeHeadSrNo != string.Empty)
                         feeHeadNo = Convert.ToInt32(feeHeadSrNo);
@@ -664,8 +664,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         feeAmount = Convert.ToDouble(feeAmt);
 
                     feeHeadAmts[feeHeadNo - 1] = feeAmount;
-                    }
                 }
+            }
 
 
             ////foreach (ListViewDataItem item in lvFeeItems.Items)
@@ -717,15 +717,15 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             //    }
             //    //*****************
             //}
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return feeHeadAmts;
         }
-    protected void btnCancel_Click(object sender, EventArgs e)
+        catch (Exception ex)
         {
+            throw;
+        }
+        return feeHeadAmts;
+    }
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
         //txtEnrollmentNo.Text = string.Empty;
         divHostelTransport.Visible = false;
         divhosteltype.Visible = false;
@@ -735,34 +735,34 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         btnPayment.Visible = false;
         divMSG.Visible = false;
         lblmsg.Text = string.Empty;
-        }
+    }
 
     private void CheckPageAuthorization()
-        {
+    {
         if (Request.QueryString["pageno"] != null)
-            {
+        {
             // Check user's authrity for Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
-                {
-                Response.Redirect("~/notauthorized.aspx?page=OnlinePaymentRequest.aspx");
-                }
-            }
-        else
             {
+                Response.Redirect("~/notauthorized.aspx?page=OnlinePaymentRequest.aspx");
+            }
+        }
+        else
+        {
             // Even if PageNo is Null then, don't show the page
             Response.Redirect("~/notauthorized.aspx?page=OnlinePaymentRequest.aspx");
-            }
-
         }
 
+    }
+
     private void PopulateDropDown()
-        {
+    {
 
         this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE RT INNER JOIN ACD_DEMAND D ON(RT.RECIEPT_CODE = D.RECIEPT_CODE)", "DISTINCT RT.RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO>0 AND D.IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "RECIEPT_TITLE");
         ddlReceiptType.SelectedIndex = 1;
         //this.objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
         this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "S.SEMESTERNO");
-        }
+    }
 
     //private void PopulateDropDownList()
     //    {
@@ -773,104 +773,104 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
 
     private void OnlinePayment(string Order_id)
-        {
+    {
         string api_key = ConfigurationManager.AppSettings["API_KEY"];
         string country = "IND";
         string currency = "INR";
         string return_url = ConfigurationManager.AppSettings["RETURN_URL"];
 
         try
-            {
+        {
             string[] hashVarsSeq;
             string hash_string = string.Empty;
 
             hashVarsSeq = ConfigurationManager.AppSettings["hashSequence"].Split('|'); // spliting hash sequence from config
             hash_string = "";
             foreach (string hash_var in hashVarsSeq)
-                {
+            {
                 if (hash_var == "api_key")
-                    {
+                {
                     hash_string = hash_string + api_key;
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "amount")
-                    {
+                {
                     hash_string = hash_string + Convert.ToDecimal(lblAmount.Text.Trim()).ToString("g29");
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "SALT")
-                    {
+                {
                     hash_string = hash_string + ConfigurationManager.AppSettings["SALT"];
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "mode")
-                    {
+                {
                     hash_string = hash_string + ConfigurationManager.AppSettings["MODE"];
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "country")
-                    {
+                {
                     hash_string = hash_string + country;
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "currency")
-                    {
+                {
                     hash_string = hash_string + currency;
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "return_url")
-                    {
+                {
                     hash_string = hash_string + return_url;
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "city")
-                    {
+                {
                     hash_string = hash_string + hdfCity.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "name")
-                    {
+                {
                     hash_string = hash_string + hdfName.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "order_id")
-                    {
+                {
                     hash_string = hash_string + Order_id;
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "phone")
-                    {
+                {
                     hash_string = hash_string + hdfMobileNo.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "state")
-                    {
+                {
                     hash_string = hash_string + hdfState.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "zip_code")
-                    {
+                {
                     hash_string = hash_string + hdfZipCode.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "description")
-                    {
+                {
                     hash_string = hash_string + "Online Payment";
                     hash_string = hash_string + '|';
-                    }
+                }
                 else if (hash_var == "email")
-                    {
+                {
                     hash_string = hash_string + hdfEmailId.Value.Trim();
                     hash_string = hash_string + '|';
-                    }
                 }
+            }
 
             hash_string = hash_string.Substring(0, hash_string.Length - 1);
             hash = Generatehash512(hash_string).ToUpper();         //generating hash
             action = ConfigurationManager.AppSettings["TRAKNPAY_URL"];// setting URL
 
             if (!string.IsNullOrEmpty(hash))
-                {
+            {
                 System.Collections.Hashtable data = new System.Collections.Hashtable(); // adding values in gash table for data post
                 //data.Add("address_line_1", "-");
                 //data.Add("address_line_2", "-");
@@ -898,13 +898,13 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
                 string strForm = PreparePOSTForm(action, data);
                 Page.Controls.Add(new LiteralControl(strForm));
-                }
-            }
-        catch (Exception ex)
-            {
-            Response.Write("<span style='color:red'>" + ex.Message + "</span>");
             }
         }
+        catch (Exception ex)
+        {
+            Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+        }
+    }
 
     /// <summary>
     /// Generate HASH for encrypt all parameter passing while transaction
@@ -912,7 +912,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     /// <param name="text"></param>
     /// <returns></returns>
     public string Generatehash512(string text)
-        {
+    {
         byte[] message = Encoding.UTF8.GetBytes(text);
 
         UnicodeEncoding UE = new UnicodeEncoding();
@@ -921,15 +921,15 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         string hex = "";
         hashValue = hashString.ComputeHash(message);
         foreach (byte x in hashValue)
-            {
+        {
             hex += String.Format("{0:x2}", x);
-            }
+        }
         return hex;
 
-        }
+    }
 
     private string PreparePOSTForm(string url, System.Collections.Hashtable data)      // post form
-        {
+    {
         //Set a name for the form
         string formID = "PostForm";
         //Build the form using the specified data to be posted.
@@ -944,11 +944,11 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         strForm.Append("<iframe id=\"ifrm\" src=\"" + url +
                            "\"></iframe>");
         foreach (System.Collections.DictionaryEntry key in data)
-            {
+        {
 
             strForm.Append("<input type=\"hidden\" name=\"" + key.Key +
                            "\" value=\"" + key.Value + "\">");
-            }
+        }
 
 
         strForm.Append("</form>");
@@ -964,16 +964,16 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         //Return the form and the script concatenated.
         //(The order is important, Form then JavaScript)
         return strForm.ToString() + strScript.ToString();
-        }
+    }
     protected void btnReciept_Click(object sender, EventArgs e)
-        {
+    {
         ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
-        }
+    }
 
     private void ShowReport(string reportTitle, string rptFileName)
-        {
+    {
         try
-            {
+        {
             int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
             ;
             //if (divEnrollment.Visible == false)
@@ -1004,17 +1004,17 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void FeeItemsSection()
-        {
+    {
         try
-            {
+        {
             int status = 0;
             /// Get fee demand of the student for given semester no.
             /// if demand found then display fee items. Use status variable to 
@@ -1026,7 +1026,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             ds = objFee.GetFeeItems_Data_For_Student(Convert.ToInt32(hdfSessioNo.Value), Convert.ToInt32(ViewState["StudId"]), Convert.ToInt32(ddlSemester.SelectedValue), ddlReceiptType.SelectedValue, Convert.ToInt16(ViewState["pType"]), ref status);
 
             if (status != -99 && ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
+            {
 
 
                 hdnFeeItemCount.Value = ds.Tables[0].Rows.Count.ToString();
@@ -1036,7 +1036,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 string RecieptCode = ds.Tables[0].Rows[0]["RECIEPT_CODE"].ToString();
                 if (RecieptCode == "TF" || RecieptCode == "EF" || RecieptCode == "HF" || RecieptCode == "BCA" || RecieptCode == "MBA" || RecieptCode == "PG" || RecieptCode == "EVF" ||
                     RecieptCode == "PGF" || RecieptCode == "BMF" || RecieptCode == "BHE" || RecieptCode == "PDF" || RecieptCode == "UNG" || RecieptCode == "OF")
-                    {
+                {
                     /// Show remark for current fee demand
 
 
@@ -1057,43 +1057,43 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     //    txtTotalAmountShow.Text = this.GetTotalFeeDemandAmount(ds.Tables[0]).ToString();
                     //}
                     //txtTotalFeeAmount.Text = txtTotalAmountShow.Text;
-                    }
+                }
                 /// If fee items are available then Enable
                 /// submit button and show the div FeeItems.
 
                 divFeeItems.Visible = true;
 
 
-                }
+            }
 
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void lvFeeItems_ItemDataBound(object sender, ListViewItemEventArgs e)
-        {
+    {
         if (e.Item.ItemType == ListViewItemType.DataItem)
-            {
+        {
             ListViewDataItem dataItem = (ListViewDataItem)e.Item;
             DataRow dr = ((DataRowView)dataItem.DataItem).Row;
             if (((TextBox)e.Item.FindControl("txtFeeItemAmount")).Text == "0.00")
-                {
+            {
                 ((CheckBox)e.Item.FindControl("chkFee")).Enabled = false;
-                }
-            else
-                {
-                ((CheckBox)e.Item.FindControl("chkFee")).Enabled = true;
-                }
-
-
             }
+            else
+            {
+                ((CheckBox)e.Item.FindControl("chkFee")).Enabled = true;
+            }
+
+
         }
+    }
 
     protected void ddlReceiptType_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
 
         int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
 
@@ -1108,12 +1108,12 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         lvFeeItems.DataSource = null;
         lvFeeItems.DataBind();
 
-        }
+    }
 
     private void DisplayInformation(int studentId)
-        {
+    {
         try
-            {
+        {
             #region Display Previous Receipts Information
             DataSet ds;
             /// Display student's previously paid receipt information.
@@ -1121,48 +1121,48 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             /// previous semesters or part payment for current semester
             ds = objFee.GetAllFeesDetailsStudIdOnline(studentId);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 divpaymentdetails.Visible = true;
                 // Bind list view with paid receipt data 
                 lvPaymentDetails.DataSource = ds;
                 lvPaymentDetails.DataBind();
 
-                }
+            }
             else//MAKE CHANGE HERE
-                {
+            {
                 divPreviousReceipts.Visible = false;
                 divpaymentdetails.Visible = false;
                 divHidPreviousReceipts.InnerHtml = "No Previous Receipt Found.<br/>";
-                }
+            }
 
 
             ds = objFee.GetPaidReceiptsInfoByStudIdOnline(studentId);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 divPreviousReceipts.Visible = true;
 
                 lvPaidReceipts.DataSource = ds;
                 lvPaidReceipts.DataBind();
-                }
+            }
             else//MAKE CHANGE HERE
-                {
+            {
                 divPreviousReceipts.Visible = false;
                 divHidPreviousReceipts.InnerHtml = "No Previous Receipt Found.<br/>";
-                }
+            }
 
             //divPreviousReceipts.Visible = true;
             #endregion
-            }
-        catch
-            {
-            throw;
-            }
         }
+        catch
+        {
+            throw;
+        }
+    }
 
     protected void btnPrintReceipt_Click(object sender, ImageClickEventArgs e)
-        {
+    {
         try
-            {
+        {
             ImageButton btnPrint = sender as ImageButton;
 
             int DcrNo = (btnPrint.CommandArgument != string.Empty ? int.Parse(btnPrint.CommandArgument) : 0);
@@ -1184,20 +1184,20 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             // }
 
             if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
-                {
+            {
                 //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 
                 ShowReportProvisional("OnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", DcrNo);
                 return;
-                }
+            }
 
             Session["UAFULLNAME"] = objCommon.LookUp("USER_ACC", "UA_FULLNAME", "UA_NO=" + Convert.ToInt32(Session["userno"]));
             if (btnPrint.CommandArgument != string.Empty)
-                {
+            {
                 if (Convert.ToInt32(Session["OrgId"]) == 1)
-                    {
+                {
                     if (ReportFlag == 1)
-                        {
+                    {
                         // Below Code added by Rohit M. on dated 26.06.2023 
                         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                         url += "Reports/Academic/Fees/RcpitReceipt.html?";
@@ -1205,16 +1205,16 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
 
                         //  // Above Code added by Rohit M. on dated 26.06.2023 
-                        }
-                    else
-                        {
-                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                        }
                     }
-                else if (Convert.ToInt32(Session["OrgId"]) == 6)
+                    else
                     {
+                        ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
+                }
+                else if (Convert.ToInt32(Session["OrgId"]) == 6)
+                {
                     if (ReportFlag == 1)
-                        {
+                    {
                         // Below Code added by Rohit M. on dated 26.06.2023 
                         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                         url += "Reports/Academic/Fees/RCPIPERReceipt.html?";
@@ -1222,24 +1222,24 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
 
                         // Above Code added by Rohit M. on dated 26.06.2023 
-                        }
+                    }
                     else
-                        {
+                    {
                         ShowReportPrevious_RCPIPER("OnlineFeePayment", "FeeCollectionReceiptForCash_RCPIPER.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Convert.ToInt32(Session["CANCEL_REC"]));
-                        }
                     }
+                }
                 else if (Convert.ToInt32(Session["OrgId"]) == 2)
-                    {
+                {
                     ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_crescent.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                    }
+                }
                 else if (Convert.ToInt32(Session["OrgId"]) == 8)
-                    {
+                {
                     ShowReportPrevious_MIT("OnlineFeePayment", "FeeCollectionReceiptForCash_MIT_FEECOLL.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString());
-                    }
+                }
                 else if (Session["OrgId"].ToString().Equals("3") || Session["OrgId"].ToString().Equals("4"))
-                    {
+                {
                     if (ReportFlag == 1)
-                        {
+                    {
                         // Below Code added by Rohit M. on dated 26.06.2023 
                         string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                         url += "Reports/Academic/Fees/CpuKota.html?";
@@ -1247,20 +1247,20 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
 
                         // Above Code added by Rohit M. on dated 26.06.2023 
-                        }
-                    else
-                        {
-
-                        this.ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_cpukota.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                        }
-
-
                     }
-                else if (Session["OrgId"].ToString().Equals("5"))
+                    else
                     {
 
+                        this.ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_cpukota.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                    }
+
+
+                }
+                else if (Session["OrgId"].ToString().Equals("5"))
+                {
+
                     if (ReportFlag == 1)
-                        {
+                    {
                         //// Below Code added by Rohit M. on dated 29.05.2023 
                         //string url = Request.Url.ToString();
                         //url = Request.ApplicationPath + "/Reports/Academic/Fees/FeeReceipt.html";
@@ -1277,31 +1277,31 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "openModal", "window.open('" + url + "');", true);
 
                         //  // Above Code added by ROHIT M. on dated 01.06.2023
-                        }
+                    }
                     else
-                        {
+                    {
                         ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash_JECRC.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                        }
-                    }
-                else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
-                    {
-                    this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-                    }
-                else
-                    {
-                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
-
                     }
                 }
-            }
-        catch
-            {
-            throw;
+                else if (Session["OrgId"].ToString().Equals("19"))  //PCEN RECIPT ADDED ON 23_11_2023 DATED ON 50439
+                {
+                    this.ShowReport_ForCash_PCEN("FeeCollectionReceiptForCash_PCEN.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), "1", Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+                }
+                else
+                {
+                    ShowReportPrevious("OnlineFeePayment", "FeeCollectionReceiptForCash.rpt", Int32.Parse(btnPrint.CommandArgument), Convert.ToInt32(Session["stuinfoidno"]), Session["UAFULLNAME"].ToString(), Convert.ToInt32(Session["CANCEL_REC"]));
+
+                }
             }
         }
+        catch
+        {
+            throw;
+        }
+    }
 
     private string GetViewStateItem(string itemName)
-        {
+    {
         if (ViewState.Count > 0 &&
             ViewState[itemName] != null &&
             ViewState[itemName].ToString() != null &&
@@ -1309,12 +1309,12 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             return ViewState[itemName].ToString();
         else
             return string.Empty;
-        }
+    }
 
     private void ShowInstllmentReportPrevious(string reportTitle, string rptFileName, int dcrNo, int studentNo)
-        {
+    {
         try
-            {
+        {
 
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -1335,17 +1335,17 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReportPrevious_MIT(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username)
-        {
+    {
         try
-            {
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
@@ -1366,17 +1366,17 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReport_MIT(string reportTitle, string rptFileName, string UANAME)
-        {
+    {
         try
-            {
+        {
             int SemesterNo = Convert.ToInt32(ddlSemester.SelectedValue);
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -1391,17 +1391,17 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReportPrevious_RCPIPER(string reportTitle, string rptFileName, int dcrNo, int studentNo, int Cancel)
-        {
+    {
         try
-            {
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
@@ -1425,17 +1425,17 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReportPrevious(string reportTitle, string rptFileName, int dcrNo, int studentNo, string Username, int Cancel)
-        {
+    {
         try
-            {
+        {
 
 
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -1463,36 +1463,36 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private string GetReportParameters(int dcrNo, int studentNo, string copyNo)
-        {
+    {
 
         string param = "@P_DCRNO=" + dcrNo.ToString() + "*MainRpt,@P_IDNO=" + studentNo.ToString() + "*MainRpt,CopyNo=" + copyNo + "*MainRpt";
         return param;
 
-        }
+    }
     private string GetInstallmnentReportParameters(int dcrNo, int studentNo, string copyNo)
-        {
+    {
 
         string param = "@P_DCRNO=" + dcrNo.ToString() + ",@P_IDNO=" + studentNo.ToString();
         return param;
 
-        }
+    }
 
     protected void btnPay_Click(object sender, EventArgs e)
-        {
+    {
         int status1 = 0;
         int Currency = 1;
         string amount = string.Empty;
         amount = Convert.ToString(hdfAmount.Value);
         try
-            {
+        {
 
             Button btnPayNow = sender as Button;
             int installno = (btnPayNow.CommandArgument != string.Empty ? int.Parse(btnPayNow.CommandArgument) : 0);
@@ -1531,61 +1531,61 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             Session["paysession"] = session;
             //int uano = Convert.ToInt32(Session["userno"]);
             if (Session["OrgId"].ToString() == "6")
-                {
+            {
                 degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                 if (ddlReceiptType.SelectedValue == "AEF" || ddlReceiptType.SelectedValue == "EF")
-                    {
+                {
                     int payactivityno = Convert.ToInt32(objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME = 'Exam Registration'"));
 
                     Session["payactivityno"] = payactivityno;
-                    }
+                }
                 else
-                    {
+                {
                     Session["payactivityno"] = 1;
-                    }
                 }
+            }
             if (Session["OrgId"].ToString() == "8")
-                {
+            {
                 college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                }
+            }
             else if (Session["OrgId"].ToString() == "16")
-                {
+            {
                 college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
-                }
+            }
 
             DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
             if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
-                {
+            {
                 if (ds1.Tables[0].Rows.Count > 1)
-                    {
+                {
 
-                    }
+                }
                 else
-                    {
+                {
                     Session["paymentId"] = ds1.Tables[0].Rows[0]["PAY_ID"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
                     Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
                     //Response.Redirect("http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
 
-                    }
                 }
-
             }
+
+        }
         catch (Exception ex)
-            {
+        {
             Response.Write(ex.Message);
-            }
+        }
 
-        }
+    }
     protected void btnClear_Click(object sender, EventArgs e)
-        {
+    {
         Response.Redirect(Request.Url.ToString());
-        }
+    }
     protected void btnPrintReceipt_Click1(object sender, ImageClickEventArgs e)
-        {
+    {
         ImageButton btnPrintReceipt = sender as ImageButton;
         int DcrNo = (btnPrintReceipt.CommandArgument != string.Empty ? int.Parse(btnPrintReceipt.CommandArgument) : 0);
 
@@ -1593,23 +1593,23 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         Session["DCR_NOS"] = Convert.ToInt32(DcrNo);
         string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["idno"].ToString()));
         if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
-            {
+        {
             //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 
             ShowReportProvisional("OnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", DcrNo);
-            }
+        }
         else
-            {
+        {
             //ShowReport("InstallmentOnlineFeePayment", "rptInstallmentOnlineReceipt.rpt", DcrNo);
             ShowInstllmentReportPrevious("InstallmentOnlineFeePayment", "rptInstallmentOnlineReceipt.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
-            }
-
         }
 
+    }
+
     private void ShowReportProvisional(string reportTitle, string rptFileName, int DCRNO)
-        {
+    {
         try
-            {
+        {
             int IDNO = Convert.ToInt32(Session["idno"].ToString());
 
             // string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + Session["idno"].ToString() + "'");
@@ -1627,19 +1627,19 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "CourseWise_Registration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
-            }
         }
+    }
 
     #region Search Panel
     protected void lnkId_Click(object sender, EventArgs e)
-        {
+    {
         LinkButton lnk = sender as LinkButton;
         string url = string.Empty;
         if (Request.Url.ToString().IndexOf("&id=") > 0)
@@ -1673,31 +1673,31 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         lvfeehead.Visible = false;
 
 
-        }
+    }
     protected void btnClose_Click(object sender, EventArgs e)
-        {
+    {
         Response.Redirect(Request.Url.ToString());
 
-        }
+    }
     protected void ddlSearch_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         try
-            {
+        {
             Panel3.Visible = false;
             lblNoRecords.Visible = false;
             lvStudent.DataSource = null;
             lvStudent.DataBind();
             if (ddlSearch.SelectedIndex > 0)
-                {
+            {
                 DataSet ds = objCommon.GetSearchDropdownDetails(ddlSearch.SelectedItem.Text);
                 if (ds.Tables[0].Rows.Count > 0)
-                    {
+                {
                     string ddltype = ds.Tables[0].Rows[0]["CRITERIATYPE"].ToString();
                     string tablename = ds.Tables[0].Rows[0]["TABLENAME"].ToString();
                     string column1 = ds.Tables[0].Rows[0]["COLUMN1"].ToString();
                     string column2 = ds.Tables[0].Rows[0]["COLUMN2"].ToString();
                     if (ddltype == "ddl")
-                        {
+                    {
                         pnltextbox.Visible = false;
                         txtSearch.Visible = false;
                         pnlDropdown.Visible = true;
@@ -1717,38 +1717,38 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                         //{
                         //    objCommon.FillDropDownList(ddlDropdown, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
                         //}
-                        }
+                    }
                     else
-                        {
+                    {
                         pnltextbox.Visible = true;
                         divtxt.Visible = true;
                         txtSearch.Visible = true;
                         pnlDropdown.Visible = false;
 
-                        }
                     }
                 }
+            }
             else
-                {
+            {
 
                 pnltextbox.Visible = false;
                 pnlDropdown.Visible = false;
 
-                }
-            }
-        catch
-            {
-            throw;
             }
         }
+        catch
+        {
+            throw;
+        }
+    }
 
     private void bindlist(string category, string searchtext)
-        {
+    {
         StudentController objSC = new StudentController();
         DataSet ds = objSC.RetrieveStudentDetailsNew(searchtext, category);
 
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             Panel3.Visible = true;
             divReceiptType.Visible = false;
             divStudSemester.Visible = false;
@@ -1757,18 +1757,18 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             lvStudent.DataBind();
             objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label - 
             lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
-            }
+        }
         else
-            {
+        {
             lblNoRecords.Text = "Total Records : 0";
             lvStudent.Visible = false;
             lvStudent.DataSource = null;
             lvStudent.DataBind();
-            }
         }
+    }
 
     protected void btnSearch_Click(object sender, EventArgs e)
-        {
+    {
         Panel1.Visible = true;
         lblNoRecords.Visible = true;
         lvPaymentDetails.Visible = false;
@@ -1777,13 +1777,13 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         //divtxt.Attributes.Add("style", "display:none");
         string value = string.Empty;
         if (ddlDropdown.SelectedIndex > 0)
-            {
+        {
             value = ddlDropdown.SelectedValue;
-            }
+        }
         else
-            {
+        {
             value = txtSearch.Text;
-            }
+        }
 
         //ddlSearch.ClearSelection();
 
@@ -1810,7 +1810,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         //}
 
         //ShowDetails();
-        }
+    }
 
     //public void search()
     //    {
@@ -1867,45 +1867,45 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
     //        }
 
     protected void btnHostel_Click(object sender, EventArgs e)
-        {
+    {
         ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
         //divhottrsansport.Visible = true;
         divhosteltype.Visible = true;
         this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
 
-        }
+    }
     protected void rdbhostel_CheckedChanged(object sender, EventArgs e)
-        {
+    {
 
-        }
+    }
     protected void rblhottransport_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (rblhottransport.SelectedValue == "1")
-            {
+        {
             divhosteltype.Visible = true;
             //divHostelTransport.Visible = false;
             this.objCommon.FillDropDownList(ddlhosteltype, "ACD_HOSTEL_TYPE", "DISTINCT HOSTEL_TYPE_NO", "HOSTEL_TYPE_NAME", "HOSTEL_TYPE_NO >0 AND ACTIVESTATUS=1", "HOSTEL_TYPE_NO");
-            }
+        }
         else
-            {
+        {
             divhosteltype.Visible = false;
             //divHostelTransport.Visible = false;
-            }
-
         }
+
+    }
     protected void ddlhosteltype_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
 
         if (ddlhosteltype.SelectedValue != "0")
-            {
+        {
             ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmhostel();", true);
-            }
-
-        //objCommon.DisplayMessage(this, "your Demand Has been Modify Succesfully", this.Page);
         }
 
+        //objCommon.DisplayMessage(this, "your Demand Has been Modify Succesfully", this.Page);
+    }
+
     public void ModifyDemand()
-        {
+    {
         StudentController objsc = new StudentController();
         int IDNO = Convert.ToInt32(Session["stuinfoidno"]);
         int semester = Convert.ToInt32(ddlSemester.SelectedValue);
@@ -1915,7 +1915,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
         CustomStatus cs = (CustomStatus)objsc.UpdateHostelStatusOnlinePay(IDNO, semester, Receipt_code, Convert.ToInt32(ddlhosteltype.SelectedValue), IPADDRESS, UA_NO);
         if (cs == CustomStatus.RecordSaved)
-            {
+        {
             SemesterWiseFees();
             //lblTotalAmount.Text = (objCommon.LookUp("ACD_DEMAND", "TOTAL_AMT", "IDNO=" + IDNO + "AND SEMESTERNO=" + semester + "AND RECIEPT_CODE='" + Receipt_code + "'"));
             objCommon.DisplayMessage(this, "Demand Modified Successfully!!", this.Page);
@@ -1928,25 +1928,25 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             ddlhosteltype.SelectedValue = Hosteltype.ToString();
             ddlhosteltype.Enabled = false;
             return;
-            }
-        else if (cs == CustomStatus.RecordNotFound)
-            {
-            objCommon.DisplayMessage(this, "Standard Fees is not Defined for Hostel Types please Contact to Admin!!", this.Page);
-            }
-        else
-            {
-            objCommon.DisplayMessage(this, "Server Error", this.Page);
-            }
         }
+        else if (cs == CustomStatus.RecordNotFound)
+        {
+            objCommon.DisplayMessage(this, "Standard Fees is not Defined for Hostel Types please Contact to Admin!!", this.Page);
+        }
+        else
+        {
+            objCommon.DisplayMessage(this, "Server Error", this.Page);
+        }
+    }
 
     #endregion
 
-    public DataSet GetFeeItems_Data(int studentId, int semesterNo,string receiptType)
-        {
+    public DataSet GetFeeItems_Data(int studentId, int semesterNo, string receiptType)
+    {
         DataSet ds = null;
         int status = 0;
         try
-            {
+        {
             string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
             SQLHelper objDataAccess = new SQLHelper(_connectionString);
             SqlParameter[] sqlParams = new SqlParameter[] 
@@ -1961,18 +1961,18 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
             ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_ONLINEPAYMENT", sqlParams);
             //ds = objDataAccess.ExecuteDataSetSP("PKG_FEECOLLECT_FEE_ITEMS_AMOUNT_SRK_29042023", sqlParams); // ADDED BY SHAILENDRA K. ON DATED 29.04.2023 AS PER DR. MANOJ SIR SUGGESTION CALCULATING LATE FINE ON TRANS DATE.
-            }
-        catch (Exception ex)
-            {
-            throw new IITMSException("Academic_FeeCollection.GetFeeItems_Data() --> " + ex.Message + " " + ex.StackTrace);
-            }
-        return ds;
         }
+        catch (Exception ex)
+        {
+            throw new IITMSException("Academic_FeeCollection.GetFeeItems_Data() --> " + ex.Message + " " + ex.StackTrace);
+        }
+        return ds;
+    }
 
     private void ShowReport_ForCash_PCEN(string rptName, int dcrNo, int studentNo, string copyNo, string UA_FULLNAME, int Cancel)
-        {
+    {
         try
-            {
+        {
             //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -1994,13 +1994,13 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
             sb.Append(@"window.open('" + url + "','','" + features + "');");
             ScriptManager.RegisterClientScriptBlock(this.updFee, this.updFee.GetType(), "controlJSScript", sb.ToString(), true);
-            }
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUaimsCommon.ShowError(Page, "Academic_FeeCollection.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
-            }
         }
     }
+}
