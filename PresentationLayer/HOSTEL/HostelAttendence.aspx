@@ -116,12 +116,13 @@
                     </div>
 
                     <div class="col-12 btn-footer">
-                        <span style="color: Red">* Note : Please Uncheck student who are Absent</span>
+                        <span style="color: Red">* Note : Please Select Remark For Present / Absent / Late.</span>
+                        <%--<span style="color: Red">* Note : Please Uncheck student who are Absent</span>
                         (
                             <asp:CheckBox ID="chk1" runat="server" Checked="true" Enabled="false" />
                         Present
                      <asp:CheckBox ID="chk2" runat="server" Checked="false" Enabled="false" />
-                        Absent )
+                        Absent )--%>
                     </div>
 
                     <div class="col-12">
@@ -166,7 +167,7 @@
                                         <%# Eval("ROOM_NAME")%>
                                     </td>
                                     <td>
-                                        <asp:CheckBox ID="chkIdno" runat="server" ToolTip='<%# Eval("IDNO") %>' Checked="true" />
+                                        <asp:CheckBox ID="chkIdno" runat="server" ToolTip='<%# Eval("IDNO") %>' Checked="true" onclick="preventCheckboxClick(event)" /> <%--preventCheckboxClick(event) Added By himanshu tamrakar for bug : 170496--%>
                                     </td>
                                     <td>
                                         <asp:DropDownList ID="ddlRemark" runat="server" AppendDataBoundItems="True" ToolTip="Please Select Remark for Late"
@@ -265,7 +266,11 @@
             }
         }
     </script>--%>
-
+    <script type="text/javascript">  //Added By himanshu tamrakar 05/01/2024
+        function preventCheckboxClick(event) {
+            event.preventDefault();
+        }
+    </script>
     <script type="text/javascript" language="javascript">
         function enableDisabled(crl) {
             debugger;
@@ -278,20 +283,20 @@
 
             if (ddlRemarkText == "Present" || ddlRemarkText == "PRESENT" || ddlRemarkText == "present") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val(""); //this line added by Saurabh L on 18/01/2023 Purpose: To clear Time 
             }
             else if (ddlRemarkText == "Absent" || ddlRemarkText == "ABSENT" || ddlRemarkText == "absent") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = false;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val("");
             }
             else if (ddlRemarkText == "Late" || ddlRemarkText == "LATE" || ddlRemarkText == "late")  // for late
             {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = false;
             }
                 //else if (id == "4") {

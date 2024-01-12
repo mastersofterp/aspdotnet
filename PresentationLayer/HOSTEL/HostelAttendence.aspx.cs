@@ -187,7 +187,7 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "T") //Added by Saurabh l on 06/01/2023
                     {
                         chkIdno.Enabled = false;
-                        txtTime.Enabled = false;
+                        //txtTime.Enabled = false;
                     }
                     //if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A" || ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "L")
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A")
@@ -277,10 +277,16 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                string ddlremark = ddlRemark.SelectedItem.Text;
 
                if (ddlremark == "Present" || ddlremark == "PRESENT" || ddlremark == "present")
+               {
                    att_status += "P,";
+                   txtTime.Text = ""; //Added By himanshu tamrakar for bug : 170496
+               }
                else if (ddlremark == "Absent" || ddlremark == "ABSENT" || ddlremark == "absent")
+               {
                    att_status += "A,";
-              else if (ddlremark == "Late" || ddlremark == "LATE" || ddlremark == "late")    //Else if condition added for by default absent mark.
+                   txtTime.Text = ""; //Added By himanshu tamrakar for bug : 170496
+               }
+               else if (ddlremark == "Late" || ddlremark == "LATE" || ddlremark == "late")    //Else if condition added for by default absent mark.
                    att_status += "T,";
                else
                    att_status += "A,";
