@@ -71,8 +71,6 @@ public partial class HOSTEL_GATEPASS_HostelGatepassReport : System.Web.UI.Page
     {
         try
         {
-
-
             string Applydate = string.IsNullOrEmpty(txtApplyDate.Text) ? "01/01/1999" : Convert.ToString(txtApplyDate.Text);
 
             //string dateFrom =Convert.ToDateTime(txtFromDate.Text.ToString()).ToShortDateString();
