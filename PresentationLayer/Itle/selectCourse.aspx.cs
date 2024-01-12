@@ -281,7 +281,7 @@ public partial class Itle_selectCourse : System.Web.UI.Page
         try
         {
             IForumMasterController objFM = new IForumMasterController();
-            string usename = objCommon.LookUp("user_acc", "ua_fullname", "ua_no=" + Convert.ToInt16(Session["userno"].ToString()));
+            string usename = objCommon.LookUp("user_acc", "ua_fullname", "ua_no=" + Convert.ToInt32(Session["userno"].ToString()));
 
             NewForum = objFM.NewForumNotification(usename, Convert.ToInt32(Session["idno"]));
 
