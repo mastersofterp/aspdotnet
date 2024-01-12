@@ -191,11 +191,11 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         string SchBranchnos = "";
         DataSet dsBranchnos = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO = SR.IDNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO = SR.SCHEMENO) INNER JOIN ACD_BRANCH BR ON (BR.BRANCHNO = S.BRANCHNO)", "DISTINCT BR.BRANCHNO", "BR.LONGNAME", "SR.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND  SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(S.CAN,0)=0 AND ISNULL(S.ADMCAN,0)=0", "BR.BRANCHNO");
 
-        if (dsBranchnos.Tables.Count > 0) 
+        if (dsBranchnos.Tables.Count > 0)
         {
-            if(dsBranchnos.Tables[0].Rows.Count > 0)
+            if (dsBranchnos.Tables[0].Rows.Count > 0)
             {
-                foreach(DataRow row in dsBranchnos.Tables[0].Rows)
+                foreach (DataRow row in dsBranchnos.Tables[0].Rows)
                 {
                     SchBranchnos += row["BRANCHNO"].ToString() + "$";
                 }
@@ -221,6 +221,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
                 lvBundleList.DataSource = ds.Tables[0];
                 lvBundleList.DataBind();
                 lvBundleList.Visible = true;
+                ColumnHide(ds);
             }
             else
             {
@@ -229,13 +230,33 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
                 lvBundleList.Visible = false;
             }
 
-            //pnlValuer.Visible = true;
         }
         else
         {
             lvBundleList.DataSource = null;
             lvBundleList.DataBind();
             lvBundleList.Visible = false;
+        }
+    }
+
+    // added by shubham on 11-01-24
+    protected void ColumnHide(DataSet ds)
+    {
+        int count = 0;
+        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+        {
+            if (string.IsNullOrEmpty(ds.Tables[0].Rows[i]["SEATNOFROM"].ToString()) || ds.Tables[0].Rows[i]["SEATNOFROM"].ToString() == "0")
+            {
+                count++;
+            }
+        }
+        if (count == ds.Tables[0].Rows.Count)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#hdSeatfrom').hide();$('td:nth-child(7)').hide();$('#hdSeatto').hide();$('td:nth-child(8)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#hdSeatfrom').hide();$('td:nth-child(7)').hide();$('#hdSeatto').hide();$('td:nth-child(8)').hide();});", true);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#hdSeatfrom').show();$('td:nth-child(7)').show();$('#hdSeatto').show();$('td:nth-child(8)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#hdSeatfrom').show();$('td:nth-child(7)').show();$('#hdSeatto').show();$('td:nth-child(8)').show();});", true);
         }
     }
 
@@ -251,7 +272,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
             if (ddlDate.SelectedIndex > 0)
             {
                 CustomStatus cs = CustomStatus.Error;
-                
+
 
                 foreach (ListViewDataItem item in lvBundleList.Items)
                 {
@@ -270,10 +291,10 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
                     //string SP_Name = "PKG_ACAD_INS_BUNDLE";
                     //string SP_Parameters = "@P_BUNDLENO,@P_COURSENO,@P_REGNOFROM,@P_REGNOTO,@P_SEATNOFROM,@P_SEATNOTO,@P_SESSIONID,@P_BRANCHNO,@P_COLLEGEID,@P_COUNT,@P_OUT";
                     //string Call_Values = "" + Convert.ToInt32(lblBundle.ToolTip) + "," + Convert.ToInt32(lblCourseNo.ToolTip) + "," + (lblRegFrom.ToolTip).ToString() + "," + (lblRegTo.ToolTip).ToString() + "," + (lblSeatFrom.ToolTip).ToString() + "," + (lblSeatto.ToolTip).ToString() + "," + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(lblBranchno.ToolTip) + "," + Convert.ToInt32(ViewState["college_id"]) + "," + Convert.ToInt32(lblBundleCount.ToolTip) + "," + ",1";
-                   
 
-                     //que_out = AL.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true, 1);
-                     //a = que_out;
+
+                    //que_out = AL.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true, 1);
+                    //a = que_out;
                 }
 
                 if (cs.Equals(CustomStatus.RecordSaved))
@@ -320,7 +341,21 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         }
         else
         {
-            ShowReport("Assigning rough Bundle Sheet", "rptRoughBundleReport.rpt");
+
+            string SP_Name = "PKG_ROUGH_BUNDLE_REPORT";
+            string SP_Parameters = "@P_SESSIONID,@P_EXAM_DATE,@P_SLOTNO,@P_COURSENO";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ddlDate.SelectedValue.ToString() + "," + Convert.ToInt32(ddlSlot.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ShowReport("Assigning rough Bundle Sheet", "rptRoughBundleReport.rpt");
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Found for current selection.", this.Page);
+            }
         }
     }
     protected void btnStickerReport_Click(object sender, EventArgs e)
@@ -331,7 +366,20 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         }
         else
         {
-            ShowReport1("Assigning rough Bundle Sheet", "BundleReport.rpt");
+            string SP_Name = "PKG_BUNDLE_REPORT_COURSEWISE";
+            string SP_Parameters = "@P_SESSIONID,@P_EXAM_DATE,@P_SLOTNO,@P_COURSENO";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ddlDate.SelectedValue.ToString() + "," + Convert.ToInt32(ddlSlot.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "";
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ShowReport1("Assigning rough Bundle Sheet", "BundleReport.rpt");
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Found for current selection.", this.Page);
+            }
         }
 
     }
@@ -343,7 +391,20 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         }
         else
         {
-            ShowReport2("Date_Wise Bundle List", "rptDateWiseBundleReport.rpt");
+            string SP_Name = "PKG_BUNDLE_REPORT_DATEWISE";
+            string SP_Parameters = "@P_SESSIONID,@P_EXAM_DATE,@P_SLOTNO";
+            string Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ddlDate.SelectedValue.ToString() + "," + Convert.ToInt32(ddlSlot.SelectedValue) + "";
+            DataSet ds = null;
+            ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ShowReport2("Date_Wise Bundle List", "rptDateWiseBundleReport.rpt");
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Data Found for current selection.", this.Page);
+            }
         }
 
     }
@@ -369,7 +430,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
             }
             else
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
             }
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -406,7 +467,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
             }
             else
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue) + ",@P_COURSENO=" + ddlCourse.SelectedValue;
             }
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -446,7 +507,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
             }
             else
             {
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue);
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_EXAM_DATE=" + ddlDate.SelectedValue.ToString() + ",@P_SLOTNO=" + Convert.ToInt32(ddlSlot.SelectedValue);
             }
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -644,25 +705,32 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
             string proc_name = "PKG_ACD_ANSWERSHEET_BUNDLE_STUD_GETLIST_PCEN";
             string param = "@P_SESSIONNO";
-            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "";
+            string call_values = "" + Convert.ToInt32(ViewState["SESSIONNO"]) + "";
 
             DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
             GridView dg = new GridView();
             if (ds.Tables.Count > 0)
             {
-                dg.DataSource = ds.Tables[0];
-                dg.DataBind();
-                //AddReportHeader(dg);
-                string attachment = "attachment; filename=" + "Bundle_Details " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-                Response.ClearContent();
-                Response.AddHeader("content-disposition", attachment);
-                Response.ContentType = "application/" + "ms-excel";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                dg.HeaderStyle.Font.Bold = true;
-                dg.RenderControl(htw);
-                Response.Write(sw.ToString());
-                Response.End();
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    dg.DataSource = ds.Tables[0];
+                    dg.DataBind();
+                    //AddReportHeader(dg);
+                    string attachment = "attachment; filename=" + "Bundle_Details " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/" + "ms-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    dg.HeaderStyle.Font.Bold = true;
+                    dg.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this, "No Data Found for this selection.", this.Page);
+                }
             }
             else
             {
@@ -674,16 +742,17 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
 
         }
-        }
+    }
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
-        try 
+        try
         {
-            if(ddlBranch.SelectedIndex > 0)
+            if (ddlBranch.SelectedIndex > 0)
             {
                 BindBundleList();
             }
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
         }
     }

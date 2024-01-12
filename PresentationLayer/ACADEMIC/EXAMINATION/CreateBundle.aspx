@@ -202,9 +202,9 @@
                                                     </th>
                                                     <th>Reg No. To
                                                     </th>
-                                                    <th>Seat No From
+                                                    <th id="hdSeatfrom">Seat No From
                                                     </th>
-                                                    <th>Seat No. To
+                                                    <th id="hdSeatto">Seat No. To
                                                     </th>
                                                     <th>Bundle Book Count
                                                     </th>
