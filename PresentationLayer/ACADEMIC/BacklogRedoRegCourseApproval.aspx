@@ -296,7 +296,7 @@
             catch (e) {
                 alert(e);
             }
-        }    
+        }
 
         //function HideColumn(orgID) {
         //    if (orgID != 2) {
