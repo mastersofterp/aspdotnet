@@ -318,7 +318,22 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         int orgID = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
         string pageNo = "";
         string pageName = "PersonalDetails.aspx";
+        string idno = string.Empty;
         ds = objConfig.GetStudentConfigData(orgID, pageNo, pageName);
+
+        if (ViewState["usertype"].ToString() == "2")
+        {
+            idno = (Session["idno"]).ToString();
+        }
+        else
+        {
+            idno = (Session["stuinfoidno"]).ToString();
+        }
+
+        DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
+
+        string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
+        string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -352,6 +367,21 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     if (dropdownlist.SelectedIndex == 0)
                     {
                         validationErrors.Add("Please Select " + captionName);
+                    }
+                }
+
+                if (control is FileUpload)
+                {
+                    FileUpload fileUploadControl = (FileUpload)control;
+
+                    if (captionName == "Photo" && string.IsNullOrEmpty(photo))
+                    {
+                        validationErrors.Add("Please Upload a File for " + captionName);
+                    }
+
+                    if (captionName == "Signature" && string.IsNullOrEmpty(sign))
+                    {
+                        validationErrors.Add("Please Upload a File for " + captionName);
                     }
                 }
             }

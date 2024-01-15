@@ -159,7 +159,7 @@
 
                 </div>
 
-                <div class="col-12" id="divDocumentUpload" runat="server" visible="false">
+                <div class="col-12" id="divDocumentUpload" runat="server">
                     <asp:Panel ID="pnlBind" runat="server">
                         <asp:Label ID="lblmessageShow" runat="server"></asp:Label>
                         <div class="sub-heading">

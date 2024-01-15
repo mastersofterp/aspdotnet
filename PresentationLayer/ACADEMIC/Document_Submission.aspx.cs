@@ -526,7 +526,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             string ext = System.IO.Path.GetExtension(fuPhotoUpload.PostedFile.FileName);
             byte[] image = null;
             byte[] imageaftercompress = null;
-            string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["studid"]));
+            string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
 
 
             if (fuPhotoUpload.HasFile)
@@ -577,7 +577,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this, "Photo uploaded Successfully!!", this.Page);
                 ViewState["StudPhoto"] = 1;
-                showstudentphoto(IdNo);
+                ShowStudentDetails();
 
             }
             else
@@ -624,7 +624,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
     {
         StudentController objSC = new StudentController();
         DataTableReader dtr = null;
-        string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["studid"]));
+        string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
 
         dtr = objSC.GetStudentDetails(Convert.ToInt32(Session["IdNo"]));
         if (dtr != null)
@@ -701,7 +701,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             Student objstud = new Student();
             string ext = System.IO.Path.GetExtension(this.fuSignUpload.PostedFile.FileName);
 
-            string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["studid"]));
+            string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
 
             if (fuSignUpload.HasFile)
             {
@@ -754,7 +754,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this, "Signature uploaded Successfully!!", this.Page);
                 ViewState["StudSign"] = 1;
-                showstudentsignature(IdNo);
+                ShowStudentDetails();
             }
             else
             {
@@ -779,7 +779,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Please Select File To Upload!", this.Page);
             return;
         }
-
+        Session["SelectedDocumentIndex"] = lvdi.DisplayIndex; 
         uploadDocument();
     }
 
@@ -798,7 +798,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             //string idno = Session["idno"].ToString();
             string studentname = Session["userfullname"].ToString();
             // string IdNo = Session["stuinfoidno"].ToString();
-
+            int selectedDocumentIndex = Convert.ToInt32(Session["SelectedDocumentIndex"]);
             // string folderPath = WebConfigurationManager.AppSettings["SVCE_STUDENT_DOC"].ToString() + idno + "_" + studentname + "\\";
             foreach (ListViewDataItem lvitem in lvBinddata.Items)
             {
