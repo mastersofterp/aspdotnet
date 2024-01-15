@@ -44,9 +44,6 @@ using ClosedXML.Excel;
 //using Microsoft.Office.Interop.Excel;
 
 
-
-
-
 public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -183,7 +180,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnConsolidateGradeCard.Visible = true;
                 btnProgrssionrpt.Visible = false;
                 pre_eleven.Visible = false;
-
                 btnCount.Visible = true;
                 DatePublish.Visible = false;
                 btnSRNo.Visible = false;
@@ -225,7 +221,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = false;
 
-            }
+            }           
             else if (Convert.ToInt32(Session["OrgId"]) == 3)
             {
                 btnProvisionalDegree.Visible = true;
@@ -233,10 +229,11 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = false;
+                btnCertificate.Visible = true; // Added for degree certificate by shubham
 
             }
-
-
+            
+            
             #region For RCPIPER Grade Card added on 25/07/2023 by shubham
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
@@ -264,40 +261,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = true;//added by tejas thakre as on 16-12-2023
-                btnpassingcrft.Visible = true;
-
-            }
-            #endregion
-            #region For ADCET added on 22/01/2024 by Tejas as on 22-01-2024
-            else if (Convert.ToInt32(Session["OrgId"]) == 22)
-            {
-                btnCount.Visible = true;
-                tab_year.Visible = true;
-                btncoursegrade.Visible = false;
-                btngraderange.Visible = false;
-                btnExcel.Visible = false;
-                btnExamFeesPaid.Visible = false;
-                btnConvocationExcelReport.Visible = false;
-                Yearid.Visible = false;
-                btnConsolidateGradeCard.Visible = false;
-                Dateissue.Visible = false;
-                btnConsoli.Visible = false;
-                btnConsoliA4.Visible = false;
-                btnLedgerReport.Visible = false;
-
-                btnProgrssionrpt.Visible = false;
-                pre_eleven.Visible = false;
-
-                DatePublish.Visible = false;
-
-                btnResultStatistics.Visible = false;
-                pre_eight.Visible = false;
-                btnSRNo.Visible = false;
-                btnProvisionalDegree.Visible = false;
-                txtScrutinized.Visible = false;
-                lblScrutinized.Visible = false;
-                btnufm.Visible = false;
-                btnConsolidtedMPHRAM.Visible = false;
 
             }
             #endregion
@@ -329,19 +292,16 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = false;
+            }
 
-                if (Convert.ToInt32(Session["OrgId"]) == 18) // added by Shubham for HITS ExceCIA report
-                {
-                    btnCIAExcel.Visible = true;
-                }
-                if (Convert.ToInt32(Session["OrgId"]) == 19) // added by Shubham for PCEN Gazette report
-                {
-                    BtnGazette.Visible = true;
-                }
-                if (Convert.ToInt32(Session["OrgId"]) == 4)
-                {
-                    btnCertificate.Visible = true; // Added for degree certificate by shubham
-                }
+            if (Convert.ToInt32(Session["OrgId"]) == 18) // added by Shubham for HITS ExceCIA report
+            {
+                btnCIAExcel.Visible = true;
+            }
+
+            if (Convert.ToInt32(Session["OrgId"]) == 4)
+            {
+                btnCertificate.Visible = true; // Added for degree certificate by shubham
             }
 
             //ddlYear.CssClass = "mytest";
@@ -3774,7 +3734,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
             ids = ids.TrimEnd('.');
 
-            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_TGPCET_Without_Header");
+            this.ShowGradeCardWithoutHeader("Grade_Card_Without_header", "rptGradeCardReport_TGPCET_Without_Header.rpt");
         }
         else
         {
@@ -5884,31 +5844,62 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objCommon.DisplayMessage(updpnlExam, "Please Select At least one Student!!", this.Page);
                 return;
             }
-            int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
-            string date3 = Convert.ToDateTime(txtprint.Text).ToString("MM/dd/yyyy");
-            string date4 = Convert.ToDateTime(txtprint.Text).ToString("dd/MM/yyyy");
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + "Degree Certificate";
-            if (ViewState["degreeno"] == "2" || ViewState["degreeno"] == "4" || ViewState["degreeno"] == "6" || ViewState["degreeno"] == "7" || ViewState["degreeno"] == "11" || ViewState["degreeno"] == "17" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "20")
+            if (Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 3)
             {
-                url += "&path=~,Reports,Academic," + "rptDegreeCertificate.rpt";//as per ticket number 49655 (Template 1)
-            }
-            else if (ViewState["degreeno"] == "5" || ViewState["degreeno"] == "8" || ViewState["degreeno"] == "9")
-            {
-                url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Three.rpt";//as per ticket number 49655 (Template 3)
+                string degreename = objCommon.LookUp("ACD_DEGREE", "DEGREENAME", "DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]));
+                // call for Poly and Diploma
+                if (Convert.ToInt32(ViewState["degreeno"]) == 12)
+                {
+                    ShowReportDC(idno, "Convocation_Certificate_Report", "DCert_Kota_Poly_Diploma.rpt");
+                }
+                //call for D.pharma
+                else if (Convert.ToInt32(ViewState["degreeno"]) == 40)
+                {
+                    ShowReportDC(idno, "Convocation_Certificate_Report", "DCert_Kota_DPharma.rpt");
+                }
+                // Call for Phd
+                else if (Convert.ToInt32(ViewState["degreeno"]) == 13)
+                {
+                    ShowReportDC(idno, "Convocation_Certificate_Report", "DCert_Kota_Phd_Degree.rpt");
+                }
+                // Call for Integrated Degree name 
+                else if (degreename.Contains("Integrated"))
+                {
+                    ShowReportDC(idno, "Convocation_Certificate_Report", "DCert_Kota_Integrated_Degree.rpt");
+                }
+                // Call for other Degree name 
+                else
+                {
+                    ShowReportDC(idno, "Convocation_Certificate_Report", "DCert_Kota_Degree.rpt");
+                }
             }
             else
             {
-                url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Two.rpt";//as per ticket number 49655 (Template 2)
+                int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
+                string date3 = Convert.ToDateTime(txtprint.Text).ToString("MM/dd/yyyy");
+                string date4 = Convert.ToDateTime(txtprint.Text).ToString("dd/MM/yyyy");
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + "Degree Certificate";
+                if (ViewState["degreeno"] == "2" || ViewState["degreeno"] == "4" || ViewState["degreeno"] == "6" || ViewState["degreeno"] == "7" || ViewState["degreeno"] == "11" || ViewState["degreeno"] == "17" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "19" || ViewState["degreeno"] == "20")
+                {
+                    url += "&path=~,Reports,Academic," + "rptDegreeCertificate.rpt";//as per ticket number 49655 (Template 1)
+                }
+                else if (ViewState["degreeno"] == "5" || ViewState["degreeno"] == "8" || ViewState["degreeno"] == "9")
+                {
+                    url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Three.rpt";//as per ticket number 49655 (Template 3)
+                }
+                else
+                {
+                    url += "&path=~,Reports,Academic," + "rptDegreeCertificate_Two.rpt";//as per ticket number 49655 (Template 2)
+                }
+                url += "&param=@P_SCHEMENO=" + schemeno + ",@P_DATE=" + date3 + ",@P_IDNO=" + GetIDNO() + ",@V_DATE=" + date4;
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+
             }
-            url += "&param=@P_SCHEMENO=" + schemeno + ",@P_DATE=" + date3 + ",@P_IDNO=" + GetIDNO() + ",@V_DATE=" + date4;
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
-            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
-
-
         }
         catch (Exception ex)
         {
@@ -6017,7 +6008,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     }
 
 
-    //added by Shubham for CPUK AND CPUH Degree  Certificate 
+    //added by Shubham for CPUK AND CPUH Degree Certificate 
     private void ShowReportDC(string param, string reportTitle, string rptFileName)
     {
         try
@@ -6042,7 +6033,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
     }
 
-    // added  by shubham on 04-01-2024
+    // added by shubham on 04-01-2024
     protected void btnCIAExcel_Click(object sender, EventArgs e)
     {
         try
@@ -6055,26 +6046,19 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             GridView dg = new GridView();
             if (ds.Tables.Count > 0)
             {
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    dg.DataSource = ds.Tables[0];
-                    dg.DataBind();
-                    //AddReportHeader(dg);
-                    string attachment = "attachment; filename=" + "CIA_Result_Analysis " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-                    Response.ClearContent();
-                    Response.AddHeader("content-disposition", attachment);
-                    Response.ContentType = "application/" + "ms-excel";
-                    StringWriter sw = new StringWriter();
-                    HtmlTextWriter htw = new HtmlTextWriter(sw);
-                    dg.HeaderStyle.Font.Bold = true;
-                    dg.RenderControl(htw);
-                    Response.Write(sw.ToString());
-                    Response.End();
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
-                }
+                dg.DataSource = ds.Tables[0];
+                dg.DataBind();
+                //AddReportHeader(dg);
+                string attachment = "attachment; filename=" + "CIA_Result_Analysis " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", attachment);
+                Response.ContentType = "application/" + "ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                dg.HeaderStyle.Font.Bold = true;
+                dg.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.End();
             }
             else
             {
@@ -6093,114 +6077,4 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
     }
 
-    protected void BtnGazette_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            string proc_name = "PKG_ACD_GAZZETTEE_REPORT_DATA";
-            string param = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO";
-            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "";
-
-            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
-            if (ds.Tables.Count > 0)
-            {
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    string rptFileName = "GazetteReport.rpt";
-                    string reportTitle = "GazetteReport";
-
-                    string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-                    url += "Reports/CommonReport.aspx?";
-                    url += "pagetitle=" + reportTitle;
-                    url += "&path=~,Reports,Academic," + rptFileName;
-                    url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue);
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
-                    string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-                    sb.Append(@"window.open('" + url + "','','" + features + "');");
-
-                    ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
-                }
-                else
-                {
-                    objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
-                }
-            }
-            else
-            {
-                objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
-            }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.BtnGazette_Click() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-    }
-
-    protected void btnpassingcrft_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
-            int ua_no = Convert.ToInt32(Session["userno"].ToString());
-            if (lvStudent.Visible == false)
-            {
-                objCommon.DisplayMessage(this.updpnlExam, "Please get the Student List to Genarate Passing Certificate", this.Page);
-                return;
-            }
-            string retIDNO = string.Empty;
-            int cntlength = 0;
-            foreach (ListViewDataItem item in lvStudent.Items)
-            {
-                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                Label lblStudname = item.FindControl("lblStudname") as Label;
-                if (chk.Checked)
-                {
-                    if (retIDNO.Length == 0)
-                    {
-                        retIDNO = lblStudname.ToolTip.ToString();
-                    }
-                    else
-                    {
-                        retIDNO += "$" + lblStudname.ToolTip.ToString();
-                    }
-                    cntlength++;
-                }
-            }
-            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
-            if (cntid == cntlength)
-            {
-                retIDNO = "0";
-            }
-            if (cntlength == 0)
-            {
-                objCommon.DisplayMessage(this.updpnlExam, "Please Select atleast one Student to Genarate Passing Certificate", this.Page);
-                return;
-            }
-            string exists = objCommon.LookUp("ACD_EXAM_PASSING_CERTIFICATE", "DISTINCT 1", "SCHEMENO= " + schemeno + "AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + retIDNO + "','$')) OR ('" + retIDNO + "' ='0')");
-            int curordup = string.IsNullOrEmpty(exists) ? 0 : 1;
-            string rptFileName = "rptPassingCertificate.rpt";
-            string reportTitle = "Passing Certificate";
-
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_SCHEMENO=" + schemeno + ",@CUR_OR_DUP=" + curordup + ",@P_UA_NO=" + ua_no + ",@P_ADMBATCH=" + 0 + ",@P_IDNOS=" + retIDNO;
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
-            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnpassingcrft_Click() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
-        }
-
-    }
 }
