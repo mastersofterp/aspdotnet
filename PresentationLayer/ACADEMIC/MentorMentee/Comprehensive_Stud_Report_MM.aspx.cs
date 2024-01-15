@@ -26,7 +26,9 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
     StudentControllerDetails_MM objSc = new StudentControllerDetails_MM();
 
     int uano = 0;
-
+    decimal addition = 0;
+    decimal addition1 = 0;
+    decimal addition2 = 0;
 
 
     protected void Page_PreInit(object sender, EventArgs e)
@@ -847,26 +849,95 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
     }
     protected void lvSession_ItemDataBound(object sender, ListViewItemEventArgs e)
     {
+
         ListViewDataItem dataitem = (ListViewDataItem)e.Item;
         Label IoNO = dataitem.FindControl("lbIoNo") as Label;
         Label lblSession = dataitem.FindControl("lblSession") as Label;
         //Label lblsessionnm = dataitem.FindControl("lblSessionname") as Label;
         int Semesterno = Convert.ToInt32(rdolistSemester.SelectedValue);
-
         ViewState["semester"] = Semesterno;
         int idno = Convert.ToInt32(IoNO.ToolTip);
         ViewState["stuidno"] = idno;
         int sessionno = Convert.ToInt32(lblSession.ToolTip);
         ViewState["sessionno"] = sessionno;
+        Session["Sesno"] = sessionno;
+        int scheme = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno + " "));
+        string Schemep = Convert.ToString(objCommon.LookUp("ACD_SCHEME ", "grademarks", "SCHEMENO=" + scheme));
+        int orgid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "OrganizationId", "IDNO=" + idno));
         ListView lv = dataitem.FindControl("lvDetails") as ListView;
+        ListView lv1 = dataitem.FindControl("lvMarksDetails") as ListView;
+        //Label Label20 = lv1.FindControl("Label20") as Label;
         try
         {
+            if (orgid == 3)
+            {
+                if (Schemep == "M")
+                {
+                    string proc_name = "PKG_ACD_GET_SEMESTERWISE_STUD_DETAILS_For_MarksPattern";
+                    string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO";
+                    string Call_values = "" + idno + "," + sessionno + "," + Semesterno + "";
+                    DataSet ds = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+                    lv.DataSource = ds;
+                    lv.DataBind();
+                    Label lblstatus = dataitem.FindControl("lblstatus") as Label;
+                    int studtype = Convert.ToInt32(lblstatus.ToolTip);
 
-            DataSet ds = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
-            lv.DataSource = ds;
-            lv.DataBind();
-            Label lblstatus = dataitem.FindControl("lblstatus") as Label;
-            int studtype = Convert.ToInt32(lblstatus.ToolTip);
+                }
+                else
+                {
+
+                    DataSet ds = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
+                    lv.Visible = true;
+                    lv.DataSource = ds;
+                    lv.DataBind();
+                    //ViewState["PreviousStatus"] = ds.Tables[0].Rows[0]["PREVSTATUS"].ToString();
+                    Label lblstatus = dataitem.FindControl("lblstatus") as Label;
+                    int studtype = Convert.ToInt32(lblstatus.ToolTip);
+
+                }
+
+
+
+            }
+            else
+            {
+                if (orgid == 4)
+                {
+                    int Fees_Paid = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "COUNT(*)", "FEES_PAID=1 AND EXAM_REGISTRATION=1"));
+                    DataSet ds2 = objSc.AdmfessDues(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+
+                    if (Fees_Paid == 1)
+                    {
+                        if (ds2.Tables.Count > 0)
+                        {
+                            ViewState["status"] = ds2.Tables[0].Rows[0]["DUES"].ToString();
+                            if (Convert.ToInt32(ViewState["status"]) == 0)
+                            {
+                                DataSet ds = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
+                                lv.Visible = true;
+                                lv.DataSource = ds;
+                                lv.DataBind();
+                                Label lblstatus = dataitem.FindControl("lblstatus") as Label;
+                                int studtype = Convert.ToInt32(lblstatus.ToolTip);
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(updStudentInfo, "Please Clear your Outstanding Dues.", this.Page);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    DataSet ds = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
+                    lv.Visible = true;
+                    lv.DataSource = ds;
+                    lv.DataBind();
+                    Label lblstatus = dataitem.FindControl("lblstatus") as Label;
+                    int studtype = Convert.ToInt32(lblstatus.ToolTip);
+                }
+            }
+
 
         }
         catch (Exception ex)
@@ -876,6 +947,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
+
     }
     protected void rdolistSemester_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -903,12 +975,12 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
             if (orgid == 1)
             {
                 DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
-                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     pnlCollege.Visible = true;
                     lvSession.DataSource = ds;
                     lvSession.DataBind();
+
 
                 }
                 else
@@ -919,19 +991,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                     lvSession.DataBind();
 
                 }
-                if (dsreval.Tables[0].Rows.Count > 0)
-                {
-                    pnlrevalresult.Visible = true;
-                    lvRevalDetails.DataSource = dsreval;
-                    lvRevalDetails.DataBind();
-                }
-                else
-                {
-                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
-                    pnlrevalresult.Visible = false;
-                    lvRevalDetails.DataSource = null;
-                    lvRevalDetails.DataBind();
-                }
+
             }
             else if (orgid == 2)
             {
@@ -949,7 +1009,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                     {
 
                         DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
-                        DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                        //added by lalit remove regarding ticket no 48549  // DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
                         if (ds.Tables[0].Rows.Count > 0)
                         {
                             pnlCollege.Visible = true;
@@ -964,19 +1024,19 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                             lvSession.DataSource = null;
                             lvSession.DataBind();
                         }
-                        if (dsreval.Tables[0].Rows.Count > 0)
-                        {
-                            pnlrevalresult.Visible = true;
-                            lvRevalDetails.DataSource = dsreval;
-                            lvRevalDetails.DataBind();
-                        }
-                        else
-                        {
-                            // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
-                            pnlrevalresult.Visible = false;
-                            lvRevalDetails.DataSource = null;
-                            lvRevalDetails.DataBind();
-                        }
+                        //if (dsreval.Tables[0].Rows.Count > 0)
+                        //{
+                        //    pnlrevalresult.Visible = true;
+                        //    lvRevalDetails.DataSource = dsreval;
+                        //    lvRevalDetails.DataBind();
+                        //}
+                        //else
+                        //{
+                        //    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                        //    pnlrevalresult.Visible = false;
+                        //    lvRevalDetails.DataSource = null;
+                        //    lvRevalDetails.DataBind();
+                        //}
                     }
                     else
                     {
@@ -1037,7 +1097,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                     pnlCollege.Visible = true;
                     lvSession.DataSource = ds;
                     lvSession.DataBind();
-                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+                    //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
 
                 }
                 else
@@ -1064,7 +1124,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
 
 
             }
-            else
+            else if (orgid == 3)
             {
                 DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
                 DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
@@ -1075,6 +1135,122 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                     pnlCollege.Visible = true;
                     lvSession.DataSource = ds;
                     lvSession.DataBind();
+                    int Fees_Paid = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "COUNT(*)", "FEES_PAID=1 AND EXAM_REGISTRATION=1"));
+                    DataSet ds2 = objSc.AdmfessDues(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                    if (Fees_Paid == 1)
+                    {
+                        if (ds2.Tables.Count > 0)
+                        {
+                            ViewState["status"] = ds2.Tables[0].Rows[0]["DUES"].ToString();
+                            if (Convert.ToInt32(ViewState["status"]) == 0)
+                            {
+                                if (orgid == 3)
+                                {
+                                    foreach (ListViewItem items in lvSession.Items)
+                                    {
+                                        // ListViewDataItem dataitem = (ListViewDataItem)e.Item;
+                                        Label IoNO = items.FindControl("lbIoNo") as Label;
+                                        Label lblSession = items.FindControl("lblSession") as Label;
+                                        //Label lblsessionnm = dataitem.FindControl("lblSessionname") as Label;
+                                        int Semesterno = Convert.ToInt32(rdolistSemester.SelectedValue);
+                                        ViewState["semester"] = Semesterno;
+                                        //  int idno = Convert.ToInt32(IoNO.ToolTip);
+                                        ViewState["stuidno"] = idno;
+                                        int sessionno = Convert.ToInt32(lblSession.ToolTip);
+                                        ViewState["sessionno"] = sessionno;
+                                        Session["Sesno"] = sessionno;
+                                        int scheme = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "SCHEMENO", "IDNO=" + idno + " "));
+                                        string Schemep = Convert.ToString(objCommon.LookUp("ACD_SCHEME ", "grademarks", "SCHEMENO=" + scheme));
+                                        // int orgid = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "OrganizationId", "IDNO=" + idno));
+                                        ListView lv = items.FindControl("lvDetails") as ListView;
+                                        ListView lv1 = items.FindControl("lvMarksDetails") as ListView;
+
+                                        try
+                                        {
+                                            if (orgid == 3)
+                                            {
+                                                if (Schemep == "M")
+                                                {
+                                                    string proc_name = "PKG_ACD_GET_SEMESTERWISE_STUD_DETAILS_For_MarksPattern";
+                                                    string parameter = "@P_IDNO,@P_SESSIONNO,@P_SEMESTERNO";
+                                                    string Call_values = "" + idno + "," + sessionno + "," + Semesterno + "";
+                                                    DataSet ds1 = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+
+                                                    for (int i = 0; i < ds1.Tables[0].Rows.Count; i++)
+                                                    {
+
+                                                        lv1.Visible = true;
+                                                        lv1.DataSource = ds1;
+                                                        lv1.DataBind();
+                                                        Label Label20 = lv1.FindControl("lblTotalM") as Label;
+                                                        Label Label21 = lv1.FindControl("Label20") as Label;
+                                                        Label Label22 = lv1.FindControl("Label21") as Label;
+                                                        Label Label23 = lv1.FindControl("Label22") as Label;
+                                                        string data = ds1.Tables[0].Rows[i]["MAXMARKS_E"].ToString();
+                                                        string data1 = ds1.Tables[0].Rows[i]["MINMARKS"].ToString();
+                                                        string data2 = ds1.Tables[0].Rows[i]["EXTERMARK"].ToString();
+                                                        string data3 = ds1.Tables[0].Rows[i]["REMARK"].ToString();
+                                                        addition = Convert.ToDecimal(data) + Convert.ToDecimal(addition);
+                                                        addition1 = Convert.ToDecimal(data1) + Convert.ToDecimal(addition1);
+                                                        addition2 = Convert.ToDecimal(data2) + Convert.ToDecimal(addition2);
+                                                        Label20.Text = Convert.ToString(addition);
+                                                        // Label20.Visible = true;
+                                                        Label21.Text = Convert.ToString(addition1);
+                                                        Label22.Text = Convert.ToString(addition2);
+                                                        Label23.Text = Convert.ToString(data3);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+
+                                                    DataSet ds1 = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
+                                                    lv.Visible = true;
+                                                    lv.DataSource = ds1;
+                                                    lv.DataBind();
+                                                    //ViewState["PreviousStatus"] = ds.Tables[0].Rows[0]["PREVSTATUS"].ToString();
+                                                    Label lblstatus = items.FindControl("lblstatus") as Label;
+                                                    int studtype = Convert.ToInt32(lblstatus.ToolTip);
+
+                                                }
+
+
+
+                                            }
+                                            else
+                                            {
+                                                //DataSet ds1 = objSc.GetSemsesterwiseMarkDetails(idno, sessionno, Semesterno);
+                                                //lv.Visible = true;
+                                                //lv.DataSource = ds1;
+                                                //lv.DataBind();
+                                                ////ViewState["PreviousStatus"] = ds.Tables[0].Rows[0]["PREVSTATUS"].ToString();
+                                                //Label lblstatus = items.FindControl("lblstatus") as Label;
+                                                //int studtype = Convert.ToInt32(lblstatus.ToolTip);
+                                            }
+
+
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            if (Convert.ToBoolean(Session["error"]) == true)
+                                                objUaimsCommon.ShowError(Page, "Academic_Reports_Comprehensive_Stud_Report.lvCollege_ItemDatabound() --> " + ex.Message + " " + ex.StackTrace);
+                                            else
+                                                objUaimsCommon.ShowError(Page, "Server Unavailable.");
+                                        }
+
+
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                objCommon.DisplayMessage(updStudentInfo, "Please Clear your Outstanding Dues.", this.Page);
+                                pnlCollege.Visible = false;
+
+                            }
+                        }
+                    }
                     //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm =Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
                     ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
 
@@ -1100,6 +1276,216 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                     lvRevalDetails.DataSource = null;
                     lvRevalDetails.DataBind();
                 }
+            }
+            else if (orgid == 4)
+            {
+                DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+
+                    pnlCollege.Visible = true;
+                    lvSession.DataSource = ds;
+                    lvSession.DataBind();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                    pnlCollege.Visible = false;
+                    lvSession.DataSource = null;
+                    lvSession.DataBind();
+
+                }
+                if (dsreval.Tables[0].Rows.Count > 0)
+                {
+                    pnlrevalresult.Visible = true;
+                    lvRevalDetails.DataSource = dsreval;
+                    lvRevalDetails.DataBind();
+                }
+                else
+                {
+                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                    pnlrevalresult.Visible = false;
+                    lvRevalDetails.DataSource = null;
+                    lvRevalDetails.DataBind();
+                }
+
+            }
+            else if (orgid == 8)  //Added by lalit on dated 
+            {
+                int Count = 0;
+                string proc_name = "PKG_CHECK_STATUS_FOR_FEEDBACK_IN_STUDENT_LOGIN";
+                string parameter = "@P_IDNO,@P_SEMESTERNO";
+                string Call_values = "" + idno + "," + Convert.ToInt32(rdolistSemester.SelectedValue) + "";
+                DataSet ds1 = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+                if (ds1.Tables[0].Rows.Count > 0)
+                {
+                    Count = Convert.ToInt32((ds1.Tables[0].Rows[0]["idno"].ToString()));
+                }
+                int schemeno = Convert.ToInt32(objCommon.LookUp("acd_student", "schemeno", "idno=" + idno + ""));
+                int coursecount = Convert.ToInt32(objCommon.LookUp("acd_course", "Count(courseno) ", "schemeno=" + schemeno + " and semesterno=" + Convert.ToInt32(rdolistSemester.SelectedValue) + ""));
+                int countfeedback = Convert.ToInt32(objCommon.LookUp("acd_online_feedback", "count(*)", "sessionno=" + Convert.ToInt32(ddlSession.SelectedValue) + ""));
+                if (countfeedback > 0)
+                {
+                    if (Count == coursecount)
+                    {
+                        DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                        DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+
+
+                            pnlCollege.Visible = true;
+                            lvSession.DataSource = ds;
+                            lvSession.DataBind();
+                            //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                            pnlCollege.Visible = false;
+                            lvSession.DataSource = null;
+                            lvSession.DataBind();
+
+                        }
+                        if (dsreval.Tables[0].Rows.Count > 0)
+                        {
+                            pnlrevalresult.Visible = true;
+                            lvRevalDetails.DataSource = dsreval;
+                            lvRevalDetails.DataBind();
+                        }
+                        else
+                        {
+                            // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                            pnlrevalresult.Visible = false;
+                            lvRevalDetails.DataSource = null;
+                            lvRevalDetails.DataBind();
+                        }
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updStudentInfo, "Feedback Pending!!", this.Page);
+
+                    }
+                }
+                else
+                {
+                    DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                    DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+
+
+                        pnlCollege.Visible = true;
+                        lvSession.DataSource = ds;
+                        lvSession.DataBind();
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                    }
+                    else
+                    {
+                        objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                        pnlCollege.Visible = false;
+                        lvSession.DataSource = null;
+                        lvSession.DataBind();
+
+                    }
+                    if (dsreval.Tables[0].Rows.Count > 0)
+                    {
+                        pnlrevalresult.Visible = true;
+                        lvRevalDetails.DataSource = dsreval;
+                        lvRevalDetails.DataBind();
+                    }
+                    else
+                    {
+                        // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                        pnlrevalresult.Visible = false;
+                        lvRevalDetails.DataSource = null;
+                        lvRevalDetails.DataBind();
+                        //pnlrevalresult.Visible = true;
+                    }
+
+
+                }
+
+            }
+            else if (orgid == 15)
+            {
+                DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+
+                    pnlCollege.Visible = true;
+                    lvSession.DataSource = ds;
+                    lvSession.DataBind();
+                    // ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                    pnlCollege.Visible = false;
+                    lvSession.DataSource = null;
+                    lvSession.DataBind();
+
+                }
+                if (dsreval.Tables[0].Rows.Count > 0)
+                {
+                    pnlrevalresult.Visible = true;
+                    lvRevalDetails.DataSource = dsreval;
+                    lvRevalDetails.DataBind();
+                }
+                else
+                {
+                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                    pnlrevalresult.Visible = false;
+                    lvRevalDetails.DataSource = null;
+                    lvRevalDetails.DataBind();
+                }
+
+            }
+            else
+            {
+                DataSet ds = objSc.GetSemesterHistoryDetails(idno, Convert.ToInt32(rdolistSemester.SelectedValue));
+                DataSet dsreval = objSc.GetSemesterHistoryDetailsForRevalResult(idno, Convert.ToInt32(ViewState["sessionno"]), Convert.ToInt32(rdolistSemester.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+
+
+                    pnlCollege.Visible = true;
+                    lvSession.DataSource = ds;
+                    lvSession.DataBind();
+                    ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "$('#printreport').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestMa//ager.getInstance();prm.add_endRequest(function () { $('#printreport').hide();$('td:nth-child(10)').hide();});", true);
+
+                }
+                else
+                {
+                    objCommon.DisplayMessage(updStudentInfo, "No Result Found.", this.Page);
+                    pnlCollege.Visible = false;
+                    lvSession.DataSource = null;
+                    lvSession.DataBind();
+
+                }
+                if (dsreval.Tables[0].Rows.Count > 0)
+                {
+                    pnlrevalresult.Visible = true;
+                    lvRevalDetails.DataSource = dsreval;
+                    lvRevalDetails.DataBind();
+                }
+                else
+                {
+                    // objCommon.DisplayMessage(updStudentInfo, "No.", this.Page);
+                    pnlrevalresult.Visible = false;
+                    lvRevalDetails.DataSource = null;
+                    lvRevalDetails.DataBind();
+                }
+
             }
 
 
