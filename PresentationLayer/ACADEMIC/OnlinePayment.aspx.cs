@@ -282,10 +282,6 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             
         }
 
-
-
-    }
-
     public void DisplayStudentInfo(int idno)
     {
         #region Display Student Information
