@@ -718,7 +718,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         DataSet dsFailSubjects;
         if (ViewState["usertype"].ToString() == "2")
         {
-            int accept = Convert.ToInt32(objCommon.LookUp("acd_student_result", "count(1)", "sessionno=" + Convert.ToInt32(ViewState["SessionNo"]) + "  AND PREV_STATUS=1 AND ACCEPTED=1 AND REGISTERED=1 AND EXAM_REGISTERED=1 AND ISNULL(CANCEL,0)=0 AND IDNO=" + idno));
+            int accept = Convert.ToInt32(objCommon.LookUp("acd_student_result", "count(1)", "sessionno=" + Convert.ToInt32(ViewState["SessionNo"]) + " AND RE_REGISTER=1  AND PREV_STATUS=1 AND ACCEPTED=1 AND REGISTERED=1 AND EXAM_REGISTERED=1 AND ISNULL(CANCEL,0)=0 AND IDNO=" + idno));
             if (accept > 0)
             {
                 lvFailCourse.Enabled = false;

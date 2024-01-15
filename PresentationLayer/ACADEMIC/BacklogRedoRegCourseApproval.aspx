@@ -86,10 +86,10 @@
                                         <asp:DropDownList ID="ddlDepartment" runat="server" AppendDataBoundItems="True" TabIndex="3" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                       <%-- <asp:RequiredFieldValidator ID="rfvDepartment" runat="server" ControlToValidate="ddlDepartment"
+                                        <%-- <asp:RequiredFieldValidator ID="rfvDepartment" runat="server" ControlToValidate="ddlDepartment"
                                             Display="None" InitialValue="0" ErrorMessage="Please Select Department" ValidationGroup="Show"></asp:RequiredFieldValidator>--%>
                                     </div>
-                               
+
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <%--<label>Degree Name</label>--%>  <sup>*</sup>
@@ -160,10 +160,12 @@
                                                                 <th>PRN No.</th>
                                                                 <th>Student Name</th>
                                                                 <th>Registration Status By Stud</th>
-                                                                <th>HOD Approval Status</th>
-                                                                <th>Payment Status</th>
-                                                                <th>DEAN Approval Status</th>
-                                                              
+                                                                <th>
+                                                                    <asp:Label runat="server" ID="thHODArrpve" Text="HOD Approval Status" />
+                                                                </th>
+                                                                <th id="thPayment" runat="server">Payment Status</th>
+                                                                <th id="thDeanApprove" runat="server">DEAN Approval Status</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -182,7 +184,7 @@
                                                             <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/images/edit1.gif"
                                                                 CommandArgument='<%# Eval("IDNO")%>' AlternateText="Edit Record" ToolTip='<%# Eval("IDNO")%>'
                                                                 OnClick="btnEdit_Click" />
-                                                        </td>--%> 
+                                                        </td>--%>
                                                         <td>
                                                             <asp:Label ID="lblIDNO" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO")%>' />
                                                         </td>
@@ -201,7 +203,7 @@
 
                                                         </td>
                                                         <td>
-                                                            <asp:Label ID="Label4" runat="server" Text='<%# (Convert.ToInt32(Eval("PAY_STATUS") )> 0 ?  "Done" : "Not Done" )%>' ForeColor='<%# (Convert.ToInt32(Eval("PAY_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>' />
+                                                            <asp:Label ID="lblPayment" runat="server" Text='<%# (Convert.ToInt32(Eval("PAY_STATUS") )> 0 ?  "Done" : "Not Done" )%>' ForeColor='<%# (Convert.ToInt32(Eval("PAY_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>' />
                                                         </td>
 
                                                         <td>
@@ -209,7 +211,7 @@
                                                             <asp:Label ID="lblDeanApproveStatus" runat="server" ForeColor='<%# (Convert.ToInt32(Eval("DEAN_APPROVAL_STATUS") )== 0 ?System.Drawing.Color.Red:System.Drawing.Color.Green)%>'
                                                                 Text='<%# (Convert.ToInt32(Eval("DEAN_APPROVAL_STATUS") )> 0 ?  "Approved" : "Pending" )%>' />
                                                         </td>
-                                                      
+
                                                     </tr>
                                                 </ItemTemplate>
                                             </asp:ListView>
@@ -294,7 +296,7 @@
             catch (e) {
                 alert(e);
             }
-        }    
+        }
 
         //function HideColumn(orgID) {
         //    if (orgID != 2) {

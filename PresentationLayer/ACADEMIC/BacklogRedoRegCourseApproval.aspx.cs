@@ -63,9 +63,10 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
     private void PopulateDropDownList()
     {
 
-        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN ACD_SESSION S ON(A.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_REG_CONFIG_ACTIVITY B ON A.SESSIONNO = B.SESSION_NO", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "B.STARTED = 1 AND B.CRS_ACTIVITY_NO =2 AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " ", "S.SESSIONID");
+        //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN ACD_SESSION S ON(A.SESSIONID = S.SESSIONID) INNER JOIN ACD_COURSE_REG_CONFIG_ACTIVITY B ON A.SESSIONNO = B.SESSION_NO", "DISTINCT S.SESSIONID", "S.SESSION_NAME", "B.STARTED = 1 AND B.CRS_ACTIVITY_NO =2 AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " ", "S.SESSIONID");
         //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", " COLLEGE_ID IN (" + ddlCollege.SelectedValue + ") AND isnull(FLOCK,0)=1 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "SESSIONNO DESC");
-  
+        objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER A INNER JOIN ACD_STUDENT_RESULT SR ON A.SESSIONNO=SR.SESSIONNO AND SR.RE_REGISTER=1 AND SR.PREV_STATUS=1 AND ISNULL(SR.CANCEL,0)=0",
+            "DISTINCT A.SESSIONID", "A.SESSION_NAME", "", "A.SESSIONID DESC");
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
@@ -141,17 +142,38 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
 
         if (ddlSession.SelectedIndex > 0)
         {
-            string clg_Nos = objCommon.LookUp("USER_ACC", "DISTINCT ISNULL(UA_COLLEGE_NOS,0)AS UA_COLLEGE_NOS", "UA_TYPE=" + Session["usertype"].ToString() + " AND ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND UA_NO=" + Session["userno"].ToString());
+            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "DEPTNO<>0 and ACTIVESTATUS = 1", "");
+           
 
             if (Session["usertype"].ToString() != "1")
-                objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_COURSE_REG_CONFIG_ACTIVITY B ON A.SESSIONNO = B.SESSION_NO", "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME", "B.STARTED = 1 AND B.CRS_ACTIVITY_NO  =2 AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue) + " ", "CM.COLLEGE_ID"); //OR (" + Session["userdeptno"].ToString() + ")
-            // objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_DEGREE_BRANCH D INNER JOIN ACD_COLLEGE_MASTER C ON C.COLLEGE_ID=D.COLLEGE_ID AND C.ORGANIZATIONID=D.ORGANIZATIONID ", "DISTINCT C.COLLEGE_ID", "C.COLLEGE_NAME", "C.COLLEGE_ID IN(" + clg_Nos + ") AND C.ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND D.DEPTNO IN(" + Session["userdeptno"].ToString() + ")", "C.COLLEGE_ID"); //OR (" + Session["userdeptno"].ToString() + ")
+                objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID)",
+                    "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME",
+                    "AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])
+                    + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue)
+                    + " ", "CM.COLLEGE_ID");
             else
-                objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_COURSE_REG_CONFIG_ACTIVITY B ON A.SESSIONNO = B.SESSION_NO", "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME", "B.STARTED = 1 AND B.CRS_ACTIVITY_NO  =2 AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue) + " AND CM.COLLEGE_ID IN(" + clg_Nos + ")  ", "CM.COLLEGE_ID"); //OR (" + Session["userdeptno"].ToString() + ")
-            //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "COLLEGE_ID IN(" + clg_Nos + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
+            {
+                string clg_Nos = objCommon.LookUp("USER_ACC", "DISTINCT ISNULL(UA_COLLEGE_NOS,0)AS UA_COLLEGE_NOS", "UA_TYPE=" + Session["usertype"].ToString() + " AND ORGANIZATIONID=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND UA_NO=" + Session["userno"].ToString());
 
-            objCommon.FillDropDownList(ddlDepartment, "ACD_DEPARTMENT", "DEPTNO", "DEPTNAME", "DEPTNO<>0 and ACTIVESTATUS = 1", "");
-            //objCommon.FillDropDownList(ddlDepartment, "STORE_SUBDEPARTMENT", "SDNO", "SDNAME", "", "");
+                if (string.IsNullOrEmpty(clg_Nos))
+                {
+                    objCommon.DisplayMessage(uplReg, "College Not Defined to User!", this.Page);
+                    return;
+                }
+
+                //objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID) INNER JOIN ACD_COURSE_REG_CONFIG_ACTIVITY B ON A.SESSIONNO = B.SESSION_NO",
+                //    "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME",
+                //    "B.STARTED = 1 AND B.CRS_ACTIVITY_NO  =2 AND A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])
+                //    + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue)
+                //    + " AND CM.COLLEGE_ID IN(" + clg_Nos + ")  ", "CM.COLLEGE_ID");
+
+                objCommon.FillDropDownList(ddlCollege, "ACD_SESSION_MASTER A INNER JOIN ACD_COLLEGE_MASTER CM ON(A.COLLEGE_ID = CM.COLLEGE_ID) ",
+                   "DISTINCT CM.COLLEGE_ID", "CM.COLLEGE_NAME",
+                   "A.OrganizationId = " + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])
+                   + " AND A.SESSIONID= " + Convert.ToInt32(ddlSession.SelectedValue)
+                   + " AND CM.COLLEGE_ID IN(" + clg_Nos + ")  ", "CM.COLLEGE_ID");
+
+            }          
 
             lvApproveCourse.DataSource = null;
             lvApproveCourse.DataBind();
@@ -299,22 +321,25 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
     protected void lvApproveCourse_ItemDataBound(object sender, ListViewItemEventArgs e)
     {
         ListViewDataItem dataItem = (ListViewDataItem)e.Item;
-       if (e.Item.ItemType == ListViewItemType.DataItem)
+        if (e.Item.ItemType == ListViewItemType.DataItem)
         {
             Label HODApprove = (Label)e.Item.FindControl("lblHODApproveStatus");
             Label DEANApprove = (Label)e.Item.FindControl("lblDeanApproveStatus");
+            Label lblPayment = (Label)e.Item.FindControl("lblPayment");
             CheckBox cbApprove = (CheckBox)e.Item.FindControl("cbApprove");
+            cbApprove.Checked = (HODApprove.Text == "Approved") ? true : false;
+            cbApprove.Checked = (DEANApprove.Text == "Approved") ? true : false;
 
-            if (HODApprove.Text == "Approved")
-             {
-                 cbApprove.Checked = true;
-             }
-            if (DEANApprove.Text == "Approved")
+            if (Convert.ToInt16(Session["OrgId"]) != 2)
             {
-                cbApprove.Checked = true;
+                DEANApprove.Visible = false;
+                lblPayment.Visible = false;
+                lvApproveCourse.FindControl("thPayment").Visible = false;
+                lvApproveCourse.FindControl("thDeanApprove").Visible = false;
+                Label lblbb = (Label)lvApproveCourse.FindControl("thHODArrpve");
+                lblbb.Text = "Approval Status";
             }
-         
-        }       
+        }
     }
 
     protected void btnCancel_Click(object sender, EventArgs e)
