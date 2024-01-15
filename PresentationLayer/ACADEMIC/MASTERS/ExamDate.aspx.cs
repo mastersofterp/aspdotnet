@@ -122,10 +122,16 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         if ((Convert.ToInt32(Session["OrgId"]) == 2)) //For Crescent Client 
         {
             btnClashExcel.Visible = true;
+            btnCoveringPage.Visible = false;
+        }
+        else if ((Convert.ToInt32(Session["OrgId"]) == 18)) //For HITS Client 
+        {
+            btnCoveringPage.Visible = true;
         }
         else
         {
             btnClashExcel.Visible = false;
+            btnCoveringPage.Visible = false;
         }
 
     }
@@ -3669,4 +3675,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     }
     #endregion common Time Table End
 
+    protected void btnCoveringPage_Click(object sender, EventArgs e)  //Added by Tejas For HITS 09-01-2024
+    {
+        ShowReportDailyAttendenceCresent("Exam_Covering_Page", "rptExamCoveringPage.rpt"); 
+    }
 }

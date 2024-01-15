@@ -335,6 +335,8 @@
                                             <asp:Button ID="btnExcel" runat="server" Text="Exam Time Table Excel" OnClick="btnExcel_Click" CssClass="btn btn-info" TabIndex="1" />
                                             <asp:Button ID="btnClashExcel" Visible="false" ValidationGroup="Clash" runat="server" Text="Exam Clash Excel Report" OnClick="btnClashExcel_Click" CssClass="btn btn-info" TabIndex="1" />
 
+                                              <asp:Button ID="btnCoveringPage" runat="server" Text="Exam Covering Sheet" CssClass="btn btn-info" OnClick="btnCoveringPage_Click" ValidationGroup="Show" TabIndex="1" Visible="false" />
+
                                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="1" />
 
                                             <asp:ValidationSummary ID="valsum" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="submit" />
