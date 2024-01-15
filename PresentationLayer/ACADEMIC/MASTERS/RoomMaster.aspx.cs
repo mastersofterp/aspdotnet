@@ -94,6 +94,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
         lvAssessment.DataSource = dt;
         lvAssessment.DataBind();
+        ClearControls();
     }
 
     private void PopulateDropDown()
@@ -175,9 +176,9 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     #region Submit
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        DataTable dt = new DataTable();
         if (ddlCollege.SelectedIndex == 0)
         {
-
             objCommon.DisplayMessage(this.updRoom, "Please Select College/School!", this.Page);
         }
         else if (ddlDept.SelectedIndex == 0)
@@ -196,6 +197,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         }
         else
         {
+
             try
             {
 
@@ -207,6 +209,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 objexam.FloorNo = Convert.ToInt32(ddlFloorNo.SelectedValue);
                 objexam.Blockno = Convert.ToInt32(ddlBlockNo.SelectedValue);
                 objexam.collegecode = Convert.ToInt32(ViewState["CollegeCode"]);
+
                 foreach (ListViewDataItem item in lvAssessment.Items)
                 {
                     HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
@@ -215,6 +218,12 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                     
                     TextBox txtOutOfMarks = item.FindControl("txtRoomCapacity") as TextBox;
                     CheckBox chkactive = item.FindControl("chkStatus") as CheckBox;
+
+                   
+
+
+
+
                     //if (txtGradeReleaseName.Text == "")
                     //{
                     //    objCommon.DisplayMessage(this.updRoom, "Please Enter the Room Name !", this.Page);
@@ -239,6 +248,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                         else if (cs.Equals(CustomStatus.TransactionFailed))
                         {
                             objexam.ActiveStatus = Convert.ToBoolean(0);
+                            return;
                         }
                         if (btnSubmit.Text == "Update")
                         {
@@ -264,9 +274,10 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
 
                                         objCommon.DisplayMessage(this.updRoom, "Room Updated Successfully!", this.Page);
+                                        BindRooms();
                                         btnSubmit.Text = "Submit";
                                         btnadd.Visible = true;
-
+                                        ClearControls();
                                     }
                                 }
                                 else
@@ -282,6 +293,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
                                         objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
 
+                                        
+
 
                                     }
                                     else if (cs.Equals(CustomStatus.TransactionFailed))
@@ -289,6 +302,9 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                                         objCommon.DisplayMessage(this.updRoom, "Transaction Failed!", this.Page);
                                         return;
                                     }
+                                    //ClearControls();
+                                    //SetInitialRow();
+                                    
                                 }
 
 
@@ -302,14 +318,14 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                             int cnt = Convert.ToInt16(objCommon.LookUp("ACD_ROOM", "COUNT(*)", "ROOMNAME LIKE '" + txtGradeReleaseName.Text.Trim() + "'"));
                             if (cnt > 0)
                             {
-                                objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
-                                return;
+                                    objCommon.DisplayMessage(this.updRoom, "Room Entry with the name [" + txtGradeReleaseName.Text.Trim() + "] already exists!!", this.Page);
+                                    return;
                             }
                             else
                             {
                                 objexam.Roomname = txtGradeReleaseName.Text;
                                 objexam.RoomCapacity = Convert.ToInt32(txtOutOfMarks.Text);
-                                if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
+                                if (ViewState["action"] != null && ViewState["action"].ToString().Equals("submit"))
                                 {
                                     SeatingArrangementController objSC = new SeatingArrangementController();
 
@@ -337,18 +353,23 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                                     {
 
                                         objCommon.DisplayMessage(this.updRoom, "Room Saved Successfully!", this.Page);
-                                        this.BindRooms();
-                                        ClearControls();
+                                        ViewState["Room"] = "Room";
+                                      // this.BindRooms();
+                                       // SetInitialRow();
+                                 
+                                        
+                                      
 
                                     }
                                     else if (cs.Equals(CustomStatus.TransactionFailed))
                                     {
                                         objCommon.DisplayMessage(this.updRoom, "Transaction Failed!", this.Page);
-                                        return;
+                                        //ClearControls();
+                                        //SetInitialRow();
+                                        //return;
                                     }
                                 }
-
-
+                               
                             }
                         }
                         //Added by lalit
@@ -356,13 +377,26 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                     else
                     {
                         objCommon.DisplayMessage(this.updRoom, "Please Filled the listview All Column", this.Page);
+                        //this.BindRooms();
+                        //ClearControls();
+                        //SetInitialRow();
                         return;
 
                     }
 
                 }
                 this.BindRooms();
-                ClearControls();
+                if (ViewState["Room"]==null)
+                {
+                    
+                    this.BindRooms();
+                }
+                else
+                {
+                    SetInitialRow();
+                }
+                //ClearControls();
+                
             }
             catch (Exception ex)
             {
@@ -372,7 +406,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                     objCommon.DisplayMessage("Server UnAvailable", this.Page);
             }
 
-
+            
         }
 
     }
@@ -386,7 +420,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         try
         {
             SeatingArrangementController objSC = new SeatingArrangementController();
-            DataSet ds = objSC.GetAllRoom(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue));
+            DataSet ds = objSC.GetAllRoom(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlBlockNo.SelectedValue));
             lvRoomMaster.DataSource = ds;
             lvRoomMaster.DataBind();
         }
@@ -560,7 +594,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
         ddlFloorNo.SelectedIndex = 0;
         ddlBlockNo.SelectedIndex = 0;
 
-
+    
         foreach (ListViewDataItem item in lvAssessment.Items)
         {
             HiddenField hfdValue = item.FindControl("hfdValue") as HiddenField;
@@ -573,7 +607,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
             ViewState["action"] = null;
             ViewState["roomno"] = null;
             ViewState["roomname"] = string.Empty;
-        }
+        } 
     }
     #endregion
 
@@ -617,7 +651,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     {
         int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
         ViewState["CollegeCode"] = collegecode;
-        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNAME ASC");
+        objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNO ASC");
         this.BindRooms();
         ddlFloorNo.Focus();
         // objCommon.FillDropDownList(ddlRoom, "ACD_ROOM R INNER JOIN ACD_BLOCK B ON B.BLOCKNO=R.BLOCKNO INNER JOIN ACD_DEPARTMENT D ON R.DEPTNO=D.DEPTNO", "R.ROOMNO", "CONCAT(ROOMNAME,'-',DEPTCODE)", "R.ROOMNO > 0 AND  R.BLOCKNO=" + ddlBlockNo.SelectedValue + "", "ROOMNAME ASC");
@@ -1025,6 +1059,7 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                 }
             }
         }
+       
     }
 
     //protected void lvAssessment_ItemDataBound(object sender, ListViewItemEventArgs e)
