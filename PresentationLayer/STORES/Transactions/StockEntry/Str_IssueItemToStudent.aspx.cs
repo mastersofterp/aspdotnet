@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 
 
-public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.Web.UI.Page
+public partial class STORES_Transactions_StockEntry_Str_IssueItemToStudent : System.Web.UI.Page
 {
 
     Common objCommon = new Common();
@@ -71,9 +71,14 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
                 ViewState["REQTRNO"] = "0";
                 ViewState["dtItem1"] = null;
             }
-            FillDropDownList();
+            //FillDropDownList();
             ViewState["action"] = "add";
             txtTranDate.Text = System.DateTime.Now.ToString("dd/MM/yyyy");
+
+            objCommon.FillDropDownList(ddlMember, "ACD_STUDENT", "IDNO", "(STUDNAME+' '+ISNULL(STUDLASTNAME,'')) AS FULLNAME", "ISNULL(ADMCAN,0)=0 ", "STUDNAME");
+            //objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENAME");
+            //objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
+            //objCommon.FillDropDownList(ddlBranch, "ACD_BRANCH A INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (A.BRANCHNO=B.BRANCHNO)", "A.BRANCHNO", "A.LONGNAME", "B.DEGREENO > 0 AND A.BRANCHNO>0", "A.BRANCHNO");
         }
     }
 
@@ -140,20 +145,15 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
                 objCommon.DisplayMessage(this.Page, "Please Enter " + lblTranDate.Text, this);
                 return;
             }
-
-            //if (rdbDirectIssue.Text == "Direct Item Issue")
-            //{
-            //    if (ddlItemIsue.SelectedItem.Text == "Please Select") //Issue Item
-            //    {
-            //        objCommon.DisplayMessage(this.Page, "Please Select Item Name", this);
-            //        return;
-            //    }
-            //    if (txtItemQty.Text == string.Empty) // Quantity
-            //    {
-            //        objCommon.DisplayMessage(this.Page, "Please Enter  in Quantity", this);
-            //        return;
-            //    }
-            //}
+            if (ddlMember.SelectedValue == "0")
+            {
+                objCommon.DisplayMessage(this.Page, "Please Select Student" , this);
+                return;
+            }
+            else
+            {
+                objJVEnt.StudentIdno = Convert.ToInt32(ddlMember.SelectedValue);
+            }
 
 
             //----------------start----18-07-2023----Shaikh Juned---
@@ -455,24 +455,35 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             {
                 IssueItem();
             }
-            else if (ddlTranType.SelectedValue == "4") //Consume Item            
-            {
-                ConsumeItem();
-            }
             else
             {
-                SMRItem(); //Scrap , Missing , Return , Transfer
+                objCommon.DisplayMessage(this.Page, "Please Select Tran Type", this);
+                return;
             }
+            //else if (ddlTranType.SelectedValue == "4") //Consume Item            
+            //{
+            //    ConsumeItem();
+            //}
+            //else
+            //{
+            //    SMRItem(); //Scrap , Missing , Return , Transfer
+            //}
             objJVEnt.JV_ITEM_TBL = JVItemsTbl;
+
+            if (JVItemsTbl.Rows.Count == 0)
+            {
+                objCommon.DisplayMessage(this.Page, "Please click in issue for Selecting the Item from the Item Details .", this);
+                return;
+            }
 
             objJVEnt.TRAN_DATE = Convert.ToDateTime(txtTranDate.Text);
             objJVEnt.JVTRAN_TYPE = Convert.ToInt32(ddlTranType.SelectedValue);
 
             if (ddlTranType.SelectedValue == "3")
             {
-                objJVEnt.FROM_COLLEGE = Convert.ToInt32(ddlFromCollege.SelectedValue);
-                objJVEnt.FROM_DEPT = Convert.ToInt32(ddlFromDept.SelectedValue);
-                objJVEnt.FROM_EMPLOYEE = Convert.ToInt32(ddlFromEmployee.SelectedValue);
+                objJVEnt.FROM_COLLEGE = Convert.ToInt32(0);
+                objJVEnt.FROM_DEPT = Convert.ToInt32(0);
+                objJVEnt.FROM_EMPLOYEE = Convert.ToInt32(0);
             }
             else
             {
@@ -482,21 +493,20 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
                 objJVEnt.FROM_EMPLOYEE = Convert.ToInt32(objCommon.LookUp("USER_ACC", "ISNULL(UA_IDNO,0)", "UA_NO =" + Convert.ToInt32(Session["userno"])));
             }
 
-            objJVEnt.TO_COLLEGE = Convert.ToInt32(ddlToCollege.SelectedValue);
-            objJVEnt.TO_DEPT = Convert.ToInt32(ddlToDept.SelectedValue);
-            objJVEnt.TO_EMPLOYEE = Convert.ToInt32(ddlToEmployee.SelectedValue);
-            objJVEnt.LOCATIONNO = Convert.ToInt32(ddlLocation.SelectedValue);            //---31/10/2022
-            objJVEnt.StudentIdno = 0;          //used in issue item to student entry form
+            objJVEnt.TO_COLLEGE = Convert.ToInt32(0);
+            objJVEnt.TO_DEPT = Convert.ToInt32(0);
+            objJVEnt.TO_EMPLOYEE = Convert.ToInt32(0);
+            objJVEnt.LOCATIONNO = Convert.ToInt32(0);            //---31/10/2022
+            objJVEnt.StudentIdno = Convert.ToInt32(ddlMember.SelectedValue);          //used in issue item to student entry form
 
-
-            if (ddlTranType.SelectedValue == "3")
-            {
-                if (objJVEnt.FROM_EMPLOYEE == objJVEnt.TO_EMPLOYEE)
-                {
-                    DisplayMessage("You Can Not Transfer The Item To The Same Employee.");
-                    return;
-                }
-            }
+            //if (ddlTranType.SelectedValue == "3")
+            //{
+            //    if (objJVEnt.FROM_EMPLOYEE == objJVEnt.TO_EMPLOYEE)
+            //    {
+            //        DisplayMessage("You Can Not Transfer The Item To The Same Employee.");
+            //        return;
+            //    }
+            //}
 
 
             objJVEnt.REMARK = txtRemark.Text;
@@ -585,349 +595,82 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
         }
     }
 
-    private void SMRItem()
-    {
-        dtRow = null;
-        JVItemsTbl = this.CreateJVItemTable();
-        foreach (ListViewItem lv in lvSMRDsr.Items)
-        {
-            CheckBox chkDsrselect = lv.FindControl("chkSMRDsrItem") as CheckBox;
-            HiddenField hdnSMRDsrItemNo = lv.FindControl("hdnSMRDsrItemNo") as HiddenField;
+    //private void SMRItem()
+    //{
+    //    dtRow = null;
+    //    JVItemsTbl = this.CreateJVItemTable();
+    //    foreach (ListViewItem lv in lvSMRDsr.Items)
+    //    {
+    //        CheckBox chkDsrselect = lv.FindControl("chkSMRDsrItem") as CheckBox;
+    //        HiddenField hdnSMRDsrItemNo = lv.FindControl("hdnSMRDsrItemNo") as HiddenField;
 
-            Label lblSMRDsrNumber = lv.FindControl("lblSMRDsrNumber") as Label;
-            TextBox lblSMRDsrRemark = lv.FindControl("lblSMRDsrRemark") as TextBox;
-            TextBox txtFineAmt = lv.FindControl("txtFineAmt") as TextBox;
-            HiddenField hdnInvDINO = lv.FindControl("hdnSMRDsrInvidno") as HiddenField;
-            //HiddenField HiddenBalance = lv.FindControl("HiddenBalance") as HiddenField;
-            //TextBox txtAlredyIssue = lv.FindControl("txtAlredyIssue") as TextBox;
+    //        Label lblSMRDsrNumber = lv.FindControl("lblSMRDsrNumber") as Label;
+    //        TextBox lblSMRDsrRemark = lv.FindControl("lblSMRDsrRemark") as TextBox;
+    //        TextBox txtFineAmt = lv.FindControl("txtFineAmt") as TextBox;
+    //        HiddenField hdnInvDINO = lv.FindControl("hdnSMRDsrInvidno") as HiddenField;
+    //        //HiddenField HiddenBalance = lv.FindControl("HiddenBalance") as HiddenField;
+    //        //TextBox txtAlredyIssue = lv.FindControl("txtAlredyIssue") as TextBox;
 
-            if (chkDsrselect.Checked)
-            {
-                dtRow = JVItemsTbl.NewRow();
-                dtRow["ITEM_NO"] = Convert.ToInt32(hdnSMRDsrItemNo.Value);
-                dtRow["ITEM_NAME"] = "";
-                dtRow["AVLQTY"] = 0;
-                dtRow["JVSTOCK_QTY"] = 1;
-                dtRow["DSR_NUMBER"] = lblSMRDsrNumber.Text;
-                dtRow["ITEM_REMARK"] = lblSMRDsrRemark.Text;
-                dtRow["FINE_AMOUNT"] = txtFineAmt.Text == "" ? 0 : Convert.ToDouble(txtFineAmt.Text);
-                dtRow["INVDINO"] = Convert.ToInt32(hdnInvDINO.Value);
-                dtRow["ALLREADYISSUEDQTY"] = 0;
-                dtRow["BALANCE"] = 0;
-                //dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
-                //dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
-                JVItemsTbl.Rows.Add(dtRow);
-            }
-        }
+    //        if (chkDsrselect.Checked)
+    //        {
+    //            dtRow = JVItemsTbl.NewRow();
+    //            dtRow["ITEM_NO"] = Convert.ToInt32(hdnSMRDsrItemNo.Value);
+    //            dtRow["ITEM_NAME"] = "";
+    //            dtRow["AVLQTY"] = 0;
+    //            dtRow["JVSTOCK_QTY"] = 1;
+    //            dtRow["DSR_NUMBER"] = lblSMRDsrNumber.Text;
+    //            dtRow["ITEM_REMARK"] = lblSMRDsrRemark.Text;
+    //            dtRow["FINE_AMOUNT"] = txtFineAmt.Text == "" ? 0 : Convert.ToDouble(txtFineAmt.Text);
+    //            dtRow["INVDINO"] = Convert.ToInt32(hdnInvDINO.Value);
+    //            dtRow["ALLREADYISSUEDQTY"] = 0;
+    //            dtRow["BALANCE"] = 0;
+    //            //dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
+    //            //dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
+    //            JVItemsTbl.Rows.Add(dtRow);
+    //        }
+    //    }
 
-    }
+    //}
 
-    private void ConsumeItem()
-    {
-        dtRow = null;
-        JVItemsTbl = this.CreateJVItemTable();
-        foreach (ListViewItem lv in lvConsItem.Items)
-        {
-            CheckBox chkSelConsItem = lv.FindControl("chkSelConsItem") as CheckBox;
-            Label lblSMRDsrNumber = lv.FindControl("lblSMRDsrNumber") as Label;
-            Label lblConsAvlQty = lv.FindControl("lblConsAvlQty") as Label;
-            TextBox lblConsumeQty = lv.FindControl("lblConsumeQty") as TextBox;
-            TextBox lblConsItemRemark = lv.FindControl("lblConsItemRemark") as TextBox;
-            //HiddenField hdnInvDINO = lv.FindControl("hdnSMRDsrInvidno") as HiddenField;
-            // HiddenField HiddenBalance = lv.FindControl("HiddenBalance") as HiddenField;
-            // TextBox txtAlredyIssue = lv.FindControl("txtAlredyIssue") as TextBox;
+    //private void ConsumeItem()
+    //{
+    //    dtRow = null;
+    //    JVItemsTbl = this.CreateJVItemTable();
+    //    foreach (ListViewItem lv in lvConsItem.Items)
+    //    {
+    //        CheckBox chkSelConsItem = lv.FindControl("chkSelConsItem") as CheckBox;
+    //        Label lblSMRDsrNumber = lv.FindControl("lblSMRDsrNumber") as Label;
+    //        Label lblConsAvlQty = lv.FindControl("lblConsAvlQty") as Label;
+    //        TextBox lblConsumeQty = lv.FindControl("lblConsumeQty") as TextBox;
+    //        TextBox lblConsItemRemark = lv.FindControl("lblConsItemRemark") as TextBox;
+    //        //HiddenField hdnInvDINO = lv.FindControl("hdnSMRDsrInvidno") as HiddenField;
+    //        // HiddenField HiddenBalance = lv.FindControl("HiddenBalance") as HiddenField;
+    //        // TextBox txtAlredyIssue = lv.FindControl("txtAlredyIssue") as TextBox;
 
-            if (chkSelConsItem.Checked)
-            {
-                dtRow = JVItemsTbl.NewRow();
-                dtRow["ITEM_NO"] = Convert.ToInt32(chkSelConsItem.ToolTip);
-                dtRow["ITEM_NAME"] = "";
-                dtRow["AVLQTY"] = Convert.ToInt32(lblConsAvlQty.Text);
-                dtRow["JVSTOCK_QTY"] = Convert.ToInt32(lblConsumeQty.Text);
-                dtRow["DSR_NUMBER"] = "";
-                dtRow["ITEM_REMARK"] = lblConsItemRemark.Text;
-                dtRow["FINE_AMOUNT"] = 0;
-                dtRow["INVDINO"] = 0;
-                dtRow["ALLREADYISSUEDQTY"] = 0;
-                //dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
-                //dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
-                dtRow["BALANCE"] = 0;
-                JVItemsTbl.Rows.Add(dtRow);
-            }
-        }
+    //        if (chkSelConsItem.Checked)
+    //        {
+    //            dtRow = JVItemsTbl.NewRow();
+    //            dtRow["ITEM_NO"] = Convert.ToInt32(chkSelConsItem.ToolTip);
+    //            dtRow["ITEM_NAME"] = "";
+    //            dtRow["AVLQTY"] = Convert.ToInt32(lblConsAvlQty.Text);
+    //            dtRow["JVSTOCK_QTY"] = Convert.ToInt32(lblConsumeQty.Text);
+    //            dtRow["DSR_NUMBER"] = "";
+    //            dtRow["ITEM_REMARK"] = lblConsItemRemark.Text;
+    //            dtRow["FINE_AMOUNT"] = 0;
+    //            dtRow["INVDINO"] = 0;
+    //            dtRow["ALLREADYISSUEDQTY"] = 0;
+    //            //dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
+    //            //dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
+    //            dtRow["BALANCE"] = 0;
+    //            JVItemsTbl.Rows.Add(dtRow);
+    //        }
+    //    }
 
-    }
+    //}
 
-    private void IssueItem()
-    {
-        dtRow = null;
-        JVItemsTbl = this.CreateJVItemTable();
+  
 
-        foreach (ListViewDataItem item in lvIssueItem.Items)
-        {
-
-            CheckBox chkIssueSelect = item.FindControl("chkIssueSelect") as CheckBox;
-            Label lblIssueItem = item.FindControl("lblIssueItem") as Label;
-            TextBox txtAQty = item.FindControl("txtAQty") as TextBox;
-            TextBox txtIQ = item.FindControl("txtIQty") as TextBox;
-            TextBox txtAlredyIssue = item.FindControl("txtAlredyIssue") as TextBox;
-            TextBox txtIssueItemRemark = item.FindControl("txtIssueItemRemark") as TextBox;
-            HiddenField HiddenBalance = item.FindControl("HiddenBalance") as HiddenField;
-            string bal = HiddenBalance.Value;
-            if (chkIssueSelect.Checked == true)
-            {
-                string ItemType = objCommon.LookUp("STORE_ITEM", "MIGNO", "ITEM_NO =" + Convert.ToInt32(chkIssueSelect.ToolTip));
-                if (ItemType == "1") // Non Consumable Item
-                {
-                    foreach (ListViewItem lv in lvDsrIssue.Items)
-                    {
-                        CheckBox chkDsrselect = lv.FindControl("chkDsrselect") as CheckBox;
-                        HiddenField hdnInvidno = lv.FindControl("hdnInvidno") as HiddenField;
-                        Label lblDsrNumber = lv.FindControl("lblDsrNumber") as Label;
-                        HiddenField hdnIDSRNo = lv.FindControl("hdnInvidno") as HiddenField;
-                        if (chkDsrselect.Checked)
-                        {
-                            dtRow = JVItemsTbl.NewRow();
-                            dtRow["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
-                            dtRow["ITEM_NAME"] = lblIssueItem.Text;
-                            dtRow["AVLQTY"] = txtAQty.Text == "" ? 0 : Convert.ToInt32(txtAQty.Text);
-                            dtRow["JVSTOCK_QTY"] = 1;
-                            dtRow["DSR_NUMBER"] = lblDsrNumber.Text;
-                            dtRow["ITEM_REMARK"] = txtIssueItemRemark.Text;
-                            dtRow["FINE_AMOUNT"] = 0;
-                            dtRow["INVDINO"] = Convert.ToInt32(hdnIDSRNo.Value);
-                            if (txtAlredyIssue.Text == "")
-                            {
-                                dtRow["ALLREADYISSUEDQTY"] = 0;
-                            }
-                            else
-                            {
-                                dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
-                            }
-
-                            if (HiddenBalance.Value == "")
-                            {
-                                dtRow["BALANCE"] = 0;
-                            }
-                            else
-                            {
-                                dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
-                            }
-
-                            JVItemsTbl.Rows.Add(dtRow);
-                        }
-                    }
-                }
-                else if (ItemType == "2") // Consumable Item
-                {
-                    dtRow = JVItemsTbl.NewRow();
-                    dtRow["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
-                    dtRow["ITEM_NAME"] = lblIssueItem.Text;
-                    dtRow["AVLQTY"] = txtAQty.Text == "" ? 0 : Convert.ToInt32(txtAQty.Text);
-                    dtRow["JVSTOCK_QTY"] = txtIQ.Text == "" ? 0 : Convert.ToInt32(txtIQ.Text);
-                    dtRow["DSR_NUMBER"] = "";
-                    dtRow["ITEM_REMARK"] = txtIssueItemRemark.Text;
-                    dtRow["FINE_AMOUNT"] = 0;
-                    dtRow["INVDINO"] = 0;
-                    dtRow["ALLREADYISSUEDQTY"] = txtAlredyIssue.Text == "" ? 0 : Convert.ToInt32(txtAlredyIssue.Text);
-                    dtRow["BALANCE"] = HiddenBalance.Value == "" ? 0 : Convert.ToInt32(HiddenBalance.Value);
-                    JVItemsTbl.Rows.Add(dtRow);
-                }
-            }
-        }
-
-        //string Invidno = string.Empty;
-        //foreach (ListViewItem lv in lvDsrIssue.Items)
-        //{
-        //    CheckBox chkDsrselect = lv.FindControl("chkDsrselect") as CheckBox;
-        //    HiddenField hdnInvidno = lv.FindControl("hdnInvidno") as HiddenField;
-        //    if (chkDsrselect.Checked)
-        //    {
-        //        string invidno = hdnInvidno.Value;
-        //        Invidno += invidno + ',';
-        //    }
-        //}
-        //if (Invidno != string.Empty)
-        //    Invidno = Invidno.Substring(0, Invidno.Length - 1);        
-        //objJVEnt.INVIDNO = Invidno;
-
-        objJVEnt.REQTRNO = Convert.ToInt32(ddlReq.SelectedValue);
-        if (rdbDirectIssue.Checked == true)
-            objJVEnt.ISSUE_TYPE = "Direct";
-        if (rdbRequisition.Checked == true)
-            objJVEnt.ISSUE_TYPE = "Req";
-    }
-
-    private DataTable CreateJVItemTable()
-    {
-        JVItemsTbl = new DataTable();
-        JVItemsTbl.Columns.Add("ITEM_NO", typeof(int));
-        JVItemsTbl.Columns.Add("ITEM_NAME", typeof(string));
-        JVItemsTbl.Columns.Add("AVLQTY", typeof(int));
-        JVItemsTbl.Columns.Add("JVSTOCK_QTY", typeof(int));
-        JVItemsTbl.Columns.Add("DSR_NUMBER", typeof(string));
-        JVItemsTbl.Columns.Add("ITEM_REMARK", typeof(string));
-        JVItemsTbl.Columns.Add("FINE_AMOUNT", typeof(double));
-        JVItemsTbl.Columns.Add("INVDINO", typeof(int));
-        JVItemsTbl.Columns.Add("ALLREADYISSUEDQTY", typeof(int));
-        JVItemsTbl.Columns.Add("BALANCE", typeof(int));
-        return JVItemsTbl;
-    }
-
-    void clear()
-    {
-        Response.Redirect(Request.Url.ToString());
-    }
-    void ClearAll()
-    {
-        divTranDate.Visible = false;
-        divAsset.Visible = false;
-        divToFields.Visible = false;
-        divIssue.Visible = false;
-        divFromFields.Visible = false;
-        txtTranSlipNum.Text = string.Empty;
-        divSlipNum.Visible = false;
-
-        ddlTranType.SelectedIndex = 0;
-        txtTranDate.Text = DateTime.Now.ToString();
-        rdbDirectIssue.Checked = false;
-        rdbRequisition.Checked = true;
-        ddlReq.SelectedIndex = 0;
-        txtRemark.Text = string.Empty;
-        divAddItem.Visible = false;
-        lblReqDate.Text = string.Empty;
-        lblReqDept.Text = string.Empty;
-        lblReqUser.Text = string.Empty;
-        ddlToCollege.SelectedValue = "0"; //--21/11/2022
-        ddlToDept.SelectedIndex = 0;
-        ddlToEmployee.SelectedIndex = 0;
-
-        ddlCategory.SelectedIndex = 0;
-        ddlSubCategory.SelectedIndex = 0;
-        ddlItemSMR.SelectedIndex = 0;
-
-        lvIssueItem.DataSource = null;
-        lvIssueItem.DataBind();
-        pnlItemDetails.Visible = false;
-
-        lvDsrIssue.DataSource = null;
-        lvDsrIssue.DataBind();
-        lvDsrIssue.Visible = false;
-
-        lvConsItem.DataSource = null;
-        lvConsItem.DataBind();
-        lvConsItem.Visible = false;
-
-        lvSMRDsr.DataSource = null;
-        lvSMRDsr.DataBind();
-        lvSMRDsr.Visible = false;
-
-        divreqDetails.Visible = false;
-        divAddItem.Visible = false;
-        ddlItemIsue.SelectedIndex = 0;
-        txtItemQty.Text = string.Empty;
-        divreq.Visible = true;
-        ViewState["REQTRNO"] = null;
-
-        ddlFromCollege.SelectedIndex = 0;
-        ddlFromDept.SelectedIndex = 0;
-        ddlFromEmployee.SelectedIndex = 0;
-
-        ddlLocation.SelectedIndex = 0; //---31/10/2022
-        ViewState["dtItem1"] = null;
-
-    }
-    void GenTranSlipNo()
-    {
-        DataSet ds = new DataSet();
-        int mdno = Convert.ToInt32(Session["strdeptcode"].ToString());
-        ds = objJVCon.GenrateJvTranSlipNo(Convert.ToInt32(ddlTranType.SelectedValue));
-        if (ds.Tables[0].Rows.Count > 0)
-        {
-            txtTranSlipNum.Text = Convert.ToString(ds.Tables[0].Rows[0]["TRAN_SLIP_NO"].ToString());
-        }
-    }
-
-    //Check for Main Store User.
-    private bool CheckMainStoreUser()
-    {
-        string test = Application["strrefmaindept"].ToString();
-        string test1;
-        if (Session["usertype"].ToString() != "1")
-        {
-            test1 = objCommon.LookUp("STORE_DEPARTMENTUSER", "MDNO", "UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND APLNO=1");
-        }
-        else
-        {
-            test1 = Session["strdeptcode"].ToString();
-        }
-
-
-        // if (Session["strdeptcode"].ToString() == Application["strrefmaindept"].ToString())
-        if (test1 == Application["strrefmaindept"].ToString())
-        {
-            ViewState["StoreUser"] = "MainStoreUser";
-            return true;
-        }
-        else
-        {
-            this.CheckDeptStoreUser();
-            return false;
-        }
-    }
-
-    //Check for Department Store User.
-    private bool CheckDeptStoreUser()
-    {
-        string test = objCommon.LookUp("STORE_DEPARTMENTUSER", "APLNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
-
-        // When department user is having approval level as Department Store means "4". It is fixed in Store Reference table.
-        string deptStoreUser = objCommon.LookUp("STORE_REFERENCE", "DEPT_STORE_USER", "");
-
-        if (test == deptStoreUser)
-        {
-            ViewState["StoreUser"] = "DeptStoreUser";
-            return true;
-        }
-        else
-        {
-            ViewState["StoreUser"] = "NormalUser";
-            return false;
-
-        }
-    }
-
-    private void FillDropDownList()
-    {
-        try
-        {
-            objCommon.FillDropDownList(ddlToCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "", "COLLEGE_NAME");
-            ddlToCollege.SelectedValue = "0";        //--21/11/2022
-            objCommon.FillDropDownList(ddlToEmployee, "PAYROLL_EMPMAS", "IDNO", "ISNULL(TITLE,'')+' '+ISNULL(FNAME,'')+' '+ISNULL(MNAME,'')+' '+ISNULL(LNAME,'') AS NAME", "", "FNAME");
-            objCommon.FillDropDownList(ddlToDept, "STORE_SUBDEPARTMENT", "SDNO", "SDNAME", "", "SDNAME");
-
-
-            objCommon.FillDropDownList(ddlFromCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME", "", "COLLEGE_NAME");
-            objCommon.FillDropDownList(ddlFromEmployee, "PAYROLL_EMPMAS", "IDNO", "ISNULL(TITLE,'')+' '+ISNULL(FNAME,'')+' '+ISNULL(MNAME,'')+' '+ISNULL(LNAME,'') AS NAME", "", "FNAME");
-            objCommon.FillDropDownList(ddlFromDept, "STORE_SUBDEPARTMENT", "SDNO", "SDNAME", "", "SDNAME");
-
-            objCommon.FillDropDownList(ddlCategory, "STORE_MAIN_ITEM_GROUP", "MIGNO", "MIGNAME", "MIGNO <> 0", "MIGNAME");//and ITEM_TYPE='F'            
-            objCommon.FillDropDownList(ddlTranType, "STORE_STOCK_TRAN_TYPE", "STOCK_TYPE_ID", "STOCK_TRAN_TYPE", "IS_ACTIVE = 1", "STOCK_TYPE_ID");
-            objCommon.FillDropDownList(ddlLocation, "STORE_LOCATION", "LOCATIONNO", "LOCATION", "ACTIVESTATUS = 1", "LOCATIONNO");    //-31/10/2022
-
-            //objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=1", "MISGNAME");
-            //}
-
-            // }
-        }
-        catch (Exception ex)
-        {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUaimsCommon.ShowError(Page, "Stores_Transactions_Str_user_Requisition.FillItems() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUaimsCommon.ShowError(Page, "Server Unavailable.");
-        }
-    }
+ 
 
     private void FillRequisition()
     {
@@ -1218,28 +961,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
         divreq.Visible = true;
         divAddItem.Visible = false;
     }
-    protected void rdbDirectIssue_CheckedChanged(object sender, EventArgs e)
-    {
-        //if (ddlItemIsue.SelectedItem.Text == "Please Select") //Issue Item
-        //{
-        //    objCommon.DisplayMessage(this.Page, "Please Select Item Name", this);
-        //    return;
-        //}
-        //if (txtItemQty.Text == string.Empty) // Quantity
-        //{
-        //    objCommon.DisplayMessage(this.Page, "Please Enter  in Quantity", this);
-        //    return;
-        //}
-
-
-
-
-        ClearReqDirect();
-        divreq.Visible = false;
-        divAddItem.Visible = true;
-        divreqDetails.Visible = false;
-        objCommon.FillDropDownList(ddlItemIsue, "STORE_ITEM", "ITEM_NO", "ITEM_NAME", "", "ITEM_NAME");
-    }
+   
 
     private void ClearReqDirect()
     {
@@ -1272,31 +994,34 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
     protected void chkIssueSelect_CheckedChanged(object sender, EventArgs e)
     {
         CheckBox chk = sender as CheckBox;
-       int Item_no= Convert.ToInt32(chk.ToolTip);
-       int Cons = Convert.ToInt32(objCommon.LookUp("STORE_MAIN_ITEM_GROUP", "MIGNO", "ITEM_TYPE='C'"));   //--getting Non consumable MIGNO 
-       int Iscons = Convert.ToInt32(objCommon.LookUp("STORE_ITEM", "Count(*)", "ITEM_NO =" + Item_no + " AND MIGNO=" + Cons));
-       if (Iscons > 0)
-       {
-           DataSet dss = objCommon.FillDropDown("STORE_INVOICE A INNER JOIN STORE_INVOICE_ITEM B ON (A.INVTRNO=B.INVTRNO)", "B.INVTRNO,ITEM_NO", "A.EXPIRYDATE,GETDATE() AS CURRENTDATE", "B.ITEM_NO =" + Item_no + " AND A.EXPIRYDATE IS NOT NULL", "");
+        int Item_no = Convert.ToInt32(chk.ToolTip);
+        int Cons = Convert.ToInt32(objCommon.LookUp("STORE_MAIN_ITEM_GROUP", "MIGNO", "ITEM_TYPE='C'"));   //--getting Non consumable MIGNO 
+        int Iscons = Convert.ToInt32(objCommon.LookUp("STORE_ITEM", "Count(*)", "ITEM_NO =" + Item_no + " AND MIGNO=" + Cons));
+        if (Iscons > 0)
+        {
+            DataSet dss = objCommon.FillDropDown("STORE_INVOICE A INNER JOIN STORE_INVOICE_ITEM B ON (A.INVTRNO=B.INVTRNO)", "B.INVTRNO,ITEM_NO", "A.EXPIRYDATE,GETDATE() AS CURRENTDATE", "B.ITEM_NO =" + Item_no + " AND A.EXPIRYDATE IS NOT NULL", "");
 
-           if (dss != null && dss.Tables[0].Rows.Count>0)
-           {
-               string EXPIRYDATE = dss.Tables[0].Rows[0]["expirydate"].ToString();
-               string CURRENTDATE = dss.Tables[0].Rows[0]["CURRENTDATE"].ToString();
-               if (Convert.ToDateTime(EXPIRYDATE) < Convert.ToDateTime(CURRENTDATE))
-               {
-                   objCommon.DisplayMessage(this.Page, "This Item Has Been Expired.", this);
-                   chk.Checked = false;
-                   return;
-               }
-           }
-       }
+            if (dss != null && dss.Tables[0].Rows.Count > 0)
+            {
+                string EXPIRYDATE = dss.Tables[0].Rows[0]["expirydate"].ToString();
+                string CURRENTDATE = dss.Tables[0].Rows[0]["CURRENTDATE"].ToString();
+                if (Convert.ToDateTime(EXPIRYDATE) < Convert.ToDateTime(CURRENTDATE))
+                {
+                    objCommon.DisplayMessage(this.Page, "This Item Has Been Expired.", this);
+                    chk.Checked = false;
+                    return;
+                }
+            }
+        }
 
 
         string ItemNo = string.Empty;
         foreach (ListViewItem lv in lvIssueItem.Items)
         {
             CheckBox chkIssueSelect = lv.FindControl("chkIssueSelect") as CheckBox;
+            TextBox txtIQty = lv.FindControl("txtIQty") as TextBox;
+            TextBox txtAQty = lv.FindControl("txtAQty") as TextBox;
+
             if (chkIssueSelect.Checked)
             {
                 string itemno = chkIssueSelect.ToolTip;
@@ -1337,10 +1062,10 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
                     return;
                 }
             }
-            
+
             //=====================for checking item serial no. is generated or not======end=============================
 
-          //  DataSet ds = objCommon.FillDropDown("STORE_INVOICE_DSR_ITEM A INNER JOIN STORE_ITEM B ON (A.ITEM_NO=B.ITEM_NO)", "INVDINO,SRNO", "DSR_NUMBER,A.ITEM_NO,B.ITEM_NAME", "A.ITEM_NO IN (" + ItemNo + ") AND DSR_NUMBER IS NOT NULL AND B.MIGNO = 1 AND INVDINO NOT IN (SELECT DISTINCT INVDINO FROM STORE_JVSTOCK_TRAN WHERE JVTRAN_ID <> 5)", "");   //31/10/2022
+            //  DataSet ds = objCommon.FillDropDown("STORE_INVOICE_DSR_ITEM A INNER JOIN STORE_ITEM B ON (A.ITEM_NO=B.ITEM_NO)", "INVDINO,SRNO", "DSR_NUMBER,A.ITEM_NO,B.ITEM_NAME", "A.ITEM_NO IN (" + ItemNo + ") AND DSR_NUMBER IS NOT NULL AND B.MIGNO = 1 AND INVDINO NOT IN (SELECT DISTINCT INVDINO FROM STORE_JVSTOCK_TRAN WHERE JVTRAN_ID <> 5)", "");   //31/10/2022
             DataSet ds = objCommon.FillDropDown("STORE_INVOICE_DSR_ITEM A INNER JOIN STORE_ITEM B ON (A.ITEM_NO=B.ITEM_NO)", "INVDINO,SRNO", "DSR_NUMBER,A.ITEM_NO,B.ITEM_NAME", "A.ITEM_NO IN (" + ItemNo + ") AND DSR_NUMBER IS NOT NULL AND B.MIGNO = 1 AND INVDINO NOT IN (SELECT  INVDINO FROM STORE_JVSTOCK_TRAN A inner join STORE_JVSTOCK_MAIN C on (A.JVTRAN_ID=C.JVTRAN_ID) WHERE INVDINO is not null)", "");
             //and A.DSR_NUMBER not in(Select T.DSR_NUMBER from STORE_JVSTOCK_TRAN T where T.DSR_NUMBER=A.DSR_NUMBER)
             if (ds.Tables[0].Rows.Count > 0)
@@ -1363,7 +1088,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
                     {
                         // objCommon.DisplayMessage(this.Page, "For This Item, Serial Number Is Not Generated", this); 11/05/2023-
                         objCommon.DisplayMessage(this.Page, "Please Generate the Item Serial Number First", this);
-                        
+
                         return;
                     }
                 }
@@ -1372,85 +1097,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
         }
     }
 
-    protected void btnAdd_Click(object sender, EventArgs e)
-    {
-
-
-        DataRow drI = null;
-        DataTable ItemsTbl = this.CreateJVItemTable();
-
-        foreach (ListViewDataItem item in lvIssueItem.Items)
-        {
-            CheckBox chkIssueSelect = item.FindControl("chkIssueSelect") as CheckBox;
-            Label lblIssueItem = item.FindControl("lblIssueItem") as Label;
-            TextBox txtAQty = item.FindControl("txtAQty") as TextBox;
-            TextBox txtIQ = item.FindControl("txtIQty") as TextBox;
-            TextBox txtRemark = item.FindControl("txtIssueItemRemark") as TextBox;
-            HiddenField hdnItemtype = item.FindControl("hdnItemtype") as HiddenField;
-            TextBox txtReqQty = item.FindControl("txtReqQty") as TextBox;
-            TextBox txtAlredyIssue = item.FindControl("txtAlredyIssue") as TextBox;
-            HiddenField HiddenBalance = item.FindControl("HiddenBalance") as HiddenField;
-
-            //if (lblIssueItem.Text == ddlItemIsue.SelectedItem.Text)
-            //{
-
-            //    DisplayMessage("This Item Name Already Exist.");
-            //    return;
-            //}
-
-            drI = ItemsTbl.NewRow();
-            drI["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
-            drI["ITEM_NAME"] = lblIssueItem.Text;
-
-            drI["AVLQTY"] = Convert.ToInt32(txtAQty.Text);
-            drI["JVSTOCK_QTY"] = Convert.ToInt32(txtIQ.Text);
-            drI["DSR_NUMBER"] = "";
-            drI["ITEM_REMARK"] = txtRemark.Text;
-            if (!ItemsTbl.Columns.Contains("ITEM_TYPE"))
-                ItemsTbl.Columns.Add("ITEM_TYPE", typeof(string));
-            drI["ITEM_TYPE"] = hdnItemtype.Value;
-
-            if (!ItemsTbl.Columns.Contains("REQ_QTY"))
-                ItemsTbl.Columns.Add("REQ_QTY", typeof(int));
-            drI["REQ_QTY"] = Convert.ToInt32(txtReqQty.Text);
-            drI["ALLREADYISSUEDQTY"] = txtAlredyIssue.Text == "" ? 0 : Convert.ToInt32(txtAlredyIssue.Text);
-            drI["BALANCE"] = HiddenBalance.Value == "" ? 0 : Convert.ToInt32(HiddenBalance.Value);
-            ItemsTbl.Rows.Add(drI);
-
-        }
-
-        if (IsItemExist(ItemsTbl, ddlItemIsue.SelectedItem.Text.Trim()))
-        {
-            DisplayMessage("This Item Name Already Exist.");
-            return;
-        }
-
-        drI = ItemsTbl.NewRow();
-
-        drI["ITEM_NO"] = Convert.ToInt32(ddlItemIsue.SelectedValue);
-        drI["ITEM_NAME"] = ddlItemIsue.SelectedItem.Text.Trim();
-        DataSet dsAQty = objJVCon.GetItemAvlQty(Convert.ToInt32(ddlItemIsue.SelectedValue));
-        drI["AVLQTY"] = dsAQty.Tables[0].Rows[0]["AVLQTY"].ToString();
-        drI["JVSTOCK_QTY"] = Convert.ToInt32(txtItemQty.Text);
-        drI["DSR_NUMBER"] = "";
-        drI["ITEM_REMARK"] = "";
-        if (!ItemsTbl.Columns.Contains("ITEM_TYPE"))
-            ItemsTbl.Columns.Add("ITEM_TYPE", typeof(string));
-        drI["ITEM_TYPE"] = objCommon.LookUp("STORE_ITEM", "MIGNO", "ITEM_NO=" + ddlItemIsue.SelectedValue);
-
-        if (!ItemsTbl.Columns.Contains("REQ_QTY"))
-            ItemsTbl.Columns.Add("REQ_QTY", typeof(int));
-        drI["REQ_QTY"] = Convert.ToInt32(txtItemQty.Text);
-        //drI["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
-
-        ItemsTbl.Rows.Add(drI);
-        ddlItemIsue.SelectedIndex = 0;
-        txtItemQty.Text = string.Empty;
-        lvIssueItem.DataSource = ItemsTbl;
-        lvIssueItem.DataBind();
-        pnlItemDetails.Visible = true;
-        hdnRowCount.Value = ItemsTbl.Rows.Count.ToString();
-    }
+  
 
     // It is used to check duplicate Item name. 
     private bool IsItemExist(DataTable dt, string value)
@@ -1482,16 +1129,16 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
     {
         divTranDate.Visible = true;
         divFromFields.Visible = false;
-        if (ddlTranType.SelectedValue == "4")
-        {
-            ddlCategory.SelectedValue = "2";
-            objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
-        }
-        else
-        {
-            ddlCategory.SelectedValue = "1";
-            objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
-        }
+        //if (ddlTranType.SelectedValue == "4")
+        //{
+        //    ddlCategory.SelectedValue = "2";
+        //    objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
+        //}
+        //else
+        //{
+        //    ddlCategory.SelectedValue = "1";
+        //    objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
+        //}
 
         if (ddlTranType.SelectedValue == "1")
         {
@@ -1499,7 +1146,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             divIssue.Visible = true;
             divAsset.Visible = false;
             divStore.Visible = false;
-            divToFields.Visible = true;
+           // divToFields.Visible = true;
 
             lvConsItem.DataSource = null;
             lvConsItem.DataBind();
@@ -1536,7 +1183,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             lblScrpOrTransfer.Text = "Transfer Item";
             divStore.Visible = false;
             divFromFields.Visible = true;
-            divToFields.Visible = true;
+          //  divToFields.Visible = true;
             divItem.Visible = true;
 
             lvConsItem.DataSource = null;
@@ -1574,7 +1221,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             divIssue.Visible = false;
             lblScrpOrTransfer.Text = "Missing Item";
             divStore.Visible = false;
-            divToFields.Visible = true;
+          //  divToFields.Visible = true;
             divItem.Visible = true;
 
             lvConsItem.DataSource = null;
@@ -1592,7 +1239,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             divIssue.Visible = false;
             lblScrpOrTransfer.Text = "Return Item";
             divStore.Visible = false;
-            divToFields.Visible = true;
+          //  divToFields.Visible = true;
             divItem.Visible = true;
 
             lvConsItem.DataSource = null;
@@ -1610,7 +1257,7 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
             divIssue.Visible = false;
             lblScrpOrTransfer.Text = "Damage Item";
             divStore.Visible = false;
-            divToFields.Visible = true;
+          //  divToFields.Visible = true;
             divItem.Visible = true;
 
             lvConsItem.DataSource = null;
@@ -1643,43 +1290,8 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
         btnSubmit.Visible = true;
         btnSubmit.Enabled = true;
     }
-    protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
-    }
-    protected void ddlSubCategory_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlSubCategory.SelectedItem.Text == "Please Select")
-        {
-            lvSMRDsr.Visible = false;
-        }
-        DataSet ds = null;
-        if (ddlTranType.SelectedValue == "4")
-        {
-            ds = objJVCon.GetConsumableItemDetBySubCategory(Convert.ToInt32(ddlSubCategory.SelectedValue));//objCommon.FillDropDown("STORE_ITEM", "ITEM_NO", "ITEM_NAME,10 AS AVLQTY", "MISGNO="+ddlSubCategory.SelectedValue, "");
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                lvConsItem.DataSource = ds.Tables[0];
-                lvConsItem.DataBind();
-                hdnConsDsrRowCount.Value = ds.Tables[0].Rows.Count.ToString();
-                lvConsItem.Visible = true;
-                lvSMRDsr.Visible = false;
-            }
-            else
-            {
-                lvConsItem.DataSource = null;
-                lvConsItem.DataBind();
-                hdnConsDsrRowCount.Value = "0";
-                lvConsItem.Visible = false;
-                lvSMRDsr.Visible = false;
-            }
-
-        }
-        else
-        {
-            objCommon.FillDropDownList(ddlItemSMR, "STORE_ITEM", "ITEM_NO", "ITEM_NAME", "MIGNO=" + Convert.ToInt32(ddlCategory.SelectedValue) + " AND MISGNO=" + Convert.ToInt32(ddlSubCategory.SelectedValue) + "", "ITEM_NAME");
-        }
-    }
+   
+ 
     protected void ddlItemSMR_SelectedIndexChanged(object sender, EventArgs e)
     {
 
@@ -1980,4 +1592,388 @@ public partial class STORES_Transactions_StockEntry_Str_JvStockEntry : System.We
     //        }
     //    }
     //}
+
+    //=--------------------------------------------------------------------------------------------------------------//
+    void clear()
+    {
+        Response.Redirect(Request.Url.ToString());
+    }
+    void ClearAll()
+    {
+        divTranDate.Visible = false;
+        divAsset.Visible = false;
+        divToFields.Visible = false;
+        divIssue.Visible = false;
+        divFromFields.Visible = false;
+        txtTranSlipNum.Text = string.Empty;
+        divSlipNum.Visible = false;
+
+        ddlTranType.SelectedIndex = 0;
+        txtTranDate.Text = DateTime.Now.ToString();
+        rdbDirectIssue.Checked = false;
+        rdbRequisition.Checked = true;
+        ddlReq.SelectedIndex = 0;
+        txtRemark.Text = string.Empty;
+        divAddItem.Visible = false;
+        lblReqDate.Text = string.Empty;
+        lblReqDept.Text = string.Empty;
+        lblReqUser.Text = string.Empty;
+        ddlToCollege.SelectedValue = "0"; //--21/11/2022
+        ddlToDept.SelectedIndex = 0;
+        ddlToEmployee.SelectedIndex = 0;
+
+        ddlCategory.SelectedIndex = 0;
+        ddlSubCategory.SelectedIndex = 0;
+        ddlItemSMR.SelectedIndex = 0;
+
+        lvIssueItem.DataSource = null;
+        lvIssueItem.DataBind();
+        pnlItemDetails.Visible = false;
+
+        lvDsrIssue.DataSource = null;
+        lvDsrIssue.DataBind();
+        lvDsrIssue.Visible = false;
+
+        lvConsItem.DataSource = null;
+        lvConsItem.DataBind();
+        lvConsItem.Visible = false;
+
+        lvSMRDsr.DataSource = null;
+        lvSMRDsr.DataBind();
+        lvSMRDsr.Visible = false;
+
+        divreqDetails.Visible = false;
+        divAddItem.Visible = false;
+        ddlItemIsue.SelectedIndex = 0;
+        txtItemQty.Text = string.Empty;
+        divreq.Visible = true;
+        ViewState["REQTRNO"] = null;
+
+        ddlFromCollege.SelectedIndex = 0;
+        ddlFromDept.SelectedIndex = 0;
+        ddlFromEmployee.SelectedIndex = 0;
+
+        ddlLocation.SelectedIndex = 0; //---31/10/2022
+        ViewState["dtItem1"] = null;
+
+        divStudent.Visible = false;
+        lblStudBranhch.Text = string.Empty;
+        lblStudRollNo.Text =string.Empty;
+        ddlMember.SelectedValue = "0";
+
+    }
+    void GenTranSlipNo()
+    {
+        DataSet ds = new DataSet();
+        int mdno = Convert.ToInt32(Session["strdeptcode"].ToString());
+        ds = objJVCon.GenrateJvTranSlipNo(Convert.ToInt32(ddlTranType.SelectedValue));
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            txtTranSlipNum.Text = Convert.ToString(ds.Tables[0].Rows[0]["TRAN_SLIP_NO"].ToString());
+        }
+    }
+
+    //Check for Main Store User.
+    private bool CheckMainStoreUser()
+    {
+        string test = Application["strrefmaindept"].ToString();
+        string test1;
+        if (Session["usertype"].ToString() != "1")
+        {
+            test1 = objCommon.LookUp("STORE_DEPARTMENTUSER", "MDNO", "UA_NO=" + Convert.ToInt32(Session["userno"]) + " AND APLNO=1");
+        }
+        else
+        {
+            test1 = Session["strdeptcode"].ToString();
+        }
+
+
+        // if (Session["strdeptcode"].ToString() == Application["strrefmaindept"].ToString())
+        if (test1 == Application["strrefmaindept"].ToString())
+        {
+            ViewState["StoreUser"] = "MainStoreUser";
+            return true;
+        }
+        else
+        {
+            this.CheckDeptStoreUser();
+            return false;
+        }
+    }
+
+    //Check for Department Store User.
+    private bool CheckDeptStoreUser()
+    {
+        string test = objCommon.LookUp("STORE_DEPARTMENTUSER", "APLNO", "UA_NO=" + Convert.ToInt32(Session["userno"]));
+
+        // When department user is having approval level as Department Store means "4". It is fixed in Store Reference table.
+        string deptStoreUser = objCommon.LookUp("STORE_REFERENCE", "DEPT_STORE_USER", "");
+
+        if (test == deptStoreUser)
+        {
+            ViewState["StoreUser"] = "DeptStoreUser";
+            return true;
+        }
+        else
+        {
+            ViewState["StoreUser"] = "NormalUser";
+            return false;
+
+        }
+    }
+
+ 
+    protected void ddlCategory_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        objCommon.FillDropDownList(ddlSubCategory, "STORE_MAIN_ITEM_SUBGROUP", "MISGNO", "MISGNAME", "MIGNO=" + ddlCategory.SelectedValue, "MISGNAME");
+    }
+    protected void ddlSubCategory_SelectedIndexChanged(object sender, EventArgs e)
+    {
+         objCommon.FillDropDownList(ddlItemIsue, "STORE_ITEM", "ITEM_NO", "ITEM_NAME", "MISGNO="+Convert.ToInt32(ddlSubCategory.SelectedValue), "ITEM_NAME");
+    }
+    protected void rdbDirectIssue_CheckedChanged(object sender, EventArgs e)
+    {     
+        ClearReqDirect();
+        divreq.Visible = false;
+        divAddItem.Visible = true;
+        divreqDetails.Visible = false;
+
+        objCommon.FillDropDownList(ddlCategory, "STORE_MAIN_ITEM_GROUP", "MIGNO", "MIGNAME", "ITEM_TYPE='C'", "MIGNAME");//and ITEM_TYPE='F' 
+        // objCommon.FillDropDownList(ddlItemIsue, "STORE_ITEM", "ITEM_NO", "ITEM_NAME", "", "ITEM_NAME");
+        divStudent.Visible = true;
+    }
+   
+
+    protected void ddlItemIsue_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DataSet DsstockAvailable = objJVCon.GetItemAvlQty(Convert.ToInt32(ddlItemIsue.SelectedValue));
+        if (DsstockAvailable != null && DsstockAvailable.Tables[0].Rows.Count > 0)
+        {
+            int stokAvalaible = Convert.ToInt32(DsstockAvailable.Tables[0].Rows[0]["AVLQTY"].ToString());
+            if (stokAvalaible == 0)
+            {
+                objCommon.DisplayMessage(this.Page, "No Stock available for selected item, ", this);
+                return;
+            }
+        }
+    }
+    protected void btnAdd_Click(object sender, EventArgs e)
+    {
+
+
+        if (ddlItemIsue.SelectedItem.Text == "Please Select") //Issue Item
+        {
+            objCommon.DisplayMessage(this.Page, "Please Select Item Name", this);
+            return;
+        }
+
+
+        if (txtItemQty.Text == string.Empty) // Quantity
+        {
+            objCommon.DisplayMessage(this.Page, "Please Enter  in Quantity", this);
+            return;
+        }
+
+        DataSet DsstockAvailable = objJVCon.GetItemAvlQty(Convert.ToInt32(ddlItemIsue.SelectedValue));
+        if (DsstockAvailable != null && DsstockAvailable.Tables[0].Rows.Count > 0)
+        {
+            int stokAvalaible = Convert.ToInt32(DsstockAvailable.Tables[0].Rows[0]["AVLQTY"].ToString());
+            if (stokAvalaible > 0)
+            {
+                if (stokAvalaible < Convert.ToInt32(txtItemQty.Text))
+                {
+                    objCommon.DisplayMessage(this.Page, "your Quantity should not be grater than Available Stock qty "+ stokAvalaible, this);
+                    return;
+                }
+            }
+        }
+
+
+        DataRow drI = null;
+        DataTable ItemsTbl = this.CreateJVItemTable();
+
+        foreach (ListViewDataItem item in lvIssueItem.Items)
+        {
+            CheckBox chkIssueSelect = item.FindControl("chkIssueSelect") as CheckBox;
+            Label lblIssueItem = item.FindControl("lblIssueItem") as Label;
+            TextBox txtAQty = item.FindControl("txtAQty") as TextBox;
+            TextBox txtIQ = item.FindControl("txtIQty") as TextBox;
+            TextBox txtRemark = item.FindControl("txtIssueItemRemark") as TextBox;
+            HiddenField hdnItemtype = item.FindControl("hdnItemtype") as HiddenField;
+            TextBox txtReqQty = item.FindControl("txtReqQty") as TextBox;
+            TextBox txtAlredyIssue = item.FindControl("txtAlredyIssue") as TextBox;
+            HiddenField HiddenBalance = item.FindControl("HiddenBalance") as HiddenField;
+
+            //if (lblIssueItem.Text == ddlItemIsue.SelectedItem.Text)
+            //{
+
+            //    DisplayMessage("This Item Name Already Exist.");
+            //    return;
+            //}
+
+            drI = ItemsTbl.NewRow();
+            drI["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
+            drI["ITEM_NAME"] = lblIssueItem.Text;
+
+            drI["AVLQTY"] = Convert.ToInt32(txtAQty.Text);
+            drI["JVSTOCK_QTY"] = 0;               //Convert.ToInt32(txtIQ.Text);
+            drI["DSR_NUMBER"] = "";
+            drI["ITEM_REMARK"] = txtRemark.Text;
+            if (!ItemsTbl.Columns.Contains("ITEM_TYPE"))
+                ItemsTbl.Columns.Add("ITEM_TYPE", typeof(string));
+            drI["ITEM_TYPE"] = hdnItemtype.Value;
+
+            if (!ItemsTbl.Columns.Contains("REQ_QTY"))
+                ItemsTbl.Columns.Add("REQ_QTY", typeof(int));
+            drI["REQ_QTY"] = Convert.ToInt32(txtReqQty.Text);
+            drI["ALLREADYISSUEDQTY"] = txtAlredyIssue.Text == "" ? 0 : Convert.ToInt32(txtAlredyIssue.Text);
+            drI["BALANCE"] = HiddenBalance.Value == "" ? 0 : Convert.ToInt32(HiddenBalance.Value);
+            ItemsTbl.Rows.Add(drI);
+
+        }
+
+        if (IsItemExist(ItemsTbl, ddlItemIsue.SelectedItem.Text.Trim()))
+        {
+            DisplayMessage("This Item Name Already Exist.");
+            return;
+        }
+
+        drI = ItemsTbl.NewRow();
+
+        drI["ITEM_NO"] = Convert.ToInt32(ddlItemIsue.SelectedValue);
+        drI["ITEM_NAME"] = ddlItemIsue.SelectedItem.Text.Trim();
+        DataSet dsAQty = objJVCon.GetItemAvlQty(Convert.ToInt32(ddlItemIsue.SelectedValue));
+        drI["AVLQTY"] = dsAQty.Tables[0].Rows[0]["AVLQTY"].ToString();
+        drI["JVSTOCK_QTY"] = 0;             //Convert.ToInt32(txtItemQty.Text);
+        drI["DSR_NUMBER"] = "";
+        drI["ITEM_REMARK"] = "";
+        if (!ItemsTbl.Columns.Contains("ITEM_TYPE"))
+            ItemsTbl.Columns.Add("ITEM_TYPE", typeof(string));
+        drI["ITEM_TYPE"] = objCommon.LookUp("STORE_ITEM", "MIGNO", "ITEM_NO=" + ddlItemIsue.SelectedValue);
+
+        if (!ItemsTbl.Columns.Contains("REQ_QTY"))
+            ItemsTbl.Columns.Add("REQ_QTY", typeof(int));
+        drI["REQ_QTY"] = Convert.ToInt32(txtItemQty.Text);
+        //drI["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
+
+        ItemsTbl.Rows.Add(drI);
+        ddlItemIsue.SelectedIndex = 0;
+        txtItemQty.Text = string.Empty;
+        lvIssueItem.DataSource = ItemsTbl;
+        lvIssueItem.DataBind();
+        pnlItemDetails.Visible = true;
+        hdnRowCount.Value = ItemsTbl.Rows.Count.ToString();
+        ddlCategory.SelectedValue = "0";
+        ddlSubCategory.SelectedValue = "0";
+    }
+    protected void ddlMember_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DataSet ds = objCommon.FillDropDown("ACD_STUDENT a inner join ACD_BRANCH b on (a.BRANCHNO=b.BRANCHNO)", "a.idno,a.ROLLNO", "(STUDNAME+' '+ISNULL(STUDLASTNAME,'')) AS FULLNAME,b.LONGNAME as BranchName", "ISNULL(ADMCAN,0)=0 and a.idno=" + Convert.ToInt32(ddlMember.SelectedValue), "");
+         if (ds != null && ds.Tables[0].Rows.Count > 0)
+         {
+             lblStudBranhch.Text = ds.Tables[0].Rows[0]["BranchName"].ToString();
+             lblStudRollNo.Text = ds.Tables[0].Rows[0]["ROLLNO"].ToString();
+         }
+    }
+    private void IssueItem()
+    {
+        dtRow = null;
+        JVItemsTbl = this.CreateJVItemTable();
+
+        foreach (ListViewDataItem item in lvIssueItem.Items)
+        {
+
+            CheckBox chkIssueSelect = item.FindControl("chkIssueSelect") as CheckBox;
+            Label lblIssueItem = item.FindControl("lblIssueItem") as Label;
+            TextBox txtAQty = item.FindControl("txtAQty") as TextBox;
+            TextBox txtIQ = item.FindControl("txtIQty") as TextBox;
+            TextBox txtAlredyIssue = item.FindControl("txtAlredyIssue") as TextBox;
+            TextBox txtIssueItemRemark = item.FindControl("txtIssueItemRemark") as TextBox;
+            HiddenField HiddenBalance = item.FindControl("HiddenBalance") as HiddenField;
+            string bal = HiddenBalance.Value;
+            if (chkIssueSelect.Checked == true)
+            {
+                string ItemType = objCommon.LookUp("STORE_ITEM", "MIGNO", "ITEM_NO =" + Convert.ToInt32(chkIssueSelect.ToolTip));
+                if (ItemType == "1") // Non Consumable Item
+                {
+                    foreach (ListViewItem lv in lvDsrIssue.Items)
+                    {
+                        CheckBox chkDsrselect = lv.FindControl("chkDsrselect") as CheckBox;
+                        HiddenField hdnInvidno = lv.FindControl("hdnInvidno") as HiddenField;
+                        Label lblDsrNumber = lv.FindControl("lblDsrNumber") as Label;
+                        HiddenField hdnIDSRNo = lv.FindControl("hdnInvidno") as HiddenField;
+                        if (chkDsrselect.Checked)
+                        {
+                            dtRow = JVItemsTbl.NewRow();
+                            dtRow["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
+                            dtRow["ITEM_NAME"] = lblIssueItem.Text;
+                            dtRow["AVLQTY"] = txtAQty.Text == "" ? 0 : Convert.ToInt32(txtAQty.Text);
+                            dtRow["JVSTOCK_QTY"] = 1;
+                            dtRow["DSR_NUMBER"] = lblDsrNumber.Text;
+                            dtRow["ITEM_REMARK"] = txtIssueItemRemark.Text;
+                            dtRow["FINE_AMOUNT"] = 0;
+                            dtRow["INVDINO"] = Convert.ToInt32(hdnIDSRNo.Value);
+                            if (txtAlredyIssue.Text == "")
+                            {
+                                dtRow["ALLREADYISSUEDQTY"] = 0;
+                            }
+                            else
+                            {
+                                dtRow["ALLREADYISSUEDQTY"] = Convert.ToInt32(txtAlredyIssue.Text);
+                            }
+
+                            if (HiddenBalance.Value == "")
+                            {
+                                dtRow["BALANCE"] = 0;
+                            }
+                            else
+                            {
+                                dtRow["BALANCE"] = Convert.ToInt32(HiddenBalance.Value);
+                            }
+
+                            JVItemsTbl.Rows.Add(dtRow);
+                        }
+                    }
+                }
+                else if (ItemType == "2") // Consumable Item
+                {
+                    dtRow = JVItemsTbl.NewRow();
+                    dtRow["ITEM_NO"] = Convert.ToInt32(chkIssueSelect.ToolTip);
+                    dtRow["ITEM_NAME"] = lblIssueItem.Text;
+                    dtRow["AVLQTY"] = txtAQty.Text == "" ? 0 : Convert.ToInt32(txtAQty.Text);
+                    dtRow["JVSTOCK_QTY"] = txtIQ.Text == "" ? 0 : Convert.ToInt32(txtIQ.Text);
+                    dtRow["DSR_NUMBER"] = "";
+                    dtRow["ITEM_REMARK"] = txtIssueItemRemark.Text;
+                    dtRow["FINE_AMOUNT"] = 0;
+                    dtRow["INVDINO"] = 0;
+                    dtRow["ALLREADYISSUEDQTY"] = txtAlredyIssue.Text == "" ? 0 : Convert.ToInt32(txtAlredyIssue.Text);
+                    dtRow["BALANCE"] = HiddenBalance.Value == "" ? 0 : Convert.ToInt32(HiddenBalance.Value);
+                    JVItemsTbl.Rows.Add(dtRow);
+                }
+            }
+        }
+
+        objJVEnt.REQTRNO = Convert.ToInt32(0);
+
+        if (rdbDirectIssue.Checked == true)
+            objJVEnt.ISSUE_TYPE = "Stud";
+        //if (rdbRequisition.Checked == true)
+        //    objJVEnt.ISSUE_TYPE = 'R';
+    }
+
+    private DataTable CreateJVItemTable()
+    {
+        JVItemsTbl = new DataTable();
+        JVItemsTbl.Columns.Add("ITEM_NO", typeof(int));
+        JVItemsTbl.Columns.Add("ITEM_NAME", typeof(string));
+        JVItemsTbl.Columns.Add("AVLQTY", typeof(int));
+        JVItemsTbl.Columns.Add("JVSTOCK_QTY", typeof(int));
+        JVItemsTbl.Columns.Add("DSR_NUMBER", typeof(string));
+        JVItemsTbl.Columns.Add("ITEM_REMARK", typeof(string));
+        JVItemsTbl.Columns.Add("FINE_AMOUNT", typeof(double));
+        JVItemsTbl.Columns.Add("INVDINO", typeof(int));
+        JVItemsTbl.Columns.Add("ALLREADYISSUEDQTY", typeof(int));
+        JVItemsTbl.Columns.Add("BALANCE", typeof(int));
+        return JVItemsTbl;
+    }
 }
