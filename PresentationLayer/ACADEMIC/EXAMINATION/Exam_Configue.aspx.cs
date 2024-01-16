@@ -46,6 +46,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
                     }
 
                 }
+                PopulateUserTypes();
                 BindView();
             }
             else
@@ -63,7 +64,31 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
 
         }
     }
+    private void PopulateUserTypes()
+    {
+        try
+        {
+            DataSet ds = objCommon.FillDropDown("ACD_SUBJECTTYPE WITH (NOLOCK)", "SUBID", "SUBNAME", "SUBID>0 AND ACTIVESTATUS=1", "SUBID");
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    chkListSubjectTypes.DataTextField = "SUBNAME";
+                    chkListSubjectTypes.DataValueField = "SUBID";
 
+                    chkListSubjectTypes.DataSource = ds.Tables[0];
+                    chkListSubjectTypes.DataBind();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "Activity_ActivityMaster.PopulateUserTypes --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
     //private void BindView()
     //{
 
@@ -120,7 +145,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
     private void BindView()
     {
 
-        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,ISNULL(GRADE_ADMIN,0) AS GRADE_ADMIN,ISNULL(GRADE_FACULTY,0) AS GRADE_FACULTY,ISNULL(GRAPH,0) AS GRAPH,ISNULL(GRADE_RANGE,0) AS GRADE_RANGE, ISNULL(COLLEGE,0) AS COLLEGE,ISNULL(SESSION,0) AS SESSION,ISNULL(FEES_PAID,0) AS FEES_PAID,ISNULL(RELATIVE,0) AS RELATIVE,ISNULL(ABSOLUTE,0) AS ABSOLUTE, ISNULL(BARCODE,0) AS BARCODE, ISNULL(FEEDBACK,0) AS FEEDBACK,ISNULL(ATTENDANCE,0) AS ATTENDANCE,ISNULL(INTSUBEXAM,0) AS INTSUBEXAM,ISNULL(INTASSESSMENT,0) AS INTASSESSMENT,ISNULL(INTEXCELFORMAT,0) AS INTEXCELFORMAT,ISNULL(ADMISSION_STATUS,0) AS ADMISSION_STATUS,ISNULL(MULTIPALE_END_SEM_COMPONENT,0) AS MULTIPALE_END_SEM_COMPONENT,ISNULL(ADMIN_EX_APPROVAL,0) AS ADMIN_EX_APPROVAL,ISNULL(ADMIN_COMPONENT,0) AS ADMIN_COMPONENT,ISNULL(FACULTY_COMPONENT,0) AS FACULTY_COMPONENT,ISNULL(EXCELUPLOAD_TIMETABLE,0) AS EXCELUPLOAD_TIMETABLE,ISNULL(INTMARKPUBLISH,0) AS INTMARKPUBLISH,ISNULL(COMPONENTWISE_EXCEL,0) AS COMPONENTWISE_EXCEL", "", "");
+        DataSet ds = objCommon.FillDropDown("ACD_EXAM_CONFIGURATION", "EXAM_REGISTRATION", "EXAM_RULE,GRACE_RULE,LATE_FEE,IMPROVEMENT,EXAM_PATTERN,REVALUATION_PROCESS,RESULT_PUBLISH,CONDONATION,ISNULL(DECODE_NUMBER,0)AS DECODE_NUMBER,ISNULL(SEAT_NUMBER,0)AS SEAT_NUMBER,ISNULL(ExcelMarkEntry,0)AS ExcelMarkEntry,ISNULL(SEC_TIMETABLE,0) AS SEC_TIMETABLE,ISNULL(BATCH_TIMETABLE,0) AS BATCH_TIMETABLE,ISNULL(GRADE_ADMIN,0) AS GRADE_ADMIN,ISNULL(GRADE_FACULTY,0) AS GRADE_FACULTY,ISNULL(GRAPH,0) AS GRAPH,ISNULL(GRADE_RANGE,0) AS GRADE_RANGE, ISNULL(COLLEGE,0) AS COLLEGE,ISNULL(SESSION,0) AS SESSION,ISNULL(FEES_PAID,0) AS FEES_PAID,ISNULL(RELATIVE,0) AS RELATIVE,ISNULL(ABSOLUTE,0) AS ABSOLUTE, ISNULL(BARCODE,0) AS BARCODE, ISNULL(FEEDBACK,0) AS FEEDBACK,ISNULL(ATTENDANCE,0) AS ATTENDANCE,ISNULL(INTSUBEXAM,0) AS INTSUBEXAM,ISNULL(INTASSESSMENT,0) AS INTASSESSMENT,ISNULL(INTEXCELFORMAT,0) AS INTEXCELFORMAT,ISNULL(ADMISSION_STATUS,0) AS ADMISSION_STATUS,ISNULL(MULTIPALE_END_SEM_COMPONENT,0) AS MULTIPALE_END_SEM_COMPONENT,ISNULL(ADMIN_EX_APPROVAL,0) AS ADMIN_EX_APPROVAL,ISNULL(ADMIN_COMPONENT,0) AS ADMIN_COMPONENT,ISNULL(FACULTY_COMPONENT,0) AS FACULTY_COMPONENT,ISNULL(EXCELUPLOAD_TIMETABLE,0) AS EXCELUPLOAD_TIMETABLE,ISNULL(INTMARKPUBLISH,0) AS INTMARKPUBLISH,ISNULL(COMPONENTWISE_EXCEL,0) AS COMPONENTWISE_EXCEL,ISNULL(SUBJECT_FOR_MARK,0) AS SUBJECT_FOR_MARK", "", "");
         if (ds != null && ds.Tables.Count > 0)
         {
             string[] arr_rdIds = { "chk_Reg", "chk_ExamRule", "chk_GraceRule", "chk_LateFee", "chk_Improvement", "chk_ExamPattern", "chk_Revaluation_Process", "chk_ResultPublish", "chk_Condonation", "chk_Decode", "chk_SeatNumber", "chk_MarkEnrtyExcel", "chk_Section", "chk_Batch", "chk_grade_admin", "chk_grade_faculty", "chkGraph", "chk_chgrange", "chk_college", "chk_session", "chk_feescollection", "chk_relative", "chk_absolute", "chk_barcode", "chk_feedback", "chk_attendance", "chk_intsubexam", "chk_intassessment", "chk_intexcelformat", "chk_admissionstatus", "chk_endsemcomponent", "chk_adminexapproval", "chk_admincomponent", "chk_facultycomponent", "chk_timetableexcel", "chk_intmarkpublish", "chk_compwiseexcel" };
@@ -150,6 +175,21 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
             //string script = str.ToLower();
 
             ScriptManager.RegisterStartupScript(this, GetType(), "YourUniqueScriptKey", "" + str + "", true);
+
+
+            DataRow dr = ds.Tables[0].Rows[0];
+            string userTypes = dr["SUBJECT_FOR_MARK"] == DBNull.Value ? string.Empty : dr["SUBJECT_FOR_MARK"].ToString();
+            string[] userTypeIds = userTypes.Split(',');
+
+            for (int i = 0; i < userTypeIds.Length; i++)
+            {
+                foreach (ListItem item in chkListSubjectTypes.Items)
+                {
+                    if (item.Value == userTypeIds[i])
+                        item.Selected = true;
+                }
+            }
+
 
 
         }
@@ -232,6 +272,19 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         int exceltimetable = 0;
         int intmarkpublish = 0;
         int compwiseexcel = 0;
+        string subjecttype = string.Empty;
+
+
+        foreach (ListItem item in chkListSubjectTypes.Items)
+        {
+            if (item.Selected)
+            {
+                if (subjecttype.Length > 0)
+                    subjecttype += ",";
+
+                subjecttype += item.Value;
+            }
+        }
 
 
 
@@ -436,7 +489,7 @@ public partial class ACADEMIC_EXAMINATION_Exam_Configue : System.Web.UI.Page
         //CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent);
 
         //EXCEL TIMETABLE,INTERNAL MARK PUBLISH, COMPONENTWISE EXCEL FLAG ADDED AS PER THE REQUIREMENT.
-        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent, exceltimetable, intmarkpublish, compwiseexcel);
+        CustomStatus cs = (CustomStatus)exam.Add_ExamConfiguration(examrule, garcerule, latefee, Improvement, exampattern, revaluation, resultpublish, condonation, feetype, passrule, examreg, decode, seatno, 0, excelmark, sectnowise, batchwise, Grade_Admin, Grade_Faculty, graph, change_range, college, session, feescollection, relative, absolute, barcode, feedback, attendance, attendance_percentage, intsubexam, intassessment, intexcelformat, admissionstatus, endsemcomponent, adminexapproval, admincomponent, facultycomponent, exceltimetable, intmarkpublish, compwiseexcel, subjecttype);
 
         if (Convert.ToInt32(cs) == 1 || Convert.ToInt32(cs) == 2)
         {

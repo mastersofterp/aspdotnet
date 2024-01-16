@@ -627,6 +627,21 @@
                                         </div>
                                     </div>
 
+
+                                      <div class="form-group col-lg-6 col-md-6 col-12">
+                                                <span class="pr-5">
+                                                    <label for="chksubjecttype" style="font-size: small;">Subject For Marks By Faculty</label>
+                                                </span>
+
+                                                <div class="col-lg-6 col-md-6 col-12 h-20">
+
+                                                    <div class="form-group col-md-12 checkbox-list-box">
+                                                        <asp:CheckBoxList ID="chkListSubjectTypes" runat="server" RepeatColumns="4" TabIndex="5"
+                                                            RepeatDirection="Horizontal" CssClass="checkbox-list-style">
+                                                        </asp:CheckBoxList>
+                                                    </div>
+                                                </div>
+                                            </div>
                                 </div>
 
                             </div>
