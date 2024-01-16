@@ -193,7 +193,7 @@
                                             <asp:Label ID="lblAttendancePercentage" runat="server" Text='<%# Eval("ATTENDANCE PERCENTAGE")%>'></asp:Label>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TabIndex="1" TextMode="MultiLine" Rows="1" Text='<%# Eval("REMARK")%>' onKeyUp="javascript:Count(this);" onChange="javascript:Count(this);"></asp:TextBox>
+                                            <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control" TabIndex="1" TextMode="MultiLine" Rows="1" Text='<%# Eval("REMARK")%>'></asp:TextBox>
                                         </td>
                                     </tr>
                                 </ItemTemplate>
@@ -255,18 +255,6 @@
                 return false;
             }
         };
-
-        function Count(text) {
-            var maxlength = 100;
-            var object = document.getElementById(text.id)
-            if (object.value.length > maxlength) {
-                object.focus();
-                object.value = text.value.substring(0, maxlength);
-                object.scrollTop = object.scrollHeight;
-                return false;
-            }
-            return true;
-        }
     </script>
 </asp:Content>
 
