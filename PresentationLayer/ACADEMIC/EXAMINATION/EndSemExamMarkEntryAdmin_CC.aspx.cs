@@ -147,10 +147,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        //0 - means - unlock
         SaveAndLock(0);
     }
 
@@ -399,8 +397,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                         {
                              cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
                         }
-                   
-
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
                         if (lock_status == 1)
@@ -683,7 +679,12 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
       
         string  semester = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO)", "SA.SEMESTER", "STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'");
         objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SR.SEMESTERNO IN(" + semester + ") AND  SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
-      
+
+
+        string subjecttype = string.Empty;
+            
+           
+
     }
     protected void ddlExam_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1261,63 +1262,21 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     lockcount_test++;
                                 }
                             }
-                        }
-
-                        // added for absent student by prafull on dated 23072022
-                        int z = 0;
-
-                        //commented by prafull on dt 10022023
-
-                        //foreach (GridViewRow rw in gvStudent.Rows)
-                        //{
-                        //    TextBox txtmark = (TextBox)rw.FindControl("txtmarks");
-                        //    string regno = (dsStudent.Tables[0].Rows[z]["REGNO"]).ToString();
-
-                        //    if ((dsStudent.Tables[0].Rows[z]["SMARK"]) is DBNull)
-                        //    {
-                        //        txtmark.Enabled = true;
-                        //    }
-                        //    else if ((Convert.ToDouble(dsStudent.Tables[0].Rows[z]["SMARK"]) == 902.00) || (Convert.ToDouble(dsStudent.Tables[0].Rows[z]["SMARK"]) == 903.00))
-                        //    {
-                        //        txtmark.Enabled = false;
-                        //    }
-                        //    else if (Convert.ToBoolean(dsStudent.Tables[0].Rows[z]["LOCK"]) == true)
-                        //    {
-                        //        txtmark.Enabled = false;
-                        //    }
-                        //    else
-                        //    {
-                        //        txtmark.Enabled = true;
-                        //    }
-
-
-                        //    z++;
-                        //}
-                        // prafull comment end 
-                        #region Comment Code
-
-
-
-                        #endregion Comment Code
-
+                        }                      
                         btnSave.Enabled = true;
                         btnLock.Enabled = true;
                         btnSave.Visible = true;
                         btnLock.Visible = true;
-
                         btnExcelReport.Enabled = true;
                         btnExcelReport.Visible = true;
+                        btnPrint.Visible = true;
+                        btnPrint.Enabled = true;
                         //lnkExcekImport.Visible = true;
-
-
                         int TestMark = 0;
                         TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
                         string extermarmew = Convert.ToString(objCommon.LookUp("ACD_COURSE", "MAXMARKS_E", "COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue)));
 
-
-                       
                         btnGrade.Visible = false;
-
                         if (examtype == "S")
                         {
                             int SESSION_TYPE = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "SESSIONNO=" + ddlSession.SelectedValue));
@@ -2060,6 +2019,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                             btnLock.Visible = false;
                                             btnExcelReport.Enabled = true;
                                             btnExcelReport.Visible = true;
+                                            btnPrint.Visible = true;
+                                            btnPrint.Enabled = true;
                                             lnkExcekImport.Visible = false;
 
                                             int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
@@ -2099,13 +2060,13 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                             btnLock.Visible = true;
                                             btnExcelReport.Enabled = true;
                                             btnExcelReport.Visible = true;
+                                            btnPrint.Visible = true;
+                                            btnPrint.Enabled = true;
                                             lnkExcekImport.Enabled = true;
                                           
                                             //lnkExcekImport.Visible = false;
 
                                             int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-
 
                                             //added by prafull on dt 30032023  for grade button only for admin login
 
@@ -2182,6 +2143,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                             btnLock.Visible = false;
                                             btnExcelReport.Enabled = true;
                                             btnExcelReport.Visible = true;
+                                            btnPrint.Visible = true;
+                                            btnPrint.Enabled = true;
                                             lnkExcekImport.Enabled = false;
                                             lnkExcekImport.Visible = false;
                                             //lnkExcekImport.Visible = false;
@@ -2223,6 +2186,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                             btnLock.Visible = true;
                                             btnExcelReport.Enabled = true;
                                             btnExcelReport.Visible = true;
+                                            btnPrint.Visible = true;
+                                            btnPrint.Enabled = true;
                                             lnkExcekImport.Enabled = true;
                                             lnkExcekImport.Visible = true;
                                             //lnkExcekImport.Visible = false;
@@ -2286,6 +2251,8 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnLock.Visible = false;
                                         btnExcelReport.Enabled = true;
                                         btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
                                         //lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
@@ -2327,11 +2294,11 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnLock.Visible = true;
                                         btnExcelReport.Enabled = true;
                                         btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
                                         //lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
-
-
 
                                         //added by prafull on dt 30032023  for grade button only for admin login
 
@@ -2385,14 +2352,14 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnLock.Visible = false;
                                         btnExcelReport.Enabled = true;
                                         btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
                                         //lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
 
-
-
                                         //added by prafull on dt 30032023  for grade button only for admin login
-
+                                        
                                         if (Convert.ToInt32(Session["OrgId"]) != 6)
                                         {
                                             btnGrade.Enabled = true;
@@ -2426,6 +2393,9 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                         btnLock.Visible = true;
                                         btnExcelReport.Enabled = true;
                                         btnExcelReport.Visible = true;
+                                        btnPrint.Visible = true;
+                                        btnPrint.Enabled = true;
+
                                         //lnkExcekImport.Visible = false;
 
                                         int studentcount = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(DISTINCT IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(CANCEL,0)=0 AND ISNULL(EXAM_REGISTERED,0)=1"));
@@ -2537,9 +2507,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                                     btnLock.Visible = true;
                                     btnGrade.Enabled = false;
                                     btnGrade.Visible = false;
-
-
-
                                     //added by prafull on dt 30032023  for grade button only for admin login
 
                                     if (Convert.ToInt32(Session["OrgId"]) != 6)
@@ -2620,15 +2587,15 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                     if (ddlcollege.SelectedIndex > 0)
                     {
                         int count = 0;
-                        count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
+                        count = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "COUNT(SESSIONNO)", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1  AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND  COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')"));
                         if (count > 0)
                         {
                             
                               //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "COLLEGE_ID = " + Convert.ToInt32(ViewState["college_id"]), "SESSIONNO DESC");                           
                            // ddlSession.Focus();
 
-                            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
-                            ddlSession.Focus();
+                            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND " + ViewState["degreeno"] + " IN (SELECT VALUE FROM DBO.SPLIT(SA.DEGREENO,',') WHERE VALUE <>'')  AND " + ViewState["branchno"] + "  IN (SELECT VALUE FROM DBO.SPLIT(SA.BRANCH,',') WHERE VALUE <>'') AND COLLEGE_IDS =" + ViewState["college_id"] + " AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%'  and USERTYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%')", "");
+                            ddlSession.Focus();                          
                         }
                         else
                         {
@@ -2804,8 +2771,26 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
 
     protected void ddlsemester_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "R.SUBID");
-        //objCommon.FillDropDownList(ddlsemester, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+
+
+
+        if (Convert.ToInt32(Session["usertype"]) == 1)
+        {
+            objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "R.SUBID");
+        }
+        else
+        {
+            string Subjecttypes = string.Empty;
+            Subjecttypes = Convert.ToString(objCommon.LookUp("ACD_EXAM_CONFIGURATION", "SUBJECT_FOR_MARK", ""));
+            if (Subjecttypes != string.Empty)
+            {
+                objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]) + " AND R.SUBID IN(" + Subjecttypes.ToString()+")", "R.SUBID");
+            }
+            else
+            {
+                objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", " DISTINCT R.SUBID", "S.SUBNAME", "R.SEMESTERNO=" + Convert.ToInt32(ddlsemester.SelectedValue) + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "R.SUBID");
+            }
+        }
     }
     protected void ddlCourse_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -3499,14 +3484,6 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 return;
             }
 
-            //if (examtype == "S")
-            //{
-            //    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNewAdmin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, examname1, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, 0, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ddlsemester.SelectedValue), 0);
-            //}
-            //else
-            //{
-            //    cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_cc(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), ccode, studids, marks, lock_status, ddlExam.SelectedValue, Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ViewState["schemeno"].ToString()), subExam_Name, Convert.ToInt32(Exam[1]), SubExamComponentName);
-            //}
             if (cs.Equals(CustomStatus.RecordSaved))
             {
                 if (lock_status == 1)
@@ -3706,7 +3683,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     //    //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
     //    CloudBlobContainer container = client.GetContainerReference(Name);
     //    System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-  
+    //    container.CreateIfNotExists();
     //}
 
     //private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
@@ -3744,7 +3721,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
     //    {
     //        DeleteIFExits(FileName);
     //        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-    
+    //        container.CreateIfNotExists();
     //        container.SetPermissions(new BlobContainerPermissions
     //        {
     //            PublicAccess = BlobContainerPublicAccessType.Blob
@@ -3833,7 +3810,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
                 objCommon.DisplayMessage(this.updpnl, "No Data Found", this.Page);
             }
         }
-        else if (Convert.ToInt32(Session["OrgId"]) == 6)
+        else if (Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 20)
         {
             if (ddlStudenttype.SelectedValue == "1")
             {
@@ -4213,5 +4190,20 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         }
     }
 
+    protected void btnPrint_Click(object sender, EventArgs e)
+    {
+        string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
+        string reportTitle = "ExternalMarksListReport";
+        string rptFileName = "rptMarksList1_External_New.rpt";
+
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_semesterno=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_CCODE=" + ccode + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "";
+
+        string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+        ScriptManager.RegisterClientScriptBlock(this.updpnl, this.updpnl.GetType(), "key", Print_Val, true);
+    }
 }
 

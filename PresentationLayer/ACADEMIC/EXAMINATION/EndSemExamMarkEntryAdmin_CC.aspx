@@ -31,6 +31,7 @@
         #ctl00_ContentPlaceHolder1_gvStudent.table-bordered > tbody > tr > th {
             border-top: 0px solid var(--table-border-color);
         }
+        .btn-info {}
     </style>
 
     <asp:UpdatePanel ID="updpnl" runat="server">
@@ -280,16 +281,19 @@
                                 
 
                                     <asp:Button ID="btnExcelReport" TabIndex="17" runat="server" Text="Report" CssClass="btn btn-info"
-                                        OnClick="btnExcelReport_Click" Enabled="false" Visible="False" />
+                                        OnClick="btnExcelReport_Click" Enabled="false" Visible="False"  />
+                                    
+                                     <asp:Button ID="btnPrint" TabIndex="18" runat="server" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"
+                                        Enabled="false" Visible="False"  />
 
-                                     <asp:Button ID="btnEndSemReport" runat="server" TabIndex="18"  Text="Mark Entry Report"
+                                     <asp:Button ID="btnEndSemReport" runat="server" TabIndex="19"  Text="Mark Entry Report"
                                         CssClass="btn btn-info" OnClick="btnEndSemReport_Click" Visible="false"  ValidationGroup="ExternalMark" ></asp:Button>
 
                                     <%--<asp:Button ID="btninterreport" TabIndex="15" runat="server" Font-Bold="true" Text="Report" CssClass="btn btn-info"
                                         OnClick="btninterreport_Click" Enabled="false" Visible="False" />--%>                                
 
                                     
-                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="19" Font-Bold="true" OnClick="btnCancel2_Click"
+                                    <asp:Button ID="btnCancel2" runat="server" TabIndex="20" Font-Bold="true" OnClick="btnCancel2_Click"
                                         Text="Cancel" CssClass="btn btn-warning" />
 
                                     <asp:ValidationSummary runat="server" ID="ValidationSummary1" ValidationGroup="show" DisplayMode="List"
