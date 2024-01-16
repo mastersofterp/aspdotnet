@@ -1563,7 +1563,11 @@ public partial class ACADEMIC_FetchDetailRegistration_JECRC : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Blob
+            });
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);
@@ -2462,6 +2466,7 @@ public partial class ACADEMIC_FetchDetailRegistration_JECRC : System.Web.UI.Page
             string Password = string.Empty;
 
             string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + IDNOnew);
+            string Semester = objCommon.LookUp("ACD_STUDENT", "SEMESTERNO", "IDNO=" + IDNOnew);
             string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "B.LONGNAME", "IDNO=" + IDNOnew);
 
             string Userno = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO=" + IDNOnew);
@@ -2488,28 +2493,29 @@ public partial class ACADEMIC_FetchDetailRegistration_JECRC : System.Web.UI.Page
 
                 if (sendmail == 1)
                 {
-                    subject = "Admission Confirmation Payment Link.";
+                    subject = "Provisional Admission Confirmation Payment Link..";
 
                     string message = "";
-                    message += "<p>Dear :<b>" + Name + "</b> </p>";
-                    message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + "</b><br/>You Can Pay First Installment Fees using the following Link and credentials. </td><p style=font-weight:bold;> " + MISLink + " </p><p>Username   : " + Username + " <br/>Password: " + Password + "</p><p style=font-weight:bold;>Fee Details: <br/><b>Note:</b> You can find your fee details after login in your portal using above login credentials.</p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University.</p><p>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</p><p style=color:blue;>Documents required at the time of Confirmation of Admission: Originals along with one set of Self attested Photocopy.</p>";
+                    message += "<p><b> Dear  " + Name + "</b> </p>";
+                    message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " + MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>B.Tech. Program: 40000/-  <br>All Other UG / PG Program: 25000/-  <br>Hostel Booking: 30000/- If opted (Subject to the availability Hostel Room).<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
                     message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
                     message += " <tr >";
                     message += " <td style='border: 1px solid black;'>";
-                    message += "JEE Mains Score Card (if appeared/ applicable)</td>";
+                    message += "JEE Mains Score Card (Mandetory if appeared/ applicable)</td>";
                     message += "<td style='border: 1px solid black;'> Migration Certificate</td></tr>";
-                    message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate</td> </tr>";
-                    message += "  <td style='border: 1px solid black;'>12th Mark-sheet</td><td style='border: 1px solid black;'>Character Certificate</td>";
+                    message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate & Character Certificate</td> </tr>";
                     message += "<tr></tr><tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet (for PG Admissions)</td>";
                     message += "<td style='border: 1px solid black;'>Caste Certificate (if applicable)</td></tr>";
                     message += "<tr><td style='border: 1px solid black;'>Copy of Aadhar Card (UID)</td><td>OBC Non Creamy layer Certificate (if applicable)</td></tr>";
                     message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
                     message += "<td style='border: 1px solid black;'>Printout of application form (if filled online)</td></tr></table>";
-                    message += "<p>The final admission is subject to clearing the document verification. In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</p><p><b>Note:</b></p>";
-                    message += "<p>1.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
-                    message += "2.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
-                    message += "3.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> Academic Menu-->>Student Related-->>Online Payment.<br/>(Any query regarding admission send email to admission@jecrcu.edu.in)";
-                    message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>JECRC University, Jaipur</p>";
+                    message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                    message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                    message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                    message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
+                    message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
+                    message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                    message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>Directorate of Executive Education.</p>";
 
                     objS.EmailID = ViewState["EMAILID"].ToString();
 
