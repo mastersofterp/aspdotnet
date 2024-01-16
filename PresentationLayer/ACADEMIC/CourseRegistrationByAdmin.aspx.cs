@@ -1603,6 +1603,10 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             double globalCredits = 0;
             double electiveCredits = 0;
             double coreCredits = 0;
+            double globalCreditsStud = 0;
+            double electiveCreditsStud = 0;
+            double coreCreditsStud = 0;
+
             DataSet dsOfferedCrs = (DataSet)ViewState["OfferedCourseList"];
             foreach (ListItem Item in lboOfferCourse.Items)
             {
@@ -1692,6 +1696,10 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 CheckBox cbRow = dataitem.FindControl("cbRow") as CheckBox;
                 if (cbRow.Checked == true)
                 {
+                    globalCreditsStud = globalCredits;
+                    electiveCreditsStud = electiveCredits;
+                    coreCreditsStud = coreCredits;
+                    
                     //Add registered 
                     objSR.IDNO = Convert.ToInt32(((dataitem.FindControl("lblIDNo")) as Label).ToolTip);
                     objSR.REGNO = ((dataitem.FindControl("lblIDNo")) as Label).Text;
@@ -1716,19 +1724,19 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                                 bool IsGlobalCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["GLOBALELE"].ToString());
                                 double credit = Convert.ToDouble(dsRegdCrs.Tables[0].Rows[i]["CREDITS"].ToString());
                                 if (IsGlobalCourse)
-                                    globalCredits += credit;
+                                    globalCreditsStud += credit;
                                 else
                                 {
                                     bool IsElectCourse = Convert.ToBoolean(dsRegdCrs.Tables[0].Rows[i]["ELECT"].ToString());
                                     if (IsElectCourse)
-                                        electiveCredits += credit;
+                                        electiveCreditsStud += credit;
                                     else
-                                        coreCredits += credit;
+                                        coreCreditsStud += credit;
                                 }
                             }
                         }
 
-                        if (coreCredits > 0 || electiveCredits > 0 || globalCredits > 0)
+                        if (coreCreditsStud > 0 || electiveCreditsStud > 0 || globalCreditsStud > 0)
                         {
                             DataSet dsCredits = objCommon.FillDropDown("ACD_DEFINE_TOTAL_CREDIT WITH (NOLOCK)", "ISNULL(CORE_CREDIT,0)CORE_CREDIT", "ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT", "SCHEMENO =" + objSR.SCHEMENO + " AND TERM = " + objSR.SEMESTERNO, "");
                             double totGlobalCredits = 0;
@@ -1746,32 +1754,32 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                                 return;
                             }
 
-                            if (coreCredits > 0 && coreCredits > totCoreCredits)
+                            if (coreCreditsStud > 0 && coreCreditsStud > totCoreCredits)
                             {
                                 objCommon.DisplayMessage(updBulkReg, "The Total Core Credits limits is "
                                     + totCoreCredits
                                     + ", Student Already Registered Core Credit is "
-                                    + coreCredits, this.Page);
+                                    + coreCreditsStud, this.Page);
 
                                 return;
                             }
 
-                            if (electiveCredits > 0 && electiveCredits > totElectiveCredits)
+                            if (electiveCreditsStud > 0 && electiveCreditsStud > totElectiveCredits)
                             {
                                 objCommon.DisplayMessage(updBulkReg, "The Total Elective Credits limits is "
                                     + totElectiveCredits
                                     + ", Student Already Registered Elective Credit is "
-                                    + electiveCredits, this.Page);
+                                    + electiveCreditsStud, this.Page);
 
                                 return;
                             }
 
-                            if (globalCredits > 0 && globalCredits > totGlobalCredits)
+                            if (globalCreditsStud > 0 && globalCreditsStud > totGlobalCredits)
                             {
                                 objCommon.DisplayMessage(updBulkReg, "The Total Global Credits limits is "
                                     + totGlobalCredits
                                     + ", Student Already Registered Global Credit is "
-                                    + globalCredits, this.Page);
+                                    + globalCreditsStud, this.Page);
 
                                 return;
                             }
