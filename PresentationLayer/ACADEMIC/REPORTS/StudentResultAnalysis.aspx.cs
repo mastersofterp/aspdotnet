@@ -609,6 +609,7 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
 
         string reportTitle = "Internal_Mark_Register";
         string rptFileName = "rptInternalMarkRegister.rpt";
+       // string rptFileName = "rptExternalMarkRegister.rpt";
         try
         {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
@@ -3225,6 +3226,52 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSubExam.Focus();
             ddlcourse.SelectedIndex = 0;
             ddlStudType.SelectedIndex = 0;
+        }
+    }
+    protected void btnExternalmarkreg_Click(object sender, EventArgs e)
+    {
+        //if (ddlSem.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Semester.');", true);
+        //    ddlSem.Focus();
+        //    return;
+        //}
+        //else if (ddlSection.SelectedIndex == 0)
+        //{
+        //    ScriptManager.RegisterStartupScript(this, GetType(), "key", "alert('Please Select Section.');", true);
+        //    ddlSection.Focus();
+        //    return;
+        //}
+        //int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
+        //int subType = 0;
+        //if (rbtnOpenEle.Checked)
+        //    subType = 1;
+        ////if (ddlStudType.SelectedValue == "-1")
+        ////int StudType = 0;
+
+        string reportTitle = "External_Mark_Register";
+        string rptFileName = "rptExMarkRegister.rpt";//rptInternalMarkRegister rptExternalMarkRegister
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
 }

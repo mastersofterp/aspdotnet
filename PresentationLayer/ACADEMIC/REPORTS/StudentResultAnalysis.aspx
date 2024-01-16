@@ -853,20 +853,21 @@
                                 ValidationGroup="report" Visible="false" />--%>
                                     <%--  <asp:Button ID="btnRank" runat="server" OnClick="btnRank_Click" Text="Rank Report" ValidationGroup="Rank" CssClass="btn btn-info" style="display:none"/>--%>
                                     <asp:Button ID="btnInternalMarkReg" runat="server" OnClick="btnInternalMarkReg_Click" ValidationGroup="Rank" Text="Overall Internal Mark" CssClass="btn btn-info" TabIndex="1" />
-                                    <asp:Button ID="btnConsolidatedInternalTestMarkReport" runat="server" OnClick="btnConsolidatedInternalTestMarkReport_Click" Text="CAT wise Report" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" CausesValidation="false" />
-                                    <asp:Button ID="btnCATInternalMarks" runat="server" OnClick="btnCATInternalMarks_Click" Text="CAT Internal Marks" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" CausesValidation="false" />
+                                    <asp:Button ID="btnExternalmarkreg" runat="server" OnClick="btnExternalmarkreg_Click" ValidationGroup="Rank" Text="Overall External Mark" CssClass="btn btn-info" TabIndex="2" />
+                                    <asp:Button ID="btnConsolidatedInternalTestMarkReport" runat="server" OnClick="btnConsolidatedInternalTestMarkReport_Click" Text="CAT wise Report" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" TabIndex="3" CausesValidation="false" />
+                                    <asp:Button ID="btnCATInternalMarks" runat="server" OnClick="btnCATInternalMarks_Click" Text="CAT Internal Marks" CssClass="btn btn-info" ValidationGroup="Rank" Visible="false" CausesValidation="false" TabIndex="4" />
 
-                                    <asp:Button ID="btnExelrpt" runat="server" Text="Internal Report" CssClass="btn btn-info" OnClick="btnExelrpt_Click" TabIndex="1" ValidationGroup="InternalReport" />
+                                    <asp:Button ID="btnExelrpt" runat="server" Text="Internal Report" CssClass="btn btn-info" OnClick="btnExelrpt_Click" TabIndex="5" ValidationGroup="InternalReport" />
 
-                                    <asp:Button ID="btnGraderpt" runat="server" Text="Format - II Report" CssClass="btn btn-info" OnClick="btnGraderpt_Click" TabIndex="1" ValidationGroup="FormatIIReport" />
-                                    <asp:Button ID="btntrexcel" runat="server" Text="TR EXCEL (GRADE)" CssClass="btn btn-info" OnClick="btntrexcel_Click" TabIndex="1" CausesValidation="false" />
+                                    <asp:Button ID="btnGraderpt" runat="server" Text="Format - II Report" CssClass="btn btn-info" OnClick="btnGraderpt_Click" TabIndex="6" ValidationGroup="FormatIIReport" />
+                                    <asp:Button ID="btntrexcel" runat="server" Text="TR EXCEL (GRADE)" CssClass="btn btn-info" OnClick="btntrexcel_Click" TabIndex="7" CausesValidation="false" />
 
-                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" ValidationGroup="AnalysisReport" TabIndex="1" Visible="true" />
+                                    <asp:Button ID="btnGradesheet" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnGradesheet_Click" ValidationGroup="AnalysisReport" TabIndex="8" Visible="true" />
 
-                                    <asp:Button ID="btnFaculty" runat="server" Text="Faculty Wise Result Analysis" CssClass="btn btn-info" OnClick="btnFaculty_Click" TabIndex="1" CausesValidation="false" Visible="false" />
-                                    <asp:Button ID="btnAnalysis" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnAnalysis_Click" TabIndex="1" CausesValidation="false" Visible="false" />
+                                    <asp:Button ID="btnFaculty" runat="server" Text="Faculty Wise Result Analysis" CssClass="btn btn-info" OnClick="btnFaculty_Click" TabIndex="9" CausesValidation="false" Visible="false" />
+                                    <asp:Button ID="btnAnalysis" runat="server" Text="Analysis Report" CssClass="btn btn-info" OnClick="btnAnalysis_Click" TabIndex="10" CausesValidation="false" Visible="false" />
 
-                                    <asp:Button ID="btnExamFeesPaid" runat="server" Text="Exam Fees Paid Excel Report" CssClass="btn btn-info" OnClick="btnExamFeesPaid_Click" TabIndex="1" ValidationGroup="schemesession" />
+                                    <asp:Button ID="btnExamFeesPaid" runat="server" Text="Exam Fees Paid Excel Report" CssClass="btn btn-info" OnClick="btnExamFeesPaid_Click" TabIndex="11" ValidationGroup="schemesession" />
 
                                     <%-- <asp:Button ID="btnModelExam" runat="server" OnClick="btnModelExam_Click" ValidationGroup="report" Text="Model Exam Mark" CssClass="btn btn-info" style="display:none"/>
                             <asp:Button ID="btnCorrelationAnalysis" runat="server" OnClick="btnCorrelationAnalysis_Click" ValidationGroup="AnalysisReport" Text="Correlation Analysis" CssClass="btn btn-info" style="display:none"/>
