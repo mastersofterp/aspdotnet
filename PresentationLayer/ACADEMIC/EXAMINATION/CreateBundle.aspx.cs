@@ -171,67 +171,79 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 
     private void BindBundleList()
     {
-        DataSet ds;
-        string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
-        //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), ddlCourse.SelectedValue, Convert.ToDateTime(txtDtOfPaper.Text), Convert.ToInt32(ddlBranch.SelectedValue));
-        //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
-        //if (ddlBranch.SelectedIndex > 0)
-        //{
-        //    //string sp_procedure = "PKG_SPECIALISATION_COURSE_STUDENT_LIST";
-        //    //string sp_parameters = "@P_SCHEMENO,@P_BRANCHNO,@P_DEGREENO";
-        //    //string sp_callValues = "" + Convert.ToInt32(ddlScheme.SelectedValue) + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + Convert.ToInt32(ddlDegree.SelectedValue) + "";
-
-        //    //ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-        //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
-        //}
-        //else
-        //{
-
-        // added by shubham on Excel as per PCEN Requirement
-        string SchBranchnos = "";
-        DataSet dsBranchnos = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO = SR.IDNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO = SR.SCHEMENO) INNER JOIN ACD_BRANCH BR ON (BR.BRANCHNO = S.BRANCHNO)", "DISTINCT BR.BRANCHNO", "BR.LONGNAME", "SR.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND  SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(S.CAN,0)=0 AND ISNULL(S.ADMCAN,0)=0", "BR.BRANCHNO");
-
-        if (dsBranchnos.Tables.Count > 0)
+        if (ddlCourse.SelectedIndex > 0)
         {
-            if (dsBranchnos.Tables[0].Rows.Count > 0)
+
+            DataSet ds;
+            string ccode = objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO=" + ddlCourse.SelectedValue);
+            //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), ddlCourse.SelectedValue, Convert.ToDateTime(txtDtOfPaper.Text), Convert.ToInt32(ddlBranch.SelectedValue));
+            //DataSet ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+            //if (ddlBranch.SelectedIndex > 0)
+            //{
+            //    //string sp_procedure = "PKG_SPECIALISATION_COURSE_STUDENT_LIST";
+            //    //string sp_parameters = "@P_SCHEMENO,@P_BRANCHNO,@P_DEGREENO";
+            //    //string sp_callValues = "" + Convert.ToInt32(ddlScheme.SelectedValue) + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + Convert.ToInt32(ddlDegree.SelectedValue) + "";
+
+            //    //ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+            //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+            //}
+            //else
+            //{
+
+            // added by shubham on Excel as per PCEN Requirement
+            string SchBranchnos = "";
+            DataSet dsBranchnos = objCommon.FillDropDown("ACD_STUDENT S INNER JOIN ACD_STUDENT_RESULT SR ON (S.IDNO = SR.IDNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO = SR.SCHEMENO) INNER JOIN ACD_BRANCH BR ON (BR.BRANCHNO = S.BRANCHNO)", "DISTINCT BR.BRANCHNO", "BR.LONGNAME", "SR.SESSIONNO = " + Convert.ToInt32(ViewState["SESSIONNO"]) + " AND  SR.SCHEMENO = " + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(S.CAN,0)=0 AND ISNULL(S.ADMCAN,0)=0", "BR.BRANCHNO");
+
+            if (dsBranchnos.Tables.Count > 0)
             {
-                foreach (DataRow row in dsBranchnos.Tables[0].Rows)
+                if (dsBranchnos.Tables[0].Rows.Count > 0)
                 {
-                    SchBranchnos += row["BRANCHNO"].ToString() + "$";
+                    foreach (DataRow row in dsBranchnos.Tables[0].Rows)
+                    {
+                        SchBranchnos += row["BRANCHNO"].ToString() + "$";
+                    }
+                    SchBranchnos = SchBranchnos.TrimEnd('$');
                 }
-                SchBranchnos = SchBranchnos.TrimEnd('$');
             }
-        }
-        DateTime selectedDate = Convert.ToDateTime(ddlDate.SelectedValue);
-        string formattedDate = selectedDate.ToString("dd/MMM/yyyy").ToUpper();
-        string sp_procedure = "PKG_ACAD_GET_BUNDLENO_SEATNO_NEW";
-        string sp_parameters = "@P_SESSIONID,@P_COURSENO,@P_EXAMDATE,@P_BRANCHNO,@P_BRANCHNO_S,@P_BUNDLENO";
-        string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + formattedDate + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + SchBranchnos.ToString() + "," + Convert.ToInt32(txtStudPerBundle.Text.Trim()) + "";
-        ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-        //int brchno = Convert.ToInt32(ddlBranch.SelectedValue);
-        //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
-        //}
+            DateTime selectedDate = Convert.ToDateTime(ddlDate.SelectedValue);
+            string formattedDate = selectedDate.ToString("dd/MMM/yyyy").ToUpper();
+            string sp_procedure = "PKG_ACAD_GET_BUNDLENO_SEATNO_NEW";
+            string sp_parameters = "@P_SESSIONID,@P_COURSENO,@P_EXAMDATE,@P_BRANCHNO,@P_BRANCHNO_S,@P_BUNDLENO";
+            string sp_callValues = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ddlCourse.SelectedValue) + "," + formattedDate + "," + Convert.ToInt32(ddlBranch.SelectedValue) + "," + SchBranchnos.ToString() + "," + Convert.ToInt32(txtStudPerBundle.Text.Trim()) + "";
+            ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+            //int brchno = Convert.ToInt32(ddlBranch.SelectedValue);
+            //    ds = objExamController.GetBundleNo_SeatNoDetails(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlCourse.SelectedValue), Convert.ToDateTime(ddlDate.SelectedValue.ToString()), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(txtStudPerBundle.Text.Trim()));
+            //}
 
-        // end here by Shubham as per PCEN Requirement
-        if (ds != null && ds.Tables.Count > 0)
-        {
-            if (ds.Tables[0].Rows.Count > 0)
+            // end here by Shubham as per PCEN Requirement
+            if (ds != null && ds.Tables.Count > 0)
             {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
 
-                lvBundleList.DataSource = ds.Tables[0];
-                lvBundleList.DataBind();
-                lvBundleList.Visible = true;
-                ColumnHide(ds);
+                    lvBundleList.DataSource = ds.Tables[0];
+                    lvBundleList.DataBind();
+                    lvBundleList.Visible = true;
+                    ColumnHide(ds);
+                }
+                else
+                {
+                    lvBundleList.DataSource = null;
+                    lvBundleList.DataBind();
+                    lvBundleList.Visible = false;
+                    objCommon.DisplayMessage(updExam, "Data not found..!!", this.Page);
+                }
+
             }
             else
             {
                 lvBundleList.DataSource = null;
                 lvBundleList.DataBind();
                 lvBundleList.Visible = false;
+                objCommon.DisplayMessage(updExam, "Data not found..!!", this.Page);
             }
-
         }
-        else
+        else 
         {
             lvBundleList.DataSource = null;
             lvBundleList.DataBind();
@@ -299,7 +311,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
-                    objCommon.DisplayMessage(updExam, "Bundle Creation Done Successfuly..!!", this.Page);
+                    objCommon.DisplayMessage(updExam, "Bundle Creation Done Successfully..!!", this.Page);
 
                 }
                 else if (cs.Equals(CustomStatus.RecordNotFound))
@@ -646,6 +658,13 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
             ddlCollege.SelectedIndex = 0;
         }
+        ddlSession.SelectedIndex = 0;
+        ddlBranch.SelectedIndex = 0;
+        ddlDate.SelectedIndex = 0;
+        ddlSlot.SelectedIndex = 0;
+        ddlCourse.SelectedIndex = 0;
+        ClearList();
+
     }
 
     private void PopulateDropDown()
@@ -687,6 +706,12 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
             ddlSession.SelectedIndex = 0;
         }
+
+        ddlBranch.SelectedIndex = 0;
+        ddlDate.SelectedIndex = 0;
+        ddlSlot.SelectedIndex = 0;
+        ddlCourse.SelectedIndex = 0;
+        ClearList();
     }
     protected void ddlDate_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -698,6 +723,10 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         {
             ddlDate.SelectedIndex = 0;
         }
+
+        ddlSlot.SelectedIndex = 0;
+        ddlCourse.SelectedIndex = 0;
+        ClearList();
     }
     protected void btnExcel_Click(object sender, EventArgs e)
     {
@@ -743,6 +772,7 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
 
         }
     }
+
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
         try
@@ -755,5 +785,12 @@ public partial class ACADEMIC_EXAMINATION_CreateBundle : System.Web.UI.Page
         catch (Exception ex)
         {
         }
+    }
+
+    private void ClearList()
+    {
+        lvBundleList.DataSource = null;
+        lvBundleList.DataBind();
+        lvBundleList.Visible = false;
     }
 }
