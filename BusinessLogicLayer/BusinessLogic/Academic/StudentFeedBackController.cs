@@ -744,6 +744,54 @@ namespace IITMS
                     return retStatus;
                 }
 
+                public int SaveStudentFeedBackAnswer(StudentFeedBack SFB, DataTable dt_FEEDBACK, string COMMENTS)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(connectionString);
+                        SqlParameter[] objParams = new SqlParameter[]
+                        {
+                        new SqlParameter("@P_IDNO", SFB.Idno),
+                        new SqlParameter("@P_SESSIONNO", SFB.SessionNo),
+                        new SqlParameter("@P_IPADDRESS", SFB.Ipaddress),
+                        new SqlParameter("@P_QUESTIONID", SFB.QuestionIds),
+                        new SqlParameter("@P_ANSWERID", SFB.AnswerIds),
+                        //new SqlParameter("@P_DATE", SFB.Date),
+                        new SqlParameter("@P_COLLEGE_CODE", SFB.CollegeCode),
+                        new SqlParameter("@P_REMARK", SFB.Remark),
+                        new SqlParameter("@P_COURSENO", SFB.CourseNo),
+                        new SqlParameter("@P_STATUS", SFB.FB_Status),
+                        new SqlParameter("@P_UA_NO", SFB.UA_NO),
+                        new SqlParameter("@P_SUGGESTION_A", SFB.Suggestion_A),
+                        new SqlParameter("@P_SUGGESTION_B", SFB.Suggestion_B),
+                        new SqlParameter("@P_SUGGESTION_C", SFB.Suggestion_C),
+                        new SqlParameter("@P_SUGGESTION_D", SFB.Suggestion_D),
+                        new SqlParameter("@P_OVERALL_IMPRESSION", SFB.OverallImpression),
+                        new SqlParameter("@P_CTID", SFB.CTID),
+                        new SqlParameter("@P_EXITQUESTIONBESTTEACHER", SFB.ExitQuestionBestTeacher),
+                        new SqlParameter("@P_FROMDEPARTMENT", SFB.FromDepartment),
+                        new SqlParameter("@P_OTHERDEPARTMENT", SFB.OtherDepartment),
+                        new SqlParameter("@P_EXAMNO", SFB.ExamNo),
+                        new SqlParameter("@P_ORGANIZATIONID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"])),
+                        new SqlParameter("@P_ACD_FEEDBACK_QA", dt_FEEDBACK),
+                        new SqlParameter("@P_COMMENTS", COMMENTS),                  
+                        new SqlParameter("@P_OUT", SFB.Out),
+                        };
+
+                        objParams[objParams.Length - 1].Direction = ParameterDirection.InputOutput;
+
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SAVE_STUDENT_FEEDBACK_ANSWER", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.StudentFeedBackController.InsertStudentFeedBackAnswer-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
                 /// Added by Amit B. on date 28/11/2023
                 public int UpdateFinalSubmitStatus(StudentFeedBack SFB, int OrganisationId, int Is_Final)
                 {

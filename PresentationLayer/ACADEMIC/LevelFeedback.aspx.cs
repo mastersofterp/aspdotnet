@@ -553,6 +553,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     {
                         RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
                         HiddenField hdnCourse = dataitem.FindControl("hdnCourse") as HiddenField;
+                        TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
 
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
@@ -561,23 +562,29 @@ public partial class LevelFeedback : System.Web.UI.Page
                             {
                                 string studentFeedback = ds.Tables[0].Rows[i]["STUD_ANSWERID"].ToString();
 
-                                //
-                                string ansOptions = ds.Tables[0].Rows[i]["ANS_OPTIONS"].ToString();
-
-                                if (ansOptions.Contains(","))
+                                if (ds.Tables[0].Rows[i]["OPTION_TYPE"].ToString() == "R")
                                 {
-                                    string[] opt;
-                                    string[] val;
+                                    string ansOptions = ds.Tables[0].Rows[i]["ANS_OPTIONS"].ToString();
 
-                                    opt = ansOptions.Split(new[] { "," }, StringSplitOptions.None);
-
-                                    for (int j = 0; j < opt.Length; j++)
+                                    if (ansOptions.Contains(","))
                                     {
-                                        if (rblCourse.Items[j].Value == studentFeedback)
+                                        string[] opt;
+                                        string[] val;
+
+                                        opt = ansOptions.Split(new[] { "," }, StringSplitOptions.None);
+
+                                        for (int j = 0; j < opt.Length; j++)
                                         {
-                                            rblCourse.Items[j].Selected = true;
+                                            if (rblCourse.Items[j].Value == studentFeedback)
+                                            {
+                                                rblCourse.Items[j].Selected = true;
+                                            }
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    txtcourse.Text = ds.Tables[0].Rows[i]["ANSWER"].ToString();
                                 }
                                 //
 
@@ -823,7 +830,24 @@ public partial class LevelFeedback : System.Web.UI.Page
 
                         lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
                         ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
-
+                        foreach (ListViewDataItem dataitem in lvSelected.Items)
+                        {
+                            HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
+                            LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
+                            int courseno = Convert.ToInt32(lnkbtnCourse.CommandArgument);
+                            int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
+                            if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()))
+                            {
+                                if (sequenceNumber != 1)
+                                {
+                                    btnPrevious.Visible = true;
+                                }
+                                else
+                                {
+                                    btnPrevious.Visible = false;
+                                }
+                            }
+                        }
                         foreach (ListViewDataItem dataitem in lvCourse.Items)
                         {
                             RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
@@ -838,7 +862,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     }
 
                     this.CheckSubjectAssign();
-
+                    FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
                     //this.ClearControls();
                     //fillquestion();
                 }
@@ -881,7 +905,16 @@ public partial class LevelFeedback : System.Web.UI.Page
             txtWhatOtherChanges.Text = string.Empty;
             txtAnyComments.Text = string.Empty;
             ViewState["Semester"] = lnk.CommandName;
-
+            HiddenField hdnserialno = lnk.FindControl("hdnserialno") as HiddenField;
+            int sequenceNumber = Convert.ToInt32( hdnserialno.Value);
+            if (sequenceNumber != 1)
+            {
+                btnPrevious.Visible = true;
+            }
+            else
+            {
+                btnPrevious.Visible = false;
+            }
             ViewState["SelectedCourse"] = ViewState["COURSENO"];
 
             ViewState["SubId"] = 0;
@@ -994,7 +1027,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 btnSubmit.Visible = true;
                 btnCancel.Visible = true;
                 btnFinalSubmit.Visible = false;
-                btnPrevious.Visible = true;
+                //btnPrevious.Visible = true;
 
             }
             else if (Convert.ToInt32(count) > 0 && (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["countIsSubmit"])))
@@ -1006,7 +1039,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 btnSubmit.Visible = true;
                 btnCancel.Visible = true;
                 btnFinalSubmit.Visible = true;
-                btnPrevious.Visible = true;
+                //btnPrevious.Visible = true;
             }
             else if (Convert.ToInt32(count) > 0 && (Convert.ToInt32(ViewState["countofCourse"]) != Convert.ToInt32(ViewState["Is_FsubmitCount"])))//entry already done
             {
@@ -1017,7 +1050,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 btnSubmit.Visible = true;
                 btnCancel.Visible = true;
                 btnFinalSubmit.Visible = false;
-                btnPrevious.Visible = true;
+                //btnPrevious.Visible = true;
             }
 
 
@@ -1196,7 +1229,7 @@ public partial class LevelFeedback : System.Web.UI.Page
     {
         pnlFeedback.Visible = false;
         pnlFinalSumbit.Visible = false;
-
+        pnlSubmit.Visible = false;
         if (ddlFeedbackTyp.SelectedIndex > 0)
         {
             Panel1.Visible = false;
@@ -1208,6 +1241,8 @@ public partial class LevelFeedback : System.Web.UI.Page
             ViewState["MODE"] = mode;
             if (mode == 1)
             {
+                pnlSubmit.Visible = true;
+                pnlFinalSumbit.Visible = false;
                 Panel1.Visible = false;
                 FillQuestion(1, Convert.ToInt32(lblSemester.ToolTip));
                 //if (Session["OrgId"].ToString() == "2")
@@ -1239,6 +1274,8 @@ public partial class LevelFeedback : System.Web.UI.Page
             }
             else if (mode == 3)
             {
+                pnlSubmit.Visible = true;
+                pnlFinalSumbit.Visible = false;
                 Panel1.Visible = false;
                 pnlSubject.Visible = false;
                 lblcrse.Visible = false;
@@ -1344,6 +1381,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     lblMsg.Visible = true;
                     pnlFeedback.Visible = false;
                     pnlFinalSumbit.Visible = false;
+                    pnlSubmit.Visible = false;
                 }
             }
             else if (Convert.ToInt32(count) == 0)//new entry
@@ -1358,7 +1396,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     lvCourse.DataSource = ds;
                     lvCourse.DataBind();
                     pnlFeedback.Visible = true;
-                    pnlFinalSumbit.Visible = true;
+                    //pnlFinalSumbit.Visible = true;
                     foreach (ListViewDataItem dataitem in lvCourse.Items)
                     {
                         RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
@@ -1627,6 +1665,7 @@ public partial class LevelFeedback : System.Web.UI.Page
         int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
         string count = "-1";
         lblcrse.Text = string.Empty;
+     
         if (ViewState["dataTableHist"] != null)
         {
             DataTable dataTable = (DataTable)ViewState["dataTableHist"];
@@ -1665,7 +1704,24 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
             ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
-
+            foreach (ListViewDataItem dataitem in lvSelected.Items)
+            {
+                HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
+                LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
+                int courseno = Convert.ToInt32( lnkbtnCourse.CommandArgument);
+                int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
+                if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()))
+                {
+                    if (sequenceNumber != 1)
+                    {
+                        btnPrevious.Visible = true;
+                    }
+                    else
+                    {
+                        btnPrevious.Visible = false;
+                    }
+                }
+            }
             //foreach (ListViewDataItem dataitem in lvCourse.Items)
             //{
             //    RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
@@ -1676,5 +1732,163 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
         }
+    }
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (divcomment.Visible == true)
+            {
+                if (txtComments.Text.Length > 1000)
+                {
+                    objCommon.DisplayMessage("Maximum characters should be less than 1000 !", this.Page);
+                    return;
+                }
+            }
+            DataTable dt_FEEDBACK = new DataTable("FEEDBACK");
+            dt_FEEDBACK.Columns.Add(new DataColumn("QID", typeof(int)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSID", typeof(int)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSTEXT", typeof(string)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSWERTEXT", typeof(string)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("ANS_OPTION_ID", typeof(int)));
+            if (Session["usertype"].ToString() == "2")
+            {
+                foreach (ListViewDataItem dataitem in lvCourse.Items)
+                {
+                    RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+                    Label lblCourse = dataitem.FindControl("lblCourse") as Label;
+                    TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
+                    HiddenField hfOPTION_TYPE = dataitem.FindControl("hfOPTION_TYPE") as HiddenField;
+
+                    int dataItemIndex = 0;
+                    //int index = lvCourse.Items.IndexOf(dataitem.rblCourse);
+                    for (int i = 0; i <= Convert.ToInt32(rblCourse.SelectedIndex); i++)
+                    {
+                        // Access the data item index for each RadioButton
+                        dataItemIndex = i + 1;
+
+                    }
+
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true) || (txtcourse.Text == "" && txtcourse.Visible == true))
+                    {
+                        objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
+                        return;
+                    }
+                    else
+                    {
+                        if (hfOPTION_TYPE.Value == "R")
+                        {
+                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
+                        }
+                        else if (hfOPTION_TYPE.Value == "T")
+                        {
+                            //objSEB.AnswerIds += txtcourse.Text + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                        }
+                    }
+                }
+
+                //objSEB.AnswerIds = objSEB.AnswerIds.TrimEnd(',');
+                //objSEB.QuestionIds = objSEB.QuestionIds.TrimEnd(',');
+
+                //this.FillAnswers();
+
+                int retFlag = this.SaveAnswers(dt_FEEDBACK);
+
+                if (retFlag == 1)
+                {
+                    objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
+                    txtWhatOtherChanges.Text = "";
+                    txtAnyComments.Text = "";
+                    //ddlFeedbackTyp.SelectedIndex = 0;
+                    //ddlSession.SelectedIndex = 0;
+                    pnlSubmit.Visible = false;
+                }
+                else
+                {
+                    //objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
+                    objCommon.DisplayMessage("Something Went Wrong !", this.Page);
+                }
+
+                this.CheckSubjectAssign();
+
+                this.ClearControls();
+                //fillquestion();
+            }
+            else
+            {
+                objCommon.DisplayMessage("Only Students fills this form!!", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_StudentFeedBackAns.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    // function to save the feedback details
+    private int SaveAnswers(DataTable dt_FEEDBACK)
+    {
+
+        objSEB.SessionNo = Convert.ToInt32(lblSession.ToolTip);
+        objSEB.Ipaddress = Request.ServerVariables["REMOTE_HOST"];
+        objSEB.Date = DateTime.Now;
+        objSEB.CollegeCode = Session["colcode"].ToString();
+        objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        if (ViewState["MODE"].ToString() == "2")
+        {
+            objSEB.CourseNo = Convert.ToInt32(ViewState["COURSENO"].ToString());
+            objSEB.UA_NO = Convert.ToInt32(ViewState["TeachNo"].ToString());
+        }
+        objSEB.FB_Status = true;
+        objSEB.OverallImpression = "0";
+        objSEB.Suggestion_A = lblWhatOtherChanges.Text;
+        objSEB.Suggestion_B = txtWhatOtherChanges.Text;
+        objSEB.Suggestion_C = lblAnyComments.Text;
+        objSEB.Suggestion_D = txtAnyComments.Text;
+
+        objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
+
+        objSEB.ExamNo = Convert.ToInt32(ddlExam.SelectedValue);
+        ViewState["examno"] = Convert.ToInt32(ddlExam.SelectedValue);
+        string COMMENTS = string.Empty;
+        if (Session["OrgId"].ToString() == "15")
+        {
+            COMMENTS = txtComments.Text;
+        }
+        else
+        {
+            COMMENTS = "";
+        }
+
+        //if (ViewState["FinalSubmit"] == null)
+        //{
+        //    ViewState["FinalSubmit"] = 1;
+        //}
+        //else
+        //{
+        //    ViewState["FinalSubmit"] = Convert.ToInt32(ViewState["FinalSubmit"]) + 1;
+        //}
+
+        //if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["FinalSubmit"]))
+        //{
+        //    is_Final_submit = 1;
+        //}
+        //else
+        //{
+        //    is_Final_submit = 0;
+        //}
+
+        if (!txtRemark.Text.Equals(string.Empty)) objSEB.Remark = txtRemark.Text.ToString();
+        int ret = objSFBC.SaveStudentFeedBackAnswer(objSEB, dt_FEEDBACK, COMMENTS);
+
+
+        return ret;
     }
 }

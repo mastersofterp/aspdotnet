@@ -3,8 +3,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <style>
-        .myTable tbody tr td, .table-striped tbody tr td label
-        {
+        .myTable tbody tr td, .table-striped tbody tr td label {
             font-weight: bold;
         }
     </style>
@@ -35,14 +34,12 @@
     </script>
 
     <style>
-        .RadioButtonWidth tbody tr:nth-of-type(odd)
-        {
+        .RadioButtonWidth tbody tr:nth-of-type(odd) {
             border-bottom: 0px solid transparent;
             background-color: transparent !important;
         }
 
-        .RadioButtonWidth .table-bordered td
-        {
+        .RadioButtonWidth .table-bordered td {
             border: 0px solid #dee2e6;
         }
     </style>
@@ -180,6 +177,7 @@
                                                 <%--ToolTip='<%# (Convert.ToInt32(Eval("SUBID"))==1 ||Convert.ToInt32(Eval("SUBID"))==3 || 
                                                           Convert.ToInt32(Eval("SUBID"))==13)?Eval("ad_teacher_th"):Eval("ad_teacher_pr")%>'--%>
                                                 <asp:HiddenField ID="hdnSubId" runat="server" Value='<%# Eval("SUBID")%>' />
+                                                <asp:HiddenField ID="hdnserialno" runat="server" Value='<%# Container.DataItemIndex + 1%>' />
                                             </td>
                                             <td>
                                                 <asp:Label ID="lblsem" Text='<%# Eval("SEMESTERNO")%>' runat="server"></asp:Label>
@@ -187,10 +185,10 @@
                                             <td>
                                                 <asp:Label ID="lblComplete" Text='<%# Eval("Status")%>' runat="server"></asp:Label>
                                             </td>
-                                             <td>
-                                                <asp:Label ID="lblFinalSubmit" Text='<%# Eval("Status")%>' runat="server" Visible="false"  ToolTip='<%# Eval("Final_Submit_Status")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
-                                                <asp:Label ID="lblFinalSubmittext" Text='<%# Eval("Final_Submit_Text")%>' runat="server"  ToolTip='<%# Eval("Final_Submit_Text")%>'  CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
-                                                  <asp:HiddenField ID="hdnFinalSubmitted" Value='<%# Eval("Final_Submit_Status")%>'  runat="server"  />
+                                            <td>
+                                                <asp:Label ID="lblFinalSubmit" Text='<%# Eval("Status")%>' runat="server" Visible="false" ToolTip='<%# Eval("Final_Submit_Status")%>' CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
+                                                <asp:Label ID="lblFinalSubmittext" Text='<%# Eval("Final_Submit_Text")%>' runat="server" ToolTip='<%# Eval("Final_Submit_Text")%>' CommandArgument='<%# Eval("is_Submit")%>'></asp:Label>
+                                                <asp:HiddenField ID="hdnFinalSubmitted" Value='<%# Eval("Final_Submit_Status")%>' runat="server" />
                                             </td>
                                         </tr>
                                     </ItemTemplate>
@@ -232,7 +230,7 @@
                                 <h5>
                                     <asp:Label ID="lblcrse" runat="server" Visible="false"></asp:Label></h5>
                             </div>
-                                <asp:ListView ID="lvCourse" runat="server">
+                            <asp:ListView ID="lvCourse" runat="server">
                                 <LayoutTemplate>
                                     <div id="demo-grid" class="vista-grid">
                                         <table class="table table-striped table-bordered nowrap" style="width: 100%">
@@ -250,11 +248,11 @@
                                         <td>Ans:&nbsp; </td>
                                         <td>
                                             <asp:RadioButtonList ID="rblCourse" runat="server" Class="spaced" Visible='<%#(Convert.ToString(Eval("OPTION_TYPE"))=="R" ? true : false)%>'
-                                                 CssClass="RadioButtonWidth" Style="margin-left: -10px" 
+                                                CssClass="RadioButtonWidth" Style="margin-left: -10px"
                                                 RepeatDirection="Horizontal" ToolTip='<%# Eval("QUESTIONID") %>'>
                                             </asp:RadioButtonList>
                                             <asp:TextBox ID="txtcourse" runat="server" Visible='<%#(Convert.ToString(Eval("OPTION_TYPE"))=="T" ? true : false)%>'
-                                                 ToolTip='<%# Eval("QUESTIONID") %>' MaxLength="200"></asp:TextBox>
+                                                ToolTip='<%# Eval("QUESTIONID") %>' MaxLength="200"></asp:TextBox>
                                             <asp:HiddenField ID="hdnCourse" runat="server" Value='<%# Eval("QUESTIONID") %>' />
                                             <asp:HiddenField ID="hfOPTION_TYPE" runat="server" Value='<%# Eval("OPTION_TYPE") %>' />
 
@@ -263,7 +261,7 @@
                                 </ItemTemplate>
                             </asp:ListView>
 
-                             <div class="col-12" id="divcomment" runat="server">
+                            <div class="col-12" id="divcomment" runat="server">
                                 <div class="row">
                                     <div class="form-group col-lg-12 col-md-12 col-12">
                                         <div class="label-dynamic">
@@ -331,7 +329,6 @@
                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAnyComments"
                                 ErrorMessage="Mention the topics to be included in the syllabus because they are prerequisite / relevant / contemporary / required for employment / correlating with course outcomes etc." 
                                 SetFocusOnError="True" ValidationGroup="Submit" Display="None"></asp:RequiredFieldValidator>--%>
-
                         </div>
                         <div class="form-group col-lg-12 col-md-12 col-12 d-none">
                             <div class="label-dynamic">
@@ -341,20 +338,27 @@
                             </div>
                             <asp:TextBox ID="txtRemark" runat="server" TextMode="MultiLine" placeholder="Please enter comments (Max. 100 char) ." CssClass="form-control" MaxLength="100"></asp:TextBox>
                         </div>
-                        </asp:Panel>
-                         <asp:Panel ID="pnlFinalSumbit" runat="server" Visible="false">
+                    </asp:Panel>
+                    <asp:Panel ID="pnlFinalSumbit" runat="server" Visible="false">
                         <div class="col-12 btn-footer">
                             <asp:Button ID="btnSubmit" runat="server" Text="Save & Next" OnClick="btnSubmit_Click" CssClass="btn btn-info"
                                 ValidationGroup="Submit" />
                             <asp:Button ID="btnPrevious" runat="server" Text="Previous" OnClick="btnPrevious_Click" CssClass="btn btn-info"
                                 ValidationGroup="Submit" />
-                             <asp:Button ID="btnNext" runat="server" Text="Next" OnClick="btnNext_Click" CssClass="btn btn-primary"
-                                ValidationGroup="Submit" Visible="false"/>
-                             <asp:Button ID="btnFinalSubmit" runat="server" Text="Final Submit" OnClick="btnFinalSubmit_Click"  CssClass="btn btn-info"
-                                ValidationGroup="Submit" Visible="false"/>
+                            <asp:Button ID="btnNext" runat="server" Text="Next" OnClick="btnNext_Click" CssClass="btn btn-primary"
+                                ValidationGroup="Submit" Visible="false" />
+                            <asp:Button ID="btnFinalSubmit" runat="server" Text="Final Submit" OnClick="btnFinalSubmit_Click" CssClass="btn btn-info"
+                                ValidationGroup="Submit" Visible="false" />
                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
                             <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="True" ShowSummary="False"
                                 ValidationGroup="Submit" />
+                        </div>
+                    </asp:Panel>
+                    <asp:Panel ID="pnlSubmit" runat="server" Visible="false">
+                        <div class="col-12 btn-footer">
+                             <asp:Button ID="btnSave" runat="server" Text="Submit" OnClick="btnSave_Click" CssClass="btn btn-info"
+                                ValidationGroup="Submit" />
+                            <asp:Button ID="btnHide" runat="server" Text="Cancel" OnClick="btnCancel_Click" CssClass="btn btn-warning" />
                         </div>
                     </asp:Panel>
                     <div class="col-12 text-center">
