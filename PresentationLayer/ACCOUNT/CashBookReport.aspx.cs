@@ -614,7 +614,20 @@ public partial class CashBookReport : System.Web.UI.Page
                 dtExcelData.Columns.Add("CHQ_NO");
 
             DataView dvData = new DataView(dsBankData.Tables[0]);
-            dvData.RowFilter = "VOUCHER_NO=" + dtVouchers.Rows[i]["VOUCHER_NO"].ToString() + " and Vch_Type='" + dtVouchers.Rows[i]["Vch_Type"].ToString() + "'";
+
+            //dvData.RowFilter = "VOUCHER_NO=" + dtVouchers.Rows[i]["VOUCHER_NO"].ToString() + " and Vch_Type='" + dtVouchers.Rows[i]["Vch_Type"].ToString() + "'";
+
+
+            //Pawan Nikhare
+            if (!dtVouchers.Rows[i].IsNull("VOUCHER_NO") && !dtVouchers.Rows[i].IsNull("Vch_Type"))
+            {
+                dvData.RowFilter = "VOUCHER_NO=" + dtVouchers.Rows[i]["VOUCHER_NO"].ToString() + " and Vch_Type='" + dtVouchers.Rows[i]["Vch_Type"].ToString() + "'";
+            }
+            else
+            {
+                continue;
+            }
+            
             DataTable drVoucherData = dvData.ToTable();
 
             if (i == 0)
@@ -768,7 +781,9 @@ public partial class CashBookReport : System.Web.UI.Page
         gvTrialBalance.DataSource = dtExcelData;
         gvTrialBalance.DataBind();
 
-        if (dsBankData.Tables[0].Rows.Count > 0)
+        //if (dsBankData.Tables[0].Rows.Count > 0)
+        //pawan nikhare
+        if (gvTrialBalance.Controls.Count > 0)
         {
             //To add heading in excel
             GridViewRow HeaderGridRow = new GridViewRow(0, 0, DataControlRowType.Header, DataControlRowState.Insert);
@@ -780,7 +795,7 @@ public partial class CashBookReport : System.Web.UI.Page
             HeaderCell.ForeColor = System.Drawing.Color.Black;
             HeaderGridRow.Cells.Add(HeaderCell);
             gvTrialBalance.Controls[0].Controls.AddAt(0, HeaderGridRow);
-
+ 
             GridViewRow HeaderGridRow1 = new GridViewRow(1, 0, DataControlRowType.Header, DataControlRowState.Insert);
             TableCell HeaderCell1 = new TableCell();
 
@@ -790,7 +805,7 @@ public partial class CashBookReport : System.Web.UI.Page
             HeaderCell1.ForeColor = System.Drawing.Color.Black;
             HeaderGridRow1.Cells.Add(HeaderCell1);
             gvTrialBalance.Controls[0].Controls.AddAt(1, HeaderGridRow1);
-
+            
             GridViewRow HeaderGridRow2 = new GridViewRow(2, 0, DataControlRowType.Header, DataControlRowState.Insert);
             TableCell HeaderCell2 = new TableCell();
             HeaderCell2 = new TableCell();
@@ -800,6 +815,7 @@ public partial class CashBookReport : System.Web.UI.Page
             HeaderCell2.ForeColor = System.Drawing.Color.Black;
             HeaderGridRow2.Cells.Add(HeaderCell2);
             gvTrialBalance.Controls[0].Controls.AddAt(2, HeaderGridRow2);
+           
 
             GridViewRow HeaderGridRow3 = new GridViewRow(3, 0, DataControlRowType.Header, DataControlRowState.Insert);
             HeaderCell = new TableCell();
@@ -819,7 +835,7 @@ public partial class CashBookReport : System.Web.UI.Page
             HeaderCell.ForeColor = System.Drawing.Color.Black;
             HeaderGridRow4.Cells.Add(HeaderCell);
             gvTrialBalance.Controls[0].Controls.AddAt(4, HeaderGridRow4);
-
+            
 
             //gvTrialBalance.Controls[0].Controls.AddAt(0, HeaderGridRow);
 
@@ -832,6 +848,11 @@ public partial class CashBookReport : System.Web.UI.Page
             gvTrialBalance.RenderControl(htw);
             Response.Write(sw.ToString());
             Response.End();
+        }
+            //pawan nikhare
+            
+        {
+            objCommon.DisplayUserMessage(UPDLedger, "Data not found", this);
         }
     }
 
