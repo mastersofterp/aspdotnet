@@ -251,22 +251,89 @@
 
     <%-- <asp:UpdatePanel ID="updStudent" runat="server">
         <ContentTemplate>--%>
-    <div id="dvMain" runat="server">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-12">
-                <div class="box box-primary">
-                    <div id="div1" runat="server"></div>
-                    <div class="box-header with-border">
-                        <h3 class="box-title">RE MAJOR EXAM REGISTRATION</h3>
-                    </div>
+ <div id="dvMain" runat="server">
+        <div class="col-md-12 col-sm-12 col-12">
+            <div class="box box-primary">
+                <div id="div2" runat="server"></div>
+                <div class="box-header with-border">
+                    <%--<h3 class="box-title">SESSION CREATION</h3>--%>
+                    <h3 class="box-title">
+                         <asp:Label ID="lblDynamicPageTitle" runat="server"></asp:Label>
+
+                    </h3>
+                </div>
+
+                   <%-- <-----------------------------------------Added By Rohit--------------------------------------------------->--%>
+                   <div id="pnlSearch" runat="server" visible="False">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div id="divenroll" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                        <div class="label-dynamic">
+                                            <sup>* </sup>
+                                            <label>PRN No</label>
+                                        </div>
+                                        <asp:TextBox ID="txtEnrollno" runat="server" CssClass="form-control" ToolTip="Enter text to search." TabIndex="1" MaxLength="20"></asp:TextBox>
+                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender8" runat="server" FilterType="Numbers, UppercaseLetters, LowercaseLetters" TargetControlID="txtEnrollno" />
+                                        <asp:RequiredFieldValidator ID="valSearchText" runat="server" ControlToValidate="txtEnrollno"
+                                            Display="None" ErrorMessage="Please Enter PRN No." SetFocusOnError="true"
+                                            ValidationGroup="search" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 btn-footer">
+                                <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" ValidationGroup="search" />
+                          <%--  <asp:Button ID="btnSearch" runat="server" Text="Show" ValidationGroup="search" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear" ValidationGroup="Show" TabIndex="1" OnClick="btnClear_Click" CssClass="btn btn-warning" />--%>
+                                  <asp:Button ID="btnSearch" runat="server" Text="Show" CssClass="btn btn-primary" TabIndex="1" OnClick="btnSearch_Click" />
+                                <asp:Button ID="btnClear" runat="server" Text="Clear" TabIndex="1" CssClass="btn btn-warning" OnClick="btnClear_Click" />
+                            </div>
+                        </div>
+                <%--<---------------------------------------------------------------------------------------------------------->--%>
+
+                <div class="box-body">
                     <asp:UpdatePanel ID="updatepnl" runat="server">
                         <ContentTemplate>
 
-                            <div class="box-body">
-                                <div id="pnlSearch" runat="server">
-                                    <div class="col-12">
-                                        <div class="row">
-                                        </div>
+
+                            <div class="col-12" id="divCourses" runat="server" visible="false">
+                                <div class="row">
+
+                                    <div class="col-lg-7 col-md-6 col-12">
+                                        <ul class="list-group list-group-unbordered">
+                                            <li class="list-group-item"><b>Student Name :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblName" runat="server" Font-Bold="true" />
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item"><b>RRN No :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblEnrollNo" runat="server" Font-Bold="true" /></a>
+                                            </li>
+                                            <li class="list-group-item"><b>Semester/Trimester :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblSemester" runat="server" Font-Bold="true" /></a>
+                                            </li>
+                                            <li class="list-group-item" style="display: none;"><b>Admission Batch :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblAdmBatch" runat="server" Font-Bold="true" />
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item"><b>Degree / Branch :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblBranch" runat="server" Font-Bold="true" />
+
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item"><b>Scheme :</b>
+                                                <a class="sub-label">
+                                                    <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
+                                            </li>
+                                             <li class="list-group-item"><b>Session Name :</b>
+                                                    <a class="sub-label">
+                                                    <asp:Label ID="lblsessionno" runat="server" Font-Bold="true" /></a>
+                                             </li>
+                                        </ul>
                                     </div>
                                     <div class="col-12 btn-footer d-none">
                                         <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
@@ -505,19 +572,25 @@
                                                         <td>
                                                             <%--<asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("EXAM_REGISTERED").ToString() == "1" ? true : false %>' Enabled='<%# Eval("ACCEPTED").ToString() == "0" ? true : false %>' />--%>
 
-                                                            <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" OnCheckedChanged="chkAccept_CheckedChanged"
-                                                                Checked="true" />
-                                                        </td>
-                                                        <td>
-                                                            <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
-                                                        </td>
-                                                        <td>
-                                                            <asp:Label ID="Label1" runat="server" Text='<%# Eval("COURSENAME") %>' />
-                                                            <%--  <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("CPS") %>' />--%>
-                                                            <asp:HiddenField ID="hdfExistingMark" runat="server" Value='<%# Eval("EXTERMARK") %>' />
-                                                            <asp:HiddenField ID="hdfapplycourse" runat="server" Value='<%# Eval("APPLYCOURSE") %>' />
-                                                            <asp:HiddenField ID="hdfapplycoursedone" runat="server" Value='<%# Eval("ABSENT_LOG") %>' />
-                                                            <%--<asp:HiddenField ID="hdfStudRegistered" runat="server" Value='<%# Eval("STUD_EXAM_REGISTERED") %>' />   --%>                                                  
+
+                                                    <%--OnCheckedChanged="chkAccept_CheckedChanged"--%>  <%--Checked='<%#(Convert.ToInt32(Eval("STUD_EXAM_REGISTERED"))==1 ? true : false)%>' --%>
+                                                    <%-- Enabled='<%# Eval("REGISTERED").ToString()=="1" && Eval("EXAMTYPENO").ToString()=="1" && Eval("EXAM_REGISTERED").ToString()=="1"? false : true%>'--%>
+                                                    <%--Enabled='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? false : true)%>' onclick="backlogLvChk(this);" />--%>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' />
+                                                    <asp:HiddenField ID="hdfExamRegistered" runat="server" Value='<%# Eval("EXAM_REGISTERED") %>' />
+                                                    <%--  <asp:HiddenField ID="hdfStudRegistered" runat="server" Value='<%# Eval("STUD_EXAM_REGISTERED") %>' />--%>
+
+                                                    <asp:Label ID="Label1" runat="server" Text='<%# Eval("COURSENAME") %>' />
+                                                    <%--  <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' ToolTip='<%# Eval("CPS") %>' />--%>
+                                                    <asp:HiddenField ID="hdfExistingMark" runat="server" Value='<%# Eval("EXTERMARK") %>' />
+                                                    <asp:HiddenField ID="hdfapplycourse" runat="server" Value='<%# Eval("APPLYCOURSE") %>' />
+                                                    <asp:HiddenField ID="hdfabsentlog" runat="server" Value='<%# Eval("ABSENT_LOG") %>' />
+                                                    <asp:HiddenField ID="hdfStudRegistered" runat="server" Value='<%# Eval("EXAM_REGISTERED") %>' />                                                     
                                                      
                                                         </td>
                                                         <td>
