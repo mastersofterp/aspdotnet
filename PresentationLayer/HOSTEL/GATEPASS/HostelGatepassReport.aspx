@@ -175,6 +175,7 @@
             </ContentTemplate>
         <Triggers>
           <asp:PostBackTrigger ControlID="btnReport" />
+            <asp:PostBackTrigger ControlID="btnExcelReport" />
          </Triggers>
 </asp:UpdatePanel>
 </asp:Content>
