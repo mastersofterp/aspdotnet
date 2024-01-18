@@ -48,16 +48,16 @@ using DynamicAL_v2;
 
 
 
-public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
+public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin_CPU : System.Web.UI.Page
 {
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     MarksEntryController objMarksEntry = new MarksEntryController();
     int s;
     string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
-    //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_MEContainerName"].ToString();
+   // string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_MEContainerName"].ToString();
+    //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["rcpitdoctesting"].ToString();
     string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameExam"].ToString();
-
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -113,8 +113,23 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
                 //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT TOP 4 SESSIONNO", "SESSION_NAME", "SESSIONNO > 0", "SESSIONNO DESC");
                 string colgno = Session["college_nos"].ToString();
+                if (Session["usertype"].ToString().Equals("1"))
+                {
 
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
+                    //objCommon.FillDropDownList(ddlscheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+                    objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
+        
+                    ddlSession.SelectedIndex = 0;
+                }
+                else
+                {
+                    //objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "COLLEGE_NAME+'('+SHORT_NAME +'-'+ CODE +')' as COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND COLLEGE_ID IN (" + ViewState["College_ids"].ToString() + ")", "COLLEGE_ID");
+                    // objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_MASTER WITH (NOLOCK)", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_ID");
+                   // objCommon.FillDropDownList(ddlscheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+                    ddlSession.SelectedIndex = 0;
+                }
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER S INNER JOIN ACD_COLLEGE_MASTER C ON (C.COLLEGE_ID=S.COLLEGE_ID)", "DISTINCT S.SESSIONNO", "SESSION_NAME+' - '+C.COLLEGE_NAME AS SESSION_NAME", "SESSIONNO > 0 AND S.SESSIONNO IN(SELECT DISTINCT SESSIONNO FROM ACD_COURSE_TEACHER WHERE ISNULL(CANCEL,0)=0)", "SESSIONNO DESC");
 
                 //objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE", "SUBID", "SUBNAME", "SUBID > 0", "SUBID");
                 //ddlSession.SelectedIndex = 1;
@@ -133,7 +148,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             }
 
             //Page.Form.Attributes.Add("enctype", "multipart/form-data");
-            this.Page.Form.Enctype = "multipart/form-data";
+            //this.Page.Form.Enctype = "multipart/form-data";
         }
         divMsg.InnerHtml = string.Empty;
 
@@ -141,7 +156,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
     private void ShowCourses()
     {
-        DataSet ds = objMarksEntry.GetCourseForTeacher(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
+        DataSet ds = objMarksEntry.GetCourseForTeacher_Admin_RCPIT(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
 
         if (ds != null && ds.Tables.Count > 0)
         {
@@ -179,27 +194,26 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 ViewState["COURSENO"] = lblCourse.ToolTip;
                 ViewState["CCODE"] = (objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO='" + lblCourse.ToolTip + "'"));
                 string[] sec_batch = lnk.CommandArgument.ToString().Split('+');
-                string COURSENAME = (objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO='" + lblCourse.ToolTip + "'"));
-                int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
+
+
                 //Added by gaurav For check Status for end Sem mark entry 07-09-2022
                 ViewState["EXAMNO"] = sec_batch[2];
                 string examno = objCommon.LookUp("acd_exam_name", "FLDNAME", "examno=" + ViewState["EXAMNO"]);
 
-                #region ADDED BY GAURAV S 11_01_2023 FOR CPUH/K FOR CHECK EXTERNAL MARK ENTRY CHECK 
-                   //Added by gaurav For check Status for end Sem mark entry 07-09-2022
+                int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
+                string COURSENAME = (objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO='" + lblCourse.ToolTip + "'"));
+                #region ADDED BY GAURAV S 11_01_2023 FOR CPUH/K FOR CHECK EXTERNAL MARK ENTRY CHECK
+                //Added by gaurav For check Status for end Sem mark entry 07-09-2022
 
-                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 16)
+                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
                 {
                     if (examno == "EXTERMARK")
                     {
                         int TestMark = 0;
                         double maxmark = 0.00;
-                        maxmark=Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip)));
+                        maxmark = Convert.ToDouble(objCommon.LookUp("ACD_COURSE", "MAXMARKS_I", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip)));
                         if (maxmark > 0)
                         {
-
-
-
                             TestMark = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_TEST_MARK", "COUNT(*)", "COURSENO=" + Convert.ToInt32(lblCourse.ToolTip) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)));
                             if (TestMark > 0)
                             {
@@ -234,14 +248,30 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                                 return;
                             }
                         }
-                       // }
+                        // }
                     }
                 }
                 #endregion
+                
+                
+                //if (examno == "EXTERMARK")
+                //{
+                //    int status = GetStatusForMarkEntry();
+                //    if (status == 1)
+                //    {
+                //        return;
+                //    }
+                //}
+
+
+                //LinkButton btn = sender as LinkButton;
+                //ViewState["sem"] = Convert.ToInt32((btn.Parent.FindControl("hdnsem") as HiddenField).Value);
+                //hdnsem.Value = Convert.ToString(ViewState["sem"]);                  //Added on 04082022           
 
 
                 // Check Mark Enrty Activitity -- Added by Abhinay Lad [14-09-2019]
                 DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND  SHOW_STATUS =1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND EXAMNO=" + Convert.ToInt32(lnk.CommandArgument.ToString().Split('+')[2]) + " )", "SESSIONNO DESC");
+                //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN ( SELECT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' and PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND EXAMNO=" + Convert.ToInt32(lnk.CommandArgument.ToString().Split('+')[2]) + " )", "SESSIONNO DESC");
 
                 if (ds_CheckActivity.Tables[0].Rows.Count == 0)
                 {
@@ -314,7 +344,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                     ddlSubExam.Visible = true;
                     lblSubExamName.Visible = true;
 
-                    DataSet dsExams = objMarksEntry.GetONExams(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
+                    DataSet dsExams = objMarksEntry.GetONExams_RCPIT_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
                     string exams = string.Empty;
                     if (dsExams != null && dsExams.Tables.Count > 0 && dsExams.Tables[0].Rows.Count > 0)
                     {
@@ -359,11 +389,11 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                                     }
                                 }
                             }
-                                // added by gaurav for cpu 04_05_2023
-                            else {
-                               // objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
-                               // return;
-                            
+                            else
+                            {
+                                objCommon.DisplayMessage(this.updpanle1, "The Mark Entry activity may not be Started!!!, Please contact Admin", this.Page);
+                                return;// added by gaurav 17-01-2024
+
                             }
                         }
                         dtr.Close();
@@ -430,13 +460,13 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
-                Response.Redirect("~/notauthorized.aspx?page=MarkEntry.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=MarkEntryforIA_Admin_CPU.aspx");
             }
         }
         else
         {
             //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=MarkEntry.aspx");
+            Response.Redirect("~/notauthorized.aspx?page=MarkEntryforIA_Admin_CPU.aspx");
         }
     }
 
@@ -468,7 +498,6 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 string marks = string.Empty;
 
                 MarksEntryController objMarksEntry = new MarksEntryController();
-
                 Label lbl;
                 TextBox txtMarks;
 
@@ -488,7 +517,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 }
                 string[] course = lblCourse.Text.Split('~');
                 string ccode = course[0].Trim();
-                // Added By Abhinay Lad [17-07-2019]*---
+                // Added By Abhinay Lad [17-07-2019]
                 int courseNo = Convert.ToInt32(lblCourse.ToolTip);
                 int FlagReval = 0;
 
@@ -499,44 +528,46 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
                 string examname = ddlExam.SelectedValue;
                 string subExam_Name = (ddlSubExam.Visible == true) ? ddlSubExam.SelectedValue : "S10T1-19";
+                #region added by gaurav 
                 string[] Exam = ddlExam.SelectedValue.Split('-');
                 if (Exam[1].StartsWith("S"))
                     examtype = "S";
                 else if (Exam[1].StartsWith("E"))
                     examtype = "E";
-
                 string examnameExtern = string.Empty;
+                #endregion 
 
-               
-               // ddlSubExam
-                //ADDED BY GAURAV 09_01_2023
-               
+
                 CustomStatus cs;
+
                 #region ADDED BY GAURAV S FOR CPU/H END SEM MARK ENTRY SAVE 11_01_2023
                 string SubExamComponentName = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])); ;
-                string Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1])+"AND  SUBEXAMNO="+ddlSubExam.SelectedValue.Split('-')[1]);
+                string Subexam = objCommon.LookUp("ACD_SUBEXAM_NAME", " CAST(FLDNAME AS NVARCHAR)+'-'+ CAST (SUBEXAMNO AS NVARCHAR) AS FLDNAME", "EXAMNO=" + Convert.ToInt32(Exam[1]) + "AND  SUBEXAMNO=" + ddlSubExam.SelectedValue.Split('-')[1]);
 
                 string examnoname = objCommon.LookUp("acd_exam_name", "fldname", "examno=" + Convert.ToInt32(ViewState["examNo"]));
                 int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
                 //return;             
-                    // CPUKOTA/HAMIRPUR
+                // CPUKOTA/HAMIRPUR
                 if (examnoname == "EXTERMARK")
                 {
                     examname = Exam[1];
                     if (ddlSubjectType.SelectedValue == "2" || ddlSubjectType.SelectedValue == "11")
                     {
-                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);                     
+                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
                     }
                     else
                     {
-                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
+                        cs = (CustomStatus)objMarksEntry.InsertMarkEntrybyAdmin_CPU_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(courseNo), ccode, studids, marks, lock_status, ddlExam.SelectedValue.ToString(), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"].ToString()), ViewState["ipAddress"].ToString(), examtype, Convert.ToInt32(ViewState["SemesterNo"].ToString()), SCHEMENO, Convert.ToInt32(hdfSection.Value), Subexam, Convert.ToInt32(Exam[1]), SubExamComponentName);
                     }
 
                 }
-                #endregion
+                #endregion 
                 else
-                {                   
-                    #region other 
+                {//added by gaurav 1
+                    #region elsepart 
+
+
+
                     if (ViewState["markentryotp"] != null && ViewState["markentryotp"].ToString() == "1")
                     {
                         string smsmobile, to_email;
@@ -563,55 +594,34 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                             email_text = ViewState["email_text"].ToString();
                         else
                             email_text = string.Empty;
-                       
 
-                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4 ||Convert.ToInt32(Session["OrgId"]) == 16 ) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
+
+                        // return;
+                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
                         {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                         else if (Convert.ToInt32(Session["OrgId"]) == 1)
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 2)
-                        {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CRESCENT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
                         }
                         else
                         {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        
+                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew1(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
                         }
-                    }
+                        }
                     else
                     {
-                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4|| Convert.ToInt32(Session["OrgId"]) == 16) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
+                        if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
                         {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CPU_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
                         }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 1)   //ADDED BY PRAFULL ON DT 23012023 
-                        {
-                            //cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, to_email, from_email, smsmobile, 1, sms_text, email_text, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-
-                        }
-                        else if (Convert.ToInt32(Session["OrgId"]) == 2)
-                        {
-                            
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew_CRESCENT(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
-                        }
-
                         else
                         {
-                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
+                            //  return;
+                            cs = (CustomStatus)objMarksEntry.UpdateMarkEntryNew1(Convert.ToInt32(ddlSession.SelectedValue), courseNo, ccode, studids.Remove(studids.Length - 1, 1), marks.Remove(marks.Length - 1, 1), lock_status, examname, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, FlagReval, string.Empty, string.Empty, string.Empty, 0, string.Empty, string.Empty, subExam_Name, Convert.ToInt32(ViewState["SemesterNo"]), Convert.ToInt32(hdfSection.Value));
                         }
                     }
 
                     #endregion
-                }//add gaurav end
-
+                }//added by gaurav 1
                 if (cs.Equals(CustomStatus.RecordSaved))
-                // if (1==1)
                 {
                     if (lock_status == 1)
                     {
@@ -920,6 +930,8 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     {
         this.ShowCourses();
         this.GetStatus();
+
+        this.BindCourse();
     }
 
     protected void btnShow_Click(object sender, EventArgs e)
@@ -973,28 +985,28 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             }
 
             //dsStudent = objMarksEntry.GetStudentsForMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue));
-
-            if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4 || Convert.ToInt32(Session["OrgId"]) == 16) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
+            if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
             {
-                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew_CPU(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
+                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew_CPU_admin(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
             }
-            else {
-
-                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
+            else
+            {
+                dsStudent = objMarksEntry.GetStudentsForMarkEntryNew_RCPIT_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToString(ddlExam.SelectedValue).Split('-')[0], Convert.ToInt32(ViewState["COURSENO"]), Convert.ToString(ddlSubExam.SelectedValue), Convert.ToInt32(ddlSort.SelectedValue));
             }
-           
-            int lockcount = 0;
+                 int lockcount = 0;
             if (dsStudent != null && dsStudent.Tables.Count > 0)
             {
                 if (dsStudent.Tables[0].Rows.Count > 0)
                 {
                     ViewState["SemesterNo"] = Convert.ToInt32(dsStudent.Tables[0].Rows[0]["SEMESTERNO"]);
                     ////HIDE STUDENT NAME COLUMN IF MARK ENTRY IS FROM EMDSEM
-                    if (ddlExam.SelectedValue == "EXTERMARK")
+                    if (ddlExam.SelectedValue == "EXTERMARK")                   
                     {
                         if (Convert.ToInt32(dsStudent.Tables[0].Rows[0]["LOCKS1"]) == 0)
                         {
                             objCommon.DisplayMessage(this.updpanle1, "Internal Mark Entry is not Done.", this.Page);
+                            //gvStudent.DataSource = dsStudent;
+                            //gvStudent.DataBind();
                             return;
                         }
                         gvStudent.Columns[2].Visible = false;
@@ -1184,37 +1196,64 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     private void GetStatus()
     {
         ViewState["Semester"] = string.Empty;
-        DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
-        if (ds != null && ds.Tables[0].Rows.Count > 0)
+        if (Convert.ToString(Session["usertype"]) == "7")
         {
-            //GVEntryStatus.DataSource = ds;
-            //GVEntryStatus.DataBind();
-            
-           
-            if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 2)
+            ViewState["DEPTNO"] = (objCommon.LookUp("user_acc", "UA_DEPTNO", "ua_no='" + Convert.ToInt16(Session["userno"]) + "'"));
+            ViewState["SCHEMENO"] = (objCommon.LookUp("ACD_SCHEME", "SCHEMENO", "DEPTNO='" + Convert.ToInt32(ViewState["DEPTNO"]) + "'"));
+            DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus_RECPIT_ADMIN(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO"]));
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();
-            }//Added on 04082022
+                //GVEntryStatus.DataSource = ds;
+                //GVEntryStatus.DataBind();
+                ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();                   //Added on 04082022
+                ViewState["Semester"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
+                //Added on 04082022 
+
+                rptExamName.DataSource = ds;
+                rptExamName.DataBind();
+                Div_ExamNameList.Visible = true;
+            }
             else
             {
-                 ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["LOCKSTATUS"].ToString();    
-               // ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();
+                //GVEntryStatus.DataSource = null;
+                //GVEntryStatus.DataBind();
+                rptExamName.DataSource = null;
+                rptExamName.DataBind();
+                lvCourse.Visible = false;
+                Div_ExamNameList.Visible = false;
+                objCommon.DisplayMessage(this.updpanle1, "No Course Found For This Subject Type.", this.Page); //lblStatus.Visible = false;
             }
-            ViewState["Semester"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();                          
-
-            rptExamName.DataSource = ds;
-            rptExamName.DataBind();
-            Div_ExamNameList.Visible = true;
         }
         else
         {
-            //GVEntryStatus.DataSource = null;
-            //GVEntryStatus.DataBind();
-            rptExamName.DataSource = null;
-            rptExamName.DataBind();
-            lvCourse.Visible = false;
-            Div_ExamNameList.Visible = false;
-            objCommon.DisplayMessage(this.updpanle1, "No Course Found For This Subject Type.", this.Page); //lblStatus.Visible = false;
+            ViewState["SCHEMENO1"] = objCommon.LookUp("ACD_COLLEGE_SCHEME_MAPPING", "schemeno", "SCHEMENO=" + Convert.ToInt32(ddlscheme.SelectedValue));
+            if (ViewState["SCHEMENO1"] == null || ViewState["SCHEMENO1"] == string.Empty)
+            {
+                ViewState["SCHEMENO1"] = 0;
+            }
+            DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus_RECPIT_ADMIN(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(ViewState["SCHEMENO1"].ToString()));
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                //GVEntryStatus.DataSource = ds;
+                //GVEntryStatus.DataBind();
+                ViewState["markentrystatus"] = ds.Tables[0].Rows[0]["MARK_ENTRY_STATUS"].ToString();                   //Added on 04082022
+                ViewState["Semester"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
+                //Added on 04082022 
+
+                rptExamName.DataSource = ds;
+                rptExamName.DataBind();
+                Div_ExamNameList.Visible = true;
+            }
+            else
+            {
+                //GVEntryStatus.DataSource = null;
+                //GVEntryStatus.DataBind();
+                rptExamName.DataSource = null;
+                rptExamName.DataBind();
+                lvCourse.Visible = false;
+                Div_ExamNameList.Visible = false;
+                objCommon.DisplayMessage(this.updpanle1, "No Course Found For This Subject Type.", this.Page); //lblStatus.Visible = false;
+            }
         }
     }
 
@@ -1306,7 +1345,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
             if (Convert.ToInt32(ds.Tables[0].Rows[0][0]) == 1)
             {
-               // objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                //objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
                 objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "A.SUBEXAMNAME", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
                 DataSet ds1 = objCommon.FillDropDown("ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "SUBEXAMNO", "", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
 
@@ -1319,6 +1358,8 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             else
             {
                // objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                //objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "A.SUBEXAMNAME", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
+
                 objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "A.SUBEXAMNAME", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
                 DataSet ds1 = objCommon.FillDropDown("ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "SUBEXAMNO", "", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
 
@@ -1339,9 +1380,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     protected void ddlSubExam_SelectedIndexChanged(object sender, EventArgs e)
     {
         pnlStudGrid.Visible = false; lblStudents.Visible = false;
-        pnlUP.Visible = false;// added by gaurav
         btnSave.Visible = false; btnLock.Visible = false; btnPrintReport.Visible = false;
-
 
     }
 
@@ -1464,7 +1503,18 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     {
         if (Convert.ToInt32(ddlSession.SelectedValue) > 0)
         {
-            objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", "DISTINCT R.SUBID", "SUBNAME", "S.SUBID > 0 AND (UA_NO=" + Convert.ToInt32(Session["userno"].ToString()) + " OR UA_NO_PRAC=" + Convert.ToInt32(Session["userno"].ToString()) + ") AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "");
+
+          //  objCommon.FillDropDownList(ddlscheme, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID DESC");
+
+            objCommon.FillDropDownList(ddlscheme, " ACD_COLLEGE_SCHEME_MAPPING  A INNER JOIN  ACD_STUDENT_RESULT B ON (A.SCHEMENO=B.SCHEMENO)", " DISTINCT A.SCHEMENO", "COL_SCHEME_NAME", " SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "A.SCHEMENO");
+
+
+
+
+
+
+
+            objCommon.FillDropDownList(ddlSubjectType, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)", "DISTINCT R.SUBID", "SUBNAME", "S.SUBID > 0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "", "");
             this.GetExamWiseDates();
         }
         else
@@ -1474,10 +1524,12 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             //divstatus.Visible = false;
         }
         ddlSubjectType.SelectedIndex = 0;
+        ddlscheme.SelectedIndex = 0;
         //GVEntryStatus.DataSource = null;
         //GVEntryStatus.DataBind();
         rptExamName.DataSource = null;
         rptExamName.DataBind();
+       // rptExamName.Visible = false;
     }
 
     //Patch For Adding Mark Entry Patch OTP
@@ -1626,13 +1678,13 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     protected void lbtnPrint_Click(object sender, EventArgs e)
     {
         LinkButton lbtn = (LinkButton)(sender);
-        ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split('$')[0]);
-        lbl_SubjectName.Text = lbtn.CommandArgument.Split('$')[1];
-        ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split('$')[2]);
-        ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split('$')[3]);
-        ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split('$')[4]);
-        ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split('$')[5]);
-        ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split('$')[6]);
+        ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
+        lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
+        ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
+        ViewState["sec_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[3]);
+        ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
+        ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
+        ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
 
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
 
@@ -1808,7 +1860,6 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 string reportTitle = "CatMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
                 string rptFileName = "rptMarksList_ExamwiseNew_ForTheory.rpt";
-               // string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_CPU.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
@@ -1825,9 +1876,8 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
             {
 
                 string reportTitle = "CatMarksListReport";
-                 string rptFileName = "rptMarksList_Examwise.rpt";
-               // string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_CPU.rpt"; --comment by gaurav
-                //string rptFileName = "rptMarksList_ExamwiseNew.rpt"; // COMMENT BY GAURAV 31_01_2023
+                // string rptFileName = "rptMarksList_Examwise.rpt";
+                string rptFileName = "rptMarksList_ExamwiseNew.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
@@ -1851,52 +1901,8 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
     protected void lnkExcekImport_Click(object sender, EventArgs e)
     {
         if (ddlExam.SelectedIndex > 0 && ddlSubExam.SelectedIndex > 0)
-        {
-        //     LinkButton lnk = sender as LinkButton;
-        //     if (!lnk.ToolTip.Equals(string.Empty))
-        //     {
-        //         lblCourse.Text = lnk.Text;
-        //         lblCourse.ToolTip = lnk.ToolTip;
-        //         ViewState["COURSENO"] = lblCourse.ToolTip;
-        //         ViewState["CCODE"] = (objCommon.LookUp("ACD_COURSE", "CCODE", "COURSENO='" + lblCourse.ToolTip + "'"));
-        //         string[] sec_batch = lnk.CommandArgument.ToString().Split('+');
-        //         string COURSENAME = (objCommon.LookUp("ACD_COURSE", "COURSE_NAME", "COURSENO='" + lblCourse.ToolTip + "'"));
-        //         int SCHEMENO = Convert.ToInt32(objCommon.LookUp("ACD_COURSE", "SCHEMENO", "COURSENO='" + lblCourse.ToolTip + "'"));
-        //         //Added by gaurav For check Status for end Sem mark entry 07-09-2022
-        //         ViewState["EXAMNO"] = sec_batch[2];
-        //         string examno = objCommon.LookUp("acd_exam_name", "FLDNAME", "examno=" + ViewState["EXAMNO"]);
+        {          
 
-
-        //         string sp_procedure = "PKG_ACD_CHECK_SUB_EXAMS_LOCKED_FOR_ENDSEM_MARK_ENTRY_CPU_K_H";
-        //         string sp_parameters = "@P_COURSENO,@P_SCHEMENO,@P_UA_NO,@P_SESSIONNO";
-        //         string sp_callValues = "" + ViewState["COURSENO"] + "," + SCHEMENO + "," + (Session["userno"].ToString()) + "," + ddlSession.SelectedValue + "";
-
-        //         DataSet dschk = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
-        //         if (dschk.Tables.Count > 0)
-        //         {
-        //             if (dschk.Tables[0].Rows.Count > 0 && dschk.Tables != null)
-        //             {
-        //                 string islocked = dschk.Tables[0].Rows[0]["LOCK"].ToString();
-
-        //                 if (islocked == "0" || islocked == string.Empty || islocked == null)
-        //                 {
-        //                     objCommon.DisplayMessage(this.updpanle1, "Kindly Check the Internal Mark Entry is not Completed or Not Locked for " + COURSENAME + " !", this.Page);
-        //                     return;
-
-        //                 }
-        //             }
-        //         }
-
-        //     }
-
-
-
-
-
-
-
-
-            //if (ViewState["markentrystatus"].ToString() == "0")
             if (ViewState["LOCK_STATUS"] == "")
             {
                 pnlUP.Visible = true;
@@ -1906,6 +1912,8 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 pnlUP.Visible = false;
                 objCommon.DisplayMessage(updpanle1, "Mark Entry is locked!", this.Page);
             }
+
+
         }
     }
 
@@ -1923,8 +1931,17 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 int MExamNo = Convert.ToInt32(ViewState["examNo"].ToString());
                 string subexamno = objCommon.LookUp("ACD_SUBEXAM_NAME", "SUBEXAMNO", "ISNULL(ACTIVESTATUS,0)=1 AND EXAMNO=" + MExamNo + "AND FLDNAME='" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[0] + "'");
 
-                //dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToInt32(Examno[0]), Convert.ToInt32(ViewState["COURSENO"]));
-                dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), subexamno);
+                if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4) //ADDED BY GAURAV FOR CPUK/H 21_01_2023
+                {
+                    dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), subexamno);
+
+                }
+                else
+                {
+                    //dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), Convert.ToInt32(Examno[0]), Convert.ToInt32(ViewState["COURSENO"]));
+                    dsStudent = objMarksEntry.GetStudentsForPracticalCourseMarkEntry_IA_ADMIN_RCPIT(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["CCODE"].ToString(), Convert.ToInt16(hdfSection.Value), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt16(ViewState["sem"]), MExamNo, Convert.ToInt32(ViewState["COURSENO"]), subexamno);
+
+                }
 
                 if (dsStudent != null && dsStudent.Tables.Count > 0)
                 {
@@ -2015,6 +2032,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                     string filename = FuBrowse.FileName.ToString();
                     string Extension = Path.GetExtension(filename);
                     string Filepath = Server.MapPath("~/ExcelData/" + filename);
+                    // CreateBlobContainer(blob_ContainerName); 
                     CreateBlobContainer(blob_ContainerName);
                     if (filename.Contains(".xls") || filename.Contains(".xlsx"))
                     {
@@ -2034,6 +2052,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                         }
                         else
                         {
+
                             int retval = Blob_Upload(blob_ConStr, blob_ContainerName, filename, FuBrowse);
                             if (retval == 0)
                             {
@@ -2156,7 +2175,7 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
         //Get the reference of the Container. The GetConainerReference doesn't make a request to the Blob Storage but the Create() &CreateIfNotExists() method does. The method CreateIfNotExists() could be use whether the Container exists or not
         CloudBlobContainer container = client.GetContainerReference(Name);
         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-     
+        container.CreateIfNotExists();
     }
 
     private CloudBlobContainer Blob_Connection(string ConStr, string ContainerName)
@@ -2169,19 +2188,19 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
     public void DeleteIFExits(string FileName)
     {
-        CloudBlobContainer container = Blob_Connection(blob_ConStr, blob_ContainerName);
-        string FN = Path.GetFileNameWithoutExtension(FileName);
-        try
-        {
-            Parallel.ForEach(container.ListBlobs(FN, true), y =>
-            {
-                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-                ((CloudBlockBlob)y).DeleteIfExists();
-            });
-        }
-        catch (Exception)
-        {
-        }
+        //CloudBlobContainer container = Blob_Connection(blob_ConStr, blob_ContainerName);
+        //string FN = Path.GetFileNameWithoutExtension(FileName);
+        //try
+        //{
+        //    Parallel.ForEach(container.ListBlobs(FN, true), y =>
+        //    {
+        //        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+        //        ((CloudBlockBlob)y).DeleteIfExists();
+        //    });
+        //}
+        //catch (Exception)
+        //{
+        //}
     }
 
     public int Blob_Upload(string ConStr, string ContainerName, string DocName, FileUpload FU)
@@ -2194,7 +2213,11 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-           
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Blob
+            });
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);
@@ -2367,18 +2390,11 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
                 int courseno = Convert.ToInt32(lblCourse.ToolTip);
                 string[] course = lblCourse.Text.Split('~');
                 string ccode = course[0].Trim();
-
-
-
-                if (ddlExam.SelectedValue.StartsWith("S"))
-                    examtype = "S";
-                else if (ddlExam.SelectedValue.StartsWith("E"))
-                    examtype = "E";
-               // examtype = "S";-- comment by gaurav 14_02_2023
+                examtype = "S";
 
                 //return;
                 if (!string.IsNullOrEmpty(studids))
-                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryForSubExam(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype);
+                    cs = (CustomStatus)objMarksEntry.UpdateMarkEntryForSubExam_RCPIT_ADMIN(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype);
 
                 ///TO SAVE BLOG LOG//////////////
                 log = (CustomStatus)objMarksEntry.InsertMarkEntryBlobLog(Convert.ToInt32(ddlSession.SelectedValue), courseno, ccode, studids, marks, semno, lock_status, subExam, Convert.ToInt32(ViewState["examNo"]), sectionno, Convert.ToInt16(ddlSubjectType.SelectedValue), Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString(), examtype, file_name);
@@ -2503,6 +2519,65 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
     }
     #endregion
+    protected void ddlscheme_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        //if (ddlscheme.SelectedIndex > 0)
+        //{
+
+        //}
+        //else {
+            lvCourse.Visible = false;
+            Div_ExamNameList.Visible = false;
+            ddlSubjectType.SelectedIndex = 0;
+            ddlcourse.SelectedIndex = 0;
+      //  }
+      
+       
+    }
+
+
+
+    protected void ddlcourse_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (ddlcourse.SelectedIndex > 0)
+        {
+            foreach (RepeaterItem row in rptExamName.Items)
+            {
+                HiddenField hdn = row.FindControl("hdnfld_courseno") as HiddenField;
+                if (hdn.Value == ddlcourse.SelectedValue)
+                {
+                    row.Visible = true;
+                }
+                else
+                {
+                    row.Visible = false;
+                }
+            }
+        }
+        else
+        {
+            foreach (RepeaterItem row in rptExamName.Items)
+            {
+                row.Visible = true;
+            }
+        }
+    }
+
+
+    protected void BindCourse()
+    {
+        ddlcourse.Items.Clear();
+        ddlcourse.Items.Add(new ListItem("Please Select", "0"));
+        if (Div_ExamNameList.Visible == true)
+        {
+          //  AND (A.UA_NO= '+CAST(@P_UA_NO AS NVARCHAR(20))+' OR A.UA_NO= '+CAST(@P_UA_NO_PRAC AS NVARCHAR(20))+')' 
+            objCommon.FillDropDownList(ddlcourse, " ACD_STUDENT_RESULT R INNER JOIN  ACD_COURSE C ON (R.COURSENO   = C.COURSENO )", "DISTINCT R.COURSENO", "C.COURSE_NAME", " R.SESSIONNO   = " + Convert.ToInt16(ddlSession.SelectedValue) + " AND ISNULL(CANCEL,0) = 0 AND R.SUBID = " + Convert.ToInt16(ddlSubjectType.SelectedValue) +" AND (C.SCHEMENO="+Convert.ToInt16(ddlscheme.SelectedValue) + " OR "+ Convert.ToInt16(ddlscheme.SelectedValue)+"=0)", "R.COURSENO");
+
+
+                 //AND (R.SCHEMENO=@P_SCHEMENO OR @P_SCHEMENO=0)
+        }
+    }
 }
 
 
