@@ -1282,7 +1282,7 @@ public partial class examseatingreports : System.Web.UI.Page
 
         string EXAMDAT = Convert.ToString(ddlExamdate.SelectedItem);
         string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("dd/MM/yyyy");
-        if (Convert.ToInt32(Session["OrgId"]) == 1)
+        if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
         {
             btnexcelbutton.Visible = true;
             //ddlBlock.Visible = true;
