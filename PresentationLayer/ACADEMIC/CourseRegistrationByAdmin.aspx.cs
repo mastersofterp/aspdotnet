@@ -222,7 +222,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                         "CCODE", "COURSENO,COUNT(1) TIMES",
                         "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO < " + Convert.ToInt32(objSR.SESSIONNO)
                         + " AND IDNO = " + objSR.IDNO +
-                        "  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE", "CCODE,COURSENO");
+                        "  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO", "CCODE,COURSENO");
 
             if (dsAlreadyCrs != null && dsAlreadyCrs.Tables[0].Rows.Count > 0)
             {
@@ -1663,7 +1663,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
             DataSet dsAlreadyCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
                       "CCODE", "COURSENO,COUNT(1) TIMES",
                       "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO <= " + Convert.ToInt32(objSR.SESSIONNO)
-                      + " AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + studIDs + "','$'))  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO", "CCODE");
+                      + " AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + studIDs + "','$'))  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO,COURSENO", "CCODE");
 
             if (dsAlreadyCrs != null && dsAlreadyCrs.Tables[0].Rows.Count > 0)
             {

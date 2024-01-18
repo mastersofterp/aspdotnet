@@ -1057,7 +1057,7 @@
                                                 <asp:Button ID="btnBack" runat="server" CausesValidation="false" CssClass="btn btn-primary" OnClick="btnBack_Click" Text="Back" />
                                                 <asp:Button ID="btnReport" runat="server" CausesValidation="false" CssClass="btn btn-info" Enabled="false" OnClick="btnReport_Click" Text="Receipt Report" />
                                                 <asp:Button ID="btnCancel" runat="server" CausesValidation="false" CssClass="btn btn-danger" OnClick="btnCancel_Click" Text="Cancel" />
-                                                <asp:ValidationSummary ID="valSummery1" runat="server" DisplayMode="List" ShowSummary="false" ValidationGroup="submit" />
+                                                <asp:ValidationSummary ID="valSummery1" runat="server" DisplayMode="List" ShowSummary="false" ValidationGroup="submit" ShowMessageBox="true" />
                                             </div>
 
                                             <div id="divPreviousReceipts" runat="server" visible="false">
