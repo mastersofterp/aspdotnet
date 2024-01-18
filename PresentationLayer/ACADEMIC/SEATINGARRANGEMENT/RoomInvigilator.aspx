@@ -484,17 +484,12 @@
 
                                                         <%-- <thead>--%>
                                                         <tr class="bg-light-blue">
-                                                            <th style="text-align: center">Sr No. </th>
-
-                                                            <th style="text-align: center">
-                                                                <asp:CheckBox ID="chkheader" runat="server" onclick="return totAll(this);" TabIndex="1" />
-                                                                Check
-                                                        
-                                                            <%--<th style="text-align: center">Check </th>--%>
-                                                            <th style="text-align: center">Room No</th>
-                                                            <th style="text-align: center">Room Name </th>
-                                                            <th style="text-align: center">Room Capacity</th>
-                                                            <th style="text-align: center">Required Invigilator</th>
+                                                            <th style="text-align:center">Sr No. </th>
+                                                            <th style="text-align:center">Check </th>
+                                                            <th style="text-align:center">Room No</th>
+                                                            <th style="text-align:center">Room Name </th>
+                                                            <th style="text-align:center">Room Capacity</th>
+                                                            <th style="text-align:center">Required Invigilator</th>
                                                             <%-- <th>Sequence</th>--%>
                                                         </tr>
                                                     </thead>
@@ -508,23 +503,23 @@
                                         <ItemTemplate>
 
                                             <tr class="item">
-                                                <td style="text-align: center">
+                                                <td style="text-align:center">
                                                     <%# Container.DataItemIndex + 1 %>
                                                 </td>
-                                                <td style="text-align: center">
-                                                    <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" onclick="return chld(this);" />
+                                                <td style="text-align:center">
+                                                    <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" />
                                                     <%--Enabled='<%# Eval("DEAN_LOCK").ToString().ToLower() == "true" ? false : true %>'--%>
                                                 </td>
-                                                <td style="text-align: center">
+                                                <td style="text-align:center">
                                                     <asp:Label ID="lblRoomno" runat="server" Text='<%# Eval("ROOMNO")%>' ToolTip='<%# Eval("ROOMNO")%>' />
                                                 </td>
-                                                <td style="text-align: center">
+                                                <td style="text-align:center">
                                                     <asp:Label ID="lblRoomname" runat="server" Text='<%# Eval("ROOMNAME")%>' ToolTip='<%# Eval("ROOMNAME")%>' />
                                                 </td>
-                                                <td style="text-align: center">
+                                                <td style="text-align:center">
                                                     <asp:Label ID="lblRomCpt" runat="server" Text='<%# Eval("ROOMCAPACITY")%>' ToolTip='<%# Eval("ROOMCAPACITY")%>' />
 
-                                                <td style="text-align: center">
+                                                <td style="text-align:center">
                                                     <asp:TextBox ID="txtRequiredInvigilator" runat="server" TabIndex="1" placeholder="Please Enter" MaxLength="5" Text='<%# Eval("REQD_INVIGILATORS")%>'></asp:TextBox>
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtRequiredInvigilator"
                                                         ValidChars="1234567890" FilterMode="ValidChars" />
@@ -615,116 +610,6 @@
             }
         }
     </script>
-
-    <script language="javascript" type="text/javascript">
-        function totAll(headchk) {
-
-
-            var frm = document.forms[0]
-            for (i = 0; i < document.forms[0].elements.length; i++) {
-                var e = frm.elements[i];
-                if (e.type == 'checkbox') {
-                    if (headchk.checked == true) {
-                        e.checked = true;
-                    }
-                    else if (e.checked == false) {
-                        headchk.checked == false;
-                    }
-                    else {
-                        e.checked = false;
-                    }
-                }
-            }
-        }
-    </script>
-
-
-       <script language="javascript" type="text/javascript">
-       function chld(ths) {
-         //  var hdchk = document.getElementById("ctl00_ContentPlaceHolder1_lvRoomMaster_chkheader"); 
- 
-           {
-               if (ths.checked == false) {
-                   document.getElementById("ctl00_ContentPlaceHolder1_lvRoomMaster_chkheader").checked = false;
-
-                   //alert('Hii');
-               }
-               if (ths.checked == true) {
-
-                   var updateButtons = $('#divsessionlist input[type=checkbox]');
-                   var count =0, chkcount=0;
-                   $('#divsessionlist tbody tr').each(function () {
-                       count +=1;
-                       var ck =  $(this).find('input[type=checkbox]').prop('checked');
-                       if(ck)
-                       {
-                           chkcount +=1;
-                       }
-                   });
-                   if(chkcount==count)
-                   {
-                       document.getElementById("ctl00_ContentPlaceHolder1_lvRoomMaster_chkheader").checked = true;
-                   }
-                   
-
-               }
-           }
-       }
-
-    </script>
-
-    
-
-
-
-   <%-- <script language="javascript" type="text/javascript">
-        function chld(ths) {
-
-        var checkboxes = $('#divsessionlist input[type=checkbox]');
-
-        // Check if the clicked checkbox is the header checkbox
-        if (ths === headerCheckbox) {
-            checkboxes.prop('checked', ths.checked);
-        } else {
-            // Check the status of all checkboxes
-            var allChecked = true;
-            checkboxes.each(function () {
-                if (!this.checked) {
-                    allChecked = false;
-                    return false; // exit the loop early if any checkbox is unchecked
-                }
-            });
-
-            // Update the state of the header checkbox
-            headerCheckbox.checked = allChecked;
-        }
-    }
-</script>--%>
-
-
-<%--    <script language="javascript" type="text/javascript">
-        function chld(ths) {
-            
-      
-        // Assuming all child checkboxes share a common parent container
-        var columnCheckboxes = $('#divsessionlist input[type=checkbox]');
-
-        // Iterate through each checkbox in the column
-        for (var i = 0; i < columnCheckboxes.length; i++) {
-            var checkbox = columnCheckboxes[i];
-
-            // If any checkbox in the column is unchecked, uncheck the header checkbox
-            if (checkbox.checked === false) {
-                headerCheckbox.checked = false;
-                return; // exit the loop early
-            }
-        }
-
-        // If all checkboxes in the column are checked, check the header checkbox
-        headerCheckbox.checked = true;
-    }
-    </script>--%>
-
 
 
 
