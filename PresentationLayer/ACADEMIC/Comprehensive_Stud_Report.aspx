@@ -325,7 +325,7 @@
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_3" onclick="return Checktabid(this)">Certificates Details</a>
                                                             </li>
                                                             <li class="nav-item" runat="server" id="divOtherFees" visible="false">
-                                                                 <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
+                                                                <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_OtherFees" onclick="return Checktabid(this)">Other Fee Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
@@ -368,15 +368,51 @@
                                             </div>
 
                                             <div class="col-lg-10 col-md-8 col-12 mt-3">
-                                                <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
-                                                    <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <label>Session</label>
+
+                                                <div class="row">
+                                                    <div class="col-lg-10 col-md-12 col-12">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 col-md-6 col-12">
+                                                                <ul class="list-group list-group-unbordered">
+                                                                    <li class="list-group-item"><b>Student Name :</b>
+                                                                        <a class="sub-label">
+                                                                            <asp:Label ID="lblfixStdName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-6 col-12">
+                                                                <ul class="list-group list-group-unbordered">
+                                                                    <li class="list-group-item"><b>RRN :</b>
+                                                                        <a class="sub-label">
+                                                                            <asp:Label ID="lblfixRRN" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-12 mt-2">
+                                                                <ul class="list-group list-group-unbordered">
+                                                                    <li class="list-group-item"><b>Degree/Branch :</b>
+                                                                        <a class="sub-label">
+                                                                            <asp:Label ID="lblfixdegreeBranch" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-lg-4 col-md-6 col-12 mt-3">
+                                                            <div class="label-dynamic">
+                                                                <sup>* </sup>
+                                                                <label>Session</label>
+                                                            </div>
+                                                            <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                            </asp:DropDownList>
+                                                        </div>
                                                     </div>
-                                                    <asp:DropDownList ID="ddlSession" runat="server" AppendDataBoundItems="true" OnSelectedIndexChanged="ddlSession_SelectedIndexChanged" AutoPostBack="true" CssClass="form-control" data-select2-enable="true">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
+                                                    <div class="col-lg-2 col-md-3 col-6">
+                                                         <asp:Image ID="imgPhoto" runat="server" src="../Images/nophoto.jpg" alt="photo" class="w-75" />
+                                                    </div>
                                                 </div>
+
+
                                                 <div class="tab-content" id="my-tab-content">
                                                     <div class="tab-pane active" id="tab_1">
                                                         <div id="divStudentInfo">
@@ -503,6 +539,10 @@
                                                                             <li class="list-group-item"><b>Bank Address :</b>
                                                                                 <a class="sub-label">
                                                                                     <asp:Label ID="lblBankAddress" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+                                                                            <li class="list-group-item"><b>ABC ID :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblAbcId" runat="server" Font-Bold="True"></asp:Label></a>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
@@ -631,14 +671,14 @@
                                                                         </ul>
                                                                     </div>
 
-                                                                    <div class="col-lg-4 col-md-6 col-12">
+                                                                   <%-- <div class="col-lg-4 col-md-6 col-12">
                                                                         <ul class="list-group list-group-unbordered">
                                                                             <li class="list-group-item"><b>Photo :</b>
                                                                                 <a class="sub-label">
                                                                                     <asp:Image ID="imgPhoto" runat="server" Height="120px" Width="128px" /></a>
                                                                             </li>
                                                                         </ul>
-                                                                    </div>
+                                                                    </div>--%>
 
                                                                     <%--<div class="col-12">--%>
                                                                     <%--<div class="row">--%>
@@ -1191,15 +1231,18 @@
                                                     <div class="tab-pane fade" id="tab_5">
                                                         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                             <ContentTemplate>
-
-
-
                                                                 <div class="col-12">
+                                                                  <div class="row mb-1">
                                                                     <div class="sub-heading">
                                                                         <h5>Course Details</h5>
                                                                     </div>
+                                                                     <div class="col-lg-2 col-md-6 offset-lg-10 mb-2">
+                                                                         <asp:Button ID="btnPrintRegSlip" runat="server" Text="Registration Slip" OnClick="btnPrintRegSlip_Click" Enabled="true" CssClass="btn btn-info" Visible="false" />
+                                                                     </div>
+                                                                   </div>
                                                                 </div>
                                                                 <div id="divcourse" class="col-12">
+                                                                     
                                                                     <asp:ListView ID="lvCourseReg" runat="server">
                                                                         <LayoutTemplate>
                                                                             <div class="table-responsive" style="max-height: 320px; overflow: scroll; border-top: 1px solid #e5e5e5;">
