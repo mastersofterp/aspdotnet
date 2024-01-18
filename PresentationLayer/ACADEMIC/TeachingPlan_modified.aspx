@@ -573,12 +573,13 @@
                                                         <td>
                                                             <asp:ImageButton ID="btnEdit" runat="server" AlternateText="Edit Record" CausesValidation="false" CommandArgument='<%# Eval("TP_NO") %>'
                                                                 ImageUrl='<%# "~/images/" + (Eval("TEACHINGPLAN_NO").ToString() == "0" ? "edit.png" : "disable.png") %>' OnClick="btnEdit_Click" TabIndex="5" ToolTip="Edit Record"
-                                                                Enabled='<%# Convert.ToInt32(Eval("TEACHINGPLAN_NO"))== 0 ? true : false %>' />
+                                                                Enabled='<%# Eval("TEACHINGPLAN_NO").ToString() == "0"? true : false %>' />
                                                         </td>
                                                         <td>
                                                             <asp:ImageButton ID="btnDelete" runat="server" CommandArgument='<%# Eval("TP_NO") %>'
                                                                 ImageUrl='<%# "~/images/" + (Eval("TEACHINGPLAN_NO").ToString() == "0" ? "delete.png" : "disable.png") %>' OnClick="btnDelete_Click"
-                                                                OnClientClick="return ConfirmToDelete(this);" TabIndex="5" ToolTip='<%# Eval("TP_NO") %>' Enabled='<%# Convert.ToInt32(Eval("TEACHINGPLAN_NO"))== 0 ? true : false %>' />
+                                                                OnClientClick="return ConfirmToDelete(this);" TabIndex="5" ToolTip='<%# Eval("TP_NO") %>'
+                                                                 Enabled='<%# Eval("TEACHINGPLAN_NO").ToString() == "0" ? true : false %>' />
                                                         </td>
                                                         <td><%# Eval("UNIT_NO")%></td>
                                                         <td><%# Eval("LECTURE_NO")%></td>

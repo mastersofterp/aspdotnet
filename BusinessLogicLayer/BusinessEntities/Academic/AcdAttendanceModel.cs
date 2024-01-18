@@ -400,6 +400,13 @@ namespace IITMS
                 get { return _tutorial; }
                 set { _tutorial = value; }
             }
+
+            private string _tpNos = string.Empty;
+            public string TpNos
+            {
+                get { return _tpNos; }
+                set { _tpNos = value; }
+            }
             #endregion
 
             #region for special leave

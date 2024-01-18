@@ -256,7 +256,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             {
                 electtype = 1;
                 ddlTopicCovered.Items.Clear();
-                ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
+                //ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
                 DataSet ds = objAttController.GetFacultyWiseTopicCovered(Convert.ToInt32(ddlColgSession.SelectedValue), Convert.ToInt32(Session["college_id_att"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(ViewState["Courseno"]), Convert.ToInt32(Session["userno_Faculty"]), tutorial, Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["OrgId"]), electtype);
                 if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -264,19 +264,18 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     ddlTopicCovered.DataTextField = ds.Tables[0].Columns["TOPIC_COVERED"].ToString();
                     ddlTopicCovered.DataValueField = ds.Tables[0].Columns["TP_NO"].ToString();
                     ddlTopicCovered.DataBind();
-                    ddlTopicCovered.SelectedIndex = 1;
+                    //  ddlTopicCovered.SelectedIndex = 1;
                 }
-                else
-                {
-                    ddlTopicCovered.Items.Clear();
-                    ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
-                }
+                //else
+                //{//ddlTopicCovered.Items.Clear();
+                //    // ddlTopicCovered.Items.Add(new ListItem("Select All", "0"));
+                //}
             }
             else if (rdoGlobalElective.Checked == true)
             {
                 electtype = 2;
                 ddlTopicCovered.Items.Clear();
-                ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
+                //ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
                 DataSet ds = objAttController.GetFacultyWiseTopicCovered(Convert.ToInt32(ddlSessionGlobal.SelectedValue), Convert.ToInt32(Session["college_id_att"]), Convert.ToInt32(Session["_semNo"]), Convert.ToInt32(Session["_schemeNo"]), Convert.ToInt32(ViewState["Alt_Courseno"]), Convert.ToInt32(Session["userno_Faculty"]), tutorial, Convert.ToInt32(Session["_sectionNo"]), Convert.ToInt32(Session["_batchNo"]), Convert.ToInt32(Session["OrgId"]), electtype);
                 if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -284,13 +283,13 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                     ddlTopicCovered.DataTextField = ds.Tables[0].Columns["TOPIC_COVERED"].ToString();
                     ddlTopicCovered.DataValueField = ds.Tables[0].Columns["TP_NO"].ToString();
                     ddlTopicCovered.DataBind();
-                    ddlTopicCovered.SelectedIndex = 1;
+                    //ddlTopicCovered.SelectedIndex = 1;
                 }
-                else
-                {
-                    ddlTopicCovered.Items.Clear();
-                    ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
-                }
+                //else
+                //{
+                //    ddlTopicCovered.Items.Clear();
+                //    ddlTopicCovered.Items.Add(new ListItem("Please Select", "0"));
+                //}
             }
             //txtTopcDesc.Visible = false;
             // objCommon.FillDropDownList(ddlTopicCovered, "ACD_COURSE_TEACHER T INNER JOIN ACD_TEACHINGPLAN TP ON (T.SESSIONNO = TP.SESSIONNO AND T.SEMESTERNO = TP.TERM AND (T.CCODE  = TP.CCODE AND T.COURSENO = TP.COURSENO) AND T.UA_NO = TP.UA_NO AND T.COLLEGE_ID=TP.COLLEGE_ID)", "DISTINCT TP_NO", "TOPIC_COVERED", " TERM=" + Session["_semNo"].ToString() + " AND T.SCHEMENO=" + Session["_schemeNo"].ToString() + " AND SLOT=" + Session["_slotNo"] + " AND T.SECTIONNO =" + Session["_sectionNo"].ToString() + " AND (T.UA_NO=" + Session["userno_Faculty"].ToString() + " OR T.ADTEACHER =" + Session["userno_Faculty"].ToString() + ") AND T.COURSENO =" + ViewState["Alt_Courseno"].ToString() + "  AND (T.BATCHNO =" + Session["_batchNo"].ToString() + " OR T.BATCHNO =" + Session["_batchNo"].ToString() + ") AND ISNULL(T.CANCEL,0)=0 AND T.SESSIONNO =" + ddlSession.SelectedValue + "  AND CAST(TP.[DATE] AS DATE) = CAST(CONVERT(DATE,'" + Date.ToString("dd/MM/yyyy") + "',103) AS DATE) AND T.COLLEGE_ID=" + ddlInstitute.SelectedValue + "AND T.ORGANIZATIONID="+Session["OrgId"]+" AND  ISNULL(TUTORIAL,0)=" + tutorial, "");
@@ -1504,7 +1503,7 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                         ddlTopicCovered.Visible = true;
                         divTopicCoveredStatus.Visible = true;
                         this.BindTopicCovered();
-                        ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString();
+                       // ddlTopicCovered.SelectedValue = hdnAttendanceNo.Value == null || hdnAttendanceNo.Value == "" ? "0" : hdnAttendanceNo.Value.ToString();
                         ddltopicstatus.SelectedValue = hdnTopicCoveredStatus.Value == null || hdnTopicCoveredStatus.Value == "" || hdnTopicCoveredStatus.Value == "0" ? "1" : hdnTopicCoveredStatus.Value.ToString();
                         txtTopcDesc.Visible = false;
                         //txtTopcDesc.Text = objCommon.LookUp("ACD_COURSE_TEACHER T INNER JOIN ACD_TEACHINGPLAN TP ON (T.SESSIONNO = TP.SESSIONNO AND T.SEMESTERNO = TP.TERM AND (T.CCODE  = TP.CCODE AND T.COURSENO = TP.COURSENO) AND T.UA_NO = TP.UA_NO)", "DISTINCT TP.TOPIC_COVERED", "(T.UA_NO=" + uano + " OR T.ADTEACHER =" + uano + ") AND T.COURSENO =" + courseno + "  AND (T.BATCHNO =" + batchno + " OR T.BATCHNO =" + batchno + ") AND ISNULL(T.CANCEL,0)=0 AND T.SESSIONNO =" + sessionno + "  AND CAST(TP.[DATE] AS DATE) = CAST(CONVERT(DATE,'" + date.ToString("dd/MM/yyyy") + "',103) AS DATE)");
@@ -1514,6 +1513,22 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
                             ddlClassType.Enabled = false;
                         }
                         hdnTeachingPlanStatus.Value = "1";
+
+                        if (string.IsNullOrEmpty(hdnAttendanceNo.Value))
+                            ddlTopicCovered.DataValueField = "0";
+                        else
+                        {
+                            if (ddlTopicCovered.Items.Count > 0)
+                            {
+                                foreach (ListItem itm in ddlTopicCovered.Items)
+                                {
+                                    if (hdnAttendanceNo.Value.Contains(itm.Value))
+                                        itm.Selected = true;
+                                }
+                            }
+                            else
+                                return;
+                        }
                     }
                     else
                     {
@@ -1898,8 +1913,6 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
         int _schemeType = (rbnNew.Checked ? 1 : 2);
         try
         {
-
-
             if (Session["_AttType"].Equals("1"))// alternate
             {
                 if (Session["_TranType"].ToString().Equals("3"))//for Engage credits goes to main t.(scheduleno)
@@ -1921,15 +1934,15 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             objAttModel.Att_date = Convert.ToDateTime(txtLectDate.Text);
             objAttModel.CourseNo = Convert.ToInt32(txtCourse.ToolTip);
 
-            if (ddlTopicCovered.SelectedIndex == 0)   // ADDED BY SAFAL GUPTA ON 06052021
-            {
+            //if (ddlTopicCovered.SelectedIndex == 0)   // ADDED BY SAFAL GUPTA ON 06052021
+            //{
 
-                objAttModel.Topic_Covered = txtTopcDesc.Text.Trim();
-            }
-            else
-            {
-                objAttModel.Topic_Covered = ddlTopicCovered.SelectedItem.Text;
-            }
+            //    objAttModel.Topic_Covered = txtTopcDesc.Text.Trim();
+            //}
+            //else
+            //{
+            //    objAttModel.Topic_Covered = ddlTopicCovered.SelectedItem.Text;
+            //}
             //objAttModel.Topic_Covered = ddlClassType.SelectedValue == "0" ? ddlTopicCovered.SelectedItem.Text : txtTopcDesc.Text.Trim();
             objAttModel.Curdate = DateTime.Now;
             objAttModel.StudID = string.Empty;
@@ -1948,14 +1961,14 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
             int TPlanYesNo = 0;
 
             //TPlanYesNo = objCommon.LookUp("ACD_ATTENDANCE_CONFIG", "ISNULL(TEACHING_PLAN,0)", " SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue) + " AND ISNULL(ACTIVE,0)=1 and ISNULL(SCHEMETYPE,0)=" + _schemeType) == string.Empty ? 0 : Convert.ToInt32(objCommon.LookUp("ACD_ATTENDANCE_CONFIG", "ISNULL(TEACHING_PLAN,0)", " SESSIONNO=" + Convert.ToInt32(ddlColgSession.SelectedValue) + " AND ISNULL(ACTIVE,0)=1 and ISNULL(SCHEMETYPE,0)=" + _schemeType + " AND COLLEGE_ID=" + Convert.ToInt32(Session["college_id_att"]) + " AND ORGANIZATIONID=" + Session["OrgId"]));//COLLEGE_ID="+Convert.ToInt32(ddlInstitute.SelectedValue) Added By Dileep Kare on 10.04.2021
-            if (Convert.ToInt32(ViewState["TPlanYesNo"]) == 1)// if(TPlanYesNo=1)THEN attendance base on teaching plan..
-            {
-                objAttModel.TpNo = Convert.ToInt32(ddlTopicCovered.SelectedValue) == null ? 0 : Convert.ToInt32(ddlTopicCovered.SelectedValue);
-            }
-            else
-            {
-                objAttModel.TpNo = 0;
-            }
+            //if (Convert.ToInt32(ViewState["TPlanYesNo"]) == 1)// if(TPlanYesNo=1)THEN attendance base on teaching plan..
+            //{
+            //    objAttModel.TpNo = Convert.ToInt32(ddlTopicCovered.SelectedValue) == null ? 0 : Convert.ToInt32(ddlTopicCovered.SelectedValue);
+            //}
+            //else
+            //{
+            //    objAttModel.TpNo = 0;
+            //}
 
             objAttModel.TopicCoveredStatus = Convert.ToInt32(ddltopicstatus.SelectedValue) == null ? 0 : Convert.ToInt32(ddltopicstatus.SelectedValue); // Added By Rishabh on 02/03/2023
 
@@ -1985,6 +1998,32 @@ public partial class ACADEMIC_TIMETABLE_AttendanceEntry : System.Web.UI.Page
 
             if (objAttModel.StudID.Substring(objAttModel.StudID.Length - 1) == ",")
                 objAttModel.StudID = objAttModel.StudID.Substring(0, objAttModel.StudID.Length - 1);
+
+            if (Convert.ToInt32(ViewState["TPlanYesNo"]) == 1)
+            {
+                foreach (ListItem itm in ddlTopicCovered.Items)
+                {
+                    if (itm.Selected)
+                    {
+                        objAttModel.Topic_Covered += itm.Text + "|";
+                        objAttModel.TpNos += itm.Value + ",";
+                    }
+                }
+
+                if (string.IsNullOrEmpty(objAttModel.TpNos))
+                {
+                    objCommon.DisplayMessage(updTeachingPlan, "Please select Atleast one Topic.", this.Page);
+                    return;
+                }
+
+                objAttModel.TpNos = objAttModel.TpNos.TrimEnd(',');
+                objAttModel.Topic_Covered = objAttModel.Topic_Covered.TrimEnd('|');
+            }
+            else
+            {
+                objAttModel.Topic_Covered = txtTopcDesc.Text.Trim();
+                objAttModel.TpNos = "0";
+            }
 
             //Add Attendance Entry
             if (rdoCore.Checked == true)
