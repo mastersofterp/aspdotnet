@@ -458,6 +458,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
 
             if (cs.Equals(CustomStatus.RecordSaved))
             {
+                this.clearcotrollers();
                 objCommon.DisplayMessage(this.Page, "Payment type modification done successfully.", this.Page);
                 this.Controlls_Visible();
                 divNewDemandAMounts.Visible = false;
