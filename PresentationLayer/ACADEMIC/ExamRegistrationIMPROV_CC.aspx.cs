@@ -235,7 +235,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
         try
         {
             string demandno = objCommon.LookUp("ACD_DCR", "MAX(DCR_NO)", "");
-            DataSet ds = feeController.GetNewReceiptData("B", Int32.Parse(Session["userno"].ToString()), "MSIE");
+            DataSet ds = feeController.GetNewReceiptData("B", Int32.Parse(Session["userno"].ToString()), "MSE");
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 DataRow dr = ds.Tables[0].Rows[0];
@@ -293,13 +293,13 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
             //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
-                Response.Redirect("~/notauthorized.aspx?page=ExamRegistration.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=ExamRegistrationIMPROV_CC.aspx");
             }
         }
         else
         {
             //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=ExamRegistration.aspx");
+            Response.Redirect("~/notauthorized.aspx?page=ExamRegistrationIMPROV_CC.aspx");
         }
     }
     private void ShowDetails()
@@ -505,7 +505,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
             if (idno == null || idno == 0)
             {
                 objCommon.DisplayMessage(updatepnl,"No Record Found...", this.Page);
-
+                divbtn.Visible = false;
             }
             else
             {
@@ -520,7 +520,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 call_values = "" + idno + "," + sessionno + "," + Convert.ToInt32(lblScheme.ToolTip) + "," + degreeno + "," + branchno + "";               
                 dsSubjects = objCommon.DynamicSPCall_Select(proc_name, para_name, call_values);
 
-               
+                ViewState["cfound"] = 1;
 
 
                 if (dsSubjects.Tables[0].Rows.Count > 0)
@@ -538,6 +538,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 }
                 else
                 {
+                    
                     lvFailCourse.DataSource = null;
                     lvFailCourse.DataBind();
                     lvFailCourse.Visible = false;
@@ -551,6 +552,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                     btnPrintRegSlip.Visible = false;
                     btnPrintRegSlip.Enabled=false;
                     divbtn.Visible = false;
+                    ViewState["cfound"] = 0;
                     return;
                 }
 
@@ -1040,12 +1042,12 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                             string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
                             if (que_out == "1")
                             {
-                                objCommon.DisplayMessage("Course Registration done Sucessfully, Wait for the final approval from the Head of Department", this.Page); 
+                                objCommon.DisplayMessage("Course Registration done Sucessfully", this.Page); 
                                 HideClm();
                             }
                             else
                             {
-                                objCommon.DisplayMessage("Course Registration Update Sucessfully, Wait for the final approval from the Head of Department", this.Page);
+                                objCommon.DisplayMessage("Course Registration Update Sucessfully", this.Page);
                                
                                 HideClm();
                             }
@@ -1175,8 +1177,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                             {
 
                                 Label lblAmt = dataitem.FindControl("lblAmt") as Label;
-                                HiddenField hdfExamRegistered = dataitem.FindControl("hdfExamRegistered") as HiddenField;
-                                HiddenField hdfStudRegistered = dataitem.FindControl("hdfStudRegistered") as HiddenField;
+                                HiddenField hdfExamRegistered = dataitem.FindControl("hdfExamRegisteredimprovement") as HiddenField;
+                                HiddenField hdfStudRegistered = dataitem.FindControl("hdfStudRegisteredimprovement") as HiddenField;
                                 HiddenField hdfSubid = dataitem.FindControl("hdfSubid") as HiddenField;
                                 decimal CourseAmt = Convert.ToDecimal(lblAmt.Text);
                                 if (ViewState["usertype"].ToString() == "2")
@@ -1232,20 +1234,20 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                             int IfDemandCreated = 0;
                             IfDemandCreated = Convert.ToInt32(objCommon.LookUp("ACD_DEMAND", "COUNT(DISTINCT 1) _COUNT", "IDNO=" + Convert.ToInt32(Session["idno"]) + " AND SESSIONNO =" + Convert.ToInt32(ViewState["sessionnonew"]) + " AND RECIEPT_CODE = 'MSE' AND ISNULL(CAN,0)=0 and SEMESTERNO=" + lblSemester.ToolTip));
 
-                            if (IfDemandCreated > 0)
-                            {
-                                ViewState["TotalSubFee"] = (Convert.ToDecimal(TotalAmt)).ToString();
-                                FinalTotal.Text = (Convert.ToDecimal(TotalAmt)).ToString();// + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"]) + valuationfee).ToString();
-                                Amt = 0;
-                                CourseAmtt = 0;
-                            }
-                            else
-                            {
+                            //if (IfDemandCreated > 0)
+                            //{
+                            //    ViewState["TotalSubFee"] = (Convert.ToDecimal(TotalAmt)).ToString();
+                            //    FinalTotal.Text = (Convert.ToDecimal(TotalAmt)).ToString();// + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"]) + valuationfee).ToString();
+                            //    Amt = 0;
+                            //    CourseAmtt = 0;
+                            //}
+                            //else
+                            //{
                                 ViewState["TotalSubFee"] = Convert.ToDecimal(TotalAmt);
                                 FinalTotal.Text = (Convert.ToDecimal(TotalAmt) + Convert.ToDecimal(lblfessapplicable.Text) + Convert.ToDecimal(lblCertificateFee.Text) + Convert.ToDecimal(ViewState["latefee"])).ToString();
                                 Amt = 0;
                                 CourseAmtt = 0;
-                            }
+                            //}
 
                         }
                   
@@ -1340,8 +1342,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                             {
                                 CheckBox cbRow = dataitem.FindControl("chkAccept") as CheckBox;
                                 Label lblAmt = dataitem.FindControl("lblAmt") as Label;
-                                HiddenField hdfExamRegistered = dataitem.FindControl("hdfExamRegistered") as HiddenField;
-                                HiddenField hdfStudRegistered = dataitem.FindControl("hdfStudRegistered") as HiddenField;
+                                HiddenField hdfExamRegistered = dataitem.FindControl("hdfExamRegisteredimprovement") as HiddenField;
+                                HiddenField hdfStudRegistered = dataitem.FindControl("hdfStudRegisteredimprovement") as HiddenField;
                                 decimal CourseAmt = Convert.ToDecimal(lblAmt.Text);
                                 if (cbRow.Checked == true)
                                 {
@@ -1741,7 +1743,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
 
 
 
-            string payactivityno = objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "TOP 1 ACTIVITYNO", "ACTIVESTATUS=1 AND ACTIVITYNAME like '%Exam%'");
+            string payactivityno = objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "TOP 1 ACTIVITYNO", "ACTIVESTATUS=1 AND ACTIVITYNAME like '%Improv%'");
             if (payactivityno == string.Empty || payactivityno == null)
             {
                 objCommon.DisplayMessage(updatepnl, "Payment Activity Master is not define.", this.Page);
@@ -1791,7 +1793,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
-                objCommon.ShowError(Page, "Academic_ExamRegistration_CC.btnPay_Click() --> " + ex.Message + " " + ex.StackTrace);
+                objCommon.ShowError(Page, "ExamRegistrationIMPROV_CC.aspx.btnPay_Click() --> " + ex.Message + " " + ex.StackTrace);
             else
                 objCommon.ShowError(Page, "Server Unavailable.");
         }
@@ -1829,8 +1831,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 int CheckExamfeesApplicableOrNot = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "COUNT(FID)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%'  AND FEETYPE=6 AND COLLEGE_ID=" + cid + "  AND ISNULL(IsFeesApplicable,0)=1 and ISNULL(CANCEL,0)=0"));
                 if (CheckExamfeesApplicableOrNot >= 1)
                 {
-                   
-                    applycourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ISNULL(STUD_EXAM_REGISTERED,0)=1 AND ISNULL(EXAM_REGISTERED,0)=1 AND SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"])));
+
+                    applycourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ISNULL(STUD_EXAM_REGISTERED_IMPROVEMENT,0)=1 AND ISNULL(EXAM_REGISTERED_IMPROVEMENT,0)=1 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"])));
                     if (applycourse > 0)
                     {
                         if (ViewState["usertype"].ToString() == "2")
@@ -1918,8 +1920,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 }
                 else
                 {
-
-                    applycourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(idno)", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ISNULL(STUD_EXAM_REGISTERED,0)=1 AND ISNULL(EXAM_REGISTERED,0)=1 AND  SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"])));
+                    applycourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(IDNO)", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ISNULL(STUD_EXAM_REGISTERED_IMPROVEMENT,0)=1 AND ISNULL(EXAM_REGISTERED_IMPROVEMENT,0)=1 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"])));
+                    //applycourse = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(idno)", "IDNO=" + Convert.ToInt32(Session["idno"]) + "AND ISNULL(STUD_EXAM_REGISTERED,0)=1 AND ISNULL(EXAM_REGISTERED,0)=1 AND  SESSIONNO=" + Convert.ToInt32(ViewState["sessionnonew"])));
                     if (applycourse > 0)
                     {
                         if (e.Item.ItemType == ListViewItemType.DataItem)
@@ -1965,6 +1967,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 //    btnPrintRegSlip.Visible = true;
                 //}
             }
+
+            
         }
        
         catch (Exception ex)
@@ -2819,7 +2823,15 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
                 FinalTotal.Text = "";
                 this.ShowDetails();
                 bindcourses();
-                divbtn.Visible = true;
+                if (Convert.ToInt32(ViewState["cfound"]) == 1)
+                {
+                    divbtn.Visible = true;
+                }
+                else
+                {
+                    divbtn.Visible = false;
+                }
+                
                 //btnhideshow();
 
                 //btnSubmit.Visible = true;
