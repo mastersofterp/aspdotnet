@@ -283,20 +283,20 @@
 
             if (ddlRemarkText == "Present" || ddlRemarkText == "PRESENT" || ddlRemarkText == "present") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val(""); //this line added by Saurabh L on 18/01/2023 Purpose: To clear Time 
             }
             else if (ddlRemarkText == "Absent" || ddlRemarkText == "ABSENT" || ddlRemarkText == "absent") {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = false;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val("");
             }
             else if (ddlRemarkText == "Late" || ddlRemarkText == "LATE" || ddlRemarkText == "late")  // for late
             {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime").disabled = false;
             }
                 //else if (id == "4") {
@@ -306,7 +306,7 @@
                 //}
             else {
                 document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").checked = true;
-                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = false;
+                document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_chkIdno").disabled = true;
                 $(document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl" + index + "_txtTime")).val("");
                 //document.getElementById("ctl00_ContentPlaceHolder1_lvDetails_ctrl"+index+"_txtTime").disabled=false; 
             }
