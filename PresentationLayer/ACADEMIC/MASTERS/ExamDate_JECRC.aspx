@@ -5,7 +5,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css") %>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.js")%>"></script>
-
     <style>
         .dataTables_scrollHeadInner {
             width: max-content!important;
@@ -27,28 +26,40 @@
             width: 100px !important;
         }
 
-        .tbl-reponsive {
-            width: 100%;
-            max-height: 400px;
-            overflow: scroll;
-        }
-
-        @media (max-width: 1200px) {
-            .tbl-panel2 {
+        @media (min-width: 1201px) {
+            .tbl-panel3 {
                 width: 100%;
-                overflow-x: scroll;
+                overflow: scroll;
+                max-height: 400px;
             }
         }
 
         @media (max-width: 1200px) {
+            .tbl-panel1 {
+                width: 100%;
+                overflow: scroll;
+                max-height: 400px;
+            }
+
+            .tbl-panel2 {
+                width: 100%;
+                overflow: scroll;
+                max-height: 400px;
+            }
+
             .tbl-panel3 {
                 width: 100%;
-                overflow-x: scroll;
+                overflow: scroll;
+                max-height: 320px;
+            }
+
+            .tbl-panel4 {
+                width: 100%;
+                overflow: scroll;
+                max-height: 400px;
             }
         }
     </style>
-
-
     <div>
         <asp:UpdateProgress ID="updProg" runat="server" AssociatedUpdatePanelID="updExamdate"
             DynamicLayout="true" DisplayAfter="0">
@@ -296,9 +307,6 @@
                                             <asp:Button ID="btnShow" runat="server" Text="Show Courses" OnClick="btnShow_Click" CssClass="btn btn-info" ValidationGroup="Show" TabIndex="1" />
 
                                             <asp:Button ID="btnSubmit" runat="server" Text="Submit" OnClick="btnSubmit_Click" CssClass="btn btn-info" TabIndex="1" ValidationGroup="submit" Visible="false" />
-
-
-
                                             <asp:Button ID="btnReport" runat="server" Text="Exam Time Table Report" OnClick="btnReport_Click" ValidationGroup="Show" CssClass="btn btn-info" TabIndex="1" />
                                             <asp:Button ID="btndatewisereport" runat="server" Text="DateWise Time Table Report" OnClick="btndatewisereport_Click" ValidationGroup="Datewise" CssClass="btn btn-info" TabIndex="1" />
 
@@ -317,7 +325,7 @@
                                                     <div class="sub-heading">
                                                         <h5>Course List</h5>
                                                     </div>
-                                                    <div class="tbl-reponsive">
+                                                    <div class="tbl-panel1">
                                                         <table id="ID5" class="table table-striped table-bordered " style="width: 100%">
                                                             <thead>
                                                                 <tr class="bg-light-blue">
@@ -341,7 +349,8 @@
                                                 <ItemTemplate>
                                                     <tr id="trCurRow">
                                                         <td>
-                                                            <asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("STATUS").ToString() == "True" ? true : false %>' ToolTip='<%#Eval("COURSENO")%>' TabIndex="1" />
+                                                            <%--<asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("STATUS").ToString() == "True" ? true : false %>' ToolTip='<%#Eval("COURSENO")%>' TabIndex="1" />--%>
+                                                            <asp:CheckBox ID="chkAccept" runat="server" ToolTip='<%#Eval("COURSENO")%>' TabIndex="1" />
                                                         </td>
                                                         <td><%# Eval("SUBJECT_NAME")%></td>
                                                         <asp:Label ID="lblCourseno" runat="server" Text='<%# Eval("COURSENO")%>' ToolTip='<%# Eval("CCODE")%>' Visible="false"></asp:Label>
@@ -349,11 +358,11 @@
                                                         <td>
                                                             <div class="input-group">
                                                                 <div class="input-group-addon">
-                                                                    <i class="fa fa-calendar" id='<%# "imgExamDate2" + (Container.DataItemIndex + 1) %>'></i>
+                                                                    <i class="fa fa-calendar"></i>
                                                                 </div>
-                                                                <%--    <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onKeyPress="javascript:checkDate();" AutoPostBack="true" OnTextChanged="txtExamDate_TextChanged" />--%>
-                                                                <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" />
-                                                                <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID='<%# "imgExamDate2" + (Container.DataItemIndex + 1) %>' TargetControlID="txtExamDate" Enabled="true" OnClientDateSelectionChanged="checkDate" />
+                                                                <%-- <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit" ToolTip='<%# Container.DataItemIndex + 1 %>' Enabled="false" TabIndex="1" onKeyPress="javascript:checkDate();" AutoPostBack="true" OnTextChanged="txtExamDate_TextChanged" />--%>
+                                                                <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit" ToolTip='' Enabled="false" TabIndex="1" onblur="onTextBoxBlur(this)" AutoPostBack="true" OnTextChanged="txtExamDate_TextChanged" />
+                                                                <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate" TargetControlID="txtExamDate" Enabled="true" OnClientDateSelectionChanged="checkDate" />
                                                                 <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate" />
                                                                 <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit" />
                                                                 <asp:RequiredFieldValidator ID="rfvExamDate" runat="server" ControlToValidate="txtExamDate" Display="None" ErrorMessage="Please select Exam Date!!" ValidationGroup="Submit"></asp:RequiredFieldValidator>
@@ -514,7 +523,7 @@
                                                     <div class="sub-heading">
                                                         <h5>Course List</h5>
                                                     </div>
-                                                    <div class="tbl-reponsive">
+                                                    <div class="tbl-panel4">
                                                         <table id="ID5" class="table table-striped table-bordered " style="width: 100%">
                                                             <thead>
                                                                 <tr class="bg-light-blue">
@@ -537,7 +546,8 @@
                                                 <ItemTemplate>
                                                     <tr id="trCurRow">
                                                         <td>
-                                                            <asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("STATUS").ToString() == "True" ? true : false %>' TabIndex="1" />
+                                                            <%--<asp:CheckBox ID="chkAccept" runat="server" Checked='<%# Eval("STATUS").ToString() == "True" ? true : false %>' TabIndex="1" />--%>
+                                                            <asp:CheckBox ID="chkAccept" runat="server" TabIndex="1" />
                                                         </td>
                                                         <td>
                                                             <asp:Label ID="lblCourseno" runat="server" Text='<%# Eval("SUBJECT_NAME")%>' ToolTip='<%# Eval("CCODE")%>'></asp:Label>
@@ -546,15 +556,16 @@
                                                         <td>
                                                             <div class="input-group">
                                                                 <div class="input-group-addon">
-                                                                    <i class="fa fa-calendar" id='<%# "imgExamDate1" + (Container.DataItemIndex + 1) %>'></i>
+                                                                    <i class="fa fa-calendar"></i>
                                                                 </div>
                                                                 <%-- <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onKeyPress="javascript:checkDate();" AutoPostBack="true" OnTextChanged="txtExamDate1_TextChanged" />--%>
-                                                                <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" />
-                                                                <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID='<%# "imgExamDate1" + (Container.DataItemIndex + 1) %>' TargetControlID="txtExamDate" Enabled="true" OnClientDateSelectionChanged="checkDate" />
-                                                                <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate" />
-                                                                <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
-                                                                <asp:RequiredFieldValidator ID="rfvExamDate" runat="server" ControlToValidate="txtExamDate" Display="None" ErrorMessage="Please select Exam Date!!" ValidationGroup="Submit1"></asp:RequiredFieldValidator>
+                                                                <asp:TextBox ID="txtExamDate1" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" ToolTip='<%# Container.DataItemIndex + 1 %>' TabIndex="1" onblur="onTextBoxBlur(this)" AutoPostBack="true" OnTextChanged="txtExamDate1_TextChanged" />
+                                                                <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate" TargetControlID="txtExamDate1" Enabled="true" OnClientDateSelectionChanged="checkDate" />
+                                                                <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate1" />
+                                                                <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate1" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
+                                                                <asp:RequiredFieldValidator ID="rfvExamDate" runat="server" ControlToValidate="txtExamDate1" Display="None" ErrorMessage="Please select Exam Date!!" ValidationGroup="Submit1"></asp:RequiredFieldValidator>
                                                             </div>
+
                                                         </td>
                                                         <td>
                                                             <%--  <asp:DropDownList ID="ddlSlot" runat="server" AppendDataBoundItems="true" CausesValidation="true" TabIndex="1" OnSelectedIndexChanged="ddlSlot1_SelectedIndexChanged" AutoPostBack="true">--%>
@@ -699,10 +710,10 @@
                                             <div class="col-12 mt-4" id="gridrow">
                                                 <asp:ListView ID="lvcommoncourse" runat="server">
                                                     <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Course List</h5>
+                                                        </div>
                                                         <div class="tbl-panel2">
-                                                            <div class="sub-heading">
-                                                                <h5>Course List</h5>
-                                                            </div>
                                                             <table class="table table-bordered table-striped" style="width: 100%">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
@@ -741,15 +752,13 @@
                                                             <td>
                                                                 <div class="input-group">
                                                                     <div class="input-group-addon">
-                                                                        <i class="fa fa-calendar" id='<%# "imgExamDate" + (Container.DataItemIndex + 1) %>'></i>
+                                                                        <i class="fa fa-calendar"></i>
                                                                     </div>
-                                                                    <asp:TextBox ID="txtExamDate" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" TabIndex="1" />
-                                                                    <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID='<%# "imgExamDate" + (Container.DataItemIndex + 1) %>' TargetControlID="txtExamDate" Enabled="true" OnClientDateSelectionChanged="checkDate" />
-                                                                    <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate" />
-                                                                    <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
-                                                                    <asp:RequiredFieldValidator ID="rfvExamDate1" runat="server" ControlToValidate="txtExamDate" Display="None" ErrorMessage="Please select Exam Date!!" ValidationGroup="submit2"></asp:RequiredFieldValidator>
+                                                                    <asp:TextBox ID="txtExamDate2" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" TabIndex="1" />
+                                                                    <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate3" TargetControlID="txtExamDate2" Enabled="true" OnClientDateSelectionChanged="checkDate1" />
+                                                                    <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate2" />
+                                                                    <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate2" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
                                                                 </div>
-
                                                             </td>
                                                             <td>
                                                                 <asp:DropDownList ID="ddlSlot1" runat="server" AppendDataBoundItems="true" CausesValidation="true" data-select2-enable="true" TabIndex="1">
@@ -772,27 +781,25 @@
                                             <div class="col-12 mt-4" id="gridrow2">
                                                 <asp:ListView ID="lvtimetable" runat="server">
                                                     <LayoutTemplate>
+                                                        <div class="sub-heading">
+                                                            <h5>Time Table List</h5>
+                                                        </div>
                                                         <div class="tbl-panel3">
-                                                            <div class="sub-heading">
-                                                                <h5>Time Table List</h5>
-                                                            </div>
-                                                            <div class="tbl-reponsive">
-                                                                <table class="table table-striped table-bordered" style="width: 100%" id="tblTim">
-                                                                    <thead class="bg-light-blue">
-                                                                        <tr>
-                                                                            <th>Edit</th>
-                                                                            <th>Course</th>
-                                                                            <th>Scheme</th>
-                                                                            <th>Exam Date</th>
-                                                                            <th>Exam Slot</th>
-                                                                            <th>Cancel</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr id="itemPlaceholder" runat="server" />
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                            <table class="table table-striped table-bordered" style="width: 100%" id="tblTim">
+                                                                <thead class="bg-light-blue">
+                                                                    <tr>
+                                                                        <th>Edit</th>
+                                                                        <th>Course</th>
+                                                                        <th>Scheme</th>
+                                                                        <th>Exam Date</th>
+                                                                        <th>Exam Slot</th>
+                                                                        <th>Cancel</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </LayoutTemplate>
                                                     <ItemTemplate>
@@ -981,16 +988,11 @@
         }
     </script>
 
-
     <script>
         function checkDate(sender, args) {
+            debugger;
             if (sender._selectedDate < new Date()) {
-
                 alert("You cannot select a day earlier than today!")
-                //    return false;
-                //} else {
-                //    return true;
-                //
             }
         }
     </script>
@@ -1018,6 +1020,37 @@
             });
         });
     </script>
-
+    <asp:HiddenField ID="hiddenTooltip" runat="server" ClientIDMode="Static" />
+    <script type="text/javascript">
+        function onTextBoxBlur(textBox) {
+            debugger;
+            // Get the UniqueID of the TextBox within the ListView
+            var textBoxUniqueID = textBox.id;
+            var tooltipValue = textBox.getAttribute('tooltip');
+            // Use tooltipValue as needed
+            console.log('Tooltip Value:', tooltipValue);
+            console.log(textBox.value);
+            if (document.getElementById('hiddenTooltip').value !== textBox.value) {
+                var tooltipValue = textBox.value;
+                // Set the value in the hidden field
+                document.getElementById('hiddenTooltip').value = tooltipValue;
+                if (textBox.value !== "__/__/____") {
+                    // Call the __doPostBack function to initiate a postback
+                    __doPostBack(textBoxUniqueID, '');
+                }
+            }
+        }
+    </script>
+    <script>
+        function checkDate1(sender, args) {
+            debugger;
+            if (sender._selectedDate < new Date()) {
+                var text = sender._element;
+                var textbox = document.getElementById(text);
+                alert("You cannot select a day earlier than today!")
+                textbox.value = "";
+            }
+        }
+    </script>
 </asp:Content>
 

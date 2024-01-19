@@ -521,7 +521,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                      ",@P_EXAM_NO=" + Convert.ToInt32(ddlExamName.SelectedValue) +
                      ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) +
                      ",@P_SUBEXAMNO=" + Convert.ToInt32(ddlSubExamName.SelectedValue) +
-                     ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                    //",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
                 System.Text.StringBuilder sb = new System.Text.StringBuilder();
                 string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
                 sb.Append(@"window.open('" + url + "','','" + features + "');");
@@ -635,6 +636,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         try
         {
             string ccode = null;
+            int count = 0;
             int EXAM_TT_TYPE = 0, SUBEXAMNO = 0, SUBID = 0;
             DataSet ds = null;
             foreach (ListViewDataItem dataitem in lvCourse.Items)
@@ -644,7 +646,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
                 if (chkBox.Checked)
                 {
-
+                    count++;
                     ImageButton ibtnEvalDelete = sender as ImageButton;
                     int courseno = int.Parse(ibtnEvalDelete.CommandArgument);
                     //ds = objCommon.FillDropDown("ACD_EXAM_DATE", "CCODE,EXAM_TT_TYPE", "SUBEXAMNO,SUBID", "EXDTNO=" + IDNO + "", "");
@@ -686,11 +688,11 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     GetCourses();
                     btnViewLogin.Visible = true;
                 }
-                else
-                {
-                    objCommon.DisplayMessage(this.updExamdate, "Select CheckBox to delete Time Table", this.Page);
-                    btnViewLogin.Visible = false;
-                }
+            }
+            if (count == 0)
+            {
+                objCommon.DisplayMessage(this.updExamdate, "Select CheckBox to delete Time Table", this.Page);
+                btnViewLogin.Visible = false;
             }
         }
         catch (Exception ex)
@@ -927,21 +929,27 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         string drpslot = null;
         currentdate.Enabled = true;
         DateTime date;
-        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        CheckBox chkBoxdate = currentItem.FindControl("chkAccept") as CheckBox;
+        if (chkBoxdate.Checked)
         {
-            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
-            currentdate.Text = "";
-            return;
-        }
-        if (date < DateTime.Now)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('You cannot select a day earlier than today!');", true);
-            currentdate.Text = "";
-            return;
+            if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+            {
+                date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+                currentdate.Text = "";
+                checkbox();
+                return;
+            }
+            if (date < DateTime.Now)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('You cannot select a day earlier than today!');", true);
+                currentdate.Text = "";
+                checkbox();
+                return;
+            }
         }
         foreach (ListViewDataItem item in lvCourse.Items)
         {
@@ -1213,14 +1221,14 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
                 if (chkBox.Checked)
                 {
-                    if (Convert.ToInt32((dataitem.FindControl("ddlSlot") as DropDownList).SelectedValue) > 0 && Convert.ToString((dataitem.FindControl("txtExamDate") as TextBox).Text) != "")
+                    if (Convert.ToInt32((dataitem.FindControl("ddlSlot") as DropDownList).SelectedValue) > 0 && Convert.ToString((dataitem.FindControl("txtExamDate1") as TextBox).Text) != "")
                     {
                         objExam.Status = 1;
                         string ccode = (dataitem.FindControl("lblCourseno") as Label).ToolTip;
                         objExam.Slot = Convert.ToInt32((dataitem.FindControl("ddlSlot") as DropDownList).SelectedValue);
                         int Modeexam = 0;// Convert.ToInt32((dataitem.FindControl("ddlmodeexam") as DropDownList).SelectedValue);
                         int sessionid = Convert.ToInt32(ddlSession1.SelectedValue);
-                        objExam.Examdate = Convert.ToDateTime((dataitem.FindControl("txtExamDate") as TextBox).Text);
+                        objExam.Examdate = Convert.ToDateTime((dataitem.FindControl("txtExamDate1") as TextBox).Text);
                         //return;   //Injamam Break point for testing
                         //CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno);
                         CustomStatus cs = (CustomStatus)objExamController.AddExamDayElect(objExam, OrgID, Modeexam, ccode, sessionid, subexamno, Convert.ToInt32(Session["userno"]), ViewState["ipAddress"].ToString());
@@ -1292,7 +1300,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 HiddenField hdn_fld = lvHead.FindControl("hdf_slotno") as HiddenField;
                 HiddenField hdf_modeexam = lvHead.FindControl("hdf_modeexam") as HiddenField;
                 CheckBox chkHead = lvHead.FindControl("chkAccept") as CheckBox;
-                TextBox txtDate = lvHead.FindControl("txtExamDate") as TextBox;
+                TextBox txtDate = lvHead.FindControl("txtExamDate1") as TextBox;
                 objCommon.FillDropDownList(ddlSlot, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
                 objCommon.FillDropDownList(ddlmodeexam, "ACD_EXAMINATION_MODE WITH (NOLOCK)", "ModeEXAMno", "ModeEXAMNAME", "ModeEXAMNO>0", "ModeEXAMNO");
                 ddlSlot.SelectedValue = hdn_fld.Value;
@@ -1328,7 +1336,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         foreach (ListViewDataItem ROW in lvCourse1.Items)
         {
             CheckBox chkBox = ROW.FindControl("chkAccept") as CheckBox;
-            TextBox txtDate1 = ROW.FindControl("txtExamDate") as TextBox;
+            TextBox txtDate1 = ROW.FindControl("txtExamDate1") as TextBox;
             DropDownList dropslot1 = ROW.FindControl("ddlSlot") as DropDownList;
             if (chkBox.Checked)
             {
@@ -1351,7 +1359,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             CheckBox chkBox = lvHead.FindControl("chkAccept") as CheckBox;
             if (chkBox.Checked)
             {
-                TextBox txtDate = lvHead.FindControl("txtExamDate") as TextBox;
+                TextBox txtDate = lvHead.FindControl("txtExamDate1") as TextBox;
                 DropDownList dropslot = lvHead.FindControl("ddlSlot") as DropDownList;
                 string ccode = (lvHead.FindControl("lblCourseno") as Label).ToolTip;
                 foreach (ListViewDataItem row in lvCourse1.Items)
@@ -1359,7 +1367,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     CheckBox chkBox1 = row.FindControl("chkAccept") as CheckBox;
                     if (chkBox1.Checked)
                     {
-                        TextBox txtDate1 = row.FindControl("txtExamDate") as TextBox;
+                        TextBox txtDate1 = row.FindControl("txtExamDate1") as TextBox;
                         DropDownList dropslot1 = row.FindControl("ddlSlot") as DropDownList;
                         string ccode1 = (row.FindControl("lblCourseno") as Label).ToolTip;
                         if (txtDate.Text == txtDate1.Text && dropslot.SelectedValue == dropslot1.SelectedValue && ccode1 != ccode)
@@ -1390,7 +1398,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 try
                 {
-                    string date = (dataitem.FindControl("txtExamDate") as TextBox).Text;
+                    string date = (dataitem.FindControl("txtExamDate1") as TextBox).Text;
                     DateTime date1;
                     if (DateTime.TryParseExact(date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
                     {
@@ -1399,13 +1407,13 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     else
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date: " + date + "');", true);
-                        (dataitem.FindControl("txtExamDate") as TextBox).Text = "";
+                        (dataitem.FindControl("txtExamDate1") as TextBox).Text = "";
                         return false;
                     }
                     if (date1 < DateTime.Now)
                     {
                         stat = false;
-                        (dataitem.FindControl("txtExamDate") as TextBox).Text = "";
+                        (dataitem.FindControl("txtExamDate1") as TextBox).Text = "";
                         checkbox1();
                         return stat;
                     }
@@ -1433,7 +1441,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 try
                 {
-                    string date = (dataitem.FindControl("txtExamDate") as TextBox).Text;
+                    string date = (dataitem.FindControl("txtExamDate1") as TextBox).Text;
                     int value = Convert.ToInt32((dataitem.FindControl("ddlSlot") as DropDownList).SelectedValue);
                     if (string.IsNullOrEmpty(date))
                     {
@@ -1469,7 +1477,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         {
             if (item.DisplayIndex == currentIndex)
             {
-                TextBox txtDate = item.FindControl("txtExamDate") as TextBox;
+                TextBox txtDate = item.FindControl("txtExamDate1") as TextBox;
                 textdate = txtDate.Text;
                 txtDate.Enabled = true;
             }
@@ -1482,7 +1490,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 if (ROW.DisplayIndex != currentIndex)
                 {
-                    TextBox txtDate1 = ROW.FindControl("txtExamDate") as TextBox;
+                    TextBox txtDate1 = ROW.FindControl("txtExamDate1") as TextBox;
                     DropDownList dropslot1 = ROW.FindControl("ddlSlot") as DropDownList;
                     if (currentDropdown.Text == dropslot1.Text && textdate == txtDate1.Text)
                     {
@@ -1508,21 +1516,26 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         string drpslot = null;
         currentdate.Enabled = true;
         DateTime date;
-        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        CheckBox chkBoxdate = currentItem.FindControl("chkAccept") as CheckBox;
+        if (chkBoxdate.Checked)
         {
-            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
-            currentdate.Text = "";
-            return;
-        }
-        if (date < DateTime.Now)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('You cannot select a day earlier than today!');", true);
-            currentdate.Text = "";
-            return;
+            if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+            {
+                date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+                currentdate.Text = "";
+                checkbox1();
+                return;
+            }
+            if (date < DateTime.Now)
+            {
+                currentdate.Text = "";
+                checkbox1();
+                return;
+            }
         }
         foreach (ListViewDataItem item in lvCourse1.Items)
         {
@@ -1535,7 +1548,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
         }
 
-      
+
         foreach (ListViewDataItem ROW in lvCourse1.Items)
         {
             CheckBox chkBox = ROW.FindControl("chkAccept") as CheckBox;
@@ -1543,7 +1556,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 if (ROW.DisplayIndex != currentIndex)
                 {
-                    TextBox txtDate1 = ROW.FindControl("txtExamDate") as TextBox;
+                    TextBox txtDate1 = ROW.FindControl("txtExamDate1") as TextBox;
                     DropDownList dropslot1 = ROW.FindControl("ddlSlot") as DropDownList;
                     if (drpslot == dropslot1.Text && selecteddate == txtDate1.Text)
                     {
@@ -1755,7 +1768,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 DropDownList ddlcommoncourse = items.FindControl("ddlcommoncourse") as DropDownList;
                 ListBox ddlschemelist = items.FindControl("ddlschemelist") as ListBox;
                 DropDownList ddlSlot1 = items.FindControl("ddlSlot1") as DropDownList;
-                TextBox txtExamDate = items.FindControl("txtExamDate") as TextBox;
+                TextBox txtExamDate = items.FindControl("txtExamDate2") as TextBox;
                 string schemes = selectedMultipeScheme(ddlschemelist);
                 string ccode = ddlcommoncourse.SelectedValue.ToString();
                 objExam.Examdate = Convert.ToDateTime(txtExamDate.Text.ToString());
@@ -1917,7 +1930,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         ddlcoursecat.Items.Add(new ListItem("Please Select", "0"));
         if (ddlSubexamname2.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlcoursecat, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_COURSE_CATEGORY CC ON (CC.CATEGORYNO=C.CATEGORYNO)", " DISTINCT C.CATEGORYNO", "CATEGORYNAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND ISNULL(SR.EXAM_REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue), "C.CATEGORYNO");
+            //objCommon.FillDropDownList(ddlcoursecat, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_COURSE_CATEGORY CC ON (CC.CATEGORYNO=C.CATEGORYNO)", " DISTINCT C.CATEGORYNO", "CATEGORYNAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND ISNULL(SR.EXAM_REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue), "C.CATEGORYNO");
+            objCommon.FillDropDownList(ddlcoursecat, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_COURSE_CATEGORY CC ON (CC.CATEGORYNO=C.CATEGORYNO)", " DISTINCT C.CATEGORYNO", "CATEGORYNAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue), "C.CATEGORYNO");
         }
     }
 
@@ -1968,7 +1982,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                         DropDownList ddlcommoncourse = (DropDownList)lvcommoncourse.Items[rowIndex].FindControl("ddlcommoncourse");
                         ListBox ddlschemelist = (ListBox)lvcommoncourse.Items[rowIndex].FindControl("ddlschemelist");
                         DropDownList ddlSlot1 = (DropDownList)lvcommoncourse.Items[rowIndex].FindControl("ddlSlot1");
-                        TextBox txtExamDate = (TextBox)lvcommoncourse.Items[rowIndex].FindControl("txtExamDate");
+                        TextBox txtExamDate = (TextBox)lvcommoncourse.Items[rowIndex].FindControl("txtExamDate2");
 
                         if (ddlcommoncourse.SelectedIndex == 0)
                         {
@@ -2050,7 +2064,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             if (item.DisplayIndex == currentIndex)
             {
                 ddlschemelist.Items.Clear();
-                DataSet ds1 = objCommon.FillDropDown("ACD_SCHEME C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.SCHEMENO=C.SCHEMENO) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT SR.SCHEMENO", "C.SCHEMENAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND ISNULL(SR.EXAM_REGISTERED,0)=1 AND SM.SESSIONID= " + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID= " + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + " AND CCODE='" + selectedCcode + "'", "SR.SCHEMENO");
+                DataSet ds1 = objCommon.FillDropDown("ACD_SCHEME C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.SCHEMENO=C.SCHEMENO) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT SR.SCHEMENO", "C.SCHEMENAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID= " + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID= " + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + " AND CCODE='" + selectedCcode + "'", "SR.SCHEMENO");
                 if (ds1.Tables[0].Rows.Count > 0)
                 {
                     ddlschemelist.DataSource = ds1;
@@ -2061,7 +2075,6 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             }
 
         }
-
     }
 
     private void SetInitialRow()
@@ -2096,18 +2109,18 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     private void SetPreviousData()
     {
         int rowIndex = 0;
-        foreach (ListViewDataItem dataitem in lvcommoncourse.Items)
-        {
-            DropDownList ddlcommoncourse = dataitem.FindControl("ddlcommoncourse") as DropDownList;
-            DropDownList ddlSlot1 = dataitem.FindControl("ddlSlot1") as DropDownList;
-            ListBox ddlschemelist = dataitem.FindControl("ddlschemelist") as ListBox;
+        //foreach (ListViewDataItem dataitem in lvcommoncourse.Items)
+        //{
+        //    DropDownList ddlcommoncourse = dataitem.FindControl("ddlcommoncourse") as DropDownList;
+        //    DropDownList ddlSlot1 = dataitem.FindControl("ddlSlot1") as DropDownList;
+        //    ListBox ddlschemelist = dataitem.FindControl("ddlschemelist") as ListBox;
 
-            objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=SR.SCHEMENO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND SC.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
+        //    objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=SR.SCHEMENO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND SC.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
 
 
-            objCommon.FillDropDownList(ddlSlot1, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
+        //    objCommon.FillDropDownList(ddlSlot1, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
 
-        }
+        //}
 
         if (ViewState["CurrentTable"] != null)
         {
@@ -2123,9 +2136,15 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     DropDownList ddlcommoncourse = (DropDownList)lvcommoncourse.Items[rowIndex].FindControl("ddlcommoncourse");
                     DropDownList ddlSlot1 = (DropDownList)lvcommoncourse.Items[rowIndex].FindControl("ddlSlot1");
                     ListBox ddlschemelist = (ListBox)lvcommoncourse.Items[rowIndex].FindControl("ddlschemelist");
-                    TextBox txtExamDate = (TextBox)lvcommoncourse.Items[rowIndex].FindControl("txtExamDate");
+                    TextBox txtExamDate = (TextBox)lvcommoncourse.Items[rowIndex].FindControl("txtExamDate2");
                     ImageButton imgbtnrowremove = (ImageButton)lvcommoncourse.Items[rowIndex].FindControl("imgbtnrowremove");
                     ImageButton imgaddcourse = (ImageButton)lvcommoncourse.Items[rowIndex].FindControl("imgaddcourse");
+
+
+                    objCommon.FillDropDownList(ddlcommoncourse, "ACD_COURSE C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.CCODE=C.CCODE) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=SR.SCHEMENO)", "DISTINCT C.CCODE ", "(C.CCODE +' - '+ COURSE_NAME) as COURSE_NAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND SC.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue) + "AND (C.CATEGORYNO=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + "OR 0=" + Convert.ToInt32(ddlcoursecat.SelectedValue) + ")", "C.CCODE");
+
+                    objCommon.FillDropDownList(ddlSlot1, "ACD_EXAM_TT_SLOT WITH (NOLOCK)", "SLOTNO", "SLOTNAME", "SLOTNO>0", "SLOTNO");
+
 
                     hdf_course.Value = dt.Rows[i]["CCODE"].ToString();
                     hdn_schemeno.Value = dt.Rows[i]["SCHEME"].ToString();
@@ -2235,6 +2254,31 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         }
     }
 
+    protected void txtExamDate2_TextChanged(object sender, EventArgs e)
+    {
+        TextBox currentdate = (TextBox)sender;
+        ListViewItem currentItem = (ListViewItem)currentdate.NamingContainer;
+        int currentIndex = currentItem.DisplayIndex;
+        string selecteddate = currentdate.Text;
+        currentdate.Enabled = true;
+        DateTime date;
+        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        {
+            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+            currentdate.Text = "";
+            return;
+        }
+        if (date < DateTime.Now)
+        {
+            currentdate.Text = "";
+            return;
+        }
+    }
+
     protected void imgbtnedit_Click(object sender, ImageClickEventArgs e)
     {
         int lvrowcount = 1;
@@ -2251,7 +2295,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             DropDownList ddlcommoncourse = item.FindControl("ddlcommoncourse") as DropDownList;
             DropDownList ddlSlot1 = item.FindControl("ddlSlot1") as DropDownList;
             ListBox ddlschemelist = item.FindControl("ddlschemelist") as ListBox;
-            TextBox txtExamDate = item.FindControl("txtExamDate") as TextBox;
+            TextBox txtExamDate = item.FindControl("txtExamDate2") as TextBox;
             HiddenField hdf_course1 = item.FindControl("hdf_course") as HiddenField;
             HiddenField hdn_schemeno1 = item.FindControl("hdn_schemeno") as HiddenField;
             HiddenField hdf_slotno2 = item.FindControl("hdf_slotno1") as HiddenField;
@@ -2378,7 +2422,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             DropDownList ddlcommoncourse = (DropDownList)lvcommoncourse.Items[i].FindControl("ddlcommoncourse");
             ListBox ddlschemelist = (ListBox)lvcommoncourse.Items[i].FindControl("ddlschemelist");
             DropDownList ddlSlot1 = (DropDownList)lvcommoncourse.Items[i].FindControl("ddlSlot1");
-            TextBox txtExamDate = (TextBox)lvcommoncourse.Items[i].FindControl("txtExamDate");
+            TextBox txtExamDate = (TextBox)lvcommoncourse.Items[i].FindControl("txtExamDate2");
             hdfcourse.Value = ddlcommoncourse.Text;
             hdn_schemeno.Value = selectedMultipeScheme(ddlschemelist);
             hdfslotno1.Value = ddlSlot1.Text;
@@ -2396,5 +2440,5 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     }
 
     #endregion common Time Table End
-   
+
 }
