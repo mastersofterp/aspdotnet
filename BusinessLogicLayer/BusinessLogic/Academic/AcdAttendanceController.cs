@@ -6551,7 +6551,28 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+        public DataSet GetAllLeaveForApproval_HOD(int uaType, int uano, int college_ID, int sessionno)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[4];
+                objParams[0] = new SqlParameter("@P_UATYPE", uaType);
+                objParams[1] = new SqlParameter("@P_UANO", uano);
+                objParams[2] = new SqlParameter("@P_COLLEGE_ID", college_ID);
+                objParams[3] = new SqlParameter("@P_SESSIONNO", sessionno);
 
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_ALL_LEAVE_FOR_APPROVAL_HOD", objParams);
+            }
+            catch (Exception ex)
+            {
+                return ds;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.GetAllLeave-> " + ex.ToString());
+            }
+            return ds;
+        }
 
         //Added by Nehal on 28/04/2023
 

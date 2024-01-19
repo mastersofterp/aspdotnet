@@ -34,7 +34,7 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     AcdAttendanceController objAttC = new AcdAttendanceController();
     AcdAttendanceModel objAttModel = new AcdAttendanceModel();
-   
+
 
     #region Page Methods
     protected void Page_PreInit(object sender, EventArgs e)
@@ -60,13 +60,46 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 else
                 {
                     //Page Authorization
-                    this.CheckPageAuthorization();
+                    // this.CheckPageAuthorization();
                     Blob_Storage();
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
-
-                    this.FillDropdown();
-                    this.BindListView();
+                    if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                    {
+                        //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                        if (Session["usertype"].ToString() == "3")
+                        {
+                            this.FillDropdown();
+                            this.BindListView();
+                        }
+                        else if (Session["usertype"].ToString() == "8")
+                        {
+                            this.FillDropdown();
+                            this.BindListView();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updHoliday, "Sorry you are not Authorized to view this Page !", this.Page);
+                            // ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Sorry, your are not Authorized to view this Page !');window.location ='';", true);
+                            Response.Redirect("~/notauthorized.aspx?page=LeaveAndHolidayEntry.aspx");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (Session["usertype"].ToString() == "3")
+                        {
+                            this.FillDropdown();
+                            this.BindListView();
+                        }
+                        else
+                        {
+                            objCommon.DisplayMessage(updHoliday, "Sorry you are not Authorized to view this Page !", this.Page);
+                            // ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Sorry, your are not Authorized to view this Page !');window.location ='';", true);
+                            Response.Redirect("~/notauthorized.aspx?page=LeaveAndHolidayEntry.aspx");
+                            return;
+                        }
+                    }
 
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                 }
@@ -150,6 +183,14 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 lvExamday.DataSource = ds;
                 lvExamday.DataBind();
                 objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvExamday);//Set label - 
+                if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Javascript", "$('#thconduct').show();$('td:nth-child(10)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thconduct').show();$('td:nth-child(10)').show();});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "Javascript", "$('#thconduct').hide();$('td:nth-child(10)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thconduct').hide();$('td:nth-child(10)').hide();});", true);
+                }
             }
             else
             {
@@ -163,24 +204,74 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 {
                     ImageButton btnEdit = item.FindControl("btnEdit") as ImageButton;
                     Label lblStatus = item.FindControl("lblAStatus") as Label;
-
-                    if (lblStatus.Text == "PENDING")
-                    {
-                        btnEdit.Enabled = true;
-                        btnEdit.ImageUrl = "~/Images/edit.png";
+                    Label lblFacStatus = item.FindControl("lblFacStatus") as Label;
+                    if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                    {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                        if (Session["usertype"].ToString() == "3")
+                        {
+                            if (lblFacStatus.Text == "PENDING")
+                            {
+                                btnEdit.Enabled = true;
+                                btnEdit.ImageUrl = "~/Images/edit.png";
+                            }
+                            else
+                            {
+                                btnEdit.Enabled = false;
+                                if (lblFacStatus.Text == "APPROVED")
+                                {
+                                    btnEdit.ImageUrl = "~/images/check1.jpg";
+                                    //btnEdit.ImageUrl.wi="50px";
+                                    btnEdit.Width = Unit.Pixel(15);
+                                }
+                                if (lblStatus.Text == "REJECTED")
+                                {
+                                    btnEdit.ImageUrl = "~/Images/delete.png";
+                                }
+                            }
+                        }
+                        else if (Session["usertype"].ToString() == "8")
+                        {
+                            if (lblStatus.Text == "PENDING")
+                            {
+                                btnEdit.Enabled = true;
+                                btnEdit.ImageUrl = "~/Images/edit.png";
+                            }
+                            else
+                            {
+                                btnEdit.Enabled = false;
+                                if (lblStatus.Text == "APPROVED")
+                                {
+                                    btnEdit.ImageUrl = "~/images/check1.jpg";
+                                    //btnEdit.ImageUrl.wi="50px";
+                                    btnEdit.Width = Unit.Pixel(15);
+                                }
+                                if (lblStatus.Text == "REJECTED")
+                                {
+                                    btnEdit.ImageUrl = "~/Images/delete.png";
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        btnEdit.Enabled = false;
-                        if (lblStatus.Text == "APPROVED")
+                        if (lblStatus.Text == "PENDING")
                         {
-                            btnEdit.ImageUrl = "~/images/check1.jpg";
-                            //btnEdit.ImageUrl.wi="50px";
-                            btnEdit.Width = Unit.Pixel(15);
+                            btnEdit.Enabled = true;
+                            btnEdit.ImageUrl = "~/Images/edit.png";
                         }
-                        if (lblStatus.Text == "REJECTED")
+                        else
                         {
-                            btnEdit.ImageUrl = "~/Images/delete.png";
+                            btnEdit.Enabled = false;
+                            if (lblStatus.Text == "APPROVED")
+                            {
+                                btnEdit.ImageUrl = "~/images/check1.jpg";
+                                //btnEdit.ImageUrl.wi="50px";
+                                btnEdit.Width = Unit.Pixel(15);
+                            }
+                            if (lblStatus.Text == "REJECTED")
+                            {
+                                btnEdit.ImageUrl = "~/Images/delete.png";
+                            }
                         }
                     }
                 }
@@ -322,20 +413,54 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
     {
         if (e.Item.ItemType == ListViewItemType.DataItem)
         {
+            string Fac_status = "";
             ListViewDataItem item = (ListViewDataItem)e.Item;
             string status = (string)DataBinder.Eval(item.DataItem, "APPROVAL_STATUS");
-
-            if (status == "PENDING")
-            {
-                (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                Fac_status = (string)DataBinder.Eval(item.DataItem, "APPROVAL_FAC_STATUS");
             }
-            else if (status == "APPROVED")
-            {
-                (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Green;
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                if (Fac_status == "PENDING")
+                {
+                    (e.Item.FindControl("lblFacStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
+                }
+                else if (Fac_status == "APPROVED")
+                {
+                    (e.Item.FindControl("lblFacStatus") as Label).ForeColor = System.Drawing.Color.Green;
+                }
+                else if (Fac_status == "REJECTED")
+                {
+                    (e.Item.FindControl("lblFacStatus") as Label).ForeColor = System.Drawing.Color.Red;
+                }
+                if (status == "PENDING")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
+                }
+                else if (status == "APPROVED")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Green;
+                }
+                else if (status == "REJECTED")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Red;
+                } 
             }
-            else if (status == "REJECTED")
+            else
             {
-                (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Red;
+                if (status == "PENDING")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
+                }
+                else if (status == "APPROVED")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Green;
+                }
+                else if (status == "REJECTED")
+                {
+                    (e.Item.FindControl("lblAStatus") as Label).ForeColor = System.Drawing.Color.Red;
+                }
             }
         }
     }
@@ -766,7 +891,7 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                         lblFileName.Visible = true;
                         lblFileName.Text = dr["FILENAME"].ToString();
                     }
-                    
+
                     if (!string.IsNullOrEmpty(txtFromDate.Text))
                     {
                         this.txtFromDate_TextChanged(new object(), new EventArgs());
@@ -1175,12 +1300,37 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 }
             }
             int ua_no = Convert.ToInt32(Session["userno"]);
-            CustomStatus cs = (CustomStatus)objAttC.UpdateLeaveStatus(leaveNo, status, slotnos, ua_no, ViewState["ipAddress"].ToString());  //added by nehal
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                int Fac_status = 0;
+                if (Session["usertype"].ToString() == "8")
+                {
+                    Fac_status = Convert.ToInt32(objCommon.LookUp("ACD_ACADEMIC_LEAVE_MASTER", "isnull(APPROVAL_FAC_STATUS,0) as APPROVAL_FAC_STATUS", "HOLIDAY_NO=" + leaveNo));
+                    if (Fac_status == 0)
+                    {
+                        objCommon.DisplayMessage(this, "Faculty has not yet given Approval", this);
+                        return;
+                    }
+                }
+             CustomStatus cs = (CustomStatus)objAttC.UpdateLeaveStatus(leaveNo, status, slotnos, ua_no, ViewState["ipAddress"].ToString());  //added by nehal
+            
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
                 this.ShowLeaveDetails(leaveNo, Convert.ToInt32(ddlCollege.SelectedValue), sessionno);
                 this.BindListViewApproval();
                 objCommon.DisplayMessage(updHoliday, "Leave Record Updated Successfully!", this.Page);
+            }
+            }
+            else
+            {
+                CustomStatus cs = (CustomStatus)objAttC.UpdateLeaveStatus(leaveNo, status, slotnos, ua_no, ViewState["ipAddress"].ToString());  //added by nehal
+            
+            if (cs.Equals(CustomStatus.RecordUpdated))
+            {
+                this.ShowLeaveDetails(leaveNo, Convert.ToInt32(ddlCollege.SelectedValue), sessionno);
+                this.BindListViewApproval();
+                objCommon.DisplayMessage(updHoliday, "Leave Record Updated Successfully!", this.Page);
+            }
             }
         }
         catch (Exception ex)
@@ -1197,28 +1347,63 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
 
         if (e.Item.ItemType == ListViewItemType.DataItem)
         {
+            string Fac_status = string.Empty;
             ListViewDataItem item = (ListViewDataItem)e.Item;
             string status = (string)DataBinder.Eval(item.DataItem, "APPROVAL_STATUS");
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                Fac_status = (string)DataBinder.Eval(item.DataItem, "APPROVAL_FAC_STATUS");
+            }
             int ODTYPE = (int)DataBinder.Eval(item.DataItem, "ODTYPE");
             int OD_COUNT = (int)DataBinder.Eval(item.DataItem, "OD_COUNT");
-
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                if (Fac_status == "PENDING")
+                {
+                    (e.Item.FindControl("Label1") as Label).ForeColor = System.Drawing.Color.SandyBrown;
+                }
+                else if (Fac_status == "APPROVED")
+                {
+                    (e.Item.FindControl("Label1") as Label).ForeColor = System.Drawing.Color.Green;
+                    lnkbtn.Enabled = false;
+                }
+                else if (Fac_status == "REJECTED")
+                {
+                    (e.Item.FindControl("Label1") as Label).ForeColor = System.Drawing.Color.Red;
+                }
+            }
             if (status == "PENDING")
             {
                 (e.Item.FindControl("lblStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
-                if (ODTYPE == 2 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve special od as per req.13-03-2020
-                {
-                    lnkbtn.Enabled = false;
+                if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                    if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                    {
+                        lnkbtn.Enabled = false;
+                    }
+                    if (OD_COUNT >= 63)
+                    {
+                        lblRegNo.ForeColor = System.Drawing.Color.Red;
+                        lblRegNo.Font.Bold = true;
+                    }
                 }
-                if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                else
                 {
-                    lnkbtn.Enabled = false;
-                    //lblRegNo.ForeColor = System.Drawing.Color.Red;
-                    //lblRegNo.Font.Bold = true;
-                }
-                if (OD_COUNT >= 63)
-                {
-                    lblRegNo.ForeColor = System.Drawing.Color.Red;
-                    lblRegNo.Font.Bold = true;
+                    if (ODTYPE == 2 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve special od as per req.13-03-2020
+                    {
+                        lnkbtn.Enabled = false;
+                    }
+                    if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                    {
+                        lnkbtn.Enabled = false;
+                        //lblRegNo.ForeColor = System.Drawing.Color.Red;
+                        //lblRegNo.Font.Bold = true;
+                    }
+                    if (OD_COUNT >= 63)
+                    {
+                        lblRegNo.ForeColor = System.Drawing.Color.Red;
+                        lblRegNo.Font.Bold = true;
+                    }
                 }
             }
             else if (status == "APPROVED")
@@ -1247,17 +1432,80 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objAttC.GetAllLeaveForApproval(Convert.ToInt32(Session["usertype"].ToString()), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                lvLeaveApproval.DataSource = ds;
-                lvLeaveApproval.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvLeaveApproval);//Set label - 
+            if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+            {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                if (Session["usertype"].ToString() == "8")
+                {
+
+                    DataSet ds = objAttC.GetAllLeaveForApproval_HOD(Convert.ToInt32(Session["usertype"].ToString()), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        lvLeaveApproval.DataSource = ds;
+                        lvLeaveApproval.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvLeaveApproval);//Set label - 
+                        if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                        {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').show();$('td:nth-child(8)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').show();$('td:nth-child(8)').show();});", true);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').hide();$('td:nth-child(8)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').hide();$('td:nth-child(8)').hide();});", true);
+                        }
+                    }
+                    else
+                    {
+                        lvLeaveApproval.DataSource = null;
+                        lvLeaveApproval.DataBind();
+                    }
+                }
+
+                else if (Session["usertype"].ToString() == "3")
+                {
+
+                    DataSet ds = objAttC.GetAllLeaveForApproval(Convert.ToInt32(Session["usertype"].ToString()), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        lvLeaveApproval.DataSource = ds;
+                        lvLeaveApproval.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvLeaveApproval);//Set label - 
+                        if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                        {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').show();$('td:nth-child(8)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').show();$('td:nth-child(8)').show();});", true);
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').hide();$('td:nth-child(8)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').hide();$('td:nth-child(8)').hide();});", true);
+                        }
+                    }
+                    else
+                    {
+                        lvLeaveApproval.DataSource = null;
+                        lvLeaveApproval.DataBind();
+                    }
+                }
             }
             else
             {
-                lvLeaveApproval.DataSource = null;
-                lvLeaveApproval.DataBind();
+                DataSet ds = objAttC.GetAllLeaveForApproval(Convert.ToInt32(Session["usertype"].ToString()), Convert.ToInt32(Session["userno"].ToString()), Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    lvLeaveApproval.DataSource = ds;
+                    lvLeaveApproval.DataBind();
+                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvLeaveApproval);//Set label - 
+                    if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                    {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+                        ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').show();$('td:nth-child(8)').show();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').show();$('td:nth-child(8)').show();});", true);
+                    }
+                    else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "myfun2", "$('#thcount').hide();$('td:nth-child(8)').hide();var prm = Sys.WebForms.PageRequestManager.getInstance();prm.add_endRequest(function () { $('#thcount').hide();$('td:nth-child(8)').hide();});", true);
+                    }
+                }
+                else
+                {
+                    lvLeaveApproval.DataSource = null;
+                    lvLeaveApproval.DataBind();
+                }
             }
         }
         catch (Exception ex)
@@ -1563,7 +1811,7 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
             {
                 objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO>0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlCollege.SelectedValue), "SESSIONNO DESC");
                 ddlSession.Focus();
-                
+
             }
             else
             {
@@ -1615,7 +1863,7 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
         }
         CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
         string doc = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
-        var Document = doc ;
+        var Document = doc;
         string extension = Path.GetExtension(doc.ToString());
         if (doc == null || doc == "")
         {
@@ -1705,7 +1953,8 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
         if (doc == null || doc == "")
         {
         }
-        else{
+        else
+        {
             if (extension == ".pdf")
             {
                 DataTable dtBlobPic = Blob_GetById(blob_ConStr, blob_ContainerName, doc);
@@ -1741,7 +1990,7 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 Response.TransmitFile(filePath);
                 //Response.Flush();
                 Response.End();
-            }      
+            }
         }
     }
     private string GenerateOTP()
@@ -1800,7 +2049,11 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
         {
             DeleteIFExits(FileName);
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions
+            {
+                PublicAccess = BlobContainerPublicAccessType.Blob
+            });
 
             CloudBlockBlob cblob = container.GetBlockBlobReference(FileName);
             cblob.UploadFromStream(FU.PostedFile.InputStream);
