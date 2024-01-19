@@ -242,7 +242,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 if (!string.IsNullOrEmpty(alreadyCrs))
                 {
                     alreadyCrs = alreadyCrs.TrimEnd(',');
-                    objCommon.DisplayMessage(updReg, "Selected " + alreadyCrs + " Courses already registered in previous Session/ Semester.", this.Page);
+                    objCommon.DisplayMessage(updReg, "Selected " + alreadyCrs + " Course/Courses are already registered in previous Session/ Semester.", this.Page);
                     return;
                 }
             }
@@ -1685,7 +1685,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 if (!string.IsNullOrEmpty(alreadyCrs))
                 {
                     alreadyCrs = alreadyCrs.TrimEnd(',');
-                    objCommon.DisplayMessage(updBulkReg, "Selected " + alreadyCrs + " courses already registered in previous Session/ Semester.", this.Page);
+                    objCommon.DisplayMessage(updBulkReg, "Selected " + alreadyCrs + " Course/Courses are already registered in previous Session/ Semester.", this.Page);
                     return;
                 }
             }

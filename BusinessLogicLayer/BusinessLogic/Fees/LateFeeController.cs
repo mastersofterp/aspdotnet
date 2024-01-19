@@ -430,8 +430,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             {
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = new SqlParameter[2];
-                objParams[0] = new SqlParameter("@P_FROMDT", FromDT);
-                objParams[1] = new SqlParameter("@P_TODT", ToDT);
+                objParams[0] = new SqlParameter("@P_FROMDT", FromDT.ToString("dd-MMM-yyyy"));
+                objParams[1] = new SqlParameter("@P_TODT", ToDT.ToString("dd-MMM-yyyy"));
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_LATE_FEE_CANCEL_STUD_DETAILS", objParams);
             }
             catch (Exception ex)

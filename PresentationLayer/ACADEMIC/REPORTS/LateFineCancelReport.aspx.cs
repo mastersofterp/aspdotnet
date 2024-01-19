@@ -1,9 +1,12 @@
 ﻿using ClosedXML.Excel;
+using IITMS;
+using IITMS.SQLServer.SQLDAL;
 using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -68,6 +71,7 @@ public partial class ACADEMIC_REPORTS_LateFineCancelReport : System.Web.UI.Page
             DateTime FromDate = Convert.ToDateTime(txtFromDate.Text);
             DateTime ToDate = Convert.ToDateTime(txtToDate.Text);
             DataSet ds = lateFeeController.GET_LATE_FEES_CANCEL_STUD_DETAILS(FromDate, ToDate);
+           // DataSet ds = GET_LATE_FEES_CANCEL_STUD_DETAILS(FromDate, ToDate);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ds.Tables[0].TableName = "Late Fees Cancel Students List";
@@ -109,5 +113,27 @@ public partial class ACADEMIC_REPORTS_LateFineCancelReport : System.Web.UI.Page
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
+    }
+
+    // Added By Shailendra K on dated 18.02.2023 for tkt no.39324
+    public DataSet GET_LATE_FEES_CANCEL_STUD_DETAILS(DateTime FromDT, DateTime ToDT)
+    {
+        DataSet ds = null;
+        try
+        {
+            string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
+            SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+            SqlParameter[] objParams = new SqlParameter[2];
+            objParams[0] = new SqlParameter("@P_FROMDT", FromDT.ToString("dd-MMM-yyyy"));
+            objParams[1] = new SqlParameter("@P_TODT", ToDT.ToString("dd-MMM-yyyy"));
+            ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_LATE_FEE_CANCEL_STUD_DETAILS", objParams);
+        }
+        catch (Exception ex)
+        {
+
+            return ds;
+            throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LateFeeController.GET_LATE_FEES_CANCEL_STUD_DETAILS-> " + ex.ToString());
+        }
+        return ds;
     }
 }
