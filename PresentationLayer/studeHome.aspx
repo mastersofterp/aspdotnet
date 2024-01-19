@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudeHome.aspx.cs" Inherits="StudeHome" MasterPageFile="~/SiteMasterPage.master" %>
+﻿
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudeHome.aspx.cs" Inherits="StudeHome" MasterPageFile="~/SiteMasterPage.master" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
@@ -723,7 +724,10 @@
                                                     <p class="day"><%#Eval("DD")%></p>
                                                 </a>
                                                 <div class="media-body">
-                                                    <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                    <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                    <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                    <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
                                                     <p><%#Eval("NEWSDESC") %></p>
                                                 </div>
                                             </article>
@@ -731,6 +735,12 @@
 
                                     </ItemTemplate>
                                 </asp:ListView>
+
+                                <asp:Panel ID="pnlPopup" style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;"  runat="server" CssClass="modalPopup" Visible="false">
+                                    <div class="body">
+                                        <iframe runat="server" id="iframeActive"></iframe>
+                                    </div>
+                                </asp:Panel>
 
                                 <div class="x_title">
                                     <h2>Expired Notice/News</h2>
@@ -754,7 +764,10 @@
                                                         <p class="day"><%#Eval("DD")%></p>
                                                     </a>
                                                     <div class="media-body">
-                                                        <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                        <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                        <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                        <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
                                                         <p><%#Eval("NEWSDESC") %></p>
                                                     </div>
                                                 </article>
@@ -762,6 +775,12 @@
 
                                         </ItemTemplate>
                                     </asp:ListView>
+
+                                    <asp:Panel ID="pnlPopup2" style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;"  runat="server" CssClass="modalPopup" Visible="false">
+                                    <div class="body">
+                                        <iframe runat="server" id="iframeExpired"></iframe>
+                                    </div>
+                                </asp:Panel>
                                 </div>
                             </div>
                         </div>

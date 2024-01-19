@@ -659,13 +659,21 @@
                                             <p class="day"><%#Eval("DD")%></p>
                                         </a>
                                         <div class="media-body">
+                                            <%--<p><%#Eval("NEWSDESC") %></p>
+                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>--%>
+
+                                            <asp:LinkButton ID="lnkDownloadActive" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForActiveNotice"></asp:LinkButton>
                                             <p><%#Eval("NEWSDESC") %></p>
-                                            <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
                                         </div>
                                     </article>
                                 </tr>
                             </ItemTemplate>
                         </asp:ListView>
+                        <asp:Panel ID="pnlPopup" Style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;" runat="server" CssClass="modalPopup" Visible="false">
+                            <div class="body">
+                                <iframe runat="server" id="iframeActive"></iframe>
+                            </div>
+                        </asp:Panel>
                         <div class="x_title">
                             <h2>Expired Notice/News</h2>
                             <div class="clearfix"></div>
@@ -688,7 +696,10 @@
                                                 <p class="day"><%#Eval("DD")%></p>
                                             </a>
                                             <div class="media-body">
-                                                <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" Text='<%#Eval("TITLE")%>' NavigateUrl='<%# GetFileNamePath(Eval("FILENAME"))%>'><%#  GetFileName(Eval("FILENAME"))%></asp:HyperLink>
+                                                <p><%#Eval("NEWSDESC") %></p>--%>
+
+                                                <asp:LinkButton ID="lnkDownloadExpired" runat="server" Text='<%#Eval("TITLE")%>' CommandArgument='<%#Eval("FILENAME")%>' OnCommand="GetFileNamePathEventForExpiredNotice"></asp:LinkButton>
                                                 <p><%#Eval("NEWSDESC") %></p>
                                             </div>
                                         </article>
@@ -696,6 +707,11 @@
 
                                 </ItemTemplate>
                             </asp:ListView>
+                            <asp:Panel ID="pnlPopup2" Style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;" runat="server" CssClass="modalPopup" Visible="false">
+                                <div class="body">
+                                    <iframe runat="server" id="iframeExpired"></iframe>
+                                </div>
+                            </asp:Panel>
                         </div>
                     </div>
 

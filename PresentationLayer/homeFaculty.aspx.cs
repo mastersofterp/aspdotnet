@@ -28,7 +28,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System.Threading.Tasks;
 using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using System.Web.Script.Serialization;
-
+using System.Web.UI.HtmlControls;
 
 public partial class homeFaculty : System.Web.UI.Page
 {
@@ -324,9 +324,23 @@ public partial class homeFaculty : System.Web.UI.Page
         }
     }
 
-    public string GetFileNamePath(object filename)
+    protected void GetFileNamePathEventForActiveNotice(object sender, CommandEventArgs e)
+    {
+        string filename = e.CommandArgument.ToString();
+        GetFileNamePath(filename, iframeActive);
+    }
+
+    protected void GetFileNamePathEventForExpiredNotice(object sender, CommandEventArgs e)
+    {
+        string filename = e.CommandArgument.ToString();
+        GetFileNamePath(filename, iframeExpired);
+    }
+
+
+    protected string GetFileNamePath(object filename, HtmlIframe iframeId)
     {
         string Url = string.Empty;
+        string fileUrl = string.Empty;
         string directoryPath = string.Empty;
         try
         {
@@ -359,6 +373,8 @@ public partial class homeFaculty : System.Web.UI.Page
 
                 string filePath = directoryPath + "\\" + ImageName;
 
+                fileUrl = iframeId.Src = string.Format(ResolveUrl("~/DownloadImg/" + ImageName));
+
 
                 if ((System.IO.File.Exists(filePath)))
                 {
@@ -367,10 +383,13 @@ public partial class homeFaculty : System.Web.UI.Page
                 if (CheckIFExits(ImageName) == true)
                 {
                     blob.DownloadToFile(filePath, System.IO.FileMode.CreateNew);
+                    string script = "window.open('" + fileUrl + "', '_blank');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "OpenFileInNewTab", script, true);
                     return string.Format(ResolveUrl("~/DownloadImg/" + ImageName));
                 }
 
             }
+
         }
         catch (Exception ex)
         {
