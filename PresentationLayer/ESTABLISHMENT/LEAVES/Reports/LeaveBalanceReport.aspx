@@ -2,8 +2,8 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-        <ContentTemplate>
+  <%--  <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>--%>
             <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 
             <script type="text/javascript">
@@ -40,7 +40,7 @@
                         <div class="form-group col-md-1" style="text-align: left">
                             <asp:ImageButton ID="imgBtnBack" runat="server" ImageUrl="~/IMAGES/btnBack.jpg" Width="60px" Height="30px" PostBackUrl="~/PAYROLL/TRANSACTIONS/Pay_UniversalSearch_EmployeeDetail.aspx" Visible="false" />
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" runat="server" visible="false">
                             <div class="row">
                                 <div class="col-12">
                                     <div id="divnote" runat="server">
@@ -54,13 +54,13 @@
                             <div class="panel-body">
                                 <div class="box-body">
                                     <div class="col-12">
-                                        <div class="row">
+                                        <%--<div class="row">--%>
                                             <asp:Panel ID="pnlInfo" runat="server">
                                                 <%-- Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span><br />--%>
 
                                                 <div class="col-12">
                                                     <div class="row">
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="trStaffType" runat="server" visible="false">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trStaffType" runat="server" visible="false">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>Staff Type</label>
@@ -74,7 +74,7 @@
                                                                 SetFocusOnError="True" InitialValue="0">
                                                             </asp:RequiredFieldValidator>
                                                         </div>
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="trcollege" runat="server">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trcollege" runat="server">
                                                             <div class="label-dynamic">
                                                                 <%--<sup>* </sup>--%>
                                                                 <label>College</label>
@@ -87,7 +87,7 @@
                                                                 SetFocusOnError="True" InitialValue="0">
                                                             </asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="tr1" runat="server" visible="false">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="tr1" runat="server" visible="false">
                                                             <div class="label-dynamic">
                                                                 <sup></sup>
                                                                 <label>Staff Type</label>
@@ -100,7 +100,7 @@
                                                                 SetFocusOnError="True" InitialValue="0">
                                                             </asp:RequiredFieldValidator>--%>
                                                         </div>
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="trdept" runat="server">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trdept" runat="server">
                                                             <div class="label-dynamic">
                                                                 <sup></sup>
                                                                 <label>Department</label>
@@ -110,7 +110,7 @@
                                                             </asp:DropDownList>
 
                                                         </div>
-                                                        <div class="form-group col-lg-4 col-md-6 col-12" id="trsearchtype" runat="server" style="padding-top: 10px">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12" id="trsearchtype" runat="server" style="padding-top: 10px">
                                                             <label>Search Type</label>
                                                             <asp:RadioButtonList ID="rblSelect" runat="server" RepeatDirection="Horizontal" AutoPostBack="True"
                                                                 OnSelectedIndexChanged="rblSelect_SelectedIndexChanged">
@@ -120,7 +120,7 @@
 
                                                         </div>
 
-                                                         <div class="form-group col-lg-4 col-md-6 col-12" id="trEmp" runat="server" visible="false" >
+                                                         <div class="form-group col-lg-3 col-md-6 col-12" id="trEmp" runat="server" visible="false" >
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>Select Employee</label>
@@ -133,7 +133,7 @@
                                                             </asp:RequiredFieldValidator>
                                                          </div>
 
-                                                      <div class="form-group col-lg-4 col-md-6 col-12">
+                                                      <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
                                                           <sup>* </sup>
                                                           <label>Period</label>
@@ -145,7 +145,7 @@
                                                             Display="None" ErrorMessage="Please Select Period" ValidationGroup="Holiday" InitialValue="0"></asp:RequiredFieldValidator>
                                                       </div>
 
-                                                        <div class="form-group col-lg-4 col-md-6 col-12">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>Year</label>
@@ -160,7 +160,7 @@
                                                         <%-- </div>--%>
                                                            
                                                         <%-- <div class="col-md-12">--%>
-                                                        <div id="Div1" class="form-group col-lg-4 col-md-6 col-12" runat="server" visible="false">
+                                                        <div id="Div1" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>From Date</label>
@@ -188,7 +188,7 @@
                                                                     InitialValue="__/__/____" />
                                                             </div>
                                                         </div>
-                                                        <div id="Div2" class="form-group col-lg-4 col-md-6 col-12" runat="server" visible="false">
+                                                        <div id="Div2" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
                                                             <div class="label-dynamic">
                                                                 <sup>* </sup>
                                                                 <label>To Date</label>
@@ -233,24 +233,23 @@
                                             <div class="col-md-12 form-group text-center">
                                                 <asp:Label ID="lblHead" runat="server" Visible="False" Style="text-align: center"></asp:Label>
                                             </div>
-                                            <div id="divMsg" runat="server">
-                                            </div>
-
-                                        </div>
+                                            
+                                        <%--</div>--%>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-        </ContentTemplate>
+      <%--  </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnReport" />
             <asp:PostBackTrigger ControlID="btnExport" />
-        </Triggers>
-    </asp:UpdatePanel>
+         </Triggers>
+    </asp:UpdatePanel>--%>
+    <div id="divMsg" runat="server">
+    </div>
 </asp:Content>
 
 

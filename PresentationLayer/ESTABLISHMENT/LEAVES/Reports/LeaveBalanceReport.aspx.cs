@@ -300,10 +300,11 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveBalanceReport : System.We
                 }
                 else
                 {
-                    objCommon.DisplayUserMessage(UpdatePanel1, "Please Select Employee", this);
+                    objCommon.DisplayUserMessage(this.Page, "Please Select Employee", this);
                     return;
                 }
             }
+            string Script = string.Empty;
             string collegeno = Session["college_nos"].ToString();
             string[] values = collegeno.Split(',');
             if (values.Length > 1)
@@ -322,9 +323,13 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveBalanceReport : System.We
                 url += "&param=@P_IDNO=" + idno + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_PERIOD=" + periodno + ",@P_LVNO=" + lvno + ",@P_STNO=" + stno + "," + "@P_Deptno=" + deptno + "," + "@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
             }
 
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+
+            Script += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            ScriptManager.RegisterClientScriptBlock(this.Page, GetType(), "Report", Script, true);
+
 
 
         }
@@ -455,10 +460,13 @@ public partial class ESTABLISHMENT_LEAVES_Reports_LeaveBalanceReport : System.We
         ddlCollege.SelectedIndex = 0;
         ddlStaff.SelectedIndex = 0;
         ddldept.SelectedIndex = 0;
-        rblSelect.SelectedIndex = 0;
         txtFdate.Text = string.Empty;
         txtDate.Text = string.Empty;
-        ddlEmployee.SelectedIndex = 0;
+        if (rblSelect.SelectedValue == "1")
+        {
+          ddlEmployee.SelectedIndex = 0;
+          rblSelect.SelectedIndex = 0;
+        }
         trEmp.Visible = false;
         ddlPeriod.SelectedIndex = 0;
         ddlYear.SelectedIndex = 0;
