@@ -88,7 +88,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <%--<sup>* </sup>--%>
-                                            <label>Choise For : </label>
+                                            <label>Choice For : </label>
                                         </div>
 
                                         <asp:RadioButton ID="rdoStudent" runat="server" Text="Student" GroupName="act_faculty"
@@ -121,7 +121,7 @@
                                                     <th>Feedback Type</th>
                                                     <th>Feedback Mode</th>
                                                     <th>Course Type</th>
-                                                    <th>Choise For</th>
+                                                    <th>Choice For</th>
                                                     <th>Active Status</th>
                                                 </tr>
                                             </thead>
