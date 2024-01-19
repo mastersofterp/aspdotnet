@@ -2760,13 +2760,19 @@ public partial class FetchDetailRegistration_Crescent : System.Web.UI.Page
             SP_name = "PKG_ACD_OA_GET_USERS_DEGREE_TYPE";
             SP_call = "@P_USERNO";
             SP_value = "" + user + "";
+            string applicationId = objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Convert.ToInt32(user));
+
+            if (applicationId == string.Empty)
+            {
+                applicationId = "-" + applicationId;
+            }
             dsCheckType = objCommon.DynamicSPCall_Select(SP_name, SP_call, SP_value);
             if (dsCheckType.Tables[0].Rows.Count > 0)
             {
                 //Added by Nikhil L. to download the reports as per degree type.
                 if (dsCheckType.Tables[0].Rows[0]["UGPGOT"].ToString() == "1" && dsCheckType.Tables[0].Rows[0]["DEGREENO"].ToString() == "7")
                 {
-                    ShowReport("pdf", "Preview_Form", "rptPreviewForm_Crescent.rpt", Convert.ToInt32(user));
+                    ShowReport("pdf", applicationId, "rptPreviewForm_Crescent.rpt", Convert.ToInt32(user));
                 }
                 else if (dsCheckType.Tables[0].Rows[0]["UGPGOT"].ToString() == "1" && dsCheckType.Tables[0].Rows[0]["DEGREENO"].ToString() != "7")
                 {
@@ -2925,10 +2931,11 @@ public partial class FetchDetailRegistration_Crescent : System.Web.UI.Page
         {
             DataSet dsExcel = null; string spName = string.Empty; string spCall = string.Empty; string spValue = string.Empty;
             int admBatch = ddlAdmbatch.SelectedIndex > 0 ? Convert.ToInt32(ddlAdmbatch.SelectedValue) : 0;
+            int status = Convert.ToInt32(rdoStatus.SelectedValue);
             //int degreeNo = 0;
             spName = "PKG_ACD_GET_DUMP_DATA_BTECH_EXCEL";
-            spCall = "@P_ADMBATCH";
-            spValue = "" + admBatch + "";
+            spCall = "@P_ADMBATCH,@P_STATUS";
+            spValue = "" + admBatch + "," + status;
             dsExcel = objCommon.DynamicSPCall_Select(spName, spCall, spValue);
             if (dsExcel.Tables[0].Rows.Count > 0)
             {

@@ -170,7 +170,7 @@
                                             <tr>
                                                 <th>SrNo
                                                 </th>
-                                                <th>Application Id
+                                                <th>Application Number
                                                 </th>
                                                 <th>Name
                                                 </th>
