@@ -22,7 +22,6 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     OnlineAdmissionGroupwiseController objOAC = new OnlineAdmissionGroupwiseController();
-    string SP_name = string.Empty; string SP_parameters = string.Empty; string SP_value = string.Empty; int admType = 0;
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -66,14 +65,12 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
                 this.BindListView();
                 ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                 ViewState["action"] = "add";
-                BindList_NRI();
             }
 
         }
 
     }
 
-    #region tab1
     private void BindListView()
     {
 
@@ -109,25 +106,6 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             objCommon.FillDropDownList(ddlgroup, "ACD_ADMISSION_CONFIG_GROUP", "GROUPNO", "GROUP_NAME", "GROUPNO>0", "GROUPNO");
             objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNO DESC");
             objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO != 3", "IDTYPENO");
-            DataSet dsDropDown_NRI = null;
-            SP_name = "PKG_ACD_GET_DROPDOWN_ADM_CONFIG";
-            SP_parameters = "@P_ADMTYPE";
-            SP_value = "" + admType + "";
-            dsDropDown_NRI = objCommon.DynamicSPCall_Select(SP_name, SP_parameters, SP_value);
-            if (dsDropDown_NRI.Tables.Count > 0)
-            {
-                if (dsDropDown_NRI.Tables[0].Rows.Count > 0)
-                {
-                    ddlAdmBatch_NRI.Items.Clear();
-                    ddlAdmBatch_NRI.Items.Add(new ListItem("Please Select", "0"));
-                    ddlAdmBatch_NRI.DataSource = dsDropDown_NRI.Tables[0];
-                    ddlAdmBatch_NRI.DataTextField = "BATCHNAME";
-                    ddlAdmBatch_NRI.DataValueField = "BATCHNO";
-                    ddlAdmBatch_NRI.DataBind();
-                }
-            }
-            ViewState["ddlAdmType"] = dsDropDown_NRI.Tables[1];
-            ViewState["ddlProgrammeType"] = dsDropDown_NRI.Tables[2];
         }
         catch (Exception ex)
         {
@@ -152,14 +130,11 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         int form_category = 0;
-        //  int collegeid = 0;
         int ugpg = 0;
         DateTime dt = DateTime.Now;
         DateTime dtEnd = Convert.ToDateTime(txtEndDate.Text);
         dtEnd = dtEnd + DateTime.Now.TimeOfDay;
-
-        //seconds = dt.Second;
-        string t1 = dt.ToString("H:mm");
+       string t1 = dt.ToString("H:mm");
 
         string STime = string.Empty;
         string ETime = string.Empty;
@@ -219,12 +194,12 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             objConfig.Details = txtDetails.Text.Trim();
             objConfig.Fees = Convert.ToDouble(txtApplicationFee.Text.Trim());
             ugpg = Convert.ToInt32(ddlProgramme.SelectedValue);
-            form_category = Convert.ToInt32(ddlCategory.SelectedValue);
-
             objConfig.Age = Convert.ToInt32(txtAge.Text.Trim());
             int Active = chkStatus.Checked ? Active = 1 : Active = 0;
             int groupno = 0;
             groupno = Convert.ToInt32(ddlgroup.SelectedValue);
+            int Admissionsession = Convert.ToInt32(ddlphd.SelectedValue);
+           
             int is_nri = Convert.ToInt32(rdobtnnri.SelectedValue);
             if (rdobtnnri.SelectedValue == "1")
             {
@@ -235,7 +210,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             if (ViewState["action"] != null && ViewState["action"].ToString().Equals("edit"))
             {
                 string ConfigID = Convert.ToString(ViewState["ConfigID"]);
-                CustomStatus cs = (CustomStatus)objOAC.UpdateOnline(objConfig, form_category, STime, ETime, ugpg, Active, ConfigID, DegreeBranchno, groupno, Convert.ToInt32(Session["OrgId"]), is_nri, nrifees);
+                CustomStatus cs = (CustomStatus)objOAC.UpdateOnline(objConfig, form_category, STime, ETime, ugpg, Active, ConfigID, DegreeBranchno, groupno, Convert.ToInt32(Session["OrgId"]), is_nri, nrifees, Admissionsession);
 
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
@@ -260,7 +235,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             }
             else
             {
-                CustomStatus cs = (CustomStatus)objOAC.AddOnline(objConfig, form_category, STime, ETime, ugpg, Convert.ToInt32(Session["OrgId"]), Active, DegreeBranchno, groupno, is_nri, nrifees);
+                CustomStatus cs = (CustomStatus)objOAC.AddOnline(objConfig, form_category, STime, ETime, ugpg, Convert.ToInt32(Session["OrgId"]), Active, DegreeBranchno, groupno, is_nri, nrifees, Admissionsession);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
                     ViewState["test"] = "save";
@@ -279,7 +254,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             }
         }
         this.BindListView();
-        rdobtnnri.Enabled = false;
+       // rdobtnnri.Enabled = false;
     }
 
     protected void lstbxDegree_SelectedIndexChanged(object sender, EventArgs e)
@@ -404,6 +379,11 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
                         chkStatus.Checked = false;
 
                     }
+                    if (dr["UGPGOT"].ToString() == "3")
+                    {
+                        divphd.Visible = true;
+                        ddlphd.SelectedValue = dr["ADMISSION_SESSION"] == null ? "0" : dr["ADMISSION_SESSION"].ToString();
+                    }
                     ddlAdmType.SelectedValue = dr["ADM_TYPE"] == null ? "0" : dr["ADM_TYPE"].ToString();
                     rdobtnnri.SelectedValue = dr["IS_NRI"] == null ? "0" : dr["IS_NRI"].ToString();
                     txteqvinr.Text = dr["NRI_FEES"] == null ? "0" : dr["NRI_FEES"].ToString();
@@ -428,7 +408,6 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
     {
         ddlProgramme.SelectedIndex = 0;
         ddlSchool.SelectedIndex = 0;
-        ddlCategory.SelectedIndex = 0;
         ddlAdmBatch.SelectedIndex = 0;
         txtStartDate.Text = string.Empty;
         txtStartTime.Text = string.Empty;
@@ -447,6 +426,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
         rdobtnnri.Enabled = true;
         lblapp.Text = "Application Fee(INR)";
         divinr.Visible = false;
+        ViewState["action"] = "add";
     }
 
     protected void btnEdit_Click(object sender, ImageClickEventArgs e)
@@ -474,6 +454,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
         ClearControls();
         rdobtnnri.SelectedIndex = 0;
         rdobtnnri.Enabled = true;
+        divphd.Visible = false;
     }
 
     protected void ddlAdmBatch_SelectedIndexChanged(object sender, EventArgs e)
@@ -493,17 +474,20 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
         txtStartTime.Text = string.Empty;
         ddlProgramme.SelectedIndex = 0;
         ddlAdmType.SelectedIndex = 0;
+        ddlphd.SelectedIndex = 0;
         if (ddlAdmBatch.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlProgramme, "ACD_UA_SECTION C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON CB.UGPGOT=C.UA_SECTION", "DISTINCT UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0", "UA_SECTION");
 
         }
         rdobtnnri.SelectedIndex = check;
+        divphd.Visible = false;
     }
 
     protected void ddlAdmType_SelectedIndexChanged(object sender, EventArgs e)
     {
         int check = rdobtnnri.SelectedIndex;
+        ddlphd.SelectedIndex = 0;
         if (ddlAdmType.SelectedIndex == 2)
         {
             objCommon.FillDropDownList(ddlProgramme, "ACD_UA_SECTION C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CB ON CB.UGPGOT=C.UA_SECTION", "DISTINCT UA_SECTION", "UA_SECTIONNAME", "UA_SECTION>0 AND CB.ADM_TYPE= 1", "UA_SECTION");
@@ -515,10 +499,21 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
 
         }
         rdobtnnri.SelectedIndex = check;
+        divphd.Visible = false;
+       
     }
 
     protected void ddlProgramme_SelectedIndexChanged(object sender, EventArgs e)
     {
+
+        if (ddlProgramme.SelectedValue == "3" && ddlAdmType.SelectedValue == "1")
+        {
+            divphd.Visible = true;
+        }
+        else
+        {
+            divphd.Visible = false;
+        }
         int check = rdobtnnri.SelectedIndex;
         txtApplicationFee.Text = string.Empty;
         txtDetails.Text = string.Empty;
@@ -542,6 +537,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
 
         }
         rdobtnnri.SelectedIndex = check;
+        
     }
 
     protected void rdobtnnri_SelectedIndexChanged(object sender, EventArgs e)
@@ -558,320 +554,6 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             divinr.Visible = false;
         }
     }
-
-    #endregion
-
-    #region NRI
-
-    protected void ddlAdmBatch_NRI_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            if (ddlAdmBatch_NRI.SelectedIndex > 0)
-            {
-                ddlAdmType_NRI.Items.Clear();
-                ddlAdmType_NRI.Items.Add(new ListItem("Please Select", "0"));
-                ddlAdmType_NRI.DataSource = ViewState["ddlAdmType"];
-                ddlAdmType_NRI.DataTextField = "IDTYPEDESCRIPTION";
-                ddlAdmType_NRI.DataValueField = "IDTYPENO";
-                ddlAdmType_NRI.DataBind();
-                ddlAdmType_NRI.Focus();
-            }
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-    protected void ddlDegree_NRI_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-    protected void ddlProgrammeType_NRI_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            DataSet dsDropDownDegree_NRI = null;
-            admType = Convert.ToInt16(ddlProgrammeType_NRI.SelectedValue);
-            SP_name = "PKG_ACD_GET_DROPDOWN_ADM_CONFIG";
-            SP_parameters = "@P_ADMTYPE";
-            SP_value = "" + admType + "";
-            dsDropDownDegree_NRI = objCommon.DynamicSPCall_Select(SP_name, SP_parameters, SP_value);
-            if (dsDropDownDegree_NRI.Tables.Count > 0)
-            {
-                if (dsDropDownDegree_NRI.Tables[3].Rows.Count > 0)
-                {
-                    ddlDegree_NRI.Items.Clear();
-                    ddlDegree_NRI.Items.Add(new ListItem("Please Select", "0"));
-                    ddlDegree_NRI.DataSource = dsDropDownDegree_NRI.Tables[3];
-                    ddlDegree_NRI.DataTextField = "DEGREE";
-                    ddlDegree_NRI.DataValueField = "DEGREENO";
-                    ddlDegree_NRI.DataBind();
-                    ddlDegree_NRI.Focus();
-                }
-            }
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-    protected void ddlSchool_NRI_SelectedIndexChanged(object sender, EventArgs e)
-    {
-
-    }
-    protected void ddlAdmType_NRI_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        try
-        {
-            if (ddlAdmType_NRI.SelectedIndex > 0)
-            {
-                ddlProgrammeType_NRI.Items.Clear();
-                ddlProgrammeType_NRI.Items.Add(new ListItem("Please Select", "0"));
-                ddlProgrammeType_NRI.DataSource = ViewState["ddlProgrammeType"];
-                ddlProgrammeType_NRI.DataTextField = "UA_SECTIONNAME";
-                ddlProgrammeType_NRI.DataValueField = "UA_SECTION";
-                ddlProgrammeType_NRI.DataBind();
-                ddlProgrammeType_NRI.Focus();
-            }
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-    protected void btnSubmit_NRI_Click(object sender, EventArgs e)
-    {
-        try
-        {
-            int ugpg = 0;
-            DateTime dt = DateTime.Now;
-            DateTime dtEnd = Convert.ToDateTime(txtEndDate_NRI.Text);
-            dtEnd = dtEnd + DateTime.Now.TimeOfDay;
-
-            string t1 = dt.ToString("H:mm");
-
-            string STime = string.Empty;
-            string ETime = string.Empty;
-            if ((txtStartDate_NRI.Text != string.Empty) && (txtEndDate_NRI.Text != string.Empty))
-            {
-
-                int rest = DateTime.Compare(dt, dtEnd);
-                if (Convert.ToDateTime(txtStartDate_NRI.Text) > Convert.ToDateTime(txtEndDate_NRI.Text))
-                {
-                    if (dtEnd.ToString("yyyyMMdd") == dt.ToString("yyyyMMdd"))
-                    {
-                        if (Convert.ToDateTime(txtEndTime_NRI.Text) < Convert.ToDateTime(t1))
-                        {
-                            objCommon.DisplayMessage(this.Page, "End Time Should be Greater than Current time.", this.Page);
-
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        objCommon.DisplayMessage(this.Page, "End Date should be greater than Start Date.", this.Page);
-
-                        return;
-                    }
-                }
-                if (Convert.ToDateTime(txtStartTime_NRI.Text) < dt)
-                {
-                    if (Convert.ToDateTime(txtStartTime_NRI.Text) < Convert.ToDateTime(t1))
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`Start Time Should be Greater than Current time`)", true);
-                        return;
-                    }
-                }
-                IITMS.UAIMS.BusinessLayer.BusinessEntities.Config objConfig = new IITMS.UAIMS.BusinessLayer.BusinessEntities.Config();
-                objConfig.Admbatch = Convert.ToInt32(ddlAdmBatch_NRI.SelectedValue);
-                objConfig.Degree_No = Convert.ToInt32(ddlDegree_NRI.SelectedValue);
-                objConfig.College_Id = Convert.ToInt32(ddlSchool_NRI.SelectedValue);
-                objConfig.Config_SDate = Convert.ToDateTime(txtStartDate_NRI.Text);
-                objConfig.Config_EDate = Convert.ToDateTime(txtEndDate_NRI.Text);
-                objConfig.AdmType = Convert.ToInt32(ddlAdmType_NRI.SelectedValue);
-                STime = txtStartTime_NRI.Text;
-                ETime = txtEndTime_NRI.Text;
-                objConfig.Details = txtRemark_NRI.Text.Trim();
-                objConfig.Fees = Convert.ToDouble(txtAppFee_NRI.Text.Trim());
-                ugpg = Convert.ToInt32(ddlProgrammeType_NRI.SelectedValue);
-                string mode = "";
-                int configId = 0;
-                int Active = chkActive_NRI.Checked ? Active = 1 : Active = 0;
-                if (ViewState["action_NRI"] == null || ViewState["action_NRI"].ToString().Equals(string.Empty))
-                {
-                    mode = "INSERT";
-                    //CustomStatus cs = (CustomStatus)objOAC.AddOnlineAdm_NRI(objConfig, STime, ETime, ugpg, Convert.ToInt32(Session["OrgId"]), Active, mode, configId);
-                    //if (cs.Equals(CustomStatus.RecordSaved))
-                    //{
-                    //    //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alert", "alert(`Notification Saved Successfully.`)", true);
-                    //    objCommon.DisplayMessage(this.Page, "Notification Saved Successfully.", this.Page);
-                    //    BindList_NRI();
-                    //    //tab2.Attributes.Add("class", "tab-pane active");
-                    //    //tab1.Attributes.Add("class", "tab-pane");
-                    //    ClearControls_NRI();
-                    //}
-                    //else
-                    //{
-                    //    objCommon.DisplayMessage(this.Page, "Failed To Save Record.", this.Page);
-                    //    return;
-                    //}
-                }
-                else if (ViewState["action_NRI"].ToString().Equals("edit"))
-                {
-                    mode = "UPDATE";
-                    configId = Convert.ToInt32(ViewState["ConfigID"].ToString());
-                    objConfig.ConfigID = configId;
-                    //CustomStatus cs = (CustomStatus)objOAC.UpdateOnlineAdm_NRI(objConfig, STime, ETime, ugpg, Active);
-                    // if (cs.Equals(CustomStatus.RecordUpdated))
-                    // {
-                    //     objCommon.DisplayMessage(this.Page, "Notification Updated Successfully.", this.Page);
-                    //     BindList_NRI();
-                    //     ClearControls_NRI();
-                    // }
-                    // else
-                    // {
-                    //     objCommon.DisplayMessage(this.Page, "Failed To Save Record.", this.Page);
-                    //     return;
-                    // }
-                }
-
-            }
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-    protected void btnCancel_NRI_Click(object sender, EventArgs e)
-    {
-
-    }
-    private void ClearControls_NRI()
-    {
-        ddlProgrammeType_NRI.SelectedIndex = 0;
-        ddlSchool_NRI.SelectedIndex = 0;
-        ddlAdmBatch_NRI.SelectedIndex = 0;
-        ddlDegree_NRI.SelectedIndex = 0;
-        //ddlBranch.SelectedIndex = 0;
-        txtStartDate_NRI.Text = string.Empty;
-        txtStartTime_NRI.Text = string.Empty;
-        txtEndDate_NRI.Text = string.Empty;
-        txtEndTime_NRI.Text = string.Empty;
-        //txtIntake.Text = string.Empty;
-        txtRemark_NRI.Text = string.Empty;
-        txtAppFee_NRI.Text = string.Empty;
-        chkActive_NRI.Checked = false;
-        ddlAdmType_NRI.SelectedIndex = 0;
-    }
-    protected void BindList_NRI()
-    {
-        try
-        {
-            DataSet dsBind_NRI = null;
-            int config = 0;
-            SP_name = "PKG_GET_ALL_CONFIG_FOR_NRI";
-            SP_parameters = "@P_CONFIGID";
-            SP_value = "" + config + "";
-            dsBind_NRI = objCommon.DynamicSPCall_Select(SP_name, SP_parameters, SP_value);
-            if (dsBind_NRI.Tables.Count > 0)
-            {
-                lvNRI.DataSource = dsBind_NRI.Tables[1];
-                lvNRI.DataBind();
-                lvNRI.Visible = true;
-            }
-            else
-            {
-                lvNRI.DataSource = null;
-                lvNRI.DataBind();
-                lvNRI.Visible = false;
-            }
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-    protected void btnEdit_NRI_Click(object sender, ImageClickEventArgs e)
-    {
-        try
-        {
-            ImageButton btnEdit_NRI = sender as ImageButton;
-            int ConfigID = int.Parse(btnEdit_NRI.CommandArgument);
-            ViewState["ConfigID"] = int.Parse(btnEdit_NRI.CommandArgument);
-            ViewState["action_NRI"] = "edit";
-            SP_name = "PKG_GET_ALL_CONFIG_FOR_NRI";
-            SP_parameters = "@P_CONFIGID";
-            SP_value = "" + ConfigID + "";
-            DataSet dsEdit = objCommon.DynamicSPCall_Select(SP_name, SP_parameters, SP_value);
-            if (dsEdit.Tables.Count > 0)
-            {
-                if (dsEdit.Tables[0].Rows.Count > 0)
-                {
-                    ddlAdmBatch_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADMBATCH"].ToString();
-                    ddlProgrammeType_NRI.Items.Clear();
-                    ddlProgrammeType_NRI.Items.Add(new ListItem("Please Select", "0"));
-                    ddlProgrammeType_NRI.DataSource = ViewState["ddlProgrammeType"];
-                    ddlProgrammeType_NRI.DataTextField = "UA_SECTIONNAME";
-                    ddlProgrammeType_NRI.DataValueField = "UA_SECTION";
-                    ddlProgrammeType_NRI.DataBind();
-                    ddlProgrammeType_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["UGPGOT"].ToString();
-
-                    DataSet dsDropDownDegree_NRI = null;
-                    admType = Convert.ToInt16(ddlProgrammeType_NRI.SelectedValue);
-                    SP_name = "PKG_ACD_GET_DROPDOWN_ADM_CONFIG";
-                    SP_parameters = "@P_ADMTYPE";
-                    SP_value = "" + admType + "";
-                    dsDropDownDegree_NRI = objCommon.DynamicSPCall_Select(SP_name, SP_parameters, SP_value);
-                    if (dsDropDownDegree_NRI.Tables.Count > 0)
-                    {
-                        if (dsDropDownDegree_NRI.Tables[3].Rows.Count > 0)
-                        {
-                            ddlDegree_NRI.Items.Clear();
-                            ddlDegree_NRI.Items.Add(new ListItem("Please Select", "0"));
-                            ddlDegree_NRI.DataSource = dsDropDownDegree_NRI.Tables[3];
-                            ddlDegree_NRI.DataTextField = "DEGREE";
-                            ddlDegree_NRI.DataValueField = "DEGREENO";
-                            ddlDegree_NRI.DataBind();
-                        }
-                    }
-                    ddlDegree_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["DEGREENO"].ToString();
-                    txtStartDate_NRI.Text = dsEdit.Tables[0].Rows[0]["ADMSTRDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ADMSTRDATE"].ToString()).ToString("dd/MM/yyyy");
-                    txtEndDate_NRI.Text = dsEdit.Tables[0].Rows[0]["ADMENDDATE"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ADMENDDATE"].ToString()).ToString("dd/MM/yyyy");
-                    txtStartTime_NRI.Text = dsEdit.Tables[0].Rows[0]["STARTTIME"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["STARTTIME"].ToString()).ToString("hh:mm tt");
-                    txtEndTime_NRI.Text = dsEdit.Tables[0].Rows[0]["ENDTIME"] == DBNull.Value ? string.Empty : Convert.ToDateTime(dsEdit.Tables[0].Rows[0]["ENDTIME"].ToString()).ToString("hh:mm tt");
-                    txtRemark_NRI.Text = dsEdit.Tables[0].Rows[0]["DETAILS"] == null ? string.Empty : dsEdit.Tables[0].Rows[0]["DETAILS"].ToString();
-                    txtAppFee_NRI.Text = dsEdit.Tables[0].Rows[0]["FEES"] == null ? "0" : dsEdit.Tables[0].Rows[0]["FEES"].ToString();
-                    if (dsEdit.Tables[0].Rows[0]["ACTIVE_STATUS"].ToString().Equals("1"))
-                    {
-                        chkActive_NRI.Checked = true;
-                    }
-                    else
-                    {
-                        chkActive_NRI.Checked = false;
-                    }
-                    ddlAdmType_NRI.Items.Clear();
-                    ddlAdmType_NRI.Items.Add(new ListItem("Please Select", "0"));
-                    ddlAdmType_NRI.DataSource = ViewState["ddlAdmType"];
-                    ddlAdmType_NRI.DataTextField = "IDTYPEDESCRIPTION";
-                    ddlAdmType_NRI.DataValueField = "IDTYPENO";
-                    ddlAdmType_NRI.DataBind();
-                    ddlAdmType_NRI.SelectedValue = dsEdit.Tables[0].Rows[0]["ADM_TYPE"] == null ? "0" : dsEdit.Tables[0].Rows[0]["ADM_TYPE"].ToString();
-                }
-            }
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-
-    #endregion
 
 }
 
