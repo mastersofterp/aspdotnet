@@ -116,7 +116,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
 
     private void ShowCourses()
     {
-        DataSet ds = objMarksEntry.GetCourseForTeacher(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
+        DataSet ds = objMarksEntry.GetCourseForTeacher(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ddlSubjectType.SelectedValue));
 
         if (ds != null && ds.Tables.Count > 0)
         {
@@ -994,7 +994,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     //methods to get marks entry status course wise..........added on [14-09-2016]
     private void GetStatus()
     {
-        DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
+        DataSet ds = objMarksEntry.GetCourse_MarksEntryStatus(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(Session["userno"]), Convert.ToInt32(ddlSubjectType.SelectedValue));
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             //GVEntryStatus.DataSource = ds;
@@ -1404,6 +1404,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
     protected void lbtnPrint_Click(object sender, EventArgs e)
     {
         LinkButton lbtn = (LinkButton)(sender);
+
         ViewState["courseNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[0]);
         lbl_SubjectName.Text = lbtn.CommandArgument.Split(',')[1];
         ViewState["sem_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[2]);
@@ -1411,8 +1412,36 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
         ViewState["examNo_POP"] = Convert.ToInt32(lbtn.CommandArgument.Split(',')[4]);
         ViewState["examName_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[5]);
         ViewState["fldname_POP"] = Convert.ToString(lbtn.CommandArgument.Split(',')[6]);
-
         ViewState["ccode_POP"] = lbl_SubjectName.Text.Split('~')[0];
+        //#region Added on 20012024
+       
+        //HiddenField hdnfld_courseno = new HiddenField();
+        //hdnfld_courseno = (HiddenField)rptExamName.FindControl("hdnfld_courseno");
+        //ViewState["courseNo_POP"] = Convert.ToInt32(hdnfld_courseno);
+
+        //HiddenField hdnsem = new HiddenField();
+        //hdnsem = (HiddenField)rptExamName.FindControl("hdnsem");
+        //ViewState["sem_POP"] = Convert.ToInt32(hdnsem);
+
+        //HiddenField hdsec = new HiddenField();
+        //hdsec = (HiddenField)rptExamName.FindControl("hdsec");
+        //ViewState["sec_POP"] = Convert.ToInt32(hdsec);
+
+        //HiddenField hdexam = new HiddenField();
+        //hdexam = (HiddenField)rptExamName.FindControl("hdexam");
+        //ViewState["examNo_POP"] = Convert.ToInt32(hdexam);
+
+
+        //HiddenField hdexamname = new HiddenField();
+        //hdexamname = (HiddenField)rptExamName.FindControl("hdexamname");
+        //ViewState["examName_POP"] = Convert.ToString(hdexamname);
+
+
+        //HiddenField hdfldname = new HiddenField();
+        //hdfldname = (HiddenField)rptExamName.FindControl("hdfldname");
+        //ViewState["fldname_POP"] = Convert.ToString(hdfldname);
+
+        //#endregion
         
         ddlExamPrint.Items.Clear();
         ddlExamPrint.Items.Add(new ListItem("Please Select","0"));
@@ -1453,8 +1482,17 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             }
             else
             {
-                objCommon.FillDropDownList(ddlSubExamPrint, "ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExamPrint.SelectedValue) + "", "");
-                ddlSubExamPrint.Enabled = true;
+                if (Convert.ToInt32(Session["OrgId"]) == 5)
+                {
+                    objCommon.FillDropDownList(ddlSubExamPrint, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExamPrint.SelectedValue) + "", "");
+                    ddlSubExamPrint.Enabled = true;
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlSubExamPrint, "ACD_SUBEXAM_NAME", "TOP(1) CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExamPrint.SelectedValue) + "", "");
+                    ddlSubExamPrint.Enabled = true;
+                }
+               
             }
             ddlSubExamPrint.Enabled = true;
         }
@@ -1508,7 +1546,7 @@ public partial class Academic_MarkEntryforIA : System.Web.UI.Page
             url += "&path=~,Reports,Academic," + rptFileName;
 
             url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + ddlSubExamPrint.SelectedValue + "";
-
+            url = url.Replace("\n", "").Replace("\r", "");//added on 18012024
             string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
         }
