@@ -431,8 +431,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             ////ShowReportinFormate(rdoReportType.SelectedValue, "rptConsolidatedAttendanceNew.rpt");
             GridView GV = new GridView();
 
-            DateTime FromDate = txtFromDate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtFromDate.Text);
-            DateTime ToDate = txtTodate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtTodate.Text);
+            string  FromDate = txtFromDate.Text == string.Empty ? "01/01/1753" : txtFromDate.Text;
+            string  ToDate = txtTodate.Text == string.Empty ? "01/01/1753" : txtTodate.Text;
             DataSet ds = objCommon.GetAttendanceData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), FromDate, ToDate, Convert.ToInt32(ddlSection.SelectedValue), ddlOperator.SelectedValue, Convert.ToDouble(txtPercentage.Text), Convert.ToInt32(ddlSubjectType.SelectedValue), txtPercentageFrom.Text.ToString(), txtPercentageTo.Text.ToString(), Convert.ToInt32(selector));
 
             //**************************************************************************************
@@ -748,11 +748,13 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+            DateTime FromDate = Convert.ToDateTime(txtFromDate.Text);
+            string from = FromDate.ToString("yyyy-MM-dd");
+            DateTime ToDate = Convert.ToDateTime(txtTodate.Text);
+            string to = ToDate.ToString("yyyy-MM-dd");
             objAtt.Conditions = ddlOperator.SelectedValue.ToString();
             objAtt.Percentage = Convert.ToString(txtPercentage.Text);
-            DataSet ds = objSAC.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet ds = objSAC.GetAttendanceSelectorWise(objAtt, selector, from, to);
             pnlByPercent.Visible = false;
 
             if (ds.Tables[0].Rows.Count <= 0)
@@ -797,8 +799,10 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+            DateTime FromDate = Convert.ToDateTime(txtFromDate.Text);
+            string from = FromDate.ToString("yyyy-MM-dd");
+            DateTime ToDate = Convert.ToDateTime(txtTodate.Text);
+            string to = ToDate.ToString("yyyy-MM-dd");
             if (txtPercentageTo.Text != string.Empty && txtPercentageFrom.Text != string.Empty)
             {
                 if (Convert.ToInt32(txtPercentageTo.Text) <= Convert.ToInt32(txtPercentageFrom.Text))
@@ -813,7 +817,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             objAtt.SectionNo = Convert.ToInt32(ddlSection.SelectedValue);
             objAtt.Th_Pr = Convert.ToInt32(ddltheorypractical.SelectedValue);
             objAtt.SubId = Convert.ToInt32(ddlSubjectType.SelectedValue);
-            DataSet dsPer = objSAC.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet dsPer = objSAC.GetAttendanceSelectorWise(objAtt, selector, from, to);
             pnlAttendence.Visible = false;
             pnlByPercent.Visible = true;
             if (dsPer.Tables[0].Rows.Count <= 0)
@@ -866,12 +870,15 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+           // Convert.ToDateTime(txtFromDate.Text);
+            DateTime FromDate = Convert.ToDateTime(txtFromDate.Text);
+            string from = FromDate.ToString("yyyy-MM-dd");
+           DateTime ToDate = Convert.ToDateTime(txtTodate.Text);
+           string to = ToDate.ToString("yyyy-MM-dd");
             objAtt.SectionNo = Convert.ToInt32(ddlSection.SelectedValue);
             objAtt.Th_Pr = Convert.ToInt32(ddltheorypractical.SelectedValue);
             objAtt.SubId = Convert.ToInt32(ddlSubjectType.SelectedValue);
-            DataSet dsAll = objSAC.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet dsAll = objSAC.GetAttendanceSelectorWise(objAtt, selector, from, to);
             pnlAttendence.Visible = false;
             pnlByPercent.Visible = true;
             if (dsAll.Tables[0].Rows.Count <= 0)
@@ -994,8 +1001,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty : System.Web.UI.Page
             ////ShowReportinFormate(rdoReportType.SelectedValue, "rptConsolidatedAttendanceNew.rpt");
             GridView GV = new GridView();
 
-            DateTime FromDate = txtFromDate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtFromDate.Text);
-            DateTime ToDate = txtTodate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtTodate.Text);
+            string FromDate = txtFromDate.Text == string.Empty ? "01/01/1753" : txtFromDate.Text;
+            string ToDate = txtTodate.Text == string.Empty ? "01/01/1753" :txtTodate.Text;
             DataSet ds = objCommon.GetAttendanceData1(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), FromDate, ToDate, Convert.ToInt32(ddlSection.SelectedValue), ddlOperator.SelectedValue, Convert.ToDouble(txtPercentage.Text), Convert.ToInt32(ddlSubjectType.SelectedValue), txtPercentageFrom.Text.ToString(), txtPercentageTo.Text.ToString(), Convert.ToInt32(selector));
 
             //**************************************************************************************

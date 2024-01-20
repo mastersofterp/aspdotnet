@@ -1150,7 +1150,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
         //Added by Nikhil Vinod Lambe on 21022020 
-        public DataSet GetAttendenceDetails(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector)
+        //Updated BY Sakshi M on 09012024
+        public DataSet GetAttendenceDetails(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector, string FromDate, string ToDate)
         {
             DataSet ds = null;
             try
@@ -1160,8 +1161,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[0] = new SqlParameter("@P_SESSIONNO ", objAtt.SessionNo);
                 objParams[1] = new SqlParameter("@P_SEMESTERNO ", objAtt.SemesterNo);
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objAtt.SchemeNo);
-                objParams[3] = new SqlParameter("@P_FROMDATE", objAtt.FromDate);
-                objParams[4] = new SqlParameter("@P_TODATE", objAtt.ToDate);
+                objParams[3] = new SqlParameter("@P_FROMDATE", FromDate);
+                objParams[4] = new SqlParameter("@P_TODATE", ToDate);
                 //objParams[5] = new SqlParameter("@P_SECTIONNO",objAtt.SectionNo );
                 objParams[5] = new SqlParameter("@P_PERCENTAGEFROM", objAtt.PercentageFrom);
                 objParams[6] = new SqlParameter("@P_PERCENTAGETO", objAtt.PercentageTo);
@@ -1187,7 +1188,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
-        public DataSet GetAttendanceByPercentage(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector)
+        //Update BY Sakshi M on 09012024
+        public DataSet GetAttendanceByPercentage(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector, string FromDate, string ToDate)
         {
             DataSet dsPer = null;
             try
@@ -1197,8 +1199,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[0] = new SqlParameter("@P_SESSIONNO", objAtt.SessionNo);
                 objParams[1] = new SqlParameter("@P_SEMESTERNO", objAtt.SemesterNo);
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objAtt.SchemeNo);
-                objParams[3] = new SqlParameter("@P_FROMDATE", objAtt.FromDate);
-                objParams[4] = new SqlParameter("@P_TODATE", objAtt.ToDate);
+                objParams[3] = new SqlParameter("@P_FROMDATE", FromDate);
+                objParams[4] = new SqlParameter("@P_TODATE", ToDate);
                 objParams[5] = new SqlParameter("@P_PERCENTAGEFROM", objAtt.PercentageFrom);
                 objParams[6] = new SqlParameter("@P_PERCENTAGETO", objAtt.PercentageTo);
                 objParams[7] = new SqlParameter("@P_SECTIONNO", objAtt.SectionNo);
@@ -1245,13 +1247,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return dsAll;
         }
 
-        /// <summary>
-        /// Modified by S.Patil - 22042020
-        /// </summary>
-        /// <param name="objAtt"></param>
-        /// <param name="selector"></param>
-        /// <returns></returns>
-        public DataSet GetAttendanceSelectorWise(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector)
+        /// //Updated BY Sakshi M ON 09012024
+        public DataSet GetAttendanceSelectorWise(IITMS.UAIMS.BusinessLayer.BusinessEntities.Attendance objAtt, int selector, string FromDate, string ToDate)
         {
             DataSet dsAll = null;
             try
@@ -1261,8 +1258,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[0] = new SqlParameter("@P_SESSIONNO", objAtt.SessionNo);
                 objParams[1] = new SqlParameter("@P_SEMESTERNO", objAtt.SemesterNo);
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objAtt.SchemeNo);
-                objParams[3] = new SqlParameter("@P_FROMDATE", objAtt.FromDate);
-                objParams[4] = new SqlParameter("@P_TODATE", objAtt.ToDate);
+                objParams[3] = new SqlParameter("@P_FROMDATE", FromDate);
+                objParams[4] = new SqlParameter("@P_TODATE", ToDate);
                 objParams[5] = new SqlParameter("@P_PERCENTAGEFROM", objAtt.PercentageFrom);
                 objParams[6] = new SqlParameter("@P_PERCENTAGETO", objAtt.PercentageTo);
                 objParams[7] = new SqlParameter("@P_SECTIONNO", objAtt.SectionNo);
@@ -1279,6 +1276,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return dsAll;
         }
+
+
+
+
 
         /// <summary>
         /// added by Jay T on 21_02_2023

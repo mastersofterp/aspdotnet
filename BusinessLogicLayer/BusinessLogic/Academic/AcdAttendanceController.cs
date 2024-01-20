@@ -5561,8 +5561,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-        // ***** ADDED BY JAY TAKALKHEDE ON DATE 26122022 *****
-        public DataSet RETRIEVE_COURSEWISE_CONSOLIDATED_REPORT(DateTime AttendanceStartDate, DateTime AttendanceEndDate, int UANO, int schemeno, int session, int courseno, int section)
+        //Updated By Sakshi M on 09012024
+        public DataSet RETRIEVE_COURSEWISE_CONSOLIDATED_REPORT(string AttendanceStartDate, string AttendanceEndDate, int UANO, int schemeno, int session, int courseno, int section)
         {
             DataSet ds = null;
             try
@@ -5585,6 +5585,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
 
 
 
@@ -6383,7 +6384,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
         #endregion
 
-
         /// <summary>
         /// Added By - Swapnil Prachand for Global elective attendance excel Report
         /// </summary>
@@ -6394,7 +6394,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="OrgId"></param>
         /// <returns></returns>
         /// Done
-        public DataSet GetAllCoursesWiseAttendanceExcelReport(int sessionid, string collegenos, DateTime FromDate, DateTime ToDate)
+        /// //Updated By Sakshi M on 09012024
+        public DataSet GetAllCoursesWiseAttendanceExcelReport(int sessionid, string collegenos, string FromDate, string ToDate)
         {
             DataSet ds = null;
             try
@@ -6416,6 +6417,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+
         /// <summary>
         /// Added By - Swapnil Prachand for Global elective attendance excel Report
         /// </summary>
@@ -6426,7 +6428,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="OrgId"></param>
         /// <returns></returns>
         /// Done
-        public DataSet GetAllStudentWiseAttendanceExcelReport(int sessionid, string collegenos, DateTime FromDate, DateTime ToDate)
+        /// //Updated BY Sakshi M on 09012024
+        public DataSet GetAllStudentWiseAttendanceExcelReport(int sessionid, string collegenos, string FromDate, string ToDate)
         {
             DataSet ds = null;
             try
@@ -6911,7 +6914,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
         // added by jay takalkhede on dated 21042023
-        public DataSet GetSubjectWiseDetailsExcelReport(int sessionno, int schemeno, int semno, int sectionno, DateTime frmdate, DateTime todate, string CONDITIONS, int PERCENTAGE, int COURSENO, int SUBID, int College_id)
+        //Updated By Sakshi M on 09012024
+        public DataSet GetSubjectWiseDetailsExcelReport(int sessionno, int schemeno, int semno, int sectionno, string frmdate, string todate, string CONDITIONS, int PERCENTAGE, int COURSENO, int SUBID, int College_id)
         {
             DataSet ds = null;
             try
@@ -6938,6 +6942,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
         // added by nehal on dated 02052023
 
         public DataSet GetFeesNotPaidStudentFaculty(int collegeid, int degree, int branch, int semester, int uano)

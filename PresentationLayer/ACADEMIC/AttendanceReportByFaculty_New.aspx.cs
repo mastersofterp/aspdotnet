@@ -397,8 +397,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
     {
         try
         {
-            DateTime SDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])));
-            DateTime EDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.END_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])));
+            DateTime SDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "A.START_DATE", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])));
+            DateTime EDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "A.END_DATE", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + " AND A.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"])));
 
             if (Convert.ToDateTime(txtFromDate.Text) < SDate)
             {
@@ -419,8 +419,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         }
         catch
         {
-            txtFromDate.Text = string.Empty;
-            txtFromDate.Focus();
+            //txtFromDate.Text = string.Empty;
+            //txtFromDate.Focus();
         }
     }
 
@@ -428,8 +428,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
     {
         try
         {
-            DateTime SDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.START_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
-            DateTime EDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "CONVERT(VARCHAR(10),A.END_DATE,103)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
+            DateTime SDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", ",A.START_DATE", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
+            DateTime EDate = Convert.ToDateTime(objCommon.LookUp("ACD_ATTENDANCE_CONFIG A INNER JOIN ACD_SCHEME S ON S.DEGREENO=A.DEGREENO AND A.SCHEMETYPE=S.SCHEMETYPE", "A.END_DATE", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND A.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)));
 
             if (Convert.ToDateTime(txtTodate.Text) < SDate)
             {
@@ -452,8 +452,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         }
         catch
         {
-            txtTodate.Text = string.Empty;
-            txtTodate.Focus();
+            //txtTodate.Text = string.Empty;
+            //txtTodate.Focus();
         }
     }
 
@@ -486,13 +486,13 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
-                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
-                + ",username=" + Session["userfullname"].ToString() 
-                + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) 
-                + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) 
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd") 
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd") 
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"])
+                + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
+                + ",username=" + Session["userfullname"].ToString()
+                + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
+                + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
+                + ",@P_FROMDATE=" + txtFromDate.Text
+                + ",@P_TODATE=" + txtTodate.Text
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) 
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue 
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim() 
@@ -525,7 +525,6 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
-
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "exporttype=" + exporttype;
@@ -591,7 +590,6 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         {
             throw;
         }
-
     }
 
     //showing the Attendance Details report on rptAttendanceDetails.rpt file .
@@ -611,7 +609,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
     {
         try
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            string url = Request.Url.ToString().Substring(0,(Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
@@ -620,8 +618,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                 + ",username=" + Session["userfullname"].ToString() 
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) 
                 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) 
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd") 
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd") 
+                + ",@P_FROMDATE=" +txtFromDate.Text
+                + ",@P_TODATE=" +txtTodate.Text
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) 
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue 
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim() 
@@ -691,9 +689,9 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) 
                 + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) 
                 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) 
-                + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) 
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd") 
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd") 
+                + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
+                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("dd/MM/yyyy")
+                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("dd/MM/yyyy")
                 + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
             
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -716,7 +714,6 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + "AttReportWithOD";
             url += "&path=~,Reports,Academic," + "rptAttReportWithOD.rpt";
-
             url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) 
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
                 + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"])
@@ -725,8 +722,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                 + ",@P_SUBID=" + ddlSubjectType.SelectedValue
                 + ",@P_COURSENO=" + ddlSubject.SelectedValue
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                + ",@P_FROMDATE=" + txtFromDate.Text
+                + ",@P_TODATE=" +txtTodate.Text
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
                 + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
@@ -784,8 +781,8 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
                     + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) 
                     + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) 
                     + ",@P_COURSENO=" + Convert.ToInt32(ddlSubject.SelectedValue) 
-                    + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd") 
-                    + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                    + ",@P_FROMDATE=" + txtFromDate.Text
+                    + ",@P_TODATE=" + txtTodate.Text
                     + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
                 
                 divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -893,7 +890,7 @@ public partial class ACADEMIC_AttendanceReportByFaculty_New : System.Web.UI.Page
         try
         {
             GridView GVStudData = new GridView();
-            DataSet ds = objAttC.GetSubjectWiseDetailsExcelReport(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToDateTime(txtFromDate.Text), Convert.ToDateTime(txtTodate.Text), ddlOperator.SelectedValue, Convert.ToInt32(txtPercentage.Text.Trim()), Convert.ToInt32(ddlSubject.SelectedValue), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
+            DataSet ds = objAttC.GetSubjectWiseDetailsExcelReport(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), txtFromDate.Text, txtTodate.Text, ddlOperator.SelectedValue, Convert.ToInt32(txtPercentage.Text.Trim()), Convert.ToInt32(ddlSubject.SelectedValue), Convert.ToInt32(ddlSubjectType.SelectedValue), Convert.ToInt32(ViewState["college_id"]));
             if (ds.Tables[0].Rows.Count > 0)
             {
 
