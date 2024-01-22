@@ -880,6 +880,8 @@
                                                                                                                         </th>
                                                                                                                         <th>CONSOLIDATED EMPLOYEE AMOUNT
                                                                                                                         </th>
+                                                                                                                        <th>Employee Type
+                                                                                                                        </th>
                                                                                                                     </tr>
                                                                                                                 </thead>
                                                                                                                 <tbody>
@@ -977,6 +979,9 @@
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <asp:Label ID="lblCONSOLIDATEDEMPLOYEEAMOUNT" runat="server" Text='<%# Eval("CONSOLIDATED EMPLOYEE AMOUNT")%>'></asp:Label>
+                                                                                                            </td>
+                                                                                                             <td>
+                                                                                                                <asp:Label ID="lblEmployeeType" runat="server" Text='<%# Eval("Employee Type")%>'></asp:Label>
                                                                                                             </td>
 
                                                                                                         </tr>
