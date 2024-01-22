@@ -905,6 +905,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
             btnGenRegNo.Visible = false;
             btnGenerateRR.Visible = true;
             btnGenerateRR.Enabled = true;
+            lvStudents.Visible = false;
             int RegCountflag = 0;
             int StudCountflag = 0;
             if (radRollNoGen.Checked) // Class roll no. generation
@@ -916,9 +917,21 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
 
                 int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
 
+                if (ddlgender.SelectedIndex > 0)
+                {
+                    if (rdbgender.SelectedValue=="")
+                    {
+                        objCommon.DisplayMessage(this.UpdatePanel1, "Please Select Gender.", this.Page);
+                        return;
+                    }
+                    dsStudent = GetStudentsGenderWise(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), rdbgender.SelectedItem.Value);
 
-                dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                }
+                else
+                {
 
+                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                }
                 //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO ", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + " AND A.SEMESTERNO=" + ddlsemester.SelectedValue + "  and A.SECTIONNO=" + ddlSection.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + " AND A.ADMCAN = 0", "A.REGNO");
                 if (dsStudent.Tables[0].Rows.Count > 0)
                     {
@@ -964,15 +977,22 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
 
                 int RollCountflag = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR ", "count(1)", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + " and A.COLLEGE_ID=" + ddlClgname.SelectedValue + " and A.DEGREENO=" + ddlDegree.SelectedValue + " and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + "  AND ISNULL(A.ADMCAN,0) = 0 AND (A.ROLLNO  is not null and A.ROLLNO <>'')"));
 
-                if (ddlsort.SelectedIndex == 1)
+                if (ddlgender.SelectedIndex > 0)
+                {
+                    if (rdbgender.SelectedValue == "")
                     {
-                    dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-                    //dsStudent = objCommon.FillDropDown("ACD_STUDENT A WITH (NOLOCK) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B WITH (NOLOCK) ON A.BRANCHNO=B.BRANCHNO AND A.DEGREENO=B.DEGREENO INNER JOIN ACD_YEAR Y  ON A.YEAR=Y.YEAR", " DISTINCT A.STUDNAME", "A.IDNO,A.REGNO,IDTYPE,A.ROLLNO,A.MERITNO", "A.ADMBATCH =  " + ddlAdmBatch.SelectedValue + "and A.COLLEGE_ID=" + ddlClgname.SelectedValue + "and A.DEGREENO=" + ddlDegree.SelectedValue + "and A.BRANCHNO=" + ddlBranch.SelectedValue + "and A.YEAR=" + ddlyear.SelectedValue + " AND IDTYPE = " + ddlidtype.SelectedValue + "AND A.ADMCAN = 0", " A.STUDNAME");
+                        objCommon.DisplayMessage(this.UpdatePanel1, "Please Select Gender.", this.Page);
+                        return;
                     }
+
+                    dsStudent = GetStudentsGenderWise(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), rdbgender.SelectedValue);
+
+                }
                 else
-                    {
+                {
+
                     dsStudent = GetStudentsDAIICT(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
-                    }
+                }
                 if (dsStudent.Tables[0].Rows.Count > 0)
                     {
                     lvStudents.DataSource = dsStudent.Tables[0];
@@ -1441,7 +1461,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 }
             else if (Session["OrgId"].ToString() == "21")//TGPCET REGNO
                 {
-                retStatus = objRegistration.GenereateRRNoForTGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue));
+                retStatus = GenereateRRNoForTGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlyear.SelectedValue),rdbgender.SelectedValue.ToString());
                 btnGenerateRR.Enabled = false;
                 }
             else
@@ -1495,7 +1515,7 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
                 }
             if (Session["OrgId"].ToString() == "21")
                 {
-                retStatus = objRegistration.GenereateRollNo_TGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue));
+                retStatus = GenereateRollNo_TGPCET(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ddlClgname.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlidtype.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlsort.SelectedValue),rdbgender.SelectedValue.ToString());
                 }
             else
                 {
@@ -1600,6 +1620,84 @@ public partial class ACADEMIC_EnrollNoGeneration : System.Web.UI.Page
             }
         return ds;
         }
+
+    public int GenereateRRNoForTGPCET(int admbatch, int clg, int degree, int branch, int semester, int idtype, int Year, int sort1, string sort2)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[10];
+            objParams[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+            objParams[1] = new SqlParameter("@P_COLLEGEID", clg);
+            objParams[2] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[3] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[4] = new SqlParameter("@P_SEMESTERNO", semester);
+            objParams[5] = new SqlParameter("@P_ID_TYPE", idtype);
+            objParams[6] = new SqlParameter("@P_YEAR", Year);
+            objParams[7] = new SqlParameter("@P_SORT1", sort1);
+            objParams[8] = new SqlParameter("@P_SORT2", sort2);
+            objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+            objParams[9].Direction = ParameterDirection.Output;
+
+            object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_BULK_RRNO_GENERATION_TGPCET", objParams, false);
+
+            if (Convert.ToInt32(ret) == -99)
+                retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+            else
+                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
+        }
+
+        return retStatus;
+
+    }
+
+    public int GenereateRollNo_TGPCET(int admbatch, int clg, int degree, int branch, int idtype, int semester, int section, int sort1, string sort2)
+    {
+        int retStatus = Convert.ToInt32(CustomStatus.Others);
+        try
+        {
+            SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+            SqlParameter[] objParams = null;
+
+            objParams = new SqlParameter[10];
+            objParams[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+            objParams[1] = new SqlParameter("@P_COLLEGEID", clg);
+            objParams[2] = new SqlParameter("@P_DEGREENO", degree);
+            objParams[3] = new SqlParameter("@P_BRANCHNO", branch);
+            objParams[4] = new SqlParameter("@P_IDTYPE", idtype);
+            objParams[5] = new SqlParameter("@P_SEMESTERNO", semester);
+            objParams[6] = new SqlParameter("@P_SECTIONNO", section);
+            objParams[7] = new SqlParameter("@P_SORT1", sort1);
+            objParams[8] = new SqlParameter("@P_SORT2", sort2);
+            objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+            objParams[9].Direction = ParameterDirection.Output;
+
+            object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_BULK_ROLLNO_GENERATION_NEW_TGPCET", objParams, false);
+
+            if (Convert.ToInt32(ret) == -99)
+                retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+            else
+                retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+        }
+        catch (Exception ex)
+        {
+            retStatus = Convert.ToInt32(CustomStatus.Error);
+            throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddFailSubjects-> " + ex.ToString());
+        }
+
+        return retStatus;
+
+    }
 
 
 
