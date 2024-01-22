@@ -30,7 +30,7 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                //CheckPageAuthorization();
+                CheckPageAuthorization();
 
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
@@ -218,13 +218,13 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
                     StudIDNOs = IDNO.ToolTip + "," + StudIDNOs;
                     cbChecked = true;
                     //break;
-                }                
+                }
             }
             //StudIDNOs = StudIDNOs.Length-1;
             if (cbChecked)
             {
                 int SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
-                int DegreeNo =  Convert.ToInt32(ddlDegree.SelectedValue);
+                int DegreeNo = Convert.ToInt32(ddlDegree.SelectedValue);
                 int BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
                 int College_ID = Convert.ToInt32(ddlCollege.SelectedValue);
                 //int OrgId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
@@ -264,6 +264,10 @@ public partial class ACADEMIC_BacklogRedoRegCourseApproval : System.Web.UI.Page
                 btnShow.Enabled = true;
                 //btnSubmit.Enabled = false;
                 objCommon.DisplayMessage(uplReg, "Backlog Redo Courses Approved successfully.", this.Page);
+            }
+            else
+            {
+                objCommon.DisplayMessage(uplReg, "You don't have authority to approve the courses.", this.Page);               
             }
         }
         catch (Exception ex)
