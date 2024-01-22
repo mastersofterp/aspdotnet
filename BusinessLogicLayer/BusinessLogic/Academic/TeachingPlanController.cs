@@ -1890,6 +1890,313 @@ namespace IITMS
                     return retStatus;
                 }
                 #endregion
+
+                #region Faculty Diary
+
+                public string InsertSubWiseNotinContentCourse(string topicName, string content, string mappPEO, string date, string schemeno, string courseno, string sessionno, string clgcode, string orgid)
+                {
+                    string retStatus = string.Empty;
+                    DateTime datee = Convert.ToDateTime(date);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add
+                        objParams = new SqlParameter[9];
+                        objParams[0] = new SqlParameter("@P_TOPIC_NAME", topicName);
+                        objParams[1] = new SqlParameter("@P_CONTENT", content);
+                        objParams[2] = new SqlParameter("@P_MAPP_PEO", mappPEO);
+                        objParams[3] = new SqlParameter("@P_DATE", datee.ToString("dd-MM-yyyy"));
+                        objParams[4] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParams[5] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[6] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[7] = new SqlParameter("@P_COLLEGE_CODE", clgcode);
+                        objParams[8] = new SqlParameter("@P_ORGID", orgid);
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_INTO_CONTENT_SYLLABUS", objParams, true) != null)
+                            retStatus = "1";
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.AddSession-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public string InsertExtraActivityData(string program, string date, string group, string principal, string clgcode, string orgid)
+                {
+                    string retStatus = string.Empty;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_PROGRAM", program);
+                        objParams[1] = new SqlParameter("@P_DATE", date);
+                        objParams[2] = new SqlParameter("@P_GROUPTEACHER", group);
+                        objParams[3] = new SqlParameter("@P_PRINCIPAL", principal);
+                        objParams[4] = new SqlParameter("@P_COLLEGE_CODE", clgcode);
+                        objParams[5] = new SqlParameter("@P_ORGID", orgid);
+
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_EXT_CUR_ACTIVITY", objParams, true) != null)
+                            retStatus = "1";
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.AddSession-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int InsertPeojectTitle(IITMS.UAIMS.BusinessLayer.BusinessEntities.Session objSession, int colgcode)
+                {
+                    int retStatus = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add
+                        objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_PROJECT_TITLE", objSession.ProjectName);
+                        objParams[1] = new SqlParameter("@P_IS_ACTIVE", objSession.IsActive);
+                        objParams[2] = new SqlParameter("@P_COLLEGE_CODE", colgcode);
+                        objParams[3] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[3].Direction = ParameterDirection.Output;
+
+                        //if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_FD_PROJECT_TITLE_MASTER", objParams, true) != null)
+                        //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_FD_PROJECT_TITLE_MASTER", objParams, true);
+
+                        if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001" && obj.ToString() != "-2")
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString().Equals("-2"))
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.TeachingPlanController.InsertPeojectTitle-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public int UpdateProjectTitle(IITMS.UAIMS.BusinessLayer.BusinessEntities.Session objSession, int ID)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+                        //Add
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_ID", ID);
+                        objParams[1] = new SqlParameter("@P_PROJECT_TITLE", objSession.ProjectName);
+                        objParams[2] = new SqlParameter("@P_IS_ACTIVE", objSession.IsActive);
+
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPD_PROJECT_TITLE_MASTER", objParams, true) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.TeachingPlanController.UpdateProjectTitle-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetProjectTitleData()
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[0];
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_BIND_PROJECT_TITLE_MASTER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public SqlDataReader GetProjectTitleData(int ID)
+                {
+                    SqlDataReader ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ID", ID);
+                        ds = objSQLHelper.ExecuteReaderSP("PKG_ACD_EDIT_PROJECT_TITLE_MASTER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet BindStudData(int sessionno, int collegeid, int degree, int branchno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        objParams[2] = new SqlParameter("@P_DEGREENO ", degree);
+                        objParams[3] = new SqlParameter("@P_BRANCHNO", branchno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_BIND_STUDENT_DATA", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public int InsertProjectTitleData(IITMS.UAIMS.BusinessLayer.BusinessEntities.Session objSession, int idno, int session, int degreeno, int branchno, int projectid, int Groupid)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[8];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_PROJECT_NAME", objSession.ProjectName);
+                        objParams[2] = new SqlParameter("@P_SESSIONNO", session);
+                        objParams[3] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParams[4] = new SqlParameter("@P_BRANCHNO", branchno);
+                        objParams[5] = new SqlParameter("@P_PROJECT_ID", projectid);
+                        objParams[6] = new SqlParameter("@P_GROUPID", Groupid);
+
+                        objParams[7] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_ASSIGN_PROJECT_STUDENT_LIST", objParams, true);
+
+                        if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001" && obj.ToString() != "-2")
+                            retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                        else if (obj.ToString().Equals("-2"))
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        return retStatus;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet BindStudentAssignprojectData(int sessionno, int collegeid, int degree, int branchno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParams[1] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        objParams[2] = new SqlParameter("@P_DEGREENO", degree);
+                        objParams[3] = new SqlParameter("@P_BRANCHNO", branchno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_BIND_LV_ASSIGN_STUDENT_PROJECT_TITLE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public SqlDataReader EditAssignDataOfStudent(int ID)
+                {
+                    SqlDataReader ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_IDNO", ID);
+                        ds = objSQLHelper.ExecuteReaderSP("PKG_ACD_EDIT_ASSIGN_PROJECT_STUDENT_DATA", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public int UpdateAssignProjectData(IITMS.UAIMS.BusinessLayer.BusinessEntities.Session objSession, int idno, int projectid)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+                        objParams[1] = new SqlParameter("@P_PROJECT_NAME", objSession.ProjectName);
+                        //objParams[2] = new SqlParameter("@P_SESSIONNO", session);
+                        //objParams[3] = new SqlParameter("@P_DEGREENO", degreeno);
+                        //objParams[4] = new SqlParameter("@P_BRANCHNO", branchno);
+                        objParams[2] = new SqlParameter("@P_PROJECT_ID", projectid);
+                        objParams[3] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[3].Direction = ParameterDirection.Output;
+                        object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_ASSIGN_PROJECT_STUDENT_DATA", objParams, true);
+
+                        if (obj != null && obj.ToString() != "-99" && obj.ToString() != "-1001" && obj.ToString() != "-2")
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        else if (obj.ToString().Equals("-2"))
+                        {
+                            retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+                        }
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        return retStatus;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet BindFacultyDairyData(string uano)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UANO", uano);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_FACULTY_DAIRY_CERTIFICATE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TeachingPlanController.GetProjectTitleData -> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                #endregion
+
             }
         }
     }
