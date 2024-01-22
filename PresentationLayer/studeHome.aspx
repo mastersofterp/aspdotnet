@@ -1,5 +1,4 @@
-﻿
-<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudeHome.aspx.cs" Inherits="StudeHome" MasterPageFile="~/SiteMasterPage.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="StudeHome.aspx.cs" Inherits="StudeHome" MasterPageFile="~/SiteMasterPage.master" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
@@ -12,7 +11,6 @@
     <script src="<%=Page.ResolveClientUrl("https://www.google.com/jsapi")%>" type="text/javascript"></script>--%>
 
     <link href="<%=Page.ResolveClientUrl("~/plugins/newbootstrap/css/Dashboard.css")%>" rel="stylesheet" />
-
 
     <style>
         .pay-online {

@@ -23,7 +23,6 @@ using System.Data.Linq;
 using System.Collections.Generic;
 using System.Web.Services;
 using System.IO;
-
 public partial class StudeHome : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -277,7 +276,6 @@ public partial class StudeHome : System.Web.UI.Page
         }
         return string.Empty;
     }
-
     #region BlobStorage
     public bool CheckIFExits(string FileName)
     {
