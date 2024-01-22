@@ -101,6 +101,10 @@ public partial class STORES_Reports_str_Store_ItemExpWarr : System.Web.UI.Page
         {
             ShowReport("WarrantyItem", "str_ItemWarranty.rpt");
         }
+        txtFromDate.Text = string.Empty;
+        txtToDate.Text = string.Empty;
+        ddlItem.SelectedIndex = 0;
+
     }
 
     //Generate the report

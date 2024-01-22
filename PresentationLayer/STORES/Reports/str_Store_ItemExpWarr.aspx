@@ -100,6 +100,9 @@
                                             EmptyValueMessage="Please Select To Date" InvalidValueMessage="To Date is Invalid (Enter dd/MM/yyyy Format)"
                                             Display="None" EmptyValueBlurredText="Empty" InvalidValueBlurredMessage="Invalid Date" SetFocusOnError="True"
                                             ValidationGroup="Store" IsValidEmpty="false"> </ajaxToolKit:MaskedEditValidator>
+                                         <asp:CompareValidator ID="cmpvDate" runat="server" ErrorMessage="To Date Should be greater than or equal to  From Date"
+                                                    ControlToCompare="txtFromDate" ControlToValidate="txtToDate" Display="None" ValueToCompare="Date"
+                                                    Type="Date" Operator="GreaterThanEqual" ValidationGroup="Store"></asp:CompareValidator>
 
                                     </div>
                                 </div>
