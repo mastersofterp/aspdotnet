@@ -926,6 +926,9 @@
 
                                     <asp:Button ID="btnIntEntRpt" Text="Internal Mark Entry Report" runat="server" TabIndex="1" ValidationGroup="CourseWiseExamRegistartion" CssClass="btn btn-info" OnClick="btnIntEntRpt_Click" Visible="false" />
                                     <asp:Button ID="btnsubtituteexamexcel" Text="Substitute Registration Excel" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnsubtituteexamexcel_Click" ValidationGroup="schemesession" />
+                                      <asp:Button ID="btnClassBranch" Text="Class Branchwise Name List" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnClassBranch_Click"  ValidationGroup="schemesession" Visible="false"/>
+                                     <asp:Button ID="btnSummaryReport" Text="Class / Branch wise Students Summary" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSummaryReport_Click"   ValidationGroup="schemesession" Visible="false" />
+                                    <asp:Button ID="btnExamSummaryOnePage" Text="Exam Summary Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnExamSummaryOnePage_Click"  ValidationGroup="schemesession" Visible="false"/>
                                     <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
 
                                     <asp:ValidationSummary ID="ValidationSummary11" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="InternalmarkReport" CausesValidation="false" />

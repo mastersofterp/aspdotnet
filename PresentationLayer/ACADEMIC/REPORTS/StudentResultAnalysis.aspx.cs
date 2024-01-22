@@ -186,6 +186,15 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                     btnBranchWiseResultAnalysis.Visible = false;
                     btnCGPAReport.Visible = false;
                 }
+                else if (Convert.ToInt32(Session["OrgId"]) == 22) // ADCET
+                {
+                    btnClassBranch.Visible = true;
+                    btnSummaryReport.Visible = true;
+                    btnExamSummaryOnePage.Visible = true;
+                    btnBranchWiseResultAnalysis.Visible = false;
+                    pre_fourteen.Visible = false;
+                    btnGraderpt.Visible = false;
+                }
                 else
                 {
                     btnBranchWiseResultAnalysis.Visible = false;
@@ -2435,7 +2444,8 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
                 }
                 else if (param == 3)
                 {
-                    url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                    //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                    url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
                 }
                 else if (param == 4)
                 {
@@ -3273,6 +3283,109 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+
+
+    protected void btnClassBranch_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Class/Branchwise Report";
+        string rptFileName = "rptExamClassBranchWiseReport_ADCET.rpt";
+
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+            //    ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    protected void btnSummaryReport_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Class/Branchwise Report";
+        string rptFileName = "rptExamClassBranchWiseReport_Student_Summary.rpt";
+
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+            //    ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+
+    protected void btnExamSummaryOnePage_Click(object sender, EventArgs e)
+    {
+        string reportTitle = "Class/Branchwise Report";
+        string rptFileName = "rptSummarOnePageSemesterReport.rpt";
+
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            //url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONO=" + Convert.ToInt32(ddlSection.SelectedValue) +
+            //    ",@P_COURSENO=" + Convert.ToInt32(ddlcourse.SelectedValue) + ",@P_UA_NO=" + Session["userno"] + ",@P_UA_TYPE=" + Session["usertype"];
+
+            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
+
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";@P_DEGREENO   @P_STUDENTTYPE
+            //divMsg.InnerHtml += " </script>";
+            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
     }
 }
 
