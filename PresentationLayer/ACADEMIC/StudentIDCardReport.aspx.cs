@@ -274,7 +274,14 @@ public partial class ACADEMIC_StudentIDCardReport : System.Web.UI.Page
                     }
                     else if (ua_section == "UG")
                     {
-                        ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
+                        if (ddlDegree.SelectedValue == "2")
+                        {
+                            ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_PG_RCPIPER.rpt");
+                        }
+                        else
+                        {
+                            ShowReport_ATLAS(ids, "Student_ID_Card_Report", "Student_Identity_Card_UG_RCPIPER.rpt");
+                        }
                     }
                     else
                     {
