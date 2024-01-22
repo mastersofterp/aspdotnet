@@ -707,24 +707,24 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         }
     }
 
-    private void BindStudentFailedCourseList()
-    {
-        DataSet dsCurrCourses = null;
-        //Show Backlog Semester Courses ..
-        dsCurrCourses = objSReg.GetStudentCoursesForBacklogRegistration(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt32(ViewState["idno"]), 0);
-        if (dsCurrCourses != null && dsCurrCourses.Tables.Count > 0 && dsCurrCourses.Tables[0].Rows.Count > 0)
-        {
-            lvBacklogSubjects.DataSource = dsCurrCourses.Tables[0];
-            lvBacklogSubjects.DataBind();
-            lvBacklogSubjects.Visible = true;
-        }
-        else
-        {
-            lvBacklogSubjects.DataSource = null;
-            lvBacklogSubjects.DataBind();
-            lvBacklogSubjects.Visible = false;
-        }
-    }
+    //private void BindStudentFailedCourseList()
+    //{
+    //    DataSet dsCurrCourses = null;
+    //    //Show Backlog Semester Courses ..
+    //    dsCurrCourses = objSReg.GetStudentCoursesForBacklogRegistration(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt32(ViewState["idno"]), 0);
+    //    if (dsCurrCourses != null && dsCurrCourses.Tables.Count > 0 && dsCurrCourses.Tables[0].Rows.Count > 0)
+    //    {
+    //        lvBacklogSubjects.DataSource = dsCurrCourses.Tables[0];
+    //        lvBacklogSubjects.DataBind();
+    //        lvBacklogSubjects.Visible = true;
+    //    }
+    //    else
+    //    {
+    //        lvBacklogSubjects.DataSource = null;
+    //        lvBacklogSubjects.DataBind();
+    //        lvBacklogSubjects.Visible = false;
+    //    }
+    //}
 
     #endregion
 
@@ -831,7 +831,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 if (dsOfferedCourses.Tables.Count > 0 && dsOfferedCourses.Tables[0].Rows.Count > 0)
                 {
                     ListOperations(lvCurrentSubjects, dsOfferedCourses.Tables[0]);
-                    ListOperations(lvBacklogSubjects, dsOfferedCourses.Tables[0]);
+                   // ListOperations(lvBacklogSubjects, dsOfferedCourses.Tables[0]);
                 }
             }
             else
@@ -848,11 +848,13 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
     private void ListOperations(ListView list, DataTable dt)
     {
+        int count=0;
         foreach (ListViewDataItem item in list.Items)
         {
-            CheckBox cbHead = list.FindControl("cbHead") as CheckBox;
-            CheckBox chkAccept = item.FindControl("chkAccept") as CheckBox;
+           // CheckBox cbHead = list.FindControl("cbHead") as CheckBox;
+            //CheckBox chkAccept = item.FindControl("chkAccept") as CheckBox;
             string lblCCode = (item.FindControl("lblCCode") as Label).ToolTip;
+
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -860,14 +862,17 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
                 {
                     if (dt.Rows[i]["REGISTERED"].ToString() == "1")
                     {
-                        CheckBox cbHeadReg = list.FindControl("cbHeadReg") as CheckBox;
                         CheckBox chkRegister = item.FindControl("chkRegister") as CheckBox;
                         chkRegister.Checked = true;
-                        cbHeadReg.Checked = true;
+                        count++;
                     }
                 }
             }
         }
+
+        CheckBox cbHeadReg = list.FindControl("cbHeadReg") as CheckBox;
+        if (count == list.Items.Count)
+            cbHeadReg.Checked = true;
     }
 
     protected void btnBackHOD_Click(object sender, EventArgs e)
@@ -1662,8 +1667,8 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
 
             DataSet dsAlreadyCrs = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
                       "CCODE", "COURSENO,COUNT(1) TIMES",
-                      "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO <= " + Convert.ToInt32(objSR.SESSIONNO)
-                      + " AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + studIDs + "','$'))  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO,COURSENO", "CCODE");
+                      "ISNULL(ACCEPTED,0) = 1 AND ISNULL(REGISTERED,0) = 1 AND ISNULL(CANCEL,0) = 0 AND ISNULL(PREV_STATUS,0) = 0 AND SESSIONNO < " + Convert.ToInt32(objSR.SESSIONNO)
+                      + " AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + studIDs + "','$'))  AND COURSENO IN (SELECT VALUE FROM DBO.SPLIT('" + objSR.COURSENOS + "','$')) GROUP BY CCODE,COURSENO", "CCODE");
 
             if (dsAlreadyCrs != null && dsAlreadyCrs.Tables[0].Rows.Count > 0)
             {

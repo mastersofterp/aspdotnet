@@ -25,47 +25,47 @@
                         for (i = 0; i <= rows.length; i++) {
                             if (document.getElementById('ctl00_ContentPlaceHolder1_lvStudentBulk_cbHead').checked == true) {
                                 document.getElementById('<%= txtTotStud.ClientID %>').value = count++;
-                             }
-                             else {
-                                 document.getElementById('<%= txtTotStud.ClientID %>').value = 0;
-                             }
-                         }
+                            }
+                            else {
+                                document.getElementById('<%= txtTotStud.ClientID %>').value = 0;
+                            }
+                        }
 
+                    });
+
+
+
+                    // Handle click on checkbox to set state of "Select all" control
+                    $('#tblHead tbody').on('change', 'input[type="checkbox"]', function () {
+
+                        // If checkbox is not checked
+                        //if (!this.checked) {
+
+                        var el = $('#ctl00_ContentPlaceHolder1_lvStudentBulk_cbHead').get(0);
+                        var rows = table.rows({ 'search': 'applied' }).nodes();
+
+                        // Check/uncheck checkboxes for all rows in the table
+                        if (el && el.checked && ('indeterminate' in el)) {
+                            // Set visual state of "Select all" control
+                            // as 'indeterminate'
+                            el.indeterminate = true;
+                        }
+                        var tot = document.getElementById('<%= txtTotStud.ClientID %>');
+                         //alert(this.checked)
+                         //for (i = 0; i <= rows.length; i++) {
+                         if (this.checked == true) {
+                             tot.value = Number(tot.value) + 1;
+                         }
+                         else {
+                             tot.value = Number(tot.value) - 1;
+                             //document.getElementById('<%= txtTotStud.ClientID %>').value = count--;
+                }
+                         //}
+                         // If "Select all" control is checked and has 'indeterminate' property
+
+                         //}
                      });
-
-
-
-                     // Handle click on checkbox to set state of "Select all" control
-                     $('#tblHead tbody').on('change', 'input[type="checkbox"]', function () {
-
-                         // If checkbox is not checked
-                         //if (!this.checked) {
-
-                         var el = $('#ctl00_ContentPlaceHolder1_lvStudentBulk_cbHead').get(0);
-                         var rows = table.rows({ 'search': 'applied' }).nodes();
-
-                         // Check/uncheck checkboxes for all rows in the table
-                         if (el && el.checked && ('indeterminate' in el)) {
-                             // Set visual state of "Select all" control
-                             // as 'indeterminate'
-                             el.indeterminate = true;
-                         }
-                         var tot = document.getElementById('<%= txtTotStud.ClientID %>');
-                //alert(this.checked)
-                //for (i = 0; i <= rows.length; i++) {
-                if (this.checked == true) {
-                    tot.value = Number(tot.value) + 1;
-                }
-                else {
-                    tot.value = Number(tot.value) - 1;
-                    //document.getElementById('<%= txtTotStud.ClientID %>').value = count--;
-                }
-                //}
-                // If "Select all" control is checked and has 'indeterminate' property
-
-                //}
-            });
-                 });
+                });
                 var parameter = Sys.WebForms.PageRequestManager.getInstance();
                 parameter.add_endRequest(function () {
                     $(document).ready(function () {
@@ -98,6 +98,12 @@
                     });
                 });
             </script>
+
+            <style>
+                .dataTables_scrollHeadInner {
+                    width: max-content !important;
+                }
+            </style>
             <%-- <asp:HiddenField ID="hidTAB" runat="server" ClientIDMode="Static" />--%>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12">
@@ -479,7 +485,7 @@
                                                                         <td>
                                                                             <asp:Label ID="lblCredits" runat="server" Text='<%# Eval("CREDITS") %>' />
                                                                         </td>
-                                                                        <td> <%#Eval("CATEGORY")%>
+                                                                        <td><%#Eval("CATEGORY")%>
                                                                         </td>
                                                                     </tr>
                                                                 </ItemTemplate>
@@ -809,8 +815,8 @@
                                                                 <sup>* </sup>
                                                                 <label>Offered Courses</label>
                                                             </div>
-                                                            <asp:ListBox ID="lboOfferCourse" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo"  AppendDataBoundItems="true"></asp:ListBox>
-                                                            
+                                                            <asp:ListBox ID="lboOfferCourse" runat="server" SelectionMode="Multiple" CssClass="form-control multi-select-demo" AppendDataBoundItems="true"></asp:ListBox>
+
                                                         </div>
                                                     </div>
 
@@ -819,7 +825,7 @@
                                                             OnClientClick="return validateAssign();" OnClick="btnBulkSubmit_Click"
                                                             Enabled="false" />
 
-                                                       <%-- <asp:Button ID="btnBulkReport" runat="server" Text="Registration Slip Report"
+                                                        <%-- <asp:Button ID="btnBulkReport" runat="server" Text="Registration Slip Report"
                                                             CssClass="btn btn-info" Visible="false"
                                                             ValidationGroup="BulkSubmit" />--%>
 
@@ -852,7 +858,7 @@
                                                                             </th>--%>
                                                                                         <th>Roll No
                                                                                         </th>
-                                                                                     <th>Student Name
+                                                                                        <th>Student Name
                                                                                         </th>
                                                                                     </tr>
                                                                                 </thead>
@@ -871,7 +877,7 @@
                                                                                 </td>
 
                                                                                 <td>
-                                                                                    <asp:Label ID="lblRollNoForbulk" runat="server" Text='<%# Eval("ROLLNO") %>'/>
+                                                                                    <asp:Label ID="lblRollNoForbulk" runat="server" Text='<%# Eval("ROLLNO") %>' />
                                                                                 </td>
                                                                                 <%--<td style="text-align: left; width: 25%">
                                                                         <asp:LinkButton ID="lblRegNo" runat="server" Text='<%# Eval("ENROLLNO") %>' ToolTip="Click here to Display Registered Courses"
@@ -1055,18 +1061,18 @@
 
         function validateAssign() {
             var txtTot = document.getElementById('<%= txtTotStud.ClientID %>').value;
-           //var offer = document.getElementById('<%= lboOfferCourse.ClientID %>').value;
-           // alert(offer);
+            //var offer = document.getElementById('<%= lboOfferCourse.ClientID %>').value;
+            // alert(offer);
             if (txtTot == 0) {
-                alert('Please Check atleast one student ');             
+                alert('Please Check atleast one student ');
                 return false;
-                
+
             }
             //if (isNaN(offer)==0) {
             //    alert('Please Select Atleast one Offer Cousre');
             //    return false;
             //}
-           
+
         }
         //function MultipleSelect(frm) {
         //    for (i = 0; i < frm.length; i++) {
@@ -1173,7 +1179,7 @@
             }
         }
         function showConfirm() {
-            var ret = confirm('Do you Really want to Confirm/Submit this Subjects for Subject Registration?');
+            var ret = confirm('Do you Really want to Confirm/Submit this Subjects for Course Registration?');
             if (ret == true)
                 return true;
             else
@@ -1232,22 +1238,22 @@
                 }
                 else {
                     searchtxt = document.getElementById('<%=txtSearch.ClientID %>').value;
-                      if (searchtxt == "" || searchtxt == null) {
-                          alert('Please Enter Data you want to search..');
-                      }
-                      else {
-                          __doPostBack(btnsearch, rbText + ',' + searchtxt);
-                          //$("#<%= divpanel.ClientID %>").hide();
-                        //$("#<%= pnltextbox.ClientID %>").show();
-
-                        return true;
+                    if (searchtxt == "" || searchtxt == null) {
+                        alert('Please Enter Data you want to search..');
                     }
-                }
-        }
-    }
+                    else {
+                        __doPostBack(btnsearch, rbText + ',' + searchtxt);
+                        //$("#<%= divpanel.ClientID %>").hide();
+                          //$("#<%= pnltextbox.ClientID %>").show();
 
-    function CloseSearchBox(btnClose) {
-        document.getElementById('<%=txtSearch.ClientID %>').value = '';
+                          return true;
+                      }
+                  }
+          }
+      }
+
+      function CloseSearchBox(btnClose) {
+          document.getElementById('<%=txtSearch.ClientID %>').value = '';
         __doPostBack(btnClose, '');
         return true;
     }
@@ -1270,7 +1276,7 @@
             });
         });
 
-     
+
     </script>
-    
+
 </asp:Content>
