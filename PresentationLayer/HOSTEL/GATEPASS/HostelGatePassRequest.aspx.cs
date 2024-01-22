@@ -53,7 +53,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
                 else
                 {
                     // Check User Authority 
-                    this.CheckPageAuthorization();
+                    //this.CheckPageAuthorization();
 
                     // Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -229,8 +229,10 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
 
             if (!string.IsNullOrEmpty(IsApprove))
             {
-                objCommon.DisplayMessage("You can't able to edit approved gatepass.", this.Page);
-                Response.Redirect(Request.RawUrl);
+                objCommon.DisplayMessage("You can not modify gatepass request after approval.", this.Page);
+                Clear();
+                return;
+
             }
             else
             {
