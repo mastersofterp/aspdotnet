@@ -741,6 +741,7 @@
             </div>
         </div>
     </div>
+
     <script>
         var tableOffset = $("#table-1").offset().top;
         var $header = $("#table-1 > thead").clone();

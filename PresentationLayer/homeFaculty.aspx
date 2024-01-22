@@ -14,6 +14,7 @@
     <script src="<%=Page.ResolveClientUrl("~/plugins/Chart.js/dist/Chart.min.js")%>" type="text/javascript"></script>
     <script src="<%=Page.ResolveClientUrl("~/plugins/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js")%>" type="text/javascript"></script>
 
+
     <style>
         .new-parent {
             height: 240px;

@@ -30,6 +30,7 @@ using IITMS.NITPRM.BusinessLayer.BusinessLogic;
 using System.Web.Script.Serialization;
 using System.Web.UI.HtmlControls;
 
+
 public partial class homeFaculty : System.Web.UI.Page
 {
     Common objCommon = new Common();

@@ -23,6 +23,7 @@ using System.Data.Linq;
 using System.Collections.Generic;
 using System.Web.Services;
 using System.IO;
+
 public partial class StudeHome : System.Web.UI.Page
 {
     Common objCommon = new Common();
