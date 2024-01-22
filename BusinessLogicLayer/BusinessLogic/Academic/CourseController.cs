@@ -5478,6 +5478,63 @@ namespace IITMS
                     return ds;
                 }
 
+                /// <summary>
+                /// Added By Gopal on 17/01/2024 to get student roll list and roster all Course Registration data.
+                /// </summary>
+                /// <param name="session"></param>
+                /// <returns></returns>
+                public DataSet GetStudentRollListAndRosterAllCourseRegistrationData(int sessionId, int faculty_uano, string semesterno, int coursetype, int courseno, int sectionno, int batchno, int tut_batchno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[8];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionId);
+                        objParams[1] = new SqlParameter("@P_UA_NO", faculty_uano);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[3] = new SqlParameter("@P_SUBID", coursetype);
+                        objParams[4] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[5] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[6] = new SqlParameter("@P_BATCHNO", batchno);
+                        objParams[7] = new SqlParameter("@P_TUT_BATCHNO", tut_batchno);
+                        //objParams[1] = new SqlParameter("@P_MODE", mode);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_ROLLLIST_AND_ROSTER_COURSE_REGISTRATION_DETAIL", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetAllCourseRegistrationData-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetStudentRollListAndRosterAllCourseRegistrationDataExcel(int sessionId, int faculty_uano, string semesterno, int coursetype, int courseno, int sectionno, int batchno, int tut_batchno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[8];
+                        objParams[0] = new SqlParameter("@P_SESSIONID", sessionId);
+                        objParams[1] = new SqlParameter("@P_UA_NO", faculty_uano);
+                        objParams[2] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParams[3] = new SqlParameter("@P_SUBID", coursetype);
+                        objParams[4] = new SqlParameter("@P_COURSENO", courseno);
+                        objParams[5] = new SqlParameter("@P_SECTIONNO", sectionno);
+                        objParams[6] = new SqlParameter("@P_BATCHNO", batchno);
+                        objParams[7] = new SqlParameter("@P_TUT_BATCHNO", tut_batchno);
+                        //objParams[1] = new SqlParameter("@P_MODE", mode);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_STUDENT_ROLLLIST_AND_ROSTER_COURSE_REGISTRATION_DETAIL_EXCEL", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.CourseController.GetAllCourseRegistrationData-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
 
             }//END: BusinessLayer.BusinessLogic
 
