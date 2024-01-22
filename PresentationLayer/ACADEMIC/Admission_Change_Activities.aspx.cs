@@ -45,7 +45,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
                 else
                 {
                     //Page Authorization
-                    //this.CheckPageAuthorization();
+                   //this.CheckPageAuthorization();
 
                     //Set the Page Title
                     Page.Title = Session["coll_name"].ToString();
@@ -63,7 +63,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
                 hdfOrganization.Value = Session["OrgId"].ToString();
                 //Search Pannel Dropdown Added by Swapnil
                 this.objCommon.FillDropDownList(ddlSearch, "ACD_SEARCH_CRITERIA", "ID", "CRITERIANAME", "ID > 0 ", "SRNO");
-                ddlSearch.SelectedIndex = 1;
+                ddlSearch.SelectedIndex = 0;
                 ddlSearch_SelectedIndexChanged(sender, e);
 
                 //End Search Pannel Dropdown
@@ -121,7 +121,8 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
                     if (ddltype == "ddl")
                     {
                         //pnltextbox.Visible = false;
-                        // txtSearch.Visible = false;
+                        divtxt.Visible = false;
+                        txtSearch.Visible = false;
                         pnlDropdown.Visible = true;
 
                         //divtxt.Visible = false;
@@ -186,16 +187,33 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
         if (ddlDropdown.SelectedIndex > 0)
         {
             value = ddlDropdown.SelectedValue;
+            divtxt.Visible = false;
         }
         else
         {
             value = txtSearch.Text;
+            divtxt.Visible = true;
         }
 
         //ddlSearch.ClearSelection();
 
-        bindlist(ddlSearch.SelectedItem.Text, value);
-        ddlDropdown.ClearSelection();
+        if (ddlSearch.SelectedValue != "0" && ddlSearch.SelectedValue != "")
+        {
+            if (ddlSearch.SelectedItem.Text == "IDNO" && txtSearch.Text == "")
+            {
+                objCommon.DisplayMessage(this, "Please Enter Search Value", this.Page);
+                lblNoRecords.Text = "Total Records : 0";
+            }
+            else
+            {
+                bindlist(ddlSearch.SelectedItem.Text, value);
+                ddlDropdown.ClearSelection();
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(this, "Please Select Search Criteria", this.Page);
+        }
         txtSearch.Text = string.Empty;
         //if (value == "BRANCH")
         //{
@@ -237,6 +255,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
 
     }
     #endregion
+
     #region SelectedIndexChanged
     protected void ddlNewCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -344,6 +363,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
         ScriptManager.RegisterStartupScript(this, this.GetType(), "function", "rblWithBranch_change();", true);
     }
     #endregion
+
     #region button_ClickEvents
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
@@ -489,6 +509,7 @@ public partial class ACADEMIC_ReAdmission_Branch_Payment_Type_Change : System.We
         Response.Redirect(Request.Url.ToString());
     }
     #endregion
+
     #region user_definedfuncationsss
     private void FillDropDown()
     {
