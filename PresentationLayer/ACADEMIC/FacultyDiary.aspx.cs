@@ -111,6 +111,8 @@ public partial class ACADEMIC_FacultyDiary : System.Web.UI.Page
         ddlSemester.Items.Add(new ListItem("Please Select", "0"));
         lvStudent.DataSource = null;
         lvStudent.DataBind();
+        btnSubmit.Visible = false;
+        btnReport.Visible = false;
         if (ddlCollegeScheme.SelectedIndex > 0)
         {
             string College_Scheme = ddlCollegeScheme.SelectedValue.ToString();
@@ -130,6 +132,8 @@ public partial class ACADEMIC_FacultyDiary : System.Web.UI.Page
         ddlSemester.Items.Add(new ListItem("Please Select", "0"));
         lvStudent.DataSource = null;
         lvStudent.DataBind();
+        btnSubmit.Visible = false;
+        btnReport.Visible = false;
         if (ddlSession.SelectedIndex > 0)
         {
             string College_Scheme = ddlCollegeScheme.SelectedValue.ToString();
