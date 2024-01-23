@@ -7142,17 +7142,18 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
 
-        public DataSet GetAvailableCourseListForModified(int schemeNo, int semesterNo, int sessionNo)
+        public DataSet GetAvailableCourseListForModified(int schemeNo, int semesterNo, int sessionNo, int idNo)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQL = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
-                objParams = new SqlParameter[3];
+                objParams = new SqlParameter[4];
                 objParams[0] = new SqlParameter("@P_SCHEMENO", schemeNo);
                 objParams[1] = new SqlParameter("@P_SEMESTERNO", semesterNo);
                 objParams[2] = new SqlParameter("@P_SESSIONNO", sessionNo);
+                objParams[3] = new SqlParameter("@P_IDNO", idNo);
                 ds = objSQL.ExecuteDataSetSP("PKG_ACD_COURSE_MODIFICATION_LIST", objParams);
             }
             catch (Exception ex)

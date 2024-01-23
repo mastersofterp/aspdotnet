@@ -686,7 +686,7 @@ public partial class ACADEMIC_CourseRegistrationByAdmin : System.Web.UI.Page
         //    "C.SCHEMENO = " + lblScheme.ToolTip + " AND ISNULL(COURSE_OFFERED,0)=1 AND O.SEMESTERNO = " + lblSemester.ToolTip, "C.CCODE");
         ////dsCurrCourses = objCommon.FillDropDown("ACD_COURSE C INNER JOIN ACD_SUBJECTTYPE S ON (C.SUBID = S.SUBID)", "DISTINCT C.COURSENO", "C.CCODE,C.COURSE_NAME,C.SUBID,C.ELECT,CAST(C.CREDITS AS INT) CREDITS,S.SUBNAME, 0 as ACCEPTED, 0 as EXAM_REGISTERED, DBO.FN_DESC('SEMESTER',C.SEMESTERNO)SEMESTER ", "C.SCHEMENO = " + lblScheme.ToolTip + " AND C.SEMESTERNO = " + lblSemester.ToolTip + " AND C.OFFERED = 1", "C.CCODE");
 
-        dsCurrCourses = objSReg.GetAvailableCourseListForModified(Convert.ToInt16(lblScheme.ToolTip), Convert.ToInt16(lblSemester.ToolTip), Convert.ToInt32(ViewState["currentsession"]));
+        dsCurrCourses = objSReg.GetAvailableCourseListForModified(Convert.ToInt16(lblScheme.ToolTip), Convert.ToInt16(lblSemester.ToolTip), Convert.ToInt32(ViewState["currentsession"]), Convert.ToInt16(lblName.ToolTip));
         ViewState["dsCurrCourses"] = dsCurrCourses;
 
         if (dsCurrCourses != null && dsCurrCourses.Tables.Count > 0 && dsCurrCourses.Tables[0].Rows.Count > 0)
