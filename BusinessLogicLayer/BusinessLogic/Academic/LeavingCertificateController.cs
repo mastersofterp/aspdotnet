@@ -103,6 +103,26 @@ namespace IITMS
                     }
                     return status;
                 }
+
+                // Added By Vipul Tichakule on Dated 08-01-2024
+                public DataSet GetAllTCRemarks(int id)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_ID", id);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_TC_REMARKS_MASTER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavingCertificateController.GetAllTCRemarks-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
                 // Added By Vipul Tichakule on Dated 08-01-2024
                 public int Add_TCRemarksMaster(int id, string remarks, bool IsActive)
                 {
@@ -144,24 +164,6 @@ namespace IITMS
                     return status;
                 }
 
-                // Added By Vipul Tichakule on Dated 08-01-2024
-                public DataSet GetAllTCRemarks(int id)
-                {
-                    DataSet ds = null;
-                    try
-                    {
-                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
-                        SqlParameter[] objParams = new SqlParameter[1];
-                        objParams[0] = new SqlParameter("@P_ID", id);
-                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_TC_REMARKS_MASTER", objParams);
-                    }
-                    catch (Exception ex)
-                    {
-                        return ds;
-                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavingCertificateController.GetAllTCRemarks-> " + ex.ToString());
-                    }
-                    return ds;
-                }
             }
         }
     }
