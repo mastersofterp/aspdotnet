@@ -170,7 +170,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">GRN ENTRY</h3>
                 </div>
-
+                 <asp:Panel runat="server" ID="GrnPanel">
                 <div class="box-body">
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnAddNew" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
@@ -589,6 +589,7 @@
                             <asp:Button ID="btnAddNew2" runat="server" Text="Add New" CssClass="btn btn-primary" OnClick="btnAdNew_Click" />
                             <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" Text="Submit" ValidationGroup="Store" OnClick="btnSubmit_Click" OnClientClick="return Validate(this);" />
                             <asp:Button ID="btnBack" runat="server" CssClass="btn btn-primary" Text="Back" OnClick="btnBack_Click" />
+                            <asp:Button ID="btnReport" runat="server" CssClass="btn btn-info" TabIndex="47" Text="Report" OnClick="btnReport_Click" />
                             <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" Text="Cancel" OnClick="btnCancel_Click" />
 
                             <asp:ValidationSummary ID="valiSummary" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="Store" />
@@ -782,7 +783,38 @@
                     <asp:HiddenField ID="hdnBillAmt" runat="server" Value="0" />
                     <asp:HiddenField ID="hdnTaxAmt" runat="server" Value="0" />
 
+               
+                     </asp:Panel>
 
+                       <%--    //------start  08-12-2023--%>
+                <asp:Panel ID="pnlReport" runat="server" Visible="false">
+                    <div class="panel panel-info">
+                        <%--<div class="panel-heading">Delivery Note/ Invoice Number</div>--%>
+
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="col-md-5">
+                                    <div class="sub-heading">
+                                        <h5>GRN Number</h5>
+                                    </div>
+                                    <br />
+                                    <asp:DropDownList ID="ddlGrn" runat="server" TabIndex="48" CssClass="form-control" AppendDataBoundItems="true">
+                                        <%--AutoPostBack="false" OnSelectedIndexChanged="ddlInv_SelectedIndexChanged" --%>
+                                        <asp:ListItem Enabled="true" Selected="True" Value="0" Text="Please Select"></asp:ListItem>
+                                    </asp:DropDownList>
+                                    <asp:RequiredFieldValidator ID="rfvddlInv" runat="server" ControlToValidate="ddlGrn"
+                                        Display="None" ErrorMessage="Please Select GRN Number" InitialValue="0" ValidationGroup="StoreReport"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <asp:Button ID="btnRpt" runat="server" Text=" Show Report" TabIndex="49" ToolTip="Click To Show Report" CssClass="btn btn-info" OnClick="btnRpt_Click" ValidationGroup="StoreReport" />
+                        <asp:Button ID="Button1" runat="server" Text="Back" OnClick="Button1_Click" TabIndex="50" ToolTip="Click To Go Back" CssClass="btn btn-warning" />
+                        <asp:ValidationSummary ID="vsReport" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="StoreReport" />
+                    </div>
+                </asp:Panel>
+                <%--    //------end  08-12-2023--%>
 
                 </div>
             </div>
