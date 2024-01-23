@@ -58,6 +58,7 @@ namespace IITMS
                
                 private string _college_id_str = string.Empty; //add by maithili 19/08/2022
                 private int _sequence_no = 0; //For Session to add Sequence Number
+                 private string _projectname = string.Empty;
                 #endregion
 
                 #region Public Properties
@@ -243,6 +244,14 @@ namespace IITMS
                     get { return _sequence_no; }
                     set { _sequence_no = value; }
                 }
+               
+                public string ProjectName
+                {
+                    get { return _projectname; }
+                    set { _projectname = value; }
+                }
+         
+
                 #endregion
             }
         }
