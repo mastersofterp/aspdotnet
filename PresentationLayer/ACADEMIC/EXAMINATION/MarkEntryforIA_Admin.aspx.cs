@@ -57,7 +57,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
     string blob_ConStr = System.Configuration.ConfigurationManager.AppSettings["Blob_ConnectionString"].ToString();
    // string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_MEContainerName"].ToString();
     //string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["rcpitdoctesting"].ToString();
-    string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameExam"].ToString();
+   string blob_ContainerName = System.Configuration.ConfigurationManager.AppSettings["Blob_ContainerNameExam"].ToString(); //Added by lalit 
     protected void Page_PreInit(object sender, EventArgs e)
     {
         //To Set the MasterPage
@@ -1668,8 +1668,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
             ddlSubExamPrint.Enabled = false;
             btnPrintFront.Enabled = false;
         }
-
-        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "none", "<script>$('#PrintModal').modal('show');</script>", false);
+        ClientScript.RegisterStartupScript(GetType(), Guid.NewGuid().ToString(), "functionpopup();", true);
         updPopUp.Update();
     }
 
@@ -1732,20 +1731,41 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
         }
         else
         {
-            string reportTitle = "MarksListReport";
-            string rptFileName = "rptMarksList1_NEW.rpt";
+            if (Convert.ToInt32(Session["OrgId"]) == 1)
+            {
+                string reportTitle = "MarksListReport";
+                string rptFileName = "rptMarksList1_NEW_Admin.rpt";
 
-            string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
+                string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
 
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
 
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + ddlSubExamPrint.SelectedValue + "";
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + ddlSubExamPrint.SelectedValue + "";
 
-            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
+            }
+            else
+            {
+                string reportTitle = "MarksListReport";
+                string rptFileName = "rptMarksList1_NEW.rpt";
+
+                string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
+
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+
+                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + ",@P_SUB_EXAM=" + ddlSubExamPrint.SelectedValue + "";
+
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                ScriptManager.RegisterClientScriptBlock(this.updPopUp, this.updPopUp.GetType(), "key", Print_Val, true);
+
+            }
         }
     }
     #endregion
@@ -1818,14 +1838,14 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
 
                 string reportTitle = "CatMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
-                string rptFileName = "rptMarksList_ExamwiseNew_ForTheory.rpt";
+                string rptFileName = "rptMarksList_ExamwiseNew_ForTheory_admin.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
 
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
+                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
                //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1836,14 +1856,14 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
 
                 string reportTitle = "CatMarksListReport";
                 // string rptFileName = "rptMarksList_Examwise.rpt";
-                string rptFileName = "rptMarksList_ExamwiseNew.rpt";
+                string rptFileName = "rptMarksList_ExamwiseNew_admin.rpt";
                 string fldname = objCommon.LookUp("acd_exam_name", "DISTINCT FLDNAME", "EXAMNAME='" + Convert.ToString(ddlExamPrint.SelectedItem.Text) + "'");
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
                 url += "&path=~,Reports,Academic," + rptFileName;
 
-                url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
+                url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
                 // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_UA_NO=" + Convert.ToInt32(Session["userno"]) + ",@P_CCODE=" + ViewState["ccode_POP"].ToString() + ",@P_SECTIONNO=" + Convert.ToString(ViewState["sec_POP"]) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_EXAM=" + fldname.ToString() + ",@P_semesterno=" + Convert.ToInt32(ViewState["sem_POP"]) + ",@P_COURSENO=" + Convert.ToInt32(ViewState["courseNo_POP"]) + "";
 
                 string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -1992,7 +2012,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
                     string Extension = Path.GetExtension(filename);
                     string Filepath = Server.MapPath("~/ExcelData/" + filename);
                     // CreateBlobContainer(blob_ContainerName); 
-                    CreateBlobContainer(blob_ContainerName);
+                    CreateBlobContainer(blob_ContainerName); //Added by lalit
                     if (filename.Contains(".xls") || filename.Contains(".xlsx"))
                     {
                         ViewState["FileName"] = filename;
@@ -2012,7 +2032,7 @@ public partial class ACADEMIC_EXAMINATION_MarkEntryforIA_Admin : System.Web.UI.P
                         else
                         {
 
-                            int retval = Blob_Upload(blob_ConStr, blob_ContainerName, filename, FuBrowse);
+                            int retval = Blob_Upload(blob_ConStr, blob_ContainerName, filename, FuBrowse); 
                             if (retval == 0)
                             {
                             }
