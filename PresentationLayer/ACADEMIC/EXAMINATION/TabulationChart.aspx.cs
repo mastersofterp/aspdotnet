@@ -264,6 +264,39 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnConsolidtedMPHRAM.Visible = true;//added by tejas thakre as on 16-12-2023
             }
             #endregion
+            #region For ADCET added on 22/01/2024 by Tejas as on 22-01-2024
+            else if (Convert.ToInt32(Session["OrgId"]) == 22)
+            {
+                btnCount.Visible = true;
+                tab_year.Visible = true;
+                btncoursegrade.Visible = false;
+                btngraderange.Visible = false;
+                btnExcel.Visible = false;
+                btnExamFeesPaid.Visible = false;
+                btnConvocationExcelReport.Visible = false;
+                Yearid.Visible = false;
+                btnConsolidateGradeCard.Visible = false;
+                Dateissue.Visible = false;
+                btnConsoli.Visible = false;
+                btnConsoliA4.Visible = false;
+                btnLedgerReport.Visible = false;
+
+                btnProgrssionrpt.Visible = false;
+                pre_eleven.Visible = false;
+
+                DatePublish.Visible = false;
+
+                btnResultStatistics.Visible = false;
+                pre_eight.Visible = false;
+                btnSRNo.Visible = false;
+                btnProvisionalDegree.Visible = false;
+                txtScrutinized.Visible = false;
+                lblScrutinized.Visible = false;
+                btnufm.Visible = false;
+                btnConsolidtedMPHRAM.Visible = false;
+
+            }
+            #endregion
             else
             {
                 tab_year.Visible = true;
@@ -5304,7 +5337,14 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
     protected void btnCount_Click(object sender, EventArgs e)
     {
-        ShowCountMaleFemale("Male_Female_Count", "rptMaleFemaleCount_MIT.rpt");
+        if (Convert.ToInt32(Session["OrgId"]) == 8)  // for MIT CLIENT
+        {
+            ShowCountMaleFemale("Male_Female_Count", "rptMaleFemaleCount_MIT.rpt");
+        }
+        else if (Convert.ToInt32(Session["OrgId"]) == 22) // for ADCET CLIENT
+        {
+            ShowCountMaleFemale("Male_Female_Count", "rptMaleFemaleCount_ADCET.rpt");
+        }
     }
 
     private void ShowCountMaleFemale(string reportTitle, string rptFileName)
