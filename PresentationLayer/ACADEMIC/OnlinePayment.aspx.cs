@@ -53,6 +53,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 // Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 Session["payactivityno"] = "1";
+                Session["DemandCount"] = null;
                 int IDNO1 = 0;
                 if (Session["usertype"].ToString().Equals("2") || Session["usertype"].ToString().Equals("14"))
                 {
@@ -736,12 +737,26 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
     private void PopulateDropDown()
     {
-
-        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE RT INNER JOIN ACD_DEMAND D ON(RT.RECIEPT_CODE = D.RECIEPT_CODE)", "DISTINCT RT.RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO>0 AND D.IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "RECIEPT_TITLE");
-        ddlReceiptType.SelectedIndex = 1;
-        //this.objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
-        this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "S.SEMESTERNO");
+        try
+        {
+            this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE RT INNER JOIN ACD_DEMAND D ON(RT.RECIEPT_CODE = D.RECIEPT_CODE)", "DISTINCT RT.RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO>0 AND D.IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "RECIEPT_TITLE");
+            ddlReceiptType.SelectedIndex = 1;
+            //this.objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
+            this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "S.SEMESTERNO");
+        }
+        catch (Exception Ex)
+        {
+            objCommon.DisplayMessage(this, "Demand is not Found for Selected Student", this.Page);
+            div_Studentdetail.Visible = false;
+            divDirectPayment.Visible = false;
+            string count = string.Empty;
+            Session["DemandCount"] = "NA";
+            return;
+            //Response.Redirect(Request.Url.ToString());  
+        }
     }
+
+
 
     //private void PopulateDropDownList()
     //    {
@@ -1652,17 +1667,18 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         ViewState["idno"] = Session["stuinfoidno"].ToString();
 
         DisplayStudentInfo(Convert.ToInt32(Session["stuinfoidno"]));
-
-        //Server.Transfer("PersonalDetails.aspx", false);
-        DisplayInformation(Convert.ToInt32(Session["stuinfoidno"]));
-        divDirectPayment.Visible = true;
-        div_Studentdetail.Visible = true;
-        lvStudent.Visible = false;
-        lvStudent.DataSource = null;
-        lblNoRecords.Visible = false;
-        lvfeehead.Visible = false;
-
-
+        if (Session["DemandCount"] != "NA")
+        {
+            //Server.Transfer("PersonalDetails.aspx", false);
+            DisplayInformation(Convert.ToInt32(Session["stuinfoidno"]));
+            divDirectPayment.Visible = true;
+            div_Studentdetail.Visible = true;
+            lvStudent.Visible = false;
+            lvStudent.DataSource = null;
+            lblNoRecords.Visible = false;
+            lvfeehead.Visible = false;
+        }
+        Session["DemandCount"] = null;
     }
     protected void btnClose_Click(object sender, EventArgs e)
     {
@@ -1995,7 +2011,6 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
-
 
     public void bindfeesdetails()
     {
