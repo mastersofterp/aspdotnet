@@ -123,7 +123,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             btnClashExcel.Visible = true;
             btnCoveringPage.Visible = false;
         }
-        else if ((Convert.ToInt32(Session["OrgId"]) == 18)) //For HITS Client 
+        else if ((Convert.ToInt32(Session["OrgId"]) == 18))  //For HITS Client 
         {
             btnCoveringPage.Visible = true;
         }
