@@ -159,6 +159,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 dataTable.Columns.Add("SRNO", typeof(int));
                 dataTable.Columns.Add("CourseNo", typeof(string));
                 dataTable.Columns.Add("Selected", typeof(int));
+                dataTable.Columns.Add("TeacherNo", typeof(int));
 
                 int counter = 1;
                 foreach (DataRow row in ds.Tables[0].Rows)
@@ -166,10 +167,12 @@ public partial class LevelFeedback : System.Web.UI.Page
                     DataRow newRow = dataTable.NewRow();
                     newRow["SRNO"] = counter;
                     newRow["CourseNo"] = row["CourseNo"];
+                    newRow["TeacherNo"] = row["UA_NO"];
                     if (counter == 1)
                     {
                         newRow["Selected"] = "1";
                         ViewState["SelectedCourse"] = row["CourseNo"];
+                        ViewState["TEACHERNO"] = row["UA_NO"];
                     }
                     else
                     {
@@ -788,7 +791,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     int currentsrno = 0;
                     int NextCourseno = 0;
                     ViewState["COURSENO"] = 0;
-                    ViewState["TeachNo"] = 0;
+                    //ViewState["TeachNo"] = 0;
                     int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
                     string count = "-1";
                     lblcrse.Text = string.Empty;
@@ -798,7 +801,7 @@ public partial class LevelFeedback : System.Web.UI.Page
 
                         foreach (DataRow row in dataTable.Rows)
                         {
-                            if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo)
+                            if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo && Convert.ToInt32(row["TeacherNo"]) == Convert.ToInt32(ViewState["TeachNo"]))
                             {
                                 currentsrno = Convert.ToInt32(row["srno"]);
                                 currentsrno++;
@@ -813,6 +816,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                                 NextCourseno = Convert.ToInt32(row["courseno"]);
                                 ViewState["SelectedCourse"] = NextCourseno;
                                 ViewState["COURSENO"] = NextCourseno;
+                                ViewState["TeacherNo"] = Convert.ToInt32(row["TeacherNo"]);
                                 break;
                             }
                         }
@@ -826,7 +830,10 @@ public partial class LevelFeedback : System.Web.UI.Page
                         DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
                         //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
 
-                        DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) select r).CopyToDataTable();
+                        DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
+                                           where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) && 
+                                           Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"]) 
+                                           select r).CopyToDataTable();
 
                         lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
                         ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
@@ -835,8 +842,9 @@ public partial class LevelFeedback : System.Web.UI.Page
                             HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
                             LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
                             int courseno = Convert.ToInt32(lnkbtnCourse.CommandArgument);
+                            int ua_no = Convert.ToInt32(lnkbtnCourse.ToolTip);
                             int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
-                            if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()))
+                            if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()) && ua_no == Convert.ToInt32(xdata.Rows[0]["ua_no"].ToString()))
                             {
                                 if (sequenceNumber != 1)
                                 {
@@ -1661,7 +1669,7 @@ public partial class LevelFeedback : System.Web.UI.Page
         int currentsrno = 0;
         int PrevCourseno = 0;
         ViewState["COURSENO"] = 0;
-        ViewState["TeachNo"] = 0;
+        //ViewState["TeachNo"] = 0;
         int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
         string count = "-1";
         lblcrse.Text = string.Empty;
@@ -1672,7 +1680,7 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             foreach (DataRow row in dataTable.Rows)
             {
-                if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo)
+                if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo && Convert.ToInt32(row["TeacherNo"]) == Convert.ToInt32(ViewState["TeachNo"]))
                 {
                     currentsrno = Convert.ToInt32(row["srno"]);
                     currentsrno--;
@@ -1687,6 +1695,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     PrevCourseno = Convert.ToInt32(row["courseno"]);
                     ViewState["SelectedCourse"] = PrevCourseno;
                     ViewState["COURSENO"] = PrevCourseno;
+                    ViewState["TeacherNo"] = Convert.ToInt32(row["TeacherNo"]);
                     break;
                 }
             }
@@ -1700,7 +1709,10 @@ public partial class LevelFeedback : System.Web.UI.Page
             DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
             //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
 
-            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) select r).CopyToDataTable();
+            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
+                               where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) &&
+                               Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"])
+                               select r).CopyToDataTable();
 
             lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
             ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
@@ -1710,7 +1722,8 @@ public partial class LevelFeedback : System.Web.UI.Page
                 LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
                 int courseno = Convert.ToInt32( lnkbtnCourse.CommandArgument);
                 int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
-                if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()))
+                int ua_no = Convert.ToInt32(lnkbtnCourse.ToolTip);
+                if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()) && ua_no == Convert.ToInt32(xdata.Rows[0]["ua_no"].ToString()))
                 {
                     if (sequenceNumber != 1)
                     {
