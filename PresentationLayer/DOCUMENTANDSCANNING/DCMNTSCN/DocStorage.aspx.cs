@@ -58,6 +58,17 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 //BindListView();
                 Session["Attachments"] = null;
             }
+            DataSet dsPURPOSE = new DataSet();
+            dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "", "ISNULL(EXTENTION_DOCSCAN, 0) = 1", "");
+            string Extension = "";
+            for (int i = 0; i < dsPURPOSE.Tables[0].Rows.Count; i++)
+            {
+                if (Extension == "")
+                    Extension = dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+                else
+                    Extension = Extension + ", " + dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+            }
+            lblExtension.Text = Extension;
         }
     }
 
@@ -868,6 +879,15 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 objDocType.FILENAME = filename;
                 objDocType.FILEPTH = FileUpload1.FileName;
 
+                int count = Convert.ToInt32(objCommon.LookUp("ACD_IATTACHMENT_FILE_EXTENTIONS", "COUNT(EXTENTION)", "EXTENTION='" + ext.ToString() + "'"));
+
+
+                DataSet dsPURPOSE = new DataSet();
+
+                dsPURPOSE = objCommon.FillDropDown("ACD_IATTACHMENT_FILE_EXTENTIONS", "EXTENTION", "EXTENTION_DOCSCAN", "EXTENTION_DOCSCAN=1", "");
+
+                if (count != 0)
+                {
                     string filePath = file_path + "DOCUMENTANDSCANNING" + fileName;
 
 
@@ -976,6 +996,20 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                     
                 }
 
+                }
+                else
+                {
+                    string Extension = "";
+                    for (int i = 0; i < dsPURPOSE.Tables[0].Rows.Count; i++)
+                    {
+                        if (Extension == "")
+                            Extension = dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+                        else
+                            Extension = Extension + ", " + dsPURPOSE.Tables[0].Rows[i]["EXTENTION"].ToString();
+                    }
+                    objCommon.DisplayMessage("Upload Supported File Format. Please Upload File In " + Extension, this);
+                }
+            }
             else
             {
                 objCommon.DisplayMessage("Please select a file to attach.", this);
@@ -986,6 +1020,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             throw;
         }
     }
+
 
     private DataTable GetAttachmentDataTable()
     {

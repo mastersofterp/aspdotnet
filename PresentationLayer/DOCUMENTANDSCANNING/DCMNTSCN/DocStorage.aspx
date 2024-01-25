@@ -293,7 +293,9 @@
                                 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divAttach" runat="server" visible="false">
                                         <div class="label-dynamic">
-                                            <sup>*</sup><label>Attachment</label><span style="color: red; margin-left: 10px;">(only .pdf, .jpg Formats)</span>      
+                                            <label><sup>*</sup>Attachment <small style="color: blue;">(Max.Size
+                                        <asp:Label ID="lblFileSize" runat="server" Font-Bold="true"> 10MB</asp:Label>)  (File Ext.
+                                          <asp:Label ID="lblExtension" runat="server" Font-Bold="true"></asp:Label>)</small></label>      
                                         </div>
                                         <asp:FileUpload ID="FileUpload1" runat="server" TabIndex="16" />
                                         <asp:Label ID="lblFileName" runat="server" Text="" Visible="false"></asp:Label>
