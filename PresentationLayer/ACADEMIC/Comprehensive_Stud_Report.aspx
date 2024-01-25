@@ -1262,6 +1262,7 @@
                                                                                             <th>Credits</th>
                                                                                             <th>Course Registration Status</th>
                                                                                             <th>Exam Registration Status</th>
+                                                                                             <th>Registration Type</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
@@ -1303,6 +1304,9 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     <%# Eval("EXAM_REGISTERED") %> 
+                                                                                </td>
+                                                                                  <td>
+                                                                                    <%# Eval("REGTYPE") %> 
                                                                                 </td>
                                                                             </tr>
                                                                         </ItemTemplate>
