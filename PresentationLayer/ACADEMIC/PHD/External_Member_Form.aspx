@@ -160,7 +160,7 @@
                                                                                 <th style="text-align: center;">Edit
                                                                                 </th>
                                                                                 <th>
-                                                                                     College
+                                                                                   College
                                                                                 </th>
                                                                                 <th>
                                                                                     Department
@@ -262,9 +262,6 @@
                                                             </div>
                                                             <asp:TextBox ID="txtEmail" runat="server" ToolTip="Please enter email id." TabIndex="1" MaxLength="64" AutoComplete="off" placeholder="Please enter email id" CssClass="form-control" onblur="validateEmail(this);"></asp:TextBox>
                                                             <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" TargetControlID="txtEmail" FilterMode="InvalidChars" InvalidChars="~`!#$%^&*()-+={}][:;'<,>?/|\"></ajaxToolKit:FilteredTextBoxExtender>
-                                                            <%--                                                              <asp:RegularExpressionValidator ID="revEmailId1" runat="server" ControlToValidate="txtEmail"
-                                                        Display="Dynamic" SetFocusOnError="True" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
-                                                        ErrorMessage="Please Enter Valid Email ID." ValidationGroup="Submit"></asp:RegularExpressionValidator>--%>
                                                         </div>
                                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                                             <div class="label-dynamic">

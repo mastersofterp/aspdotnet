@@ -220,7 +220,6 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     private void PopulateDropDown()
     {
         objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 ", "CDB.COLLEGE_ID DESC");
-        //objCommon.FillDropDownList(ddlInsName, "ACD_COLLEGE_MASTER C INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(C.COLLEGE_ID=CDB.COLLEGE_ID)", "DISTINCT  CDB.COLLEGE_ID", "C.COLLEGE_NAME", "isnull(C.ActiveStatus,0)=1 AND CDB.DEPTNO=" + ddlDepartment.SelectedValue, "CDB.COLLEGE_ID DESC");
     }
 
     protected void btnSubmit_Click(object sender, EventArgs e)
