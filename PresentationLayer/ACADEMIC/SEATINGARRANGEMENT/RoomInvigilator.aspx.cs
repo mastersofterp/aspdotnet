@@ -131,18 +131,26 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
     {
         try
         {
-            string sp_procedure = "PKG_GET_SP_ROOMS_INVIGILATOR";
-            string sp_parameters = "@P_FLOOR_NO,@P_BLOCK_NO";
-            string sp_callValues = "" + Convert.ToInt32(ddlFloorNo.SelectedValue) + "," + Convert.ToInt32(ddlBlockNo.SelectedValue) + "";
-            DataSet ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+            //string sp_procedure = "PKG_GET_SP_ROOMS_INVIGILATOR";
+            //string sp_parameters = "@P_FLOOR_NO,@P_BLOCK_NO";
+            //string sp_callValues = "" + Convert.ToInt32(ddlFloorNo.SelectedValue) + "," + Convert.ToInt32(ddlBlockNo.SelectedValue) + "";
+            //DataSet ds = objCommon.DynamicSPCall_Select(sp_procedure, sp_parameters, sp_callValues);
+
+
+            SeatingArrangementController objSC = new SeatingArrangementController();
+            DataSet ds = objSC.GetAllRooms(Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlDept.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlDept.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlBlockNo.SelectedValue));
+            lvRoomMaster.DataSource = ds;
+            lvRoomMaster.DataBind();
+
             if (ds.Tables.Count > 0)
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
+
                     lvRoomMaster.DataSource = ds;
                     lvRoomMaster.DataBind();
                 }
-                else 
+                else
                 {
                     objCommon.DisplayMessage(this, "Data Not Found..!!", this.Page);
                 }
@@ -193,22 +201,24 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
             ddlFloorNo.Focus();
             int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
             ViewState["CollegeCode"] = collegecode;
-        
+
         }
         else
         {
-           
+
             ddlDept.SelectedIndex = 0;
-            ddlFloorNo.SelectedIndex = 0;
-            ddlBlockNo.SelectedIndex = 0;
+            ddlFloorNo.Items.Clear();
+            ddlFloorNo.Items.Add(new ListItem("Please Select", "0"));
+            ddlBlockNo.Items.Clear();
+            ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
         }
-      
+
         ddlFloorNo.SelectedIndex = 0;
         ddlBlockNo.SelectedIndex = 0;
         lvRoomMaster.DataSource = null;
         lvRoomMaster.DataBind();
-       
-        
+
+
     }
     #endregion
 
@@ -241,28 +251,33 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
         else
         {
             ddlFloorNo.SelectedIndex = 0;
-            ddlBlockNo.SelectedIndex = 0;
+            ddlBlockNo.Items.Clear();
+            ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
         }
 
         ddlBlockNo.SelectedIndex = 0;
         lvRoomMaster.DataSource = null;
         lvRoomMaster.DataBind();
-        
+
     }
-   
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         // Branch Name
-        if(ddlCollege.SelectedIndex > 0)
+        if (ddlCollege.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlDept, "ACD_DEPARTMENT D, ACD_COLLEGE_DEPT C ", "D.DEPTNO", "D.DEPTNAME", "D.DEPTNO=C.DEPTNO AND C.DEPTNO >0 AND C.COLLEGE_ID=" + ddlCollege.SelectedValue + "", "DEPTNAME");
             ddlDept.Focus();
-        }else
+        }
+        else
         {
             ddlCollege.SelectedIndex = 0;
-            ddlDept.SelectedIndex = 0;
-            ddlFloorNo.SelectedIndex = 0;
-            ddlBlockNo.SelectedIndex = 0;
+            ddlDept.Items.Clear();
+            ddlDept.Items.Add(new ListItem("Please Select", "0"));
+            ddlFloorNo.Items.Clear();
+            ddlFloorNo.Items.Add(new ListItem("Please Select", "0"));
+            ddlBlockNo.Items.Clear();
+            ddlBlockNo.Items.Add(new ListItem("Please Select", "0"));
+            
         }
         ddlDept.SelectedIndex = 0;
         ddlFloorNo.SelectedIndex = 0;
@@ -270,7 +285,7 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
 
         lvRoomMaster.DataSource = null;
         lvRoomMaster.DataBind();
-        
+
     }
     protected void ddlBlockNo_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -280,11 +295,13 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
     {
         try
         {
+            int rowIndex = 0;
             int Count = 0;
             CustomStatus cs = CustomStatus.Error;
+
             foreach (ListViewDataItem item in lvRoomMaster.Items)
             {
-                CheckBox chk = item.FindControl("chk") as CheckBox;
+                CheckBox chk = (CheckBox)lvRoomMaster.Items[rowIndex].FindControl("chk") as CheckBox;
                 Label lblRoomno = item.FindControl("lblRoomno") as Label;
                 Label lblRoomname = item.FindControl("lblRoomname") as Label;
                 Label lblRomCpt = item.FindControl("lblRomCpt") as Label;
@@ -295,12 +312,12 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
                     Count++;
                     cs = (CustomStatus)objExamController.InsertReqInvigilator(Convert.ToInt32(ddlCollege.SelectedValue), Convert.ToInt32(ddlFloorNo.SelectedValue), Convert.ToInt32(ddlBlockNo.SelectedValue), Convert.ToInt32(lblRoomno.ToolTip), Convert.ToInt32(txtRequiredInvigilator.Text), Convert.ToInt32(lblRomCpt.ToolTip));
                 }
-                
+                rowIndex++;
             }
 
-            if(Count == 0)
+            if (Count == 0)
             {
-                objCommon.DisplayMessage(this, "Please check Room..!!", this.Page);
+                objCommon.DisplayMessage(this, "Please Select Room..!!", this.Page);
                 return;
             }
             if (cs.Equals(CustomStatus.RecordSaved))
@@ -309,7 +326,7 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
 
             }
             else if (cs.Equals(CustomStatus.RecordNotFound))
-            {
+            {   
                 objCommon.DisplayMessage(this, "Invigilator Already Created..!!", this.Page);
             }
             else
@@ -328,4 +345,7 @@ public partial class ACADEMIC_MASTERS_Roominvigilator : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+
+ 
 }
