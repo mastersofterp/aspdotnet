@@ -2178,6 +2178,27 @@ namespace IITMS
                     }
                     return retStatus;
                 }
+
+                public DataSet GetAllRooms(int collegeid, int deptno, int floorno, int blockno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_uaims_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        objParams[1] = new SqlParameter("@P_DEPT_NO", deptno);
+                        objParams[2] = new SqlParameter("@P_FLOOR_NO", floorno);
+                        objParams[3] = new SqlParameter("@P_BLOCK_NO", blockno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_SP_ROOMS_INVIGILATOR", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.SessionController.GetAllSession-> " + ex.ToString());
+                    }
+                    return ds;
+                }
             }
     }
 
