@@ -1115,6 +1115,7 @@
                                     </ContentTemplate>
                                     <Triggers>
                                         <asp:PostBackTrigger ControlID="btnStatsticalReport" />
+                                        <asp:PostBackTrigger ControlID="btnReport" />
                                     </Triggers>
                                 </asp:UpdatePanel>
                             </div>

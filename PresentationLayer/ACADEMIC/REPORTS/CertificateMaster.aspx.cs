@@ -1369,6 +1369,15 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     ShowReport_BCPRMITR(GetStudentIDs(), "Character_Certificate", "rpt_CharacterCertificate_TGPCET.rpt");
                 }
             }
+            else if (CertShortName == "AAC") // Added By Vipul Tichakule On date 25-01-2024
+            {
+                if (Session["OrgId"].ToString() == "19")
+                {
+                    ShowAttendanceReport(GetStudentIDs(),"Attendance_Certificate", "PCEN_Attendance_Certificate.rpt");
+                }
+           
+
+            }
         }
         Enable_True();
 
@@ -1564,6 +1573,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         //}
         //
     }
+
+
+    // Added by Vipul Tichakule on date 25-01-2024
+    protected void ShowAttendanceReport(string param, string reportTitle, string rptFileName)
+    {
+        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + param));
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        url += "&param=@P_COLLEGE_CODE=" + college_id + ",@P_IDNO=" + param + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue);      
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        sb.Append(@"window.open('" + url + "','','" + features + "');");
+        ScriptManager.RegisterClientScriptBlock(this.updpnlExam2, this.updpnlExam2.GetType(), "controlJSScript", sb.ToString(), true);
+        //}
+
+    }
+
+
+
+
+
+
 
     //Added by pooja on date 05-05-2023 for bonafide passport certificate
 
