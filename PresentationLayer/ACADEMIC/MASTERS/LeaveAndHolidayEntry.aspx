@@ -133,7 +133,7 @@
                                                                         ValidationGroup="Show" CssClass="btn btn-primary" TabIndex="2" />
                                                                     <asp:RequiredFieldValidator ID="rfvregno" runat="server"
                                                                         ControlToValidate="txtRollNo" Display="None"
-                                                                        ErrorMessage="Please Enter REGNO" SetFocusOnError="true"
+                                                                        ErrorMessage="Please Enter REGNO/" SetFocusOnError="true"
                                                                         ValidationGroup="Submit" />
                                                                 </div>
 

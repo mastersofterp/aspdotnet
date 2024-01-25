@@ -220,7 +220,6 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                                 if (lblFacStatus.Text == "APPROVED")
                                 {
                                     btnEdit.ImageUrl = "~/images/check1.jpg";
-                                    //btnEdit.ImageUrl.wi="50px";
                                     btnEdit.Width = Unit.Pixel(15);
                                 }
                                 if (lblStatus.Text == "REJECTED")
@@ -731,6 +730,11 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                     }
                     CustomStatus cs = (CustomStatus)objAttC.UpdateLeaveDetails(objAttModel, idno, regno, slotno, odType, filename);
                     if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        ClearControls();
+                        objCommon.DisplayMessage(updHoliday, "Record Updated Successfully!", this.Page);
+                    }
+                    if (cs.Equals(CustomStatus.RecordExist))
                     {
                         ClearControls();
                         objCommon.DisplayMessage(updHoliday, "Record Updated Successfully!", this.Page);
@@ -1299,6 +1303,14 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                     return;
                 }
             }
+            else if (status == 2)
+            {
+            }
+            else
+            {
+                objCommon.DisplayMessage(updHoliday, "Please Click on Approve or Reject Butoon", this.Page);
+                return;
+            }
             int ua_no = Convert.ToInt32(Session["userno"]);
             if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
             {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
@@ -1365,7 +1377,6 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 else if (Fac_status == "APPROVED")
                 {
                     (e.Item.FindControl("Label1") as Label).ForeColor = System.Drawing.Color.Green;
-                    lnkbtn.Enabled = false;
                 }
                 else if (Fac_status == "REJECTED")
                 {
@@ -1377,14 +1388,41 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                 (e.Item.FindControl("lblStatus") as Label).ForeColor = System.Drawing.Color.SandyBrown;
                 if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
                 {//Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
-                    if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                    if (Convert.ToInt32(Session["usertype"].ToString()) == 3)
                     {
-                        lnkbtn.Enabled = false;
+                        if (Fac_status == "APPROVED" && Convert.ToInt32(Session["usertype"].ToString()) == 3)
+                        {
+                            lnkbtn.Enabled = false;
+                        }
+                        if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                        {
+                            lnkbtn.Enabled = false;
+                        }
+                        if (OD_COUNT >= 63)
+                        {
+                            lblRegNo.ForeColor = System.Drawing.Color.Red;
+                            lblRegNo.Font.Bold = true;
+                        }
                     }
-                    if (OD_COUNT >= 63)
+                    else if (Convert.ToInt32(Session["usertype"].ToString()) == 8)
                     {
-                        lblRegNo.ForeColor = System.Drawing.Color.Red;
-                        lblRegNo.Font.Bold = true;
+
+                        if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 8)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
+                        {
+                            lnkbtn.Enabled = false;
+                        }
+                        else
+                        {
+                            lnkbtn.Enabled = true;
+                        }
+                        if (OD_COUNT >= 63)
+                        {
+                            lblRegNo.ForeColor = System.Drawing.Color.Red;
+                            lblRegNo.Font.Bold = true;
+                        }
+                        else
+                        {
+                        }
                     }
                 }
                 else
@@ -1396,8 +1434,6 @@ public partial class ACADEMIC_MASTERS_LeaveAndHolidayEntry : System.Web.UI.Page
                     if (OD_COUNT >= 63 && Convert.ToInt32(Session["usertype"].ToString()) == 3)//faculty advisor can't approve OD after 63 slots as per req.13-03-2020
                     {
                         lnkbtn.Enabled = false;
-                        //lblRegNo.ForeColor = System.Drawing.Color.Red;
-                        //lblRegNo.Font.Bold = true;
                     }
                     if (OD_COUNT >= 63)
                     {
