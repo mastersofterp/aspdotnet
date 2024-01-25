@@ -369,6 +369,7 @@
                                                         <div class="row">
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
+                                                                      <sup>* </sup>
                                                                     <label>Commitee Name</label>
                                                                 </div>
                                                                 <asp:DropDownList ID="ddlCommittee" runat="server" TabIndex="15" ToolTip="Please Select Commitee Name" AutoPostBack="true"
@@ -381,7 +382,7 @@
                                                             </div>
                                                             <div class="form-group col-lg-3 col-md-6 col-12">
                                                                 <div class="label-dynamic">
-                                                                    <%--  <sup>* </sup>--%>
+                                                                      <sup>* </sup>
                                                                     <label>Supervisor Role</label>
                                                                 </div>
                                                                 <%--patches updated--%>
@@ -404,6 +405,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Supervisor </label>
                                                                         </div>
 
@@ -415,6 +417,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID="ddlMember" runat="server" TabIndex="16" ToolTip="Please Select Member" AppendDataBoundItems="true"
@@ -434,6 +437,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor *(s)(if any) </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlJointSupervisor' runat="server" AppendDataBoundItems="True"
@@ -449,6 +453,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember1' runat="server" AutoPostBack="true" TabIndex="18" CssClass="form-control" data-select2-enable="true"
@@ -471,6 +476,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>One Institute faculty expert </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlInstFac' runat="server" AppendDataBoundItems="True" TabIndex="20" AutoPostBack="true"
@@ -484,6 +490,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember2' runat="server" TabIndex="15" ToolTip="Please Select Member" AutoPostBack="true" AppendDataBoundItems="true"
@@ -505,6 +512,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor *(s)(if any)</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlJointSupervisorSecond' runat="server" AppendDataBoundItems="True"
@@ -519,6 +527,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>Joint-Supervisor Designation</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember5' runat="server" AutoPostBack="true" TabIndex="15" AppendDataBoundItems="true"
@@ -538,6 +547,7 @@
                                                                 <div class="row">
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>A DRC nominee </label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlDRC' runat="server" AppendDataBoundItems="True" TabIndex="22" AutoPostBack="true"
@@ -552,6 +562,7 @@
 
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                              <sup>* </sup>
                                                                             <label>A DRC Nominee Designation</label>
                                                                         </div>
                                                                         <asp:DropDownList ID='ddlMember3' runat="server" TabIndex="15" ToolTip="Please Select Member" AppendDataBoundItems="true"
@@ -573,8 +584,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <div class="card" id="divchairman" runat="server">
                                     <div class="card-header collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true">
                                         <span class="title" id="trdrc" runat="server">Recommendation of the Departmental Research Committee(DRC)</span>
@@ -595,6 +604,7 @@
                                                 <div class="row">
                                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                                         <div class="label-dynamic">
+                                                              <sup>* </sup>
                                                             <label>A DRC Chairman </label>
                                                         </div>
 
