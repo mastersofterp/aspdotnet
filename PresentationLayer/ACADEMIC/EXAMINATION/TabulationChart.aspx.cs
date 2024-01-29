@@ -6044,21 +6044,28 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
             DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
             GridView dg = new GridView();
-            if (ds.Tables.Count > 0)
+           if (ds.Tables.Count > 0)
             {
-                dg.DataSource = ds.Tables[0];
-                dg.DataBind();
-                //AddReportHeader(dg);
-                string attachment = "attachment; filename=" + "CIA_Result_Analysis " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
-                Response.ClearContent();
-                Response.AddHeader("content-disposition", attachment);
-                Response.ContentType = "application/" + "ms-excel";
-                StringWriter sw = new StringWriter();
-                HtmlTextWriter htw = new HtmlTextWriter(sw);
-                dg.HeaderStyle.Font.Bold = true;
-                dg.RenderControl(htw);
-                Response.Write(sw.ToString());
-                Response.End();
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    dg.DataSource = ds.Tables[0];
+                    dg.DataBind();
+                    //AddReportHeader(dg);
+                    string attachment = "attachment; filename=" + "CIA_Result_Analysis " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/" + "ms-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    dg.HeaderStyle.Font.Bold = true;
+                    dg.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+                }
             }
             else
             {

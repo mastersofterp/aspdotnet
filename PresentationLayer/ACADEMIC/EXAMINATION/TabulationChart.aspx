@@ -1056,7 +1056,7 @@
             <asp:PostBackTrigger ControlID="btnGradeCardIssueRegister" />
             <asp:PostBackTrigger ControlID="btnElibilityReport" />
             <asp:PostBackTrigger ControlID="btnCertificate" />
-
+            <asp:PostBackTrigger ControlID="btnCIAExcel" />
             <%--Added By Praful on 20_01_2023--%>
         </Triggers>
     </asp:UpdatePanel>
