@@ -136,9 +136,13 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
                     ClearControl();
                     BindListView();
                 }
+                else if (cs.Equals(CustomStatus.RecordExist))
+                {
+                    objCommon.DisplayMessage(this.UpdProjectMs, "Record Already Exist", this.Page);
+                }
                 else
                 {
-                    objCommon.DisplayMessage(this.UpdProjectMs,"Record not update ", this.Page);
+                    objCommon.DisplayMessage(this.UpdProjectMs, "Record not update ", this.Page);
                 }
             }
         }
@@ -571,26 +575,34 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
     private void ShowReport(string reportTitle, string rptFileName)
     {
         string clgcode = objCommon.LookUp("Reff", "College_code", "College_code >0");
-        try
+        string title = objCommon.LookUp("ACD_FD_PROJECT_TITLE_MASTER", "PROJECT_TITLE", "id>0");
+        if (title != null)
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + clgcode; // ViewState["college_id"].ToString();
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
+            try
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGE_CODE=" + clgcode; // ViewState["college_id"].ToString();
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
 
 
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
-            ScriptManager.RegisterClientScriptBlock(this.updEditAssignStudent, this.updEditAssignStudent.GetType(), "controlJSScript", sb.ToString(), true);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+                ScriptManager.RegisterClientScriptBlock(this.updEditAssignStudent, this.updEditAssignStudent.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
-        catch (Exception ex)
+        else
         {
-            throw;
+            objCommon.DisplayMessage(this.updEditAssignStudent, "Record not found ", this.Page);
         }
     }
 

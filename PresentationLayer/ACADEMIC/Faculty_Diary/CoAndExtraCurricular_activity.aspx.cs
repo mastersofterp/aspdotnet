@@ -13,6 +13,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -111,16 +112,24 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
     {
         try
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGECODE=" + ViewState["college_id"].ToString(); ;
+            DataSet ds = objCommon.FillDropDown("ACD_EXT_CUR_ACTIVITY", "PROGRAM_NAME", "PROGRAM_NAME", "", "");
 
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " </script>";
+            if (ds != null)
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGECODE=" + ViewState["college_id"].ToString(); ;
 
+                divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                divMsg.InnerHtml += " </script>";
+            }
+            else
+            {
+                objCommon.DisplayMessage("Record not found", this.Page);
+            }
             ////To open new window from Updatepanel
             //System.Text.StringBuilder sb = new System.Text.StringBuilder();
             //string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";

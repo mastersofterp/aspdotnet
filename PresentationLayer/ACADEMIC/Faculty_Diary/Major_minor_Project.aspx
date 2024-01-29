@@ -16,9 +16,8 @@
             </ProgressTemplate>
         </asp:UpdateProgress>
     </div>
-
-    <%--  
-    <asp:UpdatePanel ID="UpdProject" runat="server">
+    
+   <%-- <asp:UpdatePanel ID="UpdProject" runat="server">
         <ContentTemplate>--%>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
@@ -81,9 +80,9 @@
                                                             <label>Status</label>
                                                         </div>
                                                         <div class="switch form-inline">
-                                                            <input type="checkbox" id="rdActive" name="switch" />
+                                                            <input type="checkbox" id="rdActive" name="switch" checked />
                                                             <%-- <input type="checkbox" id="Checkbox1" name="switch" checked />--%>
-                                                            <label data-on="Active" data-off="Inactive" for="rdActive"></label>
+                                                            <label data-on="Active" data-off="Inactive" for="rdActive"  ></label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -92,7 +91,7 @@
 
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" ToolTip="Submit" OnClick="btnSubmit_Click"
-                                                    CssClass="btn btn-primary" TabIndex="2" OnClientClick="return validate2();" ValidationGroup="submit4" />
+                                                    CssClass="btn btn-primary" TabIndex="2" OnClientClick="return  validate2();" ValidationGroup="submit4" />
                                                 <asp:Button ID="btnCancell" runat="server" Text="Cancel" ToolTip="Cancel" CssClass="btn btn-warning" TabIndex="3" OnClick="btnCancell_Click" />
                                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="submit4"
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
@@ -498,11 +497,6 @@
 
 
 
-
-
-
-
-
                         </div>
                     </div>
                 </div>
@@ -510,8 +504,7 @@
         </div>
     </div>
     <asp:HiddenField ID="TabName" runat="server" />
-    <%--     </ContentTemplate>
-      
+       <%--  </ContentTemplate>   
     </asp:UpdatePanel>--%>
     <script>
 

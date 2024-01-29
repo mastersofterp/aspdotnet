@@ -111,7 +111,7 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
     {
         if (ddlSession.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlCourseName, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (CT.COURSENO=C.COURSENO)", "CT.COURSENO", "C.COURSE_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "CT.COURSENO");
+            objCommon.FillDropDownList(ddlCourseName, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (CT.COURSENO=C.COURSENO)", "DISTINCT CT.COURSENO", "C.COURSE_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "CT.COURSENO");
         }
        
     }
@@ -151,26 +151,35 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
     private void ShowReport(string reportTitle, string rptFileName)
     {
         string clgcode = objCommon.LookUp("Reff", "College_code", "College_code >0");
-        try
+        DataSet ds = objCommon.FillDropDown("ACD_SUB_CONTENT_NOTIN_SYLLABUS", "CONTENT", "TOPIC_NAME", "", "");
+        if (ds != null)
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + clgcode; // ViewState["college_id"].ToString();
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
+            try
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_COLLEGE_CODE=" + clgcode; // ViewState["college_id"].ToString();
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
 
 
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
-            ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+                ScriptManager.RegisterClientScriptBlock(this.updSection, this.updSection.GetType(), "controlJSScript", sb.ToString(), true);
+            }
+
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
-        catch (Exception ex)
+        else
         {
-            throw;
+            objCommon.DisplayMessage("Record not found", this.Page);
         }
     }
 
