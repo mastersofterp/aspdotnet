@@ -17233,7 +17233,7 @@ public partial class AccountingVouchers : System.Web.UI.Page
         dtotheractivity.Columns.Add(new DataColumn("CostCenterID", typeof(int)));
         dtotheractivity.Columns.Add(new DataColumn("PartyID", typeof(int)));
         dtotheractivity.Columns.Add(new DataColumn("PartyName", typeof(string)));
-        dtotheractivity.Columns.Add(new DataColumn("Amount", typeof(int)));
+        dtotheractivity.Columns.Add(new DataColumn("Amount", typeof(decimal)));
 
         return dtotheractivity;
     }
