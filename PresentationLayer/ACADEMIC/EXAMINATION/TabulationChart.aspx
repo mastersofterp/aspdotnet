@@ -254,6 +254,7 @@
         .card-body {
             padding: 0.75rem;
         }
+    .btn-info {}
     </style>
     <asp:UpdatePanel ID="updpnlExam" runat="server">
         <ContentTemplate>
@@ -833,7 +834,7 @@
                                     TabIndex="1" CssClass="btn btn-info" Visible="false" OnClick="btnufm_Click" />
 
                                 <asp:Button ID="btntabulation" runat="server" Text="Tabulation Format 1"
-                                    ValidationGroup="Tabulation" TabIndex="1" CssClass="btn btn-info" OnClick="btntabulation_Click" Visible="false" />
+                                    ValidationGroup="Tabulation" TabIndex="1" CssClass="btn btn-info" OnClick="btntabulation_Click" Visible="false" Height="26px" Width="175px" />
 
                                 <asp:Button ID="btnResultStatement" Text="TR Report" runat="server"
                                     ValidationGroup="TRReport" TabIndex="1" CssClass="btn btn-info" OnClick="btnResultStatement_Click" />

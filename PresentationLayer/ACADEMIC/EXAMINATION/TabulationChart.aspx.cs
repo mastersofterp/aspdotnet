@@ -2874,6 +2874,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
                     }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 20) //Added By Tejas Thakre for JLCOE as on 29012024
+                    {
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
+                    }
                     else
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
@@ -4110,6 +4114,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             else if (Convert.ToInt32(Session["OrgId"]) == 15) //Added by Tejas Thakre as on 18_09_2023
             {
                 ShowTR("ResultSheet", "rptTabulationPG_DAIICT.rpt", 2);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 20) //Added by Tejas Thakre as on 18_09_2023
+            {
+                ShowTR("ResultSheet", "rptTabulationPG_PJOLCE.rpt", 2);
             }
             else
             {
