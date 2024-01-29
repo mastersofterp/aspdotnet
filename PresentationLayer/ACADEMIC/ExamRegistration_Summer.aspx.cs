@@ -369,13 +369,15 @@ public partial class ACADEMIC_ExamRegistration_Summer : System.Web.UI.Page
         ViewState["BRANCHNO"] = ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
         ViewState["SEMESTERNO"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
         ViewState["COLLEGE_ID"] = ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
+
+        sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS =" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + " AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
+        ViewState["sessionnonew"] = sessionno;
+        Session["sessionnonew"] = sessionno;
         
         string sessionnoname = objCommon.LookUp("ACD_SESSION_MASTER", "TOP (1)SESSION_NAME", "SESSIONNO=" + Convert.ToInt32(Session["sessionnonew"]));
 
         //sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS like '%" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + "%' AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
-        sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS =" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + " AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
-        ViewState["sessionnonew"] = sessionno;
-        Session["sessionnonew"] = sessionno;
+       
 
         lblsessionno.Text = sessionnoname;
         lblsessionno.ToolTip = Session["sessionnonew"].ToString();
@@ -1435,6 +1437,7 @@ public partial class ACADEMIC_ExamRegistration_Summer : System.Web.UI.Page
 
 
             #region For Update Student_Result_Table Column txt_ind=1
+            string que_out = string.Empty;
             if (lvFailCourse.Items.Count > 0)
             {
                 foreach (ListViewDataItem dataitem in lvFailCourse.Items)
@@ -1466,25 +1469,26 @@ public partial class ACADEMIC_ExamRegistration_Summer : System.Web.UI.Page
                         string SP_Parameters = "@P_IDNO,@P_SESSIONNO,@P_COURSENO,@P_STATUS,@P_OUT";
                         // string Call_Values = "" + Idno + "," + Convert.ToInt32(Session["sessionnonew"]) + "," + ccode + ",0";
                         string Call_Values = "" + Idno + "," + Convert.ToInt32(Session["sessionnonew"]) + "," + ccode + "," + flag + "," + "0";
-                        string que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
+                        que_out = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
 
-                        if (que_out == "1")
-                        {
-                            objCommon.DisplayMessage(updatepnl, "Provisional Exam Registration Done Sucessfully.", this.Page);
-
-                            HideClm();
-                        }
-                        else
-                        {
-                            objCommon.DisplayMessage(updatepnl, "Provisional Exam Registration Update Sucessfully.", this.Page);
-                            HideClm();
-                        }
+                        
 
                         bindcourses();
 
                     }
 
                     //}
+                }
+                if (que_out == "1")
+                {
+                    //objCommon.DisplayMessage(updatepnl, "Provisional Exam Registration Done Sucessfully.", this.Page);
+
+                    HideClm();
+                }
+                else
+                {
+                    //objCommon.DisplayMessage(updatepnl, "Provisional Exam Registration Update Sucessfully.", this.Page);
+                    HideClm();
                 }
             }
             #endregion
@@ -1528,7 +1532,8 @@ public partial class ACADEMIC_ExamRegistration_Summer : System.Web.UI.Page
             string payactivityno = objCommon.LookUp("ACD_PAYMENT_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVESTATUS=1 AND ACTIVITYNAME like '%SUM%'");
             if (payactivityno == string.Empty || payactivityno == null)
             {
-                objCommon.DisplayMessage(updatepnl, "Payment Activity Master is not define.", this.Page);
+                
+                objCommon.DisplayMessage(this.updatepnl , "Payment Activity Master is not define.", this.Page);
                 return;
             }
             Session["payactivityno"] = payactivityno;  // 
