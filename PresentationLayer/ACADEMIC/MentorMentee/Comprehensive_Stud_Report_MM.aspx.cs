@@ -2348,7 +2348,7 @@ public partial class ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM : System
                 string spec = string.Empty;
                 string Result = string.Empty;
                 string reportTitle = "Gradesheet Report";
-                string rptFileName = "MarksGrade_RCPIT_withoutHeader.rpt";
+                string rptFileName = "MarksGrade_RCPIT_Stu.rpt";
                 string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
                 url += "Reports/CommonReport.aspx?";
                 url += "pagetitle=" + reportTitle;
