@@ -13,7 +13,6 @@ using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.Academic;
 using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 using System.Collections.Generic;
 
-
 public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
 {
     Common objCommon = new Common();
