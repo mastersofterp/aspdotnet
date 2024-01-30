@@ -56,13 +56,14 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
                 pnlAdd.Visible = false;
+                pnlFilter.Visible = true;
                 pnlList.Visible = true;
                 FillPeriod();
                 FillCollege();
                 BindListViewHolidays();
                 this.FillType();
                 FillStaff();
-
+                FillYear();
                 btnSave.Visible = false;
                 btnCancel.Visible = false;
                 btnBack.Visible = false;
@@ -134,7 +135,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
     {
         try
         {
-            DataSet ds = objHoliday.RetrieveAllHoliday(Convert.ToInt32(ddlCollege.SelectedValue));
+            DataSet ds = objHoliday.RetrieveAllHoliday(Convert.ToInt32(ddlCollege.SelectedValue),Convert.ToInt32(ddlYear.SelectedValue));
             if (ds.Tables[0].Rows.Count <= 0)
             {
                 btnShowReport.Visible = false;
@@ -187,11 +188,14 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
         ViewState["selectedDates"] = null;
         ddlCollege.SelectedIndex = ddlHoliDayType.SelectedIndex = ddlPeriod.SelectedIndex = ddlstaff.SelectedIndex = 0;
         chkRestrict.Checked = false;
+        //ddlYear.SelectedIndex = 0;
+        //BindListViewHolidays();
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         Clear();
         pnlAdd.Visible = true;
+        pnlFilter.Visible = false;
         pnlList.Visible = false;
         //Calendar1.SelectedDate="
         btnAdd.Visible = false;
@@ -224,6 +228,16 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
     public void FillStaff()
     {
         objCommon.FillDropDownList(ddlstaff, "PAYROLL_STAFFTYPE", "STNO", "STAFFTYPE", "STNO>0 AND ISNULL(ACTIVESTATUS,0) =" + 1, "stno");
+    }
+    private void FillYear()
+    {
+        int Yr = DateTime.Now.Year;
+
+        ddlYear.Items.Add(Convert.ToString(Yr - 2));
+        ddlYear.Items.Add(Convert.ToString(Yr - 1));
+        ddlYear.Items.Add(Convert.ToString(Yr));
+        ddlYear.Items.Add(Convert.ToString(Yr + 1));
+        //ddlYear.SelectedValue = (Convert.ToString(Yr));
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
@@ -274,6 +288,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
                         {
                             MessageBox("Record Saved Successfully");
                             pnlAdd.Visible = false;
+                            pnlFilter.Visible = true;
                             pnlList.Visible = true;
                             ViewState["action"] = null;
                             Clear();
@@ -297,6 +312,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
                         {
                             MessageBox("Record Updated Successfully");
                             pnlAdd.Visible = false;
+                            pnlFilter.Visible = true;
                             pnlList.Visible = true;
                             ViewState["action"] = null;
                             Clear();
@@ -334,6 +350,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
     {
         Clear();
         pnlAdd.Visible = false;
+        pnlFilter.Visible = true;
         pnlList.Visible = true;
 
         btnAdd.Visible = true;
@@ -354,6 +371,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
 
             ViewState["action"] = "edit";
             pnlAdd.Visible = true;
+            pnlFilter.Visible = false;
             pnlList.Visible = false;
 
             btnSave.Visible = true;
@@ -442,7 +460,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT,LEAVES," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString() + "," + "@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue);
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -625,5 +643,9 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
 
         }
         return result;
+    }
+    protected void ddlYear_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        BindListViewHolidays();
     }
 }

@@ -228,17 +228,43 @@
                     <asp:Label ID="lblmsg" runat="server" SkinID="lblmsg"></asp:Label>
                 </div>
                 </asp:Panel>
+
+                    <asp:Panel ID="pnlFilter" runat="server">
+                    <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="divnote" runat="server">
+                                        Note <b>:</b> <span style="color: #FF0000">Please Select Year for Filter Holiday List.</span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                        <div class="label-dynamic">
+                            <%--<sup>* </sup>--%>
+                            <label>Year</label>
+                        </div>
+                        <asp:DropDownList ID="ddlYear" TabIndex="10" runat="server" CssClass="form-control" ToolTip="Select Year" data-select2-enable="true"
+                            OnSelectedIndexChanged="ddlYear_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true">
+                            <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
+                        </asp:DropDownList>
+                        <%-- <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear"
+                        Display="None" ErrorMessage="Please Select Year" ValidationGroup="Holiday"
+                        SetFocusOnError="true" InitialValue="0"></asp:RequiredFieldValidator>--%>
+                    </div>
+                    </asp:Panel>
                     <div class="col-12 btn-footer">
-                        <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" Text="Add New" TabIndex="10"
+                        <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" Text="Add New" TabIndex="11"
                             CssClass="btn btn-primary" ToolTip="Click here to Add New Holiday"></asp:LinkButton>
                         <asp:Button ID="btnSave" runat="server" Text="Submit" ValidationGroup="Holiday" OnClick="btnSave_Click"
-                            CssClass="btn btn-primary" ToolTip="Click here to Submit" TabIndex="11" />
+                            CssClass="btn btn-primary" ToolTip="Click here to Submit" TabIndex="12" />
                         <asp:Button ID="btnBack" runat="server" Text="Back" CausesValidation="false" OnClick="btnBack_Click"
-                            CssClass="btn btn-primary" ToolTip="Click here to Return to Previous Menu" TabIndex="12" />
+                            CssClass="btn btn-primary" ToolTip="Click here to Return to Previous Menu" TabIndex="13" />
                         <asp:Button ID="btnShowReport" runat="server" Text="Show Report" CssClass="btn btn-info" ToolTip="Click here to Show Report"
-                            OnClick="btnShowReport_Click" TabIndex="13" />
+                            OnClick="btnShowReport_Click" TabIndex="14" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
-                            OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="14" />
+                            OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="15" />
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Holiday"
                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>
@@ -369,7 +395,7 @@
                                 <tr>
                                     <td>
                                         <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("HNO") %>'
-                                            AlternateText="Edit Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnEdit_Click" TabIndex="15" />&nbsp;
+                                            AlternateText="Edit Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnEdit_Click" TabIndex="16" />&nbsp;
                                                 <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/images/delete.gif" CommandArgument='<%# Eval("HNO") %>'
                                                     AlternateText="Delete Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnDelete_Click"
                                                     OnClientClick="showConfirmDel(this); return false;" />
