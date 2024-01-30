@@ -18,6 +18,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 {
     Common objCommon = new Common();
@@ -732,8 +733,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
         }
 
         dsFailSubjects = objSC.GetStudentRedoRegisteredCourses_new(idno, sessionNo, Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt16(hdfDegreeno.Value), Convert.ToInt16(lblBranch.ToolTip));
-        ViewState["FailSubjects"] = dsFailSubjects;
-
+        ViewState["FailSubjects"] = dsFailSubjects;       
         if (dsFailSubjects.Tables[0].Rows.Count > 0)
         {
             //ddlBackLogSem.Items.Clear();
@@ -770,6 +770,9 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
         if (dsFailSubjects.Tables[1].Rows.Count > 0)
         {
+            ViewState["RedoOfferedSubjects"] = dsFailSubjects.Tables[1];
+            hfdRedoCrsTbl.Value = ViewState["RedoOfferedSubjects"].ToString();
+
             lvFailCourse.DataSource = dsFailSubjects.Tables[1];
             lvFailCourse.DataBind();
             lvFailCourse.Visible = true;            
@@ -780,6 +783,8 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
             if (Session["usertype"].ToString() == "2")
             {
+                
+
                 int count = 0;
                 foreach (ListViewDataItem itm in lvFailCourse.Items)
                 {
@@ -798,6 +803,16 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
 
             if (Convert.ToInt16(Session["OrgId"]) == 2)
             {
+                DataSet dsfeesForRedoCrs = objCommon.FillDropDown("ACD_EXAM_FEE_DEFINATION", "DISTINCT ISNULL(SUBID,0) SUBID", "ISNULL(FEE,0) FEE",
+                                                       "ISNULL(FEETYPE,0)=2 AND ISNULL(ISFEESAPPLICABLE,0)=1 AND ISNULL(CANCEL,0)=0 AND COLLEGE_ID=" + Convert.ToInt16(ViewState["collegeId"])
+                                                       + " AND DEGREENO=" + Convert.ToInt16(hdfDegreeno.Value)
+                                                       + " AND SESSIONNO=" + Convert.ToInt16(ViewState["SessionNo"])
+                                                       + " AND  " + Convert.ToInt16(lblSemester.ToolTip) + " IN (SELECT VALUE FROM DBO.SPLIT(SEMESTERNO,','))", "SUBID"); //  AND SUBID IN (" + subids + ")
+
+                ViewState["dsfeesForRedoCrs"] = dsfeesForRedoCrs.Tables[0];
+                hfdFeedetails.Value = JsonConvert.SerializeObject(dsfeesForRedoCrs.Tables[0], Formatting.Indented);
+                ScriptManager.RegisterStartupScript(this, GetType(), "Src", "backlogLvChk();", true);
+
                 btnPrintRegSlip.Visible = false;
                 int hodApprovedCount = 0;
                 for (int k = 0; k < dsFailSubjects.Tables[1].Rows.Count; k++)
