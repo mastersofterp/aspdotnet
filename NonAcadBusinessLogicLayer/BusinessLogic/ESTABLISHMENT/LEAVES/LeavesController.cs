@@ -799,16 +799,15 @@ namespace IITMS
                 }
 
                 // To Fetch all existing holiday details
-                public DataSet RetrieveAllHoliday(int collegeno,int Year,int Month)
+                public DataSet RetrieveAllHoliday(int collegeno,int Year)
                 {
                     DataSet ds = null;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                        SqlParameter[] objparams = new SqlParameter[3];
+                        SqlParameter[] objparams = new SqlParameter[2];
                         objparams[0] = new SqlParameter("@P_COLLEGE_NO", collegeno);
                         objparams[1] = new SqlParameter("@P_YEAR", Year);
-                        objparams[2] = new SqlParameter("@P_MONTH", Month);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_PAY_HOLIDAYS_GETALL", objparams);
                     }
