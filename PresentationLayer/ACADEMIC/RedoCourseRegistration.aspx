@@ -319,11 +319,11 @@
                                                 <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                         </li>
 
-                                         <li id="liDemandAmount" runat="server" class="list-group-item"><b>Demand Amount :</b>
+                                        <li id="liDemandAmount" runat="server" class="list-group-item"><b>Demand Amount :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblDemandAmt" runat="server" Font-Bold="true" /></a>
                                         </li>
-                                       <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
+                                        <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
                                             <%--<a class="sub-label">
                                                 <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -477,7 +477,7 @@
                                                     <td align="center">
                                                         <%# Eval("CREDITS") %>
                                                     </td>
-                                                     <td>
+                                                    <td>
                                                         <asp:Label ID="lblDemandAmount" runat="server" Text='<%# Eval("DEMAND_AMT") %>' />
                                                     </td>
                                                 </tr>
