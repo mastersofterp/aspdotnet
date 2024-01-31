@@ -45,7 +45,7 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
     {
         try
         {
-            if (!Page.IsPostBack)
+            if (!IsPostBack)
             {
                 //Check Session
                 if (Session["userno"] == null || Session["username"] == null ||
@@ -103,10 +103,7 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
 
        
     }
-    protected void btnReport_Click(object sender, EventArgs e)
-    {
-        ShowReport("Co-Carricular And Extra Carricular Activity", "Co_Extra_carricular_actiivty.rpt");
-    }
+   
 
     private void ShowReport(string reportTitle, string rptFileName)
     {
@@ -145,18 +142,34 @@ public partial class ACADEMIC_CoAndExtraCurricular_activity : System.Web.UI.Page
 
 
 
-    protected void btnCancel_Click(object sender, EventArgs e)
-    {
-        ClearControl();
-    }
+    //protected void btnCancel_Click(object sender, EventArgs e)
+    //{
+    //    ClearControl();
+        
+    //}
 
     protected void ClearControl()
     {
-        txtProgramName.Text = string.Empty;
-        txtPrincipal.Text = string.Empty;
-        txtGroupTeacher.Text = string.Empty;
-        txtDate.Text = string.Empty;
+        try
+        {
+            txtProgramName.Text = string.Empty;
+            txtPrincipal.Text = string.Empty;
+            txtGroupTeacher.Text = string.Empty;
+            txtDate.Text = string.Empty;
+        }
+        catch
+        {
+            throw;
+        }
     }
-   
+
+    protected void btnCancel_Click1(object sender, EventArgs e)
+    {
+         Response.Redirect(Request.Url.ToString());
+    }
+    protected void btnCoandExtReport_Click(object sender, EventArgs e)
+    {
+        ShowReport("Co-Carricular And Extra Carricular Activity", "Co_Extra_carricular_actiivty.rpt");
+    }
 }
 

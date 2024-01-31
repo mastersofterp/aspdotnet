@@ -2,7 +2,7 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <div>
+    <%--<div>
         <asp:UpdateProgress ID="UpdateProgress4" runat="server" 
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
@@ -15,7 +15,7 @@
                 </div>
             </ProgressTemplate>
         </asp:UpdateProgress>
-    </div>
+    </div>--%>
   <%--  <asp:UpdatePanel ID="updSection" runat="server"   >
         <ContentTemplate>--%>
     <div id="divMsg" runat="server"></div>
@@ -37,7 +37,7 @@
                                         </div>
                              
                                         <asp:TextBox ID="txtProgramName" runat="server" MaxLength="256" ViewStateMode="Enabled" AppendDataBoundItems="True"
-                                             TextMode="MultiLine" CssClass="form-control" ToolTip="Enter Name of the program" AutoPostBack="true"  TabIndex="1" />
+                                             TextMode="MultiLine" CssClass="form-control" ToolTip="Enter Name of the program"  TabIndex="1" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtProgramName"
                                             Display="None" ErrorMessage="Please Enter Name of the program" SetFocusOnError="True" 
                                             ValidationGroup="validate" />
@@ -46,7 +46,7 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divfromdate" runat="server">
                                         <div class="label-dynamic">
-                                            <sup id="frmdtspan" runat="server">* </sup>
+                                            <sup id="frmdtspan" runat="server">*</sup>
                                             <label>Date</label>
                                         </div>
                                         <div class="input-group date">
@@ -77,7 +77,7 @@
                                             <sup>* </sup>
                                             <asp:Label ID="lblGroupTeacher" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:TextBox ID="txtGroupTeacher" runat="server" CssClass="form-control" MaxLength="150" ToolTip="Enter Group Teacher Details" AutoPostBack="true"  TabIndex="3" />
+                                        <asp:TextBox ID="txtGroupTeacher" runat="server" CssClass="form-control" MaxLength="150" ToolTip="Enter Group Teacher Details"  TabIndex="3" />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtGroupTeacher"
                                             Display="None" ErrorMessage="Please Enter Group Teacher Details" SetFocusOnError="True" 
                                             ValidationGroup="validate"/>
@@ -87,19 +87,18 @@
                                             <sup>* </sup>
                                             <asp:Label ID="lblPrincipal" runat="server" Font-Bold="true"></asp:Label>
                                         </div>
-                                        <asp:TextBox ID="txtPrincipal" runat="server" CssClass="form-control" ToolTip="Enter Principal Details" MaxLength="150" TabIndex="4" AutoPostBack="true" />
+                                        <asp:TextBox ID="txtPrincipal" runat="server" CssClass="form-control" ToolTip="Enter Principal Details" MaxLength="150" TabIndex="4"  />
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtPrincipal"
                                             Display="None" ErrorMessage="Please Enter Principal Details" SetFocusOnError="True" 
                                             ValidationGroup="validate" />
                                     </div>
-
-
                                 </div>
                             </div>
                               <div class="col-12 btn-footer">
                                    <asp:Button ID="btnSubmit" runat="server" TabIndex="5" Text="Submit"  OnClick="btnSubmit_Click" CssClass="btn btn-primary" ValidationGroup="validate"  />
-                                   <asp:Button ID="btnReport" runat="server" TabIndex="6" Text="Report" OnClick="btnReport_Click"  CssClass="btn btn-primary" />
-                                <asp:Button ID="btnCancel" runat="server" TabIndex="7" Text="Cancel" OnClick="btnCancel_Click"  CssClass="btn btn-warning" />
+                                   <asp:Button ID="btnCoandExtReport" runat="server" TabIndex="6" Text="Report" OnClick="btnCoandExtReport_Click" CssClass="btn btn-primary" CausesValidation="false" />
+                                   <asp:Button ID="btnCancel" runat="server" TabIndex="7" Text="Cancel" OnClick="btnCancel_Click1"  CssClass="btn btn-warning"  CausesValidation="false" />
+
                                 <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                                     ShowSummary="false" ValidationGroup="validate" />
                                
