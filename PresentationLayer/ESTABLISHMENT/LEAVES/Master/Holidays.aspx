@@ -239,33 +239,65 @@
                                 </div>
                             </div>
                     </div>
-
-                    <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                    <div class="form-group col-12 mt-3">
+                    <div class="row">
+                    <div class="form-group col-lg-3 col-md-6 col-12">
                         <div class="label-dynamic">
-                            <%--<sup>* </sup>--%>
+                            <sup>* </sup>
                             <label>Year</label>
                         </div>
                         <asp:DropDownList ID="ddlYear" TabIndex="10" runat="server" CssClass="form-control" ToolTip="Select Year" data-select2-enable="true"
-                            OnSelectedIndexChanged="ddlYear_SelectedIndexChanged" AppendDataBoundItems="true" AutoPostBack="true">
-                            <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
+                             AppendDataBoundItems="true" AutoPostBack="true">
+                            <asp:ListItem Value="0">Please Select</asp:ListItem>
                         </asp:DropDownList>
-                        <%-- <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear"
-                        Display="None" ErrorMessage="Please Select Year" ValidationGroup="Holiday"
+                         <asp:RequiredFieldValidator ID="rfvYear" runat="server" ControlToValidate="ddlYear"
+                        Display="None" ErrorMessage="Please Select Year" ValidationGroup="HolidayShow"
+                        SetFocusOnError="true" InitialValue="0"></asp:RequiredFieldValidator>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-6 col-12">
+                        <div class="label-dynamic">
+                            <%--<sup>* </sup>--%>
+                            <label>Month</label>
+                        </div>
+                        <asp:DropDownList ID="ddlMonth" TabIndex="11" runat="server" CssClass="form-control" ToolTip="Select Month" data-select2-enable="true"
+                             AppendDataBoundItems="true" AutoPostBack="true">
+                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                            <asp:ListItem Value="1">January</asp:ListItem>
+                            <asp:ListItem Value="2">February</asp:ListItem>
+                            <asp:ListItem Value="3">March</asp:ListItem>
+                            <asp:ListItem Value="4">April</asp:ListItem>
+                            <asp:ListItem Value="5">May</asp:ListItem>
+                            <asp:ListItem Value="6">June</asp:ListItem>
+                            <asp:ListItem Value="7">July</asp:ListItem>
+                            <asp:ListItem Value="8">August</asp:ListItem>
+                            <asp:ListItem Value="9">September</asp:ListItem>
+                            <asp:ListItem Value="10">October</asp:ListItem>
+                            <asp:ListItem Value="11">November</asp:ListItem>
+                            <asp:ListItem Value="12">December</asp:ListItem>
+                        </asp:DropDownList>
+                        <%-- <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlYear"
+                        Display="None" ErrorMessage="Please Select Year" 
                         SetFocusOnError="true" InitialValue="0"></asp:RequiredFieldValidator>--%>
+                    </div>
+                    </div>
                     </div>
                     </asp:Panel>
                     <div class="col-12 btn-footer">
-                        <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" Text="Add New" TabIndex="11"
+                        <asp:LinkButton ID="btnShow" runat="server" SkinID="LinkAddNew" OnClick="btnShow_Click" Text="Show" TabIndex="12"
+                            CssClass="btn btn-primary" ToolTip="Click here to show Holidays List" ValidationGroup="HolidayShow"></asp:LinkButton>
+                        <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" Text="Add New" TabIndex="13"
                             CssClass="btn btn-primary" ToolTip="Click here to Add New Holiday"></asp:LinkButton>
                         <asp:Button ID="btnSave" runat="server" Text="Submit" ValidationGroup="Holiday" OnClick="btnSave_Click"
-                            CssClass="btn btn-primary" ToolTip="Click here to Submit" TabIndex="12" />
+                            CssClass="btn btn-primary" ToolTip="Click here to Submit" TabIndex="14" />
                         <asp:Button ID="btnBack" runat="server" Text="Back" CausesValidation="false" OnClick="btnBack_Click"
-                            CssClass="btn btn-primary" ToolTip="Click here to Return to Previous Menu" TabIndex="13" />
+                            CssClass="btn btn-primary" ToolTip="Click here to Return to Previous Menu" TabIndex="15" />
                         <asp:Button ID="btnShowReport" runat="server" Text="Show Report" CssClass="btn btn-info" ToolTip="Click here to Show Report"
-                            OnClick="btnShowReport_Click" TabIndex="14" />
+                            OnClick="btnShowReport_Click" TabIndex="16" />
                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false" ToolTip="Click here to Reset"
-                            OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="15" />
+                            OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="17" />
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Holiday"
+                            ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="HolidayShow"
                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                     </div>
                 <asp:Panel ID="pnlList" runat="server">
@@ -395,7 +427,7 @@
                                 <tr>
                                     <td>
                                         <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/edit.png" CommandArgument='<%# Eval("HNO") %>'
-                                            AlternateText="Edit Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnEdit_Click" TabIndex="16" />&nbsp;
+                                            AlternateText="Edit Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnEdit_Click" TabIndex="18" />&nbsp;
                                                 <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/images/delete.gif" CommandArgument='<%# Eval("HNO") %>'
                                                     AlternateText="Delete Record" ToolTip='<%# Eval("HNO") %>' OnClick="btnDelete_Click"
                                                     OnClientClick="showConfirmDel(this); return false;" />
