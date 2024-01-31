@@ -21098,6 +21098,66 @@ namespace IITMS
                     }
                     return dr;
                 }
+
+                public DataSet getStudentDeatilsForFacultyDiary(int acdyear, int degreeno, int branchno, int year, int college_id)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSH = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParam = new SqlParameter[5];
+                        objParam[0] = new SqlParameter("@P_ACD_YEAR", acdyear);
+                        objParam[1] = new SqlParameter("@P_DEGREE", degreeno);
+                        objParam[2] = new SqlParameter("@P_BRANCH", branchno);
+                        objParam[3] = new SqlParameter("@P_YEAR", year);
+                        objParam[4] = new SqlParameter("@P_COLLEGE_ID", college_id);
+                        ds = objSH.ExecuteDataSetSP("PKG_ACD_GET_STUDENT_FOR_FACULTY_DIARY", objParam);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.BindActivity-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+       
+                public int addfacultydiary_visit_detail(int collegeid, int acdyear, int degree, int branch, int year, string studname, int idno, int faculty_uano, string faculty_name, DateTime date, string detail, string Add, int OP)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[14];
+                        objParams[0] = new SqlParameter("@P_COLLEGE", collegeid);
+                        objParams[1] = new SqlParameter("@P_ACDYEAR", acdyear);
+                        objParams[2] = new SqlParameter("@P_DEGREE", degree);
+                        objParams[3] = new SqlParameter("@P_BRANCH", branch);
+                        objParams[4] = new SqlParameter("@P_YEAR", year);
+                        objParams[5] = new SqlParameter("@P_STUD_NAME", studname);
+                        objParams[6] = new SqlParameter("@P_IDNO", idno);
+                        objParams[7] = new SqlParameter("@P_FACULTY_UA_NO", faculty_uano);
+                        objParams[8] = new SqlParameter("@P_FACULTY_NAME", faculty_name);
+                        objParams[9] = new SqlParameter("@P_DATE", date);
+                        objParams[10] = new SqlParameter("@P_DETAIL", detail);
+                        objParams[11] = new SqlParameter("@P_ADDRESS", Add);
+                        objParams[12] = new SqlParameter("@P_ORGANIZATION", OP);
+                        objParams[13] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[13].Direction = ParameterDirection.Output;
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INS_FACULTY_DDAIRY_VISIT", objParams, false) != null)
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.AddBlobConfig-> " + ex.ToString());
+                    }
+                    return status;
+                }
             }
 
 
