@@ -4200,7 +4200,7 @@ public partial class Academic_MarkEntry : System.Web.UI.Page
         url += "Reports/CommonReport.aspx?";
         url += "pagetitle=" + reportTitle;
         url += "&path=~,Reports,Academic," + rptFileName;
-        url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_semesterno=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_CCODE=" + ccode + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "";
+        url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]) + ",@P_UANO=" + Convert.ToInt32(Session["userno"]) + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COURSENO=" + Convert.ToInt32(ddlCourse.SelectedValue) + ",@P_SUBID=" + ddlSubjectType.SelectedValue + ",@P_semesterno=" + Convert.ToInt32(ddlsemester.SelectedValue) + ",@P_CCODE=" + ccode + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + "";
 
         string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
         ScriptManager.RegisterClientScriptBlock(this.updpnl, this.updpnl.GetType(), "key", Print_Val, true);
