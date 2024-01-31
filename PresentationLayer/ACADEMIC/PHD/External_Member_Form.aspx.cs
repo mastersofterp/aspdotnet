@@ -392,6 +392,7 @@ public partial class ACADEMIC_PHD_External_Member_Form : System.Web.UI.Page
     }
 
     //RFC.PHD.ENHANCEMENT.MAJOR.2 (25-08-2023)(TKNO.46978)
+    //Added By Jay Takalkhede on dated (25-08-2023)(TKNO.46978)
     protected void ddlDepartment_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlDepartment.SelectedIndex > 0)
