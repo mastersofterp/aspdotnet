@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using BusinessLogicLayer.BusinessEntities.RazorPay;
 using Razorpay.Api;
 using Newtonsoft.Json;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
 {
@@ -27,6 +28,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
     Ent_Pay_Response ObjPR = new Ent_Pay_Response();
+    OrganizationController objOrg = new OrganizationController();
 
     string hash_seq = string.Empty;
     #endregion
@@ -37,18 +39,39 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         {
             try
             {
-                
-                SqlDataReader dr = objCommon.GetCommonDetails();
-
-                if (dr != null)
+                DataSet Orgds = null;
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
+
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
                 string[] merc_hash_vars_seq;
                 string merc_hash_string = string.Empty;
@@ -82,10 +105,11 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                 }
                 Ent_Payment objPay = JsonConvert.DeserializeObject<Ent_Payment>(json);
                 long unixDate = Convert.ToInt64(objPay.created_at);
+                
                 DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 DateTime sTime = start.AddSeconds(unixDate).ToLocalTime();
 
-                DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME", "UA_IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
+                DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME", "UA_TYPE = 2 AND UA_IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
 
@@ -112,7 +136,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     ObjPR.ErrorMessage = "NA";
                     ObjPR.ResponceTransactionId = objPay.id;
                     ObjPR.Amount = Convert.ToDouble(objPay.amount) / 100;
-                  
+                   
                     actualamount = tranAmt;
                     amountTax = Convert.ToDouble(Convert.ToDouble(ObjPR.Amount) - Convert.ToDouble(actualamount));
                     ObjPR.TransactionTime = sTime;
@@ -123,6 +147,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
                     ObjPR.IPAddress = Session["ipAddress"].ToString();
                     ObjPR.OrderId = Session["Order_ID"].ToString();
                     ObjPR.MACAddress = "";
+                    
                     int Result = 0;
 
                     Ent_Payment_notes ss = new Ent_Payment_notes();
@@ -353,6 +378,7 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         else
         {
             ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            //ShowReport("OnlineFeePayment", "FeeCollectionReceiptForCash_ATLAS.rpt");
         }
     }
 
@@ -363,14 +389,15 @@ public partial class RazorPayOnlinePaymentResponse : System.Web.UI.Page
         int IDNO = Convert.ToInt32((Session["idno"]));
 
         string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + Session["idno"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
-
+        string college_id = objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO='" + Session["idno"].ToString() + "'");
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
 
-            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
-
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(college_id) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+           // url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + Convert.ToInt32(DcrNo);
+            
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";

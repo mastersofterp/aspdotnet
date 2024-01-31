@@ -17,6 +17,7 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Data.SqlClient;
 using Razorpay.Api;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
 {
@@ -24,6 +25,7 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
+    OrganizationController objOrg = new OrganizationController();
 
     string hash_seq = string.Empty;
     #endregion
@@ -42,19 +44,41 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
         {
             try
             {
-                SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                DataSet Orgds = null;
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                           // hdnLogoOrg.Value = "0";
+                        }
+                    
                     }
                 }
 
-               
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        var college_Logo = dr["College_logo"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
 
                 lblRegNo.Text = Session["regno"].ToString();
@@ -240,23 +264,19 @@ public partial class RazorPayOnlinePaymentRequest : System.Web.UI.Page
 
         if (Convert.ToInt32(Session["Installmentno"]) > 0)
         {
-            result = objFees.InsertInstallmentOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), refno, Convert.ToDouble(Session["studAmt"]), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), "-");
+            result = objFees.InsertInstallmentOnlinePayment_TempDCR_Razorpay(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["demandno"]), Convert.ToInt32(Session["paysemester"]), refno, Convert.ToDouble(Session["studAmt"]), Convert.ToString(Session["ReceiptType"]), Convert.ToInt32(Session["userno"]), "-", Convert.ToInt32(Session["Installmentno"]));
         }
         else
         {
-            result = objFees.InsertOnlinePayment_TempDCR(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), refno, 1, Convert.ToString(Session["ReceiptType"]), "-");
+            result = objFees.InsertOnlinePayment_TempDCR_Razorpay(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Session["paysession"]), Convert.ToInt32(Session["paysemester"]), refno, 1, Convert.ToString(Session["ReceiptType"]), "-");
         }
-        if (result > 0)
-        {
-            string orderid = objCommon.LookUp("ACD_DCR_TEMP", "ORDER_ID", "IDNO = " + Convert.ToInt32(Session["idno"]) + " AND ORDER_ID='" + refno + "'");
-            if (orderid != "" || orderid != string.Empty || orderid == refno)
-            {
-                Session["studAmt"] = Convert.ToDouble(Session["studAmt"]);
-                Session["Order_ID"] = refno.ToString();
 
-                Response.Redirect("~/ACADEMIC/ONLINEFEECOLLECTION/RazorPay_Request.aspx", false);
-            }
-        }
+
+        Session["studAmt"] = Convert.ToDouble(Session["studAmt"]);
+        Session["Order_ID"] = refno.ToString();
+
+        Response.Redirect("~/ACADEMIC/ONLINEFEECOLLECTION/RazorPay_Request.aspx", false);
+
     
     }
     protected void btnBack_Click(object sender, EventArgs e)

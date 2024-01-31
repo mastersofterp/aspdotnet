@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PayU Payment Response</title>
+    <title>RazorPay Payment Response</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,11 +57,17 @@
             }
         }
     </style>
-
+     <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <%--<body onload="goBackOrClose();">--%>
 <body>
-
+   
     <form id="form1" runat="server" method="post">
         <input type="hidden" runat="server" id="key" name="key" />
         <input type="hidden" runat="server" id="hash" name="hash" />
@@ -75,13 +81,13 @@
          
         <asp:TextBox ID="service_provider" runat="server" Text="payu_paisa" Style="display: none" />
         <div class="container">
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-lg-8 offset-lg-2 col-md-12 col-sm-12 col-12">
                     <div class="box box-primary">
                         <div id="div1" runat="server"></div>
                         <div class="box-header with-border">
                             <div class="row">
-                                <div class="col-sm-3 text-center mt-md-4">
+                              <%--  <div class="col-sm-3 text-center mt-md-4">
                                     <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive" Width="200px" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                                 <div class="col-sm-9">
@@ -91,6 +97,9 @@
                                         <h6>
                                             <asp:Label ID="lblAddress" Font-Size="14px" runat="server" Text=""></asp:Label></h6>
                                     </div>
+                                </div>--%>
+                                  <div class="col-sm-12">
+                                    <asp:Image ID="imgCollegeLogo" class="img-logo img-responsive center" runat="server" ImageUrl="~/images/nophoto.jpg" />
                                 </div>
                             </div>
                         </div>
