@@ -2878,6 +2878,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNOS_NEW() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString();
                     }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 21) //Added By Tejas Thakre for TGPCET as on 01022024
+                    {
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
+                    }
                     else
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
@@ -4111,13 +4115,17 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             {
                 ShowTR("ResultSheet", "rptTabulationPG_MIT.rpt", 2);
             }
-            else if (Convert.ToInt32(Session["OrgId"]) == 15) //Added by Tejas Thakre as on 18_09_2023
+            else if (Convert.ToInt32(Session["OrgId"]) == 15) //Added by Tejas Thakre
             {
                 ShowTR("ResultSheet", "rptTabulationPG_DAIICT.rpt", 2);
             }
             else if (Convert.ToInt32(Session["OrgId"]) == 20) //Added by Tejas Thakre as on 18_09_2023
             {
                 ShowTR("ResultSheet", "rptTabulationPG_PJOLCE.rpt", 2);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 21) // Added by Tejas for TGPCET as on 01_02_2023
+            {
+                ShowTR("ResultSheet", "rptTabulationPG_TGPCET.rpt", 2);
             }
             else
             {
