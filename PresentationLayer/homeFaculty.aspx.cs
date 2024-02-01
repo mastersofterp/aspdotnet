@@ -328,17 +328,17 @@ public partial class homeFaculty : System.Web.UI.Page
     protected void GetFileNamePathEventForActiveNotice(object sender, CommandEventArgs e)
     {
         string filename = e.CommandArgument.ToString();
-        GetFileNamePath(filename, iframeActive);
+        GetFileNamePath(filename);
     }
 
     protected void GetFileNamePathEventForExpiredNotice(object sender, CommandEventArgs e)
     {
         string filename = e.CommandArgument.ToString();
-        GetFileNamePath(filename, iframeExpired);
+        GetFileNamePath(filename);
     }
 
 
-    protected string GetFileNamePath(object filename, HtmlIframe iframeId)
+    protected string GetFileNamePath(object filename)
     {
         string Url = string.Empty;
         string fileUrl = string.Empty;
@@ -374,7 +374,7 @@ public partial class homeFaculty : System.Web.UI.Page
 
                 string filePath = directoryPath + "\\" + ImageName;
 
-                fileUrl = iframeId.Src = string.Format(ResolveUrl("~/DownloadImg/" + ImageName));
+                fileUrl = string.Format(ResolveUrl("~/DownloadImg/" + ImageName));
 
 
                 if ((System.IO.File.Exists(filePath)))

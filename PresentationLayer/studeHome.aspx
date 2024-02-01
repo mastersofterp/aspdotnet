@@ -735,11 +735,7 @@
                                     </ItemTemplate>
                                 </asp:ListView>
 
-                                <asp:Panel ID="pnlPopup" style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;"  runat="server" CssClass="modalPopup" Visible="false">
-                                    <div class="body">
-                                        <iframe runat="server" id="iframeActive"></iframe>
-                                    </div>
-                                </asp:Panel>
+                                
 
                                 <div class="x_title">
                                     <h2>Expired Notice/News</h2>
@@ -775,11 +771,7 @@
                                         </ItemTemplate>
                                     </asp:ListView>
 
-                                    <asp:Panel ID="pnlPopup2" style="position: fixed; z-index: 100001; left: -492px !important; top: -172.5px;"  runat="server" CssClass="modalPopup" Visible="false">
-                                    <div class="body">
-                                        <iframe runat="server" id="iframeExpired"></iframe>
-                                    </div>
-                                </asp:Panel>
+                                    
                                 </div>
                             </div>
                         </div>
