@@ -177,8 +177,17 @@ public partial class ESTABLISHMENT_LEAVES_Reports_ComApplyReport : System.Web.UI
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_NO=" + collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
-
+            //url += "&param=@P_COLLEGE_NO=" + collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "";
+            string college_no = Session["college_nos"].ToString();
+            string[] values = college_no.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_NO=" + collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + "," + "@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + "";
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_NO=" + collegeno + ",@P_FDATE=" + Fdate.ToString().Trim() + ",@P_TDATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_STNO=" + staffno + "," + "@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + "";
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";

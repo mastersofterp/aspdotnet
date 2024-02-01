@@ -920,7 +920,17 @@ public partial class ESTABLISHMENT_LEAVES_Master_OD_Passing_Path : System.Web.UI
 
             //            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-            url += "&param=@username=" + Session["username"].ToString() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString()+",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) ;
+           // url += "&param=@username=" + Session["username"].ToString() + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString()+",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) ;
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@username=" + Session["username"].ToString() + ",@P_COLLEGE_CODE=0,@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            }
+            else
+            {
+                url += "&param=@username=" + Session["username"].ToString() + ",@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@username=" + Session["username"].ToString();
          
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";

@@ -384,7 +384,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ManualBiometricinsert : S
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
 
 
-            url += "&param=@P_FROMDATE=" + Fdate + ",@P_TODATE=" + todt + ",@P_IDNO=" + IDNO + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            //url += "&param=@P_FROMDATE=" + Fdate + ",@P_TODATE=" + todt + ",@P_IDNO=" + IDNO + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=@P_FROMDATE=" + Fdate + ",@P_TODATE=" + todt + ",@P_IDNO=" + IDNO + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";

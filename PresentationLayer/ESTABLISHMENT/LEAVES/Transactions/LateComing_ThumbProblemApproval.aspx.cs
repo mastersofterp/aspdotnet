@@ -2156,7 +2156,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
 
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno +",@P_COUNT=" + 0;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             //divMsg.InnerHtml += " </script>";
@@ -2354,7 +2364,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_COUNT=" + count + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + " ";
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_COUNT=" + count + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + " ";
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+               url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_COUNT=" + count + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + " ";
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_COUNT=" + count + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + " ";
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -2396,8 +2416,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
-
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString();
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -2457,7 +2486,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            }
             // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
 
@@ -2644,7 +2683,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno + ",@P_COUNT=" + 0;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -2722,8 +2771,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + Convert.ToString(idno) + ",@P_DEPTNO=" + deptno + "";
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
-
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROMDATE=" + Fdate.ToString().Trim() + ",@P_TODATE=" + Tdate.ToString().Trim() + ",@P_IDNO=" + idno + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + " ";
+            }
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_MONTH=" + txtMonthYear.Text.ToString().Trim()+",@P_EMPNO=" + empno + ",@P_DEPTNO=" + deptno ;
 
             //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -2934,7 +2992,17 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LateComing__ThumbProblemA
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            string collegeno = Session["college_nos"].ToString();
+            string[] values = collegeno.Split(',');
+            if (values.Length > 1)
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
+            else
+            {
+                url += "&param=@P_COLLEGE_CODE=" + Session["college_nos"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_IDNO=" + idno;
+            }
             // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text + " ";
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROM_DATE=" + Fdate.ToString().Trim() + ",@P_TO_DATE=" + Tdate.ToString().Trim() + ",@P_DEPTNO=" + deptno + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_DEPTNAME=" + ddlDept.SelectedItem.Text +" " ;
 

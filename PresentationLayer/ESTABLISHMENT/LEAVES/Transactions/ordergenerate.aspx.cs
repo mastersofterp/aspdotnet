@@ -724,7 +724,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ordergenerate : System.We
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + GetStudentIDs() + ",UserName=" + Session["username"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(Session["currentsession"]);@P_IDNO
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_PREVSTATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue) + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@username=" + Session["userfullname"].ToString();
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
@@ -755,7 +756,8 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_ordergenerate : System.We
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + GetStudentIDs() + ",UserName=" + Session["username"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(Session["currentsession"]);@P_IDNO
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ddlScheme.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_PREVSTATUS=" + Convert.ToInt32(ddlExamType.SelectedValue);
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_EMPNO=" + Convert.ToInt32(ddlEname.SelectedValue) + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@P_TEXT=" + text + "," + "@username=" + name;
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + "," + "@P_EMPNO=" + Convert.ToInt32(ddlEname.SelectedValue) + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@P_TEXT=" + text + "," + "@username=" + name;
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlcollege2.SelectedValue) + "," + "@P_EMPNO=" + Convert.ToInt32(ddlEname.SelectedValue) + "," + "@P_ORDTRNO=" + Convert.ToInt32(ddlOrder.SelectedValue) + "," + "@P_TEXT=" + text + "," + "@username=" + name;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";

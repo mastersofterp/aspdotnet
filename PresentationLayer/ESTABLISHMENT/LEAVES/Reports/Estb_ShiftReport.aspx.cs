@@ -142,7 +142,7 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Estb_ShiftReport : System.Web.
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT,SHIFT," + rptFileName;
-            url += "&param=@P_FROMDATE=" + FDATE.ToString().Trim() + ",@P_TODATE=" + TODATE.ToString().Trim() + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlstafftype.SelectedValue) + ",@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+            url += "&param=@P_FROMDATE=" + FDATE.ToString().Trim() + ",@P_TODATE=" + TODATE.ToString().Trim() + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlstafftype.SelectedValue) + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ddlCollege.SelectedValue);
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";

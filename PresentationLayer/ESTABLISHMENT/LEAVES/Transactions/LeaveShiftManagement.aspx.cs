@@ -480,6 +480,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_LeaveShiftManagement : Sy
             url += "&path=~,Reports,ESTABLISHMENT,SHIFT," + rptFileName;
 
 
+            //url += "&param=@P_FROMDT=" + frmdt + ",@P_TODT=" + todt + ",@P_INCHARGEEMPLOYEEIDNO=" + Convert.ToInt32(ddlIncharge.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
             url += "&param=@P_FROMDT=" + frmdt + ",@P_TODT=" + todt + ",@P_INCHARGEEMPLOYEEIDNO=" + Convert.ToInt32(ddlIncharge.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue);
             // url += "&param=@P_COLLEGE_NO=" + Convert.ToInt32(ddlCollege.SelectedValue) + ",@P_PERIOD=" + Convert.ToInt32(ddlPeriod.SelectedValue) + ",@P_YEAR=" + Convert.ToInt32(ddlYear.SelectedValue) + ",@P_LEAVENO=" + Convert.ToInt32(ddlLeaveName.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddlDept.SelectedValue) + ",@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + "," + "@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 

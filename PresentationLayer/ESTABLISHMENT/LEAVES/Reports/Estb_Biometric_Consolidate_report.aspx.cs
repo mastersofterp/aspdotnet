@@ -193,7 +193,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Estb_Biometric_Consolidate_rep
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
             //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_DEPTNO=" + deptno + ",@P_EMPNO=" + empno + ",@P_FROMDATE=" + Fdate.ToString().Trim()+",@P_TODATE="+Tdate.ToString().Trim()+"";
 
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy-MM-dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy-MM-dd") + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(idno) + " ";
+            //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy-MM-dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy-MM-dd") + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(idno) + " ";
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_FROMDATE=" + Convert.ToDateTime(txtFdate.Text).ToString("yyyy-MM-dd") + ",@P_TODATE=" + Convert.ToDateTime(txtDate.Text).ToString("yyyy-MM-dd") + " ,@P_STNO=" + Convert.ToInt32(ddlStaffType.SelectedValue) + ",@P_COLLEGE_NO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_DEPTNO=" + Convert.ToInt32(ddldept.SelectedValue) + ",@P_IDNO=" + Convert.ToInt32(idno) + " ";
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
@@ -297,8 +298,8 @@ public partial class ESTABLISHMENT_LEAVES_Reports_Estb_Biometric_Consolidate_rep
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,ESTABLISHMENT," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@FROM_DATE=" + Convert.ToDateTime(txtFdate.Text.Trim()).ToString("yyyy-MM-dd") + ",@TO_DATE=" + Convert.ToDateTime(txtDate.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_STNO=" + staffno + ",@P_DEPT=" + dept + ",@P_COLLEGENO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_IDNO=" + idno;
-
+           // url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@FROM_DATE=" + Convert.ToDateTime(txtFdate.Text.Trim()).ToString("yyyy-MM-dd") + ",@TO_DATE=" + Convert.ToDateTime(txtDate.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_STNO=" + staffno + ",@P_DEPT=" + dept + ",@P_COLLEGENO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_IDNO=" + idno;
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@FROM_DATE=" + Convert.ToDateTime(txtFdate.Text.Trim()).ToString("yyyy-MM-dd") + ",@TO_DATE=" + Convert.ToDateTime(txtDate.Text.Trim()).ToString("yyyy-MM-dd") + ",@P_STNO=" + staffno + ",@P_DEPT=" + dept + ",@P_COLLEGENO=" + Convert.ToInt32(ddlcollege.SelectedValue) + ",@P_IDNO=" + idno;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " </script>";
