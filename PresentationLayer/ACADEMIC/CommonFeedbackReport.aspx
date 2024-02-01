@@ -49,25 +49,25 @@
                         </div>
                         <div class="col-12" id="dvFeedbackReport" runat="server" visible="false">
                             <div class="row">
-                              
-                                    <div class="form-group col-lg-4 col-md-6 col-12">
-                                        <div class="label-dynamic">
-                                            <sup>* </sup>
-                                            <label>Feedback Report Type : </label>
-                                        </div>
-                                        <asp:DropDownList ID="ddlFeedbackReportType" AppendDataBoundItems="true" ToolTip="Please Select Feedback Type" runat="server" data-select2-enable="true"
-                                            CssClass="form-control" OnSelectedIndexChanged="ddlFeedbackReportType_SelectedIndexChanged" AutoPostBack="true">
-                                            <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
-                                            <%--<asp:ListItem Selected="false" Value="1">Faculty Feedback Report</asp:ListItem>--%>
-                                            <%--<asp:ListItem Selected="false" Value="2">Faculty Feedback Report Percentage Wise</asp:ListItem>--%>
-                                            <%--<asp:ListItem Selected="false" Value="3">HOD Feedback Report</asp:ListItem>--%>
-                                        </asp:DropDownList>
-                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFeedbackType"
+
+                                <div class="form-group col-lg-4 col-md-6 col-12">
+                                    <div class="label-dynamic">
+                                        <sup>* </sup>
+                                        <label>Feedback Report Type : </label>
+                                    </div>
+                                    <asp:DropDownList ID="ddlFeedbackReportType" AppendDataBoundItems="true" ToolTip="Please Select Feedback Type" runat="server" data-select2-enable="true"
+                                        CssClass="form-control" OnSelectedIndexChanged="ddlFeedbackReportType_SelectedIndexChanged" AutoPostBack="true">
+                                        <asp:ListItem Selected="True" Value="0">Please Select</asp:ListItem>
+                                        <%--<asp:ListItem Selected="false" Value="1">Faculty Feedback Report</asp:ListItem>--%>
+                                        <%--<asp:ListItem Selected="false" Value="2">Faculty Feedback Report Percentage Wise</asp:ListItem>--%>
+                                        <%--<asp:ListItem Selected="false" Value="3">HOD Feedback Report</asp:ListItem>--%>
+                                    </asp:DropDownList>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlFeedbackType"
                                         Display="None" ErrorMessage="Please select Feedback Type." SetFocusOnError="true"
                                         ValidationGroup="Report" InitialValue="0" />--%>
-                                    </div>
                                 </div>
-                            
+                            </div>
+
                         </div>
                         <div class="col-lg-12 col-md-12 col-12" id="dvFaculttyFeedback" runat="server" visible="false">
                             <div class="box-body">
@@ -121,7 +121,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="Section" runat="server">
                                             <div class="label-dynamic">
-                                                <sup id="sectiondv" runat="server"> </sup>
+                                                <sup id="sectiondv" runat="server"></sup>
                                                 <%--<label>Section</label>--%>
                                                 <asp:Label ID="lblDYddlSection" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
@@ -158,7 +158,7 @@
                                     <asp:Button ID="btnFacultyFeedbackReport" runat="server" Text="Faculty Feedback Report" TabIndex="6" Visible="false"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReport_Click" CssClass="btn btn-primary" />
 
-                                   <%-- <asp:Button ID="btnFacultyFeedbackReportPercentageWise" runat="server" Text="Faculty Feedback Report Percentage Wise" TabIndex="6"
+                                    <%-- <asp:Button ID="btnFacultyFeedbackReportPercentageWise" runat="server" Text="Faculty Feedback Report Percentage Wise" TabIndex="6"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnFacultyFeedbackReportPercentageWise_Click" CssClass="btn btn-primary" Visible="false"/>--%>
                                     <asp:Button ID="btnHODFeedbackReport" runat="server" Text="HOD Feedback Report" TabIndex="6" Visible="false"
                                         ValidationGroup="FeedbackFaculty" OnClick="btnHODFeedbackReport_Click" CssClass="btn btn-primary" />
@@ -181,50 +181,50 @@
 
 
                                 <div class="col-12">
-                            <asp:ListView ID="lvFacultyDetails" runat="server">
-                                <LayoutTemplate>
-                                    <div id="demo-grid" class="vista-grid">
-                                        <div class="sub-heading">
-                                            <h5>Faculty Details</h5>
-                                        </div>
-                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divFacultylist">
-                                            <thead class="bg-light-blue">
-                                                <tr>
-                                                    <th>Sr.No.
-                                                    </th>
-                                                    <th>Teacher name
-                                                    </th>
-                                                    <th>Subject name
-                                                    </th>
-                                                    <th>Average percentage % of feedback
-                                                    </th>                                                    
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr id="itemPlaceholder" runat="server" />
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </LayoutTemplate>
-                                <ItemTemplate>
-                                    <tr class="item">
-                                        <td>
-                                            <%# Container.DataItemIndex + 1%>
-                                        </td>                                        
-                                        <td>
-                                            <asp:LinkButton ID="lnkFacultyName" runat="server" Text='<%# Eval("UA_FULLNAME") %>' OnClick="lnkFacultyName_Click" ToolTip='<%# Eval("UA_NO")%>' CommandArgument='<%# Eval("COURSENO")%>'>LinkButton</asp:LinkButton>  
-                                        </td>
-                                        <td>
-                                            <asp:Label ID="lblsem" Text='<%# Eval("CCODE") + " - " + Eval("SECTION")%>' ToolTip='<%# Eval("COURSENO")%>' runat="server"></asp:Label>
-                                            <asp:HiddenField ID="hdnsection" runat="server" Value=' <%# Eval("SECTIONNO") %>' />
-                                        </td>    
-                                        <td>                                            
-                                             <%# Eval("FEEDBACKPERCENT") %>
-                                        </td>                                       
-                                    </tr>
-                                </ItemTemplate>
-                            </asp:ListView>
-                        </div>
+                                    <asp:ListView ID="lvFacultyDetails" runat="server">
+                                        <LayoutTemplate>
+                                            <div id="demo-grid" class="vista-grid">
+                                                <div class="sub-heading">
+                                                    <h5>Faculty Details</h5>
+                                                </div>
+                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="divFacultylist">
+                                                    <thead class="bg-light-blue">
+                                                        <tr>
+                                                            <th>Sr.No.
+                                                            </th>
+                                                            <th>Teacher name
+                                                            </th>
+                                                            <th>Subject name
+                                                            </th>
+                                                            <th>Average percentage % of feedback
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="itemPlaceholder" runat="server" />
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr class="item">
+                                                <td>
+                                                    <%# Container.DataItemIndex + 1%>
+                                                </td>
+                                                <td>
+                                                    <asp:LinkButton ID="lnkFacultyName" runat="server" Text='<%# Eval("UA_FULLNAME") %>' OnClick="lnkFacultyName_Click" ToolTip='<%# Eval("UA_NO")%>' CommandArgument='<%# Eval("COURSENO")%>'>LinkButton</asp:LinkButton>
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblsem" Text='<%# Eval("CCODE") + " - " + Eval("SECTION")%>' ToolTip='<%# Eval("COURSENO")%>' runat="server"></asp:Label>
+                                                    <asp:HiddenField ID="hdnsection" runat="server" Value=' <%# Eval("SECTIONNO") %>' />
+                                                </td>
+                                                <td>
+                                                    <%# Eval("FEEDBACKPERCENT") %>
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
 
 
 
@@ -301,13 +301,15 @@
                     </div>
                 </div>
             </div>
-            </div>
+          
 
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnreport" />
             <asp:PostBackTrigger ControlID="btnCommentReport" />
             <asp:PostBackTrigger ControlID="btnHODFeedbackReport" />
+            <asp:PostBackTrigger ControlID="btnShow" />
+
         </Triggers>
     </asp:UpdatePanel>
     <script type="text/javascript">

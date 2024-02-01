@@ -2387,8 +2387,8 @@ namespace IITMS
             //    return ds;
             //}
 
-
-            public DataSet GetAttendanceData(int sessionno, int semesterno, int schemeno, DateTime fromdate, DateTime todate, int sectionno, string condition, double per, int subid, string percentageFrom, string percentageTo, int selector)
+            //Updated By Sakshi m on 09012024
+            public DataSet GetAttendanceData(int sessionno, int semesterno, int schemeno, string fromdate, string todate, int sectionno, string condition, double per, int subid, string percentageFrom, string percentageTo, int selector)
             {
                 DataSet ds = null;
                 try
@@ -2421,6 +2421,9 @@ namespace IITMS
                 }
                 return ds;
             }
+
+
+
 
             //FOR Filling Paperset student count for subject 23092014
             public DataSet getPapersetStudentcount(int Session, int Uano)
@@ -2900,7 +2903,8 @@ namespace IITMS
             /// <param name="percentageTo"></param>
             /// <param name="selector"></param>
             /// <returns></returns>
-            public DataSet GetAttendanceData1(int sessionno, int semesterno, int schemeno, DateTime fromdate, DateTime todate, int sectionno, string condition, double per, int subid, string percentageFrom, string percentageTo, int selector)
+            /// //Updated BY Sakshi M on 09012024
+            public DataSet GetAttendanceData1(int sessionno, int semesterno, int schemeno, string fromdate, string todate, int sectionno, string condition, double per, int subid, string percentageFrom, string percentageTo, int selector)
             {
                 DataSet ds = null;
                 try
@@ -2933,7 +2937,6 @@ namespace IITMS
                 }
                 return ds;
             }
-
 
             //Added Mahesh Malve on Dated 23/06/2021
             /// <summary>

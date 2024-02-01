@@ -815,6 +815,27 @@
                                                         </div>
                                                     </div>
 
+                                                    <%-- Added By Vipul Tichakule on date 24-01-2024 --%>
+                                                     <div class="col-12">
+                                                        <div class="sub-heading">
+                                                            <h5>Related to Android </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-lg-6 col-md-6 col-12">
+                                                        <div class="label-dynamic">
+                                                            <sup>*</sup>
+                                                            <asp:Label ID="lblMarkingAttenstudisp" runat="server" Font-Bold="true">Marking Attendance Student Display/Sort Option.</asp:Label>
+                                                        </div>
+                                                        <div class="form-group col-lg-6 col-md-6 col-12">
+                                                            <asp:DropDownList ID="ddlMarkingAttendance" runat="server" CssClass="form-control" data-select2-enable="true" TabIndex="3" AutoPostBack="false">                       
+                                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                <asp:ListItem Value="1">Registration No.</asp:ListItem>
+                                                                <asp:ListItem Value="2">Roll No.</asp:ListItem>
+                                                                <asp:ListItem Value="3">Enrollment No.</asp:ListItem>
+                                                            </asp:DropDownList>                                                          
+                                                        </div>
+                                                    </div>   <%-- end--%>
+
 
                                                 </div>
                                                 <div class="col-12 btn-footer">
@@ -2132,10 +2153,11 @@
     <script>
         $(document).ready(function () {
             var sessionvalue = "<%=Session["OrgId"]%>";
-            BindStudentconfig(sessionvalue,"73","NULL");
+            BindStudentconfig(sessionvalue,"","AddressDetails.aspx");
         });
         function BindStudentconfig(OrgID_,PageNo_,PageName_)
         {
+            debugger;
             //var OrgID_="";
             //var PageNo_="";
             //var PageName_="";
@@ -2548,13 +2570,26 @@
             var pageNo = "";
             var pageName = "";
 
-            if (selectedText === "Add Student") {
+            if (selectedText === "New Student") {
                 pageNo = "73";
-            } else if (selectedText === "Personal Details") {
+            } 
+            else if (selectedText === "Personal Details") {
                 pageName = "PersonalDetails.aspx";
             }
             else if(selectedText === "Admission Details"){
                 pageName = "AdmissionDetails.aspx";
+            }
+            else if(selectedText === "Address Details")
+            {
+                pageName = "AddressDetails.aspx";
+            }
+            else if(selectedText === "Qualification Details")
+            {
+                pageName = "QualificationDetails.aspx";
+            }
+            else if(selectedText === "Other Information")
+            {
+                pageName = "OtherInformation.aspx";
             }
             // Perform an AJAX request
             $.ajax({

@@ -35,6 +35,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             ddlAdmRound.Attributes.Add("disabled", "disabled");
             ddlAdmCategory.Attributes.Add("disabled", "disabled");
             txtDTEAppId.Attributes.Add("disabled", "disabled");
+            txtAbcId.Attributes.Add("disabled", "disabled");
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -296,6 +297,8 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
                 ddlAdmCategory.SelectedValue = dtr["ADMCATEGORYNO"] == null ? "0" : dtr["ADMCATEGORYNO"].ToString();
 
                 txtDTEAppId.Text = dtr["DTE_APPLICATION_ID"] == null ? string.Empty : dtr["DTE_APPLICATION_ID"].ToString();
+
+                txtAbcId.Text = dtr["ABCC_ID"] == null ? string.Empty : dtr["ABCC_ID"].ToString();
 
                 if ((ddlDegree.SelectedValue) == "1")
                 {

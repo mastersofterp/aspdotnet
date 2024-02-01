@@ -1306,11 +1306,27 @@ public partial class Academic_MarkEntryforOIA : System.Web.UI.Page
 
             if (Convert.ToInt32(ds.Tables[0].Rows[0][0]) == 1)
             {
-                objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+               // objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "A.SUBEXAMNAME", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
+                DataSet ds1 = objCommon.FillDropDown("ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "SUBEXAMNO", "", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
+
+                if (ds1.Tables[0].Rows.Count == 0)
+                {
+                    objCommon.DisplayMessage(this.updpanle1, "STOP !!! Exam Rule is not Defined for Selected Subject.", this.Page);
+
+                }
             }
             else
             {
-                objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+               // objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "SUBEXAMNAME", "ISNULL(ACTIVESTATUS,0)=1 AND SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + "", "");
+                objCommon.FillDropDownList(ddlSubExam, "ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "CAST(FLDNAME AS VARCHAR)+'-'+CAST(SUBEXAMNO AS VARCHAR) AS SUBEXAMNO", "A.SUBEXAMNAME", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
+                DataSet ds1 = objCommon.FillDropDown("ACD_SUBEXAM_NAME  A INNER JOIN ACAD_EXAM_RULE B ON (A.SUBEXAMNO=B.EXAMNO AND A.SUBEXAM_SUBID=SUB_ID)", "SUBEXAMNO", "", "ISNULL(A.ACTIVESTATUS,0)=1 AND A.SUBEXAM_SUBID=" + Convert.ToInt32(ds.Tables[0].Rows[0]["SUBID"].ToString()) + " AND A.EXAMNO=" + Convert.ToString(ddlExam.SelectedValue).Split('-')[1] + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + " AND SESSIONNO=" + Convert.ToInt16(ddlSession.SelectedValue) + " AND COURSENO=" + Convert.ToInt32(lblCourse.ToolTip), "");
+
+                if (ds1.Tables[0].Rows.Count == 0)
+                {
+                    objCommon.DisplayMessage(this.updpanle1, "STOP !!! Exam Rule is not Defined for Selected Subject.", this.Page);
+
+                }
             }
         }
         else if (ddlExam.SelectedIndex == 0)

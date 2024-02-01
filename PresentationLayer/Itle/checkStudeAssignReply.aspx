@@ -83,11 +83,11 @@
                                         <label>Replied Answer</label>
                                     </div>
                                     <div class="table table-responsive">
-                                            <CKEditor:CKEditorControl ID="divRepDesc" runat="server" Height="150"    ToolbarStartupExpanded="false" ToolbarCanCollapse="false" Enabled="false"
-                                                BasePath="~/plugins/ckeditor" ToolTip="Enter Description" TabIndex="2">		                        
-                                            </CKEditor:CKEditorControl>
-                                        </div>
-                                  <%--  <asp:Panel ID="pnlReplyDesc" runat="server" BorderColor="Navy" BorderWidth="3px" Heigh="200px">
+                                        <CKEditor:CKEditorControl ID="divRepDesc" runat="server" Height="150" ToolbarStartupExpanded="false" ToolbarCanCollapse="false" Enabled="false"
+                                            BasePath="~/plugins/ckeditor" ToolTip="Enter Description" TabIndex="2">		                        
+                                        </CKEditor:CKEditorControl>
+                                    </div>
+                                    <%--  <asp:Panel ID="pnlReplyDesc" runat="server" BorderColor="Navy" BorderWidth="3px" Heigh="200px">
                                         <div style="height: 300px; background-color: #D1EDD1; padding-top: 25px; padding-left: 5px; padding-left: 5px;">
                                             <div id="divRepDesc" runat="server" style="height: 95%; padding-left: 10px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; background-color: White; border-radius: 25px; overflow: auto">
                                             </div>
@@ -107,24 +107,24 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td id="tdblob" runat="server" visible="false">
-                                                    <asp:Image ID="img1"  runat="server" ImageUrl="~/Images/attachment.png" />
-                                                   <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                    <asp:Image ID="img1" runat="server" ImageUrl="~/Images/attachment.png" />
+                                                    <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
                                                     <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
                                                         <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
                                                 </td>
 
-                                                <td id="tdattachblob" runat="server" visible="false" >
+                                                <td id="tdattachblob" runat="server" visible="false">
                                                     <asp:Image ID="img2" runat="server" ImageUrl="~/Images/attachment.png" />
-                                                                          <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
-                                                           <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
-                                                           --%>     <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
+                                                    <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                    <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
+                                                    --%>     <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
                                                   
-                                                                         </td>
+                                                </td>
 
-                                                                      <td style="text-align: center" id="tdbtndownload" runat="server"  visible="false">
+                                                <td style="text-align: center" id="tdbtndownload" runat="server" visible="false">
                                                     <asp:UpdatePanel ID="updPreview" runat="server">
                                                         <ContentTemplate>
-                                                            <asp:ImageButton ID="imgdow" runat="server"  OnClick="imgdow_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
+                                                            <asp:ImageButton ID="imgdow" runat="server" OnClick="imgdow_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
                                                                 data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
 
                                                         </ContentTemplate>
@@ -132,8 +132,8 @@
                                                             <asp:AsyncPostBackTrigger ControlID="imgdow" EventName="Click" />
                                                         </Triggers>
                                                     </asp:UpdatePanel>
-                                                               
-                                                            </td>
+
+                                                </td>
 
                                             </tr>
                                         </ItemTemplate>
@@ -220,7 +220,7 @@
                                                     <th>RRN</th>
                                                     <th>Student</th>
                                                     <th>Reply Date</th>
-                                                   <%-- <th>Attachment</th>--%>
+                                                    <%-- <th>Attachment</th>--%>
                                                     <th>Check Status</th>
                                                 </tr>
                                             </thead>
@@ -247,13 +247,13 @@
                                             <td>
                                                 <%# Eval("reply_date", "{0:dd-MMM-yyyy}")%>
                                             </td>
-                                           <%-- <td>
+                                            <%-- <td>
                                                 <img alt="Attachment" src="../IMAGES/attachment.png" class='<%# (Convert.ToInt32(Eval("ATTACHMENT")) > 0)? "show_img": "hide_img" %>' />
                                             </td>--%>
                                             <td>
-                                                <asp:Image ID="imgcheck" runat="server" ImageUrl="~/Images/check1.jpg" class='<%# (Convert.ToInt32(Eval("STATUS")) > 0)? "show_img": "hide_img" %>' width="15px" height="15px" />
-                                              <%--  <img alt="checked" src="../IMAGES/check1.jpg" class='<%# (Convert.ToInt32(Eval("STATUS")) > 0)? "show_img": "hide_img" %>' width="15px" height="15px" />
-                                            --%></td>
+                                                <asp:Image ID="imgcheck" runat="server" ImageUrl="~/Images/check1.jpg" class='<%# (Convert.ToInt32(Eval("STATUS")) > 0)? "show_img": "hide_img" %>' Width="15px" Height="15px" />
+                                                <%--  <img alt="checked" src="../IMAGES/check1.jpg" class='<%# (Convert.ToInt32(Eval("STATUS")) > 0)? "show_img": "hide_img" %>' width="15px" height="15px" />
+                                                --%></td>
                                         </tr>
                                     </ItemTemplate>
                                     <EmptyDataTemplate>
@@ -302,7 +302,7 @@
                                                             -
                                                             <%# Eval("SUBMITDATE", "{0:hh:mm:ss tt}")%>
                                             </td>
-                                          <%--  <td>
+                                            <%--  <td>
                                                 <img alt="Attachment" src="../IMAGES/attachment.png" class='<%# (Convert.ToInt32(Eval("ATTACHMENT")) > 0)? "show_img": "hide_img" %>' />
                                             </td>--%>
                                             <td>
@@ -326,12 +326,12 @@
 
                         </div>
 
-                         <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                        </div>
+                        <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                        </div>
                     </asp:Panel>
                 </div>
             </div>
@@ -435,8 +435,15 @@
 
     </script>
 
-
-     <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
+      <script type="text/javascript">
+          function CloseModal() {
+              $("#preview").modal("hide");
+          }
+          function ShowModal() {
+              $("#preview").modal("show");
+          }
+</script>
+    <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
         <div class="modal-dialog text-center">
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                 <ContentTemplate>
@@ -457,7 +464,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <%-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="BTNCLOSE" runat="server" Text="CLOSE" OnClick="BTNCLOSE_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                         </div>
                     </div>
                     </div>

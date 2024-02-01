@@ -17,7 +17,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
    {
        string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
-       public int AddOnline(Config objConfig, int form_category, string STime, string ETime, int UgPg, int orgId, int activeStatus, string DegreeBranchno, int groupno, int is_nri, double nrifees)
+       public int AddOnline(Config objConfig, int form_category, string STime, string ETime, int UgPg, int orgId, int activeStatus, string DegreeBranchno, int groupno, int is_nri, double nrifees, int Admissionsession)
        {
            //int status = Convert.ToInt32(CustomStatus.Others);
            int status = 0;
@@ -27,12 +27,10 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                SqlParameter[] objParams = null;
 
                //Add New Adm
-               objParams = new SqlParameter[24];
+               objParams = new SqlParameter[25];
                objParams[0] = new SqlParameter("@P_ADMBATCH", objConfig.Admbatch);
                objParams[1] = new SqlParameter("@P_DEGREENO", 0);
-
                objParams[2] = new SqlParameter("@P_BRANCHNO", 0);     //Added By Yogesh K. on Date: 25-01-2023
-              
                objParams[3] = new SqlParameter("@P_ADMSTRDATE", objConfig.Config_SDate);
                objParams[4] = new SqlParameter("@P_STARTTIME", STime);
                objParams[5] = new SqlParameter("@P_ADMENDDATE", objConfig.Config_EDate);
@@ -55,8 +53,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                objParams[20] = new SqlParameter("@P_CONFIGID", 1111);
                objParams[21] = new SqlParameter("@P_ISNRI", is_nri);
                objParams[22] = new SqlParameter("@P_NRI_FEES", nrifees);
-               objParams[23] = new SqlParameter("@P_OUT", SqlDbType.Int);
-               objParams[23].Direction = ParameterDirection.Output;
+               objParams[23] = new SqlParameter("@P_ADMISSION_SESSION", Admissionsession);
+               objParams[24] = new SqlParameter("@P_OUT", SqlDbType.Int);
+               objParams[24].Direction = ParameterDirection.Output;
 
                object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_ADD_ADMISSION_CONFIG_GROUPWISE", objParams, true);
 
@@ -69,6 +68,8 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                    status = Convert.ToInt32(CustomStatus.Error);
                else if (ret != null && ret.ToString() == "1")
                    status = Convert.ToInt32(CustomStatus.DuplicateRecord);
+               else if (ret != null && ret.ToString() == "3")
+                   status = 3;
                
            }
            catch (Exception ex)
@@ -79,7 +80,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
            return status;
        }
 
-       public int UpdateOnline(Config objConfig, int form_category, string STime, string ETime, int UgPg, int activeStatus, string ConfigID, string DegreeBranchno,int groupno, int OrgId, int is_nri, double nrifees)
+       public int UpdateOnline(Config objConfig, int form_category, string STime, string ETime, int UgPg, int activeStatus, string ConfigID, string DegreeBranchno,int groupno, int OrgId, int is_nri, double nrifees, int Admissionsession)
        {
            int retStatus = Convert.ToInt32(CustomStatus.Others);
 
@@ -89,7 +90,7 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                SqlParameter[] objParams = null;
 
                //update
-               objParams = new SqlParameter[24];
+               objParams = new SqlParameter[25];
                objParams[0] = new SqlParameter("@P_ADMBATCH", objConfig.Admbatch);
                objParams[1] = new SqlParameter("@P_DEGREENO", 0);
 
@@ -117,8 +118,9 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                objParams[20] = new SqlParameter("@P_ORGANIZATION_ID", OrgId);
                objParams[21] = new SqlParameter("@P_ISNRI", is_nri);
                objParams[22] = new SqlParameter("@P_NRI_FEES", nrifees);
-               objParams[23] = new SqlParameter("@P_OUT",SqlDbType.Int);
-               objParams[23].Direction = ParameterDirection.Output;
+               objParams[23] = new SqlParameter("@P_ADMISSION_SESSION", Admissionsession);
+               objParams[24] = new SqlParameter("@P_OUT",SqlDbType.Int);
+               objParams[24].Direction = ParameterDirection.Output;
 
                object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPD_ADMISSION_CONFIG_GROUPWISE", objParams, true));
                if (ret != null && ret.ToString() == "2")
@@ -129,6 +131,8 @@ namespace IITMS.UAIMS.BusinessLogicLayer.BusinessLogic
                    retStatus = Convert.ToInt32(CustomStatus.DuplicateRecord);
                else if (ret != null && ret.ToString() == "3")
                    retStatus = Convert.ToInt32(CustomStatus.RecordExist);
+               else if (ret != null && ret.ToString() == "4")
+                   retStatus = 4;
            }
            catch (Exception ex)
            {

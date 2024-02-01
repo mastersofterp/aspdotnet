@@ -133,7 +133,7 @@
                                                                         ValidationGroup="Show" CssClass="btn btn-primary" TabIndex="2" />
                                                                     <asp:RequiredFieldValidator ID="rfvregno" runat="server"
                                                                         ControlToValidate="txtRollNo" Display="None"
-                                                                        ErrorMessage="Please Enter REGNO" SetFocusOnError="true"
+                                                                        ErrorMessage="Please Enter REGNO/" SetFocusOnError="true"
                                                                         ValidationGroup="Submit" />
                                                                 </div>
 
@@ -456,6 +456,8 @@
                                                                     </th>
                                                                     <th>Download Document 
                                                                     </th>
+                                                                    <td id="thconduct">Faculty Status 
+                                                                    </td>
                                                                     <th>Status
                                                                     </th>
                                                                 </tr>
@@ -508,6 +510,9 @@
                                                                 </asp:UpdatePanel>
                                                             </td>
                                                             <td>
+                                                                <asp:Label ID="lblFacStatus" runat="server" Text='<%# Eval("APPROVAL_FAC_STATUS")%>'></asp:Label>
+                                                            </td>
+                                                            <td>
                                                                 <asp:Label ID="lblAStatus" runat="server" Text='<%# Eval("APPROVAL_STATUS")%>'></asp:Label>
                                                             </td>
                                                         </tr>
@@ -554,6 +559,9 @@
                                                                 </asp:UpdatePanel>
                                                             </td>
                                                             <td>
+                                                                <asp:Label ID="lblFacStatus" runat="server" Text='<%# Eval("APPROVAL_FAC_STATUS")%>'></asp:Label>
+                                                            </td>
+                                                            <td>
                                                                 <asp:Label ID="lblAStatus" runat="server" Text='<%# Eval("APPROVAL_STATUS")%>'></asp:Label>
                                                             </td>
                                                         </tr>
@@ -564,7 +572,7 @@
 
                                         </div>
                                     </div>
-                                   
+
 
                                     <div class="tab-pane" id="tab_3">
                                         <div>
@@ -611,6 +619,8 @@
                                                                         </th>
                                                                         <td>Download Document
                                                                         </td>
+                                                                        <td id="thcount">Faculty Status 
+                                                                        </td>
                                                                         <th>Status
                                                                         </th>
                                                                     </tr>
@@ -633,7 +643,7 @@
                                                                     <asp:HiddenField ID="hdnODTYPE" runat="server" Value='<%# Eval("ODTYPE")%>' />
                                                                     <asp:HiddenField ID="OdCount" runat="server" Value='<%# Eval("OD_COUNT")%>' />
                                                                 </td>
-                                                               <td style="white-space: normal;">
+                                                                <td style="white-space: normal;">
                                                                     <%# Eval("ACADEMIC_LEAVE_NAME")%>
                                                                 </td>
                                                                 <td>
@@ -653,6 +663,9 @@
                                                                             <%--<asp:AsyncPostBackTrigger ControlID="imgbtnpfPrevDoc2" EventName="Click" />--%>
                                                                         </Triggers>
                                                                     </asp:UpdatePanel>
+                                                                </td>
+                                                                <td>
+                                                                    <asp:Label ID="Label1" class="status_app" runat="server" Text='<%# Eval("APPROVAL_FAC_STATUS")%>'></asp:Label>
                                                                 </td>
                                                                 <td title="View Details">
                                                                     <asp:UpdatePanel ID="updShow" runat="server">
@@ -706,6 +719,9 @@
                                                                         </Triggers>
                                                                     </asp:UpdatePanel>
                                                                 </td>
+                                                                <td>
+                                                                    <asp:Label ID="Label1" class="status_app" runat="server" Text='<%# Eval("APPROVAL_FAC_STATUS")%>'></asp:Label>
+                                                                </td>
                                                                 <td title="View Details">
                                                                     <%-- <a href="#" id="myBtn" data-target="#myModal1" data-toggle="modal" style="cursor: pointer; font-weight: bold;">
                                                                 <asp:Label ID="lblStatus" runat="server" Text='<%# Eval("APPROVAL_STATUS")%>'></asp:Label></a>--%>
@@ -718,11 +734,10 @@
                                                         </AlternatingItemTemplate>
                                                     </asp:ListView>
                                                 </div>
-
                                             </ContentTemplate>
                                         </asp:UpdatePanel>
                                     </div>
-                                     <div id="divMsg" runat="Server"></div>
+                                    <div id="divMsg" runat="Server"></div>
                                 </div>
                             </div>
                         </div>

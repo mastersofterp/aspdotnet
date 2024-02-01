@@ -36,16 +36,23 @@ namespace IITMS
                 private string _ATTACHMENT;
                 private string _FILEPATH;
                 private DataTable _AttachTable;
-               
-                               
+                private int _IS_BLOB;
+
+
                 #endregion
 
                 #region Public Members
 
-                     public DataTable AttachTable
+                public DataTable AttachTable
                 {
                     get { return _AttachTable; }
                     set { _AttachTable = value; }
+                }
+
+                public int IS_BLOB
+                {
+                    get { return _IS_BLOB; }
+                    set { _IS_BLOB = value; }
                 }
                 public string FILEPATH
                 {
@@ -64,8 +71,8 @@ namespace IITMS
                     get { return _CAT_NAME; }
                     set { _CAT_NAME = value; }
                 }
-                
-                
+
+
                 public int SUB_HEAD
                 {
                     get { return _SUB_HEAD; }
@@ -92,7 +99,7 @@ namespace IITMS
                     get { return _SIZE; }
                     set { _SIZE = value; }
                 }
-                
+
                 public string FILENAME
                 {
                     get { return _FILENAME; }
@@ -165,8 +172,8 @@ namespace IITMS
                 }
                 public string DEPARTMENTS
                 {
-                    get { return _DEPARTMENTS ; }
-                    set { _DEPARTMENTS  = value; }
+                    get { return _DEPARTMENTS; }
+                    set { _DEPARTMENTS = value; }
                 }
                 #endregion
             }

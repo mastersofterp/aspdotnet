@@ -529,16 +529,21 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
     }
     protected void ddlFeedbackTyp_SelectedIndexChanged(object sender, EventArgs e)
     {
-        int feedbackmode = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_MASTER", "MODE_ID", "FEEDBACK_NO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue)));
+        if (Convert.ToInt32(ddlFeedbackTyp.SelectedValue) > 0)
+        {
+            int feedbackmode = Convert.ToInt32(objCommon.LookUp("ACD_FEEDBACK_MASTER", "MODE_ID", "FEEDBACK_NO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue)));
 
-        if (feedbackmode == 3 && Session["OrgId"].ToString() == "2")
-        {
-            btnCommentReport.Visible = true;
+            if (feedbackmode == 3 && Session["OrgId"].ToString() == "2")
+            {
+                btnCommentReport.Visible = true;
+            }
+            else
+            {
+                btnCommentReport.Visible = false;
+            }
         }
-        else
-        {
-            btnCommentReport.Visible = false;
-        }
+        lvFacultyDetails.DataSource = null;
+        lvFacultyDetails.DataBind();
     }
     protected void Button1_Click(object sender, EventArgs e)
     {
@@ -691,7 +696,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
         SP_Parameters = "@P_SESSIONNO,@P_DEGREENO,@P_BRANCHNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO,@P_FEEDBACK_TYPENO";
         Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["degreeno"]) + "," + Convert.ToInt32(ViewState["branchno"]) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue) + "," + Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
         ds = objCommon.DynamicSPCall_Select(SP_Name, SP_Parameters, Call_Values);
-        if (ds.Tables.Count > 0 && ds.Tables != null)
+        if (ds.Tables[0].Rows.Count > 0 && ds.Tables != null)
         {
             lvFacultyDetails.DataSource = ds;
             lvFacultyDetails.DataBind();
@@ -715,7 +720,7 @@ public partial class ACADEMIC_CommonFeedbackReport : System.Web.UI.Page
             int courseno = Convert.ToInt32(lnk.CommandArgument);
             HiddenField hdnsection = lnk.FindControl("hdnsection") as HiddenField;
             int sectionno = Convert.ToInt32(hdnsection.Value);
-            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(sectionno) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO=" + courseno + "";
+            string param = "@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + Convert.ToInt32(ViewState["degreeno"]) + ",@P_BRANCHNO=" + Convert.ToInt32(ViewState["branchno"]) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_SECTIONNO=" + Convert.ToInt32(sectionno) + ",@P_UA_NO=" + UA_NO + ",@P_COURSENO=" + courseno + ",@P_FEEDBACK_TYPENO=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue) + "";
             ShowReportNew("FeedBack_Analysis_Report", "rptFeedbackAnalysisReport_PCEN.rpt", param);
         }
         catch (Exception ex)

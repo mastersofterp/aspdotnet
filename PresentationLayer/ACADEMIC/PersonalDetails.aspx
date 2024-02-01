@@ -1017,7 +1017,7 @@
                                                     <div class="row">
                                                         <div class="form-group col-lg-6 col-md-6 col-12" id="divPhotograph" runat="server">
                                                             <div class="label-dynamic">
-                                                                <%--<sup id="supPhotograph" runat="server">* </sup>--%>
+                                                                <sup id="supPhotograph" runat="server">* </sup>
                                                                 <label>Photo</label>
                                                             </div>
                                                             <asp:Image ID="imgPhoto" runat="server" Width="128px" Height="128px" /><br />
@@ -1030,7 +1030,7 @@
                                                         </div>
                                                         <div class="form-group col-lg-6 col-md-6 col-12" id="divSignature" runat="server">
                                                             <div class="label-dynamic">
-                                                                <%--<sup id="supSignature" runat="server">* </sup>--%>
+                                                                <sup id="supSignature" runat="server">* </sup>
                                                                 <label>Signature</label>
                                                             </div>
                                                             <asp:Image ID="ImgSign" runat="server" Width="150px" Height="40px" /><br />

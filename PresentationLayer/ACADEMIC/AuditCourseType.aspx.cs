@@ -148,7 +148,7 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
         if (Convert.ToInt32(Session["usertype"]) == 2 || Convert.ToInt32(Session["usertype"]) == 1)
         {
             this.PopulateDropDownList();
-            DataSet ds = objSReg.Get_Student_Details_for_Course_Registration(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()), Convert.ToInt32(Session["usertype"]));
+            DataSet ds = objSReg.Get_Student_Details_for_Course_Registration(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()), Convert.ToInt32(Session["usertype"]),5);
             ViewState["DataSet_Student_Details"] = ds;
             if (CheckActivity(ds))
                 divNote.Visible = true;
@@ -541,8 +541,8 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                         objCommon.DisplayMessage(this.Page, "Course Registration Done Successfully.You can print the registration slip.!!", this.Page);
 
                     else
-                        objCommon.DisplayMessage(this.Page, "Course Registration Done Successfully.You can print the registration slip after Faculty Advisor/Admin Approve.!!", this.Page);
-
+                       // objCommon.DisplayMessage(this.Page, "Course Registration Done Successfully.You can print the registration slip after Faculty Advisor/Admin Approve.!!", this.Page);
+                        objCommon.DisplayMessage(this.Page, "Audit Course Registration Done Successfully.You can print the Registration Slip", this.Page);
                     string IsCourseRegistered = objCommon.LookUp("ACD_STUDENT_RESULT", "DISTINCT 1", "ISNULL(REGISTERED,0)=1  AND ISNULL(ACCEPTED,0)=1 AND IDNO=" + Convert.ToInt32(lblName.ToolTip));
                     if (string.IsNullOrEmpty(IsCourseRegistered))
                     {
@@ -1890,195 +1890,204 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
 
     protected void btnProceed_Click(object sender, EventArgs e)
     {
-        if (Session["usertype"].ToString().Equals("2"))     //Student 
-        {
 
-            Divsearch.Visible = false;
-            divsteps.Visible = false;
-            divNote.Visible = false;
-            divCourses.Visible = true;
-            divsession.Visible = true;
-            divmaincoursereg.Visible = true;
+       
 
-            //updEdit.Visible = true;
-            trSession_name.Visible = false;
-            //divsession.Visible = false;
-            trRollNo.Visible = false;
-            divNote.Visible = false;
-            btnShow.Visible = false;
-            btnCancel.Visible = false;
-            tblInfo.Visible = true;
-            Divsearch.Visible = false;
-            //string count = objCommon.LookUp("ACD_STUDENT_RESULT WITH (NOLOCK)", "COUNT(1)", "IDNO=" + Session["idno"].ToString() + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND REGISTERED=1 AND ISNULL(CANCEL,0)=0");
-            DataTable dt;
-            DataSet ds = (DataSet)ViewState["DataSet_Student_Details"];
-            dt = (ds != null && ds.Tables[1].Rows.Count > 0) ? ds.Tables[1] : null;
-            //int count = (dt != null && dt.Rows.Count > 0) ? dt.AsEnumerable().Count(row => row.Field<int>("REGISTERED") == 1 && row.Field<int>("ACCEPTED") == 1 && row.Field<int>("CANCEL") == 0) : 0;
-            int count = (dt != null && dt.Rows.Count > 0) ? dt.AsEnumerable().Count(row => row.Field<int>("STUD_COURSE_REG") == 1 && row.Field<int>("CANCEL") == 0) : 0;
-            //string count =objCommon.LookUp("ACD_STUDENT_RESULT WITH (NOLOCK)", "COUNT(1)", "IDNO=" + Session["idno"].ToString() + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCEL,0)=0 AND ISNULL(REGISTERED,0)=1 AND ISNULL(ACCEPTED,0)=1");
-            DataTable dt1 = (ds != null && ds.Tables[3].Rows.Count > 0) ? ds.Tables[3] : null;
-            int IsCrsRegistred = (dt1 != null && dt.Rows.Count > 0) ? dt1.AsEnumerable().Count(row => row.Field<int>("REGISTERED") == 1) : 0;
 
-            ShowDetails();
-            //DataSet dsCourseRegistred = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
-            //    "COUNT(ISNULL(REGISTERED,0))TOTAL_REGISTERED_COURSE", " COUNT(DISTINCT COURSENO) TOTAL_COURSES",
-            //    "ISNULL(CANCEL,0)= 0  AND ISNULL(PREV_STATUS,0)=0  AND IDNO=" + Convert.ToInt32(lblName.ToolTip) 
-            //    + " AND SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip)
-            //    + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
-            //    + " AND SEMESTERNO="+Convert.ToInt32(lblSemester.ToolTip), "");
-
-            DataSet dsCourseRegistred = objSReg.Get_Student_Registered_Course(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip));
-
-            int COREREGISTERED = 0;
-            int ELECTREGISTERED = 0;
-            int GLOBALREGISTERED = 0;
-            int StudCOREREGISTERED = 0;
-            int StudELECTREGISTERED = 0;
-            int StudGLOBALREGISTERED = 0;
-
-            if (dsCourseRegistred != null && dsCourseRegistred.Tables[0].Rows.Count > 0)
+            if (Session["usertype"].ToString().Equals("2"))     //Student 
             {
-                if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["COREREGISTERED"].ToString()))
-                    COREREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["COREREGISTERED"].ToString());
-                else
-                    COREREGISTERED = 0;
 
-                if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString()))
-                    ELECTREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString());
-                else
-                    ELECTREGISTERED = 0;
+                Divsearch.Visible = false;
+                divsteps.Visible = false;
+                divNote.Visible = false;
+                divCourses.Visible = true;
+                divsession.Visible = true;
+                divmaincoursereg.Visible = true;
 
-                if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString()))
-                    GLOBALREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString());
-                else
-                    GLOBALREGISTERED = 0;
+                //updEdit.Visible = true;
+                trSession_name.Visible = false;
+                //divsession.Visible = false;
+                trRollNo.Visible = false;
+                divNote.Visible = false;
+                btnShow.Visible = false;
+                btnCancel.Visible = false;
+                tblInfo.Visible = true;
+                Divsearch.Visible = false;
+                //string count = objCommon.LookUp("ACD_STUDENT_RESULT WITH (NOLOCK)", "COUNT(1)", "IDNO=" + Session["idno"].ToString() + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND REGISTERED=1 AND ISNULL(CANCEL,0)=0");
+                DataTable dt;
+                DataSet ds = (DataSet)ViewState["DataSet_Student_Details"];
+                dt = (ds != null && ds.Tables[1].Rows.Count > 0) ? ds.Tables[1] : null;
+                //int count = (dt != null && dt.Rows.Count > 0) ? dt.AsEnumerable().Count(row => row.Field<int>("REGISTERED") == 1 && row.Field<int>("ACCEPTED") == 1 && row.Field<int>("CANCEL") == 0) : 0;
+                int count = (dt != null && dt.Rows.Count > 0) ? dt.AsEnumerable().Count(row => row.Field<int>("STUD_COURSE_REG") == 1 && row.Field<int>("CANCEL") == 0) : 0;
+                //string count =objCommon.LookUp("ACD_STUDENT_RESULT WITH (NOLOCK)", "COUNT(1)", "IDNO=" + Session["idno"].ToString() + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND ISNULL(CANCEL,0)=0 AND ISNULL(REGISTERED,0)=1 AND ISNULL(ACCEPTED,0)=1");
+                DataTable dt1 = (ds != null && ds.Tables[3].Rows.Count > 0) ? ds.Tables[3] : null;
+                int IsCrsRegistred = (dt1 != null && dt.Rows.Count > 0) ? dt1.AsEnumerable().Count(row => row.Field<int>("REGISTERED") == 1) : 0;
 
-                //ELECTREGISTERED=(!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString())?  Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString()):0;
-                //GLOBALREGISTERED=(!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString())?Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString()):0;
+                ShowDetails();
+                //DataSet dsCourseRegistred = objCommon.FillDropDown("ACD_STUDENT_RESULT WITH (NOLOCK)",
+                //    "COUNT(ISNULL(REGISTERED,0))TOTAL_REGISTERED_COURSE", " COUNT(DISTINCT COURSENO) TOTAL_COURSES",
+                //    "ISNULL(CANCEL,0)= 0  AND ISNULL(PREV_STATUS,0)=0  AND IDNO=" + Convert.ToInt32(lblName.ToolTip) 
+                //    + " AND SCHEMENO=" + Convert.ToInt32(lblScheme.ToolTip)
+                //    + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
+                //    + " AND SEMESTERNO="+Convert.ToInt32(lblSemester.ToolTip), "");
 
-                IsCrsRegistred = (COREREGISTERED == 1 && ELECTREGISTERED == 1 && GLOBALREGISTERED == 1) ? 1 : 0;
-            }
+                DataSet dsCourseRegistred = objSReg.Get_Student_Registered_Course(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(lblName.ToolTip), Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip));
 
-            else
-            {
-                IsCrsRegistred = 0;
+                int COREREGISTERED = 0;
+                int ELECTREGISTERED = 0;
+                int GLOBALREGISTERED = 0;
+                int StudCOREREGISTERED = 0;
+                int StudELECTREGISTERED = 0;
+                int StudGLOBALREGISTERED = 0;
 
-                if (dsCourseRegistred != null && dsCourseRegistred.Tables[1].Rows.Count > 0)
+                if (dsCourseRegistred != null && dsCourseRegistred.Tables[0].Rows.Count > 0)
                 {
-                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["COREREGISTERED"].ToString()))
-                        StudCOREREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["COREREGISTERED"].ToString());
+                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["COREREGISTERED"].ToString()))
+                        COREREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["COREREGISTERED"].ToString());
                     else
-                        StudCOREREGISTERED = 0;
+                        COREREGISTERED = 0;
 
-                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["ELECTREGISTERED"].ToString()))
-                        StudELECTREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["ELECTREGISTERED"].ToString());
+                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString()))
+                        ELECTREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString());
                     else
-                        StudELECTREGISTERED = 0;
+                        ELECTREGISTERED = 0;
 
-                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["GLOBALREGISTERED"].ToString()))
-                        StudGLOBALREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["GLOBALREGISTERED"].ToString());
+                    if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString()))
+                        GLOBALREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString());
                     else
-                        StudGLOBALREGISTERED = 0;
+                        GLOBALREGISTERED = 0;
+
+                    //ELECTREGISTERED=(!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString())?  Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["ELECTREGISTERED"].ToString()):0;
+                    //GLOBALREGISTERED=(!string.IsNullOrEmpty(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString())?Convert.ToInt32(dsCourseRegistred.Tables[0].Rows[0]["GLOBALREGISTERED"].ToString()):0;
+
+                    IsCrsRegistred = (COREREGISTERED == 1 && ELECTREGISTERED == 1 && GLOBALREGISTERED == 1) ? 1 : 0;
                 }
-            }
+
+                else
+                {
+                    IsCrsRegistred = 0;
+
+                    if (dsCourseRegistred != null && dsCourseRegistred.Tables[1].Rows.Count > 0)
+                    {
+                        if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["COREREGISTERED"].ToString()))
+                            StudCOREREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["COREREGISTERED"].ToString());
+                        else
+                            StudCOREREGISTERED = 0;
+
+                        if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["ELECTREGISTERED"].ToString()))
+                            StudELECTREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["ELECTREGISTERED"].ToString());
+                        else
+                            StudELECTREGISTERED = 0;
+
+                        if (!string.IsNullOrEmpty(dsCourseRegistred.Tables[1].Rows[0]["GLOBALREGISTERED"].ToString()))
+                            StudGLOBALREGISTERED = Convert.ToInt32(dsCourseRegistred.Tables[1].Rows[0]["GLOBALREGISTERED"].ToString());
+                        else
+                            StudGLOBALREGISTERED = 0;
+                    }
+                }
 
 
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-
-                if (IsCrsRegistred == 0)
+                if (ds.Tables[0].Rows.Count > 0)
                 {
 
-                    btnSubmit.Enabled = true;
-                    //btnPrintRegSlip.Enabled = false;
-                    lvCurrentSubjects.Enabled = false;
-                    string coursePattern = ds.Tables[0].Rows[0]["CORE_ELECT_GLOBAL_COURSE_TYPE_NO"].ToString();
-                    if (!string.IsNullOrEmpty(coursePattern))
+                    if (IsCrsRegistred == 0)
                     {
-                        if (coursePattern.Contains("2"))
+
+                        btnSubmit.Enabled = true;
+                        //btnPrintRegSlip.Enabled = false;
+                        lvCurrentSubjects.Enabled = false;
+                        string coursePattern = ds.Tables[0].Rows[0]["CORE_ELECT_GLOBAL_COURSE_TYPE_NO"].ToString();
+                        if (!string.IsNullOrEmpty(coursePattern))
                         {
-                            if (ELECTREGISTERED == 1)
+                            if (coursePattern.Contains("2"))
+                            {
+                                if (ELECTREGISTERED == 1)
+                                {
+                                    //lvUniCoreSub.Enabled = false;
+                                    lvUniCoreSub.Visible = coursePattern.Contains("2") ? true : false;
+                                }
+                                else
+                                {
+                                    //lvUniCoreSub.Enabled = coursePattern.Contains("2") ? true : false;
+                                    lvUniCoreSub.Visible = coursePattern.Contains("2") ? true : false;
+                                }
+                            }
+                            else
                             {
                                 //lvUniCoreSub.Enabled = false;
-                                lvUniCoreSub.Visible = coursePattern.Contains("2") ? true : false;
+                                lvUniCoreSub.Visible = StudELECTREGISTERED == 1 ? true : false;
+                            }
+                            if (coursePattern.Contains("3"))
+                            {
+                                if (GLOBALREGISTERED == 1)
+                                {
+                                    // lvGlobalSubjects.Enabled = false;
+                                    lvGlobalSubjects.Visible = coursePattern.Contains("3") ? true : false;
+                                }
+                                else
+                                {
+                                    //lvGlobalSubjects.Enabled = coursePattern.Contains("3") ? true : false;
+                                    lvGlobalSubjects.Visible = coursePattern.Contains("3") ? true : false;
+                                }
                             }
                             else
                             {
-                                //lvUniCoreSub.Enabled = coursePattern.Contains("2") ? true : false;
-                                lvUniCoreSub.Visible = coursePattern.Contains("2") ? true : false;
+                                //lvGlobalSubjects.Enabled = false;
+                                lvGlobalSubjects.Visible = StudGLOBALREGISTERED == 1 ? true : false;
                             }
                         }
                         else
                         {
-                            //lvUniCoreSub.Enabled = false;
-                            lvUniCoreSub.Visible = StudELECTREGISTERED == 1 ? true : false;
+                            lvUniCoreSub.Visible = false;
+                            lvGlobalSubjects.Visible = false;
                         }
-                        if (coursePattern.Contains("3"))
-                        {
-                            if (GLOBALREGISTERED == 1)
-                            {
-                               // lvGlobalSubjects.Enabled = false;
-                                lvGlobalSubjects.Visible = coursePattern.Contains("3") ? true : false;
-                            }
-                            else
-                            {
-                                //lvGlobalSubjects.Enabled = coursePattern.Contains("3") ? true : false;
-                                lvGlobalSubjects.Visible = coursePattern.Contains("3") ? true : false;
-                            }
-                        }
-                        else
-                        {
-                            //lvGlobalSubjects.Enabled = false;
-                            lvGlobalSubjects.Visible = StudGLOBALREGISTERED == 1 ? true : false;
-                        }
+                        //lvUniCoreSub.Enabled = () ? false : true;
+                        //lvGlobalSubjects.Enabled = (GLOBALREGISTERED == 1) ? false : true;
                     }
                     else
                     {
-                        lvUniCoreSub.Visible = false;
-                        lvGlobalSubjects.Visible = false;
+                        objCommon.DisplayMessage(UpdatePanel1, "Audit Course registration Approved successfully..Now you can Generate Registration Slip..!!", this.Page);
+                        btnSubmit.Enabled = false;
+                        btnPrintRegSlip.Enabled = true;
+                        lvCurrentSubjects.Enabled = false;
+                        lvUniCoreSub.Enabled = false;
+                        lvGlobalSubjects.Enabled = false;
                     }
-                    //lvUniCoreSub.Enabled = () ? false : true;
-                    //lvGlobalSubjects.Enabled = (GLOBALREGISTERED == 1) ? false : true;
                 }
                 else
                 {
-                    objCommon.DisplayMessage(UpdatePanel1, "Audit Course registration Approved successfully..Now you can Generate Registration Slip..!!", this.Page);
-                    btnSubmit.Enabled = false;
-                    btnPrintRegSlip.Enabled = true;
-                    lvCurrentSubjects.Enabled = false;
-                    lvUniCoreSub.Enabled = false;
-                    lvGlobalSubjects.Enabled = false;
+                    if (count > 0)
+                    {
+                        objCommon.DisplayMessage(UpdatePanel1, "Audit Course registration already done..Now you can Generate Registration Slip..!!", this.Page);
+                        lvCurrentSubjects.Enabled = false;
+                        lvUniCoreSub.Enabled = false;
+                        lvGlobalSubjects.Enabled = false;
+                        btnSubmit.Enabled = false;
+                        btnPrintRegSlip.Enabled = true;
+                    }
                 }
+            }
+            else if (Session["usertype"].ToString().Equals("1"))
+            {
+                updEdit.Visible = true;
+                Divsearch.Visible = true;
+                divsteps.Visible = false;
+                divNote.Visible = false;
+                divCourses.Visible = true;
             }
             else
             {
-                if (count > 0)
-                {
-                    objCommon.DisplayMessage(UpdatePanel1, "Audit Course registration already done..Now you can Generate Registration Slip..!!", this.Page);
-                    lvCurrentSubjects.Enabled = false;
-                    lvUniCoreSub.Enabled = false;
-                    lvGlobalSubjects.Enabled = false;
-                    btnSubmit.Enabled = false;
-                    btnPrintRegSlip.Enabled = true;
-                }
+                divNote.Visible = false;
+                divCourses.Visible = true;
+                ddlSession.SelectedIndex = 0;
+                txtRollNo.Text = string.Empty;
+                PopulateDropDownList();
             }
-        }
-        else if (Session["usertype"].ToString().Equals("1"))
-        {
-            updEdit.Visible = true;
-            Divsearch.Visible = true;
-            divsteps.Visible = false;
-            divNote.Visible = false;
-            divCourses.Visible = true;
-        }
-        else
-        {
-            divNote.Visible = false;
-            divCourses.Visible = true;
-            ddlSession.SelectedIndex = 0;
-            txtRollNo.Text = string.Empty;
-            PopulateDropDownList();
-        }
+
+            //if (!CheckActivity())
+            //    return;
+
+        
     }
 
     protected void btnPrintChallan_Click(object sender, EventArgs e)
@@ -2137,6 +2146,7 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
     protected void btnPrintRegSlip_Click(object sender, EventArgs e)
     {
         // btnExcelReport.Visible = false;
+
         int count = 0;
         int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
         int idno = Convert.ToInt32(Session["idno"]);
@@ -2308,16 +2318,19 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
         string branchno = string.Empty;
         string semesterno = string.Empty;
         ActivityController objActController = new ActivityController();
-        DataSet ds = objSReg.Get_Student_Details_for_Course_Registration(Convert.ToInt32(Session["idno"]), Convert.ToInt32(84), Convert.ToInt32(Session["usertype"]));
+        int idno = Convert.ToInt32(Session["idno"]);
+        int page = Convert.ToInt32(Request.QueryString["pageno"].ToString());
+        int user = Convert.ToInt32(Session["usertype"]);
+        DataSet ds = objSReg.Get_Student_Details_for_Course_Registration(Convert.ToInt32(Session["idno"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()), Convert.ToInt32(Session["usertype"]), 5);
         ViewState["DataSet_Student_Details"] = ds;
         if (ds.Tables[0].Rows.Count > 0)
         {
-            //if (ds.Tables[0].Rows[0]["STARTED"].ToString().ToLower().Equals("false"))
-            //{
-            //    objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
-            //    pnlMain.Visible = false;
-            //    ret = false;
-            //}
+            if (ds.Tables[0].Rows[0]["STARTED"].ToString().ToLower().Equals("false"))
+            {
+                objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
+                pnlMain.Visible = false;
+                ret = false;
+            }
 
             int IsFeeSubmitted = 0;
             if (!string.IsNullOrEmpty(ds.Tables[0].Rows[0]["PAYMENT_APPLICABLE_FOR_SEM_WISE"].ToString()) && ds.Tables[0].Rows[0]["PAYMENT_APPLICABLE_FOR_SEM_WISE"].ToString().ToLower().Equals("true"))
@@ -2338,12 +2351,12 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
                 ret = false;
             }
         }
-        //else
-        //{
-        //    objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
-        //    pnlMain.Visible = false;
-        //    ret = false;
-        //}
+        else
+        {
+            objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
+            pnlMain.Visible = false;
+            ret = false;
+        }
 
         return ret;
     }
@@ -2486,9 +2499,11 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
     {
         try
         {
-            // divDemandCreation.Visible = true;
-            // btnCreateDemand.Visible = true;
-            LinkButton lnk = sender as LinkButton;
+            //Added By Vipul Tichakule on dated 18-01-2024 as per Tno :
+            LinkButton btnlink = sender as LinkButton;
+            int idno = int.Parse(btnlink.CommandArgument);
+            Session["idno"] = idno;
+            Session["stuinfoidno"] = idno;
             string url = string.Empty;
             if (Request.Url.ToString().IndexOf("&id=") > 0)
                 url = Request.Url.ToString().Remove(Request.Url.ToString().IndexOf("&id="));
@@ -2497,61 +2512,61 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
 
             string value = string.Empty;
 
-            Label lblenrollno = lnk.Parent.FindControl("lblstuenrollno") as Label;
-
-            Session["stuinfoenrollno"] = lblenrollno.Text.Trim();
-            Session["stuinfofullname"] = lnk.Text.Trim();
-            int idno = Convert.ToInt32(lnk.CommandArgument);
-            Session["stuinfoidno"] = idno;
-            Session["idno"] = idno;
-            FeeCollectionController feeController = new FeeCollectionController();
-            // int studentId = feeController.GetStudentIdByEnrollmentNo(txtEnrollNo.Text.Trim());
-            if (idno > 0)
+            foreach (ListViewDataItem lnk in lvStudent.Items)
             {
-                //divSingleStudDetail.Visible = true;
-
-                if (CheckActivity())
-                // if (1==1)
+                Label lblenrollno = lnk.FindControl("lblstuenrollno") as Label;
+                Session["stuinfoenrollno"] = lblenrollno.Text.Trim();          
+                break;                             
+            }//end
+                FeeCollectionController feeController = new FeeCollectionController();
+                // int studentId = feeController.GetStudentIdByEnrollmentNo(txtEnrollNo.Text.Trim());
+                if (idno > 0)
                 {
-                    divmaincoursereg.Visible = true;
+                    //divSingleStudDetail.Visible = true;
 
-                    binddetails();
+                    if (CheckActivity())
+                    // if (1==1)
+                    {
+                        divmaincoursereg.Visible = true;
 
-                    divsession.Visible = true;
-                    pnlLV.Visible = false;
-                    // pnlMain.Visible = true;
-                    divCourses.Visible = true;
+                        binddetails();
 
-                    // btnProceed_Click(sender, e);
-                    ShowDetails();
-                    lvValueAdded.Visible = true;
-                    lvGlobalSubjects.Visible = true;
-                    lvUniCoreSub.Visible = true;
-                    lvCurrentSubjects.Visible = true;
-                    lvHistory.Visible = true;
-                    divCourses.Visible = true;
-                    divsession.Visible = true;
-                    divmaincoursereg.Visible = true;
-                    pnlMain.Visible = true;
-                    Divsearch.Visible = false;
-                    tblInfo.Visible = true;
-                    divmainsearch.Visible = false;
-                    trSession_name.Visible = false;
-                    btnShow.Visible = false;
-                    //btnExcelReport.Visible = false;
-                    btnCancel.Visible = false;
+                        divsession.Visible = true;
+                        pnlLV.Visible = false;
+                        // pnlMain.Visible = true;
+                        divCourses.Visible = true;
 
+                        // btnProceed_Click(sender, e);
+                        ShowDetails();
+                        lvValueAdded.Visible = true;
+                        lvGlobalSubjects.Visible = true;
+                        lvUniCoreSub.Visible = true;
+                        lvCurrentSubjects.Visible = true;
+                        lvHistory.Visible = true;
+                        divCourses.Visible = true;
+                        divsession.Visible = true;
+                        divmaincoursereg.Visible = true;
+                        pnlMain.Visible = true;
+                        Divsearch.Visible = false;
+                        tblInfo.Visible = true;
+                        divmainsearch.Visible = false;
+                        trSession_name.Visible = false;
+                        btnShow.Visible = false;
+                        //btnExcelReport.Visible = false;
+                        btnCancel.Visible = false;
+
+                    }
+
+                    //lvStudent.Visible = false;
+                    // divDemandCreation.Visible = true;
+                    // StudentDetails();
                 }
-
-                //lvStudent.Visible = false;
-                // divDemandCreation.Visible = true;
-                // StudentDetails();
-            }
-            else
-            {
-                //ShowMessage("No student found with given enrollment number.");
-                objCommon.DisplayMessage(this.UpdatePanel1, "No student found with given enrollment number.", this.Page);
-                //  divSingleStudDetail.Visible = false;
+                else
+                {
+                    //ShowMessage("No student found with given enrollment number.");
+                    objCommon.DisplayMessage(this.UpdatePanel1, "No student found with given enrollment number.", this.Page);
+                    //  divSingleStudDetail.Visible = false;
+                
             }
         }
         catch (Exception ex)
@@ -2618,4 +2633,8 @@ public partial class ACADEMIC_AuditCourseType : System.Web.UI.Page
             throw;
         }
     }
+
+
+  
+
 }

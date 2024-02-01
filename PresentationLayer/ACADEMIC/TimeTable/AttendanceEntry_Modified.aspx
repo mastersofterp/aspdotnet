@@ -4,7 +4,8 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <link href="<%#Page.ResolveClientUrl("~/fullcalendar/fullcalendar.css")%>" rel="stylesheet" />
-
+     <link href="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.css")%>" rel="stylesheet" />
+    <script src="<%=Page.ResolveClientUrl("~/plugins/multi-select/bootstrap-multiselect.js")%>"></script>
     <%--<style>
         #ctl00_ContentPlaceHolder1_pnlAttendenceEntry .dataTables_scrollHeadInner {
             width: max-content !important;
@@ -430,10 +431,19 @@
                                                                 <label>Topic Covered</label>
                                                             </div>
                                                             <asp:TextBox ID="txtTopcDesc" placeholder="Enter Topic Covered" runat="server" Visible="false" CssClass="form-control"></asp:TextBox>
-                                                            <asp:RequiredFieldValidator ID="rfvtopcv" runat="server" ControlToValidate="txtTopcDesc" Display="None" ValidationGroup="Submit" ErrorMessage="Please Enter Topic Covered" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                                            <asp:DropDownList ID="ddlTopicCovered" runat="server" data-select2-enable="true" AppendDataBoundItems="true" Visible="false">
+                                                            <asp:RequiredFieldValidator ID="rfvtopcv" runat="server" ControlToValidate="txtTopcDesc" Display="None" ValidationGroup="Submit"
+                                                                ErrorMessage="Please Enter Topic Covered" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                                            <%-- <asp:DropDownList ID="ddlTopicCovered" runat="server" data-select2-enable="true" AppendDataBoundItems="true" Visible="false">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                            </asp:DropDownList>
+                                                            </asp:DropDownList>--%>
+                                                          <%--  <div class="checkbox-list-box">--%>
+                                                                <%-- <asp:CheckBox ID="chkTopicCovered" runat="server" Text="Select All Topics" onClick="SelectAllTopicCovered()" CssClass="select-all-checkbox" TabIndex="6" />
+                                                                <asp:CheckBoxList ID="ddlTopicCovered" runat="server"></asp:CheckBoxList>--%>
+                                                                <asp:ListBox ID="ddlTopicCovered" runat="server" AppendDataBoundItems="true" 
+                                                                    CssClass="form-control multi-select-demo" SelectionMode="multiple" onClick="SelectAllTopicCovered()"></asp:ListBox>
+                                                                <%-- <asp:RequiredFieldValidator ID="rfvddltopcv" runat="server" ControlToValidate="ddlTopicCovered" InitialValue="0"
+                                                                      Display="None" ValidationGroup="Submit" ErrorMessage="Please Select Topic Covered " SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
+                                                           <%-- </div>--%>
                                                         </div>
 
                                                         <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="divTopicCoveredStatus" visible="false">
@@ -926,7 +936,7 @@
                                             <ItemTemplate>
                                                 <tr>
                                                     <td>
-                                                        <asp:LinkButton ID="lnkbtnCourse" CssClass="Gethiddenvalue" runat="server" CommandArgument='<%# Eval("TP_NO") %>'
+                                                        <asp:LinkButton ID="lnkbtnCourse" CssClass="Gethiddenvalue" runat="server" CommandArgument='<%# Eval("ATT_TPNO") %>'
                                                             OnClick="lnkbtnCourse_Click" Text='<%# Eval("COURSE_NAME") %>' ToolTip='<%# Eval("COURSENO") %>'
                                                             Enabled='<%#Eval("LOCKSTATUS").ToString()=="1" ? false :true%>'></asp:LinkButton>
                                                         <asp:HiddenField ID="hfvSchme" runat="server" Value='<%#Eval("SCHEMENO") %>' />
@@ -1062,6 +1072,17 @@
 
     <script type="text/javascript" language="javascript">
 
+        function SelectAllTopicCovered() {
+            var CHK = document.getElementById("<%=ddlTopicCovered.ClientID%>");
+            var checkbox = CHK.getElementsByTagName("input");
+            var chkTopicCovered = document.getElementById('ctl00_ContentPlaceHolder1_chkTopicCovered');
+
+            for (var i = 0; i < checkbox.length; i++) {
+                var chk = document.getElementById('ctl00_ContentPlaceHolder1_ddlTopicCovered_' + i);
+                chk.checked = (chkTopicCovered.checked == true) ? true : false;
+            }
+        }
+
         function checkTime(field) {
             var errorMsg = "";
             var txtSlotVal = document.getElementById('<%=hdnSlotVal.ClientID %>').value;
@@ -1134,18 +1155,28 @@
         }
 
         function totAllSubjects(headchk) {
-            var frm = document.forms[0]
-            for (i = 0; i < document.forms[0].elements.length; i++) {
-                var e = frm.elements[i];
-                if (e.type == 'checkbox') {
-                    if (headchk.checked == true) {
-                        if (e.disabled == false)
-                            e.checked = true;
-                    }
-                    else
-                        e.checked = false;
-                }
+            //var frm = document.forms[0]
+            //for (i = 0; i < document.forms[0].elements.length; i++) {
+            //    var e = frm.elements[i];
+            //    if (e.type == 'checkbox') {
+            //        if (headchk.checked == true) {
+            //            if (e.disabled == false)
+            //                e.checked = true;
+            //        }
+            //        else
+            //            e.checked = false;
+            //    }
+            //}
+
+            var tbl = document.getElementById('tblStudentRecords');
+            var tbl1 = document.getElementById('tblStudentRecordsnew');
+            var chkHead = document.getElementById('ctl00_ContentPlaceHolder1_lvStudent_cbHead');
+
+            for (var i = 0; i < tbl.rows.length; i++) {
+                var chk = document.getElementById('ctl00_ContentPlaceHolder1_lvStudent_ctrl' + i + '_cbRow');
+                chk.checked = (chkHead.checked == true) ? true : false;
             }
+
             CheckSelectionCount(this);
         }
 
@@ -1524,6 +1555,30 @@
 
 
 
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multi-select-demo').multiselect({
+                includeSelectAllOption: true,
+                maxHeight: 200,
+                enableFiltering: true,
+                filterPlaceholder: 'Search',
+                enableCaseInsensitiveFiltering: true,
+            });
+        });
+        var parameter = Sys.WebForms.PageRequestManager.getInstance();
+        parameter.add_endRequest(function () {
+            $(document).ready(function () {
+                $('.multi-select-demo').multiselect({
+                    includeSelectAllOption: true,
+                    maxHeight: 200,
+                    enableFiltering: true,
+                    filterPlaceholder: 'Search',
+                    enableCaseInsensitiveFiltering: true,
+                });
+            });
+        });
     </script>
 
 </asp:Content>

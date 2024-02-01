@@ -40,7 +40,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
             objCommon.FillListBox(ddlAttendanceuser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14)", "USERTYPEID");
             objCommon.FillListBox(ddlCourseUser, "USER_RIGHTS", "USERTYPEID", "USERDESC", "USERTYPEID NOT IN (2,14) ", "USERTYPEID");
             objCommon.FillListBox(ddlCourseLock, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE NOT IN (2,14) and UA_STATUS=0", "UA_NO");
-            objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL", "DISPLAYPAGENAME ASC");
+            objCommon.FillDropDownList(ddlPageName, "ACD_STUDENT_CONFIG", "DISTINCT MIN(ORGANIZATION_ID) AS ORGANIZATION_ID", "DISPLAYPAGENAME", "DISPLAYPAGENAME IS NOT NULL GROUP BY DISPLAYPAGENAME", string.Empty);
             BindAttDropDown();
             objCommon.FillListBox(lboModAdmInfo, "USER_ACC", "UA_NO", "UA_FULLNAME", "UA_TYPE=1 and UA_STATUS=0", "UA_NO");
             BindData();
@@ -173,6 +173,12 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     {
                         ddlEmailType.SelectedValue = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
                     }
+
+                    // added by Vipul Tichakule on date 24-01-2024
+                    if (ds.Tables[0].Rows[0]["ANDROID_STUD_ATTEN"].ToString() != null)
+                    {
+                        ddlMarkingAttendance.SelectedValue = ds.Tables[0].Rows[0]["ANDROID_STUD_ATTEN"].ToString();
+                    }//end
 
                     if (ds.Tables[0].Rows[0]["REGNO_CREATION"].ToString() != null && ds.Tables[0].Rows[0]["REGNO_CREATION"].ToString() == "1")
                     {
@@ -862,7 +868,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
-        {
+        {         
             if (hfdregno.Value == "true")
             {
                 objMod.AllowRegno = true;
@@ -1242,6 +1248,8 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                 objMod.TOSHOW_FEEREC_STUDLOGIN = true;
             }
 
+            int studAttendance = Convert.ToInt32(ddlMarkingAttendance.SelectedValue); //Added By Vipul Tichakule on date 24-01-2024
+
             //Check whether to add or update
             if (ViewState["action"] != null)
             {
@@ -1255,7 +1263,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     CustomStatus cs = (CustomStatus)objMConfig.SaveModuleConfiguration(objMod, UANO, IP_ADDRESS, MAC_ID, Trisemstatus, chkoutstanding, sempromodemandcreation, semadmofflinebtn,
                         semadmbeforepromotion, semadmafterepromotion, studReactvationlarefine, IntakeCapacity, chktimeReport, chkGlobalCTAllotment,
                         BBCEMAIL_NEW_STUD, HostelTypeSelection, chkElectChoiceFor, Seatcapacitynewstud, Usernos, dashboardoutstanding, attendanceusertype, usercourseshow, TPSlot, UserLoginNos, usercourselocked,
-                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
+                        DisplayStudLoginDashboard, DisplayReceiptInHTMLFormat, chkValueAddedCTAllotment, CreateRegno, AttTeaching, createprnt, allowCurrSemForRedoImprovementCrsReg, ModAdmInfoUserNos, sessionids, college_ids, studAttendance); //3 Additional Parameters Passed By Vinay Mishra on 01/08/2023 for New Flag in Module Config
 
                     if (cs.Equals(CustomStatus.RecordSaved))
                     {
@@ -1266,7 +1274,7 @@ public partial class ADMINISTRATION_ModuleConfig : System.Web.UI.Page
                     else if (cs.Equals(CustomStatus.RecordUpdated))
                     {
                         //Clear();
-                        objCommon.DisplayMessage(this.updpnl_details, "Record Updated Successfully!", this.Page);
+                        objCommon.DisplayMessage(this.updpnl_details, "Record Updated Successfully!", this.Page);                      
                         this.BindData();
                     }
                     else

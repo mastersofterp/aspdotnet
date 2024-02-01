@@ -1056,6 +1056,7 @@
                                                                         <th>Action</th>
                                                                         <th>Service Provider</th>
                                                                         <th>SMTP Server</th>
+                                                                        <th>SMTP Server Port</th>
                                                                         <th>CKey/UserId</th>
                                                                         <th>Email ID</th>
                                                                         <th>Status</th>
@@ -1074,6 +1075,7 @@
                                                             </td>
                                                             <td><%#Eval("SERVICE_PROVIDER_NAME") %></td>
                                                             <td><%#Eval("SMTP_SERVER") %></td>
+                                                             <td><%#Eval("SMTP_PORT") %></td>
                                                             <td><%#Eval("CKEY_USERID") %></td>
                                                             <td><%#Eval("EMAILID") %></td>
                                                             <td>
@@ -1266,6 +1268,7 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+
                             <div class="tab-pane fade" id="tab_7">
                                 <div>
                                     <asp:HiddenField ID="hfdStatTempType" runat="server" ClientIDMode="Static" />
@@ -1394,6 +1397,7 @@
                                 </asp:UpdatePanel>
 
                             </div>
+
                             <div class="tab-pane fade" id="tab_6">
                                 <div>
                                     <asp:HiddenField ID="hfSmsStatus" runat="server" ClientIDMode="Static" />
@@ -1469,7 +1473,7 @@
                                                             <sup> </sup>
                                                             <label>Var Count</label>
                                                         </div>
-                                                        <asp:TextBox ID="txtVarCount" runat="server" TabIndex="7" ToolTip="Please Enter Variable Count " onkeyup="return Numbers();"></asp:TextBox>
+                                                        <asp:TextBox ID="txtVarCount" runat="server" TabIndex="7" ToolTip="Please Enter Variable Count " onkeypress="return (event.charCode>47 && event.charCode<58)" MaxLength="2" ></asp:TextBox>
                                                     </div>
                                                     <div class="form-group  col-md-6 col-12">
                                                         <div class="label-dynamic">
@@ -1616,6 +1620,7 @@
                                     }
                                 </script>
                             </div>
+
                             <div class="tab-pane fade" id="tab_4">
                                 <div>
                                     <asp:HiddenField ID="hdnWhatsaap" runat="server" ClientIDMode="Static" />
@@ -1683,12 +1688,12 @@
                                                         <sup>* </sup>
                                                         <label>Mobile No.</label>
                                                     </div>
-                                                    <asp:TextBox ID="txtMobileNo" runat="server" CssClass="form-control" TabIndex="1"></asp:TextBox>
+                                                    <asp:TextBox ID="txtMobileNo" runat="server" CssClass="form-control" TabIndex="1" onkeypress="return (event.charCode>47 && event.charCode<58)" MaxLength="10"></asp:TextBox>
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator19" runat="server" ControlToValidate="txtMobileNo"
                                                         Display="None" ErrorMessage="Please Enter Mobile No." InitialValue="" ValidationGroup="ServiceWhatsaap" />
-                                                    <asp:RegularExpressionValidator runat="server" ErrorMessage="Mobile No. is Invalid"
+                                                    <%--<asp:RegularExpressionValidator runat="server" ErrorMessage="Mobile No. is Invalid"
                                                         ID="revMobile" ControlToValidate="txtMobileNo" ValidationExpression=".{10}.*"
-                                                        Display="None" ValidationGroup="Register"></asp:RegularExpressionValidator>
+                                                        Display="None" ValidationGroup="Register"></asp:RegularExpressionValidator>--%>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false" id="divUserWhatsApp">
                                                     <div class="label-dynamic">
@@ -1740,8 +1745,8 @@
                                                                         <th>Action</th>
                                                                         <th>Service Provider</th>
                                                                         <th>API URL</th>
-                                                                        <th>Account ID</th>
                                                                         <th>API Key</th>
+                                                                         <th>Account ID</th>
                                                                         <th>Mobile No.</th>
                                                                         <th>Status</th>
                                                                     </tr>
@@ -1759,8 +1764,8 @@
                                                             </td>
                                                             <td><%#Eval("SERVICE_PROVIDER_NAME") %></td>
                                                             <td><%#Eval("WHATSAAP_API_URL") %></td>
-                                                            <td><%#Eval("WHATSAAP_ACCOUNT_SID") %></td>
                                                             <td><%#Eval("API_KEY") %></td>
+                                                            <td><%#Eval("WHATSAAP_ACCOUNT_SID") %></td>
                                                             <td><%#Eval("WHATSAAP_MOBILE") %></td>
                                                             <td>
                                                                 <asp:Label runat="server" ID="lblWhatstatus" Text='<%#Eval("STATUS") %>'></asp:Label></td>

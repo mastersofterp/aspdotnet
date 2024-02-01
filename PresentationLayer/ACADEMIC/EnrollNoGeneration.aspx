@@ -200,8 +200,8 @@
                                                 <label>Gender</label>
                                             </div>
                                             <asp:RadioButtonList ID="rdbgender" runat="server" RepeatDirection="Horizontal">
-                                           <asp:ListItem Enabled="True" Text="Male" Value="1" />
-                                           <asp:ListItem Enabled="True" Text="Female" Value="2" />
+                                           <asp:ListItem Enabled="True" Text="Male" Value="M" />
+                                           <asp:ListItem Enabled="True" Text="Female" Value="F" />
                                            </asp:RadioButtonList>
                                             
                                         </div>

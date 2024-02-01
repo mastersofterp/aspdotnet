@@ -1338,7 +1338,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[15] = new SqlParameter("@P_SUBID", 0);
                 objParams[16] = new SqlParameter("@P_UNIT_NO", 0);
                 objParams[17] = new SqlParameter("@P_STATUS", objc.LectStatus);
-                objParams[18] = new SqlParameter("@P_TP_NO", objc.TpNo);
+                objParams[18] = new SqlParameter("@P_TP_NO", objc.TpNos);
                 objParams[19] = new SqlParameter("@P_ATTE_LTIME", objc.Att_LateTime);
                 objParams[20] = new SqlParameter("@P_SLOTNO", objc.Slot);
                 objParams[21] = new SqlParameter("@P_CONUM", objc.CoNo);//Course Object Number..
@@ -1350,6 +1350,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[26].Direction = ParameterDirection.Output;
 
 
+                // if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ATTENDANCE_FACULTYWISE_SUBJECT_SRK", objParams, false) != null)
                 if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ATTENDANCE_FACULTYWISE_SUBJECT", objParams, false) != null)
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
@@ -1497,7 +1498,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
 
         // ***** ADDED BY JAY TAKALKHEDE ON DATE 22112022 *****
-        public DataSet RetrieveStudentAttTracker(AcdAttendanceModel objAttE, int COLLEGEID, int DEGREENO, int BRANCHNO, int SEMESTERNO)
+        //Updated By Sakhi M on 09012024
+        public DataSet RetrieveStudentAttTracker(string AttendanceStartDate, string AttendanceEndDate, int COLLEGEID, int DEGREENO, int BRANCHNO, int SEMESTERNO)
         {
             DataSet ds = null;
             try
@@ -1508,8 +1510,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[1] = new SqlParameter("@P_DEGREENO", DEGREENO);
                 objParams[2] = new SqlParameter("@P_BRANCHNO", BRANCHNO);
                 objParams[3] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
-                objParams[4] = new SqlParameter("@P_START_DATE", objAttE.AttendanceStartDate);
-                objParams[5] = new SqlParameter("@P_END_DATE ", objAttE.AttendanceEndDate);
+                objParams[4] = new SqlParameter("@P_START_DATE", AttendanceStartDate);
+                objParams[5] = new SqlParameter("@P_END_DATE ", AttendanceEndDate);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ATTENDANCE_TRACKER", objParams);
             }
             catch (Exception ex)
@@ -1519,6 +1521,30 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+        //// ***** ADDED BY JAY TAKALKHEDE ON DATE 22112022 *****
+        //public DataSet RetrieveStudentAttTracker(AcdAttendanceModel objAttE, int COLLEGEID, int DEGREENO, int BRANCHNO, int SEMESTERNO)
+        //{
+        //    DataSet ds = null;
+        //    try
+        //    {
+        //        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+        //        SqlParameter[] objParams = new SqlParameter[6];
+        //        objParams[0] = new SqlParameter("@P_COLLEGE_ID", COLLEGEID);
+        //        objParams[1] = new SqlParameter("@P_DEGREENO", DEGREENO);
+        //        objParams[2] = new SqlParameter("@P_BRANCHNO", BRANCHNO);
+        //        objParams[3] = new SqlParameter("@P_SEMESTERNO", SEMESTERNO);
+        //        objParams[4] = new SqlParameter("@P_START_DATE", objAttE.AttendanceStartDate);
+        //        objParams[5] = new SqlParameter("@P_END_DATE ", objAttE.AttendanceEndDate);
+        //        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_ATTENDANCE_TRACKER", objParams);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ds;
+        //        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.RetrieveStudentAttDetailsExcel-> " + ex.ToString());
+        //    }
+        //    return ds;
+        //}
 
         #endregion
 
@@ -5073,6 +5099,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[5] = new SqlParameter("@P_SCHEMETYPE", schemeType);
                 objParams[6] = new SqlParameter("@P_COLLEGE_ID", College_ID);//Added BY Dileep on 10.04.2021
                 objParams[7] = new SqlParameter("@P_ISTUTORIAL", istutorial);//Added by Dileep 10.02.2022
+                // ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_SUBJECT_FOR_ATTENDANCE_MODIFIED_SRK", objParams);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_SUBJECT_FOR_ATTENDANCE_MODIFIED", objParams);
             }
             catch (Exception ex)
@@ -5490,9 +5517,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
 
         }
-
         // ADDED BY JAY TAKALKHEDE ON DATE 22112022
-        public DataSet RetrieveStudentAttDetailsMarkedExcel(AcdAttendanceModel objAttE, int Sessionnos, int College_code)
+        //Updated By Sakshi M on 09012024
+        public DataSet RetrieveStudentAttDetailsMarkedExcel(string AttendanceStartDate, string AttendanceEndDate, int Sessionnos, int College_code)
         {
             DataSet ds = null;
             try
@@ -5500,8 +5527,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objParams = new SqlParameter[4];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionnos);
-                objParams[1] = new SqlParameter("@P_STARTDATE", objAttE.AttendanceStartDate);
-                objParams[2] = new SqlParameter("@P_ENDDATE ", objAttE.AttendanceEndDate);
+                objParams[1] = new SqlParameter("@P_STARTDATE", AttendanceStartDate);
+                objParams[2] = new SqlParameter("@P_ENDDATE ", AttendanceEndDate);
                 objParams[3] = new SqlParameter("@P_COLLEGE_ID", College_code);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_ATTANDANCE_MARKED_AND_NOT_MAKRED_FACULTYWISE", objParams);
             }
@@ -5512,6 +5539,28 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+        //// ADDED BY JAY TAKALKHEDE ON DATE 22112022
+        //public DataSet RetrieveStudentAttDetailsMarkedExcel(AcdAttendanceModel objAttE, int Sessionnos, int College_code)
+        //{
+        //    DataSet ds = null;
+        //    try
+        //    {
+        //        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+        //        SqlParameter[] objParams = new SqlParameter[4];
+        //        objParams[0] = new SqlParameter("@P_SESSIONNO", Sessionnos);
+        //        objParams[1] = new SqlParameter("@P_STARTDATE", objAttE.AttendanceStartDate);
+        //        objParams[2] = new SqlParameter("@P_ENDDATE ", objAttE.AttendanceEndDate);
+        //        objParams[3] = new SqlParameter("@P_COLLEGE_ID", College_code);
+        //        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_ATTANDANCE_MARKED_AND_NOT_MAKRED_FACULTYWISE", objParams);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ds;
+        //        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.RetrieveStudentAttDetailsExcel-> " + ex.ToString());
+        //    }
+        //    return ds;
+        //}
         //Added By Jay Takalkhede on dated 20/11/2022
         public DataSet RetrieveStudentAttDetailsFormatIIIExcel()
         {
@@ -5559,8 +5608,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-        // ***** ADDED BY JAY TAKALKHEDE ON DATE 26122022 *****
-        public DataSet RETRIEVE_COURSEWISE_CONSOLIDATED_REPORT(DateTime AttendanceStartDate, DateTime AttendanceEndDate, int UANO, int schemeno, int session, int courseno, int section)
+        //Updated By Sakshi M on 09012024
+        public DataSet RETRIEVE_COURSEWISE_CONSOLIDATED_REPORT(string AttendanceStartDate, string AttendanceEndDate, int UANO, int schemeno, int session, int courseno, int section)
         {
             DataSet ds = null;
             try
@@ -5583,6 +5632,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
 
 
 
@@ -5973,6 +6023,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[4] = new SqlParameter("@P_TPLAN_FLAG", TPlanYesNo);
                 objParams[5] = new SqlParameter("@P_SCHEMETYPE", schemeType);
                 objParams[6] = new SqlParameter("@P_ISTUTORIAL", istutorial);//Added by Dileep 10.02.2022
+                //ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_SUBJECT_FOR_ATTENDANCE_MODIFIED_GLOBAL_ELECTIVE_SRK", objParams);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_SUBJECT_FOR_ATTENDANCE_MODIFIED_GLOBAL_ELECTIVE", objParams);
             }
             catch (Exception ex)
@@ -6016,7 +6067,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[9] = new SqlParameter("@P_ORGID", OrgId);
                 objParams[10] = new SqlParameter("@P_ELECTTYPE", electtype);//Added BY Dileep on 10.04.2021
 
-                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTYWISE_TOPICCOVERED", objParams);
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTYWISE_TOPICCOVERED", objParams); // PKG_GET_FACULTYWISE_TOPICCOVERED_SRK
             }
             catch (Exception ex)
             {
@@ -6103,7 +6154,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[13] = new SqlParameter("@P_SUBID", 0);
                 objParams[14] = new SqlParameter("@P_UNIT_NO", 0);
                 objParams[15] = new SqlParameter("@P_STATUS", objc.LectStatus);
-                objParams[16] = new SqlParameter("@P_TP_NO", objc.TpNo);
+                objParams[16] = new SqlParameter("@P_TP_NO", objc.TpNos);
                 objParams[17] = new SqlParameter("@P_ATTE_LTIME", objc.Att_LateTime);
                 objParams[18] = new SqlParameter("@P_SLOTNO", objc.Slot);
                 objParams[19] = new SqlParameter("@P_CONUM", objc.CoNo);//Course Object Number..
@@ -6114,6 +6165,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[23].Direction = ParameterDirection.Output;
 
 
+                //if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ATTENDANCE_FACULTYWISE_SUBJECT_GLOBAL_ELECTIVE_SRK", objParams, false) != null)
                 if (objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_INSERT_ATTENDANCE_FACULTYWISE_SUBJECT_GLOBAL_ELECTIVE", objParams, false) != null)
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
@@ -6379,7 +6431,6 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         }
         #endregion
 
-
         /// <summary>
         /// Added By - Swapnil Prachand for Global elective attendance excel Report
         /// </summary>
@@ -6390,7 +6441,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="OrgId"></param>
         /// <returns></returns>
         /// Done
-        public DataSet GetAllCoursesWiseAttendanceExcelReport(int sessionid, string collegenos, DateTime FromDate, DateTime ToDate)
+        /// //Updated By Sakshi M on 09012024
+        public DataSet GetAllCoursesWiseAttendanceExcelReport(int sessionid, string collegenos, string FromDate, string ToDate)
         {
             DataSet ds = null;
             try
@@ -6412,6 +6464,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+
         /// <summary>
         /// Added By - Swapnil Prachand for Global elective attendance excel Report
         /// </summary>
@@ -6422,7 +6475,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="OrgId"></param>
         /// <returns></returns>
         /// Done
-        public DataSet GetAllStudentWiseAttendanceExcelReport(int sessionid, string collegenos, DateTime FromDate, DateTime ToDate)
+        /// //Updated BY Sakshi M on 09012024
+        public DataSet GetAllStudentWiseAttendanceExcelReport(int sessionid, string collegenos, string FromDate, string ToDate)
         {
             DataSet ds = null;
             try
@@ -6547,7 +6601,28 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
+        //Patch added as a enhancement for PCEN Client on dated 18012023 (TkNo.52100) Jay T.
+        public DataSet GetAllLeaveForApproval_HOD(int uaType, int uano, int college_ID, int sessionno)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = new SqlParameter[4];
+                objParams[0] = new SqlParameter("@P_UATYPE", uaType);
+                objParams[1] = new SqlParameter("@P_UANO", uano);
+                objParams[2] = new SqlParameter("@P_COLLEGE_ID", college_ID);
+                objParams[3] = new SqlParameter("@P_SESSIONNO", sessionno);
 
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_ALL_LEAVE_FOR_APPROVAL_HOD", objParams);
+            }
+            catch (Exception ex)
+            {
+                return ds;
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.SessionController.GetAllLeave-> " + ex.ToString());
+            }
+            return ds;
+        }
 
         //Added by Nehal on 28/04/2023
 
@@ -6886,7 +6961,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
         // added by jay takalkhede on dated 21042023
-        public DataSet GetSubjectWiseDetailsExcelReport(int sessionno, int schemeno, int semno, int sectionno, DateTime frmdate, DateTime todate, string CONDITIONS, int PERCENTAGE, int COURSENO, int SUBID, int College_id)
+        //Updated By Sakshi M on 09012024
+        public DataSet GetSubjectWiseDetailsExcelReport(int sessionno, int schemeno, int semno, int sectionno, string frmdate, string todate, string CONDITIONS, int PERCENTAGE, int COURSENO, int SUBID, int College_id)
         {
             DataSet ds = null;
             try
@@ -6913,6 +6989,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
+
+
         // added by nehal on dated 02052023
 
         public DataSet GetFeesNotPaidStudentFaculty(int collegeid, int degree, int branch, int semester, int uano)
@@ -7045,7 +7123,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="teacherflag"></param>
         /// <returns></returns>
         /// Done
-        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag)
+        public int ValueAdded_TimeTableCreate(DataTable dt, GlobalOfferedCourse objGOC, string startdate, string enddate, string teacherflag,int sectionno)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -7053,7 +7131,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objParams = null;
                 //Update Student Local Address
-                objParams = new SqlParameter[11];
+                objParams = new SqlParameter[12];
                 objParams[0] = new SqlParameter("@P_DATATYPE", dt);
                 objParams[1] = new SqlParameter("@P_COURSENO", objGOC.Courseno);
                 objParams[2] = new SqlParameter("@P_SLOTTYPE", objGOC.SlotType);
@@ -7064,8 +7142,9 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[7] = new SqlParameter("@P_UA_NO", objGOC.Ua_no);
                 objParams[8] = new SqlParameter("@P_ORGANIZATIONID", objGOC.Orgid);
                 objParams[9] = new SqlParameter("@P_TEACHERFLAG", teacherflag);
-                objParams[10] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[10].Direction = ParameterDirection.Output;
+                objParams[10] = new SqlParameter("@P_SECTIONNO", sectionno);
+                objParams[11] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[11].Direction = ParameterDirection.Output;
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_VALUE_ADDED_ELECTIVE_TIMETABLE_INSERT", objParams, true);
                 if (ret != null && ret.ToString() != "-99" && ret.ToString() != "-1001")
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -7185,19 +7264,20 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
         //load time table for single dates(Cancel_TimeTable.aspx)
-        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate)
+        public DataSet LoadValueAddedTimeTableDetailsForCancelTT(int sessionno, int uano, int courseno, int slottype, DateTime startdate, DateTime endate,int sectionno)
         {
             DataSet ds = null;
             try
             {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
-                SqlParameter[] objParams = new SqlParameter[6];
+                SqlParameter[] objParams = new SqlParameter[7];
                 objParams[0] = new SqlParameter("@P_SESSIONNO", sessionno);
                 objParams[1] = new SqlParameter("@P_UA_NO", uano);
                 objParams[2] = new SqlParameter("@P_COURSENO", courseno);
                 objParams[3] = new SqlParameter("@P_SLOTTYPE", slottype);
                 objParams[4] = new SqlParameter("@P_START_DATE", startdate);
                 objParams[5] = new SqlParameter("@P_END_DATE", endate);
+                objParams[6] = new SqlParameter("@P_SECTIONNO", sectionno);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_GET_FACULTY_VALUE_ADDED_TIMETABLE_DETAILS_FOR_CANCEL_TT", objParams);
             }
             catch (Exception ex)
@@ -7598,10 +7678,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendanceSubmit(Attendance objAttendanceEntity)
-            {
+        {
             int retstatus = 0;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
                 objparams = new SqlParameter[3];
@@ -7611,27 +7691,93 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objparams[2].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("ACD_INS_ATTENDANCE_CALCULATE", objparams, true);
                 if (Convert.ToInt32(obj) == 12)
-                    {
-                    retstatus = 12;
-                    }
-                else if (Convert.ToInt32(obj) == 1)
-                    {
-                    retstatus = 1;
-                    }
-                else
-                    {
-                    retstatus = 0;
-                    }
-
-                }
-            catch (Exception ex)
                 {
+                    retstatus = 12;
+                }
+                else if (Convert.ToInt32(obj) == 1)
+                {
+                    retstatus = 1;
+                }
+                else
+                {
+                    retstatus = 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
                 retstatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.CalculateAttendanceSubmit->" + ex.ToString());
-                }
-            return retstatus;
             }
+            return retstatus;
+        }
 
+
+        public DataSet Get_Students_FacultyDiary(Attendance.FacultyDiary objEFac)
+        {
+            DataSet ds = null;
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+                objParams = new SqlParameter[8];
+                objParams[0] = new SqlParameter("@P_COLLEGE_ID", objEFac.CollegeId);
+                objParams[1] = new SqlParameter("@P_SCHEMENO", objEFac.Schemeno);
+                objParams[2] = new SqlParameter("@P_SESSIONNO", objEFac.Sessionno);
+                objParams[3] = new SqlParameter("@P_SEMESTERNO", objEFac.Semesterno);
+                objParams[4] = new SqlParameter("@P_OPERATOR", objEFac.Operator);
+                objParams[5] = new SqlParameter("@P_PERCENTAGE", objEFac.Percentage);
+                objParams[6] = new SqlParameter("@P_FROMDATE", objEFac.FromDate);
+                objParams[7] = new SqlParameter("@P_TODATE", objEFac.ToDate);
+
+                ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_STUDENT_DATA_FOR_FACULTYDIARY", objParams);
+            }
+            catch (Exception ex)
+            {
+
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.Get_Students_FacultyDiary->" + ex.ToString());
+            }
+            return ds;
+        }
+
+
+        public int SaveFacultyDiary(Attendance.FacultyDiary objFac, string XmlData)
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                SqlParameter[] objParams = null;
+
+                objParams = new SqlParameter[10];
+                objParams[0] = new SqlParameter("@P_XMLDATA", XmlData);
+                objParams[1] = new SqlParameter("@P_COLLEGEID", objFac.CollegeId);
+                objParams[2] = new SqlParameter("@P_SCHEMENO", objFac.Schemeno);
+                objParams[3] = new SqlParameter("@P_SESSIONNO", objFac.Sessionno);
+                objParams[4] = new SqlParameter("@P_SEMESTERNO", objFac.Semesterno);
+                objParams[5] = new SqlParameter("@P_FROM_DATE", objFac.FromDate);
+                objParams[6] = new SqlParameter("@P_TO_DATE", objFac.ToDate);
+                objParams[7] = new SqlParameter("@P_SUBMITTED_BY", System.Web.HttpContext.Current.Session["userno"].ToString());
+                objParams[8] = new SqlParameter("@P_IPADDRESS", System.Web.HttpContext.Current.Session["ipAddress"].ToString());
+                objParams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[9].Direction = ParameterDirection.Output;
+                object obj = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INSERT_FACULTY_DIARY", objParams, true);
+                if (obj != null)
+                {
+                    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
+                }
+                else
+                {
+                    retStatus = 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.AcdAttendanceController.SaveFacultyDiary-> " + ex.ToString());
+            }
+            return retStatus;
+        }
     }
-
 }

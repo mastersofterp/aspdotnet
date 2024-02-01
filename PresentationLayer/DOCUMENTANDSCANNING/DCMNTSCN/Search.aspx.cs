@@ -20,6 +20,9 @@ using IITMS.UAIMS;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
 using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using IITMS.SQLServer.SQLDAL;
+using IITMS.UAIMS.NonAcadBusinessLogicLayer.BusinessLogic;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 
 public partial class DCMNTSCN_Search : System.Web.UI.Page
@@ -28,6 +31,7 @@ public partial class DCMNTSCN_Search : System.Web.UI.Page
     UAIMS_Common objUCommon = new UAIMS_Common();
     Documentation obj = new Documentation();
     DocumentController objC = new DocumentController();
+    BlobController objBlob = new BlobController();
 
     protected void Page_PreInit(object sender, EventArgs e)
     {
@@ -67,7 +71,7 @@ public partial class DCMNTSCN_Search : System.Web.UI.Page
                 pnlDetails.Visible = false;
                 // temprary provision for current session using session variable [by defaullt value set 1 in db]
                 PopulateRoot();
-
+                BlobDetails();
             }
         }
         else
@@ -393,5 +397,78 @@ public partial class DCMNTSCN_Search : System.Web.UI.Page
             btnSearch.Visible = true;
         }
     }
-    
+
+    private void BlobDetails()
+    {
+        try
+        {
+            string Commandtype = "Documentandscanning";
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
+                string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
+                string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
+                // Session["blob_ConStr"] = blob_ConStr;
+                // Session["blob_ContainerName"] = blob_ContainerName;
+                hdnBlobCon.Value = blob_ConStr;
+                hdnBlobContainer.Value = blob_ContainerName;
+                lblBlobConnectiontring.Text = Convert.ToString(hdnBlobCon.Value);
+                lblBlobContainer.Text = Convert.ToString(hdnBlobContainer.Value);
+            }
+            else
+            {
+                hdnBlobCon.Value = string.Empty;
+                hdnBlobContainer.Value = string.Empty;
+                lblBlobConnectiontring.Text = string.Empty;
+                lblBlobContainer.Text = string.Empty;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
+    protected void imgbtnPreview_Click(object sender, ImageClickEventArgs e)
+    {
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        try
+        {
+            string blob_ConStr = Convert.ToString(lblBlobConnectiontring.Text).Trim();
+            string blob_ContainerName = Convert.ToString(lblBlobContainer.Text).Trim();
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(blob_ConStr);
+            CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer blobContainer = cloudBlobClient.GetContainerReference(blob_ContainerName);
+            string img = ((System.Web.UI.WebControls.ImageButton)(sender)).ToolTip.ToString();
+            var ImageName = img;
+            if (img == null || img == "")
+            {
+
+
+            }
+            else
+            {
+                DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
+                var blob = blobContainer.GetBlockBlobReference(ImageName);
+                string url = dtBlobPic.Rows[0]["Uri"].ToString();
+                //dtBlobPic.Tables[0].Rows[0]["course"].ToString();
+                string Script = string.Empty;
+
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                string DocLink = url;
+                //string DocLink = "https://rcpitdocstorage.blob.core.windows.net/" + blob_ContainerName + "/" + blob.Name;
+                Script += " window.open('" + DocLink + "','PoP_Up','width=0,height=0,menubar=no,location=no,toolbar=no,scrollbars=1,resizable=yes,fullscreen=1');";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Report", Script, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 }

@@ -172,7 +172,7 @@ public partial class ACADEMIC_TimeTable_GlobalElectiveAttendanceReport : System.
             sessionid = Convert.ToInt32(ddlSession.SelectedValue);
             string FromDate = txtFromDate.Text;
             string ToDate = txtTodate.Text;
-            DataSet ds = objAttC.GetAllCoursesWiseAttendanceExcelReport(sessionid, collegenos, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate));
+            DataSet ds = objAttC.GetAllCoursesWiseAttendanceExcelReport(sessionid, collegenos, FromDate, ToDate);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ds.Tables[0].TableName = "Courses-Wise Attendance Summary";
@@ -228,7 +228,7 @@ public partial class ACADEMIC_TimeTable_GlobalElectiveAttendanceReport : System.
             sessionid = Convert.ToInt32(ddlSession.SelectedValue);
             string FromDate = txtFromDate.Text;
             string ToDate = txtTodate.Text;
-            DataSet ds = objAttC.GetAllStudentWiseAttendanceExcelReport(sessionid, collegenos, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate));
+            DataSet ds = objAttC.GetAllStudentWiseAttendanceExcelReport(sessionid, collegenos, FromDate, ToDate);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 ds.Tables[0].TableName = "Student-Wise Attendance Details";

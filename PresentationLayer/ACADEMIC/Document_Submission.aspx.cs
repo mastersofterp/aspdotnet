@@ -236,6 +236,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
                 searchText = txtTempIdno.Text.Trim();
                 idno1 = Convert.ToString((txtTempIdno.Text)).ToString();
                 studid = objCommon.LookUp("ACD_STUDENT", "IDNO", "ENROLLNO='" + idno1 + "' OR ROLLNO='" + idno1 + "'");
+                Session["studid"] = studid;
                 if (rdoEnrollmentNo.Checked)
                 {
                     searchBy = "enrollno";
@@ -523,36 +524,35 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             StudentController objEc = new StudentController();
             Student objstud = new Student();
             string ext = System.IO.Path.GetExtension(fuPhotoUpload.PostedFile.FileName);
-            //string IdNo = string.Empty;
-            //string idno1 = string.Empty;
-            //idno1 = Convert.ToString((txtTempIdno.Text)).ToString();
-            //int IdNo = 0;
-            //IdNo =Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO",""));
+            byte[] image = null;
+            byte[] imageaftercompress = null;
             string IdNo = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + Convert.ToInt32(Session["idno"]));
-            
+
 
             if (fuPhotoUpload.HasFile)
             {
                 if (ext.ToUpper().Trim() == ".JPG" || ext.ToUpper().Trim() == ".PNG" || ext.ToUpper().Trim() == ".JPEG" || ext.ToUpper().Trim() == ".GIF")
-                {                   
+                {
                     if (fuPhotoUpload.PostedFile.ContentLength < 150000)
                     {
-                       
-                        byte[] resizephoto = ResizePhoto(fuPhotoUpload);                       
-                        if (resizephoto.LongLength >= 150000)
+
+                        using (Stream fs = fuPhotoUpload.PostedFile.InputStream)
+                        {
+                            using (BinaryReader br = new BinaryReader(fs))
+                            {
+                                image = br.ReadBytes((Int32)fs.Length);
+                                imageaftercompress = ImageCompression.CompressImage(image, 150);
+                            }
+                        }
+
+                        // Check compressed image size
+                        if (imageaftercompress != null && imageaftercompress.LongLength >= 150000)
                         {
                             objCommon.DisplayMessage(this, "File size must be less or equal to 150kb", this.Page);
                             return;
                         }
-                        else
-                        {
-                            objstud.StudPhoto = this.ResizePhoto(fuPhotoUpload);
-                           // objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
-                             // objstud.IdNo = Convert.ToInt32(txtIDNo.Text);
-                            objstud.IdNo = Convert.ToInt32(IdNo);
-                          
-
-                        }
+                        objstud.StudPhoto = imageaftercompress;
+                        objstud.IdNo = Convert.ToInt32(IdNo);
                     }
                     else
                     {
@@ -568,7 +568,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(this, "Please select file!", this.Page);               
+                objCommon.DisplayMessage(this, "Please select file!", this.Page);
                 return;
             }
 
@@ -577,7 +577,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this, "Photo uploaded Successfully!!", this.Page);
                 ViewState["StudPhoto"] = 1;
-                showstudentphoto(IdNo);
+                ShowStudentDetails();
 
             }
             else
@@ -600,7 +600,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
        // string IdNo = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(txtIDNo.Text.Trim()));
         if (IdNo != "")
         {
-            string imgphoto = objCommon.LookUp("ACD_STUD_PHOTO", "photo", "IDNO=" + Convert.ToInt32(IdNo));
+            string imgphoto = objCommon.LookUp("ACD_STUD_PHOTO", "photo", "IDNO=" + Convert.ToInt32(Session["studid"]));
 
             if (imgphoto == string.Empty)
             {
@@ -674,7 +674,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
        // string idno = objCommon.LookUp("ACD_STUD_PHOTO", "ISNULL(IDNO,0)", "IDNO=" + Convert.ToInt32(txtIDNo.Text.Trim()));
         if (IdNo != "")
         {
-            string signphoto = objCommon.LookUp("ACD_STUD_PHOTO", "stud_sign", "IDNO=" + Convert.ToInt32(IdNo));
+            string signphoto = objCommon.LookUp("ACD_STUD_PHOTO", "stud_sign", "IDNO=" + Convert.ToInt32(Session["studid"]));
 
             if (signphoto == string.Empty)
             {
@@ -754,7 +754,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             {
                 objCommon.DisplayMessage(this, "Signature uploaded Successfully!!", this.Page);
                 ViewState["StudSign"] = 1;
-                showstudentsignature(IdNo);
+                ShowStudentDetails();
             }
             else
             {
@@ -779,7 +779,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             objCommon.DisplayMessage(this.Page, "Please Select File To Upload!", this.Page);
             return;
         }
-
+        Session["SelectedDocumentIndex"] = lvdi.DisplayIndex; 
         uploadDocument();
     }
 
@@ -798,7 +798,7 @@ public partial class ACADEMIC_Document_Submission : System.Web.UI.Page
             //string idno = Session["idno"].ToString();
             string studentname = Session["userfullname"].ToString();
             // string IdNo = Session["stuinfoidno"].ToString();
-
+            int selectedDocumentIndex = Convert.ToInt32(Session["SelectedDocumentIndex"]);
             // string folderPath = WebConfigurationManager.AppSettings["SVCE_STUDENT_DOC"].ToString() + idno + "_" + studentname + "\\";
             foreach (ListViewDataItem lvitem in lvBinddata.Items)
             {

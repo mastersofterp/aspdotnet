@@ -12,8 +12,8 @@
                 </div>
 
                 <div class="box-body">
-                       <asp:Panel ID="pnl" runat="server">
-                           <div class="col-12">
+                    <asp:Panel ID="pnl" runat="server">
+                        <div class="col-12">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="sub-heading">
@@ -34,90 +34,95 @@
                                         InitialValue="0" SetFocusOnError="True"></asp:RequiredFieldValidator>
 
                                 </div>
-                                </div>
+                            </div>
                         </div>
-                                <div class="col-12 btn-footer">
-                                    <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="show"
-                                        OnClick="btnShow_Click" ToolTip="Click here to Show User Type" TabIndex="2" />
-                                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false"
-                                        OnClick="btnCancel_Click" ToolTip="Click here to Reset" TabIndex="3" />
-                                    <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
-                                        ShowMessageBox="True" ShowSummary="False" ValidationGroup="show" />
-                                    <asp:HiddenField ID="hdfTot" runat="server" Value="0" />
+                        <div class="col-12 btn-footer">
+                            <asp:Button ID="btnShow" runat="server" Text="Show" CssClass="btn btn-primary" ValidationGroup="show"
+                                OnClick="btnShow_Click" ToolTip="Click here to Show User Type" TabIndex="2" />
+                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" CausesValidation="false"
+                                OnClick="btnCancel_Click" ToolTip="Click here to Reset" TabIndex="3" />
+                            <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List"
+                                ShowMessageBox="True" ShowSummary="False" ValidationGroup="show" />
+                            <asp:HiddenField ID="hdfTot" runat="server" Value="0" />
 
-                                </div>
-                             
-                        </asp:Panel>
-                    </div>
-                    <div class="col-12">
-                        <label>Assign Category</label>
-                        <asp:Panel ID="pnlTree" runat="server" ScrollBars="Auto" Height="100px">
-                            <asp:TreeView ID="tv" OnTreeNodePopulate="pp" runat="server"
-                                ShowCheckBoxes="All" TabIndex="7">
-                            </asp:TreeView>
-                        </asp:Panel>
-                    </div>
-                       <div class="col-12">
-            <asp:Panel ID="pnlListMain" runat="server" Visible="false">
-                <div class="sub-heading">
-                    <h5>Select UserName</h5>
-                </div>
-                <div class="col-12 btn-footer">
-                    <asp:Button ID="btnAssign" runat="server" Text="Assign Category" CssClass="btn btn-primary"
-                        OnClick="btnAssign_Click" ToolTip="Click here to Assign Category" TabIndex="4" />
-                </div>
-                <div class="col-12">
-                    <asp:Panel ID="pnlAssigList" runat="server" ScrollBars="Auto" Height="300px">
-                        <asp:ListView ID="lvUsers" runat="server">
-                            <LayoutTemplate>
-                                <div id="lgv1">
-                                    <div class="sub-heading">
-                                        <h5>User List </h5>
-                                    </div>
+                        </div>
 
-                                    <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
-                                        <thead class="bg-light-blue">
-                                            <tr>
-                                                <th>
-                                                    <asp:CheckBox ID="chkHead" runat="server" Checked="true" TabIndex="5"
-                                                        onclick="totAllSubjects(this)" ToolTip="Click to Select All" />
-                                                </th>
-                                                <th>UserName
-                                                </th>
-                                                <th>Name
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="itemPlaceholder" runat="server" />
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </LayoutTemplate>
-                            <ItemTemplate>
-                                <tr>
-                                    <td>
-                                        <asp:CheckBox ID="chkAccept" runat="server" Checked="true" TabIndex="6"
-                                            ToolTip='<%# Eval("UA_NO")%>' />
-                                    </td>
-                                    <td>
-                                        <%# Eval("UA_NAME") %>
-                                    </td>
-                                    <td>
-                                        <%# Eval("UA_FULLNAME") %>
-                                    </td>
-                                </tr>
-                            </ItemTemplate>
-                        </asp:ListView>
                     </asp:Panel>
                 </div>
+                <div class="col-12">
+                    <label>Assign Category</label>
+                    <asp:Panel ID="pnlTree" runat="server" ScrollBars="Auto" Height="100px">
+                        <asp:TreeView ID="tv" OnTreeNodePopulate="pp" runat="server"
+                            ShowCheckBoxes="All" TabIndex="7">
+                        </asp:TreeView>
+                    </asp:Panel>
+                </div>
+                <div class="col-12">
+                    <asp:Panel ID="pnlListMain" runat="server" Visible="false">
+                        <div class="sub-heading">
+                            <h5>Select UserName</h5>
+                        </div>
+                        <div class="col-12 btn-footer">
+                            <asp:Button ID="btnAssign" runat="server" Text="Assign Category" CssClass="btn btn-primary"
+                                OnClick="btnAssign_Click" ToolTip="Click here to Assign Category" TabIndex="4" />
+                        </div>
+                        <div class="col-12">
+                            <asp:Panel ID="pnlAssigList" runat="server" ScrollBars="Auto" Height="300px">
+                                <asp:ListView ID="lvUsers" runat="server">
+                                    <LayoutTemplate>
+                                        <div id="lgv1">
+                                            <div class="sub-heading">
+                                                <h5>User List </h5>
+                                            </div>
 
-            </asp:Panel>
-        </div>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>
+                                                            <asp:CheckBox ID="chkHead" runat="server" Checked="true" TabIndex="5"
+                                                                onclick="totAllSubjects(this)" ToolTip="Click to Select All" />
+                                                        </th>
+                                                        <th>UserName
+                                                        </th>
+                                                        <th>Name
+                                                        </th>
+                                                        <th>ASSIGN CATEGORY
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </LayoutTemplate>
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <asp:CheckBox ID="chkAccept" runat="server" Checked="true" TabIndex="6"
+                                                    ToolTip='<%# Eval("UA_NO")%>' />
+                                            </td>
+                                            <td>
+                                                <%# Eval("UA_NAME") %>
+                                            </td>
+                                            <td>
+                                                <%# Eval("UA_FULLNAME") %>
+                                            </td>
+                                            <td>
+                                                <%#Eval("CATEGORYNAMES") %>
+                                            </td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:ListView>
+                            </asp:Panel>
+                        </div>
+
+                    </asp:Panel>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
+    </div>
 
 
         

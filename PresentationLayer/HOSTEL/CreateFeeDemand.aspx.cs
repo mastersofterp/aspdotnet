@@ -137,7 +137,7 @@ public partial class Hostel_CreateFeeDemand : System.Web.UI.Page
                     ShowMessage("Unable to create demand for following students.\\nEnrollment No.: " + response + "\\nStandard fees is not defined for fees criteria applicable to these students.");
                 else
                     ShowMessage("Demand successfully created for all students.");
-
+                FillStudent(); //Added By Himanshu Tamrakar for tkt 51949 on date 30122023
 
                 //this.ShowReport(demandCriteria, "Fee_Demand_Report", "FeeDemandReport_Detailed.rpt");
             }
@@ -278,7 +278,7 @@ public partial class Hostel_CreateFeeDemand : System.Web.UI.Page
                     ShowMessage("Unable to create demand for following students.\\nEnrollment No.: " + response + "\\nStandard fees is not defined for fees criteria applicable to these students.");
                 else
                     ShowMessage("Demand successfully created for Selected students.");
-                FillStudentList();
+                FillStudent();
                 ShowMessage("Demand successfully created for Selected students.");
                 //this.ShowReport(demandCriteria, "Fee_Demand_Report", "FeeDemandReport_Detailed.rpt");
             }
@@ -545,7 +545,35 @@ public partial class Hostel_CreateFeeDemand : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+    private void FillStudent()  //Created By Himanshu Tamrakar on date 05012024
+    {
+        try
+        {
+            DemandModificationController dmController = new DemandModificationController();
+            DataSet ds = dmController.GetApplyHostelerStudents(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), Convert.ToInt32(ddlsemester.SelectedValue), ddlReceiptType.SelectedValue, Convert.ToInt32(ddlForSemester.SelectedValue));
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
 
+                lvStudents.DataSource = ds;
+                lvStudents.DataBind();
+                divSelectedStudents.Visible = true;
+                btnCreateDemand.Visible = true;
+                EnabledTextbox();
+            }
+            else
+            {
+                divSelectedStudents.Visible = false;
+                btnCreateDemand.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUaimsCommon.ShowError(Page, "Hostel_CreateFeeDemand.FillStudentList() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUaimsCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
     protected void ddlForSemester_SelectedIndexChanged(object sender, EventArgs e)
     {
         FillStudentList();

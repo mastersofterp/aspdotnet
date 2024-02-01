@@ -215,7 +215,6 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     tcpartfullno = Convert.ToInt32(rdotcpartfull.SelectedValue);
                 else
                     tcpartfullno = 0;
-
             }
             int certno = Convert.ToInt32(ddlCert.SelectedValue);
             if (rdotcpartfull.SelectedValue == "3")
@@ -237,6 +236,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         objCommon.FillDropDownList(ddlconductcharacter, "acd_tc_conduct_character", "CNO", "CONDUCT_CHARACTER", "CNO>0 AND  ACTIVESTATUS=1", "CNO");
                         ddlconductcharacter.SelectedValue = hfConductNo.Value;
                         ddlconductcharacter.SelectedIndex = Convert.ToInt32(hfConductNo.Value);
+                        DropDownList ddlRemark = lvHead.FindControl("ddlRemark") as DropDownList;
+                        TextBox txtRemark = lvHead.FindControl("txtRemark") as TextBox;
+                        HiddenField hfdddlRemark = lvHead.FindControl("hfdddlRemark") as HiddenField;
+                        if (Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")// For PCEN and PJLCOE)
+                        {
+                            if (CertShortName == "LC")
+                            {
+                                ddlRemark.Visible = true;
+                                txtRemark.Visible = false;
+                                objCommon.FillDropDownList(ddlRemark, "ACD_TC_REMARKS_MASTER", "ID", "REMARKS", "ID>0 AND  ACTIVE_STATUS=1", "ID");
+                                ddlRemark.SelectedValue = hfdddlRemark.Value;
+                                ddlRemark.SelectedItem.Text = hfdddlRemark.Value;
+                            }
+                            else
+                            {
+                                ddlRemark.Visible = false;
+                                txtRemark.Visible = true;
+                            }
+                        }
+                        else
+                        {
+                            txtRemark.Visible = true;
+                            ddlRemark.Visible = false;
+                        }
                     }
 
                     if (Convert.ToInt32(Session["OrgId"]) == 2)
@@ -323,6 +346,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         objCommon.FillDropDownList(ddlconductcharacter, "acd_tc_conduct_character", "CNO", "CONDUCT_CHARACTER", "CNO>0 AND  ACTIVESTATUS=1", "CNO");
                         ddlconductcharacter.SelectedValue = hfConductNo.Value;
                         ddlconductcharacter.SelectedIndex = Convert.ToInt32(hfConductNo.Value);
+                        DropDownList ddlRemark = lvHead.FindControl("ddlRemark") as DropDownList;
+                        TextBox txtRemark = lvHead.FindControl("txtRemark") as TextBox;
+                        HiddenField hfdddlRemark = lvHead.FindControl("hfdddlRemark") as HiddenField;
+                        if (Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")// For PCEN and PJLCOE)
+                        {
+                            if (CertShortName == "LC")
+                            {
+                                ddlRemark.Visible = true;
+                                txtRemark.Visible = false;
+                                objCommon.FillDropDownList(ddlRemark, "ACD_TC_REMARKS_MASTER", "ID", "REMARKS", "ID>0 AND  ACTIVE_STATUS=1", "ID");
+                                ddlRemark.SelectedValue = hfdddlRemark.Value;
+                                ddlRemark.SelectedItem.Text = hfdddlRemark.Value;
+                            }
+                            else
+                            {
+                                ddlRemark.Visible = false;
+                                txtRemark.Visible = true;
+                            }
+                        }
+                        else
+                        {
+                            txtRemark.Visible = true;
+                            ddlRemark.Visible = false;
+                        }
                     }
 
                     if (Convert.ToInt32(Session["OrgId"]) == 2)
@@ -465,6 +512,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
     protected void btnConfirm_BC_Click(object sender, EventArgs e)
     {
         string studentIds = string.Empty;
+        string idno = string.Empty;
         //Get Student Details from lvStudent
         string CertShortName = objCommon.LookUp("ACD_CERTIFICATE_MASTER", "CERT_SHORT_NAME", "CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "");
         decimal TuitionFee = 0.0m;
@@ -552,6 +600,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                 if (cbRow.Checked == true)
                 {
                     studentIds += cbRow.ToolTip + "$";
+                    idno = cbRow.ToolTip;
 
                     if (Session["OrgId"].ToString() == "2")
                     {
@@ -588,7 +637,7 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     if (Session["OrgId"].ToString() == "10" || Session["OrgId"].ToString() == "11")
                     {
                         //Added by pooja for estimate certificate for prmitr ON ADTE 01-08-2023
-                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + studentIds.TrimEnd('$') + "");
+                        string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + idno + "");
                         if (CertShortName == "EC")
                         {
                             //string demand = objCommon.LookUp("ACD_DEMAND", "distinct 1", "IDNO=" + IDNO + "");
@@ -611,8 +660,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     objcertMaster.Conduct_No = Convert.ToInt32(ddlConductCharacter.SelectedValue);
                     objcertMaster.CompleteProgram = Convert.ToString(ddlcompleteporg.SelectedItem.Text);
 
-                    TextBox txtRemark = (dataitem.FindControl("txtRemark")) as TextBox;
-                    objcertMaster.Remark = txtRemark.Text;
+                  
+                    if (Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")// For PCEN and PJLCOE)
+                    {
+                        if (CertShortName == "LC")
+                        {
+                            DropDownList ddlRemark = dataitem.FindControl("ddlRemark") as DropDownList;
+                            HiddenField hfdddlRemark = dataitem.FindControl("hfdddlRemark") as HiddenField;
+                            objcertMaster.Remark = ddlRemark.SelectedItem.Text;
+                            
+                        }
+                        else
+                        {
+                            TextBox txtRemark = (dataitem.FindControl("txtRemark")) as TextBox;
+                            objcertMaster.Remark = txtRemark.Text;
+                        }
+                    }
+                    else
+                    {
+                        TextBox txtRemark = (dataitem.FindControl("txtRemark")) as TextBox;
+                        objcertMaster.Remark = txtRemark.Text;
+                    }
+
+                   
+
                     objcertMaster.IpAddress = ViewState["ipAddress"].ToString();
                     objcertMaster.UaNO = Convert.ToInt32(Session["userno"]);
                     objcertMaster.CollegeCode = Session["colcode"].ToString();
@@ -782,6 +853,30 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                         objCommon.FillDropDownList(ddlconductcharacter, "acd_tc_conduct_character", "CNO", "CONDUCT_CHARACTER", "CNO>0 AND  ACTIVESTATUS=1", "CNO");
                         ddlconductcharacter.SelectedValue = hfConductNo.Value;
                         ddlconductcharacter.SelectedIndex = Convert.ToInt32(hfConductNo.Value);
+                        DropDownList ddlRemark = lvHead.FindControl("ddlRemark") as DropDownList;
+                        TextBox txtRemark = lvHead.FindControl("txtRemark") as TextBox;
+                        HiddenField hfdddlRemark = lvHead.FindControl("hfdddlRemark") as HiddenField;
+                        if (Session["OrgId"].ToString() == "19" || Session["OrgId"].ToString() == "20")// For PCEN and PJLCOE)
+                        {
+                            if (CertShortName == "LC")
+                            {
+                                ddlRemark.Visible = true;
+                                txtRemark.Visible = false;
+                                objCommon.FillDropDownList(ddlRemark, "ACD_TC_REMARKS_MASTER", "ID", "REMARKS", "ID>0 AND  ACTIVE_STATUS=1", "ID");
+                                ddlRemark.SelectedValue = hfdddlRemark.Value;
+                                ddlRemark.SelectedItem.Text = hfdddlRemark.Value;
+                            }
+                            else
+                            {
+                                ddlRemark.Visible = false;
+                                txtRemark.Visible = true;
+                            }
+                        }
+                        else
+                        {
+                            txtRemark.Visible = true;
+                            ddlRemark.Visible = false;
+                        }
                     }
 
                     if (Convert.ToInt32(Session["OrgId"]) == 2)
@@ -1367,6 +1462,16 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
                     ShowReport_BCPRMITR(GetStudentIDs(), "Character_Certificate", "rpt_CharacterCertificate_TGPCET.rpt");
                 }
             }
+            else if (CertShortName == "AAC") // Added By Vipul Tichakule On date 25-01-2024
+            {
+                if (Session["OrgId"].ToString() == "19")
+                {
+                    ShowAttendanceReport(GetStudentIDs(), "Attendance_Certificate", "PCEN_Attendance_Certificate.rpt");
+                }
+
+
+            }
+
         }
         Enable_True();
 
@@ -1468,6 +1573,24 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
     }
 
     #region SHOW CERTIFICATES
+
+    // Added by Vipul Tichakule on date 25-01-2024
+    protected void ShowAttendanceReport(string param, string reportTitle, string rptFileName)
+    {
+        int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + param));
+        string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+        url += "Reports/CommonReport.aspx?";
+        url += "pagetitle=" + reportTitle;
+        url += "&path=~,Reports,Academic," + rptFileName;
+        url += "&param=@P_COLLEGE_CODE=" + college_id + ",@P_IDNO=" + param + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+        sb.Append(@"window.open('" + url + "','','" + features + "');");
+        ScriptManager.RegisterClientScriptBlock(this.updpnlExam2, this.updpnlExam2.GetType(), "controlJSScript", sb.ToString(), true);
+        //}
+
+    }
+
     private void ShowReport_BC(string param, string reportTitle, string rptFileName)
     {
         string studentIds = string.Empty;
@@ -1749,6 +1872,22 @@ public partial class ACADEMIC_CertificateMaster : System.Web.UI.Page
         if (chkAddTextOption.Checked == true)
         {
             bonafiedOption = 1;
+        }
+
+        foreach (ListViewDataItem item in lvStudentRecords.Items)
+        {
+            CheckBox chk = item.FindControl("chkReport") as CheckBox;
+            int idno = 0;
+            if ((item.FindControl("chkReport") as CheckBox).Checked)
+            {
+                idno = Convert.ToInt32(objCommon.LookUp("ACD_CERT_TRAN", "COUNT(IDNO)", "IDNO=" + chk.ToolTip + "AND CERT_NO=" + Convert.ToInt32(ddlCert.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
+                if (idno == 0)
+                //if (idno != studentIds)btnConfirm_BC
+                {
+                    objCommon.DisplayMessage(this.updpnlExam, "Please Confirm Student First!!", this.Page);
+                    return;
+                }
+            }
         }
 
         foreach (ListViewDataItem item in lvStudentRecords.Items)

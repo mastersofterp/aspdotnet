@@ -53,6 +53,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 // Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 Session["payactivityno"] = "1";
+                Session["DemandCount"] = null;
                 int IDNO1 = 0;
                 if (Session["usertype"].ToString().Equals("2") || Session["usertype"].ToString().Equals("14"))
                 {
@@ -278,26 +279,10 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 btnCancel.Visible = true;
                 divHostelTransport.Visible = false;
             }
-
-            ds = GetFeeItems_Data(IDNO, Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
-            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
-                DataTable dt = ds.Tables[0];
-                lvfeehead.DataSource = ds;
-                lvfeehead.DataBind();
-                lvfeehead.Visible = true;
-            }
-            else
-            {
-                lvFeeItems.DataSource = null;
-                lvFeeItems.DataBind();
-                lvfeehead.Visible = false;
-            }
         }
 
-
-
-    }
+            
+        }
 
     public void DisplayStudentInfo(int idno)
     {
@@ -344,6 +329,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
     public void SemesterWiseFees()
     {
+
+        bindfeesdetails();
         DataSet ds = null;
         int IDNO = Convert.ToInt32(ViewState["StudId"].ToString());
         ds = objFee.GetStudentFeesforOnlinePayment(ddlReceiptType.SelectedValue, Convert.ToInt32(ddlSemester.SelectedValue), IDNO);
@@ -352,15 +339,9 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             decimal councellingamt = 0;
             int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO =" + IDNO));
             int paytype = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "PTYPE", "IDNO =" + IDNO));
-
             int admbatch = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "ADMBATCH", "IDNO =" + IDNO));
-
-
-
             decimal latefee = Convert.ToDecimal(ds.Tables[0].Rows[0]["LATE_FEE"].ToString());
-
             decimal total = ds.Tables[0].AsEnumerable().Sum(row => row.Field<decimal>("AMOUNTS"));
-
             total = total + latefee;
 
             if (total > 0)
@@ -757,12 +738,26 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
 
     private void PopulateDropDown()
     {
-
-        this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE RT INNER JOIN ACD_DEMAND D ON(RT.RECIEPT_CODE = D.RECIEPT_CODE)", "DISTINCT RT.RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO>0 AND D.IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "RECIEPT_TITLE");
-        ddlReceiptType.SelectedIndex = 1;
-        //this.objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
-        this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "S.SEMESTERNO");
+        try
+        {
+            this.objCommon.FillDropDownList(ddlReceiptType, "ACD_RECIEPT_TYPE RT INNER JOIN ACD_DEMAND D ON(RT.RECIEPT_CODE = D.RECIEPT_CODE)", "DISTINCT RT.RECIEPT_CODE", "RECIEPT_TITLE", "RCPTTYPENO>0 AND D.IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "RECIEPT_TITLE");
+            ddlReceiptType.SelectedIndex = 1;
+            //this.objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0", "SEMESTERNO");
+            this.objCommon.FillDropDownList(ddlSemester, "ACD_DEMAND D INNER JOIN ACD_SEMESTER S ON (D.SEMESTERNO= S.SEMESTERNO)", "DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO>0 AND IDNO =" + Convert.ToInt32(Session["stuinfoidno"]), "S.SEMESTERNO");
+        }
+        catch (Exception Ex)
+        {
+            objCommon.DisplayMessage(this, "Demand is not Found for Selected Student", this.Page);
+            div_Studentdetail.Visible = false;
+            divDirectPayment.Visible = false;
+            string count = string.Empty;
+            Session["DemandCount"] = "NA";
+            return;
+            //Response.Redirect(Request.Url.ToString());  
+        }
     }
+
+
 
     //private void PopulateDropDownList()
     //    {
@@ -1554,6 +1549,15 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
             }
+            else if (Session["OrgId"].ToString() == "15")
+            {
+                int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                Session["payactivityno"] = activityno;
+            }
+            else
+            {
+                Session["payactivityno"] = 1;
+            }
 
             DataSet ds1 = objFee.GetOnlinePaymentConfigurationDetails_WithDegree(OrganizationId, 0, Convert.ToInt32(Session["payactivityno"]), degreeno, college_id);
             if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
@@ -1568,7 +1572,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
                     Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
-                    //Response.Redirect("http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
+                    //Response.Redirect("https://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
 
                 }
             }
@@ -1664,15 +1668,18 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         ViewState["idno"] = Session["stuinfoidno"].ToString();
 
         DisplayStudentInfo(Convert.ToInt32(Session["stuinfoidno"]));
-
-        //Server.Transfer("PersonalDetails.aspx", false);
-        DisplayInformation(Convert.ToInt32(Session["stuinfoidno"]));
-        lvStudent.Visible = false;
-        lvStudent.DataSource = null;
-        lblNoRecords.Visible = false;
-        lvfeehead.Visible = false;
-
-
+        if (Session["DemandCount"] != "NA")
+        {
+            //Server.Transfer("PersonalDetails.aspx", false);
+            DisplayInformation(Convert.ToInt32(Session["stuinfoidno"]));
+            divDirectPayment.Visible = true;
+            div_Studentdetail.Visible = true;
+            lvStudent.Visible = false;
+            lvStudent.DataSource = null;
+            lblNoRecords.Visible = false;
+            lvfeehead.Visible = false;
+        }
+        Session["DemandCount"] = null;
     }
     protected void btnClose_Click(object sender, EventArgs e)
     {
@@ -1795,6 +1802,8 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
         btnPayment.Visible = false;
         btnReciept.Visible = false;
         divPreviousReceipts.Visible = false;
+        div_Studentdetail.Visible = false;
+        divInstallmentPayment.Visible = false;
         //if (value == "BRANCH")
         //{
         //    divbranch.Attributes.Add("style", "display:block");
@@ -2002,5 +2011,32 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             else
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+
+    public void bindfeesdetails()
+    {
+        try
+        {
+            DataSet ds = GetFeeItems_Data(Convert.ToInt32(ViewState["StudId"].ToString()), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToString(ddlReceiptType.SelectedValue));
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                DataTable dt = ds.Tables[0];
+                lvfeehead.DataSource = ds;
+                lvfeehead.DataBind();
+                lvfeehead.Visible = true;
+            }
+            else
+            {
+                lvFeeItems.DataSource = null;
+                lvFeeItems.DataBind();
+                lvfeehead.Visible = false;
+            }
+        }
+        catch (Exception Ex)
+        {
+            
+        }
+    
+    
     }
 }

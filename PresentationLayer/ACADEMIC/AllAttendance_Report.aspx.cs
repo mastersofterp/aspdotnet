@@ -622,11 +622,11 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+            string FromDate = txtFromDate.Text;
+            string ToDate = txtTodate.Text;
             objAtt.Conditions = ddlOperator.SelectedValue.ToString();
             objAtt.Percentage = Convert.ToString(txtPercentage.Text);
-            DataSet ds = objSAC.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet ds = objSAC.GetAttendanceSelectorWise(objAtt, selector, FromDate, ToDate);
 
             pnlByPercent.Visible = false;
 
@@ -675,8 +675,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+       string FromDate = txtFromDate.Text;
+           string ToDate =txtTodate.Text;
             if (txtPercentageTo.Text != string.Empty && txtPercentageFrom.Text != string.Empty)
             {
                 if (Convert.ToInt32(txtPercentageTo.Text) <= Convert.ToInt32(txtPercentageFrom.Text))
@@ -691,7 +691,7 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
             objAtt.SectionNo = Convert.ToInt32(ddlSection.SelectedValue);
             objAtt.Th_Pr = Convert.ToInt32(ddltheorypractical.SelectedValue);
             objAtt.SubId = Convert.ToInt32(ddlSubjectType.SelectedValue);
-            DataSet dsPer = objSAC.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet dsPer = objSAC.GetAttendanceSelectorWise(objAtt, selector, FromDate, ToDate);
             pnlAttendence.Visible = false;
             pnlByPercent.Visible = true;
             if (dsPer.Tables[0].Rows.Count <= 0)
@@ -745,13 +745,13 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                     lvByPercent.Visible = false;
                 }
             }
-            objAtt.FromDate = Convert.ToDateTime(txtFromDate.Text);
-            objAtt.ToDate = Convert.ToDateTime(txtTodate.Text);
+            string FromDate =txtFromDate.Text;
+            string ToDate = txtTodate.Text;
             objAtt.SectionNo = Convert.ToInt32(ddlSection.SelectedValue);
             objAtt.Th_Pr = Convert.ToInt32(ddltheorypractical.SelectedValue);
             objAtt.SubId = Convert.ToInt32(ddlSubjectType.SelectedValue);
 
-            DataSet dsAll = Attd.GetAttendanceSelectorWise(objAtt, selector);
+            DataSet dsAll = Attd.GetAttendanceSelectorWise(objAtt, selector, FromDate, ToDate);
             pnlAttendence.Visible = false;
             pnlByPercent.Visible = true;
             if (dsAll.Tables[0].Rows.Count <= 0)
@@ -793,7 +793,7 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
         sessionid = Convert.ToInt32(ddlSession.SelectedValue);
         string FromDate = txtFromDate.Text;
         string ToDate = txtTodate.Text;
-        DataSet ds = objAttC.GetAllStudentWiseAttendanceExcelReport(sessionid, collegenos, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate));
+        DataSet ds = objAttC.GetAllStudentWiseAttendanceExcelReport(sessionid, collegenos, FromDate,ToDate);
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             ds.Tables[0].TableName = "Student-Wise Attendance Details";
@@ -850,8 +850,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
             ////ShowReportinFormate(rdoReportType.SelectedValue, "rptConsolidatedAttendanceNew.rpt");
             GridView GV = new GridView();
 
-            DateTime FromDate = txtFromDate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtFromDate.Text);
-            DateTime ToDate = txtTodate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtTodate.Text);
+            string  FromDate = txtFromDate.Text == string.Empty ? "01/01/1753" : txtFromDate.Text;
+            string ToDate = txtTodate.Text == string.Empty ? "01/01/1753" : txtTodate.Text;
             DataSet ds = objCommon.GetAttendanceData1(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), FromDate, ToDate, Convert.ToInt32(ddlSection.SelectedValue), ddlOperator.SelectedValue, Convert.ToDouble(txtPercentage.Text), Convert.ToInt32(ddlSubjectType.SelectedValue), txtPercentageFrom.Text.ToString(), txtPercentageTo.Text.ToString(), Convert.ToInt32(selector));
 
             //**************************************************************************************
@@ -911,8 +911,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
             ////ShowReportinFormate(rdoReportType.SelectedValue, "rptConsolidatedAttendanceNew.rpt");
             GridView GV = new GridView();
 
-            DateTime FromDate = txtFromDate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtFromDate.Text);
-            DateTime ToDate = txtTodate.Text == string.Empty ? Convert.ToDateTime("01/01/1753") : Convert.ToDateTime(txtTodate.Text);
+            string  FromDate = txtFromDate.Text == string.Empty ? "01/01/1753" : txtFromDate.Text;
+            string ToDate = txtTodate.Text == string.Empty ? "01/01/1753" : txtTodate.Text;
             DataSet ds = objCommon.GetAttendanceData(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), FromDate, ToDate, Convert.ToInt32(ddlSection.SelectedValue), ddlOperator.SelectedValue, Convert.ToDouble(txtPercentage.Text), Convert.ToInt32(ddlSubjectType.SelectedValue), txtPercentageFrom.Text.ToString(), txtPercentageTo.Text.ToString(), Convert.ToInt32(selector));
 
             //**************************************************************************************
@@ -964,7 +964,7 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
         sessionid = Convert.ToInt32(ddlSession.SelectedValue);
         string FromDate = txtFromDate.Text;
         string ToDate = txtTodate.Text;
-        DataSet ds = objAttC.GetAllCoursesWiseAttendanceExcelReport(sessionid, collegenos, Convert.ToDateTime(FromDate), Convert.ToDateTime(ToDate));
+        DataSet ds = objAttC.GetAllCoursesWiseAttendanceExcelReport(sessionid, collegenos, FromDate, ToDate);
         if (ds != null && ds.Tables[0].Rows.Count > 0)
         {
             ds.Tables[0].TableName = "Courses-Wise Attendance Summary";
@@ -1066,8 +1066,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                 + ",username=" + Session["userfullname"].ToString()
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
                 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                + ",@P_FROMDATE=" + txtFromDate.Text
+                + ",@P_TODATE=" + txtTodate.Text
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
@@ -1099,8 +1099,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                 + ",username=" + Session["userfullname"].ToString()
                 + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
                 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                + ",@P_FROMDATE=" + txtFromDate.Text
+                + ",@P_TODATE=" +txtTodate.Text
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
@@ -1132,8 +1132,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                 + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"])
                 + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("dd/MM/yyyy")
+                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("dd/MM/yyyy")
                 + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
 
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
@@ -1163,8 +1163,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                 + ",@P_SUBID=" + ddlSubjectType.SelectedValue
                 + ",@P_COURSENO=" + ddlSubject.SelectedValue
                 + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
-                + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                + ",@P_FROMDATE=" +txtFromDate.Text
+                + ",@P_TODATE=" + txtTodate.Text
                 + ",@P_CONDITIONS=" + ddlOperator.SelectedValue
                 + ",@P_PERCENTAGE=" + txtPercentage.Text.Trim()
                 + ",@P_COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]);
@@ -1195,8 +1195,8 @@ public partial class ACADEMIC_AllAttendance_Report : System.Web.UI.Page
                     + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue)
                     + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue)
                     + ",@P_COURSENO=" + Convert.ToInt32(ddlSubject.SelectedValue)
-                    + ",@P_FROMDATE=" + Convert.ToDateTime(txtFromDate.Text).ToString("yyyy-MM-dd")
-                    + ",@P_TODATE=" + Convert.ToDateTime(txtTodate.Text).ToString("yyyy-MM-dd")
+                    + ",@P_FROMDATE=" + txtFromDate.Text
+                    + ",@P_TODATE=" + txtTodate.Text
                     + ",@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
                 divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";

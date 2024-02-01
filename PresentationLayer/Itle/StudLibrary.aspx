@@ -22,7 +22,8 @@
         .list-group .list-group-item .sub-label {
             float: initial;
         }
-         td .fa-eye {
+
+        td .fa-eye {
             font-size: 18px;
             color: #0d70fd;
         }
@@ -93,11 +94,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                        </div>
+                                                    <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                                    <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                                    <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                                    <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                                                </div>
                                                 <div class="form-group col-lg-4 col-md-6 col-12 mt-3">
                                                     <div class="label-dynamic">
                                                         <sup></sup>
@@ -105,56 +106,56 @@
                                                     </div>
 
                                                     <asp:ListView ID="lvAttachments" runat="server" Style="overflow: auto">
-                                                <LayoutTemplate>
-                                                    <table>
-                                                        <%-- class="table table-bordered table-hover"--%>
-                                                        <thead>
+                                                        <LayoutTemplate>
+                                                            <table>
+                                                                <%-- class="table table-bordered table-hover"--%>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th id="divattach" runat="server" visible="false">Attachments  
+                                                                        </th>
+                                                                        <th id="divDownload" runat="server" visible="false">Preview
+                                                                        </th>
+                                                                        <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr id="itemPlaceholder" runat="server" />
+                                                                </tbody>
+                                                            </table>
+                                                        </LayoutTemplate>
+                                                        <ItemTemplate>
                                                             <tr>
-                                                                <th id="divattach" runat="server" visible="false">Attachments  
-                                                                </th>
-                                                                <th id="divDownload" runat="server" visible="false">Preview
-                                                                </th>
-                                                                <th id="divBlobDownload" runat="server" visible="false">Download
-                                                                </th>
+                                                                <td>
+                                                                    <td id="tdDownload" runat="server" visible="false">
+                                                                        <asp:Image ID="img" runat="server" ImageUrl="~/Images/attachment.png" />
+                                                                        <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                                        <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
+                                                                            <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
+                                                                    </td>
+                                                                </td>
+                                                                <td id="tdDownloadLink" runat="server" visible="false">
+                                                                    <asp:Image ID="Img2" runat="server" ImageUrl="~/Images/attachment.png" />
+                                                                    <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                                    <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
+                                                                    --%>     <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
+                                                                </td>
+
+                                                                <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                                    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+                                                                        <ContentTemplate>
+                                                                            <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
+                                                                                data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                        </ContentTemplate>
+                                                                        <Triggers>
+                                                                            <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                        </Triggers>
+                                                                    </asp:UpdatePanel>
+                                                                </td>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr id="itemPlaceholder" runat="server" />
-                                                        </tbody>
-                                                    </table>
-                                                </LayoutTemplate>
-                                                <ItemTemplate>
-                                                    <tr>
-                                                        <td>
-                                                            <td id="tdDownload" runat="server" visible="false">
-                                                                <asp:Image ID="img" runat="server" ImageUrl="~/Images/attachment.png" />
-                                                                <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
-                                                                <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
-                                                                    <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
-                                                            </td>
-                                                        </td>
-                                                        <td id="tdDownloadLink" runat="server" visible="false">
-                                                            <asp:Image ID="Img2" runat="server" ImageUrl="~/Images/attachment.png" />
-                                                           <%-- <img alt="Attachment" src="../IMAGES/attachment.png" />--%>
-                                                            <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH")%>&filename=<%# Eval("FILE_NAME") %>">
-                                                            --%>     <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE"))).ToString() %>&nbsp;KB)
-                                                        </td>
-
-                                                        <td style="text-align: center" id="tdBlob" runat="server" visible="false">
-                                                            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
-                                                                <ContentTemplate>
-                                                                    <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
-                                                                        data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
-
-                                                                </ContentTemplate>
-                                                                <Triggers>
-                                                                    <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                                </Triggers>
-                                                            </asp:UpdatePanel>
-                                                        </td>
-                                                    </tr>
-                                                </ItemTemplate>
-                                            </asp:ListView>
+                                                        </ItemTemplate>
+                                                    </asp:ListView>
                                                 </div>
 
                                                 <div class="col-12 btn-footer">
@@ -181,7 +182,7 @@
                                                                 <th>Book Name</th>
                                                                 <th>Author Name</th>
                                                                 <th>WebLink</th>
-                                                               <%-- <th>Attachment</th>--%>
+                                                                <%-- <th>Attachment</th>--%>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -192,12 +193,13 @@
                                                 </LayoutTemplate>
                                                 <ItemTemplate>
                                                     <tr>
-                                                        
-                                                              <td class="text-center"><asp:LinkButton ID="btnEdit" runat="server" CssClass="fa fa-eye" CommandArgument='<%# Eval("BOOK_NO") %>' OnClick="btnEdit_Click"></asp:LinkButton></td>
-                                 
-                                                            <%--<asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/view.png"  CommandArgument='<%# Eval("BOOK_NO") %>'
+
+                                                        <td class="text-center">
+                                                            <asp:LinkButton ID="btnEdit" runat="server" CssClass="fa fa-eye" CommandArgument='<%# Eval("BOOK_NO") %>' OnClick="btnEdit_Click"></asp:LinkButton></td>
+
+                                                        <%--<asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/Images/view.png"  CommandArgument='<%# Eval("BOOK_NO") %>'
                                                                 ToolTip="To View E-BOOK" AlternateText="Show Record" OnClick="btnEdit_Click"/>
-                                                      --%> 
+                                                        --%>
                                                         <td>
                                                             <%# Eval("BOOK_NAME")%>
                                                         </td>
@@ -209,7 +211,7 @@
                                                                 Text='<%# Eval("WEBSITE_LINK")%>'>
                                                             </asp:HyperLink>
                                                         </td>
-                                                       <%-- <td>
+                                                        <%-- <td>
 
                                                            <asp:ImageButton ID="imgbtndow" runat="server" ImageUrl="~/Images/attachment.png" CommandArgument='<%# Eval("BOOK_NO") %>'  OnClick="imgbtndow_Click" />
                                                             <%--<img alt="Attachment" src="../IMAGES/attachment.png" class='<%# (Convert.ToInt32(Eval("ATTACHMENT")) > 0)? "show_img": "hide_img" %>' />
@@ -270,6 +272,15 @@
 
         </ContentTemplate>
     </asp:UpdatePanel>
+
+    <script type="text/javascript">
+        function CloseModal() {
+            $("#preview").modal("hide");
+        }
+        function ShowModal() {
+            $("#preview").modal("show");
+        }
+</script>
     <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
         <div class="modal-dialog text-center">
             <asp:UpdatePanel ID="UpdatePanel3" runat="server">
@@ -291,7 +302,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <%-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="BTNCLOSEDOC" runat="server" Text="CLOSE" OnClick="BTNCLOSEDOC_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                         </div>
                     </div>
                     </div>

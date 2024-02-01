@@ -144,8 +144,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
         }
         // objCommon.FillDropDownList(ddlAllDay, "ACD_DAY_MASTER", "DAY_NO", "DAY_NAME", "DAY_NO > 0", "DAY_NO");
-        objCommon.FillDropDownList(ddlValueAddedGroup, "ACD_VALUE_ADDED_GROUP_MASTER", "GMID", "GROUP_NAME", "GMID > 0 AND ISNULL(ACTIVESTATUS,0)=1", "GMID");
-        ddlValueAddedGroup.SelectedIndex = 1;
+        //objCommon.FillDropDownList(ddlValueAddedGroup, "ACD_VALUE_ADDED_GROUP_MASTER", "GMID", "GROUP_NAME", "GMID > 0 AND ISNULL(ACTIVESTATUS,0)=1", "GMID");
+        objCommon.FillDropDownList(ddlValueAddedGroup, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO > 0 AND ISNULL(ACTIVESTATUS,0)=1", "SECTIONNO");
+        //ddlValueAddedGroup.SelectedIndex = 1;
         // objCommon.FillDropDownList(ddlToSemester, "ACD_SEMESTER", "DISTINCT SEMESTERNO", "SEMESTERNAME", "SEMESTERNO>0 and SEMESTERNO<9", "");
         //PopulateSemesterList();
         if (Session["usertype"].ToString() != "1")
@@ -438,6 +439,10 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 ListBox lstBranch = (ListBox)dataitem.FindControl("lstBranch");
                 ListBox lstCollegeSession = (ListBox)dataitem.FindControl("lstCollegeSession");
                 ListBox lstSemester = (ListBox)dataitem.FindControl("lstSemester");
+                //DropDownList ddlmainteacher = (DropDownList)dataitem.FindControl("ddlMainTeacher");
+
+
+
                 AssessmentValue = Convert.ToInt32(ddlAssInvolve.SelectedValue);
                 Showongradecard = Convert.ToInt32(ddlShowonGradeCard.SelectedValue);
 
@@ -570,6 +575,16 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 }
 
 
+                //foreach (ListItem liSem in chkToSemesterList.Items)
+                //{
+                //    if (liSem.Selected)
+                //    {
+                //        toSem += liSem.Value + ",";
+                //    }
+                //}
+                //toSem = toSem.TrimEnd(',');
+
+
                 foreach (ListItem item1 in lstSemester.Items)
                 {
                     if (item1.Selected == true)
@@ -628,44 +643,38 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                     }
                 }
             }
-            if (ddlCollege.SelectedIndex>0)
-            {
-                if (ddlSemester.SelectedIndex > 0)
-                {
 
-                    if (!isBranchOk && !isSemesterOk && !isCollegeOk)
-                    {
-                        objCommon.DisplayMessage(updPanel1, "Please Select at least One Offered to Semester, College/Session and Program/Branch for One Course", this.Page);
-                        return;
-                    }
-                    if (!isSemesterOk)
-                    {
-                        objCommon.DisplayMessage(updPanel1, "Please Select at least One Offered to Semester for One Course", this.Page);
-                        return;
-                    }
-                    if (!isCollegeOk)
-                    {
-                        objCommon.DisplayMessage(updPanel1, "Please Select at least One College/Session for One Course", this.Page);
-                        return;
-                    }
-                    if (!isBranchOk)
-                    {
-                        objCommon.DisplayMessage(updPanel1, "Please Select at least One Program/Branch for One Course", this.Page);
-                        return;
-                    }
-                }
-                else
-                {
-                    objCommon.DisplayMessage(updPanel1, "Please Select Semester", this.Page);
-                    return;
-                }
-            }
-            else
+            if (!isBranchOk && !isSemesterOk && !isCollegeOk)
             {
-                objCommon.DisplayMessage(updPanel1, "Please Select College/Session", this.Page);
+                objCommon.DisplayMessage(updPanel1, "Please Select at least One Offered to Semester, College/Session and Program/Branch for One Course", this.Page);
                 return;
             }
+            if (!isSemesterOk)
+            {
+                objCommon.DisplayMessage(updPanel1, "Please Select at least One Offered to Semester for One Course", this.Page);
+                return;
+            }
+            if (!isCollegeOk)
+            {
+                objCommon.DisplayMessage(updPanel1, "Please Select at least One College/Session for One Course", this.Page);
+                return;
+            }
+            if (!isBranchOk)
+            {
+                objCommon.DisplayMessage(updPanel1, "Please Select at least One Program/Branch for One Course", this.Page);
+                return;
+            }
+            //if (!isMainteacher)
+            //{
+            //    objCommon.DisplayMessage(updPanel1, "Please Select Main Teacher", this.Page);
+            //    return;
+            //}
 
+
+
+            //foreach (ListViewDataItem dataitem in lvCourse.Items)
+            //{
+            //}
 
             if (RecordSaved > 0)
             {
@@ -960,7 +969,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             ddlSubjectAT.Items.Clear();
             ddlSubjectAT.Items.Add(new ListItem("Please Select", "0"));
             int SessionNo = Convert.ToInt32(ddlCollegeSession.SelectedValue);
-            DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 1);
+            DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 1,0);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlSubjectAT.DataSource = ds;
@@ -991,11 +1000,11 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         DataSet ds = null;
         if (Convert.ToInt32(ViewState["valueAddedElectiveCTAllotment"]) == 1)
         {
-            ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 9);
+            ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 9,0);
         }
         else
         {
-            ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 6);
+            ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 6,0);
         }
         if (ds.Tables[0].Rows.Count > 0)
         {
@@ -1011,6 +1020,33 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         else
         {
 
+        }
+
+       
+        if (Convert.ToInt32(ViewState["valueAddedElectiveCTAllotment"]) == 0)
+        {
+            objCommon.FillDropDownList(ddlsection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", " ISNULL(ACTIVESTATUS,0)=1 AND SECTIONNO > 0", "SECTIONNO");
+        }
+        else
+        {
+            ddlsection.Items.Clear();
+            ddlsection.Items.Add(new ListItem("Please Select", "0"));
+            //objCommon.FillDropDownList(ddlsection, "ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON (CT.SECTIONNO =S.SECTIONNO)", "DISTINCT CT.SECTIONNO", "SECTIONNAME", " SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND COURSENO  = " + ddlSubjectAT.SelectedValue + " AND CT.SECTIONNO > 0 AND ISNULL(CT.CANCEL,0)=0", "CT.SECTIONNO");
+            DataSet ds1 = objCommon.FillDropDown("ACD_COURSE_TEACHER CT INNER JOIN ACD_SECTION S ON (CT.SECTIONNO =S.SECTIONNO)", "DISTINCT CT.SECTIONNO", "SECTIONNAME", " SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + ddlSession.SelectedValue + ") AND COURSENO  = " + ddlSubjectAT.SelectedValue + " AND CT.SECTIONNO > 0 AND ISNULL(CT.CANCEL,0)=0", "CT.SECTIONNO");
+            if (ds1.Tables[0].Rows.Count > 0)
+            {
+
+                ddlsection.DataSource = ds1;
+                ddlsection.DataValueField = ds1.Tables[0].Columns[0].ToString();
+                ddlsection.DataTextField = ds1.Tables[0].Columns[1].ToString();
+                ddlsection.DataBind();
+            }
+            else
+            {
+                ddlsection.Items.Clear();
+                ddlsection.Items.Add(new ListItem("Please Select", "0"));
+                objCommon.DisplayMessage(this.UpdatePanel1, "Course Teacher Allotment Not Found for Selected Selection", this.Page);
+            }
         }
         this.BindTeacherAllotmentListView();
     }
@@ -1062,7 +1098,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             return;
         }
         int OrgId = Convert.ToInt32(Session["OrgId"].ToString());
-        if (objSC.UpdateStudent_TeachAllotForValue_Added_Modified(objStudent, OrgId) == Convert.ToInt32(CustomStatus.RecordUpdated))
+        if (objSC.UpdateStudent_TeachAllotForValue_Added_Modified(objStudent, OrgId, Convert.ToInt32(ddlsection.SelectedValue)) == Convert.ToInt32(CustomStatus.RecordUpdated))
             objCommon.DisplayMessage(this.UpdatePanel1, "Teacher Alloted Successfully..", this.Page);
         else
             objCommon.DisplayMessage(this.UpdatePanel1, "Server Error", this.Page);
@@ -1080,6 +1116,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlCollegeSession.SelectedIndex = 0;
         ddlSession.SelectedIndex = 0;
         ddlSemesterAT.SelectedIndex = 0;
+        ddlsection.SelectedIndex = 0;
         ddlTeacher.Items.Clear();
         ddlTeacher.Items.Add(new ListItem("Please Select", "0"));
         ddlSubjectAT.SelectedIndex = 0;
@@ -1140,9 +1177,26 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         repoarray = MSG.Split('-');
         string courseno = repoarray[0].ToString();
         string ua_no = repoarray[1].ToString();
+        DateTime ConfigStartDate;
+        DateTime ConfigEndDate;
         //int degreeno = Convert.ToInt32(objCommon.LookUp("ACD_COURSE C INNER JOIN ACD_SCHEME S ON(C.SCHEMENO=S.SCHEMENO)", "DISTINCT S.DEGREENO", "COURSENO=" + Convert.ToInt32(ddlSubjectTimetable.SelectedValue)));
         if (ddlSlotType.SelectedIndex > 0)
         {
+            DataSet dsDate = objCommon.FillDropDown("ACD_ATTENDANCE_CONFIG AC INNER JOIN ACD_SESSION_MASTER SM ON(AC.SESSIONNO = SM.SESSIONNO)", "DISTINCT CAST(AC.START_DATE AS DATE) START_DATE", "CAST(AC.END_DATE AS DATE) END_DATE", "ISNULL(AC.IS_VALUE_ADDED,0)=1 AND SM.SESSIONID =" + Convert.ToInt32(ddlSessionTimeTable.SelectedValue), "");
+            if (dsDate.Tables[0].Rows.Count > 0)
+            {
+                ConfigStartDate = Convert.ToDateTime(dsDate.Tables[0].Rows[0]["START_DATE"]);
+                ConfigEndDate = Convert.ToDateTime(dsDate.Tables[0].Rows[0]["END_DATE"]);
+                hdnConfigStartDate.Value = Convert.ToString(ConfigStartDate.ToString("yyyy-MM-dd"));
+                hdnConfigEndDate.Value = Convert.ToString(ConfigEndDate.ToString("yyyy-MM-dd"));
+                divNote.Visible = true;
+                lblTitleDate.Text = "Attendance Configuration Start Date : " + ConfigStartDate.ToShortDateString() + " End Date : " + ConfigEndDate.ToShortDateString();
+
+            }
+            else
+            {
+                divNote.Visible = false;
+            }
             //DataSet ds = objCommon.FillDropDown("ACD_SCHEME S INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON(S.BRANCHNO=CDB.BRANCHNO AND S.DEGREENO=CDB.DEGREENO AND S.DEPTNO=CDB.DEPTNO) INNER JOIN ACD_COURSE C ON(C.SCHEMENO=S.SCHEMENO)", "CDB.COLLEGE_ID", "S.DEGREENO", "C.COURSENO=" + Convert.ToInt32(ddlSubjectTimetable.SelectedValue), "C.COURSENO");
             //if (ds.Tables[0].Rows.Count > 0)
             //{
@@ -1304,6 +1358,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlTimeSlot.SelectedIndex = 0;
         ddlRoom.SelectedIndex = 0;
         ddlAllDay.SelectedIndex = 0;
+       // ddlTTSection.SelectedIndex = 0;
         if (Session["TimeSlotTbl"] == null)
         {
             lvTimeSlotDetails.DataSource = null;
@@ -1415,6 +1470,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
     }
     protected void btnSubmitTimeTable_Click(object sender, EventArgs e)
     {
+        
+         
+
         DataTable dt = new DataTable();
         if (Session["TimeSlotTbl"] == null)
         {
@@ -1461,7 +1519,24 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         DateTime dtEndDate = DateTime.Parse(EndDate);
         string EDate = dtEndDate.ToString("yyyy/MM/dd");
 
-        CustomStatus cs = (CustomStatus)objAttC.ValueAdded_TimeTableCreate(dt, objGOC, SDate, EDate, alternateflag);
+        DateTime ConfigStartDate, ConfigEndDate;
+        string configstart = string.Empty, configend = string.Empty;
+        DataSet dsDate = objCommon.FillDropDown("ACD_ATTENDANCE_CONFIG AC INNER JOIN ACD_SESSION_MASTER SM ON(AC.SESSIONNO = SM.SESSIONNO)", "DISTINCT CAST(AC.START_DATE AS DATE) START_DATE", "CAST(AC.END_DATE AS DATE) END_DATE", "ISNULL(AC.IS_VALUE_ADDED,0)=1 AND SM.SESSIONID =" + Convert.ToInt32(ddlSessionTimeTable.SelectedValue), "");
+        if (dsDate.Tables[0].Rows.Count > 0)
+        {
+            ConfigStartDate = Convert.ToDateTime(dsDate.Tables[0].Rows[0]["START_DATE"]);
+            ConfigEndDate = Convert.ToDateTime(dsDate.Tables[0].Rows[0]["END_DATE"]);
+            configstart = ConfigStartDate.ToString("yyyy/MM/dd");
+            configend = ConfigEndDate.ToString("yyyy/MM/dd");
+        }
+       
+        if (Convert.ToDateTime(configstart) > Convert.ToDateTime(SDate) || Convert.ToDateTime(configend) < Convert.ToDateTime(EDate))
+        {
+            objCommon.DisplayMessage(this.UpdatePanel2, "Kindly Select Date Range In Between Attendance Configuration Date!", this.Page);
+            return;
+        }
+
+        CustomStatus cs = (CustomStatus)objAttC.ValueAdded_TimeTableCreate(dt, objGOC, SDate, EDate, alternateflag, Convert.ToInt32(ddlTTSection.SelectedValue));
 
         if (cs.Equals(CustomStatus.RecordSaved))
         {
@@ -1481,6 +1556,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         lvGlobalTimeTable.DataBind();
         lvTimeSlotDetails.DataSource = null;
         lvTimeSlotDetails.DataBind();
+        ddlTTSection.SelectedIndex = 0;
 
     }
     private void ClearAfterSaveControlsTimeTable()
@@ -1561,7 +1637,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
     public void BindCourseDropdown(int Schemeno)
     {
-        DataSet ds1 = objCC.GetValueAddedCourseList(Convert.ToInt32(ViewState["schemeno"]), 0, 0, 3);
+        DataSet ds1 = objCC.GetValueAddedCourseList(Convert.ToInt32(ViewState["schemeno"]), 0, 0, 3,0);
         if (ds1.Tables[0].Rows.Count > 0)
         {
             ddlSubjectTimetable.DataSource = ds1;
@@ -1578,7 +1654,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             DataSet ds = null;
             int schemeno = Convert.ToInt32(ViewState["schemeno"]);
             CourseController objCC = new CourseController();
-            ds = objCC.GetValueAddedCoursesTimeTableModified(sessionno, courseno, ua_no);//Convert.ToInt32(ddlSessionTimeTable.SelectedValue));
+            ds = objCC.GetValueAddedCoursesTimeTableModified(sessionno, courseno, ua_no, Convert.ToInt32(ddlTTSection.SelectedValue));//Convert.ToInt32(ddlSessionTimeTable.SelectedValue));
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -1645,10 +1721,14 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             {
                 hdnDate.Value = dr["START_DATE"] != DBNull.Value ? Convert.ToDateTime(dr["START_DATE"].ToString()).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(dr["END_DATE"].ToString()).ToString("MMM dd, yyyy") : Convert.ToDateTime(DateTime.Now).ToString("MMM dd, yyyy") + " - " + Convert.ToDateTime(DateTime.Now).ToString("MMM dd, yyyy");
                 ddlCollegeSchemeTimeTable.SelectedValue = dr["COSCHNO"].ToString();
+                ddlTTSection.SelectedValue = dr["SECTIONNO"].ToString();
                 ddlSessionTimeTable.SelectedValue = dr["SESSIONID"].ToString();
                 BindCourseDropdownTimeTable(Convert.ToInt32(ddlSessionTimeTable.SelectedValue));
                 ddlSlotType.SelectedValue = dr["SLOTTYPE"].ToString();
+                ddlSubjectTimetable.SelectedValue = dr["FACULTYNO"].ToString();
+                
                 string MSG = ddlSubjectTimetable.SelectedValue.ToString();// Request.Form["msg"].ToString();
+                
                 string[] repoarray;
                 repoarray = MSG.Split('-');
                 string courseno = repoarray[0].ToString();
@@ -1669,7 +1749,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 string[] ttDates = startenddate.Split('-');
                 startDate = ttDates[0].Trim();
                 endDate = ttDates[1].Trim();
-                DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(FacultyNo, alternateflag, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate);
+                DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(FacultyNo, alternateflag, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, Courseno);
                 DataTable dt = ds.Tables[0];
                 Session["TimeSlotTbl"] = dt;
                 BindListView_TImeSlotDetails(dt);
@@ -1685,6 +1765,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         HiddenField hdfStartEndDate = dataitem.FindControl("hdfStartEndDate") as HiddenField;
 
         int facultyno = Convert.ToInt32(FacultyNo.CommandArgument);
+        int courseno = Convert.ToInt32(FacultyNo.AlternateText);
         int alternate = Convert.ToInt32(alternateflag.Value);
         string startendate = hdfStartEndDate.Value;
         string[] ttDates = startendate.Split('-');
@@ -1695,7 +1776,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         try
         {
 
-            DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate);
+            DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, courseno);
             lv.DataSource = ds;
             lv.DataBind();
 
@@ -2216,7 +2297,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             ddlSubjectAT.Items.Clear();
             ddlSubjectAT.Items.Add(new ListItem("Please Select", "0"));
             int SessionNo = Convert.ToInt32(ddlSession.SelectedValue);
-            DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 5);
+            DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 5,0);
             if (ds.Tables[0].Rows.Count > 0)
             {
                 ddlSubjectAT.DataSource = ds;
@@ -2241,9 +2322,10 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
     protected void ddlTeacher_SelectedIndexChanged(object sender, EventArgs e)
     {
+        string usertype = Convert.ToString(objCommon.LookUp("ACD_MODULE_CONFIG", "ATTENDANCE_USER_TYPES", "ConfigNo>0"));
         if (ddlTeacher.SelectedIndex > 0)
         {
-            objCommon.FillListBox(lstAdditionalTeacher, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND ISNULL(U.UA_TYPE,0)=3 AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlTeacher.SelectedValue) + ")", "U.UA_FULLNAME");
+            objCommon.FillListBox(lstAdditionalTeacher, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND U.UA_TYPE IN (select value from dbo.split('" + usertype + "',',')) AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlTeacher.SelectedValue) + ")", "U.UA_FULLNAME");
             BindTeacherAllotmentListView();
         }
         else
@@ -2284,8 +2366,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 ddlSubjectTimetable.Items.Clear();
                 ddlSubjectTimetable.Items.Add(new ListItem("Please Select", "0"));
                 int SessionNo = Convert.ToInt32(ddlSessionTimeTable.SelectedValue);
-                BindCourseDropdownTimeTable(SessionNo);
+                //BindCourseDropdownTimeTable(SessionNo);
                 BindValueAddedTimeTable(SessionNo, 0, 0);
+                objCommon.FillDropDownList(ddlTTSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", " ISNULL(ACTIVESTATUS,0)=1 AND SECTIONNO > 0", "SECTIONNO");
             }
         }
         else
@@ -2302,7 +2385,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
     public void BindCourseDropdownTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetValueAddedCourseList(Convert.ToInt32(SessionNo), 0, 0, 7);
+        ddlSubjectTimetable.Items.Clear();
+        ddlSubjectTimetable.Items.Add(new ListItem("Please Select", "0"));
+        DataSet ds1 = objCC.GetValueAddedCourseList(Convert.ToInt32(SessionNo), 0, 0, 7, Convert.ToInt32(ddlTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             ddlSubjectTimetable.DataSource = ds1;
@@ -2376,7 +2461,8 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 ddlCourseCancelTT.Items.Clear();
                 ddlCourseCancelTT.Items.Add(new ListItem("Please Select", "0"));
                 int SessionNo = Convert.ToInt32(ddlSessionCancelTT.SelectedValue);
-                BindCourseDropdownCancelTimeTable(SessionNo);
+                //BindCourseDropdownCancelTimeTable(SessionNo);
+                objCommon.FillDropDownList(ddlCancelTTSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", " ISNULL(ACTIVESTATUS,0)=1 AND SECTIONNO > 0", "SECTIONNO");
             }
         }
         else
@@ -2403,7 +2489,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         string courseno = repoarray[0].ToString();
         string facultyno = repoarray[1].ToString();
 
-        DataSet ds = objAttC.LoadValueAddedTimeTableDetailsForCancelTT(Convert.ToInt32(ddlSessionCancelTT.SelectedValue), Convert.ToInt32(facultyno), Convert.ToInt32(courseno), Convert.ToInt16(ddlSlotTypeCancelTT.SelectedValue), Convert.ToDateTime(txtCancelTTStartDate.Text), Convert.ToDateTime(txtCancelTTEndDate.Text));
+        DataSet ds = objAttC.LoadValueAddedTimeTableDetailsForCancelTT(Convert.ToInt32(ddlSessionCancelTT.SelectedValue), Convert.ToInt32(facultyno), Convert.ToInt32(courseno), Convert.ToInt16(ddlSlotTypeCancelTT.SelectedValue), Convert.ToDateTime(txtCancelTTStartDate.Text), Convert.ToDateTime(txtCancelTTEndDate.Text), Convert.ToInt32(ddlCancelTTSection.SelectedValue));
 
         if (ds != null & ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
         {
@@ -2421,7 +2507,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
     public void BindCourseDropdownCancelTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetValueAddedOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10);
+        ddlCourseCancelTT.Items.Clear();
+        ddlCourseCancelTT.Items.Add(new ListItem("Please Select", "0"));
+        DataSet ds1 = objCC.GetValueAddedOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlCancelTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             // ddlSession.SelectedValue = "";
@@ -2431,6 +2519,11 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             ddlCourseCancelTT.DataBind();
             //ddlSession.SelectedIndex = 0;
         }
+        else
+        {
+            ddlCourseCancelTT.Items.Clear();
+            ddlCourseCancelTT.Items.Add(new ListItem("Please Select", "0"));
+        }
     }
 
     protected void btnCancelTT_Click(object sender, EventArgs e)
@@ -2438,6 +2531,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlSlotTypeCancelTT.SelectedIndex = 0;
         ddlCourseCancelTT.SelectedIndex = 0;
         ddlSessionCancelTT.SelectedIndex = 0;
+        ddlCancelTTSection.SelectedIndex = 0;
         txtCancelTTStartDate.Text = "";
         txtCancelTTEndDate.Text = "";
         txtCancelRemark.Text = "";
@@ -2494,9 +2588,10 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 ddlSubjectRevisedTimetable.Items.Clear();
                 ddlSubjectRevisedTimetable.Items.Add(new ListItem("Please Select", "0"));
                 int SessionNo = Convert.ToInt32(ddlSessionRevisedTimeTable.SelectedValue);
-                BindCourseDropdownRevisedTimeTable(SessionNo);
+                //BindCourseDropdownRevisedTimeTable(SessionNo);
                 BindGlobalRevisedTimeTable(Convert.ToInt32(ddlSessionRevisedTimeTable.SelectedValue), 0, 0);
                 //BindGlobalRevisedTimeTable();
+                objCommon.FillDropDownList(ddlRevisedTTSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", " ISNULL(ACTIVESTATUS,0)=1 AND SECTIONNO > 0", "SECTIONNO");
             }
 
         }
@@ -2521,7 +2616,9 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
     public void BindCourseDropdownRevisedTimeTable(int SessionNo)
     {
-        DataSet ds1 = objCC.GetValueAddedOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10);
+        ddlSubjectRevisedTimetable.Items.Clear();
+        ddlSubjectRevisedTimetable.Items.Add(new ListItem("Please Select", "0"));
+        DataSet ds1 = objCC.GetValueAddedOfferedCourseList(Convert.ToInt32(SessionNo), 0, 0, 10, Convert.ToInt32(ddlRevisedTTSection.SelectedValue));
         if (ds1.Tables[0].Rows.Count > 0)
         {
             // ddlSession.SelectedValue = "";
@@ -2531,6 +2628,11 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             ddlSubjectRevisedTimetable.DataBind();
             //ddlSession.SelectedIndex = 0;
         }
+        else
+        {
+            ddlSubjectRevisedTimetable.Items.Clear();
+            ddlSubjectRevisedTimetable.Items.Add(new ListItem("Please Select", "0"));
+        }
     }
 
     private void BindGlobalRevisedTimeTable(int sessionid, int courseno, int facultyno)
@@ -2539,7 +2641,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         {
             DataSet ds = null;
             CourseController objCC = new CourseController();
-            ds = objCC.GetValueAddedCoursesRevisedTimeTableModified(sessionid, courseno, facultyno);
+            ds = objCC.GetValueAddedCoursesRevisedTimeTableModified(sessionid, courseno, facultyno, Convert.ToInt32(ddlRevisedTTSection.SelectedValue));
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -2591,6 +2693,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         ddlRevisedTimeSlot.SelectedIndex = 0;
         ddlRevisedRoom.SelectedIndex = 0;
         ddlRevisedAllDay.SelectedIndex = 0;
+        //ddlRevisedTTSection.SelectedIndex = 0;
         if (Session["RevisedTimeSlotTbl"] == null)
         {
             lvRevisedTimeSlotDetails.DataSource = null;
@@ -2963,6 +3066,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
     {
         ddlSessionRevisedTimeTable.SelectedIndex = 0;
         ddlSubjectRevisedTimetable.SelectedIndex = 0;
+        ddlRevisedTTSection.SelectedIndex = 0;
         txtRevisedEndDate.Text = "";
         txtRevisedStartDate.Text = "";
         ddlExistingDates.SelectedIndex = 0;
@@ -2997,7 +3101,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         try
         {
 
-            DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate);
+            DataSet ds = objCC.GetValueAddedCoursesTimeTableDetailsSectionModified(facultyno, alternate, Convert.ToInt32(ddlSessionTimeTable.SelectedValue), startDate, endDate, courseno);
             lv.DataSource = ds;
             lv.DataBind();
 
@@ -3179,7 +3283,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
                 lstAdditionalTeacherCT.ClearSelection();
                 //ddlValueAddedGroup.SelectedIndex = 1;
                 int SessionNo = Convert.ToInt32(ddlSessionCT.SelectedValue);
-                DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 5);
+                DataSet ds = objCC.GetValueAddedCourseList(SessionNo, 0, 0, 5,0);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     // ddlSession.SelectedValue = "";
@@ -3224,7 +3328,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             ddlMainTeacherCT.Items.Add(new ListItem("Please Select", "0"));
             lstAdditionalTeacherCT.ClearSelection();
             //ddlValueAddedGroup.SelectedIndex = 1;
-            DataSet ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6);
+            DataSet ds = objCC.GetValueAddedCourseList(Convert.ToInt32(ddlSessionCT.SelectedValue), Convert.ToInt32(ddlCourseCT.SelectedValue), 0, 6,0);
             if (ds.Tables[0].Rows.Count > 0)
             {
 
@@ -3261,10 +3365,11 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
     {
         try
         {
+            string usertype = Convert.ToString(objCommon.LookUp("ACD_MODULE_CONFIG", "ATTENDANCE_USER_TYPES", "ConfigNo>0"));
 
             if (ddlMainTeacherCT.SelectedIndex > 0)
             {
-                objCommon.FillListBox(lstAdditionalTeacherCT, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND ISNULL(U.UA_TYPE,0)=3 AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlMainTeacherCT.SelectedValue) + ")", "U.UA_FULLNAME");
+                objCommon.FillListBox(lstAdditionalTeacherCT, "USER_ACC U", "DISTINCT U.UA_NO", "UA_FULLNAME", "ISNULL(U.UA_STATUS,0) = 0 AND U.UA_TYPE IN (select value from dbo.split('" + usertype + "',',')) AND (U.UA_DEPTNO IS NOT NULL OR U.UA_DEPTNO <> '' OR U.UA_DEPTNO <> 0) AND U.UA_NO NOT IN(" + Convert.ToString(ddlMainTeacherCT.SelectedValue) + ")", "U.UA_FULLNAME");
                 BindCourseTeacherAllotment();
             }
             else
@@ -3323,7 +3428,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
             int output = objCC.UpdateCourseTeachAllotForValueAdded(objStudent, OrgId, Convert.ToInt32(ddlValueAddedGroup.SelectedValue));
             if (output == 1)
             {
-                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Sucessfully..", this.Page);
+                objCommon.DisplayMessage(this.updCourseTeacher, "Course Teacher Allotment Successfully..", this.Page);
             }
             else if (output == 2)
             {
@@ -3367,7 +3472,7 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
         lstAdditionalTeacherCT.ClearSelection();
         lvGlobalCourseTeacher.DataSource = null;
         lvGlobalCourseTeacher.DataBind();
-        ddlValueAddedGroup.SelectedIndex = 1;
+        ddlValueAddedGroup.SelectedIndex = 0;
     }
 
     private void BindCourseTeacherAllotment()
@@ -3514,6 +3619,112 @@ public partial class ACADEMIC_Value_Added_Courses : System.Web.UI.Page
 
             //}
             //}
+        }
+    }
+
+    protected void ddlsection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        DataSet ds = null;
+        if (Convert.ToInt32(ddlsection.SelectedValue) > 0)
+        {
+            if (Convert.ToInt32(ViewState["valueAddedElectiveCTAllotment"]) == 1)
+            {
+                ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 9, Convert.ToInt32(ddlsection.SelectedValue));
+            }
+            else
+            {
+                ds = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSubjectAT.SelectedValue), 0, 6, 0);
+            }
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+
+                // ddlSession.SelectedValue = "";
+                ddlTeacher.Items.Clear();
+                ddlTeacher.Items.Add(new ListItem("Please Select", "0"));
+                ddlTeacher.DataSource = ds;
+                ddlTeacher.DataValueField = ds.Tables[0].Columns[0].ToString();
+                ddlTeacher.DataTextField = ds.Tables[0].Columns[1].ToString();
+                ddlTeacher.DataBind();
+                //ddlSession.SelectedIndex = 0;
+
+
+            }
+            else
+            {
+                ddlTeacher.Items.Clear();
+                ddlTeacher.Items.Add(new ListItem("Please Select", "0"));
+                //ddlTeacher.DataSource = null;
+                //ddlTeacher.DataBind();
+            }
+        }
+    }
+    protected void ddlTTSection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (Session["TimeSlotTbl"] == null)
+        {
+            lvTimeSlotDetails.DataSource = null;
+            lvTimeSlotDetails.DataBind();
+        }
+        int SessionNo = Convert.ToInt32(ddlSessionTimeTable.SelectedValue);
+        if (Convert.ToInt32(ddlTTSection.SelectedValue) > 0)
+        {
+            BindCourseDropdownTimeTable(SessionNo);
+            BindValueAddedTimeTable(SessionNo, 0, 0);
+        }
+        else
+        {
+            ddlRevisedSlotType.SelectedIndex = 0;
+            BindCourseDropdownTimeTable(SessionNo);
+            BindValueAddedTimeTable(SessionNo, 0, 0);
+            ClearControls_TimeSlotDetails();
+            ddlSubjectTimetable.Items.Clear();
+            ddlSubjectTimetable.Items.Add(new ListItem("Please Select", "0"));
+        }
+
+    }
+    protected void ddlRevisedTTSection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        if (Convert.ToInt32(ddlRevisedTTSection.SelectedValue) > 0)
+        {
+            int SessionNo = Convert.ToInt32(ddlSessionRevisedTimeTable.SelectedValue);
+            BindCourseDropdownRevisedTimeTable(SessionNo);
+            BindGlobalRevisedTimeTable(Convert.ToInt32(ddlSessionRevisedTimeTable.SelectedValue), 0, 0);
+        }
+        else
+        {
+            ddlSubjectRevisedTimetable.Items.Clear();
+            ddlSubjectRevisedTimetable.Items.Add(new ListItem("Please Select", "0"));
+            ddlRevisedSlotType.SelectedIndex = 0;
+            ddlExistingDates.Items.Clear();
+            ddlExistingDates.Items.Add(new ListItem("Please Select", "0"));
+            txtRevisedStartDate.Text = "";
+            txtRevisedEndDate.Text = "";
+            txtRevisedRemark.Text = "";
+            Session["RevisedTimeSlotTbl"] = null;
+            if (Session["RevisedTimeSlotTbl"] == null)
+            {
+                lvRevisedTimeSlotDetails.DataSource = null;
+                lvRevisedTimeSlotDetails.DataBind();
+            }
+        }
+    }
+
+    protected void ddlCancelTTSection_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (Convert.ToInt32(ddlCancelTTSection.SelectedIndex) > 0)
+        {
+            int SessionNo = Convert.ToInt32(ddlSessionCancelTT.SelectedValue);
+            BindCourseDropdownCancelTimeTable(SessionNo);
+        }
+        else
+        {
+            ddlCourseCancelTT.Items.Clear();
+            ddlCourseCancelTT.Items.Add(new ListItem("Please Select", "0"));
+            ddlSlotTypeCancelTT.SelectedIndex = 0;
+            txtCancelTTStartDate.Text = "";
+            txtCancelRemark.Text = "";
+            txtCancelTTEndDate.Text = "";
         }
     }
 }

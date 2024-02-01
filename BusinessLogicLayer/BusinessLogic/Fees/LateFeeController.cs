@@ -430,8 +430,8 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             {
                 SQLHelper objSQLHelper = new SQLHelper(_connectionString);
                 SqlParameter[] objParams = new SqlParameter[2];
-                objParams[0] = new SqlParameter("@P_FROMDT", FromDT);
-                objParams[1] = new SqlParameter("@P_TODT", ToDT);
+                objParams[0] = new SqlParameter("@P_FROMDT", FromDT.ToString("dd-MMM-yyyy"));
+                objParams[1] = new SqlParameter("@P_TODT", ToDT.ToString("dd-MMM-yyyy"));
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_LATE_FEE_CANCEL_STUD_DETAILS", objParams);
             }
             catch (Exception ex)
@@ -631,6 +631,61 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return retStatus;
         }
+
+
+
+
+
+        public int UpdateLate_New_FeesDetails_EXAM(DateTime LATE_FEES_DATE, string DEGREE, int COMMON_NO, string FEE_ITEM, string RECEIPT_TYPE, int SESSIONNO, int UANO, int college_ID, int ReAdmissionFlag, double reAdmAmount, string semesternos)//string DAY_NO_FROM, string DAY_NO_TO, string AMOUNT,int LATE_FEE_NO, string SEQ_NO,
+        {
+            int retStatus = Convert.ToInt32(CustomStatus.Others);
+
+            try
+            {
+                SQLHelper objSQLHelper = new SQLHelper(_connectionString);
+                SqlParameter[] objParams = null;
+
+                //update
+                objParams = new SqlParameter[13];
+                // objParams[0] = new SqlParameter("@P_LATE_FEE_NO", LATE_FEE_NO);
+                // objParams[1] = new SqlParameter("@P_SEQ_NO", SEQ_NO);
+
+                //objParams[0] = new SqlParameter("@P_DAY_NO_FROM", DAY_NO_FROM);
+                //objParams[1] = new SqlParameter("@P_DAY_NO_TO", DAY_NO_TO);
+                //objParams[2] = new SqlParameter("@P_AMOUNT", AMOUNT);
+                objParams[0] = new SqlParameter("@P_LATE_FEES_DATE", LATE_FEES_DATE);
+                objParams[1] = new SqlParameter("@P_DEGREE", DEGREE);
+                objParams[2] = new SqlParameter("@P_COMMON_NO", COMMON_NO);
+                objParams[3] = new SqlParameter("@P_FEE_ITEM", FEE_ITEM);
+                objParams[4] = new SqlParameter("@P_RECEIPT_TYPE", RECEIPT_TYPE);
+                objParams[5] = new SqlParameter("@P_SESSIONNO", SESSIONNO);
+                objParams[6] = new SqlParameter("@P_UA_NO", UANO);
+                objParams[7] = new SqlParameter("@P_COLLEGE_ID", college_ID);
+                objParams[8] = new SqlParameter("@P_READMISSION_FLAG", ReAdmissionFlag);
+                objParams[9] = new SqlParameter("@P_READMISSION_FEE", reAdmAmount);
+                objParams[10] = new SqlParameter("@P_ORG_ID", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]));
+                objParams[11] = new SqlParameter("@P_SEMESTERNOS", semesternos);
+                objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[12].Direction = ParameterDirection.Output;
+
+                object ret = (objSQLHelper.ExecuteNonQuerySP("PKG_UPDATE_NEW_LATE_FEES_DETAILS_EXAM", objParams, true));
+                if (ret.ToString() == "2" && ret != null)
+                {
+                    retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                }
+                else if (ret.ToString() == "-99")
+                {
+                    retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                }
+            }
+            catch (Exception ex)
+            {
+                retStatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LateFeeController.UpdateLate_FeesDetails-> " + ex.ToString());
+            }
+            return retStatus;
+        }
+
 
 
 

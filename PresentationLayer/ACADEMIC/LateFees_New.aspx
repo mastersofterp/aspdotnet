@@ -226,23 +226,26 @@
                                                 <asp:TemplateField HeaderText="Day From" HeaderStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-desktop" ItemStyle-CssClass="visible-desktop">
                                                     <ItemTemplate>
                                                         <asp:TextBox ID="txtDayNoFrom" runat="server"
-                                                            CssClass="form-control">
+                                                            CssClass="form-control" MaxLength="3">
                                                         </asp:TextBox>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtDayNoFrom" ValidChars="1234567890." />
                                                         <asp:HiddenField ID="hdnval" runat="server" Value='<%# Bind("ROWNUMBER") %>' />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Day To" HeaderStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-desktop" ItemStyle-CssClass="visible-desktop">
                                                     <ItemTemplate>
                                                         <asp:TextBox ID="txtDayNoTo" runat="server"
-                                                            CssClass="form-control">
+                                                            CssClass="form-control" MaxLength="3">
                                                         </asp:TextBox>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtDayNoTo" ValidChars="1234567890." />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="Fees" HeaderStyle-HorizontalAlign="Center" HeaderStyle-CssClass="visible-desktop" ItemStyle-CssClass="visible-desktop">
                                                     <ItemTemplate>
                                                         <asp:TextBox ID="txtFees" runat="server"
-                                                            CssClass="form-control">
+                                                            CssClass="form-control" MaxLength="10">
                                                         </asp:TextBox>
+                                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" FilterMode="ValidChars" FilterType="Custom" TargetControlID="txtFees" ValidChars="1234567890." />
                                                         <asp:LinkButton ID="lnkRemove" runat="server" OnClick="lnkRemove_Click"
                                                             Style="float: none;">
                                                                                    Remove

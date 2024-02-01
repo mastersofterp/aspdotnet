@@ -143,13 +143,50 @@ public partial class LevelFeedback : System.Web.UI.Page
             int idno = 0;
             idno = Session["usertype"].ToString() == "2" ? Convert.ToInt32(Session["idno"]) : Convert.ToInt32(ViewState["Id"]);
             DataSet ds = objSFBC.GetCourseListStatus(Convert.ToInt32(lblSession.ToolTip), idno, Convert.ToInt32(lblSemester.ToolTip), Convert.ToInt32(lblScheme.ToolTip), Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
+            ViewState["lvSelected"] = ds;
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
+
                 Panel1.Visible = false;
                 lblcrse.Visible = true;
                 pnlSubject.Visible = true;
                 lvSelected.DataSource = ds;
                 lvSelected.DataBind();
+                //
+
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add("SRNO", typeof(int));
+                dataTable.Columns.Add("CourseNo", typeof(string));
+                dataTable.Columns.Add("Selected", typeof(int));
+                dataTable.Columns.Add("TeacherNo", typeof(int));
+
+                int counter = 1;
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    DataRow newRow = dataTable.NewRow();
+                    newRow["SRNO"] = counter;
+                    newRow["CourseNo"] = row["CourseNo"];
+                    newRow["TeacherNo"] = row["UA_NO"];
+                    if (counter == 1)
+                    {
+                        newRow["Selected"] = "1";
+                        ViewState["SelectedCourse"] = row["CourseNo"];
+                        ViewState["TEACHERNO"] = row["UA_NO"];
+                    }
+                    else
+                    {
+                        newRow["Selected"] = "0";
+                    }
+                    dataTable.Rows.Add(newRow);
+                    counter++;
+                }
+
+                ViewState["dataTableHist"] = dataTable;
+
+
+                //ViewState["SelectedCourse"] = ds.Tables[0].Rows[0]["courseno"].ToString();
+                //
                 this.CheckSubjectAssign();
             }
             else
@@ -187,12 +224,12 @@ public partial class LevelFeedback : System.Web.UI.Page
                 ViewState["SEMESTERNO"] = ds.Tables[0].Rows[0]["SEMESTERNO"].ToString();
                 //objCommon.FillDropDownList(ddlSession, "ACD_FEEDBACK_ACTIVITY FA INNER JOIN ACD_SESSION_MASTER SM ON (SM.SESSIONNO=FA.SESSION_NO)", "DISTINCT SESSION_NO", " SESSION_NAME", "STARTED=1 AND SHOW_STATUS=1 AND DEGREENO=" + Degreeno + " AND BRANCHNO=" + branchno + " AND SEMESTERNO=" + Semesterno + " AND FA.COLLEGE_ID=" + collegeid, "SESSION_NO");
                 //CheckActivity();
-                
+
                 ActivityController objActController = new ActivityController();
                 DataSet dssession = objActController.FillFeedbackSession(Convert.ToInt32(Degreeno), Convert.ToInt32(branchno), Convert.ToInt32(Semesterno), Convert.ToInt32(collegeid));
                 if (dssession != null && dssession.Tables.Count > 0 && dssession.Tables[0].Rows.Count > 0)
                 {
-                    
+
                     ddlSession.DataSource = dssession;
                     ddlSession.DataValueField = dssession.Tables[0].Columns[0].ToString();
                     ddlSession.DataTextField = dssession.Tables[0].Columns[1].ToString();
@@ -356,11 +393,22 @@ public partial class LevelFeedback : System.Web.UI.Page
     private void CheckSubjectAssign()
     {
         SqlDataReader dr = null;
+        int countofCourse = 0;
+        int countIsFinalSubmit = 0;
+        int countIsSubmit = 0;
+        int Is_FsubmitCount = 0;
+
         foreach (ListViewDataItem item in lvSelected.Items)
         {
             Label lblComplete = item.FindControl("lblComplete") as Label;
+            Label lblFinalSubmit = item.FindControl("lblFinalSubmit") as Label;
             lblComplete.ForeColor = System.Drawing.Color.Red;
-            lblComplete.Text = "Incomplete";
+            lblComplete.Text = "Not Saved";
+            lblFinalSubmit.ForeColor = System.Drawing.Color.Red;
+            lblFinalSubmit.Text = "Incomplete ";
+            countofCourse++;
+            ViewState["countofCourse"] = countofCourse;
+
         }
 
         if (Session["usertype"].ToString() == "2")
@@ -375,13 +423,54 @@ public partial class LevelFeedback : System.Web.UI.Page
                 {
                     LinkButton lnkCourse = item.FindControl("lnkbtnCourse") as LinkButton;
                     Label lblComplete = item.FindControl("lblComplete") as Label;
+                    Label lblFinalSubmit = item.FindControl("lblFinalSubmit") as Label;
+                    //Label hdnFinalSubmitted = item.FindControl("hdnFinalSubmitted") as HiddenField;
+
 
                     if (Convert.ToInt32(lnkCourse.CommandArgument) == Convert.ToInt32(dr["COURSENO"].ToString()) && lnkCourse.ToolTip == dr["UA_NO"].ToString())
                     {
+                        if (ViewState["PageLoad"] == null)
+                        {
+                            if (lblFinalSubmit.ToolTip == "1")
+                            {
+                                Is_FsubmitCount++;
+                                ViewState["Is_FsubmitCount"] = Is_FsubmitCount;
+                            }
+                        }
+                        else
+                        {
+                            if (lblComplete.ToolTip != null)
+                            {
+                                Is_FsubmitCount++;
+                                ViewState["Is_FsubmitCount"] = Is_FsubmitCount;
+                            }
+                        }
                         lblComplete.ForeColor = System.Drawing.Color.Green;
-                        lblComplete.Text = "Complete";
+                        lblComplete.Text = "Saved";
+                        countIsSubmit++;
+                        ViewState["countIsSubmit"] = countIsSubmit;
                         break;
                     }
+
+                }
+
+                foreach (ListViewDataItem item in lvSelected.Items)
+                {
+                    Label lblFinalSubmit = item.FindControl("lblFinalSubmit") as Label;
+                    if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["Is_FsubmitCount"]))
+                    {
+                        lblFinalSubmit.Text = "Complete";
+                        lblFinalSubmit.ForeColor = System.Drawing.Color.Green;
+                    }
+                }
+
+                if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["countIsSubmit"]))
+                {
+                    lvCourse.DataSource = null;
+                    lvCourse.DataBind();
+                    btnFinalSubmit.Visible = true;
+                    //btnSubmit.Visible = false;
+                    //btnPrevious.Visible = false;
                 }
             }
         }
@@ -395,71 +484,135 @@ public partial class LevelFeedback : System.Web.UI.Page
         objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
         objSEB.SubId = SubID;
         objSEB.SemesterNo = semesterno;
+        objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        if (ViewState["TeachNo"] != null)
+        {
+            objSEB.UA_NO = Convert.ToInt32(ViewState["TeachNo"]);
+        }
         try
         {
-            DataSet ds = objSFBC.GetFeedBackQuestionForMaster(objSEB);
-            // DataSet ds = objSFBC.GetFeedBackQuestionForMaster(objSEB, SubID);
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            if (true)
             {
-                lblcrse.Visible = true;
-                lvCourse.DataSource = ds;
-                lvCourse.DataBind();
-                pnlFeedback.Visible = true;
-                foreach (ListViewDataItem dataitem in lvCourse.Items)
+                DataSet ds = objSFBC.GetFeedBackQuestionForMaster(objSEB);
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-                    RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
-                    HiddenField hdnCourse = dataitem.FindControl("hdnCourse") as HiddenField;
-
-                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    lblcrse.Visible = true;
+                    lvCourse.DataSource = ds;
+                    lvCourse.DataBind();
+                    pnlFeedback.Visible = true;
+                    pnlFinalSumbit.Visible = true;
+                    //foreach (ListViewDataItem dataitem in lvCourse.Items)
+                    foreach (ListViewDataItem dataitem in lvCourse.Items)
                     {
-                        if (Convert.ToInt32(hdnCourse.Value) == Convert.ToInt32(ds.Tables[0].Rows[i]["QUESTIONID"]))
+                        RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+                        HiddenField hdnCourse = dataitem.FindControl("hdnCourse") as HiddenField;
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            string ansOptions = ds.Tables[0].Rows[i]["ANS_OPTIONS"].ToString();
-                            string ansValue = ds.Tables[0].Rows[i]["ANS_VALUE"].ToString();
-
-                            if (ansOptions.Contains(","))
+                            if (Convert.ToInt32(hdnCourse.Value) == Convert.ToInt32(ds.Tables[0].Rows[i]["QUESTIONID"]))
                             {
-                                string[] opt;
-                                string[] val;
+                                string queid = ds.Tables[0].Rows[i]["QUESTIONID"].ToString();
+                                string ansOptions = ds.Tables[0].Rows[i]["ANS_OPTIONS"].ToString();
+                                string ansValue = ds.Tables[0].Rows[i]["ANS_VALUE"].ToString();
+                                string studentFeedback = ds.Tables[0].Rows[i]["STUD_ANSWERID"].ToString();
 
-                                opt = ansOptions.Split(new[] { "," }, StringSplitOptions.None);
-                                val = ansValue.Split(new[] { "," }, StringSplitOptions.None);
-
-                                int itemindex = 0;
-                                for (int j = 0; j < opt.Length; j++)
+                                if (ansOptions.Contains(","))
                                 {
-                                    for (int k = 0; k < val.Length; k++)
+                                    string[] opt;
+                                    string[] val;
+
+                                    opt = ansOptions.Split(new[] { "," }, StringSplitOptions.None);
+                                    val = ansValue.Split(new[] { "," }, StringSplitOptions.None);
+
+                                    int itemindex = 0;
+                                    bool rowFeedbackOptionSelected = false;
+                                    for (int j = 0; j < opt.Length; j++)
                                     {
-                                        if (j == k)
+                                        for (int k = 0; k < val.Length; k++)
                                         {
-                                            RadioButtonList lst;
-                                            lst = new RadioButtonList();
+                                            if (j == k)
+                                            {
+                                                RadioButtonList lst;
+                                                lst = new RadioButtonList();
 
-                                            rblCourse.Items.Add(opt[j]);
-                                            rblCourse.SelectedIndex = itemindex;
-                                            rblCourse.SelectedItem.Value = val[j];
+                                                rblCourse.Items.Add(opt[j]);
+                                                rblCourse.SelectedIndex = itemindex;
+                                                rblCourse.SelectedItem.Value = val[j];
 
-                                            itemindex++;
-                                            break;
+                                                itemindex++;
+
+                                            }
                                         }
                                     }
                                 }
+                                rblCourse.SelectedIndex = -1;
+                                break;
                             }
-                            rblCourse.SelectedIndex = -1;
-                            break;
                         }
                     }
+
+                    // Added by Amit K. on date 15-Dec-2023
+                    foreach (ListViewDataItem dataitem in lvCourse.Items)
+                    {
+                        RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+                        HiddenField hdnCourse = dataitem.FindControl("hdnCourse") as HiddenField;
+                        TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
+
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            string qid = ds.Tables[0].Rows[i]["QUESTIONID"].ToString();
+                            if (Convert.ToInt32(hdnCourse.Value) == Convert.ToInt32(ds.Tables[0].Rows[i]["QUESTIONID"]))
+                            {
+                                string studentFeedback = ds.Tables[0].Rows[i]["STUD_ANSWERID"].ToString();
+
+                                if (ds.Tables[0].Rows[i]["OPTION_TYPE"].ToString() == "R")
+                                {
+                                    string ansOptions = ds.Tables[0].Rows[i]["ANS_OPTIONS"].ToString();
+
+                                    if (ansOptions.Contains(","))
+                                    {
+                                        string[] opt;
+                                        string[] val;
+
+                                        opt = ansOptions.Split(new[] { "," }, StringSplitOptions.None);
+
+                                        for (int j = 0; j < opt.Length; j++)
+                                        {
+                                            if (rblCourse.Items[j].Value == studentFeedback)
+                                            {
+                                                rblCourse.Items[j].Selected = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    txtcourse.Text = ds.Tables[0].Rows[i]["ANSWER"].ToString();
+                                }
+                                //
+
+
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    pnlFeedback.Visible = false;
+                    pnlFinalSumbit.Visible = false;
+                    lvCourse.Items.Clear();
+                    lblcrse.Visible = false;
+                    lvCourse.DataSource = null;
+                    lvCourse.DataBind();
+                    objCommon.DisplayMessage("No feedback questions found for this semester course.", this.Page);
                 }
             }
             else
             {
-                pnlFeedback.Visible = false;
-                lvCourse.Items.Clear();
-                lblcrse.Visible = false;
-                lvCourse.DataSource = null;
-                lvCourse.DataBind();
-                objCommon.DisplayMessage("No feedback questions found for this semester course.", this.Page);
+
             }
+
         }
 
         catch (Exception ex)
@@ -497,6 +650,7 @@ public partial class LevelFeedback : System.Web.UI.Page
     // function to save the feedback details
     private int FillAnswers(DataTable dt_FEEDBACK)
     {
+        int is_Final_submit = 0;
         objSEB.SessionNo = Convert.ToInt32(lblSession.ToolTip);
         objSEB.Ipaddress = Request.ServerVariables["REMOTE_HOST"];
         objSEB.Date = DateTime.Now;
@@ -509,10 +663,6 @@ public partial class LevelFeedback : System.Web.UI.Page
         }
         objSEB.FB_Status = true;
         objSEB.OverallImpression = "0";
-        //objSEB.Suggestion_A = "0";
-        //objSEB.Suggestion_B = "0";
-        //objSEB.Suggestion_C = "0";
-        //objSEB.Suggestion_D = "0";
         objSEB.Suggestion_A = lblWhatOtherChanges.Text;
         objSEB.Suggestion_B = txtWhatOtherChanges.Text;
         objSEB.Suggestion_C = lblAnyComments.Text;
@@ -521,7 +671,7 @@ public partial class LevelFeedback : System.Web.UI.Page
         objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
 
         objSEB.ExamNo = Convert.ToInt32(ddlExam.SelectedValue);
-
+        ViewState["examno"] = Convert.ToInt32(ddlExam.SelectedValue);
         string COMMENTS = string.Empty;
         if (Session["OrgId"].ToString() == "15")
         {
@@ -531,20 +681,40 @@ public partial class LevelFeedback : System.Web.UI.Page
         {
             COMMENTS = "";
         }
-        
+
+        //if (ViewState["FinalSubmit"] == null)
+        //{
+        //    ViewState["FinalSubmit"] = 1;
+        //}
+        //else
+        //{
+        //    ViewState["FinalSubmit"] = Convert.ToInt32(ViewState["FinalSubmit"]) + 1;
+        //}
+
+        //if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["FinalSubmit"]))
+        //{
+        //    is_Final_submit = 1;
+        //}
+        //else
+        //{
+        //    is_Final_submit = 0;
+        //}
 
         if (!txtRemark.Text.Equals(string.Empty)) objSEB.Remark = txtRemark.Text.ToString();
-        int ret = objSFBC.InsertStudentFeedBackAnswer(objSEB, dt_FEEDBACK, COMMENTS);
+        int ret = objSFBC.InsertStudentFeedBackAnswer(objSEB, dt_FEEDBACK, COMMENTS, is_Final_submit);
+
+
         return ret;
     }
 
 
 
-    // to save the feedback details
+    // to save & Next the feedback details
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         try
         {
+            ViewState["PageLoad"] = null;
             if (divcomment.Visible == true)
             {
                 if (txtComments.Text.Length > 1000)
@@ -573,11 +743,11 @@ public partial class LevelFeedback : System.Web.UI.Page
                     for (int i = 0; i <= Convert.ToInt32(rblCourse.SelectedIndex); i++)
                     {
                         // Access the data item index for each RadioButton
-                        dataItemIndex = i+1;
+                        dataItemIndex = i + 1;
 
                     }
 
-                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible==true) || (txtcourse.Text=="" && txtcourse.Visible==true)  )
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true) || (txtcourse.Text == "" && txtcourse.Visible == true))
                     {
                         objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
                         return;
@@ -598,7 +768,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                         }
                     }
                 }
-                
+
                 //objSEB.AnswerIds = objSEB.AnswerIds.TrimEnd(',');
                 //objSEB.QuestionIds = objSEB.QuestionIds.TrimEnd(',');
 
@@ -613,21 +783,101 @@ public partial class LevelFeedback : System.Web.UI.Page
                     txtAnyComments.Text = "";
                     //ddlFeedbackTyp.SelectedIndex = 0;
                     //ddlSession.SelectedIndex = 0;
+
+
+
+
+                    //////////Added by Amit B.
+                    int currentsrno = 0;
+                    int NextCourseno = 0;
+                    ViewState["COURSENO"] = 0;
+                    //ViewState["TeachNo"] = 0;
+                    int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
+                    string count = "-1";
+                    lblcrse.Text = string.Empty;
+                    if (ViewState["dataTableHist"] != null)
+                    {
+                        DataTable dataTable = (DataTable)ViewState["dataTableHist"];
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo && Convert.ToInt32(row["TeacherNo"]) == Convert.ToInt32(ViewState["TeachNo"]))
+                            {
+                                currentsrno = Convert.ToInt32(row["srno"]);
+                                currentsrno++;
+                                break;
+                            }
+                        }
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            if (Convert.ToInt32(row["srno"]) == currentsrno)
+                            {
+                                NextCourseno = Convert.ToInt32(row["courseno"]);
+                                ViewState["SelectedCourse"] = NextCourseno;
+                                ViewState["COURSENO"] = NextCourseno;
+                                ViewState["TeacherNo"] = Convert.ToInt32(row["TeacherNo"]);
+                                break;
+                            }
+                        }
+                        // lblcrse.Text = lnk.Text;
+                        if (ViewState["TeachNo"] == string.Empty)
+                        {
+                            objCommon.DisplayMessage(this, "No faculty is assigned to the selected Course!!!", this.Page);
+                            return;
+                        }
+
+                        DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
+                        //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
+
+                        DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
+                                           where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) && 
+                                           Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"]) 
+                                           select r).CopyToDataTable();
+
+                        lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
+                        ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
+                        foreach (ListViewDataItem dataitem in lvSelected.Items)
+                        {
+                            HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
+                            LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
+                            int courseno = Convert.ToInt32(lnkbtnCourse.CommandArgument);
+                            int ua_no = Convert.ToInt32(lnkbtnCourse.ToolTip);
+                            int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
+                            if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()) && ua_no == Convert.ToInt32(xdata.Rows[0]["ua_no"].ToString()))
+                            {
+                                if (sequenceNumber != 1)
+                                {
+                                    btnPrevious.Visible = true;
+                                }
+                                else
+                                {
+                                    btnPrevious.Visible = false;
+                                }
+                            }
+                        }
+                        foreach (ListViewDataItem dataitem in lvCourse.Items)
+                        {
+                            RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+                            rblCourse.SelectedIndex = -1;
+                        }
+
+                    }
+                    else
+                    {
+                        //objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
+                        objCommon.DisplayMessage("Something Went Wrong !", this.Page);
+                    }
+
+                    this.CheckSubjectAssign();
+                    FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
+                    //this.ClearControls();
+                    //fillquestion();
                 }
                 else
                 {
-                    //objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
-                    objCommon.DisplayMessage("Something Went Wrong !", this.Page);
+                    objCommon.DisplayMessage("Only Students fills this form!!", this.Page);
                 }
-
-                this.CheckSubjectAssign();
-
-                this.ClearControls();
-                //fillquestion();
-            }
-            else
-            {
-                objCommon.DisplayMessage("Only Students fills this form!!", this.Page);
             }
         }
         catch (Exception ex)
@@ -646,6 +896,7 @@ public partial class LevelFeedback : System.Web.UI.Page
         txtRemark.Text = string.Empty;
         ddlExam.SelectedIndex = 0;
         pnlFeedback.Visible = false;
+        pnlFinalSumbit.Visible = false;
         txtComments.Text = string.Empty;
     }
 
@@ -661,6 +912,18 @@ public partial class LevelFeedback : System.Web.UI.Page
             ViewState["COURSENO"] = lnk.CommandArgument;
             txtWhatOtherChanges.Text = string.Empty;
             txtAnyComments.Text = string.Empty;
+            ViewState["Semester"] = lnk.CommandName;
+            HiddenField hdnserialno = lnk.FindControl("hdnserialno") as HiddenField;
+            int sequenceNumber = Convert.ToInt32( hdnserialno.Value);
+            if (sequenceNumber != 1)
+            {
+                btnPrevious.Visible = true;
+            }
+            else
+            {
+                btnPrevious.Visible = false;
+            }
+            ViewState["SelectedCourse"] = ViewState["COURSENO"];
 
             ViewState["SubId"] = 0;
             if (Convert.ToInt32(ddlFeedbackTyp.SelectedValue) == 0)
@@ -711,6 +974,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                             {
                                 objCommon.DisplayMessage(this, "Not Eligible For this Subject Feedback because Attendance is only " + dsCheckStudAtt.Tables[0].Rows[0]["ATT_PER"].ToString() + "%. Attendance Should be greater than or equals to 75.00%", this.Page);
                                 pnlFeedback.Visible = false;
+                                pnlFinalSumbit.Visible = false;
                                 lblMsg.Text = "";
                                 lblMsg.Visible = false;
                                 return;
@@ -726,6 +990,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     {
                         objCommon.DisplayMessage(this, "Attendance Not Done For This Selected Course!!!", this.Page);
                         pnlFeedback.Visible = false;
+                        pnlFinalSumbit.Visible = false;
                         lblMsg.Text = "";
                         lblMsg.Visible = false;
                         return;
@@ -735,27 +1000,68 @@ public partial class LevelFeedback : System.Web.UI.Page
 
             }
 
-            if (Convert.ToInt32(count) > 0)//entry already done
+            int feedbackCount = Convert.ToInt32(objCommon.LookUp("ACD_ONLINE_FEEDBACK", "count(Final_Submit_Status)", "SESSIONNO=" + Convert.ToInt32(lblSession.ToolTip) + " AND isnull(COURSENO,0)=" + Convert.ToInt32(lnk.CommandArgument) + " AND IDNO=" + Convert.ToInt32(lblName.ToolTip) + "AND isnull(UA_NO,0)=" + Convert.ToInt32(lnk.ToolTip) + " and Final_Submit_Status=1 AND CTID=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue)));
+
+            if (Convert.ToInt32(count) > 0 && (feedbackCount > 0) && (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["Is_FsubmitCount"])))//entry already done
             {
                 string date = "";
                 date = objCommon.LookUp("ACD_ONLINE_FEEDBACK", "distinct Convert(varchar(10),DATE,103)", "SESSIONNO=" + Convert.ToInt32(lblSession.ToolTip) + " AND isnull(COURSENO,0)=" + Convert.ToInt32(lnk.CommandArgument) + " AND IDNO=" + Convert.ToInt32(lblName.ToolTip) + "AND isnull(UA_NO,0)=" + Convert.ToInt32(lnk.ToolTip) + " AND CTID=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
-
+                //date = objCommon.LookUp("ACD_ONLINE_FEEDBACK", "distinct Convert(varchar(10),DATE,103)", "SESSIONNO=" + Convert.ToInt32(lblSession.ToolTip) + " AND isnull(COURSENO,0)=" + Convert.ToInt32(lnk.CommandArgument) + " AND IDNO=" + Convert.ToInt32(lblName.ToolTip) + "AND isnull(UA_NO,0)=" + Convert.ToInt32(lnk.ToolTip) + " and Final_Submit_Status=1 AND CTID=" + Convert.ToInt32(ddlFeedbackTyp.SelectedValue));
                 if (date != "")
                 {
-                    lblMsg.Text = "FeedBack is already completed for " + lnk.Text + " on DATE " + date; ;
+                    lblMsg.Text = "FeedBack is already saved for " + lnk.Text + " on DATE " + date; ;
                     lblMsg.ForeColor = System.Drawing.Color.Red;
                     lblMsg.Visible = true;
                     pnlFeedback.Visible = false;
+                    pnlFinalSumbit.Visible = false;
+                    //if ((Convert.ToInt32(ViewState["countIsSubmit"]) == Convert.ToInt32(ViewState["countofCourse"])) && (Convert.ToInt32(ViewState["countIsSubmit"]) != Convert.ToInt32(ViewState["Is_FsubmitCount"])))
+                    //{
+                    //    pnlFinalSumbit.Visible = true;
+                    //    btnSubmit.Visible = false;
+                    //    btnCancel.Visible = false;
+                    //    btnFinalSubmit.Visible = true;
+                    //    btnPrevious.Visible = false;
+                    //}
                 }
             }
+
             else if (Convert.ToInt32(count) == 0)//new entry
             {
                 lblMsg.Text = "";
                 lblMsg.Visible = false;
                 FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
                 //FillTeacherQuestion();
+                pnlFinalSumbit.Visible = true;
+                btnSubmit.Visible = true;
+                btnCancel.Visible = true;
+                btnFinalSubmit.Visible = false;
+                //btnPrevious.Visible = true;
 
             }
+            else if (Convert.ToInt32(count) > 0 && (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["countIsSubmit"])))
+            {
+                lblMsg.Text = "";
+                lblMsg.Visible = false;
+                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
+                pnlFinalSumbit.Visible = true;
+                btnSubmit.Visible = true;
+                btnCancel.Visible = true;
+                btnFinalSubmit.Visible = true;
+                //btnPrevious.Visible = true;
+            }
+            else if (Convert.ToInt32(count) > 0 && (Convert.ToInt32(ViewState["countofCourse"]) != Convert.ToInt32(ViewState["Is_FsubmitCount"])))//entry already done
+            {
+                lblMsg.Text = "";
+                lblMsg.Visible = false;
+                FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(lnk.CommandName));
+                pnlFinalSumbit.Visible = true;
+                btnSubmit.Visible = true;
+                btnCancel.Visible = true;
+                btnFinalSubmit.Visible = false;
+                //btnPrevious.Visible = true;
+            }
+
+
             if (Session["OrgId"].ToString() == "2")
             {
                 if (ddlFeedbackTyp.SelectedValue == "1" || ddlFeedbackTyp.SelectedValue == "2")
@@ -930,7 +1236,8 @@ public partial class LevelFeedback : System.Web.UI.Page
     public void fillquestion()
     {
         pnlFeedback.Visible = false;
-
+        pnlFinalSumbit.Visible = false;
+        pnlSubmit.Visible = false;
         if (ddlFeedbackTyp.SelectedIndex > 0)
         {
             Panel1.Visible = false;
@@ -942,6 +1249,8 @@ public partial class LevelFeedback : System.Web.UI.Page
             ViewState["MODE"] = mode;
             if (mode == 1)
             {
+                pnlSubmit.Visible = true;
+                pnlFinalSumbit.Visible = false;
                 Panel1.Visible = false;
                 FillQuestion(1, Convert.ToInt32(lblSemester.ToolTip));
                 //if (Session["OrgId"].ToString() == "2")
@@ -973,6 +1282,8 @@ public partial class LevelFeedback : System.Web.UI.Page
             }
             else if (mode == 3)
             {
+                pnlSubmit.Visible = true;
+                pnlFinalSumbit.Visible = false;
                 Panel1.Visible = false;
                 pnlSubject.Visible = false;
                 lblcrse.Visible = false;
@@ -1012,6 +1323,18 @@ public partial class LevelFeedback : System.Web.UI.Page
             lvSelected.DataBind();
             ClearControls();
             lvSelected.Visible = false;
+        }
+
+        ////// added the following code for showing final submit button if feedback is saved for all courses but not submitted the final feedback
+
+        if (Convert.ToInt32(ViewState["countIsSubmit"]) == Convert.ToInt32(ViewState["Is_FsubmitCount"]))
+        {
+            pnlFinalSumbit.Visible = true;
+            btnSubmit.Visible = false;
+            btnCancel.Visible = false;
+            btnFinalSubmit.Visible = false;
+            btnPrevious.Visible = false;
+
         }
     }
 
@@ -1065,6 +1388,8 @@ public partial class LevelFeedback : System.Web.UI.Page
                     lblMsg.ForeColor = System.Drawing.Color.Red;
                     lblMsg.Visible = true;
                     pnlFeedback.Visible = false;
+                    pnlFinalSumbit.Visible = false;
+                    pnlSubmit.Visible = false;
                 }
             }
             else if (Convert.ToInt32(count) == 0)//new entry
@@ -1079,6 +1404,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                     lvCourse.DataSource = ds;
                     lvCourse.DataBind();
                     pnlFeedback.Visible = true;
+                    //pnlFinalSumbit.Visible = true;
                     foreach (ListViewDataItem dataitem in lvCourse.Items)
                     {
                         RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
@@ -1130,6 +1456,7 @@ public partial class LevelFeedback : System.Web.UI.Page
                 else
                 {
                     pnlFeedback.Visible = false;
+                    pnlFinalSumbit.Visible = false;
                     lvCourse.Items.Clear();
                     lblcrse.Visible = false;
                     lvCourse.DataSource = null;
@@ -1177,7 +1504,7 @@ public partial class LevelFeedback : System.Web.UI.Page
             }
             else
             {
-                
+
                 objCommon.DisplayMessage("This Activity has been Stopped.", this.Page);
                 divfeedbacktype.Visible = true;
                 ddlSession.Items.Clear();
@@ -1199,11 +1526,11 @@ public partial class LevelFeedback : System.Web.UI.Page
         }
         if (ddlSession.SelectedIndex > 0)
         {
-           
+
             divfeedbacktype.Visible = true;
             ActivityController objActController = new ActivityController();
             //objCommon.FillDropDownList(ddlFeedbackTyp, "ACD_FEEDBACK_ACTIVITY A INNER JOIN ACD_FEEDBACK_MASTER M ON (A.FEEDBACK_TYPENO=M.FEEDBACK_NO)", "FEEDBACK_TYPENO", "FEEDBACK_NAME", "FEEDBACK_TYPENO>0 AND STARTED=1 AND DEGREENO=" + Convert.ToInt32(ViewState["DEGREENO"]) + " AND BRANCHNO=" + Convert.ToInt32(ViewState["BRANCHNO"]) + "AND COLLEGE_ID=" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + "AND SEMESTERNO=" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "AND SESSION_NO=" + Convert.ToInt32(ddlSession.SelectedValue), "FEEDBACK_TYPENO");
-            DataSet dsfeedback = objActController.FillFeedbackType(Convert.ToInt32(Degreeno), Convert.ToInt32(branchno), Convert.ToInt32(Semesterno), Convert.ToInt32(collegeid),Convert.ToInt32( ddlSession.SelectedValue));
+            DataSet dsfeedback = objActController.FillFeedbackType(Convert.ToInt32(Degreeno), Convert.ToInt32(branchno), Convert.ToInt32(Semesterno), Convert.ToInt32(collegeid), Convert.ToInt32(ddlSession.SelectedValue));
             Session["sessionno"] = ddlSession.SelectedValue;
             ddlFeedbackTyp.Items.Clear();
             ddlFeedbackTyp.Items.Add(new ListItem("Please Select", "0"));
@@ -1230,5 +1557,351 @@ public partial class LevelFeedback : System.Web.UI.Page
             ddlFeedbackTyp.Items.Clear();
             ddlFeedbackTyp.Items.Add(new ListItem("Please Select", "0"));
         }
+    }
+    protected void btnNext_Click(object sender, EventArgs e)
+    {
+        int currentsrno = 0;
+        int NextCourseno = 0;
+        ViewState["COURSENO"] = 0;
+        ViewState["TeachNo"] = 0;
+        int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
+        string count = "-1";
+        lblcrse.Text = string.Empty;
+
+
+
+        if (ViewState["dataTableHist"] != null)
+        {
+            DataTable dataTable = (DataTable)ViewState["dataTableHist"];
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo)
+                {
+                    currentsrno = Convert.ToInt32(row["srno"]);
+                    currentsrno++;
+                    break;
+                }
+            }
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (Convert.ToInt32(row["srno"]) == currentsrno)
+                {
+                    NextCourseno = Convert.ToInt32(row["courseno"]);
+                    ViewState["SelectedCourse"] = NextCourseno;
+                    ViewState["COURSENO"] = NextCourseno;
+                    break;
+                }
+            }
+            // lblcrse.Text = lnk.Text;
+            if (ViewState["TeachNo"] == string.Empty)
+            {
+                objCommon.DisplayMessage(this, "No faculty is assigned to the selected Course!!!", this.Page);
+                return;
+            }
+
+            DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
+            //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
+
+            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) select r).CopyToDataTable();
+
+            lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
+            ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
+            //foreach (ListViewDataItem item in lvCourse.Items)
+            //{
+            //    RadioButtonList lblcrse = item.FindControl("lblcrse") as RadioButtonList;               
+            //}
+
+
+        }
+
+        //currentIndex++;
+        //if (currentIndex < lvSelected.Items.Count)
+        //{
+        //    // Navigate to the next link
+        //    lvSelected.Items[currentIndex]. = true;
+        //    lvSelected.Items[currentIndex].EnsureVisible();
+        //}
+        //else
+        //{
+        //    // Handle reaching the end of the list
+        //    // You may want to reset the index or show a message
+        //    currentIndex = lvSelected.Items.Count - 1;
+        //}
+
+    }
+    protected void btnFinalSubmit_Click(object sender, EventArgs e)
+    {
+        ViewState["PageLoad"] = "1";
+        objSEB.SessionNo = Convert.ToInt32(lblSession.ToolTip);
+        objSEB.Ipaddress = Request.ServerVariables["REMOTE_HOST"];
+        objSEB.CollegeCode = Session["colcode"].ToString();
+        objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        objSEB.ExamNo = Convert.ToInt32(ViewState["examno"]);
+        objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
+
+        int OrgID = Convert.ToInt32(Session["OrgId"]);
+
+        int is_Final_submit = 0;
+        if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["FinalSubmit"]))
+        {
+            is_Final_submit = 1;
+        }
+        else
+        {
+            is_Final_submit = 0;
+        }
+        int ret = objSFBC.UpdateFinalSubmitStatus(objSEB, OrgID, is_Final_submit);
+
+        if (ret == 2)
+        {
+            objCommon.DisplayMessage("Your Final FeedBack Saved Successfully !", this.Page);
+            CheckSubjectAssign();
+            this.ClearControls();
+            FillCourseList();
+            return;
+        }
+    }
+    protected void btnPrevious_Click(object sender, EventArgs e)
+    {
+        //////////Added by Amit B. on date 22-11-2023
+        int currentsrno = 0;
+        int PrevCourseno = 0;
+        ViewState["COURSENO"] = 0;
+        //ViewState["TeachNo"] = 0;
+        int SelectedCourseNo = Convert.ToInt32(ViewState["SelectedCourse"]);
+        string count = "-1";
+        lblcrse.Text = string.Empty;
+     
+        if (ViewState["dataTableHist"] != null)
+        {
+            DataTable dataTable = (DataTable)ViewState["dataTableHist"];
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (Convert.ToInt32(row["courseno"]) == SelectedCourseNo && Convert.ToInt32(row["TeacherNo"]) == Convert.ToInt32(ViewState["TeachNo"]))
+                {
+                    currentsrno = Convert.ToInt32(row["srno"]);
+                    currentsrno--;
+                    break;
+                }
+            }
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (Convert.ToInt32(row["srno"]) == currentsrno)
+                {
+                    PrevCourseno = Convert.ToInt32(row["courseno"]);
+                    ViewState["SelectedCourse"] = PrevCourseno;
+                    ViewState["COURSENO"] = PrevCourseno;
+                    ViewState["TeacherNo"] = Convert.ToInt32(row["TeacherNo"]);
+                    break;
+                }
+            }
+            // lblcrse.Text = lnk.Text;
+            if (ViewState["TeachNo"] == string.Empty)
+            {
+                objCommon.DisplayMessage(this, "No faculty is assigned to the selected Course!!!", this.Page);
+                return;
+            }
+
+            DataSet dsFromViewState = ViewState["lvSelected"] as DataSet;
+            //lblcrse.Text = dsFromViewState.Tables[0].Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + dsFromViewState.Tables[0].Rows[0]["TEACHER"].ToString() + "</span>]";
+
+            DataTable xdata = (from r in dsFromViewState.Tables[0].AsEnumerable() 
+                               where Convert.ToInt32(r["COURSENO"]) == Convert.ToInt32(ViewState["SelectedCourse"]) &&
+                               Convert.ToInt32(r["UA_NO"]) == Convert.ToInt32(ViewState["TeacherNo"])
+                               select r).CopyToDataTable();
+
+            lblcrse.Text = xdata.Rows[0]["COURSENAME"].ToString() + " - [<span style='color:Green;font-weight: bold;'>" + xdata.Rows[0]["UA_FULLNAME"].ToString() + "</span>] [ <span style='color:darkcyan;font-weight: bold;'>" + xdata.Rows[0]["TEACHER"].ToString() + "</span>]";
+            ViewState["TeachNo"] = Convert.ToInt32(xdata.Rows[0]["ua_no"]);
+            foreach (ListViewDataItem dataitem in lvSelected.Items)
+            {
+                HiddenField hdnserialno = dataitem.FindControl("hdnserialno") as HiddenField;
+                LinkButton lnkbtnCourse = dataitem.FindControl("lnkbtnCourse") as LinkButton;
+                int courseno = Convert.ToInt32( lnkbtnCourse.CommandArgument);
+                int sequenceNumber = Convert.ToInt32(hdnserialno.Value);
+                int ua_no = Convert.ToInt32(lnkbtnCourse.ToolTip);
+                if (courseno == Convert.ToInt32(xdata.Rows[0]["COURSENO"].ToString()) && ua_no == Convert.ToInt32(xdata.Rows[0]["ua_no"].ToString()))
+                {
+                    if (sequenceNumber != 1)
+                    {
+                        btnPrevious.Visible = true;
+                    }
+                    else
+                    {
+                        btnPrevious.Visible = false;
+                    }
+                }
+            }
+            //foreach (ListViewDataItem dataitem in lvCourse.Items)
+            //{
+            //    RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+
+            //    //rblCourse.SelectedIndex = -1;
+
+            //}
+
+            FillCourseQuestion(Convert.ToInt16(ViewState["SubId"]), Convert.ToInt32(ViewState["Semester"]));
+        }
+    }
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (divcomment.Visible == true)
+            {
+                if (txtComments.Text.Length > 1000)
+                {
+                    objCommon.DisplayMessage("Maximum characters should be less than 1000 !", this.Page);
+                    return;
+                }
+            }
+            DataTable dt_FEEDBACK = new DataTable("FEEDBACK");
+            dt_FEEDBACK.Columns.Add(new DataColumn("QID", typeof(int)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSID", typeof(int)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSTEXT", typeof(string)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("QANSWERTEXT", typeof(string)));
+            dt_FEEDBACK.Columns.Add(new DataColumn("ANS_OPTION_ID", typeof(int)));
+            if (Session["usertype"].ToString() == "2")
+            {
+                foreach (ListViewDataItem dataitem in lvCourse.Items)
+                {
+                    RadioButtonList rblCourse = dataitem.FindControl("rblCourse") as RadioButtonList;
+                    Label lblCourse = dataitem.FindControl("lblCourse") as Label;
+                    TextBox txtcourse = dataitem.FindControl("txtcourse") as TextBox;
+                    HiddenField hfOPTION_TYPE = dataitem.FindControl("hfOPTION_TYPE") as HiddenField;
+
+                    int dataItemIndex = 0;
+                    //int index = lvCourse.Items.IndexOf(dataitem.rblCourse);
+                    for (int i = 0; i <= Convert.ToInt32(rblCourse.SelectedIndex); i++)
+                    {
+                        // Access the data item index for each RadioButton
+                        dataItemIndex = i + 1;
+
+                    }
+
+                    if ((rblCourse.SelectedValue == "" && rblCourse.Visible == true) || (txtcourse.Text == "" && txtcourse.Visible == true))
+                    {
+                        objCommon.DisplayMessage("You must have to answer all the questions", this.Page);
+                        return;
+                    }
+                    else
+                    {
+                        if (hfOPTION_TYPE.Value == "R")
+                        {
+                            //objSEB.AnswerIds += rblCourse.SelectedValue + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), Convert.ToInt32(rblCourse.SelectedValue), "0", rblCourse.SelectedItem.Text, dataItemIndex);
+                        }
+                        else if (hfOPTION_TYPE.Value == "T")
+                        {
+                            //objSEB.AnswerIds += txtcourse.Text + ",";
+                            //objSEB.QuestionIds += lblCourse.Text + ",";
+                            dt_FEEDBACK.Rows.Add(Convert.ToInt32(lblCourse.Text), 0, txtcourse.Text, "", 0);
+                        }
+                    }
+                }
+
+                //objSEB.AnswerIds = objSEB.AnswerIds.TrimEnd(',');
+                //objSEB.QuestionIds = objSEB.QuestionIds.TrimEnd(',');
+
+                //this.FillAnswers();
+
+                int retFlag = this.SaveAnswers(dt_FEEDBACK);
+
+                if (retFlag == 1)
+                {
+                    objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
+                    txtWhatOtherChanges.Text = "";
+                    txtAnyComments.Text = "";
+                    //ddlFeedbackTyp.SelectedIndex = 0;
+                    //ddlSession.SelectedIndex = 0;
+                    pnlSubmit.Visible = false;
+                }
+                else
+                {
+                    //objCommon.DisplayMessage("Your FeedBack Saved Successfully !", this.Page);
+                    objCommon.DisplayMessage("Something Went Wrong !", this.Page);
+                }
+
+                this.CheckSubjectAssign();
+
+                this.ClearControls();
+                //fillquestion();
+            }
+            else
+            {
+                objCommon.DisplayMessage("Only Students fills this form!!", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_StudentFeedBackAns.btnSubmit_Click-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+    }
+
+    // function to save the feedback details
+    private int SaveAnswers(DataTable dt_FEEDBACK)
+    {
+
+        objSEB.SessionNo = Convert.ToInt32(lblSession.ToolTip);
+        objSEB.Ipaddress = Request.ServerVariables["REMOTE_HOST"];
+        objSEB.Date = DateTime.Now;
+        objSEB.CollegeCode = Session["colcode"].ToString();
+        objSEB.Idno = Convert.ToInt32(lblName.ToolTip);
+        if (ViewState["MODE"].ToString() == "2")
+        {
+            objSEB.CourseNo = Convert.ToInt32(ViewState["COURSENO"].ToString());
+            objSEB.UA_NO = Convert.ToInt32(ViewState["TeachNo"].ToString());
+        }
+        objSEB.FB_Status = true;
+        objSEB.OverallImpression = "0";
+        objSEB.Suggestion_A = lblWhatOtherChanges.Text;
+        objSEB.Suggestion_B = txtWhatOtherChanges.Text;
+        objSEB.Suggestion_C = lblAnyComments.Text;
+        objSEB.Suggestion_D = txtAnyComments.Text;
+
+        objSEB.CTID = Convert.ToInt32(ddlFeedbackTyp.SelectedValue);
+
+        objSEB.ExamNo = Convert.ToInt32(ddlExam.SelectedValue);
+        ViewState["examno"] = Convert.ToInt32(ddlExam.SelectedValue);
+        string COMMENTS = string.Empty;
+        if (Session["OrgId"].ToString() == "15")
+        {
+            COMMENTS = txtComments.Text;
+        }
+        else
+        {
+            COMMENTS = "";
+        }
+
+        //if (ViewState["FinalSubmit"] == null)
+        //{
+        //    ViewState["FinalSubmit"] = 1;
+        //}
+        //else
+        //{
+        //    ViewState["FinalSubmit"] = Convert.ToInt32(ViewState["FinalSubmit"]) + 1;
+        //}
+
+        //if (Convert.ToInt32(ViewState["countofCourse"]) == Convert.ToInt32(ViewState["FinalSubmit"]))
+        //{
+        //    is_Final_submit = 1;
+        //}
+        //else
+        //{
+        //    is_Final_submit = 0;
+        //}
+
+        if (!txtRemark.Text.Equals(string.Empty)) objSEB.Remark = txtRemark.Text.ToString();
+        int ret = objSFBC.SaveStudentFeedBackAnswer(objSEB, dt_FEEDBACK, COMMENTS);
+
+
+        return ret;
     }
 }

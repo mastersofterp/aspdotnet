@@ -216,9 +216,26 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         ViewState["admbatch"] = dtr["ADMBATCH"];
                         string branchname = objCommon.LookUp("ACD_BRANCH", "LONGNAME", "BRANCHNO=" + dtr["branchno"].ToString());
                         lblBranch.Text = branchname;
-                        lblName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
+
+                        lblfixStdName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();
+                        lblfixRRN.Text = dtr["REGNO"].ToString();
+                        lblfixdegreeBranch.Text =( dtr["DEGREE"] == null ? string.Empty : dtr["DEGREE"].ToString() )+" - " + branchname;
+                        lblName.Text = dtr["STUDNAME"] == null ? string.Empty : dtr["STUDNAME"].ToString();                    
                         //lblGender.Text = dtr["SEX"] == null ? string.Empty : dtr["SEX"].ToString();
-                        lblGender.Text = (dtr["SEX"].ToString() == "M" && dtr["SEX"] != null) ? "Male" : "Female";
+                        //lblGender.Text = (dtr["SEX"].ToString() == "M" && dtr["SEX"] != null) ? "Male" : "Female";
+
+                        if (dtr["SEX"].ToString() == "M")
+                        {
+                            lblGender.Text = "Male";
+                        }
+                        else if (dtr["SEX"].ToString() == "F")
+                        {
+                            lblGender.Text = "Female";
+                        }
+                        else if (dtr["SEX"].ToString() == "T" || dtr["SEX"].ToString() == "O")
+                        {
+                            lblGender.Text = "Other";
+                        }
 
                         lblMName.Text = dtr["FATHERNAME"] == null ? string.Empty : dtr["FATHERNAME"].ToString();
                         lblDOB.Text = dtr["DOB"] == DBNull.Value ? "" : Convert.ToDateTime(dtr["DOB"]).ToString("dd/MM/yyyy");
@@ -305,7 +322,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         lblClassAdvisorName.Text = dtr["CLASSADVISOR"] == null ? string.Empty : dtr["CLASSADVISOR"].ToString();
                         lblClsAdvEmailAddress.Text = dtr["UA_EMAIL"] == null ? string.Empty : dtr["UA_EMAIL"].ToString();
                         lblClsAdvMobNo.Text = dtr["UA_MOBILE"] == null ? string.Empty : dtr["UA_MOBILE"].ToString();
-
+                        lblAbcId.Text = dtr["ABCC_ID"] == null ? string.Empty : dtr["ABCC_ID"].ToString(); //Added by Saurabh S.
                         //Added by lalit dt 18-09-2023
                         //Students Current Registration Details
 
@@ -332,7 +349,7 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         //string sessionno = Session["currentsession"].ToString();
                         int college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + idno + ""));
                         //string sessionno = objCommon.LookUp("ACD_SESSION_MASTER", "SESSIONNO", "IS_ACTIVE=1 AND FLOCK=1 AND COLLEGE_ID=" + college_id + "");
-
+                        ViewState["collegeId"] = college_id;
                         //string sessionno = objCommon.LookUp("ACD_STUDENT_RESULT", "ISNULL(MAX(SESSIONNO),0) AS SESSIONNO", " IDNO=" + idno + "");
                         string sessionno = ddlSession.SelectedValue;
 
@@ -557,11 +574,15 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                         {
                             lvCourseReg.DataSource = dsCourse;
                             lvCourseReg.DataBind();
+                            btnPrintRegSlip.Visible = true;
+                          
                         }
                         else
                         {
                             lvCourseReg.DataSource = null;
                             lvCourseReg.DataBind();
+                            btnPrintRegSlip.Visible = false;
+                          
                         }
 
                         // End of Course Registered
@@ -814,6 +835,14 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
     {
         try
         {
+            if (ddlSession.SelectedIndex == 0)
+            {
+                btnPrintRegSlip.Visible = false;
+            }
+            else
+            {
+                btnPrintRegSlip.Visible = true;
+            }
             StudentController objSC = new StudentController();
             int idno = 0;
             if (ViewState["usertype"].ToString() == "2")
@@ -2767,4 +2796,70 @@ public partial class ACADEMIC_Comprehensive_Stud_Report : System.Web.UI.Page
                 objUaimsCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+    protected void btnPrintRegSlip_Click(object sender, EventArgs e)
+    {
+        int count = 0;
+        //int sessionno = Convert.ToInt32(ViewState["SessionNo"]);
+         int sessionno =  Convert.ToInt32(ddlSession.SelectedValue);
+        //int idno = Convert.ToInt32(Session["idno"]);
+         int idno = 0;
+        if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+        {
+            idno = Convert.ToInt32(Session["idno"]);
+        }
+        else
+        {
+            idno = Convert.ToInt32(ViewState["idno"]);
+
+        }
+        count = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(1)", "IDNO =" + idno + "AND SESSIONNO =" + sessionno + "AND ISNULL(CANCEL,0)=0"));
+        if (count > 0)
+        {
+            ShowReport("RegistrationSlip", "rptCourseRegSlip.rpt");
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "Course Registration Not Found.", this.Page);
+        }
+
+    }
+
+    private void ShowReport(string reportTitle, string rptFileName)
+    {
+        // int sessionno = Convert.ToInt32(Session["currentsession"].ToString());
+        //int sessionno = Convert.ToInt32(ViewState["SessionNo"]);
+           int sessionno = Convert.ToInt32(ddlSession.SelectedValue);
+           int idno = 0;
+           if (ViewState["usertype"].ToString() == "2" || (ViewState["usertype"].ToString() == "14"))
+           {
+               idno = Convert.ToInt32(Session["idno"]);
+           }
+           else
+           {
+               idno = Convert.ToInt32(ViewState["idno"]);
+
+           }
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["collegeId"].ToString() + ",@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@UserName=" + Session["username"].ToString();
+            //url += "&param=@P_COLLEGE_CODE=1,@P_IDNO=" + idno + ",@P_SESSIONNO=" + sessionno + ",@UserName=" + Session["username"].ToString();
+
+            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            //divMsg.InnerHtml += " </script>";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage(this.Page, "Somethingwent Wrong.!!", this.Page);
+        }
+    }
+
 }

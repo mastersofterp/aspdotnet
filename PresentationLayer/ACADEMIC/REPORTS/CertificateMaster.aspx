@@ -1017,7 +1017,11 @@
                                                                             <asp:TextBox ID="txtGReg" runat="server" Text='<%# Eval("GENERAL_REGNO")%>'></asp:TextBox>
                                                                         </td>
                                                                         <td>
-                                                                            <asp:TextBox ID="txtRemark" runat="server"></asp:TextBox>
+                                                                            <asp:TextBox ID="txtRemark" runat="server" Visible="false"></asp:TextBox>
+                                                                            <asp:DropDownList ID="ddlRemark" runat="server" AppendDataBoundItems="True" data-select2-enable="true" Visible="false">
+                                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                                            </asp:DropDownList>
+                                                                             <asp:HiddenField ID="hfdddlRemark" runat="server" Value='<%# Eval("REMARK")%>' />
                                                                         </td>
                                                                     </tr>
                                                                 </ItemTemplate>
@@ -1115,6 +1119,7 @@
                                     </ContentTemplate>
                                     <Triggers>
                                         <asp:PostBackTrigger ControlID="btnStatsticalReport" />
+                                        <asp:PostBackTrigger ControlID="btnReport" />
                                     </Triggers>
                                 </asp:UpdatePanel>
                             </div>

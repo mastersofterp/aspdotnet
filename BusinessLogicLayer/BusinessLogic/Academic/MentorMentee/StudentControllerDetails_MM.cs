@@ -512,6 +512,24 @@ namespace BusinessLogicLayer.BusinessLogic.Academic.MentorMentee
           return ds;
       }
 
+      public DataSet AdmfessDues(int idno, int Semesterno)
+      {
+          DataSet ds = null;
 
+          try
+          {
+              SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+              SqlParameter[] objParams = null;
+              objParams = new SqlParameter[2];
+              objParams[0] = new SqlParameter("@P_IDNO", idno);
+              objParams[1] = new SqlParameter("@P_SEMESTERNO", Semesterno);
+              ds = objSQLHelper.ExecuteDataSetSP("PKG_IS_ADMFEE_DUES", objParams);
+          }
+          catch (Exception ex)
+          {
+              throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetBulkSemesterPromotionData->" + ex.ToString());
+          }
+          return ds;
+      }
     }
 }

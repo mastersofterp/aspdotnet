@@ -286,8 +286,8 @@
 
                                                     <asp:TemplateField HeaderText="Academic Year" ControlStyle-Font-Bold="true" ItemStyle-HorizontalAlign="Center" ItemStyle-VerticalAlign="Middle" HeaderStyle-HorizontalAlign="Center" ItemStyle-Width="20%" HeaderStyle-VerticalAlign="Middle">
                                                         <ItemTemplate>
-                                                            <asp:Label ID="lblAcadYear" runat="server" Text='<%# Eval("AcadYear") %>' Visible="false" />
-                                                            <asp:DropDownList ID="ddlAcadYear" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                                            <asp:Label ID="lblAcadYear" runat="server" Text='<%# Eval("AcadYear") %>' Visible="false"  />
+                                                            <asp:DropDownList ID="ddlAcadYear" runat="server" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true" >
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                             </asp:DropDownList>
                                                         </ItemTemplate>
@@ -538,8 +538,8 @@
                                                 <sup></sup>
                                                 <label>Sort By</label>
                                             </div>
-                                            <asp:DropDownList ID="ddlSort" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
-                                                ValidationGroup="show">
+                                            <asp:DropDownList ID="ddlSort" runat="server" AppendDataBoundItems="True" CssClass="form-control" data-select2-enable="true"
+                                                ValidationGroup="show" >
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                 <asp:ListItem Value="1">Regno</asp:ListItem>
                                                 <asp:ListItem Value="2">Category</asp:ListItem>
@@ -556,6 +556,26 @@
                                                 <asp:ListItem Value="0" Selected="True">&nbsp;Regular Student &nbsp;&nbsp;</asp:ListItem>
                                                 <asp:ListItem Value="1">&nbsp;Ex Student</asp:ListItem>
                                             </asp:RadioButtonList>
+                                        </div>
+
+                                      <%--   <div class="form-group col-lg-3 col-md-6 col-12 ">
+                                            <div class="label-dynamic">
+                                                <label>Scholership Apply Type </label>
+                                                 <asp:DropDownList ID="DropDownList1" runat="server" AppendDataBoundItems="True" AutoPostBack="true" CssClass="form-control" data-select2-enable="true"
+                                                ValidationGroup="show">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="1">Demand-wise</asp:ListItem>
+                                                <asp:ListItem Value="2">AmountWise</asp:ListItem>                                              
+                                            </asp:DropDownList>
+                                            </div>
+                                            
+                                        </div>--%>
+
+                                        <div class="form-group col-lg-3 col-md-6 col-12" id="divamount"  runat="server" Visible="false">
+                                            <div class="label-dynamic">
+                                                <label>Amount</label>                                          
+                                            </div>
+                                             <asp:TextBox ID="txtAmountsch" runat="server" onkeyup="return IsNumeric(this);" MaxLength="9"></asp:TextBox>
                                         </div>
 
                                         <div class="col-12 btn-footer">
@@ -584,6 +604,7 @@
                                                 <p><i class="fa fa-star" aria-hidden="true"></i><span>Scholarship Allotment Amount after scholarship Adjustment can be modify only by Single Student scholarship allotment provision.</span></p>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -718,6 +739,7 @@
         <Triggers>
             <asp:PostBackTrigger ControlID="lvStudentRecords" />
             <asp:PostBackTrigger ControlID="btnShow" />
+           <%-- <asp:PostBackTrigger ControlID="gvSemesters" />--%>
         </Triggers>
 
         <%--<Triggers>   
@@ -725,6 +747,7 @@
             <asp:PostBackTrigger ControlID="btnSubmit" />
                <asp:PostBackTrigger ControlID="btnShow" />
         </Triggers>--%>
+
     </asp:UpdatePanel>
     <script type="text/javascript">
         function showConfirm() {
@@ -819,6 +842,27 @@
 
         function LoadImage() {
             document.getElementById("ctl00_ContentPlaceHolder1_imgCollegeLogo").src = document.getElementById("ctl00_ContentPlaceHolder1_fuCollegeLogo").value;
+        }
+
+
+        function IsNumeric(txt) {
+            var ValidChars = ".0123456789";
+            var num = true;
+            var mChar;
+            cnt = 0
+
+            for (i = 0; i < txt.value.length && num == true; i++) {
+                mChar = txt.value.charAt(i);
+
+                if (ValidChars.indexOf(mChar) == -1) {
+                    num = false;
+                    txt.value = '';
+                    alert("Please enter Numeric values only")
+                    txt.select();
+                    txt.focus();
+                }
+            }
+            return num;
         }
     </script>
 

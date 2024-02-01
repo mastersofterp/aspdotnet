@@ -49,7 +49,7 @@ public partial class ACADEMIC_BulkOD : System.Web.UI.Page
             else
             {
                 //Page Authorization
-                this.CheckPageAuthorization();
+               // this.CheckPageAuthorization();
                 Blob_Storage();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();

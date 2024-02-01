@@ -7,24 +7,20 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <style>
-        .dataTables_scrollHeadInner
-        {
+        .dataTables_scrollHeadInner {
             width: max-content !important;
         }
     </style>
     <style type="text/css">
-        .hide_img
-        {
+        .hide_img {
             display: none;
         }
 
-        .show_img
-        {
+        .show_img {
             display: block;
         }
 
-        td .fa-eye
-        {
+        td .fa-eye {
             font-size: 18px;
             color: #0d70fd;
         }
@@ -143,8 +139,7 @@ $(document).ready(function(){
 
 
     <style>
-        .list-group .list-group-item .sub-label
-        {
+        .list-group .list-group-item .sub-label {
             float: initial;
         }
     </style>
@@ -642,6 +637,14 @@ $(document).ready(function(){
 
         //}
     </script>
+    <script type="text/javascript">
+        function CloseModal() {
+            $("#preview").modal("hide");
+        }
+        function ShowModal() {
+            $("#preview").modal("show");
+        }
+</script>
     <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
         <div class="modal-dialog text-center">
             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -663,7 +666,9 @@ $(document).ready(function(){
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <%-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="btnclosedoc" runat="server" Text="CLOSE" OnClick="btnclosedoc_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                         </div>
                     </div>
                     </div>

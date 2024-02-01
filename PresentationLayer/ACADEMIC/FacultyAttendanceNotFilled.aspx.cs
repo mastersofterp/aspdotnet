@@ -324,11 +324,11 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     }
                     else
                     {
-                        objAttModel.AttendanceStartDate = Convert.ToDateTime(txtStartDate.Text);
-                        objAttModel.AttendanceEndDate = Convert.ToDateTime(txtEndDate.Text);
+                        string AttendanceStartDate = txtStartDate.Text;
+                        string AttendanceEndDate = txtEndDate.Text;
                         int Sessionnos= Convert.ToInt32(ddlSession.SelectedValue);
                         int College_code = Convert.ToInt32(ddlSchool.SelectedValue);
-                        DataSet ds = acdatt.RetrieveStudentAttDetailsMarkedExcel(objAttModel, Sessionnos, College_code);
+                        DataSet ds = acdatt.RetrieveStudentAttDetailsMarkedExcel(AttendanceStartDate, AttendanceEndDate, Sessionnos, College_code);
                         DataGrid dg = new DataGrid();
 
                         if (ds.Tables[0].Rows.Count > 0)
@@ -494,10 +494,10 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                     }
                     else
                     {
-                        objAttModel.AttendanceStartDate = Convert.ToDateTime(txtStartDate.Text);
-                        objAttModel.AttendanceEndDate = Convert.ToDateTime(txtEndDate.Text);
+                        string AttendanceStartDate = txtStartDate.Text;
+                         string AttendanceEndDate = txtEndDate.Text;
                         objAttModel.College_code = Session["colcode"].ToString();
-                        DataSet dsStudList = acdatt.RetrieveStudentAttTracker(objAttModel, Convert.ToInt32(ddlSchool.SelectedValue.ToString()),
+                        DataSet dsStudList = acdatt.RetrieveStudentAttTracker(AttendanceStartDate, AttendanceEndDate, Convert.ToInt32(ddlSchool.SelectedValue.ToString()),
                                              Convert.ToInt32(ddlDegree.SelectedValue.ToString()), Convert.ToInt32(ddlBranch.SelectedValue.ToString()),
                                              Convert.ToInt32(ddlsemester.SelectedValue.ToString()));
                         DataGrid dg = new DataGrid();
@@ -711,8 +711,8 @@ public partial class ACADEMIC_REPORTS_FacultyAttendanceNotFilled : System.Web.UI
                 }
                 else
                 {
-                    DateTime AttendanceStartDate = Convert.ToDateTime(txtStartDate.Text);
-                    DateTime AttendanceEndDate = Convert.ToDateTime(txtEndDate.Text);
+                    string AttendanceStartDate = txtStartDate.Text;
+                    string AttendanceEndDate = txtEndDate.Text;
                     int Clgname = Convert.ToInt32(ddlClgname.SelectedValue);
                     int session = Convert.ToInt32(ddlSession.SelectedValue);
                     int courseno = Convert.ToInt32(ddlCourse.SelectedValue);

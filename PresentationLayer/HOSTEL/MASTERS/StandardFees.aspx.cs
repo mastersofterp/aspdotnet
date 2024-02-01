@@ -32,6 +32,7 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
 
     string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     Common _objCommon = new Common();
+    Common objcommon = new Common();
     UAIMS_Common _objUaimsCommon = new UAIMS_Common();
 
     // This object is used to store reciept_code, degree_no and room_capacity for new fees item    
@@ -247,12 +248,19 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
 
             //if (Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 2 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 3 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 4)
             //{
+                ddlHostelSessionNo.SelectedValue = "0";
                 lblFeeName.Text = lstFeesItems.SelectedItem.Text;
                 StandardFeeController feeController = new StandardFeeController();
                 DataSet ds = feeController.GetHostelStandardFee(lstFeesItems.SelectedValue);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    ddlHostelSessionNo.SelectedValue = ds.Tables[0].Rows[0]["HOSTEL_SESSION_NO"].ToString();
+                    if (Session["hostel_session"].ToString() == ds.Tables[0].Rows[0]["HOSTEL_SESSION_NO"].ToString()) //Added by Himanshu Tamrakar fot tkt no : 51949
+                    {
+                        ddlHostelSessionNo.SelectedValue = ds.Tables[0].Rows[0]["HOSTEL_SESSION_NO"].ToString();
+                    }
+                    else
+                    {
+                    }
                     ddlHostel.SelectedValue = ds.Tables[0].Rows[0]["HOSTEL_NO"].ToString();
                    // ddlHosteltype.SelectedValue = ds.Tables[0].Rows[0]["HOSTEL_TYPE"].ToString();
                     ddlReceiptType.SelectedValue = ds.Tables[0].Rows[0]["RECIEPT_CODE"].ToString();
@@ -405,10 +413,16 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
             //if (Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 2 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 3 || Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) == 4)
             //{
                 int feeCatNo = 0;
-
+                Common objcommon = new Common();
             foreach (ListViewDataItem dataRow in lv.Items)
             {
                 ObjHs.Session_No = Convert.ToInt32(ddlHostelSessionNo.SelectedValue);
+                if (Convert.ToInt32(Session["hostel_session"]) != ObjHs.Session_No || ObjHs.Session_No == 0)//Added by Himanshu Tamrakar fot tkt no : 51949
+                {
+                    objcommon.DisplayMessage(pnlFeeTable, "You Can Save Standerd Fees For Current Session Only.", this.Page);
+                    return;
+                }
+                
                 ObjHs.Hostel_Name = Convert.ToInt32(ddlHostel.SelectedValue);
                 ObjHs.Hostel_No = Convert.ToInt32(ddlHostel.SelectedValue);
                 ObjHs.CAPACITY = Convert.ToInt32(ddlRoomCapacity.SelectedValue);
@@ -422,7 +436,6 @@ public partial class Payments_StandardFeeDefinition : System.Web.UI.Page
             }
             this.FillListbox(string.Empty, 0, 0);
             this.DisplayFeeName();                       //added for ticket no : 47653
-            Common objcommon = new Common();
             objcommon.DisplayMessage(pnlFeeTable, "Standard Fees Saved Successfully.!", this.Page);
             // ClearControls();
             this.lv.Visible = true;

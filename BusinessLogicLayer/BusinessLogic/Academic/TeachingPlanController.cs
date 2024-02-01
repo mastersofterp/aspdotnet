@@ -1515,7 +1515,7 @@ namespace IITMS
                         objParams[7] = new SqlParameter("@P_BATCHNO", batchno);
                         objParams[8] = new SqlParameter("@P_ISTUTORIAL", is_tutorial);
                         objParams[5] = new SqlParameter("@P_UA_NO", uano);
-                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_TEACHINGPLAN_EXCEL_DATA", objParams);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_TEACHINGPLAN_EXCEL_DATA", objParams); // PKG_ACD_GET_TEACHINGPLAN_EXCEL_DATA_SRK
                     }
                     catch (Exception ex)
                     {

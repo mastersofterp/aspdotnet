@@ -2057,7 +2057,6 @@ public partial class ACADEMIC_UploadDocument : System.Web.UI.Page
                                     //}
 
                                 }
-
                                 else
                                 {
                                     objCommon.DisplayMessage(this, "Please Upload file Below or Equal to 512 Kb only !", this);

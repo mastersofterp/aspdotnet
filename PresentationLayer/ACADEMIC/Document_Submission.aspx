@@ -159,7 +159,7 @@
 
                 </div>
 
-                <div class="col-12" id="divDocumentUpload">
+                <div class="col-12" id="divDocumentUpload" runat="server">
                     <asp:Panel ID="pnlBind" runat="server">
                         <asp:Label ID="lblmessageShow" runat="server"></asp:Label>
                         <div class="sub-heading">
@@ -248,7 +248,7 @@
                                     <td class="d-none">
                                         <asp:DropDownList ID="ddlAuthority" runat="server" CssClass="form-control" Width="100px" AppendDataBoundItems="true" Visible="false">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                        </asp:DropDownList></td>
+                                        </asp:DropDownList></td>        
                                     <td class="d-none">
                                         <asp:TextBox ID="txtDistrict" runat="server" Visible="false" CssClass="form-control" Width="100px" Text='<%# Eval("DISTRICT") %>' onkeydown="return((event.keyCode >= 64 && event.keyCode <= 91) || (event.keyCode==32)|| (event.keyCode==8)|| (event.keyCode==9));"></asp:TextBox></td>
 

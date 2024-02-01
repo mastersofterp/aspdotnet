@@ -186,11 +186,12 @@
                                             <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblSearchResults">
                                                 <thead class="bg-light-blue">
                                                     <tr>
-                                                        <th>Select
+                                                        <th>
+                                                            <asp:CheckBox ID="chkAll" runat="server" onclick="return CheckAll(this);" />  Select All
                                                         </th>
-                                                        <th>Roll No.
+                                                        <th>Reg. No.
                                                         </th>
-                                                        <th>Name
+                                                        <th>Student Name
                                                         </th>
                                                         <th>Degree
                                                         </th>
@@ -251,6 +252,29 @@
     </div>
     <div id="divMsg" runat="server">
     </div>
+
+    <script type="text/javascript">
+
+        function CheckAll(headchk) {
+
+            var frm = document.forms[0]
+            for (i = 0; i < document.forms[0].elements.length; i++) {
+                var e = frm.elements[i];
+                if (e.type == 'checkbox') {
+                    if (headchk.checked == true) {
+                        e.checked = true;
+                        headchk.checked == true;
+                        document.getElementById('ctl00_ContentPlaceHolder1_lvStudents_chkAll').checked = true;
+                    }
+                    else {
+                        e.checked = false;
+                        headchk.checked == false;
+                        document.getElementById('ctl00_ContentPlaceHolder1_lvStudents_chkAll').checked = false;
+                    }
+                }
+            }
+        }
+    </script>
 
 </asp:Content>
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="head">

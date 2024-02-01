@@ -165,8 +165,8 @@
                                             <sup>* </sup>
                                             <label>Guest Address </label>
                                         </div>
-                                        <asp:TextBox ID="txtGuestAddress" runat="server" TabIndex="3" CssClass="form-control" onkeypress="return AlphabetsOnly(event,this);" Rows="1"
-                                            MaxLength="150" TextMode="MultiLine" />
+                                        <asp:TextBox ID="txtGuestAddress" runat="server" TabIndex="3" CssClass="form-control"  Rows="1"
+                                            MaxLength="150" TextMode="MultiLine" />  <%--onkeypress="return AlphabetsOnly(event,this);" comment by Ticket 51115--%>
                                         <asp:RequiredFieldValidator ID="valGuestAddress" runat="server" ControlToValidate="txtGuestAddress"
                                             Display="None" ErrorMessage="Please enter guest address." ValidationGroup="submit"
                                             SetFocusOnError="True" />
@@ -238,7 +238,7 @@
                                             <label>Company Address </label>
                                         </div>
                                         <asp:TextBox ID="txtCompanyAddress" runat="server" TabIndex="7" Rows="1" CssClass="form-control"
-                                            MaxLength="150" TextMode="MultiLine" onkeypress="return AlphabetsOnly(event,this);" />
+                                            MaxLength="150" TextMode="MultiLine" />  <%--onkeypress="return AlphabetsOnly(event,this);" comment by Ticket 51115--%>
                                         <asp:RequiredFieldValidator ID="rfvCompanyAddress" runat="server" ControlToValidate="txtCompanyAddress"
                                             Display="None" ErrorMessage="Please enter company address." ValidationGroup="submit"
                                             SetFocusOnError="True" />

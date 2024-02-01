@@ -277,6 +277,10 @@
                                                                         <asp:LinkButton ID="lnkbtnCourse" runat="server" Text='<%# Eval("COURSENAME") %>' CommandArgument='<%# Eval("SECTIONNO") + "+" + Eval("SECTIONNO")+ "+" + Eval("EXAMNO")+"+"+Eval("FLDNAME")+"+"+Eval("EXAMNAME") %>' OnClick="lnkbtnCourse_Click" ToolTip='<%# Eval("COURSENO")%>' />
                                                                         <asp:HiddenField ID="hdnfld_courseno" runat="server" Value='<%# Eval("COURSENO")%>' />
                                                                         <asp:HiddenField ID="hdnsem" runat="server" Value='<%# Eval("semesterno")%>' />
+                                                                        <asp:HiddenField ID="hdsec" runat="server" Value='<%# Eval("SECTIONNO")%>' />
+                                                                        <asp:HiddenField ID="hdexam" runat="server" Value='<%# Eval("EXAMNO")%>' />
+                                                                        <asp:HiddenField ID="hdexamname" runat="server" Value='<%# Eval("EXAMNAME")%>' />
+                                                                         <asp:HiddenField ID="hdfldname" runat="server" Value='<%# Eval("FLDNAME")%>' />
                                                                     </td>
                                                                     <td>
                                                                         <center><%#Eval("SEMESTERNAME") %></center>

@@ -444,6 +444,13 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
         txtAPI.Text = "";
         ddlServiceProvider.Enabled = true;
 
+      
+        DivSMTPServer.Visible = false;
+        SMTPServerPort.Visible = false;
+        DivCKey.Visible = false;
+        DivEmailID.Visible = false;
+        DivPassword.Visible = false;
+        divAPI.Visible = false;
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -757,6 +764,13 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
         txtAPIKey.Text = "";
         txtUserName.Text = "";
 
+        DivURL.Visible = false;
+        DivToken.Visible = false;
+        DivAccountID.Visible = false;
+        DivMobileNo.Visible = false;
+        divUserWhatsApp.Visible = false;
+        divAPI_Key.Visible = false;
+
     }
     protected void ListViewBindWhatsaap()
     {
@@ -859,6 +873,7 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
 
     }
     #endregion
+
     #region Link Assing Start
     //***************************************Link Assing Start******************************************************** 
     private void PopulateDropDownList()
@@ -1003,6 +1018,7 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
     }
 
     #endregion
+
     protected void btnSaveTemp_Click(object sender, EventArgs e)
     {
         try
@@ -1216,6 +1232,7 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
             throw;
         }
     }
+
     private void ShowTemplateType(int TEMPLATE_ID)
     {
         DataSet ds = objTemplateTypeController.GetTemplateTypeInfo(TEMPLATE_ID);
@@ -1235,6 +1252,8 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
             }
         }
     }
+
+    //Sms Configuration Tab - 6
     protected void btnSubmit_Temp_Click(object sender, EventArgs e)
     {
         string _al_nos = string.Empty;
@@ -1252,6 +1271,8 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
         {
             objSmsTemplate.ActiveStatus = false;
         }
+        if (txtVarCount.Text == "")
+            txtVarCount.Text = "0";
         objSmsTemplate.VARIABLE_COUNT = Convert.ToInt32(txtVarCount.Text.Trim());
         //foreach (ListItem items in lstbxPageName.Items)
         //{
@@ -1411,6 +1432,8 @@ public partial class ACADEMIC_EmailSmsConfiguration : System.Web.UI.Page
             objCommon.DisplayMessage(updsms, "Selected Template Type is InActive..", this.Page);
         }
     }
+    //End sms Configuration Tab - 6
+
     protected void btnWhatsAppSubmit_Click(object sender, EventArgs e)
     {
         try

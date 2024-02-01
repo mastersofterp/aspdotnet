@@ -66,11 +66,11 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             PopulateDropDownList();
             ViewState["action"] = "add";
             ViewState["Idno"] = null;
-        }        
+        }
         ddlSession.Focus();
-       // btnShow.Visible = true;
+        // btnShow.Visible = true;
         divMsg.InnerHtml = string.Empty;
-       
+
     }
 
     private void CheckPageAuthorization()
@@ -78,7 +78,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         if (Request.QueryString["pageno"] != null)
         {
             //Check for Authorization of Page
-           if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(),int.Parse(Session["loginid"].ToString()),0) == false)
+            if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
             {
                 Response.Redirect("~/notauthorized.aspx?page=WithHeldEntry.aspx");
             }
@@ -115,7 +115,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             //objCommon.FillDropDownList(ddlclgname, "ACD_COLLEGE_SCHEME_MAPPING SM INNER JOIN ACD_COLLEGE_DEGREE_BRANCH DB ON (SM.OrganizationId = DB.OrganizationId AND SM.DEGREENO = DB.DEGREENO AND SM.BRANCHNO = DB.BRANCHNO AND SM.COLLEGE_ID = DB.COLLEGE_ID)", "COSCHNO", "COL_SCHEME_NAME", "SM.COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND SM.COLLEGE_ID > 0 AND SM.OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]) + " AND (DB.DEPTNO = ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0) OR ISNULL(" + Convert.ToInt32(Session["userdeptno"]) + ",0)=0)", "");
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO) INNER JOIN ACD_COLLEGE_MASTER C ON (ISNULL(M.COLLEGE_ID,0)=ISNULL(C.COLLEGE_ID,0))", "DISTINCT R.SESSIONNO", "SESSION_NAME +' - '+ C.COLLEGE_NAME SESSION_NAME", "M.SESSIONNO >0 AND IS_ACTIVE=1", "SESSION_NAME DESC");
             //*objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
-           // objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
+            // objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
             objCommon.FillDropDownList(ddlRemark, "ACD_WITHHELD_REASON WITH (NOLOCK)", "WITHHELDNO", "WITHHELD_NAME", string.Empty, "WITHHELDNO");
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
         }
@@ -136,7 +136,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         //ddlSem.SelectedIndex = 0;
         ddlScheme.SelectedIndex = 0;
         ddlBranch.SelectedIndex = 0;
-       // txtStudent.Text = " ";
+        // txtStudent.Text = " ";
 
 
 
@@ -164,17 +164,17 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-       // ddlSem.SelectedIndex = 0;
+        // ddlSem.SelectedIndex = 0;
         ddlScheme.SelectedIndex = 0;
-       // txtStudent.Text = " ";
+        // txtStudent.Text = " ";
 
         if (ddlBranch.SelectedIndex > 0)
         {
             ddlScheme.Items.Clear();
             objCommon.FillDropDownList(ddlScheme, "ACD_SCHEME WITH (NOLOCK)", "SCHEMENO", "SCHEMENAME", "BRANCHNO = " + ddlBranch.SelectedValue, "SCHEMENO");
             ddlScheme.Focus();
-           // ddlSem.Items.Clear();
-           // ddlSem.Items.Add(new ListItem("Please Select", "0"));
+            // ddlSem.Items.Clear();
+            // ddlSem.Items.Add(new ListItem("Please Select", "0"));
             btnShow.Visible = false;
             ddlScheme.Focus();
         }
@@ -186,7 +186,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         }
         lvWithHeld.DataSource = null;
         lvWithHeld.DataBind();
-        
+
     }
 
     protected void ddlScheme_SelectedIndexChanged(object sender, EventArgs e)
@@ -200,7 +200,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         //    objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
         //    ddlSem.Focus();
         //    btnShow.Visible = false;
-         
+
         //}
         //else
         //{
@@ -224,7 +224,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             if (ds.Tables[0].Rows.Count > 0)
             {
                 lvWithHeld.DataSource = ds;
-                lvWithHeld .DataBind();
+                lvWithHeld.DataBind();
             }
             else
             {
@@ -244,14 +244,14 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
     //Show details of WithHeld Entry
     private void ShowDetail(int idno, int sessionno)
     {
-        SqlDataReader dr = objSC.GetWithHeldDetailsById(idno, sessionno); 
+        SqlDataReader dr = objSC.GetWithHeldDetailsById(idno, sessionno);
 
         //Show WithHeld Detail
         if (dr != null)
         {
             if (dr.Read())
             {
-                ViewState["IDNO"] =idno.ToString();
+                ViewState["IDNO"] = idno.ToString();
                 ddlSession.Text = dr["SESSIONNO"] == DBNull.Value ? string.Empty : dr["SESSIONNO"].ToString();
                 ddlSem.Text = dr["SEMESTERNO"] == DBNull.Value ? "0" : dr["SEMESTERNO"].ToString();
                 txtStudent.Text = dr["REGNO"].ToString();
@@ -382,10 +382,9 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         //}
     }
 
-
     private void ShowReport(string reportTitle, string rptFileName)
     {
-        
+
 
         try
         {
@@ -397,19 +396,21 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             DataSet ds = objSC.GetWithHeldReport(Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ViewState["branchno"]), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ddlSem.SelectedValue));
             if (ds.Tables[0].Rows.Count > 0)
             {
-      
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            sb.Append(@"window.open('" + url + "','','" + features + "');");
 
-            ScriptManager.RegisterClientScriptBlock(this.updWithheld, this.updWithheld.GetType(), "controlJSScript", sb.ToString(), true);
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                //url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + ddlSem.SelectedValue;
+                divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                ScriptManager.RegisterClientScriptBlock(this.updWithheld, this.updWithheld.GetType(), "controlJSScript", sb.ToString(), true);
             }
 
             else
@@ -452,66 +453,66 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             else
             {
 
-               
-               
 
-                    lblDegreeName.Text = string.Empty;
-                    lblBranch.Text = string.Empty;
-                    lblClass.Text = string.Empty;
 
-                    lblStudent.Text = string.Empty;
-                    lblSemester.Text = string.Empty;
-                    lblScheme.Text = string.Empty;
-                    lblSection.Text = string.Empty;
-                    ddlRemark.SelectedIndex = 0;
-                    lblSeatNo.Text = string.Empty;
-                    //rfvSession.Visible = true;
-                    //rfvSemester.Visible = true;
-                    //rfvRegNo.Visible = true;
-                    ViewState["idno"] = idno;
-                    pnlStudInfo.Visible = true;
-                    lvWithHeld.Visible = true;
-                    btnRelease.Visible = false;
 
-                    //Show Student Data
-                    DataTableReader dtr = objSC.GetWithHeldStudentDetails(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue));
+                lblDegreeName.Text = string.Empty;
+                lblBranch.Text = string.Empty;
+                lblClass.Text = string.Empty;
 
-                    if (dtr.Read())
-                    {
-                        lblDegreeName.Text = dtr["DEGREENAME"].ToString();
-                        lblDegreeName.ToolTip = dtr["DEGREENO"].ToString();
-                        lblBranch.Text = dtr["BRANCHNAME"].ToString();
-                        lblClass.Text = dtr["ROLL_NO"].ToString();
-                        lblSeatNo.Text = dtr["SEATNO"].ToString();
-                        lblStudent.Text = dtr["STUDNAME"].ToString();
-                        lblSemester.Text = dtr["SEMESTERNAME"].ToString();
-                        lblSemester.ToolTip = dtr["SEMESTERNO"].ToString();
-                        lblScheme.Text = dtr["SCHEMENAME"].ToString();
-                        lblScheme.ToolTip = dtr["SCHEMENO"].ToString();
-                        lblSection.Text = dtr["SECTIONNAME"].ToString();
-                        lblSection.ToolTip = dtr["SECTIONNO"].ToString();
-                        lblMsg.Text = string.Empty;
-                        BindListView();
-                        ViewState["action"] = "add";
-                    }
-                    else
-                    {
-                        pnlStudInfo.Visible = false;
-                        lvWithHeld.DataSource = null;
-                        lvWithHeld.DataBind();
-                        objCommon.DisplayMessage(this.updWithheld, "No Record Found For Withheld Entry...", this.Page);
-                    }
-                    dtr.Close();
-               
+                lblStudent.Text = string.Empty;
+                lblSemester.Text = string.Empty;
+                lblScheme.Text = string.Empty;
+                lblSection.Text = string.Empty;
+                ddlRemark.SelectedIndex = 0;
+                lblSeatNo.Text = string.Empty;
+                //rfvSession.Visible = true;
+                //rfvSemester.Visible = true;
+                //rfvRegNo.Visible = true;
+                ViewState["idno"] = idno;
+                pnlStudInfo.Visible = true;
+                lvWithHeld.Visible = true;
+                btnRelease.Visible = false;
+
+                //Show Student Data
+                DataTableReader dtr = objSC.GetWithHeldStudentDetails(idno, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSem.SelectedValue));
+
+                if (dtr.Read())
+                {
+                    lblDegreeName.Text = dtr["DEGREENAME"].ToString();
+                    lblDegreeName.ToolTip = dtr["DEGREENO"].ToString();
+                    lblBranch.Text = dtr["BRANCHNAME"].ToString();
+                    lblClass.Text = dtr["ROLL_NO"].ToString();
+                    lblSeatNo.Text = dtr["SEATNO"].ToString();
+                    lblStudent.Text = dtr["STUDNAME"].ToString();
+                    lblSemester.Text = dtr["SEMESTERNAME"].ToString();
+                    lblSemester.ToolTip = dtr["SEMESTERNO"].ToString();
+                    lblScheme.Text = dtr["SCHEMENAME"].ToString();
+                    lblScheme.ToolTip = dtr["SCHEMENO"].ToString();
+                    lblSection.Text = dtr["SECTIONNAME"].ToString();
+                    lblSection.ToolTip = dtr["SECTIONNO"].ToString();
+                    lblMsg.Text = string.Empty;
+                    BindListView();
+                    ViewState["action"] = "add";
+                }
+                else
+                {
+                    pnlStudInfo.Visible = false;
+                    lvWithHeld.DataSource = null;
+                    lvWithHeld.DataBind();
+                    objCommon.DisplayMessage(this.updWithheld, "No Record Found For Withheld Entry...", this.Page);
+                }
+                dtr.Close();
+
                 //objCommon.FillDropDownList(ddlRemark, "ACD_STUDENT_RESULT SR,ACD_COURSE CS", "SR.COURSENO", "CS.CCODE+'-'+CS.COURSE_NAME", "CS.COURSENO > 0 AND SR.COURSENO=CS.COURSENO AND SR.SEMESTERNO=CS.SEMESTERNO AND SR.CCODE=CS.CCODE AND SR.SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SR.SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + "AND SR.IDNO=" + Convert.ToInt32(idno), "CS.CCODE");
-                
+
 
             }
 
 
-        
+
         }
-        
+
         catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
@@ -519,7 +520,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
-     }
+    }
 
     private void Clearall()
     {
@@ -535,18 +536,18 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         lblScheme.Text = string.Empty;
         lblSection.Text = string.Empty;
         ddlRemark.SelectedIndex = 0;
-       // txtPunishment.Text = string.Empty;
+        // txtPunishment.Text = string.Empty;
         lblSeatNo.Text = string.Empty;
         pnlStudInfo.Visible = false;
         lvWithHeld.DataSource = null;
         lvWithHeld.DataBind();
 
 
-       
 
-       
+
+
     }
-    
+
     protected void btnCancel_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
@@ -577,7 +578,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             lvWithHeld.DataBind();
             btnReport.Visible = true;
             btnShow.Visible = false;
-            
+
             txtStudent.Text = string.Empty;
             //rfvSemester.Visible = false;
         }
@@ -595,10 +596,11 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
             lvWithHeld.DataBind();
         }
 
-        else {
+        else
+        {
 
-            objCommon.DisplayMessage(this.updWithheld,"Please Select Action",this.Page);
-        
+            objCommon.DisplayMessage(this.updWithheld, "Please Select Action", this.Page);
+
         }
     }
     protected void btnReport_Click(object sender, EventArgs e)
@@ -627,12 +629,12 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         {
             btnShow.Visible = true;
             Clearall();
-        }        
+        }
     }
     protected void btnClear_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.ToString());
-       // pnlRpt.Visible = true;
+        // pnlRpt.Visible = true;
         //ddlSession.SelectedIndex = 0;
         //ddlDegree.SelectedIndex = 0;
         //ddlBranch.SelectedIndex = 0;
@@ -646,7 +648,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         //else
         //{
         //    btnShow.Visible = true;
-           
+
         //}
     }
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
@@ -660,22 +662,22 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         ddlDegree.SelectedIndex = 0;
         ddlBranch.SelectedIndex = 0;
         ddlScheme.SelectedIndex = 0;
-       // btnShow.Visible = false;
+        // btnShow.Visible = false;
         lvWithHeld.Visible = false;
-      
+
         txtStudent.Text = " ";
-       
+
 
         if (ddlSession.SelectedIndex > 0)
         {
             //objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
 
-            objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue  , "S.SEMESTERNO");
+            objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue, "S.SEMESTERNO");
 
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE WITH (NOLOCK)", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
-       
+
             ddlSession.Focus();
-        
+
         }
 
 
@@ -683,7 +685,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
     protected void ddlSem_SelectedIndexChanged(object sender, EventArgs e)
     {
         txtStudent.Text = " ";
-       
+
 
     }
     protected void ddlClgname_SelectedIndexChanged(object sender, EventArgs e)
@@ -715,7 +717,7 @@ public partial class ACADEMIC_WithheldEntry : System.Web.UI.Page
         txtStudent.Text = string.Empty;
         pnlStudInfo.Visible = false;
         lvWithHeld.Visible = false;
-        
+
 
 
     }

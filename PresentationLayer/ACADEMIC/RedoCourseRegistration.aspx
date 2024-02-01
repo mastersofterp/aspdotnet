@@ -312,13 +312,18 @@
                                         <li class="list-group-item"><b>Degree / Branch :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblBranch" runat="server" Font-Bold="true" /></a>
-                                             <asp:HiddenField ID="hdfDegreeno" runat="server" />
+                                            <asp:HiddenField ID="hdfDegreeno" runat="server" />
                                         </li>
                                         <li class="list-group-item"><b>Scheme :</b>
                                             <a class="sub-label">
                                                 <asp:Label ID="lblScheme" runat="server" Font-Bold="true" /></a>
                                         </li>
-                                       <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
+
+                                        <li id="liDemandAmount" runat="server" class="list-group-item"><b>Demand Amount :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblDemandAmt" runat="server" Font-Bold="true" /></a>
+                                        </li>
+                                        <%-- <li class="list-group-item" style="display:none"><b>Backlog Semester :</b>
                                             <%--<a class="sub-label">
                                                 <asp:DropDownList ID="ddlSemester" runat="server" CssClass="form-control" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlSemester_SelectedIndexChanged">
                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -330,7 +335,7 @@
                                         </li>--%>
                                     </ul>
                                 </div>
-                               <%-- <div class="col-12 mt-3">
+                                <%-- <div class="col-12 mt-3">
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-6 col-12" style="display: none">
                                             <div class="label-dynamic">
@@ -420,6 +425,8 @@
 
                                 <div class="col-12">
                                     <asp:Panel ID="pnlFailCourse" runat="server">
+                                        <asp:HiddenField ID="hfdRedoCrsTbl" runat="server" ClientIDMode="Static" />
+                                        <asp:HiddenField ID="hfdFeedetails" runat="server" ClientIDMode="Static" />
                                         <asp:ListView ID="lvFailCourse" runat="server">
                                             <LayoutTemplate>
                                                 <div class="sub-heading">
@@ -435,9 +442,10 @@
                                                                 </th>
                                                                 <th>Course Code</th>
                                                                 <th>Course Name</th>
-                                                                <th style="text-align: center; display: none"">Semester</th>
+                                                                <th style="text-align: center; display: none">Semester</th>
                                                                 <th style="text-align: center">Course Type</th>
-                                                                <th style="text-align: center; display: none">Grade</th>
+                                                                <th style="text-align: center">Credits</th>
+                                                                <th>Amount</th>
                                                             </tr>
                                                             <tr id="itemPlaceholder" runat="server" />
                                                         </thead>
@@ -447,8 +455,10 @@
                                             <ItemTemplate>
                                                 <tr id="trCurRow" class="item">
                                                     <td>
-                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? true : false)%>' onclick="backlogLvChk(this);" />
+                                                        <asp:CheckBox ID="chkAccept" runat="server" Checked='<%#(Convert.ToInt32(Eval("RE_REGISTER"))==1 ? true : false)%>' onclick="backlogLvChk();" />
                                                         <%-- Enabled='<%#(Convert.ToInt32(Eval("REGISTERED"))==1 ? false : true)%>'--%>
+                                                         <asp:HiddenField ID="hfdSubID" runat="server" Value='<%# Eval("SUBID") %>'/>
+                                                        <asp:HiddenField ID="hfdGrade" runat="server" Value='<%# Eval("GRADE") %>' />
                                                     </td>
                                                     <td>
                                                         <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
@@ -457,14 +467,18 @@
                                                     <td>
                                                         <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' />
                                                     </td>
-                                                    <td style="text-align: center; display: none"">
-                                                        <asp:Label ID="lblsemester" runat="server" Text=' <%# Eval("SEMESTER") %>' ToolTip='<%# Eval("SEMESTERNO")%>' />                                                     
+                                                    <td style="text-align: center; display: none">
+                                                        <asp:Label ID="lblsemester" runat="server" Text=' <%# Eval("SEMESTER") %>' ToolTip='<%# Eval("SEMESTERNO")%>' />
                                                     </td>
                                                     <td align="center">
                                                         <%# Eval("SUBNAME") %>
+                                                       
                                                     </td>
-                                                    <td align="center" style="display: none">
-                                                        <%# Eval("GRADE") %>
+                                                    <td align="center">
+                                                        <%# Eval("CREDITS") %>
+                                                    </td>
+                                                    <td>
+                                                        <asp:Label ID="lblDemandAmount" runat="server" Text='<%# Eval("DEMAND_AMT") %>' />
                                                     </td>
                                                 </tr>
                                             </ItemTemplate>
@@ -474,16 +488,16 @@
                                             </span>
                                             </EmptyDataTemplate>--%>
                                         </asp:ListView>
-                                    </asp:Panel>                                    
+                                    </asp:Panel>
                                 </div>
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnSubmit" runat="server" OnClick="btnStudSubmit_Click" Text="Submit" CausesValidation="false" Visible="false"
-                                        CssClass="btn btn-primary" TabIndex="8" />                                  
+                                        CssClass="btn btn-primary" TabIndex="8" />
                                     <asp:Button ID="btnStudSubmit" runat="server" Text="Save/Confirm" OnClick="btnStudSubmit_Click" CausesValidation="false"
-                                        CssClass="btn btn-primary" TabIndex="9"/>
-                                    <asp:Button ID="btnPayment" runat="server" Text="Payment" Visible="false" TabIndex="9" OnClick="btnPayment_Click"
+                                        CssClass="btn btn-primary" TabIndex="9" />
+                                    <asp:Button ID="btnPayment" runat="server" Text="Payment" Visible="false" TabIndex="9" OnClick="btnPayment_Click" CausesValidation="false"
                                         CssClass="btn btn-success" />
-                                      <asp:Button ID="btnPrintRegSlip" runat="server" Text="Registration Slip" OnClick="btnPrintRegSlip_Click" CausesValidation="false"
+                                    <asp:Button ID="btnPrintRegSlip" runat="server" Text="Registration Slip" OnClick="btnPrintRegSlip_Click" CausesValidation="false"
                                         CssClass="btn btn-primary" TabIndex="9" Visible="false" />
                                 </div>
 
@@ -500,7 +514,7 @@
                                                             <th>Course Code
                                                             </th>
                                                             <th>Course Name
-                                                            </th> 
+                                                            </th>
                                                             <th style="text-align: center">Semester
                                                             </th>
                                                             <th style="text-align: center">Course Type
@@ -525,12 +539,12 @@
                                                         <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSENAME") %>' />
                                                     </td>
                                                     <td style="text-align: center">
-                                                         <%# Eval("SEMESTER") %>
+                                                        <%# Eval("SEMESTER") %>
                                                     </td>
-                                                    <td align="center">                                                       
+                                                    <td align="center">
                                                         <%# Eval("SUBNAME") %>
                                                     </td>
-                                                    <td align="center">                                                       
+                                                    <td align="center">
                                                         <%# Eval("GRADE") %>
                                                     </td>
                                                 </tr>
@@ -547,7 +561,7 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
     <script type="text/javascript">
        
         function SelectAll(headchk) {
@@ -603,64 +617,53 @@
                 return backlogCounter;
             }
         }
-        function backlogLvChk(chk) {
+        function backlogLvChk() {
             debugger;
-            var count;
+            //var count;
             if (document.getElementById('tblBacklogSubjects') != null) {
                 dataRows = document.getElementById('tblBacklogSubjects').getElementsByTagName('tr');
                 if (dataRows != null) {
-                    //alert("1")
-                    count = BacklogCount();
+                    var feeData = $("#hfdFeedetails").val();
+                    var d = [];
+                    if (feeData != '')
+                        d = $.parseJSON(feeData);
 
-                    //if (!isBacklogGreaterThan2) {
-                    if (count <= 2) {
-                        var backlogFineAmt = $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text();
-                        //alert(backlogFineAmt)
-                        if (chk.checked) {
-                            $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text(Number(count) * 200);
-                            $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val(Number(count) * 200);
-                        }
-                        else {
-                            $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text(Number(count) * 200);
-                            $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val(Number(count) * 200);
-                        }
-                        var newbacklogFineAmt = $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val();
-                        // var selectedCourseAmt = $("#ctl00_ContentPlaceHolder1_hdnSelectedCourseFee").val();
-                        var lateFineAmt = $("#ctl00_ContentPlaceHolder1_hdnLateFine").val();
+                    //var clickedRow = chk.parentNode.parentNode;
+                    //var subID = clickedRow.querySelector('#hfdSubID').value;
+                    //var grade = clickedRow.querySelector('#hfdGrade').value;
 
-                        // var totalFinalAmt = Number(selectedCourseAmt) + Number(newbacklogFineAmt) + Number(lateFineAmt);
-                        var totalFinalAmt = Number(newbacklogFineAmt);
-                        $("#ctl00_ContentPlaceHolder1_lblTotalFee").text(Number(totalFinalAmt));
-                        $("#ctl00_ContentPlaceHolder1_hdnTotalFee").val(Number(totalFinalAmt));
-                    }
-                        //}
-                    else {
-                        if (chk.checked) {
-                            $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text(Number(500));
-                            $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val(Number(500));
-                        }
-                        else {
-                            var backlogFineAmt = $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text();
-                            if (backlogFineAmt == 500) {
-                                if (count <= 2) {
-                                    $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text(Number(count) * 200);
-                                    $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val(Number(count) * 200);
-                                }
-                                else {
-                                    $("#ctl00_ContentPlaceHolder1_lblBacklogFine").text(Number(500));
-                                    $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val(Number(500));
+                    var totfees = 0;
+                    for (var k = 0; k < dataRows.length - 1; k++) {
+                        //var chkAccept = $('#ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_chkAccept');
+                        if (document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_chkAccept').checked) {
+                            var subID = $('#ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_hfdSubID').val();
+                            var grade = $('#ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_hfdGrade').val();
+
+                            if (subID != '' && grade != '') {
+                                if (d != null && d.length > 0) {
+                                    for (var i = 0; i < d.length; i++) {
+                                        if (d[i]["SUBID"] == subID) {
+                                            var fees = d[i]["FEE"];
+
+                                            if (grade == 'U')
+                                                fees = fees / 2;
+
+                                            if (fees > 0) {
+                                                document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_lblDemandAmount').innerHTML = fees;
+                                                totfees += fees;
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-                        var newbacklogFineAmt = $("#ctl00_ContentPlaceHolder1_hdnBacklogFine").val();
-                        //  var selectedCourseAmt = $("#ctl00_ContentPlaceHolder1_hdnSelectedCourseFee").val();
-                        //  var lateFineAmt = $("#ctl00_ContentPlaceHolder1_hdnLateFine").val();
-
-                        //  var totalFinalAmt = Number(selectedCourseAmt) + Number(newbacklogFineAmt) + Number(lateFineAmt);
-                        var totalFinalAmt = Number(newbacklogFineAmt);
-                        $("#ctl00_ContentPlaceHolder1_lblTotalFee").text(Number(totalFinalAmt));
-                        $("#ctl00_ContentPlaceHolder1_hdnTotalFee").val(Number(totalFinalAmt));
+                        else
+                            document.getElementById('ctl00_ContentPlaceHolder1_lvFailCourse_ctrl' + k + '_lblDemandAmount').innerHTML = '';
                     }
+
+                    if (totfees > 0)
+                        document.getElementById('ctl00_ContentPlaceHolder1_lblDemandAmt').innerHTML = totfees;                  
                 }
             }
         }

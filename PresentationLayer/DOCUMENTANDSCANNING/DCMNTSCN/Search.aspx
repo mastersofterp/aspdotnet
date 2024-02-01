@@ -14,12 +14,12 @@
                     <div class="col-12">
                         <asp:Panel ID="pnlSearch" runat="server">
                             <div class="row">
-                              <%--  <div class="col-12">
+                                <%--  <div class="col-12">
                                     <div class="sub-heading">
                                     <h5>Search</h5>
                                 </div>
                                 </div>--%>
-                                
+
                                 <div class="form-group col-lg-4 col-md-6 col-12" id="trr" runat="server">
                                     <div class="label-dynamic">
                                         <sup></sup>
@@ -37,8 +37,8 @@
                                         <sup></sup>
                                         <label>Search</label>
                                     </div>
-                                    <asp:TextBox ID="txtSearch"  CssClass="form-control" ToolTip="Enter Search String"
-                                        TabIndex="2" runat="server" onkeydown = "return (event.keyCode!=13);">
+                                    <asp:TextBox ID="txtSearch" CssClass="form-control" ToolTip="Enter Search String"
+                                        TabIndex="2" runat="server" onkeydown="return (event.keyCode!=13);">
                                     </asp:TextBox>
                                     <asp:HiddenField ID="hfSearch" runat="server" />
                                     <ajaxToolKit:AutoCompleteExtender ID="txtSearch_AutoCompleteExtender" runat="server"
@@ -57,7 +57,7 @@
                                         <sup></sup>
                                         <label>Search</label>
                                     </div>
-                                    <asp:TextBox ID="txtKey"  CssClass="form-control" ToolTip="Enter Search String"
+                                    <asp:TextBox ID="txtKey" CssClass="form-control" ToolTip="Enter Search String"
                                         runat="server" TabIndex="3"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvKeyw" runat="server" ControlToValidate="txtKey"
                                         Display="None" ErrorMessage="Enter Keyword to search" SetFocusOnError="true"
@@ -81,7 +81,7 @@
                                     </div>
 
                                     <asp:Button ID="btnSearch" runat="server" Text="Search" ValidationGroup="Search" CssClass="btn btn-primary"
-                                        OnClick="btnSearch_Click" ToolTip="Click here to Search" TabIndex="5"  />
+                                        OnClick="btnSearch_Click" ToolTip="Click here to Search" TabIndex="5" />
                                     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Search"
                                         ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                 </div>
@@ -143,88 +143,99 @@
                             </asp:Panel>
                         </div>
                     </asp:Panel>
-
+                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                    </div>
                     <asp:Panel ID="pnlDetails" runat="server">
-                       <div class="col-12">
-                        <div class="row">
-                            
+                        <div class="col-12">
+                            <div class="row">
+
                                 <div class="sub-heading">
                                     <h5>Document Details</h5>
                                 </div>
-                            
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <ul class="list-group list-group-unbordered">
-                                    <li class="list-group-item"><b>Created Date :</b>
-                                        <a class="sub-label">
-                                            <asp:Label ID="lblDate" runat="server"></asp:Label></a>
-                                    </li>
-                                    <li class="list-group-item"><b>Category :</b>
-                                        <a class="sub-label">
-                                            <asp:Label ID="lblCategory" runat="server"></asp:Label></a>
-                                    </li>
 
-                                    <li class="list-group-item"><b>Uploaded By  :</b>
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item"><b>Created Date :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblDate" runat="server"></asp:Label></a>
+                                        </li>
+                                        <li class="list-group-item"><b>Category :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblCategory" runat="server"></asp:Label></a>
+                                        </li>
 
-                                        <a class="sub-label">
-                                            <asp:Label ID="lblUploadBy" runat="server"></asp:Label></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <ul class="list-group list-group-unbordered">
-                                    <li class="list-group-item"><b>Title :</b>
-                                        <a class="sub-label">
-                                            <asp:Label ID="lblTitle" runat="server"></asp:Label></a>
-                                    </li>
-                                    <li class="list-group-item"><b>Description :</b>
-                                        <a class="sub-label">
-                                            <asp:Label ID="lblDescription" runat="server"></asp:Label></a>
-                                    </li>
+                                        <li class="list-group-item"><b>Uploaded By  :</b>
 
-                                </ul>
-                            </div>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblUploadBy" runat="server"></asp:Label></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <ul class="list-group list-group-unbordered">
+                                        <li class="list-group-item"><b>Title :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblTitle" runat="server"></asp:Label></a>
+                                        </li>
+                                        <li class="list-group-item"><b>Description :</b>
+                                            <a class="sub-label">
+                                                <asp:Label ID="lblDescription" runat="server"></asp:Label></a>
+                                        </li>
 
-                            <div class="col-lg-4 col-md-6 col-12">
-                                <asp:ListView ID="lvAttachments" runat="server">
-                                    <LayoutTemplate>
-                                        <table>
-                                            <tr id="itemPlaceholder" runat="server" />
-                                        </table>
-                                        </div>
-                                    </LayoutTemplate>
-                                    <ItemTemplate>
-                                        <tr>
-                                            <td>
-                                                <label>Attachment :</label>
-                                                <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
-                                                <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%# Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME") %>">
+                                    </ul>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <asp:ListView ID="lvAttachments" runat="server">
+                                        <LayoutTemplate>
+                                            <table>
+                                                <tr id="itemPlaceholder" runat="server" />
+                                            </table>
+                                            </div>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td>
+                                                    <label>Attachment :</label>
+                                                    <%--<img alt="Attachment" src="../IMAGES/attachment.png" />--%>
+                                                    <%--<a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%# Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME") %>">
                                                     <%# Eval("ORIGINAL_FILENAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1).ToString() %>&nbsp;KB)
-                                            </td>
-                                        </tr>
-                                    </ItemTemplate>
-                                </asp:ListView>
-                            </div>
-                            <div class="col-12 btn-footer ">
-                             
+                                                    --%>
+
+                                                    <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/IMAGES/action_down.png" ToolTip='<%# Eval("ORIGINAL_FILENAME") %>'
+                                                        data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("ORIGINAL_FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILE_PATH"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                    &nbsp;&nbsp;<%# (Eval("FILE_PATH")).ToString() %>&nbsp;
+&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1).ToString() %>&nbsp;KB)
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
+                                <div class="col-12 btn-footer ">
+
                                     <asp:Button ID="btnClear" runat="server" Text="Start New Search" CssClass="btn btn-warning"
                                         OnClick="btnClear_Click" TabIndex="7" ToolTip="Click here to Reset" />
-                             
+
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </asp:Panel>
 
 
                 </div>
             </div>
-         
+
         </div>
     </div>
-    
-   
+
+
     <script language="javascript" type="text/javascript">
 
-      
+
 
         // show more file upload 
         function ShowHideFileUpload(id) {
@@ -290,7 +301,7 @@
             this._popup = null;
         }
 
-        
+
     </script>
-    
+
 </asp:Content>

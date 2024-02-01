@@ -10282,7 +10282,176 @@ namespace IITMS
                 }
                 #endregion
 
+                #region Shift Management
 
+                public DataSet GetNoofdays_Shift(DateTime Frdate, DateTime Todate, string leavetype, int calholy, int FNAN, int idno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[6];
+                        objParams[0] = new SqlParameter("@P_FRDATE", Frdate);
+                        objParams[1] = new SqlParameter("@P_TODATE", Todate);
+                        objParams[2] = new SqlParameter("@P_LEAVETYPE", leavetype);
+                        objParams[3] = new SqlParameter("@P_CAL_HOLIDAY", calholy);
+                        objParams[4] = new SqlParameter("@P_FNAN", FNAN);
+                        objParams[5] = new SqlParameter("@P_IDNO", idno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_NO_OF_DAYS_SHIFT", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetNoofdays_Shift->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public int GetAllowDays_Shift(Leaves objLeaves)
+                {
+                    int ret = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[8];
+
+                        if (!objLeaves.JOINDT.Equals(DateTime.MinValue))
+                            objParams[0] = new SqlParameter("@P_JOINDT", objLeaves.JOINDT);
+                        else
+                            objParams[0] = new SqlParameter("@P_JOINDT", DBNull.Value);
+
+                        if (!objLeaves.FROMDT.Equals(DateTime.MinValue))
+                            objParams[1] = new SqlParameter("@P_FROM_DATE", objLeaves.FROMDT);
+                        else
+                            objParams[1] = new SqlParameter("@P_FROM_DATE", DBNull.Value);
+
+                        objParams[2] = new SqlParameter("@P_ALLOW_DAYS", objLeaves.NO_DAYS);
+                        objParams[3] = new SqlParameter("@P_STNO", objLeaves.STNO);
+                        objParams[4] = new SqlParameter("@P_COLLEGENO", objLeaves.COLLEGE_NO);
+                        objParams[5] = new SqlParameter("@P_IS_ALLOW_BEFORE_APPLICATION", objLeaves.IsAllowBeforeApplication);
+
+                        objParams[6] = new SqlParameter("@P_IDNO", objLeaves.EMPNO);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
+                        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_LEAVE_NO_OF_ALLOWDAYS_SHIFT", objParams, true));
+
+                    }
+                    catch (Exception ex)
+                    {
+                        ret = -99;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetAllowDays->" + ex.ToString());
+                    }
+                    return ret;
+                }
+
+                #endregion
+
+                #region Leave Balance Report
+
+                public DataSet LeaveEmployeeBalanceForExport(int idno, int lvno, int Year, int periodno, int stno, int deptno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objparams = null;
+                        objparams = new SqlParameter[6];
+                        objparams[0] = new SqlParameter("@P_IDNO", idno);
+                        objparams[1] = new SqlParameter("@P_LVNO ", lvno);
+                        objparams[2] = new SqlParameter("@P_YEAR", Year);
+                        objparams[3] = new SqlParameter("@P_PERIOD", periodno);
+                        objparams[4] = new SqlParameter("@P_STNO", stno);
+                        objparams[5] = new SqlParameter("@P_Deptno", deptno);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_BALANCE_REPORT_TOEXCEL", objparams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.LeavesController.GetLeavesStatus->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                #endregion 
+
+                //#region No of days for shift
+
+                //public DataSet GetNoofdays_Shift(DateTime Frdate, DateTime Todate, string leavetype, int calholy, int FNAN, int idno)
+                //{
+                //    DataSet ds = null;
+                //    try
+                //    {
+                //        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                //        SqlParameter[] objParams = null;
+                //        objParams = new SqlParameter[6];
+                //        objParams[0] = new SqlParameter("@P_FRDATE", Frdate);
+                //        objParams[1] = new SqlParameter("@P_TODATE", Todate);
+                //        objParams[2] = new SqlParameter("@P_LEAVETYPE", leavetype);
+                //        objParams[3] = new SqlParameter("@P_CAL_HOLIDAY", calholy);
+                //        objParams[4] = new SqlParameter("@P_FNAN", FNAN);
+                //        objParams[5] = new SqlParameter("@P_IDNO", idno);
+                //        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_NO_OF_DAYS_SHIFT", objParams);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        return ds;
+                //        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetNoofdays_Shift->" + ex.ToString());
+                //    }
+                //    finally
+                //    {
+                //        ds.Dispose();
+                //    }
+                //    return ds;
+                //}
+
+                //public int GetAllowDays_Shift(Leaves objLeaves)
+                //{
+                //    int ret = 0;
+                //    try
+                //    {
+                //        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                //        SqlParameter[] objParams = null;
+                //        objParams = new SqlParameter[8];
+
+                //        if (!objLeaves.JOINDT.Equals(DateTime.MinValue))
+                //            objParams[0] = new SqlParameter("@P_JOINDT", objLeaves.JOINDT);
+                //        else
+                //            objParams[0] = new SqlParameter("@P_JOINDT", DBNull.Value);
+
+                //        if (!objLeaves.FROMDT.Equals(DateTime.MinValue))
+                //            objParams[1] = new SqlParameter("@P_FROM_DATE", objLeaves.FROMDT);
+                //        else
+                //            objParams[1] = new SqlParameter("@P_FROM_DATE", DBNull.Value);
+
+                //        objParams[2] = new SqlParameter("@P_ALLOW_DAYS", objLeaves.NO_DAYS);
+                //        objParams[3] = new SqlParameter("@P_STNO", objLeaves.STNO);
+                //        objParams[4] = new SqlParameter("@P_COLLEGENO", objLeaves.COLLEGE_NO);
+                //        objParams[5] = new SqlParameter("@P_IS_ALLOW_BEFORE_APPLICATION", objLeaves.IsAllowBeforeApplication);
+
+                //        objParams[6] = new SqlParameter("@P_IDNO", objLeaves.EMPNO);
+                //        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                //        objParams[7].Direction = ParameterDirection.Output;
+                //        ret = Convert.ToInt32(objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_LEAVE_NO_OF_ALLOWDAYS_SHIFT", objParams, true));
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        ret = -99;
+                //        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetAllowDays->" + ex.ToString());
+                //    }
+                //    return ret;
+                //}
+                //#endregion
             }
         }
     }

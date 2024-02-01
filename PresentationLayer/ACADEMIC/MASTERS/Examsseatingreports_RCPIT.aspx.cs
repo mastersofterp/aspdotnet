@@ -1164,34 +1164,52 @@ public partial class examseatingreports : System.Web.UI.Page
     }
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        string examno = string.Empty;
-        int pt = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "isnull(PATTERNNO,0) as PATTERNNO", "SCHEMENO='" + ViewState["schemeno"] + "'")));
-        DataSet ds = objCommon.FillDropDown("ACD_EXAM_NAME", "EXAMNO", "EXAMNAME", "PATTERNNO=" + pt + " and ACTIVESTATUS=1 and fldname like'%EXTERMARK%'", "");
-        if (ds.Tables[0].Rows.Count > 0)
+        if (ddlSession.SelectedIndex > 0)
         {
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-            {
-
-                examno += ds.Tables[0].Rows[i]["EXAMNO"].ToString() + "$";
-
-            }
-            examno = examno.TrimEnd('$');
-        }
-        string dates = DateTime.Now.ToString("yyyy-MM-dd");
-        ////objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
-        string proc_name = "PKG_GET_EXAM_DATE_FOR_DATE";
-        string parameter = "@P_EXAMDATE,@P_EXAM_TT_TYPE,@P_SESSIONNO";
-        string Call_values = "" + dates + "," + examno + "," + ddlSession.SelectedValue + "";
-        DataSet ds1 = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
-        // DataSet ds = objsc.GetStudentsExamDateNEW(dates, examno);
-        if (ds1.Tables[0].Rows.Count > 0)
-        {
-            ddlExamdate.DataSource = ds1;
-            ddlExamdate.DataTextField = "Dates";
-            ddlExamdate.DataValueField = "ID";
+            ddlExamdate.DataTextField = null;
+            ddlExamdate.DataValueField = null;
             ddlExamdate.DataBind();
+            ddlExamdate.Items.Clear();
+            ddlExamdate.Items.Add("Please Select");
+          //  ddlExamdate.Items.Add("Please Select");
+            string examno = string.Empty;
+            int pt = Convert.ToInt32((objCommon.LookUp("ACD_SCHEME", "isnull(PATTERNNO,0) as PATTERNNO", "SCHEMENO='" + ViewState["schemeno"] + "'")));
+            DataSet ds = objCommon.FillDropDown("ACD_EXAM_NAME", "EXAMNO", "EXAMNAME", "PATTERNNO=" + pt + " and ACTIVESTATUS=1", "");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+
+                    examno += ds.Tables[0].Rows[i]["EXAMNO"].ToString() + "$";
+
+                }
+                examno = examno.TrimEnd('$');
+            }
+            string dates = DateTime.Now.ToString("yyyy-MM-dd");
+            ////objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAM_TT_TYPE = 11", "SLOTNO");
+            string proc_name = "PKG_GET_EXAM_DATE_FOR_DATE";
+            string parameter = "@P_EXAMDATE,@P_EXAM_TT_TYPE,@P_SESSIONNO";
+            string Call_values = "" + dates + "," + examno + "," + ddlSession.SelectedValue + "";
+            DataSet ds1 = objCommon.DynamicSPCall_Select(proc_name, parameter, Call_values);
+            // DataSet ds = objsc.GetStudentsExamDateNEW(dates, examno);
+            if (ds1.Tables[0].Rows.Count > 0)
+            {
+                ddlExamdate.DataSource = ds1;
+                ddlExamdate.DataTextField = "Dates";
+                ddlExamdate.DataValueField = "ID";
+                ddlExamdate.DataBind();
+            }
+            ddlslot.Focus();
         }
-        ddlslot.Focus();
+        else
+        {
+            ddlExamdate.DataTextField = null;
+            ddlExamdate.DataValueField = null;
+            ddlExamdate.DataBind();
+            ddlExamdate.Items.Clear();
+            ddlExamdate.Items.Add("Please Select");
+
+        }
 
         //objCommon.FillDropDownList(ddlExamdate, "ACD_EXAM_DATE", "EXDTNO", "CONVERT(VARCHAR(100),EXAMDATE,103) AS DATE", "SESSIONNO=" + ddlSession.SelectedValue + " AND EXAMDATE IS NOT NULL" + " AND EXAMDATE >='" + dates + "' AND EXAM_TT_TYPE = " + examno + "", "SLOTNO");  // AND EXAM_TT_TYPE = 11" 
 
@@ -1264,7 +1282,7 @@ public partial class examseatingreports : System.Web.UI.Page
 
         string EXAMDAT = Convert.ToString(ddlExamdate.SelectedItem);
         string EXAMDATE = (Convert.ToDateTime(EXAMDAT)).ToString("dd/MM/yyyy");
-        if (Convert.ToInt32(Session["OrgId"]) == 1)
+        if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
         {
             btnexcelbutton.Visible = true;
             //ddlBlock.Visible = true;

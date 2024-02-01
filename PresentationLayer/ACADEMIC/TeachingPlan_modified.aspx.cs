@@ -2356,7 +2356,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_UA_NO=" + ua_no
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]).ToString() + ",@P_UA_NO=" + ua_no
                     + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
                      + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString())
                       + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["semesterno"].ToString())
@@ -2397,7 +2397,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_UA_NO=" + ua_no
+            url += "&param=@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]).ToString() + ",@P_UA_NO=" + ua_no
                     + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue)
                      + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString())
                       + ",@P_SEMESTERNO=" + Convert.ToInt32(ViewState["semesterno"].ToString())
@@ -2478,14 +2478,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
             objExam.Lecture_No = Convert.ToInt32(ddlLectureNo.SelectedValue);
             objExam.Courseno = Convert.ToInt32(ViewState["courseno"].ToString());
-            if (ViewState["semesterno"] == null)
-            {
-                objExam.SemesterNo = 0;
-            }
-            else
-            {
-                objExam.SemesterNo = Convert.ToInt32(ViewState["semesterno"].ToString());
-            }
+            objExam.SemesterNo = (ViewState["semesterno"] == null) ? 0 : Convert.ToInt32(ViewState["semesterno"].ToString());          
 
             //if (!(Convert.ToInt32(Session["usertype"]) > 1))
             objExam.SchemeNo = Convert.ToInt32(ViewState["schemeno"].ToString());
@@ -2505,11 +2498,23 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             if (Convert.ToInt32(ddlTutorial.SelectedValue) == 2)
             {
                 Istutorial = 1;
-                count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ") AND UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND SECTIONNO =" + Convert.ToInt32(ddlSection.SelectedValue) + "AND LECTURE_NO =" + Convert.ToInt32(ddlLectureNo.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + " AND (CANCEL IS NULL OR CANCEL = '') AND TUTORIAL = 1 AND COLLEGE_ID=" + ViewState["college_id"].ToString()));
+                count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID=" + ViewState["college_id"].ToString() + 
+                    ") AND UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + 
+                    " AND SECTIONNO =" + Convert.ToInt32(ddlSection.SelectedValue) + 
+                    " AND LECTURE_NO =" + Convert.ToInt32(ddlLectureNo.SelectedValue) + 
+                    " AND COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + 
+                    " AND (CANCEL IS NULL OR CANCEL = '') AND TUTORIAL = 1 AND COLLEGE_ID=" + ViewState["college_id"].ToString()));
             }
             else
             {
-                count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + ") AND UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + "AND SECTIONNO =" + Convert.ToInt32(ddlSection.SelectedValue) + "AND LECTURE_NO =" + Convert.ToInt32(ddlLectureNo.SelectedValue) + "AND COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + " AND (CANCEL IS NULL OR CANCEL = '') AND (TUTORIAL = 0 or tutorial is null) AND COLLEGE_ID=" + ViewState["college_id"].ToString()));
+                count = Convert.ToInt32(objCommon.LookUp("ACD_TEACHINGPLAN", "COUNT(*)", "SESSIONNO IN (" + "SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND COLLEGE_ID=" + ViewState["college_id"].ToString()+
+                    ") AND UA_NO =" + Convert.ToInt32(Session["userno"].ToString()) + 
+                    " AND SECTIONNO =" + Convert.ToInt32(ddlSection.SelectedValue) + 
+                    " AND LECTURE_NO =" + Convert.ToInt32(ddlLectureNo.SelectedValue) + 
+                    " AND COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + 
+                    " AND (CANCEL IS NULL OR CANCEL = '') AND (TUTORIAL = 0 or tutorial is null) AND COLLEGE_ID=" + ViewState["college_id"].ToString()));
             }
             //if (count != 0 && (ddlLectureNo.SelectedValue != ViewState["LECT_NO"].ToString()))
             //{
@@ -2840,9 +2845,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 }
             }
             #endregion
-
-
-
         }
         catch
         {
@@ -2989,16 +2991,35 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             if (Convert.ToInt32(ddlTutorial.SelectedValue) == 2)
             {
                 //TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + ddlCourse.SelectedValue + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND UNIT_NO=" + unit_no + " AND LECTURE_NO=" + lecture_no + " AND SECTIONNO = " + sectionno + " AND BATCHNO=" + batchno + " AND SLOT=" + slot + "  AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + "AND TUTORIAL = 1");
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND 2793SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =" + ddlSession.SelectedValue + ") AND TERM=" + ddlSemester.SelectedValue + " AND UNIT_NO=" + unit_no + " AND LECTURE_NO=" + lecture_no + " AND SECTIONNO = " + sectionno + " AND BATCHNO=" + batchno + " AND SLOT=" + slot + "  AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + "AND TUTORIAL = 1 AND OrganizationId=" + Session["OrgId"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO",
+                    "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) +
+                    " AND SESSIONNO IN ( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString() +
+                    ") AND TERM=" + ddlSemester.SelectedValue + " AND UNIT_NO=" + unit_no +
+                    " AND LECTURE_NO=" + lecture_no +
+                    " AND SECTIONNO = " + sectionno +
+                    " AND BATCHNO=" + batchno +
+                    " AND SLOT=" + slot +
+                    " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) +
+                    " AND TUTORIAL = 1 AND OrganizationId=" + Session["OrgId"].ToString());
             }
             else
             {
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND SESSIONNO IN(SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID =" + ddlSession.SelectedValue + ") AND TERM=" + ddlSemester.SelectedValue + " AND UNIT_NO=" + unit_no + " AND LECTURE_NO=" + lecture_no + " AND SECTIONNO = " + sectionno + " AND BATCHNO=" + batchno + " AND SLOT=" + slot + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + "AND (TUTORIAL = 0 or TUTORIAL IS NULL) AND OrganizationId=" + Session["OrgId"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO",
+                    "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) +
+                   " AND SESSIONNO IN ( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString() +
+                    ") AND TERM=" + ddlSemester.SelectedValue +
+                    " AND UNIT_NO=" + unit_no +
+                    " AND LECTURE_NO=" + lecture_no +
+                    " AND SECTIONNO = " + sectionno +
+                    " AND BATCHNO=" + batchno +
+                    " AND SLOT=" + slot +
+                    " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) +
+                    " AND (TUTORIAL = 0 or TUTORIAL IS NULL) AND OrganizationId=" + Session["OrgId"].ToString());
             }
-            if (TP_NO != null && TP_NO != string.Empty)
-            {
-                flag = true;
-            }
+
+            flag = !string.IsNullOrEmpty(TP_NO) ? true : false;
         }
         catch
         {
@@ -3015,16 +3036,32 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             string TP_NO = string.Empty;
             if (Convert.ToInt32(ViewState["SUBID"].ToString()) == 100)
             {
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND UNIT_NO=" + ddlUnitNo.SelectedValue + " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + " AND SECTIONNO = " + ddlSection.SelectedValue + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + "  AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + "AND TUTORIAL = 1 AND COLLEGE_ID=" + ViewState["college_id"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", 
+                    " COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + 
+                    " AND SESSIONNO IN ( SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString()+ 
+                    ") AND UNIT_NO=" + ddlUnitNo.SelectedValue + 
+                    " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + 
+                    " AND SECTIONNO = " + ddlSection.SelectedValue + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + 
+                    " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + 
+                    " AND TUTORIAL = 1 AND COLLEGE_ID=" + ViewState["college_id"].ToString());
             }
             else
             {
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND UNIT_NO=" + ddlUnitNo.SelectedValue + " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + " AND SECTIONNO = " + ddlSection.SelectedValue + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + "AND (TUTORIAL = 0 or TUTORIAL IS NULL) AND COLLEGE_ID=" + ViewState["college_id"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO",
+                    " COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) +
+                    " AND SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString() +
+                    ") AND UNIT_NO=" + ddlUnitNo.SelectedValue + 
+                    " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + 
+                    " AND SECTIONNO = " + ddlSection.SelectedValue + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + 
+                    " AND UA_NO = " + Convert.ToInt32(Session["userno"].ToString()) + 
+                    " AND (TUTORIAL = 0 or TUTORIAL IS NULL) AND COLLEGE_ID=" + ViewState["college_id"].ToString());
             }
-            if (TP_NO != null && TP_NO != string.Empty)
-            {
-                flag = true;
-            }
+
+            flag = !string.IsNullOrEmpty(TP_NO) ? true : false;
         }
         catch
         {
@@ -3041,16 +3078,36 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             string TP_NO = string.Empty;
             if (Convert.ToInt32(ViewState["SUBID"].ToString()) == 100)
             {
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND UNIT_NO=" + ddlUnitNo.SelectedValue + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + " AND UA_NO=" + Session["userno"].ToString() + " AND TERM=" + ddlSemester.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + "AND TUTORIAL = 1 AND TP_NO !=" + ViewState["TP_NO"] + " AND COLLEGE_ID=" + ViewState["college_id"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO",
+                    "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) +
+                    " AND SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString() +
+                    ") AND UNIT_NO=" + ddlUnitNo.SelectedValue + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) +
+                    " AND LECTURE_NO=" + ddlLectureNo.SelectedValue +
+                    " AND UA_NO=" + Session["userno"].ToString() +
+                   // " AND TERM=" + ddlSemester.SelectedValue +
+                    " AND SECTIONNO=" + ddlSection.SelectedValue +
+                    "AND TUTORIAL = 1 AND TP_NO !=" + ViewState["TP_NO"] +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString());
             }
             else
             {
-                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO", "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND UNIT_NO=" + ddlUnitNo.SelectedValue + " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) + " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + " AND UA_NO=" + Session["userno"].ToString() + " AND TERM=" + ddlSemester.SelectedValue + " AND SECTIONNO=" + ddlSection.SelectedValue + " AND TP_NO != " + ViewState["TP_NO"] + " AND COLLEGE_ID=" + ViewState["college_id"].ToString());
+                TP_NO = objCommon.LookUp("ACD_TEACHINGPLAN", "TP_NO",
+                    "COURSENO=" + Convert.ToInt32(ViewState["courseno"].ToString()) +
+                    " AND SESSIONNO IN (SELECT SESSIONNO FROM ACD_SESSION_MASTER WHERE SESSIONID=" + Convert.ToInt32(ddlSession.SelectedValue) +
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString() +
+                    ") AND UNIT_NO=" + ddlUnitNo.SelectedValue + 
+                    " AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue) +
+                    " AND LECTURE_NO=" + ddlLectureNo.SelectedValue + 
+                    " AND UA_NO=" + Session["userno"].ToString() + 
+                   // " AND TERM=" + ddlSemester.SelectedValue + 
+                    " AND SECTIONNO=" + ddlSection.SelectedValue +
+                    " AND TP_NO != " + ViewState["TP_NO"] + 
+                    " AND COLLEGE_ID=" + ViewState["college_id"].ToString());
             }
-            if (TP_NO != null && TP_NO != string.Empty)
-            {
-                flag = true;
-            }
+
+            flag = !string.IsNullOrEmpty(TP_NO) ? true : false;
         }
         catch
         {

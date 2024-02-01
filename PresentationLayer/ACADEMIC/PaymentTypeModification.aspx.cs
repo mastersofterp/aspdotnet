@@ -246,7 +246,7 @@ public partial class ACADEMIC_PaymentTypeModification : System.Web.UI.Page
             }
             else
             {
-               
+                btnSubmit.Enabled = false;
 
                 //Added by Rita M....................
                 DemandModificationController dmController = new DemandModificationController();
@@ -321,6 +321,7 @@ public partial class ACADEMIC_PaymentTypeModification : System.Web.UI.Page
                         }
                         else
                         {
+                            btnSubmit.Enabled = true;
                             objCommon.DisplayMessage("Failed To Modify Payment Type!", this.Page);
                             return;
                         }

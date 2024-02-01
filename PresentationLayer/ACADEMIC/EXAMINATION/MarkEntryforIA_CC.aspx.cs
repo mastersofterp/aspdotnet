@@ -67,7 +67,6 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         else
             objCommon.SetMasterPage(Page, "");
     }
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["userno"] == null || Session["username"] == null ||
@@ -135,7 +134,6 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
         divMsg.InnerHtml = string.Empty;
         Page.Form.Attributes.Add("enctype", "multipart/form-data");
     }
-
     private void ShowCourses()
     {
         DataSet ds = objMarksEntry.GetCourseForTeacher(Convert.ToInt16(ddlSession.SelectedValue), Convert.ToInt16(Session["userno"]), Convert.ToInt16(ddlSubjectType.SelectedValue));
@@ -1327,7 +1325,7 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
             DataSet dsStudent = null;
             //DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + Convert.ToInt32(ViewState["COURSENO"]) + ") AND COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + "", "");
 
-            DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO=(select schemeno from acd_course where courseno=" + Convert.ToInt32(ViewState["COURSENO"]) + ") AND COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + "AND SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + "", "");
+            DataSet ds = objCommon.FillDropDown("ACAD_EXAM_RULE", "ISNULL(RULE1,0) AS RULE1", "ISNULL(RULE2,0) AS RULE2", "EXAMNO=" + Convert.ToString(ddlSubExam.SelectedValue).Split('-')[1] + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO IN(select distinct schemeno from acd_STUDENT_RESULT where courseno=" + Convert.ToInt32(ViewState["COURSENO"]) + " AND SESSIONNO=" + ddlSession.SelectedValue + " AND ISNULL(CANCEL,0)=0 AND REGISTERED=1 AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + ") AND COURSENO=" + Convert.ToInt32(ViewState["COURSENO"]) + "AND SUB_ID=" + Convert.ToInt32(ddlSubjectType.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt16(ViewState["sem"]) + "", "");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1614,9 +1612,6 @@ public partial class Academic_MarkEntryforIA_CC : System.Web.UI.Page
                     pnlSelection.Visible = false; pnlMarkEntry.Visible = true; pnlStudGrid.Visible = true; lblStudents.Visible = true;
                     //btnBack.Visible = true; 
                     btnSave.Visible = true; btnLock.Visible = true; btnPrintReport.Visible = true;
-
-
-
 
                 }
                 else

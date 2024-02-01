@@ -1270,8 +1270,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                             new SqlParameter("@P_SCHEMEID",objs.SchemeNo),
                             new SqlParameter("@P_CHKREGNO",ChkRegno),
                             new SqlParameter("@P_IP_ADDRESS",IpAddress),
-                            new SqlParameter("@P_OUT", SqlDbType.Int),
-                        
+                            new SqlParameter("@P_OUT", SqlDbType.Int),                       
                           };
                 sqlParams[sqlParams.Length - 1].Direction = ParameterDirection.Output;
 

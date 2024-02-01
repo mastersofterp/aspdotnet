@@ -45,6 +45,11 @@
         </div>
     </div>
 
+    <style>
+        .dataTables_scrollHeadInner {
+            width: max-content !important;
+        }
+    </style>
 
     <asp:Panel runat="server" ID="pnlMain">
         <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
@@ -121,7 +126,7 @@
                                                                         <sup>*</sup>
                                                                         <asp:Label ID="lblDropdown" Style="font-weight: bold" runat="server"></asp:Label>
                                                                     </div>
-                                                                    btnsearch
+
                                                                     <asp:DropDownList runat="server" class="form-control" ID="ddlDropdown" AppendDataBoundItems="true" data-select2-enable="true">
                                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
 
@@ -284,7 +289,7 @@
                                                                     <asp:Label ID="lblFatherName" runat="server" Font-Bold="True" /></a>
                                                             </li>
 
-                                                           <%-- <li class="list-group-item">
+                                                            <%-- <li class="list-group-item">
                                                                 <b>Minimum Credits Limit :</b><a class="">
                                                                     <asp:Label ID="lblOfferedRegCreditsFrom" runat="server" Font-Bold="True"></asp:Label></a>
                                                                 <asp:HiddenField ID="hdfDegreenoFrom" runat="server" />
@@ -334,7 +339,7 @@
                                                                 <b>physical handicap:</b><a class="">
                                                                     <asp:Label ID="lblPH" runat="server" Style="font-weight: 700"></asp:Label></a>
                                                             </li>
-                                                            
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -559,11 +564,11 @@
                                                                     <asp:CheckBox ID="chkAccept" runat="server" AutoPostBack="true" ToolTip='<%#Eval("GROUPNO") %>' OnCheckedChanged="chklvUniCoreSub_OnCheckedChanged" />
                                                                 </td>
                                                                 <td>
-                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false"/>
+                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false" />
                                                                     <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
                                                                 </td>
                                                                 <td>
-                                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>'/>
+                                                                    <asp:Label ID="lblCourseName" runat="server" Text='<%# Eval("COURSE_NAME") %>' />
                                                                 </td>
                                                                 <td>
                                                                     <asp:Label ID="lblSub_Type" runat="server" Text='<%# Eval("SUBNAME") %>' ToolTip='<%# Eval("SUBID") %>' />
@@ -636,7 +641,7 @@
                                                                     <asp:CheckBox ID="chkAccept" runat="server" ToolTip='<%#Eval("GROUPNO") %>' OnCheckedChanged="chkGlobalSubjects_OnCheckedChanged" AutoPostBack="true" />
                                                                 </td>
                                                                 <td>
-                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false"/>
+                                                                    <asp:Label ID="lblAudit" runat="server" Text='<%# Eval("IS_AUDIT") %>' ToolTip='<%# Eval("IS_AUDIT")%>' Visible="false" />
                                                                     <asp:Label ID="lblCCode" runat="server" Text='<%# Eval("CCODE") %>' ToolTip='<%# Eval("COURSENO")%>' />
                                                                 </td>
                                                                 <td>
@@ -769,8 +774,8 @@
             </ContentTemplate>
             <Triggers>
                 <asp:PostBackTrigger ControlID="btnExcelReport" />
-                 <asp:PostBackTrigger ControlID="btnSubmit" />
-                 <asp:PostBackTrigger ControlID="btnPrintRegSlip" />
+                <asp:PostBackTrigger ControlID="btnSubmit" />
+                <asp:PostBackTrigger ControlID="btnPrintRegSlip" />
             </Triggers>
         </asp:UpdatePanel>
     </asp:Panel>

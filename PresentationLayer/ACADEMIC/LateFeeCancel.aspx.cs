@@ -240,7 +240,7 @@ public partial class ACADEMIC_LateFeeCancel : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(pnlFeeTable, "Only Controller of Examination can be Canceled the Late Fees.", this.Page);                
+                objCommon.DisplayMessage(pnlFeeTable, "You Don't have authority to Cancel Late fine.", this.Page);
                 return;
             }
         }

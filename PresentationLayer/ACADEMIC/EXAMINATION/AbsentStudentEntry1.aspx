@@ -237,12 +237,41 @@
                                             <label>Session</label>
                                         </div>
                                         <asp:DropDownList ID="ddlsessionforabsent" OnSelectedIndexChanged="ddlsessionforabsent_SelectedIndexChanged" data-select2-enable="true"
-                                            runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" TabIndex="2">
+                                            runat="server" CssClass="form-control" AppendDataBoundItems="true" AutoPostBack="True" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlsessionforabsent"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <%--<sup>* </sup>--%>
+                                        <label>Exam Date </label>
+                                        <asp:DropDownList ID="ddlExamDate" runat="server" AppendDataBoundItems="true" 
+                                            CssClass="form-control" AutoPostBack="true" data-select2-enable="true" OnSelectedIndexChanged="ddlExamDate_SelectedIndexChanged"
+                                            TabIndex="1">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
+                                            ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />
+                                        <asp:RequiredFieldValidator ID="RfdV1" runat="server" ControlToValidate="ddlExamDate"
+                                            ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />--%>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Semester </label>
+                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="true"
+                                            CssClass="form-control" AutoPostBack="true" data-select2-enable="true"
+                                            TabIndex="1" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlSem"
+                                            ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlSem"
+                                            ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />--%>
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
@@ -250,7 +279,7 @@
                                             <label>Course</label>
                                         </div>
                                         <asp:DropDownList ID="ddlcourseforabset" runat="server" data-select2-enable="true" AppendDataBoundItems="true" CssClass="form-control"
-                                            OnSelectedIndexChanged="ddlcourseforabset_SelectedIndexChanged" AutoPostBack="True" TabIndex="3">
+                                            OnSelectedIndexChanged="ddlcourseforabset_SelectedIndexChanged" AutoPostBack="True" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="ddlcourseforabset"
@@ -263,7 +292,7 @@
                                             <label>Exam Name</label>
                                         </div>
                                         <asp:DropDownList ID="ddlexamnameabsentstudent" runat="server" data-select2-enable="true" AppendDataBoundItems="true" ToolTip="EXTERMARK" CssClass="form-control"
-                                            AutoPostBack="True" OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged" TabIndex="4">
+                                            AutoPostBack="True" OnSelectedIndexChanged="ddlexamnameabsentstudent_SelectedIndexChanged" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="ddlexamnameabsentstudent"
@@ -277,7 +306,7 @@
                                             <label>Sub Exam Name</label>
                                         </div>
                                         <asp:DropDownList ID="ddlSubexamnameabsentstudent" runat="server" data-select2-enable="true" AppendDataBoundItems="true" ToolTip="Sub Exam Name" CssClass="form-control"
-                                            AutoPostBack="True" OnSelectedIndexChanged="ddlSubexamnameabsentstudent_SelectedIndexChanged" TabIndex="5">
+                                            AutoPostBack="True" OnSelectedIndexChanged="ddlSubexamnameabsentstudent_SelectedIndexChanged" TabIndex="1">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlSubexamnameabsentstudent"
@@ -290,7 +319,7 @@
                                             <label>Exam Type</label>
                                         </div>
                                         <asp:DropDownList ID="ddlexam_type" AutoPostBack="true" runat="server" data-select2-enable="true" AppendDataBoundItems="true" ToolTip="Exam Type" CssClass="form-control"
-                                            TabIndex="6">
+                                            TabIndex="1" OnSelectedIndexChanged="ddlexam_type_SelectedIndexChanged">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             <asp:ListItem Value="1">Regular</asp:ListItem>
                                             <asp:ListItem Value="2">Backlog</asp:ListItem>
@@ -300,7 +329,7 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
-                                    <div class="form-group col-md-3 d-none">
+                                   <%-- <div class="form-group col-md-3 d-none">
                                         <sup>* </sup>
                                         <label>Exam Date </label>
                                         <asp:DropDownList ID="ddlExamDate" runat="server" AppendDataBoundItems="true"
@@ -308,13 +337,13 @@
                                             TabIndex="3">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <%--<asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
+                                        <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
                                                     ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
                                                     SetFocusOnError="true" InitialValue="0" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlExamDate"
                                                     ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
-                                                    SetFocusOnError="true" InitialValue="0" />--%>
-                                    </div>
+                                                    SetFocusOnError="true" InitialValue="0" />
+                                    </div>--%>
 
                                     <div class="form-group col-md-3 d-none">
                                         <sup>* </sup>
@@ -354,27 +383,27 @@
 
                             <div class="col-12 btn-footer">
                                 <asp:Button ID="btnShow" runat="server" Text="Show" ValidationGroup="report"
-                                    TabIndex="5" OnClick="btnShow_Click" CssClass="btn btn-primary" />
+                                    TabIndex="1" OnClick="btnShow_Click" CssClass="btn btn-primary" />
 
                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit"
-                                    OnClick="btnSubmit_Click" TabIndex="6" CssClass="btn btn-primary" ValidationGroup="report" />
+                                    OnClick="btnSubmit_Click" TabIndex="1" CssClass="btn btn-primary" ValidationGroup="report" />
 
                                 <asp:Button ID="btnCancel" runat="server" Text="Cancel" OnClick="btnCancel_Click"
-                                    TabIndex="7" CssClass="btn btn-warning" />
+                                    TabIndex="1" CssClass="btn btn-warning" />
 
-                                <asp:Button ID="btnAbsentReport1" runat="server" TabIndex="8" Text="Report" CssClass="btn btn-info"
+                                <asp:Button ID="btnAbsentReport1" runat="server" TabIndex="1" Text="Report" CssClass="btn btn-info"
                                     CausesValidation="false" OnClick="btnAbsentReport1_Click" />
 
-                                <asp:Button ID="btnLock" runat="server" TabIndex="9" Text="Lock" CssClass="btn btn-primary"
+                                <asp:Button ID="btnLock" runat="server" TabIndex="1" Text="Lock" CssClass="btn btn-primary"
                                     OnClick="btnLock_Click" BackColor="#FF9900" Style="display: none;" />
 
-                                <asp:Button ID="btnReport" runat="server" TabIndex="100" Text="Report" CssClass="btn btn-info"
+                                <asp:Button ID="btnReport" runat="server" TabIndex="1" Text="Report" CssClass="btn btn-info"
                                     OnClick="btnReport_Click1" Visible="False" />
 
-                                <asp:Button ID="btnBlankDocket" runat="server" TabIndex="101"
+                                <asp:Button ID="btnBlankDocket" runat="server" TabIndex="1"
                                     Text="Blank Docket" CssClass="btn btn-primary" OnClick="btnBlankDocket_Click" Visible="false" />
 
-                                <asp:Button ID="btnDocket" runat="server" TabIndex="102" Text="Docket"
+                                <asp:Button ID="btnDocket" runat="server" TabIndex="1" Text="Docket"
                                     CssClass="btn btn-primary" OnClick="btnDocket_Click" Visible="false" />
 
 
@@ -414,7 +443,6 @@
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <tr>
-
                                                 <asp:HiddenField ID="hdf_IDNO" runat="server" Value='<%#Eval("IDNO")%>' />
                                                 <asp:HiddenField ID="hdf_SEM" runat="server" Value='<%#Eval("SEMESTERNO")%>' />
                                                 <asp:HiddenField ID="hdf_SEC" runat="server" Value='<%#Eval("SECTIONNO")%>' />

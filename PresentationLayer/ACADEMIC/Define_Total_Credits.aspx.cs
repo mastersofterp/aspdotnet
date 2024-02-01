@@ -578,6 +578,23 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
 
     void showDetails()
     {
+        string col1 = "ISNULL(C.GROUPID,0)GROUPID,CDB.COLLEGE_NAME,C.SCHEMENO,C.SCHEMENAME,FROM_CREDIT,TO_CREDIT,CORE_CREDIT,ELECTIVE_CREDIT,GLOBAL_CREDIT,SESSIONTYPE,STUDENT_TYPE,TERM,FROM_RANGE,TO_RANGE,ADDITIONAL_COURSE";
+        string col2 = @"(CASE  WHEN STUDENT_TYPE=1 THEN 'All Pass' ELSE 'Backlog' END)AS STUDENT_TYPE_NAME,
+                                    (CASE  WHEN ADDITIONAL_COURSE=1 THEN 'YES' ELSE 'NO' END)AS ADDITIONAL_COURSE_NAME,
+                                    (CASE  WHEN MIN_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MIN_SCHEME_LIMIT,
+                                    (CASE  WHEN MAX_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MAX_SCHEME_LIMIT,
+                                    (CASE  WHEN C.ADM_TYPE=1 THEN 'Regular' ELSE 'Direct Second Year' END)AS ADM_TYPE,
+                                    (CASE  WHEN DEGREE_TYPE=1 THEN 'UG'  WHEN DEGREE_TYPE=2 then 'UG + PG'  else '' END)AS DEGREE_TYPE,
+                                    TERM_TEXT,
+                                    (CASE  WHEN isnull(LOCK,0)=1 THEN 'Yes' else 'No' END)AS LOCK,
+                                    MIN_REG_CREDIT_LIMIT,E.GROUPNAME,ISNULL(c.ELECTIVE_GROUPNO,0)as ELECTIVE_GROUPNO,
+                                    ISNULL(c.ELECTIVE_CHOISEFOR,0)as ELECTIVE_CHOISEFOR";
+        string tblName = "ACD_DEFINE_TOTAL_CREDIT C LEFT OUTER JOIN ACD_ELECTGROUP E ON C.ELECTIVE_GROUPNO=E.GROUPNO	INNER JOIN ACD_SCHEME S ON (C.SCHEMENO = S.SCHEMENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (S.DEGREENO = CDB.DEGREENO AND S.BRANCHNO = CDB.BRANCHNO)";
+
+        DataSet dsCredit = objCommon.FillDropDown(tblName, col1, col2, "", "GROUPID DESC");
+        if (dsCredit != null && dsCredit.Tables[0].Rows.Count > 0)
+            ViewState["dsCredit"] = dsCredit;
+
         string col3 = "DISTINCT ISNULL(C.GROUPID,0)GROUPID,CDB.COLLEGE_ID,CM.COLLEGE_NAME,ISNULL(FROM_CREDIT,0)FROM_CREDIT,ISNULL(TO_CREDIT,0)TO_CREDIT,ISNULL(CORE_CREDIT,0)CORE_CREDIT,ISNULL(ELECTIVE_CREDIT,0)ELECTIVE_CREDIT,ISNULL(GLOBAL_CREDIT,0)GLOBAL_CREDIT,ISNULL(OVERLOAD_CREDIT,0)OVERLOAD_CREDIT,0 as SCHEMENO,0 as TERM,0 as ELECTIVE_GROUPNO";
         string col4 = @"(CASE  WHEN ISNULL(LOCK,0)=1 THEN 'YES' ELSE 'NO' END)AS LOCK";
         string tblName2 = "ACD_DEFINE_TOTAL_CREDIT C LEFT OUTER JOIN ACD_ELECTGROUP E ON C.ELECTIVE_GROUPNO=E.GROUPNO	INNER JOIN ACD_SCHEME S ON (C.SCHEMENO = S.SCHEMENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (S.DEGREENO = CDB.DEGREENO AND S.BRANCHNO = CDB.BRANCHNO) INNER JOIN ACD_COLLEGE_MASTER CM ON(CDB.COLLEGE_ID=CM.COLLEGE_ID)";
@@ -852,25 +869,31 @@ public partial class ACADEMIC_Define_Total_Credits : System.Web.UI.Page
         ListView lv = dataitem.FindControl("lvDetails") as ListView;
         try
         {
-            string col1 = "ISNULL(C.GROUPID,0)GROUPID,CDB.COLLEGE_NAME,C.SCHEMENO,C.SCHEMENAME,FROM_CREDIT,TO_CREDIT,CORE_CREDIT,ELECTIVE_CREDIT,GLOBAL_CREDIT,SESSIONTYPE,STUDENT_TYPE,TERM,FROM_RANGE,TO_RANGE,ADDITIONAL_COURSE";
-            string col2 = @"(CASE  WHEN STUDENT_TYPE=1 THEN 'All Pass' ELSE 'Backlog' END)AS STUDENT_TYPE_NAME,
-                                    (CASE  WHEN ADDITIONAL_COURSE=1 THEN 'YES' ELSE 'NO' END)AS ADDITIONAL_COURSE_NAME,
-                                    (CASE  WHEN MIN_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MIN_SCHEME_LIMIT,
-                                    (CASE  WHEN MAX_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MAX_SCHEME_LIMIT,
-                                    (CASE  WHEN C.ADM_TYPE=1 THEN 'Regular' ELSE 'Direct Second Year' END)AS ADM_TYPE,
-                                    (CASE  WHEN DEGREE_TYPE=1 THEN 'UG'  WHEN DEGREE_TYPE=2 then 'UG + PG'  else '' END)AS DEGREE_TYPE,
-                                    TERM_TEXT,
-                                    (CASE  WHEN isnull(LOCK,0)=1 THEN 'Yes' else 'No' END)AS LOCK,
-                                    MIN_REG_CREDIT_LIMIT,E.GROUPNAME,ISNULL(c.ELECTIVE_GROUPNO,0)as ELECTIVE_GROUPNO,
-                                    ISNULL(c.ELECTIVE_CHOISEFOR,0)as ELECTIVE_CHOISEFOR";
-            string tblName = "ACD_DEFINE_TOTAL_CREDIT C LEFT OUTER JOIN ACD_ELECTGROUP E ON C.ELECTIVE_GROUPNO=E.GROUPNO	INNER JOIN ACD_SCHEME S ON (C.SCHEMENO = S.SCHEMENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (S.DEGREENO = CDB.DEGREENO AND S.BRANCHNO = CDB.BRANCHNO)";
+//            string col1 = "ISNULL(C.GROUPID,0)GROUPID,CDB.COLLEGE_NAME,C.SCHEMENO,C.SCHEMENAME,FROM_CREDIT,TO_CREDIT,CORE_CREDIT,ELECTIVE_CREDIT,GLOBAL_CREDIT,SESSIONTYPE,STUDENT_TYPE,TERM,FROM_RANGE,TO_RANGE,ADDITIONAL_COURSE";
+//            string col2 = @"(CASE  WHEN STUDENT_TYPE=1 THEN 'All Pass' ELSE 'Backlog' END)AS STUDENT_TYPE_NAME,
+//                                    (CASE  WHEN ADDITIONAL_COURSE=1 THEN 'YES' ELSE 'NO' END)AS ADDITIONAL_COURSE_NAME,
+//                                    (CASE  WHEN MIN_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MIN_SCHEME_LIMIT,
+//                                    (CASE  WHEN MAX_SCHEME_LIMIT=1 THEN 'YES' ELSE 'NO' END)AS MAX_SCHEME_LIMIT,
+//                                    (CASE  WHEN C.ADM_TYPE=1 THEN 'Regular' ELSE 'Direct Second Year' END)AS ADM_TYPE,
+//                                    (CASE  WHEN DEGREE_TYPE=1 THEN 'UG'  WHEN DEGREE_TYPE=2 then 'UG + PG'  else '' END)AS DEGREE_TYPE,
+//                                    TERM_TEXT,
+//                                    (CASE  WHEN isnull(LOCK,0)=1 THEN 'Yes' else 'No' END)AS LOCK,
+//                                    MIN_REG_CREDIT_LIMIT,E.GROUPNAME,ISNULL(c.ELECTIVE_GROUPNO,0)as ELECTIVE_GROUPNO,
+//                                    ISNULL(c.ELECTIVE_CHOISEFOR,0)as ELECTIVE_CHOISEFOR";
+//            string tblName = "ACD_DEFINE_TOTAL_CREDIT C LEFT OUTER JOIN ACD_ELECTGROUP E ON C.ELECTIVE_GROUPNO=E.GROUPNO	INNER JOIN ACD_SCHEME S ON (C.SCHEMENO = S.SCHEMENO) INNER JOIN ACD_COLLEGE_DEGREE_BRANCH CDB ON (S.DEGREENO = CDB.DEGREENO AND S.BRANCHNO = CDB.BRANCHNO)";
 
-            DataSet dsCredit = objCommon.FillDropDown(tblName, col1, col2, "GROUPID =" + gropuid, "GROUPID DESC");
-            lv.DataSource = dsCredit.Tables[0];
-            DataTable dt = dsCredit.Tables[0];
-            ViewState["credits"] = dt;
-            lv.DataBind();
+//            DataSet dsCredit = objCommon.FillDropDown(tblName, col1, col2, "GROUPID =" + gropuid, "GROUPID DESC");
 
+            DataSet ds=(DataSet) ViewState["dsCredit"];
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                DataRow [] dr = ds.Tables[0].Select("GROUPID =" + gropuid);
+                DataTable dt = dr.CopyToDataTable();               
+                lv.DataSource = dt; //dsCredit.Tables[0];
+               
+                ViewState["credits"] = dt;
+                lv.DataBind();
+            }
         }
         catch { }
     }

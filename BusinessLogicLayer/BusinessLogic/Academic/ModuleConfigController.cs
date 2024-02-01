@@ -29,14 +29,14 @@ namespace IITMS
                 bool IntakeCapacity, bool chktimeReport, bool chkGlobalCTAllotment, string BBCMailSENTRY, bool hosteltypeselection, bool chkElectChoiceFor,
                     bool Seatcapacitynewstud, string Usernos, bool Dashboardoutstanding, string AttendanceUser, string CourseShow, bool Timeslotmandatory,
                     string UserLoginNos, string CourseLocked, bool DisplayStudLoginDashboard, bool DisplayReceiptInHTMLFormat, bool chkValueAddedCTAllotment,
-                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids, string college_ids)
+                    bool CreateRegno, bool AttTeaching, bool createprnt, int AllowCurrSemForRedoImprovementCrsReg, string ModAdmInfoUserNos, string session_ids, string college_ids, int studAttendance)
                 {
                     int status = 0;
                     try
                     {
                         SQLHelper objSQLHelper = new SQLHelper(connectionString);
                         SqlParameter[] sqlParams = null;
-                        sqlParams = new SqlParameter[57];
+                        sqlParams = new SqlParameter[58];
                         sqlParams[0] = new SqlParameter("@Configid", objConfig.Configid);
                         sqlParams[1] = new SqlParameter("@AllowRegno", objConfig.AllowRegno);
                         sqlParams[2] = new SqlParameter("@AllowRollno", objConfig.AllowRollno);
@@ -97,8 +97,9 @@ namespace IITMS
                         sqlParams[53] = new SqlParameter("@P_TOSHOW_FEEREC_STUDLOGIN", objConfig.TOSHOW_FEEREC_STUDLOGIN);
                         sqlParams[54] = new SqlParameter("@P_SESSION_IDS", session_ids);
                         sqlParams[55] = new SqlParameter("@P_COLLEGE_IDS", college_ids);
-                        sqlParams[56] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        sqlParams[56].Direction = ParameterDirection.Output;
+                        sqlParams[56] = new SqlParameter("@P_ATTENDANCE_STUDDISPLAY", studAttendance);
+                        sqlParams[57] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        sqlParams[57].Direction = ParameterDirection.Output;
 
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_SP_MODULE_CONFIGURATION_INSERT_UPDATE", sqlParams, true);
                         status = Convert.ToInt32(ret);

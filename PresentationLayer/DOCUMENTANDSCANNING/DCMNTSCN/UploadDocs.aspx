@@ -4,7 +4,11 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <%@ Register Assembly="FreeTextBox" Namespace="FreeTextBoxControls" TagPrefix="FTB" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
+        })
+    </script>
     <div class="row">
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
@@ -80,7 +84,7 @@
                                     <asp:FileUpload ID="FileUpload10" runat="server" class="multi" TabIndex="5" ToolTip="Click here to Upload Document" />&nbsp;                                                   
                                        
                                       <asp:Button ID="btnAttachFile" runat="server" Text="Attach File" ToolTip="Click here to Upload Files"
-                                            OnClick="btnAttachFile_Click" CssClass="btn btn-primary mt-1" TabIndex="15" />
+                                          OnClick="btnAttachFile_Click" CssClass="btn btn-primary mt-1" TabIndex="15" />
                                 </div>
                             </div>
                             <div class="row">
@@ -88,13 +92,13 @@
                                     <div class="label-dynamic">
                                         <%--<sup>*</sup>--%>
                                         <label>Share</label>
-                                    </div>                                  
+                                    </div>
                                     <asp:CheckBox ID="chkId" runat="server" Text="Yes" ToolTip="Select Yes If You Want To Share" TabIndex="6" />
 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <%--<div class="col-12">
                             <asp:ListView ID="lvAttachments" runat="server">
                                 <LayoutTemplate>
                                     <table>
@@ -108,30 +112,118 @@
                                     <tr>
                                         <%--<a onmouseOver="window.status='HTMLcenter';return true" onmouseOut="window.status='HTMLcenter';return true" target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%# Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME") %>">
                                                         <%# Eval("ORIGINAL_FILENAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1).ToString() %>&nbsp;KB)--%>
-                                        <td>
+                        <%-- <td>
                                             <asp:LinkButton ID="lnkDelete" runat="server" Text="X" OnClick="lnkDelete_Click" CommandArgument='<%# Eval("ATTACH_ID") %>'
-                                                ></asp:LinkButton>  <%--ToolTip='<%# Eval("IDNO") %>' CommandName='<%# Eval("UPLNO")%>'--%>
+                                                ></asp:LinkButton>  <%--ToolTip='<%# Eval("IDNO") %>' CommandName='<%# Eval("UPLNO")%>'
 
                                             <img alt="Attachment" src="../../../../Images/attachment.png" />
                                             <a onmouseover="window.status='HTMLcenter';return true" onmouseout="window.status='HTMLcenter';return true"
                                                 target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%# Eval("FILE_PATH") %>&filename=<%# Eval("ORIGINAL_FILENAME") %>">
                                                 <%# Eval("ORIGINAL_FILENAME")%></a>
 
-                                            <%-- <asp:HiddenField ID="hdnIDNO" runat="server" Value='<%# Eval("IDNO")%>' />--%>
+                                            <asp:HiddenField ID="hdnIDNO" runat="server" Value='<%# Eval("IDNO")%>' />
                                         </td>
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>
+                        </div>--%>
+                        <%--  --%>
+                        <div id="divAttch" runat="server" style="display: none">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto">
+                                            <asp:ListView ID="lvAttach" runat="server">
+                                                <LayoutTemplate>
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Action
+                                                                </th>
+                                                                <th id="divattach" runat="server">Attachments  
+                                                                </th>
+                                                                <th id="divattachblob" runat="server" visible="false">Attachments
+                                                                </th>
+                                                                <th id="divDownload" runat="server" visible="false">Download
+                                                                </th>
+                                                                <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr id="itemPlaceholder" runat="server" />
+                                                        </tbody>
+                                                    </table>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:LinkButton ID="lnkRemoveAttach" runat="server" CommandArgument='<%# Eval("UA_NO")%>'
+                                                                OnClick="lnkRemoveAttach_Click" CssClass="mail_pg">Remove</asp:LinkButton>
+
+                                                            <ajaxToolKit:ConfirmButtonExtender ID="CnfDrop" runat="server"
+                                                                ConfirmText="Are you Sure, Want to Remove.?" TargetControlID="lnkRemoveAttach">
+                                                            </ajaxToolKit:ConfirmButtonExtender>
+                                                        </td>
+                                                        <td id="attachfile" runat="server">
+                                                            <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
+                                                            --%>
+
+                                                            <img alt="Attachment" src="../../Images/attachment.png" />
+                                                            <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILEPATH") %>&filename=<%# Eval("ORIGINAL_FILENAME")%>">
+                                                                <%# Eval("ORIGINAL_FILENAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
+                                                        </td>
+                                                        <td id="attachblob" runat="server" visible="false">
+                                                            <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
+                                                            --%>
+
+                                                            <img alt="Attachment" src="../../Images/attachment.png" />
+                                                            <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                            --%>      <%# Eval("FILEPATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
+                                                        </td>
+
+
+                                                        <td id="tdDownloadLink" runat="server" visible="false">
+
+
+                                                            <img alt="Attachment" src="../../Images/attachment.png" />
+                                                            <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                            --%>      <%# Eval("ORIGINAL_FILENAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
+                                                            
+                                                        </td>
+                                                        <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                            <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                <ContentTemplate>
+                                                                    <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ORIGINAL_FILENAME") %>'
+                                                                        data-target="#preview" data-toggle="modal" CommandArgument='<%# Eval("ORIGINAL_FILENAME") %>' Visible='<%# Convert.ToString(Eval("ORIGINAL_FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                </ContentTemplate>
+                                                                <Triggers>
+                                                                    <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                </Triggers>
+                                                            </asp:UpdatePanel>
+
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+                                        </asp:Panel>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </asp:Panel>
 
 
-                      <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                        </div>
+                    <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                        <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                        <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                    </div>
 
                     <div class=" col-12 btn-footer">
                         <asp:Panel ID="pnlButton" runat="server">
@@ -150,7 +242,7 @@
                     </div>
                     <div class="col-12">
                         <asp:Panel ID="Pancatgrid" runat="server" ScrollBars="Auto">
-                            <asp:ListView ID="LVCATDOC" runat="server" >
+                            <asp:ListView ID="LVCATDOC" runat="server">
                                 <LayoutTemplate>
                                     <div id="lgv1">
                                         <div class="sub-heading">
@@ -181,8 +273,8 @@
                                     <tr>
                                         <td>
 
-                                              <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("UPLNO") %>'
-                                                        AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" />
+                                            <asp:ImageButton ID="btnEdit" runat="server" CausesValidation="false" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("UPLNO") %>'
+                                                AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" />
                                             &nbsp;
                                                     <asp:ImageButton ID="btnDelete" runat="server" ImageUrl="~/images/delete.png" CommandArgument='<%# Eval("UPLNO") %>'
                                                         ToolTip="Delete Record" OnClientClick="showConfirmDel(this); return false;" OnClick="btnDelete_Click" />
@@ -200,6 +292,12 @@
                                 </ItemTemplate>
                             </asp:ListView>
                         </asp:Panel>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-6 col-12" id="div2" runat="server" visible="false">
+                        <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="HiddenField1" runat="server" />
+                        <asp:Label ID="Label2" runat="server" Text=""></asp:Label>
+                        <asp:HiddenField ID="HiddenField2" runat="server" />
                     </div>
                     <div class="col-12">
                         <asp:Panel ID="pnlList" runat="server">
@@ -265,59 +363,59 @@
         </div>
     </div>
 
-     <script src="../../JAVASCRIPTS/JScriptAdmin_Module.js" type="text/javascript"></script>
+    <script src="../../JAVASCRIPTS/JScriptAdmin_Module.js" type="text/javascript"></script>
     <script src="../JAVASCRIPTS/jquery-1.4.min.js" type="text/javascript"></script>
     <script src="../JAVASCRIPTS/jquery.MultiFile.pack.js" type="text/javascript"></script>
 
-            <tr>
-            <%--<td class="vista_page_title_bar" style="height: 30px">UPLOAD DOCUMENTS              
+    <tr>
+        <%--<td class="vista_page_title_bar" style="height: 30px">UPLOAD DOCUMENTS              
                 <asp:ImageButton ID="btnHelp" runat="server" ImageUrl="~/images/help.gif" OnClientClick="return false;"
                     AlternateText="Page Help" ToolTip="Page Help" />
             </td>--%>
-        </tr>
-        <%--PAGE HELP--%>
-        <%--JUST CHANGE THE IMAGE AS PER THE PAGE. NOTHING ELSE--%>
-        <tr>
-            <td>
-                <!-- "Wire frame" div used to transition from the button to the info panel -->
-                <div id="flyout" style="display: none; overflow: hidden; z-index: 2; background-color: #FFFFFF; border: solid 1px #D0D0D0;">
+    </tr>
+    <%--PAGE HELP--%>
+    <%--JUST CHANGE THE IMAGE AS PER THE PAGE. NOTHING ELSE--%>
+    <tr>
+        <td>
+            <!-- "Wire frame" div used to transition from the button to the info panel -->
+            <div id="flyout" style="display: none; overflow: hidden; z-index: 2; background-color: #FFFFFF; border: solid 1px #D0D0D0;">
+            </div>
+            <!-- Info panel to be displayed as a flyout when the button is clicked -->
+            <div id="info" style="display: none; width: 250px; z-index: 2; opacity: 0; filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0); font-size: 12px; border: solid 1px #CCCCCC; background-color: #FFFFFF; padding: 5px;">
+                <div id="btnCloseParent" style="float: right; opacity: 0; filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);">
+                    <asp:LinkButton ID="btnClose" runat="server" OnClientClick="return false;" Text="X"
+                        ToolTip="Close" Style="background-color: #666666; color: #FFFFFF; text-align: center; font-weight: bold; text-decoration: none; border: outset thin #FFFFFF; padding: 5px;" />
                 </div>
-                <!-- Info panel to be displayed as a flyout when the button is clicked -->
-                <div id="info" style="display: none; width: 250px; z-index: 2; opacity: 0; filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0); font-size: 12px; border: solid 1px #CCCCCC; background-color: #FFFFFF; padding: 5px;">
-                    <div id="btnCloseParent" style="float: right; opacity: 0; filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);">
-                        <asp:LinkButton ID="btnClose" runat="server" OnClientClick="return false;" Text="X"
-                            ToolTip="Close" Style="background-color: #666666; color: #FFFFFF; text-align: center; font-weight: bold; text-decoration: none; border: outset thin #FFFFFF; padding: 5px;" />
-                    </div>
-                    <div>
-                        <p class="page_help_head">
-                            <span style="font-weight: bold; text-decoration: underline;">Page Help</span><br />
-                            <asp:Image ID="imgEdit" runat="server" ImageUrl="~/images/edit.gif" AlternateText="Edit Record" />
-                            Edit Record&nbsp;&nbsp;
+                <div>
+                    <p class="page_help_head">
+                        <span style="font-weight: bold; text-decoration: underline;">Page Help</span><br />
+                        <asp:Image ID="imgEdit" runat="server" ImageUrl="~/images/edit.gif" AlternateText="Edit Record" />
+                        Edit Record&nbsp;&nbsp;
                             <asp:Image ID="imgDelete" runat="server" ImageUrl="~/images/delete.gif" AlternateText="Delete Record" />
-                            Delete Record
-                        </p>
-                        <p class="page_help_text">
-                            <asp:Label ID="lblHelp" runat="server" Font-Names="Trebuchet MS" />
-                        </p>
-                    </div>
+                        Delete Record
+                    </p>
+                    <p class="page_help_text">
+                        <asp:Label ID="lblHelp" runat="server" Font-Names="Trebuchet MS" />
+                    </p>
                 </div>
+            </div>
 
-                <script type="text/javascript" language="javascript">
-                    // Move an element directly on top of another element (and optionally
-                    // make it the same size)
-                    function Cover(bottom, top, ignoreSize) {
-                        var location = Sys.UI.DomElement.getLocation(bottom);
-                        top.style.position = 'absolute';
-                        top.style.top = location.y + 'px';
-                        top.style.left = location.x + 'px';
-                        if (!ignoreSize) {
-                            top.style.height = bottom.offsetHeight + 'px';
-                            top.style.width = bottom.offsetWidth + 'px';
-                        }
+            <script type="text/javascript" language="javascript">
+                // Move an element directly on top of another element (and optionally
+                // make it the same size)
+                function Cover(bottom, top, ignoreSize) {
+                    var location = Sys.UI.DomElement.getLocation(bottom);
+                    top.style.position = 'absolute';
+                    top.style.top = location.y + 'px';
+                    top.style.left = location.x + 'px';
+                    if (!ignoreSize) {
+                        top.style.height = bottom.offsetHeight + 'px';
+                        top.style.width = bottom.offsetWidth + 'px';
                     }
-                </script>
-            </td>
-        </tr>
+                }
+            </script>
+        </td>
+    </tr>
     </table>
   
     <table cellpadding="0" cellspacing="0" style="width: 70%">
@@ -527,9 +625,44 @@ PopupDragHandleControlID="Panel3" />
         }
     </script>
 
+    <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
+        <div class="modal-dialog text-center">
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                <ContentTemplate>
 
+                    <div class="modal-content" style="width: 700px;">
+                        <div class="modal-header">
 
-   <%-- <script type="text/javascript">
+                            <h4 class="modal-title">Document</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                <asp:Literal ID="ltEmbed" runat="server" />
+                                <%-- <iframe style="width: 100%; height: 500px;" id="irm1" src="~/PopUp.aspx" runat="server"></iframe>
+                                --%>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="BTNCLOSEData" runat="server" Text="CLOSE" OnClick="BTNCLOSEData_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
+                        </div>
+                    </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function CloseModal() {
+            $("#preview").modal("hide");
+        }
+        function ShowModal() {
+            $("#preview").modal("show");
+        }
+    </script>
+
+    <%-- <script type="text/javascript">
         //  keeps track of the delete button for the row
         //  that is going to be removed
         var _source;
@@ -624,5 +757,4 @@ PopupDragHandleControlID="Panel3" />
             document.getElementById(id).style.display = 'none';
         }
     </script>--%>
-
 </asp:Content>

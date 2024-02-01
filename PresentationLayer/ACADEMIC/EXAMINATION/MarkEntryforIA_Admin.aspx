@@ -769,6 +769,11 @@
 
     </script>
 
-      
+      <script type="text/javascript">
+          function functionpopup()
+          {
+              $('#PrintModal').modal('show');
+          }
+      </script>
 
 </asp:Content>

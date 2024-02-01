@@ -1041,7 +1041,7 @@ public partial class Itle_ELibraryMaster : System.Web.UI.Page
                 DataTable dtBlobPic = objBlob.Blob_GetById(blob_ConStr, blob_ContainerName, img);
                 var blob = blobContainer.GetBlockBlobReference(ImageName);
 
-                string filePath = directoryPath + "\\" + ImageName;
+                string filePath = directoryPath + ImageName;
 
                 if ((System.IO.File.Exists(filePath)))
                 {
@@ -1053,7 +1053,7 @@ public partial class Itle_ELibraryMaster : System.Web.UI.Page
                 embed += " or download <a target = \"_blank\" href = \"http://get.adobe.com/reader/\">Adobe PDF Reader</a> to view the file.";
                 embed += "</object>";
                 ltEmbed.Text = string.Format(embed, ResolveUrl("~/DownloadImg/" + ImageName));
-
+                hdnfilename.Value = filePath;
             }
 
         }
@@ -1062,5 +1062,24 @@ public partial class Itle_ELibraryMaster : System.Web.UI.Page
             throw;
         }
     }
+    protected void BTNCLOSE_Click(object sender, EventArgs e)
+    {
+        string directoryPath = Server.MapPath("~/DownloadImg/");
+
+        if (Directory.Exists(directoryPath))
+        {
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (string file in files)
+            {
+                if (file == hdnfilename.Value)
+                {
+                    File.Delete(file);
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "CloseModal();", true);
+                }
+            }
+        }
+
     }
+}
 

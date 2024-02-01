@@ -139,6 +139,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     //BindTrainingAndWorkshopDetails();
                     BindCompDetails(idno);
                     BindUploasResumeDetails(idno);
+                    BindExamDetails(idno);
                 }
               
                     
@@ -297,13 +298,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         {
             txtEndPeriod.Enabled = false;
             imgDate2.Visible = false;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         else
         {
             txtEndPeriod.Enabled = true;
             imgDate2.Visible = true;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         
     }
@@ -313,24 +314,24 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         divCurrency.Visible = true;
         divStipend.Visible = false;
         //divPerAnnum.Visible = true;
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
     }
     protected void ddlJobType_SelectedIndexChanged(object sender, EventArgs e)
     {
         objCommon.FillDropDownList(ddlPositionType, "ACD_TP_JOB_ROLE A LEFT JOIN ACD_TP_JOBTYPE B ON (A.JOBNO=B.JOBNO)", "A.ROLENO", "A.JOBROLETYPE", "A.STATUS=1 AND B.JOBNO='" +Convert.ToInt32( ddlJobType.SelectedValue)+ "'", "");
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
     }
     protected void rdoStipend_CheckedChanged(object sender, EventArgs e)
     {
         divSalary.Visible = false;
         divCurrency.Visible = true;
         divStipend.Visible = true;
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
     }
     protected void btnCancelWorkExperience_Click(object sender, EventArgs e)
     {
         clearWorkExperience();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
     }
     public void clearWorkExperience()
     {
@@ -403,7 +404,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (Convert.ToDateTime(txtStartPeriod.Text) > Convert.ToDateTime(txtEndPeriod.Text))
             {
                 objCommon.DisplayMessage(this.Page, "Start date should not be greater than End date.", this.Page);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                 return;
             }
             }
@@ -426,13 +427,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (txtSalary.Text==string.Empty)
                      {
                     objCommon.DisplayMessage(this.Page, "Please Enter Salary.", this.Page);
-                  ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+                  ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                   return;
                      }
                 else if (ddlCurrency.SelectedValue=="0")
                 {
                     objCommon.DisplayMessage(this.Page, "Please Select Currency.", this.Page);
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                     return;
                 }
             }
@@ -443,13 +444,13 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                      if (TxtStipend.Text == string.Empty)
                      {
                          objCommon.DisplayMessage(this.Page, "Please Enter Stipend.", this.Page);
-                         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+                         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                          return;
                      }
                      else if (ddlCurrency.SelectedValue == "0")
                      {
                          objCommon.DisplayMessage(this.Page, "Please Select Currency.", this.Page);
-                         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+                         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
                          return;
                      }
                  }
@@ -534,11 +535,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
 
     }
@@ -551,7 +552,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["WORKEXPNO"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsWorkExp(WORKEXPNO);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
         catch (Exception ex)
         {
@@ -559,7 +560,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
         }
 
     }
@@ -697,7 +698,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             divSalary.Visible = false;
             txtSalary.Text = string.Empty;
         }
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
 
     }
     protected void btnSubmitTechSkill_Click(object sender, EventArgs e)
@@ -753,11 +754,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
         }
     }
 
@@ -792,7 +793,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["TechSkill"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsTechSkill(TechSkill);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
         }
         catch (Exception ex)
         {
@@ -800,7 +801,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
         }
     }
 
@@ -837,7 +838,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         ddlProficiency.SelectedValue = "0";
         ddlSkillName.SelectedValue = "0";
         ddlProficiency.SelectedValue = "0";
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_2');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
     }
 
     protected void btnSubmitProject_Click(object sender, EventArgs e)
@@ -850,7 +851,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (Convert.ToDateTime(txtStartDate.Text) > Convert.ToDateTime(txtEndDate.Text))
                 {
                     objCommon.DisplayMessage(this.Page, "Start date should not be greater than End date.", this.Page);
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
                     return;
                 }
             }
@@ -929,11 +930,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
     }
    
@@ -943,19 +944,19 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         {
             txtEndDate.Enabled = false;
             Div2.Visible = false;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
         else
         {
             txtEndDate.Enabled = true;
             Div2.Visible = true;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
     }
     protected void btnCancelProject_Click(object sender, EventArgs e)
     {
         clear();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
     }
     public void clear()
     {
@@ -1002,7 +1003,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["Project"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsProject(Project);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1010,7 +1011,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
         }
     }
 
@@ -1076,7 +1077,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (Convert.ToDateTime(txtFromDate.Text) > Convert.ToDateTime(txtToDate.Text))
                 {
                     objCommon.DisplayMessage(this.Page, "From date should not be greater than To date.", this.Page);
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
                     return;
                 }
             }
@@ -1152,11 +1153,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
     }
 
@@ -1202,7 +1203,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["Certification"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsCertification(Certification);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1210,7 +1211,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
     }
 
@@ -1268,7 +1269,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     protected void btnCancelCertification_Click(object sender, EventArgs e)
     {
         clearCrt();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
     }
 
 
@@ -1327,11 +1328,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
         }
     }
     public void clearLang()
@@ -1370,7 +1371,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["Language"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsLanguage(Language);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1378,7 +1379,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
         }
     }
 
@@ -1414,7 +1415,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     protected void btnCancelLanguage_Click(object sender, EventArgs e)
     {
         clearLang();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
     }
     protected void btnSubmitAward_Click(object sender, EventArgs e)
     {
@@ -1424,28 +1425,28 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (txtAwardTitle.Text==string.Empty)
             {
                 objCommon.DisplayMessage("Please Enter Award Title.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
                     return;
               
             }
             if (txtAwardDate.Text == string.Empty)
             {
                 objCommon.DisplayMessage("Please Enter Date of Award.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
                 return;
 
             }
             if (txtGivenBy.Text == string.Empty)
             {
                 objCommon.DisplayMessage("Please Enter Given By.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
                 return;
 
             }
             if (ddlLevel.SelectedValue == "0")
             {
                 objCommon.DisplayMessage("Please Select Level.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
                 return;
 
             }
@@ -1499,11 +1500,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
         }
     }
 
@@ -1545,7 +1546,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["AR_ID"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsAward(AR_ID);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1553,7 +1554,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
         }
     }
 
@@ -1595,7 +1596,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (Convert.ToDateTime(txtFromDateCompetition.Text) > Convert.ToDateTime(txtToDateCompetition.Text))
                 {
                     objCommon.DisplayMessage(this.Page, "From date should not be greater than To date.", this.Page);
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
                     return;
                 }
             }
@@ -1656,11 +1657,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
         }
     }
 
@@ -1680,7 +1681,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     protected void btnCancelCompetition_Click(object sender, EventArgs e)
     {
         clearCompetitions();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
     }
 
     protected void BindCompetitionsDetails(int idno)
@@ -1714,7 +1715,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["CP_ID"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsCompetition(CP_ID);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1722,7 +1723,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
         }
     }
 
@@ -1768,7 +1769,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 if (Convert.ToDateTime(txtFromDateTraining.Text) > Convert.ToDateTime(txtToDateTraining.Text))
                 {
                     objCommon.DisplayMessage(this.Page, "From date should not be greater than To date.", this.Page);
-                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
                     return;
                 }
             }
@@ -1823,11 +1824,11 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
         }
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
         }
     }
 
@@ -1845,7 +1846,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
     protected void btnCancelTraining_Click(object sender, EventArgs e)
     {
         clearTrainingAndWorkshop();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
     }
     protected void BindTrainingAndWorkshopDetails(int idno)
     {
@@ -1878,7 +1879,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["TW_ID"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsTraining(TW_ID);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
         }
         catch (Exception ex)
         {
@@ -1886,7 +1887,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_8');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
         }
     }
 
@@ -1928,25 +1929,25 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             if (ddlExam.SelectedValue=="0")
             {
                 objCommon.DisplayMessage("Please Select Exam.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
                 return;
             }
             if (ddlQualificationStatus.SelectedValue == "0")
             {
                 objCommon.DisplayMessage("Please Select Qualification Status.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
                 return;
             }
             if (txtyear.Text == string.Empty)
             {
                 objCommon.DisplayMessage("Please Enter Year.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
                 return;
             }
             if (txtTestScore.Text == string.Empty)
             {
                 objCommon.DisplayMessage("Please Enter Test Score/Grade.", this);
-                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
                 return;
             }
             string DOCFOLDER = file_path + "TRAININGANDPLACEMENT\\UploadFile";
@@ -2074,19 +2075,19 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 }
             }
 
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
         }
 
 
         catch (Exception ex)
         {
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
         }
     }
     protected void btnCancelScore_Click(object sender, EventArgs e)
     {
         clearTestScores();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
     }
     public void clearTestScores()
     {
@@ -2129,7 +2130,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             ViewState["TS_ID"] = int.Parse(btnEdit.CommandArgument);
             ViewState["action"] = "edit";
             this.ShowDetailsTestScores(TS_ID);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
         }
         catch (Exception ex)
         {
@@ -2137,7 +2138,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_TPJobLoc.btnEdit_Click -> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_9');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
         }
     }
 
@@ -2210,19 +2211,19 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
         {
             txtToDate.Enabled = false;
             Div4.Visible = false;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
         else
         {
             txtToDate.Enabled = true;
             Div4.Visible = true;
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_4');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_5');</script>", false);
         }
     }
     protected void btnCancelAward_Click(object sender, System.EventArgs e)
     {
         clearAward();
-        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_6');</script>", false);
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_7');</script>", false);
     }
     protected void btnlncardkSelect_Click(object sender, EventArgs e)
     {
@@ -2231,7 +2232,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
             string IDNO = string.Empty;
             IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'");
             ShowReport("Training And Placement", "GenerateResumeReport.rpt", IDNO);
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
         catch (Exception ex)
         {
@@ -2239,7 +2240,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Academic_AttendanceReportByFaculty.btnSubjectwise_Click()-> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server UnAvailable");
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
         
     }
@@ -2349,7 +2350,7 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 return;
 
             }
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
     }
 
@@ -2459,8 +2460,8 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                     }  
                 }
 
-          }
-            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_10');</script>", false);
+            }
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
         }
 
         catch (Exception ex)
@@ -2538,5 +2539,145 @@ public partial class EXAMINATION_Projects_Career_Profile : System.Web.UI.Page
                 return "";
                 break;
         }
+    }
+    protected void btnCancelResume_Click(object sender, EventArgs e)
+    {
+        Session["sb"] = null;
+        clear();
+        
+        string Url = string.Empty;
+        string directoryPath = string.Empty;
+        string img = string.Empty;
+        string blob_ConStr = string.Empty;
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_11');</script>", false);
+
+    }
+    protected void btnSubmitExamDetails_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ViewState["action"].ToString().Equals("add"))
+            {
+                int id = 0;
+                if (rbGap.SelectedValue == "1")
+                {
+                    objTPT.IS_GAP = true;
+                }
+                else
+                {
+                    objTPT.IS_GAP = false;
+                }
+                objTPT.GAP = Convert.ToInt32(txtGapYear.Text);
+
+                int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'")); //Convert.ToInt32(Session["userno"]);
+                int org = Convert.ToInt32(Session["OrgId"]);
+                CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO);
+                if (cs.Equals(CustomStatus.RecordSaved))
+                {
+
+                    ViewState["action"] = "add";
+                    objCommon.DisplayMessage(this.Page, "Record Saved Successfully.", this.Page);
+                    BindExamDetails(IDNO);
+                }
+            }
+            else
+            {
+                if (ViewState["action"].ToString().Equals("edit"))
+                {
+                    if (rbGap.SelectedValue == "1")
+                    {
+                        objTPT.IS_GAP = true;
+                        objTPT.GAP = Convert.ToInt32(txtGapYear.Text);
+                    }
+                    else
+                    {
+                        objTPT.IS_GAP = false;
+                        objTPT.GAP = 0;
+                    }
+                    int id = Convert.ToInt32(hdnGapID.Value);
+                    int org = Convert.ToInt32(Session["OrgId"]);
+ 
+                    int IDNO = Convert.ToInt32(objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_NO='" + Convert.ToInt32(Session["userno"]) + "'"));
+                    CustomStatus cs = (CustomStatus)objCompany.InsExamDetails(objTPT, org, id, IDNO);
+                    if (cs.Equals(CustomStatus.RecordUpdated))
+                    {
+                        objCommon.DisplayMessage(this.Page, "Record Updated Successfully.", this.Page);
+                        ViewState["action"] = "add";
+                        BindExamDetails(IDNO);
+                    }
+                }
+            }
+
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        }
+        catch (Exception ex)
+        {
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        }
+    }
+    protected void btnCancelExamDetails_Click(object sender, EventArgs e)
+    {
+        txtGapYear.Text = string.Empty;
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+    }
+    protected void rbGap_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (rbGap.SelectedValue == "1")
+        {
+            divGapBtn.Visible = true;
+            divGap.Visible = true;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        }
+        else
+        {
+            if (ViewState["action"].ToString().Equals("add"))
+            {
+                divGapBtn.Visible = false;
+            }
+            divGap.Visible = false;
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_1');</script>", false);
+        }
+    }
+    protected void BindExamDetails(int idno)
+    {
+        try
+        {
+            bool isgap;
+            DataSet ds = objCompany.BindExamDetails(idno);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                lvExamGPA.DataSource = ds;
+                lvExamGPA.DataBind();
+                isgap = Convert.ToBoolean(ds.Tables[0].Rows[1]["IS_GAP"].ToString());
+                lblHArrear.Text = ds.Tables[1].Rows[0]["BACKLOG_HISTORY"].ToString();
+                lblCArrear.Text = ds.Tables[1].Rows[0]["CURRENT_BACKLOG"].ToString();
+                if (isgap == true)
+                {
+                    divGap.Visible = true;
+                    divGapBtn.Visible = true;
+                    rbGap.SelectedValue = "1";
+                    txtGapYear.Text = ds.Tables[0].Rows[1]["GAP"].ToString();
+                    hdnGapID.Value = ds.Tables[0].Rows[1]["GAP_ID"].ToString();
+                    ViewState["action"] = "edit";
+                }
+                else
+                {
+                    divGap.Visible = false;
+                    divGapBtn.Visible = false;
+                    rbGap.SelectedValue = "2";
+                    txtGapYear.Text = string.Empty;
+                    hdnGapID.Value = null;
+                    ViewState["action"] = "add";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "TRAININGANDPLACEMENT_Masters_Company.btnSave_Click ->" + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+
     }
 }

@@ -148,10 +148,12 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                 //Fill Remark
                 foreach (ListViewDataItem item in lvDetails.Items)
                 {
+                    CheckBox chk = item.FindControl("chkIdno") as CheckBox;
                     DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
                     //objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "REMARKNO>0", "");
                     objCommon.FillDropDownList(ddlRemark, "ACD_HOSTEL_ATTENDANCE_REMARK", "REMARKNO", "REMARK", "ACTIVESTATUS=1", "REMARKNO");
-
+                    chk.Checked = false;
+                    chk.Enabled = false;
                 }
              }
              else
@@ -187,13 +189,19 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "T") //Added by Saurabh l on 06/01/2023
                     {
                         chkIdno.Enabled = false;
-                        txtTime.Enabled = false;
+                        //txtTime.Enabled = false;
                     }
                     //if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A" || ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "L")
                     if (ds.Tables[0].Rows[i]["ATT_STATUS"].ToString() == "A")
+                    {
                         chkIdno.Checked = false;
+                        chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
+                    }
                     else
+                    {
                         chkIdno.Checked = true;
+                        chkIdno.Enabled = false; //Added By Himanshu tamrakar 17-01-2024
+                    }
                     txtTime.Text = ds.Tables[0].Rows[i]["ATT_TIME"].ToString();
                     i++;
                 }
@@ -231,6 +239,22 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
 	        string att_time	= string.Empty;
             string college_code = Session["colcode"].ToString();
             int OrganizationId = Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]);
+            int Count=0;
+            //Below Code Added By Himanshu Tamrakar on date 17-01-2024
+            foreach (ListViewDataItem item in lvDetails.Items)
+            {
+                DropDownList ddlRemark = item.FindControl("ddlRemark") as DropDownList;
+                if (!(ddlRemark.SelectedValue).Equals("0"))
+                {
+                    Count++;
+                }
+            }
+            if (Count == 0)
+            {
+                objCommon.DisplayMessage("Please Select Remark.", this);
+                return;
+            }
+            //End 
            foreach (ListViewDataItem item in lvDetails.Items)
            {
                CheckBox chkIdno = item.FindControl("chkIdno") as CheckBox;
@@ -277,10 +301,16 @@ public partial class HOSTEL_HostelAttendence : System.Web.UI.Page
                string ddlremark = ddlRemark.SelectedItem.Text;
 
                if (ddlremark == "Present" || ddlremark == "PRESENT" || ddlremark == "present")
+               {
                    att_status += "P,";
+                   txtTime.Text = ""; //Added By himanshu tamrakar for bug : 170496
+               }
                else if (ddlremark == "Absent" || ddlremark == "ABSENT" || ddlremark == "absent")
+               {
                    att_status += "A,";
-              else if (ddlremark == "Late" || ddlremark == "LATE" || ddlremark == "late")    //Else if condition added for by default absent mark.
+                   txtTime.Text = ""; //Added By himanshu tamrakar for bug : 170496
+               }
+               else if (ddlremark == "Late" || ddlremark == "LATE" || ddlremark == "late")    //Else if condition added for by default absent mark.
                    att_status += "T,";
                else
                    att_status += "A,";

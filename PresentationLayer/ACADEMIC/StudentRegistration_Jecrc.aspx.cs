@@ -36,7 +36,7 @@ using BusinessLogicLayer.BusinessLogic;
 
 
 public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
-    {
+{
     Common objCommon = new Common();
     UAIMS_Common objUCommon = new UAIMS_Common();
     StudentController objSC = new StudentController();
@@ -48,31 +48,31 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
     string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
     string collegeCode = string.Empty;
     protected void Page_PreInit(object sender, EventArgs e)
-        {
+    {
         //To Set the MasterPage
         if (Session["masterpage"] != null)
             objCommon.SetMasterPage(Page, Session["masterpage"].ToString());
         else
             objCommon.SetMasterPage(Page, "");
-        }
+    }
 
     protected void Page_Load(object sender, EventArgs e)
-        {
+    {
         //Page.ClientScript.RegisterClientScriptInclude("selective", ResolveUrl(@"..\includes\prototype.js")) ;
         //Page.ClientScript.RegisterClientScriptInclude("selective1", ResolveUrl(@"..\includes\scriptaculous.js"));
         //Page.ClientScript.RegisterClientScriptInclude("selective2", ResolveUrl(@"..\includes\modalbox.js"));
 
         try
-            {
+        {
 
             //Check Session
             if (Session["userno"] == null || Session["username"] == null || Session["usertype"] == null || Session["userfullname"] == null)
-                {
+            {
                 Response.Redirect("~/default.aspx");
-                }
+            }
 
             if (!Page.IsPostBack)
-                {
+            {
                 ////********** Added by Rahul Moraskar 2022-07-26
                 ControlInit();
                 RequiredFieldValidatorEnableDisable();
@@ -92,25 +92,25 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 PopulateDropDownList();
                 if (Request.Params["__EVENTTARGET"] != null &&
                                 Request.Params["__EVENTTARGET"].ToString() != string.Empty)
-                    {
+                {
                     if (Request.Params["__EVENTTARGET"].ToString() == "savedata")
-                        {
+                    {
                         this.savedata();
 
-                        }
                     }
+                }
 
 
                 ViewState["Otp"] = null;
                 txtREGNo.Enabled = ((objCommon.LookUp("REFF", "ENROLLMENTNO", "") == "False") ? false : true);
                 if (txtREGNo.Enabled == true)
-                    {
+                {
                     watREGNo.WatermarkText = "Enter Application ID";
-                    }
+                }
                 else
-                    {
+                {
                     // watREGNo.WatermarkText = "Automatic Registration No. Generation";
-                    }
+                }
 
                 //txtDateOfAdmission.Text = DateTime.Today.ToString("dd/MM/yyyy");
                 txtDateOfReporting.Text = DateTime.Today.ToString("dd/MM/yyyy");
@@ -121,112 +121,112 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 txtapplicationid.Enabled = false;
 
                 if (ViewState["stuinfoidno"].ToString() != "")
-                    {
+                {
                     ShowStudentDetails();
                     ///  myModal2.Visible = true;
-                    }
+                }
                 else
-                    {
-
-                    }
+                {
 
                 }
 
+            }
+
             else
-                {
-                    //PopulateDropDownList();
+            {
+                //PopulateDropDownList();
                 if (Request.Params["__EVENTTARGET"] != null &&
                                Request.Params["__EVENTTARGET"].ToString() != string.Empty)
-                    {
+                {
                     if (Request.Params["__EVENTTARGET"].ToString() == "savedata")
-                        {
+                    {
                         this.savedata();
 
-                        }
                     }
+                }
                 if (Page.Request.Params["__EVENTTARGET"] != null)
-                    {
+                {
                     if (rbName.Checked)
-                        {
+                    {
                         if (Page.Request.Params["__EVENTTARGET"].ToString().ToLower().Contains("btnsearch"))
-                            {
+                        {
                             string[] arg = Page.Request.Params["__EVENTARGUMENT"].ToString().Split(',');
                             bindlist(arg[0], arg[1]);
-                            }
+                        }
                         if (Page.Request.Params["__EVENTTARGET"].ToString().ToLower().Contains("btncancelmodal"))
-                            {
+                        {
                             txtSearch.Text = string.Empty;
                             lvStudent.DataSource = null;
 
                             lvStudent.DataBind();
                             lblNoRecords.Text = string.Empty;
-                            }
                         }
+                    }
 
                     else
-                        {
+                    {
                         if (Page.Request.Params["__EVENTTARGET"].ToString().ToLower().Contains("btnsearch1"))
-                            {
+                        {
                             string[] arg = Page.Request.Params["__EVENTARGUMENT"].ToString().Split(',');
                             bindlistsearchprospectusno(arg[0], arg[1]);
                             //bindlistsearchTempIDNo(arg[0], arg[1]);
 
-                            }
+                        }
                         if (Page.Request.Params["__EVENTTARGET"].ToString().ToLower().Contains("btncancelmodal"))
-                            {
+                        {
                             txtSearch.Text = string.Empty;
                             lvstudentprospectusno.DataSource = null;
                             LVtempid.DataSource = null;
                             LVtempid.DataBind();
                             lvstudentprospectusno.DataBind();
                             lblNoRecords.Text = string.Empty;
-                            }
                         }
-
                     }
+
+                }
 
 
                 if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 6)
-                    {
+                {
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     divMsg.InnerHtml = string.Empty;
 
                     DataSet dsGet = (DataSet)Session["STUD_DETAILS"];
                     if (dsGet != null)//&& dsGet.Tables[0].Rows.Count>0
-                        {
-                        getSessionDetails(dsGet);
-                        }
-                    }
-                else
                     {
+                        getSessionDetails(dsGet);
+                    }
+                }
+                else
+                {
                     ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
                     divMsg.InnerHtml = string.Empty;
 
                     DataSet dsGet = (DataSet)Session["STUD_ONLINEADMDETAILS"];
                     if (dsGet != null)//&& dsGet.Tables[0].Rows.Count>0
-                        {
+                    {
                         getSessionDetails(dsGet);
-                        }
-
                     }
+
                 }
-
-
-
-
-
             }
+
+
+
+
+
+        }
         catch (Exception ex)
-            {
+        {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUCommon.ShowError(Page, "StudentRegistration.PopulateDropDownList-> " + ex.Message + " " + ex.StackTrace);
             else
                 objUCommon.ShowError(Page, "Server Unavailable");
-            }
         }
+    }
 
     private void DefaultHideContorls()
-        {
+    {
         divschmode.Visible = false;
         divAmt.Visible = false;
         divHostel.Visible = false;
@@ -238,26 +238,26 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         DivDuedate3.Visible = false;
         DivDuedate4.Visible = false;
         DivdueDate5.Visible = false;
-        }
+    }
     private void CheckPageAuthorization()
-        {
+    {
         if (Request.QueryString["pageno"] != null)
-            {
+        {
             //Check for Authorization of Page
             if (Common.CheckPage(int.Parse(Session["userno"].ToString()), Request.QueryString["pageno"].ToString(), int.Parse(Session["loginid"].ToString()), 0) == false)
-                {
-                Response.Redirect("~/notauthorized.aspx?page=StudentRegistration.aspx");
-                }
-            }
-        else
             {
-            //Even if PageNo is Null then, don't show the page
-            Response.Redirect("~/notauthorized.aspx?page=StudentRegistration.aspx");
+                Response.Redirect("~/notauthorized.aspx?page=StudentRegistration.aspx");
             }
         }
+        else
+        {
+            //Even if PageNo is Null then, don't show the page
+            Response.Redirect("~/notauthorized.aspx?page=StudentRegistration.aspx");
+        }
+    }
 
     private void CheckActivity()
-        {
+    {
         string sessionno = string.Empty;
         sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "AM.ACTIVITY_CODE = 'STUDENTRY'");
 
@@ -265,42 +265,42 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         DataTableReader dtr = objActController.CheckActivity(Convert.ToInt32(sessionno), Convert.ToInt32(Session["usertype"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
 
         if (dtr.Read())
-            {
+        {
             if (dtr["STARTED"].ToString().ToLower().Equals("false"))
-                {
+            {
                 objCommon.DisplayMessage("This Activity has been Stopped. Contact Admin.!!", this.Page);
                 dvMain.Visible = false;
 
 
-                }
+            }
 
             //if (dtr["PRE_REQ_ACT"] == DBNull.Value || dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
             if (dtr["PRE_REQ_ACT"].ToString().ToLower().Equals("true"))
-                {
+            {
                 objCommon.DisplayMessage("Pre-Requisite Activity for this Page is Not Stopped!!", this.Page);
                 dvMain.Visible = false;
-                }
-
             }
+
+        }
         else
-            {
+        {
             objCommon.DisplayMessage("Either this Activity has been Stopped Or You are Not Authorized to View this Page. Contact Admin.", this.Page);
             dvMain.Visible = false;
-            }
-        dtr.Close();
         }
+        dtr.Close();
+    }
 
     protected void PopulateDropDownList()
-        {
+    {
         try
-            {
+        {
 
             // objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0", "COLLEGE_NAME");
             objCommon.FillDropDownList(ddlSchool, "ACD_COLLEGE_MASTER", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')COLLEGE_NAME", "COLLEGE_ID > 0 AND ActiveStatus=1", "COLLEGE_NAME");
             if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
-                {
+            {
                 ddlSchool.SelectedValue = "1";
-                }
+            }
             objCommon.FillDropDownList(ddlBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0 AND ACTIVESTATUS=1 AND ISNULL(IS_ADMSSION,0)=1", "BATCHNO DESC");
             //ddlBatch.SelectedValue = "1";
             // ddlBatch.SelectedIndex = 1;
@@ -345,68 +345,68 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             //ddladmthrough.SelectedValue = "1";
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void btnSave_Click(object sender, EventArgs e)
-        {
+    {
         //ddlBatch.Enabled = true;
         try
-            {
+        {
 
 
             int checkSeatCapacity = Convert.ToInt32(objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CHECK_SEAT_CAPACITY_NEW_STUD,0) CHECK_SEAT_CAPACITY_NEW_STUD", ""));
 
             if (checkSeatCapacity == 1)
-                {
+            {
                 int Intake = Convert.ToInt32(objCommon.LookUp("ACD_BRANCH_INTAKE", "ISNULL(MAX(INTAKE),0) BRANCH_INTAKE", "BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND BATCHNO=" + Convert.ToInt32(ddlBatch.SelectedValue)));
 
                 if (Intake > 0)
-                    {
+                {
                     int ActualSeats = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COUNT(IDNO) IDNO", "BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + "AND ADMBATCH=" + Convert.ToInt32(ddlBatch.SelectedValue)));
                     if (ActualSeats > Intake || ActualSeats == Intake)
-                        {
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmhostel();", true);
-                        }
-                    else
-                        {
-                        savedata();
-                        }
-                    }
-                else
                     {
-                    savedata();
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmhostel();", true);
+                    }
+                    else
+                    {
+                        savedata();
                     }
                 }
-            else
+                else
                 {
-                savedata();
+                    savedata();
                 }
-
             }
-        catch (Exception ex)
+            else
             {
-            throw;
+                savedata();
             }
 
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
+    }
 
     private DataSet getModuleConfig()
-        {
+    {
         DataSet ds = objCommon.GetModuleConfig(Convert.ToInt32(Session["OrgId"]));
         return ds;
-        }
+    }
 
     private int OutLook_Email(string Message, string toEmailId, string sub)
-        {
+    {
 
         int ret = 0;
         try
-            {
+        {
             Common objCommon = new Common();
             DataSet dsconfig = null;
 
@@ -428,18 +428,18 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             oSmtp.SendMail(oServer, oMail);
             Console.WriteLine("email sent successfully!");
             ret = 1;
-            }
+        }
         catch (Exception ep)
-            {
+        {
             Console.WriteLine("failed to send email with the following error:");
             Console.WriteLine(ep.Message);
             ret = 0;
-            }
-        return ret;
         }
+        return ret;
+    }
 
     private string GeneratePassword()
-        {
+    {
         string allowedChars = "";
         allowedChars = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,";
         allowedChars += "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,";
@@ -456,10 +456,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         Random rand = new Random();
 
         for (int i = 0; i < 7; i++)
-            {
+        {
             temp = arr[rand.Next(0, arr.Length)];
             passwordString += temp;
-            }
+        }
         return passwordString;
 
         //-----------------OR---------------------
@@ -473,77 +473,77 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         //}
         //return new string(chars);
         //--------------------------------------
-        }
+    }
 
     private void DisableControlsRecursive(Control root)
-        {
+    {
         if (root is TextBox)
-            {
+        {
             ((TextBox)root).Text = string.Empty;
-            }
-        if (root is DropDownList)
-            {
-            ((DropDownList)root).SelectedIndex = 0;
-            }
-        foreach (Control child in root.Controls)
-            {
-            DisableControlsRecursive(child);
-            }
-        ddlBatch.SelectedIndex = 0;
         }
+        if (root is DropDownList)
+        {
+            ((DropDownList)root).SelectedIndex = 0;
+        }
+        foreach (Control child in root.Controls)
+        {
+            DisableControlsRecursive(child);
+        }
+        ddlBatch.SelectedIndex = 0;
+    }
 
     protected void btnCancel_Click(object sender, EventArgs e)
-        {
+    {
         // clearcontrols();
         Response.Redirect(Request.Url.ToString());
-        }
+    }
 
     protected void ddlSchool_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlSchool.SelectedIndex > 0)
-            {
+        {
             //if (Convert.ToInt32(Session["OrgId"]) == 1)
             //{
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlSchool.SelectedValue, "D.DEGREENAME");
             ddlDegree.Focus();
-            }
+        }
         else
-            {
+        {
             ddlDegree.SelectedIndex = 0;
             ddlBranch.SelectedIndex = 0;
             //ddlBranch.Items.Clear();
 
-            }
+        }
         //ddlDegree.Items.Clear();
         ddlDegree.SelectedIndex = 0;
         // ddlBranch.Items.Clear();
         ddlBranch.SelectedIndex = 0;
-        }
+    }
 
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlSchool.SelectedIndex > 0)
-            {
+        {
 
             objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(B.ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
             ddlBranch.Focus();
-            }
+        }
         else
-            {
+        {
             //ddlBranch.Items.Clear();
             ddlBranch.SelectedIndex = 0;
             objCommon.DisplayMessage(updStudent, "Please select college/school!", this.Page);
             return;
-            }
+        }
         //ddlBranch.Items.Clear();
         ddlBranch.SelectedIndex = 0;
 
-        }
+    }
 
     private void ShowReport(string reportTitle, string rptFileName, string regno)
-        {
+    {
         try
-            {
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/commonreport.aspx?";
             url += "pagetitle=" + "Admission_Slip_Report";
@@ -560,33 +560,35 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             //To open report with update panel
             ScriptManager.RegisterClientScriptBlock(this.updStudent, this.updStudent.GetType(), "controlJSScript", sb.ToString(), true);
 
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private void ShowReportnew(string reportTitle, string rptFileName, string regno)
-        {
+    {
         try
-            {
+        {
 
             int IDNO = 0;
             if (txtREGNo.Text == string.Empty)
-                {
+            {
                 IDNO = Convert.ToInt32(Session["output"]);
-                }
+            }
             else
-                {
+            {
 
                 IDNO = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT", "IDNO", "APPLICATIONID='" + Convert.ToString(txtREGNo.Text) + "'"));
-                }
+            }
+
+            int College_id = Convert.ToInt16(objCommon.LookUp("ACD_STUDENT", "College_ID", "IDNO='" + IDNO + "'"));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_IDNO=" + Convert.ToInt32(IDNO);
+            url += "&param=@P_COLLEGE_CODE=" + College_id + ",@P_IDNO=" + Convert.ToInt32(IDNO);
 
             //To open new window from Updatepanel
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -594,15 +596,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             sb.Append(@"window.open('" + url + "','','" + features + "');");
 
             ScriptManager.RegisterClientScriptBlock(this.Page, this.Page.GetType(), "controlJSScript", sb.ToString(), true);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private DataTable GetDemandDraftDataTable()
-        {
+    {
         DataTable dt = new DataTable();
         dt.Columns.Add(new DataColumn("IDNO", typeof(int)));
         dt.Columns.Add(new DataColumn("BRANCHNO", typeof(int)));
@@ -619,39 +621,39 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         dt.Columns.Add(new DataColumn("RECEIPTAMOUNT", typeof(string)));
         dt.Columns.Add(new DataColumn("RECEIPTDATE", typeof(DateTime)));
         return dt;
-        }
+    }
 
     private DataRow GetEditableDataRow(DataTable dt, string value)
-        {
+    {
         DataRow dataRow = null;
         try
-            {
+        {
             foreach (DataRow dr in dt.Rows)
-                {
+            {
                 if (dr["DDNO"].ToString() == value)
-                    {
+                {
                     dataRow = dr;
                     break;
-                    }
                 }
             }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return dataRow;
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        return dataRow;
+    }
 
     private void BindDDInfo(ref GEC_Student[] gecStudent)
-        {
+    {
         DataTable dt;
         if (Session["DDINFO"] != null && ((DataTable)Session["DDINFO"]) != null)
-            {
+        {
             int index = 0;
             dt = (DataTable)Session["DDINFO"];
             gecStudent = new GEC_Student[dt.Rows.Count];
             foreach (DataRow dr in dt.Rows)
-                {
+            {
                 GEC_Student objGecStud = new GEC_Student();
                 //objGecStud.IdNo = Convert.ToInt32(txtIDNo.Text.Trim());
                 objGecStud.BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
@@ -667,27 +669,27 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 objGecStud.CollegeCode = Session["colcode"].ToString();
                 gecStudent[index] = objGecStud;
                 index++;
-                }
             }
-
         }
 
+    }
+
     protected void btnSearch_Click(object sender, ImageClickEventArgs e)
-        {
+    {
         this.ClearControls_DemandDraftDetails();
         objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "DEGREENO > 0", "QUALIFYNO");
         if (txtREGNo.Text.Trim() == string.Empty)
-            {
+        {
             objCommon.DisplayMessage("Enter Registration No. to Modify!", this.Page);
             return;
-            }
+        }
 
         rdoMale.Checked = true; // ADDED 05122021
         DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A,ACD_STU_ADDRESS B", "A.IDNO", "A.REGNO,A.IDNO,A.ROLLNO,A.STUDFIRSTNAME,A.STUDMIDDLENAME,A.STUDLASTNAME,A.FATHERFIRSTNAME,A.FATHERMIDDLENAME,A.FATHERLASTNAME,A.MOTHERNAME,A.DOB,A.SEX,A.RELIGIONNO,A.MARRIED,ISNULL(A.NATIONALITYNO,0)NATIONALITYNO,ISNULL(A.CATEGORYNO,0)CATEGORYNO,A.CASTE,A.ADMDATE,A.DEGREENO,A.BRANCHNO,A.YEAR,A.STUDENTMOBILE, A.SEMESTERNO,A.PTYPE,A.STATENO,A.ADMBATCH,A.IDTYPE,A.YEAR_OF_EXAM,A.ALL_INDIA_RANK,A.STATE_RANK,A.PERCENTAGE,A.PERCENTILE,A.QEXMROLLNO,A.ADMCATEGORYNO,A.QUALIFYNO,A.SCHOLORSHIPTYPENO,A.PHYSICALLY_HANDICAPPED,A.ADMROUNDNO,A.COLLEGE_CODE,B.STADDNO, B.IDNO, B.PADDRESS, B.PCITY, B.PSTATE, B.PPINCODE,A.EMAILID,B.PTELEPHONE,B.LADDRESS,B.LTELEPHONE,B.LMOBILE,B.LEMAIL,A.ADMQUOTANO,A.BLOODGRPNO,B.LCITY,B.LSTATE", "ISNULL(A.ADMCAN,0)=0 AND A.IDNO=B.IDNO AND A.IDNO = " + txtREGNo.Text.Trim(), string.Empty);
         if (dsStudent != null && dsStudent.Tables.Count > 0)
-            {
+        {
             if (dsStudent.Tables[0].Rows.Count > 0)
-                {
+            {
 
                 //txtRegNo.ToolTip = dsStudent.Tables[0].Rows[0]["IDNO"].ToString();
                 ViewState["REGNO"] = dsStudent.Tables[0].Rows[0]["REGNO"].ToString();
@@ -700,30 +702,30 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 txtMotherName.Text = dsStudent.Tables[0].Rows[0]["MOTHERNAME"].ToString();
 
                 if (dsStudent.Tables[0].Rows[0]["SEX"].ToString().Trim().Equals("M"))
-                    {
+                {
                     rdoMale.Checked = true;
                     rdoFemale.Checked = false;
-                    }
+                }
                 else
-                    {
+                {
                     rdoFemale.Checked = true;
                     rdoMale.Checked = false;
-                    }
+                }
 
                 //txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));//Commented by Irfan Shaikh on 20190405
                 txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));
 
                 ddlReligion.SelectedValue = (dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString());
                 if (dsStudent.Tables[0].Rows[0]["MARRIED"].ToString().Trim().Equals("Y"))
-                    {
+                {
                     rdoMarriedYes.Checked = true;
                     rdoMarriedNo.Checked = false;
-                    }
+                }
                 else
-                    {
+                {
                     rdoMarriedYes.Checked = false;
                     rdoMarriedNo.Checked = true;
-                    }
+                }
                 ddlNationality.SelectedValue = (dsStudent.Tables[0].Rows[0]["NATIONALITYNO"].ToString());
 
                 ddlCategory.SelectedValue = (dsStudent.Tables[0].Rows[0]["CATEGORYNO"].ToString());
@@ -780,64 +782,64 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //Condition for MCA only
                 int degreeno = Convert.ToInt32(dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString());
                 if (degreeno == 4)
-                    {
+                {
                     trMca.Visible = true;
-                    }
+                }
                 else
-                    {
+                {
                     trMca.Visible = false;
-                    }
+                }
 
                 //Condition for the M.Tech(Appl. Geo) only
 
                 if (degreeno == 2)
-                    {
+                {
                     tblExam.Visible = false;
                     trExam.Visible = false;
-                    }
+                }
                 else
-                    {
+                {
                     tblExam.Visible = true;
                     trExam.Visible = true;
-                    }
+                }
 
                 btnSave.Enabled = false;
 
-                }
-            else
-                {
-                objCommon.DisplayMessage("Please Enter Valid Registration No.!", this.Page);
-                }
             }
-        else
+            else
             {
-            objCommon.DisplayMessage("Please Enter Valid Registration No.!", this.Page);
+                objCommon.DisplayMessage("Please Enter Valid Registration No.!", this.Page);
             }
         }
+        else
+        {
+            objCommon.DisplayMessage("Please Enter Valid Registration No.!", this.Page);
+        }
+    }
 
     protected void btnReport_Click(object sender, EventArgs e)
-        {
+    {
 
         if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
-            {
+        {
             this.ShowReport("Admission_Slip_Report", "rptStudAdmSlip_New.rpt", "0");
-            }
+        }
         else
-            {
+        {
             this.ShowReportnew("Admission_Slip_Report", "AllotmentOfferLetter.rpt", "0");
-            }
-        }///Added by Irfan Shaikh on 2019/04/08 ////End
+        }
+    }
 
     private string GetNewReceiptNo()
-        {
+    {
         string receiptNo = string.Empty;
 
         try
-            {
+        {
             string demandno = objCommon.LookUp("ACD_DEMAND", "MAX(DM_NO)", "");
             DataSet ds = feeController.GetNewReceiptData("B", Int32.Parse(Session["userno"].ToString()), "TF");
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 DataRow dr = ds.Tables[0].Rows[0];
                 //dr["FIELD"] = Int32.Parse(dr["FIELD"].ToString()) + 1;
                 dr["FIELD"] = Int32.Parse(dr["FIELD"].ToString());
@@ -845,21 +847,21 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
                 // save counter no in hidden field to be used while saving the record
                 ViewState["CounterNo"] = dr["COUNTERNO"].ToString();
-                }
             }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return receiptNo;
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        return receiptNo;
+    }
 
     private FeeDemand GetDcrCriteria()
-        {
+    {
         FeeDemand dcrCriteria = new FeeDemand();
         Student objS = new Student();
         try
-            {
+        {
             dcrCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]);
             dcrCriteria.ReceiptTypeCode = "TF";
             dcrCriteria.BranchNo = Convert.ToInt16(ddlBranch.SelectedValue);
@@ -868,38 +870,38 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             dcrCriteria.UserNo = int.Parse(Session["userno"].ToString());
             //dcrCriteria.UserNo = 7;
             if (txtDDAmountPaid.Text == "")
-                {
+            {
                 dcrCriteria.ExcessAmount = 0;
-                }
+            }
             else
-                {
+            {
                 dcrCriteria.ExcessAmount = Convert.ToDouble(txtDDAmountPaid.Text.Trim());
-                }
+            }
 
             if (Convert.ToInt32(ddlDegree.SelectedValue) == 4)
-                {
-                if (Convert.ToInt32(ddlRound.SelectedValue) == 1)
-                    {
-                    dcrCriteria.ExcessAmount = 10000;
-                    }
-                else
-                    {
-                    dcrCriteria.ExcessAmount = 0;
-                    }
-                }
-            dcrCriteria.CollegeCode = Session["colcode"].ToString();
-            }
-        catch (Exception ex)
             {
-            throw;
+                if (Convert.ToInt32(ddlRound.SelectedValue) == 1)
+                {
+                    dcrCriteria.ExcessAmount = 10000;
+                }
+                else
+                {
+                    dcrCriteria.ExcessAmount = 0;
+                }
             }
-        return dcrCriteria;
+            dcrCriteria.CollegeCode = Session["colcode"].ToString();
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        return dcrCriteria;
+    }
 
     private void ShowReport(string rptName, int dcrNo, int studentNo, string copyNo)
-        {
+    {
         try
-            {
+        {
             //string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("Academic")));
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
@@ -909,106 +911,106 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
             divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     private string GetReportParameters(int studentNo, int dcrNo, string copyNo)
-        {
+    {
 
         string collegeCode = "33";
 
         string param = "@P_IDNO=" + studentNo.ToString() + ",@P_DCRNO=" + dcrNo + ",CopyNo=" + copyNo + ",@P_COLLEGE_CODE=" + collegeCode + "";
         return param;
-        }
+    }
 
     private FeeDemand GetDemandCriteria()
-        {
+    {
         FeeDemand demandCriteria = new FeeDemand();
         Student objS = new Student();
         try
-            {
+        {
             int ExamType = Convert.ToInt16(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "FLOCK=1"));
             if (ExamType == 1)
-                {
+            {
                 demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]);
-                }
+            }
             else
-                {
+            {
                 demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]) + 1;
-                }
+            }
             demandCriteria.ReceiptTypeCode = "TF";
             demandCriteria.BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
             demandCriteria.SemesterNo = 1;
             demandCriteria.PaymentTypeNo = int.Parse(ddlPaymentType.SelectedValue);
             demandCriteria.UserNo = int.Parse(Session["userno"].ToString());
             demandCriteria.CollegeCode = Session["colcode"].ToString();
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return demandCriteria;
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        return demandCriteria;
+    }
 
     private FeeDemand GetDemandCriteriaForHostel()
-        {
+    {
         FeeDemand demandCriteria = new FeeDemand();
         Student objS = new Student();
         try
-            {
+        {
             int ExamType = Convert.ToInt16(objCommon.LookUp("ACD_SESSION_MASTER", "EXAMTYPE", "FLOCK=1"));
             if (ExamType == 1)
-                {
+            {
                 demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]);
-                }
+            }
             else
-                {
+            {
                 demandCriteria.SessionNo = Convert.ToInt32(Session["currentsession"]) + 1;
-                }
+            }
             demandCriteria.ReceiptTypeCode = "HF";
             demandCriteria.BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
             demandCriteria.SemesterNo = 1;
             demandCriteria.PaymentTypeNo = int.Parse(ddlPaymentType.SelectedValue);
             demandCriteria.UserNo = int.Parse(Session["userno"].ToString());
             demandCriteria.CollegeCode = Session["colcode"].ToString();
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
-        return demandCriteria;
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        return demandCriteria;
+    }
 
     protected void ddlExamNo_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlExamNo.SelectedValue == "9")
-            {
+        {
             trSpotOption.Visible = true;
             trCCMT.Visible = false;
             trGetScore.Visible = false;
-            }
+        }
         else if (ddlExamNo.SelectedValue == "7")
-            {
+        {
             trSpotOption.Visible = false;
             trCCMT.Visible = true;
             trGetScore.Visible = true;
-            }
+        }
         else
-            {
+        {
             trSpotOption.Visible = false;
             trCCMT.Visible = false;
             trGetScore.Visible = false;
-            }
         }
+    }
 
     private void ShowReportchallan(string rptName, int dcrNo, int studentNo, string copyNo)
-        {
+    {
         try
-            {
+        {
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=Fee_Collection_Receipt";
@@ -1017,30 +1019,30 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             divMsg.InnerHtml += " <script type='text/javascript' language='javascript'> try{ ";
             divMsg.InnerHtml += " window.open('" + url + "','Fee_Collection_Receipt','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " }catch(e){ alert('Error: ' + e.description);}</script>";
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void btnChallan_Click(object sender, EventArgs e)
-        {
+    {
         string studentIDs = txtREGNo.Text.Trim();
         string dcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO=" + Convert.ToInt32(txtREGNo.Text.Trim()) + " AND SEMESTERNO=1");
 
         if (dcrNo != string.Empty)
-            {
+        {
             this.ShowReportchallan("FeeCollectionReceiptForCourseRegister1.rpt", Convert.ToInt32(dcrNo), Convert.ToInt32(studentIDs), "1");
-            }
         }
+    }
 
     public byte[] ResizePhoto(FileUpload fu)
-        {
+    {
 
         byte[] image = null;
         if (fu.PostedFile != null && fu.PostedFile.FileName != "")
-            {
+        {
             string strExtension = System.IO.Path.GetExtension(fu.FileName);
             // Resize Image Before Uploading to DataBase
             System.Drawing.Image imageToBeResized = System.Drawing.Image.FromStream(fu.PostedFile.InputStream);
@@ -1052,10 +1054,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             imageWidth = maxWidth;
 
             if (imageHeight > maxHeight)
-                {
+            {
                 imageWidth = (imageWidth * maxHeight) / imageHeight;
                 imageHeight = maxHeight;
-                }
+            }
 
             // Saving image to smaller size and converting in byte[]
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
@@ -1064,15 +1066,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             stream.Position = 0;
             image = new byte[stream.Length + 1];
             stream.Read(image, 0, image.Length);
-            }
-        return image;
         }
+        return image;
+    }
 
     public byte[] ResizePhotoSign(FileUpload fu)
-        {
+    {
         byte[] image = null;
         if (fu.PostedFile != null && fu.PostedFile.FileName != "")
-            {
+        {
             string strExtension = System.IO.Path.GetExtension(fu.FileName);
             //string strExtension = System.IO.Path.GetExtension(hdfSignUpload.Value);
 
@@ -1086,10 +1088,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             imageWidth = maxWidth;
 
             if (imageHeight > maxHeight)
-                {
+            {
                 imageWidth = (imageWidth * maxHeight) / imageHeight;
                 imageHeight = maxHeight;
-                }
+            }
 
             // Saving image to smaller size and converting in byte[]
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(imageToBeResized, imageWidth, imageHeight);
@@ -1098,12 +1100,12 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             stream.Position = 0;
             image = new byte[stream.Length + 1];
             stream.Read(image, 0, image.Length);
-            }
-        return image;
         }
+        return image;
+    }
 
     private void ClearControls_DemandDraftDetails()
-        {
+    {
         txtDDNo.Text = string.Empty;
         txtDDAmount.Text = string.Empty;
         txtDDCity.Text = string.Empty;
@@ -1112,70 +1114,70 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtPayType.Text = string.Empty;
         txtCashDate.Text = string.Empty;
         btnpayment.Visible = false;
-        }
+    }
 
     protected void ddlSpotOption_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlSpotOption.SelectedValue == "1")
-            {
+        {
             trGetScore.Visible = true;
-            }
-        else
-            {
-            trGetScore.Visible = false;
-            }
-
         }
+        else
+        {
+            trGetScore.Visible = false;
+        }
+
+    }
 
     protected void ddlYear_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlYear.SelectedValue, "SEMESTERNO");
-        }
+    }
 
 
 
     protected void ddlExamNo_SelectedIndexChanged1(object sender, EventArgs e)
-        {
+    {
         if (ddlExamNo.SelectedItem.Text == "OTHERS")
-            {
+        {
             divotherentrance.Visible = true;
-            }
-        else
-            {
-            divotherentrance.Visible = false;
-            }
         }
+        else
+        {
+            divotherentrance.Visible = false;
+        }
+    }
 
     protected void ddlstate_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlstate.SelectedIndex > 0)
-            {
+        {
             objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO>0 and STATENO=" + ddlstate.SelectedValue, "CITY");
 
-            }
-        else
-            {
-            ddlCity.SelectedIndex = 0;
-            }
         }
+        else
+        {
+            ddlCity.SelectedIndex = 0;
+        }
+    }
 
     protected void rdoHosteler_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         try
-            {
+        {
             if (rdoHosteler.SelectedValue == "1")
-                {
+            {
                 rdbTransport.Visible = true;
                 rdbTransport.Enabled = false;
                 rdoHosteler.Visible = true;
                 lbtransport.Visible = true;
 
                 if (CheckControlToHide("divHostel") == true)
-                    {
+                {
                     //added for JECRC ONLY
                     objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL_FESS_TYPE", "HID", "HOSTELTYPE", "HID>0 ", "HID");
                     divHostel.Visible = true;
-                    }
+                }
 
                 //////********** Start Change by Rahul Moraskar 2022-07-26
                 //if (Session["OrgId"].ToString().Equals("5"))
@@ -1186,9 +1188,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //}
                 //////********** END Change by Rahul Moraskar 2022-07-26
 
-                }
+            }
             if (rdoHosteler.SelectedValue == "0")
-                {
+            {
                 lbtransport.Visible = true;
                 rdbTransport.Visible = true;
                 rdbTransport.Enabled = true;
@@ -1197,11 +1199,11 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 lbhosteller.Visible = true;
 
                 if (CheckControlToHide("divHostel") == true)
-                    {
+                {
                     //added for JECRC ONLY
                     divHostel.Visible = false;
                     rdoHosteler.Enabled = true;
-                    }
+                }
                 ////********** Start Change by Rahul Moraskar 2022-07-26
                 //if (Session["OrgId"].ToString().Equals("5"))
                 //{
@@ -1211,66 +1213,66 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //}
                 ////********** END Change by Rahul Moraskar 2022-07-26
 
-                }
-            }
-        catch (Exception ex)
-            {
-            throw;
             }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void rdbTransport_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         try
-            {
+        {
 
             if (rdbTransport.SelectedValue == "1")
-                {
+            {
                 rdoHosteler.Visible = true;
                 rdoHosteler.Enabled = false;
                 rdbTransport.Visible = true;
 
-                }
+            }
             if (rdbTransport.SelectedValue == "0")
-                {
+            {
                 lbhosteller.Visible = true;
                 rdoHosteler.Visible = true;
                 rdoHosteler.Enabled = true;
                 rdbTransport.Visible = true;
                 lbtransport.Visible = true;
                 //rdbTransport.Enabled = false; //Change by Rahul Moraskar
-                }
-            }
-        catch (Exception ex)
-            {
-            throw;
             }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void txtStudMobile_TextChanged(object sender, EventArgs e)
-        {
+    {
 
         int l = (txtStudMobile.Text).Length;
 
         if (l < 10 && l != 0)
-            {
+        {
             objCommon.DisplayUserMessage(updStudent, "Please enter 10 digit mobile Number", this.Page);
-            }
-        txtStudEmail.Focus();
         }
+        txtStudEmail.Focus();
+    }
 
     protected void txtAadhaarNo_TextChanged(object sender, EventArgs e)
-        {
+    {
         int l = (txtAadhaarNo.Text).Length;
 
         if (l < 12 && l != 0)
-            {
+        {
             objCommon.DisplayUserMessage(updStudent, "Please enter 12 digit Aadhar No.", this.Page);
-            }
         }
+    }
 
     protected void lnkId_Click(object sender, EventArgs e)
-        {
+    {
         updEdit.Visible = false;
         //divGeneralInfo.Visible = false;
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Pop", "Close();", true);
@@ -1289,64 +1291,64 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
         ShowStudentDetails();
         if (Convert.ToInt32(Session["OrgId"]) != 1)
-            {
+        {
             ddlSchool.Enabled = true;
             ddlDegree.Enabled = true;
-            }
+        }
 
         Session["STUD_DETAILS"] = null;
         ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "Pop", "Close();", true);
-        }
+    }
 
     private void bindlist(string category, string searchtext)
-        {
+    {
         StudentController objSC = new StudentController();
         DataSet ds = objSC.RetrieveStuddetpros(searchtext, category);
 
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             lvStudent.DataSource = ds;
             lvStudent.DataBind();
             lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
-            }
+        }
         else
             lblNoRecords.Text = "Total Records : 0";
 
 
-        }
+    }
 
     private void bindlistsearchprospectusno(string category, string searchtext)
-        {
+    {
 
         DataSet ds = objSC.RetrieveStuddetprospectusno(searchtext, category);
 
         if (category == "IDNO")
-            {
+        {
             if (ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 LVtempid.DataSource = ds;
                 LVtempid.DataBind();
                 lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
-                }
-            else
-                {
-                lblNoRecords.Text = "Total Records : 0";
-                }
             }
+            else
+            {
+                lblNoRecords.Text = "Total Records : 0";
+            }
+        }
 
         else
-            {
+        {
             if (ds.Tables[0].Rows.Count > 0)
-                {
+            {
                 lvstudentprospectusno.DataSource = ds;
                 lvstudentprospectusno.DataBind();
                 lblNoRecords.Text = "Total Records : " + ds.Tables[0].Rows.Count.ToString();
                 LVtempid.Visible = false;
-                }
+            }
             else
                 lblNoRecords.Text = "Total Records : 0";
-            }
         }
+    }
 
     //private void bindlistsearchTempIDNo(string category, string searchtext)
     //    {
@@ -1366,9 +1368,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
     private void getSessionDetails(DataSet dsSessionDeatails)
-        {
+    {
         if (dsSessionDeatails.Tables[0].Rows.Count > 0)
-            {
+        {
             txtIDNo.Text = dsSessionDeatails.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             txtIDNo.ToolTip = dsSessionDeatails.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             txtStudentfullName.Text = dsSessionDeatails.Tables[0].Rows[0]["STUDENT_NAME"] == null ? string.Empty : dsSessionDeatails.Tables[0].Rows[0]["STUDENT_NAME"].ToString();
@@ -1382,16 +1384,16 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             ddlBranch.SelectedValue = dsSessionDeatails.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : dsSessionDeatails.Tables[0].Rows[0]["BRANCHNO"].ToString();
             ddlBatch.SelectedValue = dsSessionDeatails.Tables[0].Rows[0]["ADMISSION_BATCH"] == null ? "0" : dsSessionDeatails.Tables[0].Rows[0]["ADMISSION_BATCH"].ToString();
 
-            }
+        }
         //else 
         //{
         //    objCommon.DisplayMessage(this.Page, "Entered Application ID is not verified", this.Page);
         //}
         Session["STUD_DETAILS"] = null;
-        }
+    }
 
     private void ShowStudentDetails()
-        {
+    {
 
         Session["STUD_DETAILS"] = null;
 
@@ -1399,21 +1401,21 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         DataSet ds = new DataSet();
 
         if (Session["usertype"].ToString() == "2")
-            {
+        {
             ds = objSC.GetStuddetpros_JECRC(Convert.ToInt32(ViewState["stuinfoidno"]));
             txtStudentName.ReadOnly = false;
             txtStudentName.Visible = true;
-            }
+        }
         else
-            {
+        {
             //ds = objSC.GetStuddetpros(Convert.ToInt32(ViewState["stuinfoidno"]));
 
             btnpayment.Visible = false;
             DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A,ACD_STU_ADDRESS B ,ACD_DEMAND C", "A.IDNO", "A.STUDNAME,A.REGNO,A.IDNO,A.ROLLNO,A.STUDFIRSTNAME,A.STUDMIDDLENAME,A.STUDLASTNAME,A.FATHERFIRSTNAME,A.FATHERMIDDLENAME,A.FATHERLASTNAME,A.MOTHERNAME,A.DOB,A.SEX,A.RELIGIONNO,A.MARRIED,A.NATIONALITYNO,A.CATEGORYNO,A.CASTE,A.ADMDATE,A.DEGREENO,A.BRANCHNO,A.YEAR,A.STUDENTMOBILE,A.STUDENTMOBILE2,A.SEMESTERNO,A.PTYPE,A.STATENO,A.ADMBATCH,A.IDTYPE,A.YEAR_OF_EXAM,A.ALL_INDIA_RANK,A.STATE_RANK,A.PERCENTAGE,A.PERCENTILE,A.QEXMROLLNO,A.ADMCATEGORYNO,A.QUALIFYNO,A.SCHOLORSHIPTYPENO,A.PHYSICALLY_HANDICAPPED,A.ADMROUNDNO,A.COLLEGE_CODE,A.MERITNO,A.APPLICATIONID,A.SCORE,B.STADDNO, B.IDNO, B.PADDRESS, ISNULL(A.SCHOLORSHIP,0),A.COLLEGE_ID,A.FATHERMOBILE,SCHOLORSHIP,A.ADDHARCARDNO,A.TRANSPORT,A.HOSTELER,B.PCITY,ISNULL(A.INSTALLMENT,0)INSTALLMENT,B.PSTATE,B.PPINCODE,A.EMAILID,B.PTELEPHONE,B.LADDRESS,B.LTELEPHONE,B.LMOBILE,B.LEMAIL,A.ADMQUOTANO,A.BLOODGRPNO,B.LCITY,B.LSTATE,C.TOTAL_AMT", "ISNULL(ADMCAN,0)=0 AND (A.IDNO=B.IDNO AND A.IDNO= C.IDNO ) AND  A.APPLICATIONID = '" + ViewState["stuinfoidno"].ToString() + "'", string.Empty);
             if (dsStudent != null && dsStudent.Tables.Count > 0)
-                {
+            {
                 if (dsStudent.Tables[0].Rows.Count > 0)
-                    {
+                {
                     PopulateDropDownList();
                     //txtRegNo.ToolTip = dsStudent.Tables[0].Rows[0]["IDNO"].ToString();
                     string srnno = objCommon.LookUp("ACD_STUDENT", "ENROLLNO", "IDNO=" + Convert.ToInt32(dsStudent.Tables[0].Rows[0]["IDNO"].ToString()));
@@ -1429,15 +1431,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     txtMotherName.Text = dsStudent.Tables[0].Rows[0]["MOTHERNAME"].ToString();
 
                     if (dsStudent.Tables[0].Rows[0]["SEX"].ToString().Trim().Equals("M"))
-                        {
+                    {
                         rdoMale.Checked = true;
                         rdoFemale.Checked = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoFemale.Checked = true;
                         rdoMale.Checked = false;
-                        }
+                    }
 
                     //txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));//Commented by Irfan Shaikh on 20190405
                     txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));
@@ -1445,15 +1447,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     //ddlReligion.SelectedValue = (dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString()), "ACD_RELIGION", "RELIGIONNO", "RELIGION"));
                     ddlReligion.SelectedValue = (dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString());
                     if (dsStudent.Tables[0].Rows[0]["MARRIED"].ToString().Trim().Equals("Y"))
-                        {
+                    {
                         rdoMarriedYes.Checked = true;
                         rdoMarriedNo.Checked = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoMarriedYes.Checked = false;
                         rdoMarriedNo.Checked = true;
-                        }
+                    }
                     ddlSchool.SelectedValue = (dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString());
                     ddlNationality.SelectedValue = (dsStudent.Tables[0].Rows[0]["NATIONALITYNO"].ToString());
                     ddlCategory.SelectedValue = (dsStudent.Tables[0].Rows[0]["CATEGORYNO"].ToString());
@@ -1514,24 +1516,24 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
                     if (Convert.ToInt32(Session["OrgId"]) == 1)
-                        {
+                    {
                         objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE DR ON(DR.DEGREENO=D.DEGREENO)", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO>0", "D.DEGREENO");
                         ddlDegree.SelectedValue = "1";
                         objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
-                        }
+                    }
 
 
                     if (rdoInstallment.SelectedValue.Equals("0"))
-                        {
+                    {
                         divinstaltype.Visible = false;
                         DivDuedate1.Visible = false;
                         DivDuedate2.Visible = false;
                         DivDuedate3.Visible = false;
                         DivDuedate4.Visible = false;
                         DivdueDate5.Visible = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         divinstaltype.Visible = true;
 
                         objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
@@ -1542,7 +1544,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                         Installmenttype = Installmenttype + '-';
                         int count = Convert.ToInt32(objCommon.LookUp("dbo.split('" + Installmenttype + "','%-')", "count(id)-1", ""));
                         if (count == 2)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = false;
@@ -1553,10 +1555,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
                             txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 3)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -1569,10 +1571,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 4)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -1587,10 +1589,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 5)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -1608,9 +1610,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate5.Text = (Due_date5.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date5.ToString()).ToString("dd/MM/yyyy"));
-                            }
-
                         }
+
+                    }
 
 
                     ddlstate.SelectedValue = (dsStudent.Tables[0].Rows[0]["STATENO"].ToString());
@@ -1620,49 +1622,49 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
                     if (Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["HOSTELER"]) == true)
-                        {
+                    {
                         rdoHosteler.SelectedValue = "1";
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoHosteler.SelectedValue = "0";
-                        }
+                    }
 
                     rdbTransport.SelectedValue = dsStudent.Tables[0].Rows[0]["TRANSPORT"].ToString();
                     rdoscholarship.SelectedValue = dsStudent.Tables[0].Rows[0]["SCHOLORSHIP"].ToString();
                     //Condition for MCA only
                     int degreeno = Convert.ToInt32(dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString());
                     if (degreeno == 4)
-                        {
+                    {
                         trMca.Visible = true;
-                        }
+                    }
                     else
-                        {
+                    {
                         trMca.Visible = false;
-                        }
+                    }
 
                     //Condition for the M.Tech(Appl. Geo) only
 
                     if (degreeno == 2)
-                        {
+                    {
                         tblExam.Visible = false;
                         trExam.Visible = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         tblExam.Visible = true;
                         trExam.Visible = true;
-                        }
+                    }
 
                     DisableFields();
-                    }
+                }
                 else
-                    {
+                {
                     DataSet dstempStudent = objCommon.FillDropDown("TEMP_STUDENT", "[Merit No],Score,ApplicationID", "Name,Degreeno,Admbatch,GENDER,CATEGORY", "ApplicationID = '" + ViewState["stuinfoidno"].ToString() + "'", string.Empty);
                     if (dstempStudent != null && dstempStudent.Tables.Count > 0)
-                        {
+                    {
                         if (dstempStudent.Tables[0].Rows.Count > 0)
-                            {
+                        {
                             //DisableControlsRecursive(Page);
                             clearcontrols();
                             EnableFields();
@@ -1683,47 +1685,47 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
 
                             if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "M" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Male" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "MALE" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "male")
-                                {
+                            {
                                 rdoMale.Checked = true;
-                                }
+                            }
                             else if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "F" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Female" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "FEMALE" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "female")
-                                {
+                            {
                                 rdoFemale.Checked = true;
-                                }
+                            }
                             else if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "O" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Other" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "OTHER" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "other")
-                                {
+                            {
                                 rdoTransGender.Checked = true;
-                                }
+                            }
 
                             if (Convert.ToInt32(Session["OrgId"]) == 1)
-                                {
+                            {
                                 objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE DR ON(DR.DEGREENO=D.DEGREENO)", "D.DEGREENO", "D.DEGREENAME", "D.DEGREENO>0", "D.DEGREENO");
                                 ddlDegree.SelectedValue = "1";
                                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
-                                }
-
-
                             }
+
+
+                        }
                         else
-                            {
+                        {
                             objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
                             Response.Redirect(Request.Url.ToString());
-                            }
-                        }
-                    else
-                        {
-                        objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
-                        Response.Redirect(Request.Url.ToString());
                         }
                     }
+                    else
+                    {
+                        objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
+                        Response.Redirect(Request.Url.ToString());
+                    }
                 }
+            }
             else
-                {
+            {
                 objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
                 Response.Redirect(Request.Url.ToString());
-                }
-
             }
+
+        }
         //if (ds.Tables[0].Rows.Count > 0)
         //{
         //    txtIDNo.Text = ds.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
@@ -1739,10 +1741,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         //    ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMISSION_BATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMISSION_BATCH"].ToString();           
         //}
         Session["STUD_DETAILS"] = ds;
-        }
+    }
 
     public void clearcontrols()
-        {
+    {
 
         Session["STUD_DETAILS"] = null;
         txtIDNo.Text = string.Empty;
@@ -1770,61 +1772,61 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         ddlBloodGrp.SelectedIndex = 0;
         txtDateOfReporting.Text = DateTime.Today.ToString("dd/MM/yyyy");
         txtParentmobno.Text = string.Empty;
-        }
+    }
 
     protected void ddlAdmType_TextChanged(object sender, EventArgs e)
-        {
+    {
         try
-            {
+        {
             if (ddlAdmType.SelectedValue.Equals("1"))
-                {
+            {
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
                 ddlYear.SelectedValue = "1";
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
                 ddlSemester.SelectedValue = "1";
-                }
+            }
             else if (ddlAdmType.SelectedValue.Equals("2"))
-                {
+            {
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
                 ddlYear.SelectedValue = "2";
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (1) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 and yearno=" + ddlAdmType.SelectedValue, "SEMESTERNO");
                 ddlSemester.SelectedIndex = 1;
-                }
+            }
             else
-                {
+            {
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0", "YEAR");
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "TOP (8) SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0", "SEMESTERNO");
 
-                }
+            }
 
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void btnSearch_Click1(object sender, EventArgs e)
-        {
+    {
 
         this.ClearControls_DemandDraftDetails();
         //btnpayment.Visible = true;
 
         objCommon.FillDropDownList(ddlExamNo, "ACD_QUALEXM", "QUALIFYNO", "QUALIEXMNAME", "DEGREENO > 0", "QUALIFYNO");
         if (txtREGNo.Text.Trim() == string.Empty)
-            {
+        {
             objCommon.DisplayMessage("Enter Application ID to Modify!", this.Page);
             return;
-            }
+        }
 
         PopulateDropDownList();
         if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 2 || Convert.ToInt32(Session["OrgId"]) == 6)
-            {
+        {
             DataSet dsStudent = objCommon.FillDropDown("ACD_STUDENT A,ACD_STU_ADDRESS B", "A.IDNO", "A.STUDNAME,A.REGNO,A.IDNO,A.ROLLNO,A.STUDFIRSTNAME,A.STUDMIDDLENAME,A.STUDLASTNAME,A.FATHERFIRSTNAME,A.FATHERMIDDLENAME,A.FATHERLASTNAME,A.MOTHERNAME,A.DOB,A.SEX,ISNULL(A.RELIGIONNO,0)RELIGIONNO,A.MARRIED,A.NATIONALITYNO,ISNULL(A.CATEGORYNO,0)CATEGORYNO,A.CASTE,A.ADMDATE,A.DEGREENO,A.BRANCHNO,A.YEAR,A.STUDENTMOBILE,A.STUDENTMOBILE2,A.SEMESTERNO,A.PTYPE,A.STATENO,A.ADMBATCH,A.IDTYPE,A.YEAR_OF_EXAM,A.ALL_INDIA_RANK,A.STATE_RANK,A.PERCENTAGE,A.PERCENTILE,A.QEXMROLLNO,A.ADMCATEGORYNO,A.QUALIFYNO,A.SCHOLORSHIPTYPENO,A.PHYSICALLY_HANDICAPPED,A.ADMROUNDNO,A.COLLEGE_CODE,A.MERITNO,A.APPLICATIONID,A.SCORE,B.STADDNO, B.IDNO, B.PADDRESS, ISNULL(A.SCHOLORSHIP,0),A.COLLEGE_ID,A.FATHERMOBILE,SCHOLORSHIP,A.ADDHARCARDNO,ISNULL(A.TRANSPORT,0)TRANSPORT,A.HOSTELER,B.PCITY,ISNULL(A.INSTALLMENT,0)INSTALLMENT,B.PSTATE,B.PPINCODE,A.EMAILID,B.PTELEPHONE,B.LADDRESS,B.LTELEPHONE,B.LMOBILE,B.LEMAIL,A.ADMQUOTANO,A.BLOODGRPNO,B.LCITY,B.LSTATE", "ISNULL(A.ADMCAN,0)=0 AND A.IDNO=B.IDNO AND A.APPLICATIONID = '" + txtREGNo.Text.Trim() + "'", string.Empty);
             if (dsStudent != null && dsStudent.Tables.Count > 0)
-                {
+            {
                 if (dsStudent.Tables[0].Rows.Count > 0)
-                    {
+                {
                     //PopulateDropDownList();
                     //txtRegNo.ToolTip = dsStudent.Tables[0].Rows[0]["IDNO"].ToString();
 
@@ -1842,15 +1844,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     txtMotherName.Text = dsStudent.Tables[0].Rows[0]["MOTHERNAME"].ToString();
 
                     if (dsStudent.Tables[0].Rows[0]["SEX"].ToString().Trim().Equals("M"))
-                        {
+                    {
                         rdoMale.Checked = true;
                         rdoFemale.Checked = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoFemale.Checked = true;
                         rdoMale.Checked = false;
-                        }
+                    }
 
                     //txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));//Commented by Irfan Shaikh on 20190405
                     txtDateOfBirth.Text = (dsStudent.Tables[0].Rows[0]["DOB"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(dsStudent.Tables[0].Rows[0]["DOB"].ToString()).ToString("dd/MM/yyyy"));
@@ -1858,15 +1860,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     //ddlReligion.SelectedValue = (dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString() == string.Empty ? string.Empty : objCommon.GetDataByIDNo(Convert.ToInt32(dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString()), "ACD_RELIGION", "RELIGIONNO", "RELIGION"));
                     ddlReligion.SelectedValue = (dsStudent.Tables[0].Rows[0]["RELIGIONNO"].ToString());
                     if (dsStudent.Tables[0].Rows[0]["MARRIED"].ToString().Trim().Equals("Y"))
-                        {
+                    {
                         rdoMarriedYes.Checked = true;
                         rdoMarriedNo.Checked = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoMarriedYes.Checked = false;
                         rdoMarriedNo.Checked = true;
-                        }
+                    }
                     ddlSchool.SelectedValue = (dsStudent.Tables[0].Rows[0]["COLLEGE_ID"].ToString());
                     ddlNationality.SelectedValue = (dsStudent.Tables[0].Rows[0]["NATIONALITYNO"].ToString());
                     ddlCategory.SelectedValue = (dsStudent.Tables[0].Rows[0]["CATEGORYNO"].ToString());
@@ -1915,16 +1917,16 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     txtAadhaarNo.Text = dsStudent.Tables[0].Rows[0]["ADDHARCARDNO"].ToString();
                     rdoInstallment.SelectedValue = dsStudent.Tables[0].Rows[0]["INSTALLMENT"].ToString();
                     if (rdoInstallment.SelectedValue.Equals("0"))
-                        {
+                    {
                         divinstaltype.Visible = false;
                         DivDuedate1.Visible = false;
                         DivDuedate2.Visible = false;
                         DivDuedate3.Visible = false;
                         DivDuedate4.Visible = false;
                         DivdueDate5.Visible = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         divinstaltype.Visible = true;
 
                         objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
@@ -1935,7 +1937,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                         Installmenttype = Installmenttype + '-';
                         int count = Convert.ToInt32(objCommon.LookUp("dbo.split('" + Installmenttype + "','%-')", "count(id)-1", ""));
                         if (count == 2)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = false;
@@ -1946,10 +1948,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
                             txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 3)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -1962,10 +1964,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 4)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -1980,10 +1982,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
-                            }
+                        }
 
                         if (count == 5)
-                            {
+                        {
                             DivDuedate1.Visible = true;
                             DivDuedate2.Visible = true;
                             DivDuedate3.Visible = true;
@@ -2001,57 +2003,57 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
                             txtduedate5.Text = (Due_date5.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date5.ToString()).ToString("dd/MM/yyyy"));
-                            }
                         }
+                    }
 
                     objCommon.FillDropDownList(ddlstate, "ACD_STATE", "STATENO", "STATENAME", "STATENO >0", "STATENAME");
                     ddlstate.SelectedValue = (dsStudent.Tables[0].Rows[0]["STATENO"].ToString());
                     objCommon.FillDropDownList(ddlCity, "ACD_CITY", "CITYNO", "CITY", "CITYNO>0 and STATENO=" + ddlstate.SelectedValue, "CITY");
                     ddlCity.SelectedValue = dsStudent.Tables[0].Rows[0]["PCITY"].ToString();
                     if (Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["HOSTELER"]) == true)
-                        {
+                    {
                         rdoHosteler.SelectedValue = "1";
-                        }
+                    }
                     else
-                        {
+                    {
                         rdoHosteler.SelectedValue = "0";
-                        }
+                    }
 
                     rdbTransport.SelectedValue = dsStudent.Tables[0].Rows[0]["TRANSPORT"].ToString();
                     rdoscholarship.SelectedValue = dsStudent.Tables[0].Rows[0]["SCHOLORSHIP"].ToString();
                     //Condition for MCA only
                     int degreeno = Convert.ToInt32(dsStudent.Tables[0].Rows[0]["DEGREENO"].ToString());
                     if (degreeno == 4)
-                        {
+                    {
                         trMca.Visible = true;
-                        }
+                    }
                     else
-                        {
+                    {
                         trMca.Visible = false;
-                        }
+                    }
 
                     //Condition for the M.Tech(Appl. Geo) only
 
                     if (degreeno == 2)
-                        {
+                    {
                         tblExam.Visible = false;
                         trExam.Visible = false;
-                        }
+                    }
                     else
-                        {
+                    {
                         tblExam.Visible = true;
                         trExam.Visible = true;
-                        }
+                    }
 
                     DisableFields();
-                    }
+                }
                 else
-                    {
+                {
                     DataSet dstempStudent = objCommon.FillDropDown("TEMP_STUDENT", "[Merit No],Score,ApplicationID", "Name,Degreeno,Admbatch,GENDER,CATEGORY", "ApplicationID = '" + txtREGNo.Text.Trim() + "'", string.Empty);
                     if (dstempStudent != null && dstempStudent.Tables.Count > 0)
-                        {
+                    {
                         if (dstempStudent.Tables[0].Rows.Count > 0)
-                            {
+                        {
                             //DisableControlsRecursive(Page);
                             clearcontrols();
                             EnableFields();
@@ -2074,53 +2076,53 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                             objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
 
                             if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "M" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Male" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "MALE" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "male")
-                                {
+                            {
                                 rdoMale.Checked = true;
-                                }
+                            }
                             else if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "F" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Female" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "FEMALE" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "female")
-                                {
+                            {
                                 rdoFemale.Checked = true;
-                                }
+                            }
                             else if (dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "O" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "Other" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "OTHER" || dstempStudent.Tables[0].Rows[0]["GENDER"].ToString() == "other")
-                                {
+                            {
                                 rdoTransGender.Checked = true;
-                                }
+                            }
 
                             if (Convert.ToInt32(Session["OrgId"]) == 2)
-                                {
+                            {
                                 ddlSchool.Enabled = true;
                                 ddlDegree.Enabled = true;
-                                }
                             }
+                        }
                         else
-                            {
+                        {
                             objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
                             Response.Redirect(Request.Url.ToString());
-                            }
                         }
+                    }
                     else
-                        {
+                    {
                         objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
                         Response.Redirect(Request.Url.ToString());
-                        }
                     }
                 }
             }
+        }
         else if (Convert.ToInt32(Session["OrgId"]) != 1 || Convert.ToInt32(Session["OrgId"]) != 2 || Convert.ToInt32(Session["OrgId"]) != 6)
-            {
+        {
             ShowStudentOnlineAdmDetails();
 
 
-            }
+        }
         else
-            {
+        {
             objCommon.DisplayMessage(this, "This Application ID is not found in the System", this.Page);
             Response.Redirect(Request.Url.ToString());
-            }
         }
+    }
 
     private void DisableFields()
-        {
+    {
         txtStudentfullName.Enabled = false;
         txtStudMobile.Enabled = false;
         txtStudEmail.Enabled = false;
@@ -2160,10 +2162,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtParentmobno.Enabled = false;
         ddlstate.Enabled = false;
         ddlstate.Attributes.Add("readonly", "readonly");
-        }
+    }
 
     private void EnableFields()
-        {
+    {
         txtStudMobile2.Enabled = true;
         txtStudentfullName.Enabled = true;
         txtStudMobile.Enabled = true;
@@ -2199,18 +2201,18 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtduedate5.Enabled = true;
         ddladmthrough.Enabled = true;
         txtParentmobno.Enabled = true;
-        }
+    }
 
     public int TransferToEmail(string useremail, string message, string subject)
-        {
+    {
         int ret = 0;
         try
-            {
+        {
             DataSet dsconfig = null;
             dsconfig = objCommon.FillDropDown("reff", "EMAILSVCID", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
 
             if (dsconfig != null)
-                {
+            {
                 string fromAddress = dsconfig.Tables[0].Rows[0]["EMAILSVCID"].ToString();
                 string fromPassword = dsconfig.Tables[0].Rows[0]["EMAILSVCPWD"].ToString();
 
@@ -2229,32 +2231,32 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 ServicePointManager.ServerCertificateValidationCallback =
                 delegate(object s, X509Certificate certificate,
                 X509Chain chain, SslPolicyErrors sslPolicyErrors)
-                    {
+                {
                     return true;
-                    };
+                };
 
                 smtp.Send(msg);
                 if (System.Net.Mail.DeliveryNotificationOptions.OnSuccess == System.Net.Mail.DeliveryNotificationOptions.OnSuccess)
-                    {
+                {
                     return ret = 1;
                     //Storing the details of sent email
-                    }
+                }
                 else
-                    {
+                {
                     return ret = 0;
-                    }
                 }
             }
+        }
         catch (Exception ex)
-            {
+        {
             throw;
-            }
+        }
         return ret;
 
-        }
+    }
 
     private void GetCategory(string category, int type)
-        {
+    {
         if (category.Contains("E") && category.Contains("N"))
             if (type == 1)
                 ddlCategory.SelectedValue = "4";
@@ -2278,14 +2280,14 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 ddlCategory.SelectedValue = "1";
             else
                 ddlCategory.SelectedValue = "1";
-        }
+    }
 
     protected void rdoInstallment_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         try
-            {
+        {
             if (rdoInstallment.SelectedValue.Equals("0"))
-                {
+            {
                 divinstaltype.Visible = false;
                 DivDuedate1.Visible = false;
                 DivDuedate2.Visible = false;
@@ -2298,78 +2300,78 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 txtduedate4.Text = string.Empty;
                 txtduedate5.Text = string.Empty;
                 ddlinstallmenttype.SelectedIndex = 0;
-                }
+            }
             else
-                {
+            {
                 divinstaltype.Visible = true;
                 objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
-                }
-            }
-        catch (Exception ex)
-            {
-            throw;
             }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     protected void ddlinstallmenttype_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlinstallmenttype.SelectedIndex > 0)
-            {
+        {
             string Installmenttype = string.Empty;
             Installmenttype = objCommon.LookUp("ACD_INSTALLMENT_MASTER", "INSTALLMENT_TYPE", "INSTALLMENT_NO=" + Convert.ToInt32(ddlinstallmenttype.SelectedValue));
             Installmenttype = Installmenttype + '-';
             int count = Convert.ToInt32(objCommon.LookUp("dbo.split('" + Installmenttype + "','%-')", "count(id)-1", ""));
             if (count == 2)
-                {
+            {
                 DivDuedate1.Visible = true;
                 DivDuedate2.Visible = true;
                 DivDuedate3.Visible = false;
                 DivDuedate4.Visible = false;
                 DivdueDate5.Visible = false;
-                }
+            }
 
             if (count == 3)
-                {
+            {
                 DivDuedate1.Visible = true;
                 DivDuedate2.Visible = true;
                 DivDuedate3.Visible = true;
                 DivDuedate4.Visible = false;
                 DivdueDate5.Visible = false;
-                }
+            }
 
             if (count == 4)
-                {
+            {
                 DivDuedate1.Visible = true;
                 DivDuedate2.Visible = true;
                 DivDuedate3.Visible = true;
                 DivDuedate4.Visible = true;
                 DivdueDate5.Visible = false;
-                }
+            }
 
 
             if (count == 5)
-                {
+            {
                 DivDuedate1.Visible = true;
                 DivDuedate2.Visible = true;
                 DivDuedate3.Visible = true;
                 DivDuedate4.Visible = true;
                 DivdueDate5.Visible = true;
-                }
+            }
             txtduedate1.Text = DateTime.Today.ToString("dd/MM/yyyy");
             txtduedate1.Enabled = false;
-            }
+        }
         else
-            {
+        {
             DivDuedate1.Visible = false;
             DivDuedate2.Visible = false;
             DivDuedate3.Visible = false;
             DivDuedate4.Visible = false;
             DivdueDate5.Visible = false;
-            }
         }
+    }
 
     protected void btnpayment_Click(object sender, EventArgs e)
-        {
+    {
         //string Recon = objCommon.LookUp("ACD_DCR", "ISNULL(RECON,0)", "ENROLLNMENTNO='" + Session["Enrollno"].ToString() + "'");
         //if (Recon == "")
         //{
@@ -2393,11 +2395,11 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         //}
         // }
 
-        }
+    }
 
 
     private void ClearAllFields()
-        {
+    {
         txtFatherName.Text = string.Empty;
         txtStudentfullName.Text = string.Empty;
         txtStudMobile.Text = string.Empty;
@@ -2465,10 +2467,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         //  Response.Redirect(Request.Url.ToString());
         //}
 
-        }
+    }
 
     public void DisableEnable()
-        {
+    {
         dvMain.Visible = true;
         dvStudent.Visible = false;
         tempid.Visible = false;
@@ -2478,23 +2480,23 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtscore.Enabled = true;
         txtmerirtno.Enabled = true;
 
-        }
+    }
 
     protected void btnNewStu_Click(object sender, EventArgs e)
-        {
+    {
         dvMain.Visible = true;
         ClearAllFields();
         DisableEnable();
-        }
+    }
     protected void btnSearchStu_Click(object sender, EventArgs e)
-        {
+    {
         btnNewStudentS.Visible = false;
         dvMain.Visible = true;
         dvStudent.Visible = false;
-        }
+    }
 
     protected void btnNewStudentS_Click(object sender, EventArgs e)
-        {
+    {
         //ViewState["stuinfoidno"] = null;
         //Session["STUD_DETAILS"] = null;
         //ViewState["stuinfoidno"] = null;
@@ -2502,10 +2504,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
         //DisableEnable();
         divGeneralInfo.Visible = false;
-        }
+    }
 
     public void clearnew()
-        {
+    {
 
         txtStudentfullName.Text = string.Empty;
         txtStudMobile.Text = string.Empty;
@@ -2567,11 +2569,11 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         ddlBatch.SelectedIndex = 0;
         ddlPaymentType.SelectedIndex = 0;
 
-        }
+    }
 
     //added by pooja
     protected void lnkIdpros_Click(object sender, EventArgs e)
-        {
+    {
         LinkButton lnk = sender as LinkButton;
         string url = string.Empty;
         if (Request.Url.ToString().IndexOf("&id=") > 0)
@@ -2588,29 +2590,29 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         //myModal2.Visible = false;
         // Response.Redirect("~/academic/StudentRegistration.aspx");
         // Response.Redirect(Request.RawUrl, false);
-        }
+    }
 
 
     private void ShowStudentbyprosnoDetails()
-        {
+    {
         Session["STUD_DETAILS"] = null;
 
         StudentController objSC = new StudentController();
         DataSet ds = new DataSet();
 
         if (Session["usertype"].ToString() == "2")
-            {
+        {
             ds = objSC.GetStuddetpros_JECRC(Convert.ToInt32(ViewState["stuinfoidno"]));
             txtStudentName.ReadOnly = false;
             txtStudentName.Visible = true;
-            }
+        }
         else
-            {
+        {
             ds = objSC.GetStuddetpros_JECRC(Convert.ToInt32(ViewState["stuinfoidno"]));
-            }
+        }
 
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             txtIDNo.Text = ds.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             txtIDNo.ToolTip = ds.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             txtStudentfullName.Text = ds.Tables[0].Rows[0]["STUDENT_NAME"] == null ? string.Empty : ds.Tables[0].Rows[0]["STUDENT_NAME"].ToString();
@@ -2621,52 +2623,52 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"] == null ? "0" : ds.Tables[0].Rows[0]["DEGREENO"].ToString();
 
             if (ds.Tables[0].Rows[0]["ISCORE"].ToString() == "1")
-                {
+            {
                 divSpecialisation.Visible = true;
                 objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlSpecialisation.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["CORE_BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["CORE_BRANCHNO"].ToString();
-                }
+            }
             else
-                {
+            {
                 divSpecialisation.Visible = false;
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
-                }
+            }
             ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMISSION_BATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMISSION_BATCH"].ToString();
 
             objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
             objCommon.FillDropDownList(ddlstate, "ACD_STATE", "STATENO", "STATENAME", "STATENO >0", "STATENAME");
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO >0 AND ACTIVESTATUS=1", "SECTIONNO ASC");
-            }
-        Session["STUD_DETAILS"] = ds;
         }
+        Session["STUD_DETAILS"] = ds;
+    }
 
 
 
 
     private void ShowStudentbyTempIDNODetails()
-        {
+    {
         Session["STUD_DETAILS"] = null;
 
         StudentController objSC = new StudentController();
         DataSet ds = new DataSet();
 
         if (Session["usertype"].ToString() == "2")
-            {
+        {
             ds = objSC.GetStuddetIDNO_JECRC(Convert.ToInt32(ViewState["stuinfoidno"]));
             txtStudentName.ReadOnly = false;
             txtStudentName.Visible = true;
-            }
+        }
         else
-            {
+        {
             ds = objSC.GetStuddetIDNO_JECRC(Convert.ToInt32(ViewState["stuinfoidno"]));
-            }
+        }
 
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             //txtIDNo.Text = ds.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             // txtIDNo.ToolTip = ds.Tables[0].Rows[0]["PROSPECTUSNO"].ToString();
             txtStudentfullName.Text = ds.Tables[0].Rows[0]["STUDNAME"] == null ? string.Empty : ds.Tables[0].Rows[0]["STUDNAME"].ToString();
@@ -2686,18 +2688,18 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             string Gender = ds.Tables[0].Rows[0]["GENDER"] == null ? "0" : ds.Tables[0].Rows[0]["GENDER"].ToString();
 
             if (Gender == "M")
-                {
+            {
                 rdoMale.Checked = true;
-                }
+            }
             else if (Gender == "F")
-                {
+            {
                 rdoFemale.Checked = true;
-                }
+            }
             else
-                {
+            {
                 rdoMale.Checked = false;
                 rdoFemale.Checked = false;
-                }
+            }
 
 
             ddlSchool.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"] == null ? "0" : ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
@@ -2705,26 +2707,26 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"] == null ? "0" : ds.Tables[0].Rows[0]["DEGREENO"].ToString();
 
             if (ds.Tables[0].Rows[0]["ISCORE"].ToString() == "1")
-                {
+            {
                 divSpecialisation.Visible = true;
                 objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlSpecialisation.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["CORE_BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["CORE_BRANCHNO"].ToString();
-                }
+            }
             else
-                {
+            {
                 divSpecialisation.Visible = false;
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
-                }
+            }
 
 
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             ddladmthrough.SelectedValue = ds.Tables[0].Rows[0]["ADMROUNDNO"] == null ? "0" : ds.Tables[0].Rows[0]["ADMROUNDNO"].ToString();
 
             if (ds.Tables[0].Rows[0]["IDTYPE"].ToString() == "2")
-                {
+            {
                 //ddlYear.SelectedValue=0;
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
                 ddlYear.SelectedValue = "2";
@@ -2733,9 +2735,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
                 ddlSemester.SelectedValue = "2";
 
-                }
+            }
             else
-                {
+            {
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
                 ddlYear.SelectedValue = "1";
                 objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO > 0 AND ACTIVESTATUS=1", "IDTYPENO");
@@ -2743,7 +2745,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
                 ddlSemester.SelectedValue = "1";
 
-                }
+            }
 
 
             ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMBATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMBATCH"].ToString();
@@ -2761,30 +2763,30 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             txtDateOfReporting.Text = (ds.Tables[0].Rows[0]["ADMDATE"].ToString() == string.Empty ? string.Empty : Convert.ToDateTime(ds.Tables[0].Rows[0]["ADMDATE"].ToString()).ToString("dd/MM/yyyy"));
 
-            }
-        Session["STUD_DETAILS"] = ds;
         }
+        Session["STUD_DETAILS"] = ds;
+    }
 
     private void ShowStudentOnlineAdmDetails()
-        {
+    {
         Session["STUD_DETAILS"] = null;
 
         StudentController objSC = new StudentController();
         DataSet ds = new DataSet();
 
         if (Session["usertype"].ToString() == "2")
-            {
+        {
             ds = objSC.getstudbyUsernameOA_JECRC(txtREGNo.Text);
             txtStudentName.ReadOnly = false;
             txtStudentName.Visible = true;
-            }
+        }
         else
-            {
+        {
             ds = objSC.getstudbyUsernameOA_JECRC(txtREGNo.Text);
-            }
+        }
 
         if (ds.Tables[0].Rows.Count > 0)
-            {
+        {
             txtIDNo.Text = ds.Tables[0].Rows[0]["USERNO"].ToString();
             Session["USERNO_OA"] = ds.Tables[0].Rows[0]["USERNO"].ToString();
             txtIDNo.ToolTip = ds.Tables[0].Rows[0]["USERNO"].ToString();
@@ -2802,58 +2804,58 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlSchool.SelectedValue, "D.DEGREENO");
             ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"] == null ? "0" : ds.Tables[0].Rows[0]["DEGREENO"].ToString();
             if (ds.Tables[0].Rows[0]["ISCORE"].ToString() == "1")
-                {
+            {
                 divSpecialisation.Visible = true;
                 objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlSpecialisation.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 try
-                    {
+                {
                     ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["CORE_BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["CORE_BRANCHNO"].ToString();
-                    }
+                }
                 catch (Exception ex)
-                    {
+                {
                     objCommon.DisplayMessage(this.Page, "Core Branch Mapping is not found for searched Application ID.", this.Page);
                     ClearAllFields();
                     return;
-                    }
                 }
+            }
             else
-                {
+            {
                 divSpecialisation.Visible = false;
                 objCommon.FillDropDownList(ddlBranch, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND CD.BRANCHNO > 0 AND ISNULL(ISCORE,0)=0 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue), "B.LONGNAME");
                 ddlBranch.SelectedValue = ds.Tables[0].Rows[0]["BRANCHNO"] == null ? "0" : ds.Tables[0].Rows[0]["BRANCHNO"].ToString();
-                }
+            }
             if (ds.Tables[0].Rows[0]["GENDER"].ToString() == "M" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "Male" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "MALE" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "male")
-                {
+            {
                 rdoMale.Checked = true;
-                }
+            }
             else if (ds.Tables[0].Rows[0]["GENDER"].ToString() == "F" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "Female" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "FEMALE" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "female")
-                {
+            {
                 rdoFemale.Checked = true;
-                }
+            }
             else if (ds.Tables[0].Rows[0]["GENDER"].ToString() == "O" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "Other" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "OTHER" || ds.Tables[0].Rows[0]["GENDER"].ToString() == "other")
-                {
+            {
                 rdoTransGender.Checked = true;
-                }
+            }
             string exist1 = objCommon.LookUp("ACD_STUDENT", "COUNT(1)", "EMAILID='" + txtStudEmail.Text.Trim().ToString() + "'");
             string exist2 = objCommon.LookUp("ACD_STUDENT", "COUNT(1)", "STUDENTMOBILE='" + txtStudMobile.Text.Trim().ToString() + "'");
 
             if (Convert.ToInt32(exist1) > 0 || Convert.ToInt32(exist2) > 0)
-                {
+            {
                 objCommon.FillDropDownList(ddlBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0 AND ACTIVESTATUS=1 AND ISNULL(IS_ADMSSION,0)=1 ", "BATCHNO DESC");
                 ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMBATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMBATCH"].ToString();
-                }
+            }
             else
-                {
+            {
 
                 ddlBatch.SelectedValue = ds.Tables[0].Rows[0]["ADMBATCH"] == null ? "0" : ds.Tables[0].Rows[0]["ADMBATCH"].ToString();
-                }
+            }
             ddlAllotedCat.SelectedValue = ds.Tables[0].Rows[0]["CATEGORYNO"] == null ? "0" : ds.Tables[0].Rows[0]["CATEGORYNO"].ToString();
             objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             ddladmthrough.SelectedValue = "1";
             if (ds.Tables[0].Rows[0]["ADMTYPE"].ToString() == "2")
-                {
+            {
                 //ddlYear.SelectedValue=0;
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
                 ddlYear.SelectedValue = "2";
@@ -2862,9 +2864,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
                 ddlSemester.SelectedValue = "2";
 
-                }
+            }
             else
-                {
+            {
                 objCommon.FillDropDownList(ddlYear, "ACD_YEAR", "YEAR", "YEARNAME", "YEAR>0 AND ACTIVESTATUS=1", "YEAR");
                 ddlYear.SelectedValue = "1";
                 objCommon.FillDropDownList(ddlAdmType, "ACD_IDTYPE", "IDTYPENO", "IDTYPEDESCRIPTION", "IDTYPENO > 0 AND ACTIVESTATUS=1", "IDTYPENO");
@@ -2872,36 +2874,36 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 //objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER", "SEMESTERNO", "SEMFULLNAME", "SEMESTERNO>0 AND ACTIVESTATUS=1", "SEMESTERNO");
                 ddlSemester.SelectedValue = "1";
 
-                }
+            }
             //ddlAdmType.SelectedValue = ds.Tables[0].Rows[0]["IDTYPENO"] == null ? "0" : ds.Tables[0].Rows[0]["IDTYPENO"].ToString();
             objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
             //objCommon.FillDropDownList(ddladmthrough, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             objCommon.FillDropDownList(ddlSection, "ACD_SECTION", "SECTIONNO", "SECTIONNAME", "SECTIONNO >0 AND ACTIVESTATUS=1", "SECTIONNO ASC");
             if (Convert.ToInt32(exist1) > 0 || Convert.ToInt32(exist1) > 0)
-                {
+            {
 
                 if (ds.Tables[0].Rows[0]["APPLICATIONID_STUD"].ToString() == "")
-                    {
+                {
                     objCommon.DisplayMessage(this.Page, "Mobile or Emailid already Found for Entered Application Number.", this.Page);
                     //clearcontrols();
                     return;
-                    }
+                }
                 txtmerirtno.Text = ds.Tables[0].Rows[0]["MERITNO"].ToString();
                 txtscore.Text = ds.Tables[0].Rows[0]["SCORE"].ToString();
                 txtapplicationid.Text = ds.Tables[0].Rows[0]["APPLICATIONID"].ToString();
                 //   txtAadhaarNo.Text = ds.Tables[0].Rows[0]["ADDHARCARDNO"].ToString();
                 rdoInstallment.SelectedValue = ds.Tables[0].Rows[0]["INSTALLMENT"].ToString();
                 if (rdoInstallment.SelectedValue.Equals("0"))
-                    {
+                {
                     divinstaltype.Visible = false;
                     DivDuedate1.Visible = false;
                     DivDuedate2.Visible = false;
                     DivDuedate3.Visible = false;
                     DivDuedate4.Visible = false;
                     DivdueDate5.Visible = false;
-                    }
+                }
                 else
-                    {
+                {
                     divinstaltype.Visible = true;
 
                     objCommon.FillDropDownList(ddlinstallmenttype, "ACD_INSTALLMENT_MASTER", "INSTALLMENT_NO", "INSTALLMENT_TYPE", "INSTALLMENT_NO>0", "INSTALLMENT_NO");
@@ -2912,7 +2914,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     Installmenttype = Installmenttype + '-';
                     int count = Convert.ToInt32(objCommon.LookUp("dbo.split('" + Installmenttype + "','%-')", "count(id)-1", ""));
                     if (count == 2)
-                        {
+                    {
                         DivDuedate1.Visible = true;
                         DivDuedate2.Visible = true;
                         DivDuedate3.Visible = false;
@@ -2923,10 +2925,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
                         txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
-                        }
+                    }
 
                     if (count == 3)
-                        {
+                    {
                         DivDuedate1.Visible = true;
                         DivDuedate2.Visible = true;
                         DivDuedate3.Visible = true;
@@ -2939,10 +2941,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                         txtduedate1.Text = (Due_date1.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date1.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
-                        }
+                    }
 
                     if (count == 4)
-                        {
+                    {
                         DivDuedate1.Visible = true;
                         DivDuedate2.Visible = true;
                         DivDuedate3.Visible = true;
@@ -2957,10 +2959,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                         txtduedate2.Text = (Due_date2.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date2.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
-                        }
+                    }
 
                     if (count == 5)
-                        {
+                    {
                         DivDuedate1.Visible = true;
                         DivDuedate2.Visible = true;
                         DivDuedate3.Visible = true;
@@ -2978,57 +2980,57 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                         txtduedate3.Text = (Due_date3.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date3.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate4.Text = (Due_date4.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date4.ToString()).ToString("dd/MM/yyyy"));
                         txtduedate5.Text = (Due_date5.ToString() == string.Empty ? string.Empty : Convert.ToDateTime(Due_date5.ToString()).ToString("dd/MM/yyyy"));
-                        }
                     }
+                }
                 if (Convert.ToBoolean(ds.Tables[0].Rows[0]["HOSTELER"]) == true)
-                    {
+                {
                     rdoHosteler.SelectedValue = "1";
                     divHostel.Visible = true;
                     rdbTransport.Visible = true;
                     rdbTransport.Enabled = false;
                     objCommon.FillDropDownList(ddlHostel, "ACD_HOSTEL_FESS_TYPE", "HID", "HOSTELTYPE", "HID>0 ", "HID");
                     ddlHostel.SelectedValue = ds.Tables[0].Rows[0]["HOSTEL_STATUS"] == null ? "0" : ds.Tables[0].Rows[0]["HOSTEL_STATUS"].ToString();
-                    }
+                }
                 else
-                    {
+                {
                     rdoHosteler.SelectedValue = "0";
-                    }
+                }
 
                 rdbTransport.SelectedValue = ds.Tables[0].Rows[0]["TRANSPORT"].ToString();
                 rdoscholarship.SelectedValue = ds.Tables[0].Rows[0]["SCHOLORSHIP"].ToString();
                 if (rdoscholarship.SelectedValue == "1")
-                    {
+                {
                     divschmode.Visible = CheckControlToHide("divschmode");
                     divschtype.Visible = CheckControlToHide("divschtype");
                     ddlSchMode.SelectedValue = ds.Tables[0].Rows[0]["SCH_MODE"].ToString();
                     ddlSchType.SelectedValue = ds.Tables[0].Rows[0]["SCHOLARSHIP_ID"].ToString();
                     if (ddlSchMode.SelectedValue == "1")
-                        {
+                    {
                         divAmt.Visible = CheckControlToHide("divAmt");
                         lblamt.Text = "Enter Scholarship Percentage";
                         txtschAmt.MaxLength = 2;
                         rfvschamt.ErrorMessage = "Please Enter Scholarship Percentage";
                         txtschAmt.Text = ds.Tables[0].Rows[0]["SCH_AMT_PER"].ToString();
-                        }
+                    }
                     else if (ddlSchMode.SelectedValue == "2")
-                        {
+                    {
 
                         divAmt.Visible = CheckControlToHide("divAmt");
                         lblamt.Text = "Enter Scholarship Amount";
                         txtschAmt.MaxLength = 12;
                         rfvschamt.ErrorMessage = "Please Enter Scholarship Amount";
                         txtschAmt.Text = ds.Tables[0].Rows[0]["SCH_AMT_PER"].ToString();
-                        }
+                    }
                     else
-                        {
+                    {
                         divAmt.Visible = false;
                         lblamt.Text = "";
                         txtschAmt.MaxLength = 2;
                         rfvschamt.ErrorMessage = "";
-                        }
                     }
+                }
                 else
-                    {
+                {
                     divschmode.Visible = false;
                     divschtype.Visible = false;
                     divAmt.Visible = false;
@@ -3036,11 +3038,11 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     txtschAmt.MaxLength = 2;
                     rfvschamt.ErrorMessage = "";
                     ddlSchMode.SelectedIndex = 0;
-                    }
                 }
+            }
 
             else
-                {
+            {
                 divinstaltype.Visible = false;
                 DivDuedate1.Visible = false;
                 DivDuedate2.Visible = false;
@@ -3055,23 +3057,23 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 ddlSchMode.SelectedIndex = 0;
                 ddlSchType.SelectedIndex = 0;
                 rdoHosteler.SelectedValue = "0";
-                }
             }
+        }
         else
-            {
+        {
             objCommon.DisplayMessage(this.Page, "Entered Application ID is not Verified.", this.Page);
             clearcontrols();
             return;
-            }
-        Session["STUD_ONLINEADMDETAILS"] = ds;
         }
+        Session["STUD_ONLINEADMDETAILS"] = ds;
+    }
 
 
     static async Task<int> Execute(string Message, string toEmailId, string sub)
-        {
+    {
         int ret = 0;
         try
-            {
+        {
             Common objCommon = new Common();
             DataSet dsconfig = null;
             dsconfig = objCommon.FillDropDown("REFF", "COMPANY_EMAILSVCID", "SENDGRID_USERNAME,SENDGRID_PWD,SENDGRID_APIKEY,SUBJECT_OTP", "COMPANY_EMAILSVCID <> '' and SENDGRID_PWD<> ''", string.Empty);
@@ -3090,29 +3092,29 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
             string res = Convert.ToString(response.StatusCode);
             if (res == "Accepted")
-                {
+            {
                 ret = 1;
                 Console.WriteLine("Email Sent successfully!");
 
-                }
+            }
             else
-                {
+            {
                 ret = 0;
                 Console.WriteLine("Fail to send Mail!");
-                }
+            }
             //attachments.Dispose();
-            }
-        catch (Exception ex)
-            {
-            ret = 0;
-            }
-        return ret;
         }
-    static async Task<int> Execute(string Message, string toEmailId, string sub, string BccEmail)
+        catch (Exception ex)
         {
+            ret = 0;
+        }
+        return ret;
+    }
+    static async Task<int> Execute(string Message, string toEmailId, string sub, string BccEmail)
+    {
         int ret = 0;
         try
-            {
+        {
 
             System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
             Common objCommon = new Common();
@@ -3131,14 +3133,14 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             var to = new List<EmailAddress>();
             foreach (var i in emails)
-                {
+            {
                 to.Add(new EmailAddress(i));
-                }
+            }
             var bcc = new List<EmailAddress>();
             foreach (var i in bccemails)
-                {
+            {
                 bcc.Add(new EmailAddress(i));
-                }
+            }
 
             var plainTextContent = "";
             var htmlContent = Message;
@@ -3150,51 +3152,51 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
             string res = Convert.ToString(response.StatusCode);
             if (res == "Accepted")
-                {
+            {
                 ret = 1;
                 Console.WriteLine("Email Sent successfully!");
 
-                }
+            }
             else
-                {
+            {
                 ret = 0;
                 Console.WriteLine("Fail to send Mail!");
-                }
+            }
             //attachments.Dispose();
-            }
-        catch (Exception ex)
-            {
-            ret = 0;
-            }
-        return ret;
         }
+        catch (Exception ex)
+        {
+            ret = 0;
+        }
+        return ret;
+    }
 
 
 
     protected void ddlPaymentType_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         int branchno = 0;
         if (ddlSpecialisation.SelectedIndex > 0)
-            {
+        {
             branchno = Convert.ToInt32(ddlSpecialisation.SelectedValue);
-            }
+        }
         else
-            {
+        {
             branchno = Convert.ToInt32(ddlBranch.SelectedValue);
-            }
+        }
         DataSet ds = objSC.GetStandardFees(Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlBatch.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlPaymentType.SelectedValue), branchno, Convert.ToInt32(ddlSchool.SelectedValue));
         txtAppliedFees.Text = ds.Tables[0].Rows[0]["STD_FEES"].ToString();
-        }
+    }
     protected void rdoscholarship_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (rdoscholarship.SelectedValue == "1")
-            {
+        {
             divschmode.Visible = CheckControlToHide("divschmode");
             divschtype.Visible = CheckControlToHide("divschtype");
             divAmt.Visible = false;
-            }
+        }
         else
-            {
+        {
             divschmode.Visible = false;
             divAmt.Visible = false;
             lblamt.Text = "";
@@ -3203,73 +3205,73 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             ddlSchMode.SelectedIndex = 0;
             ddlSchType.SelectedIndex = 0;
             divschtype.Visible = false;
-            }
         }
+    }
     protected void ddlSchMode_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
 
         if (ddlSchMode.SelectedValue == "1")
-            {
+        {
             divAmt.Visible = CheckControlToHide("divAmt");
             lblamt.Text = "Enter Scholarship Percentage";
             txtschAmt.MaxLength = 2;
             rfvschamt.ErrorMessage = "Please Enter Scholarship Percentage";
-            }
+        }
         else if (ddlSchMode.SelectedValue == "2")
-            {
+        {
 
             divAmt.Visible = CheckControlToHide("divAmt");
             lblamt.Text = "Enter Scholarship Amount";
             txtschAmt.MaxLength = 12;
             rfvschamt.ErrorMessage = "Please Enter Scholarship Amount";
-            }
+        }
         else
-            {
+        {
             divAmt.Visible = false;
             lblamt.Text = "";
             txtschAmt.MaxLength = 2;
             rfvschamt.ErrorMessage = "";
-            }
-
         }
+
+    }
 
 
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
-        {
+    {
         if (ddlBranch.SelectedIndex > 0)
-            {
+        {
             int count = Convert.ToInt32(objCommon.LookUp("ACD_COLLEGE_DEGREE_BRANCH", "count(1)", "CORE_BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue)));
             if (count > 0)
-                {
+            {
                 divSpecialisation.Visible = true;
                 objCommon.FillDropDownList(ddlSpecialisation, "ACD_COLLEGE_DEGREE_BRANCH CD INNER JOIN ACD_BRANCH B ON (B.BRANCHNO = CD.BRANCHNO)", "DISTINCT CD.BRANCHNO", "B.LONGNAME", "CD.DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND ISNULL(B.ISCORE,0)=1 AND ISNULL(ISSPECIALISATION,0) = 1 AND CD.COLLEGE_ID=" + Convert.ToInt32(ddlSchool.SelectedValue) + " AND CD.CORE_BRANCHNO =" + Convert.ToInt32(ddlBranch.SelectedValue), "B.LONGNAME");
 
-                }
-            else
-                {
-                divSpecialisation.Visible = false;
-                }
             }
-        else
+            else
             {
+                divSpecialisation.Visible = false;
+            }
+        }
+        else
+        {
             divSpecialisation.Visible = false;
 
-            }
+        }
 
         int branchno = 0;
         if (ddlSpecialisation.SelectedIndex > 0)
-            {
+        {
             branchno = Convert.ToInt32(ddlSpecialisation.SelectedValue);
-            }
+        }
         else
-            {
+        {
             branchno = Convert.ToInt32(ddlBranch.SelectedValue);
-            }
+        }
         DataSet ds = objSC.GetStandardFees(Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToInt32(ddlBatch.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlPaymentType.SelectedValue), branchno, Convert.ToInt32(ddlSchool.SelectedValue));
         txtAppliedFees.Text = ds.Tables[0].Rows[0]["STD_FEES"].ToString();
-        }
+    }
     protected void lnkIdamonline_Click(object sender, EventArgs e)
-        {
+    {
         LinkButton lnk = sender as LinkButton;
         string url = string.Empty;
         if (Request.Url.ToString().IndexOf("&id=") > 0)
@@ -3283,62 +3285,62 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtIDNo.Text = ViewState["stuinfoidno"].ToString();
         ShowStudentOnlineAdmDetails();
         ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "$('#myModal2').modal('hide')", true);
-        }
+    }
 
     ////********** Added by Rahul Moraskar 2022-07-26
     private void ControlInit()
-        {
+    {
         DataSet ControlRights = objSC.GetStudentConfig(Convert.ToInt32(Session["OrgId"]), Convert.ToInt32(Request.QueryString["pageno"].ToString()));
 
         for (int i = 0; i < ControlRights.Tables[0].Rows.Count; i++)
-            {
+        {
             ViewState["ControlRights"] = ControlRights.Tables[0];
             DataTable DTControlRights = ControlRights.Tables[0];
 
             var ctrlToHIDE = FindControlRecursive(this.Page, string.Format(DTControlRights.Rows[i]["CONTROL_TO_HIDE"].ToString()));
             if (ctrlToHIDE != null)
-                {
+            {
                 if (Convert.ToInt32(DTControlRights.Rows[i]["ISACTIVE"]) == 1)
                     ctrlToHIDE.Visible = true;
                 else
                     ctrlToHIDE.Visible = false;
-                }
+            }
 
             var ctrlToMANDATORY = FindControlRecursive(this.Page, string.Format(DTControlRights.Rows[i]["CONTROL_TO_MANDATORY"].ToString()));
             if (ctrlToMANDATORY != null)
-                {
+            {
                 if (Convert.ToInt32(DTControlRights.Rows[i]["ISMANDATORY"]) == 1)
                     ctrlToMANDATORY.Visible = true;
                 else
                     ctrlToMANDATORY.Visible = false;
-                }
             }
+        }
 
 
         DataTable dtControlRights = (DataTable)ViewState["ControlRights"];
 
         foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divScholarship'", "ORGANIZATION_ID ASC"))
-            {
+        {
             divScholarshipDetails.Visible = (bool)ActScholarship["ISACTIVE"];
-            }
-        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divinstallment'", "ORGANIZATION_ID ASC"))
-            {
-            divFeeInstallmentDetails.Visible = (bool)ActScholarship["ISACTIVE"];
-            }
-        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divhosteller'", "ORGANIZATION_ID ASC"))
-            {
-            divHostellerDetails.Visible = (bool)ActScholarship["ISACTIVE"];
-            }
-        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divTransportation'", "ORGANIZATION_ID ASC"))
-            {
-            divTransportationDetails.Visible = (bool)ActScholarship["ISACTIVE"];
-            }
-
         }
+        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divinstallment'", "ORGANIZATION_ID ASC"))
+        {
+            divFeeInstallmentDetails.Visible = (bool)ActScholarship["ISACTIVE"];
+        }
+        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divhosteller'", "ORGANIZATION_ID ASC"))
+        {
+            divHostellerDetails.Visible = (bool)ActScholarship["ISACTIVE"];
+        }
+        foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = 'divTransportation'", "ORGANIZATION_ID ASC"))
+        {
+            divTransportationDetails.Visible = (bool)ActScholarship["ISACTIVE"];
+        }
+
+    }
 
     ////********** Added by Rahul Moraskar 2022-07-26
     private void RequiredFieldValidatorEnableDisable()
-        {
+    {
         rfvStudent.Enabled = CheckControlToMandatory("supStudentfullName");
         rfvStudMobile.Enabled = CheckControlToMandatory("supStudMobile");
         rfvStudMobile2.Enabled = CheckControlToMandatory("supStudentMoblieNo2");
@@ -3374,66 +3376,66 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         RfvDob.Enabled = CheckControlToMandatory("supDateofBirth");
 
 
-        }
+    }
 
     ////********** Added by Rahul Moraskar 2022-07-26
     private static Control FindControlRecursive(Control root, string id)
-        {
+    {
         if (root != null && !string.IsNullOrWhiteSpace(id))
-            {
+        {
             if (root.ID == id)
-                {
+            {
                 return root;
-                }
+            }
 
             foreach (Control c in root.Controls)
-                {
+            {
                 Control t = FindControlRecursive(c, id);
 
                 if (t != null)
-                    {
+                {
                     return t;
-                    }
                 }
             }
+        }
 
         return null;
-        }
+    }
     ////********** Added by Rahul Moraskar 2022-07-26
     private bool CheckControlToHide(string ControlName)
-        {
+    {
         //ControlRights
         DataTable dtControlRights = (DataTable)ViewState["ControlRights"];
 
         foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_HIDE = '" + ControlName + "'", "ORGANIZATION_ID ASC"))
-            {
+        {
             return (bool)ActScholarship["ISACTIVE"];
-            }
+        }
         return true;
 
-        }
+    }
 
     ////********** Added by Rahul Moraskar 2022-07-26
     private bool CheckControlToMandatory(string ControlName)
-        {
+    {
         //ControlRights
         DataTable dtControlRights = (DataTable)ViewState["ControlRights"];
 
         foreach (DataRow ActScholarship in dtControlRights.Select("ORGANIZATION_ID = " + Convert.ToInt32(Session["OrgId"]) + " and PAGE_NO = " + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + " AND CONTROL_TO_MANDATORY = '" + ControlName + "'", "ORGANIZATION_ID ASC"))
-            {
+        {
             return (bool)ActScholarship["ISMANDATORY"];
-            }
+        }
         return true;
 
-        }
+    }
     ////********** END by Rahul Moraskar 2022-07-26
 
 
     protected void btnsendmail_Click(object sender, EventArgs e)
-        {
+    {
         try
-            {
-
+        {
+            
             StudentController objSC = new StudentController();
             UserAcc objUa = new UserAcc();
             Student objS = new Student();
@@ -3458,6 +3460,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             string Password = string.Empty;
 
             string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO=" + IDNOnew);
+            string Semester = objCommon.LookUp("ACD_STUDENT", "ISNULL(SEMESTERNO,0) SEMESTERNO", "IDNO=" + IDNOnew);
             string Branchname = objCommon.LookUp("ACD_STUDENT S INNER JOIN ACD_DEGREE D ON (S.DEGREENO=D.DEGREENO) INNER JOIN ACD_BRANCH B ON (B.BRANCHNO=S.BRANCHNO)", "B.LONGNAME", "IDNO=" + IDNOnew);
 
             string Userno = objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO=" + IDNOnew);
@@ -3468,12 +3471,12 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
             Password = clsTripleLvlEncyrpt.ThreeLevelDecrypt(Password.ToString());
-           // int TemplateTypeId = 0;
-           // int TemplateId = 0;
-            string ApplicationId=string.Empty;
+            // int TemplateTypeId = 0;
+            // int TemplateId = 0;
+            string ApplicationId = string.Empty;
             //Assign by Nikhil L. on 12-06-2023 hard coded for JECRC offer letter.(temporary commented)
             //TemplateTypeId=6;
-           // TemplateId=7;
+            // TemplateId=7;
 
             //DataSet ds_mstQry = objUC.GetEmailTemplateConfigData(TemplateTypeId, TemplateId, IDNOnew,ApplicationId);
             //if (ds_mstQry != null && ds_mstQry.Tables.Count == 3)
@@ -3502,36 +3505,37 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             //Session["Enrollno"] = srnno;
             DataSet ds = getModuleConfig();
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
-               // email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
+            {
+                // email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
                 Link = ds.Tables[0].Rows[0]["LINK"].ToString();
                 sendmail = Convert.ToInt32(ds.Tables[0].Rows[0]["THIRDPARTY_PAYLINK_MAIL_SEND"].ToString());
 
                 if (sendmail == 1)
-                    {
-                 
+                {
+
                     subject = "Provisional Admission Confirmation Payment Link.";
                     string message = "";
                     message = templateText;
-                    message += "<p>Dear :<b>" + Name + "</b> </p>";
-                    message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + "</b><br/>You Can Pay First Installment Fees using the following Link and credentials. </td><p style=font-weight:bold;> " + MISLink + " </p><p>Username   : " + Username + " <br/>Password: " + Password + "</p><p style=font-weight:bold;>Fee Details: <br/><b>Note:</b> You can find your fee details after login in your portal using above login credentials.</p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University.</p><p>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</p><p style=color:blue;>Documents required at the time of Confirmation of Admission: Originals along with one set of Self attested Photocopy.</p>";
+                    message += "<p><b> Dear  " + Name + "</b> </p>";
+                    message += "<p></p>You are shortlisted for Provisional Allotment of seat in <b>" + college + "</b> in <b>" + Branchname + " (Semester - " + Semester + ").</b> The fee payment should be made within 7 days of receiving this mail/letter.<br><br>You have to pay Registration Fees using the following Link and credentials. </td><p style=font-weight:bold;>ERP Link : " +  MISLink + "<br>Username   : " + Username + " <br/>Password   :  " + Password + "</p><p><b>Registration for Provisional Admission, Fee Details:</b> <br/>B.Tech. Program: 40000/-  <br>All Other UG / PG Program: 25000/-  <br>Hostel Booking: 30000/- If opted (Subject to the availability Hostel Room).<br></p><p>The provisional admission shall be confirmed after establishing you are eligibility in the qualifying exam after declaration of the result by the examining Board/University as per the schedule notified by the University. The Registration Fee (at the time of Provisional Admission) paid by you shall be adjusted in the initial fee payable at the time of admission.</p><p><b>You will be required to submit self attested photo copies of the following documents at the time of final admission,once the University calls for the same.</b></p>";
                     message += " <table style='border: 1px solid black;border-collapse: collapse;'>";
                     message += " <tr >";
                     message += " <td style='border: 1px solid black;'>";
-                    message += "JEE Mains Score Card (if appeared/ applicable)</td>";
+                    message += "JEE Mains Score Card (Mandetory if appeared/ applicable)</td>";
                     message += "<td style='border: 1px solid black;'> Migration Certificate</td></tr>";
-                    message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate</td> </tr>";
-                    message += "  <td style='border: 1px solid black;'>12th Mark-sheet</td><td style='border: 1px solid black;'>Character Certificate</td>";
+                    message += " <tr style='border: 1px solid black;'><td style='border: 1px solid black;'> 10th Marksheet & 12th Marksheet </td> <td style='border: 1px solid black;'> Transfer Certificate & Character Certificate</td> </tr>";
                     message += "<tr></tr><tr><td style='border: 1px solid black;'>Graduation Final Year Mark-sheet (for PG Admissions)</td>";
                     message += "<td style='border: 1px solid black;'>Caste Certificate (if applicable)</td></tr>";
                     message += "<tr><td style='border: 1px solid black;'>Copy of Aadhar Card (UID)</td><td>OBC Non Creamy layer Certificate (if applicable)</td></tr>";
                     message += "<tr><td style='border: 1px solid black;'>3 Passport Size Photographs</td>";
                     message += "<td style='border: 1px solid black;'>Printout of application form (if filled online)</td></tr></table>";
-                    message += "<p>The final admission is subject to clearing the document verification. In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</p><p><b>Note:</b></p>";
-                    message += "<p>1.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
-                    message += "2.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
-                    message += "3.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> Academic Menu-->>Student Related-->>Online Payment.<br/>(Any query regarding admission send email to admission@jecrcu.edu.in)";
-                    message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>JECRC University, Jaipur</p>";
+                    message += "<p><b>In case you found ineligible for admission in the said program and denied by admission department after verification at any stage, the complete registration fee shall be refunded and admission will be cancelled.</b></p><p><b>Note:</b></p>";
+                    message += "<p>1.Provisional Admission Registration fee shall be adjusted against the fee payable at the time of admission.<br>";
+                    message += "2.All the documents must be uploaded on URL:<b>  " + MISLink + " </b> <br/>";
+                    message += "3.After submission of registration fees, new user ID will be sent to your registered mail id separately.<br/>";
+                    message += "4.In case of addmission withdrawal fee refund will be as per the University's Policy.<br/>";
+                    message += "5.Process of fee payment: Login using above credentials in <b> " + MISLink + "</b> <br>Academic Menu-->>Student Related-->>Online Payment.<br/>";
+                    message += "<p style=font-weight:bold;>Thanks<br>Team Admissions <br>Directorate of Executive Education.</p>";
 
                     // +MISLink + " Username: " + Username + " Password: " + Password;
                     //message = "
@@ -3539,13 +3543,13 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     string BCCEmailID = string.Empty;
                     string BCCEMAIL = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(BBC_MAIL_NEW_STUD_ENTRY,0) as BBC_MAIL_NEW_STUD_ENTRY", "");
                     if (BCCEMAIL != "0")
-                        {
+                    {
                         BCCEmailID = BCCEMAIL;
-                        }
+                    }
                     else
-                        {
+                    {
                         BCCEmailID = "abc@gmail.com";
-                        }
+                    }
 
                     //------------Code for sending email,It is optional---------------
                     // int status = sendEmail(message, useremail, subject);
@@ -3567,17 +3571,17 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
                     status = objSendEmail.SendEmail(objS.EmailID, message, subject); //Calling Method
-                    }
                 }
+            }
 
             if (status == 1)
-                {
+            {
                 objCommon.DisplayMessage(this.Page, "Email Sent Successfully.", this.Page);
-                }
+            }
             else
-                {
+            {
                 objCommon.DisplayMessage(this.Page, "Failed to send mail.", this.Page);
-                }
+            }
 
             string TemplateID = string.Empty;
             string TEMPLATE = string.Empty;
@@ -3588,10 +3592,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             // DataSet ds = new DataSet();
             DataSet ds1 = objUC.GetWhatsappTemplate(0, templatename);
             if (ds1.Tables[0].Rows.Count > 0)
-                {
+            {
                 TEMPLATE = ds1.Tables[0].Rows[0]["TEMPLATE"].ToString();
 
-                }
+            }
 
             string Whatsappmessage = TEMPLATE;
 
@@ -3608,34 +3612,34 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             //MailSendStatus += hdnidno1.Value + ',';
             Whatsaapjecrc(Whatsappmessage, MOBILENO);
 
-            }
+        }
         catch (Exception ex)
-            {
+        {
 
             throw;
-            }
         }
+    }
 
 
     protected void CreateUser(string student_Name, string RRNO, string Email)
-        {
+    {
         try
-            {
+        {
             string UA_PWD = string.Empty;
             string UA_ACC = string.Empty;
             string password = string.Empty;
             int IDNO = 0;
             if (Convert.ToInt32(Session["OrgId"].ToString()) == 3)
-                {
+            {
                 string PasswordName = CommonComponent.GenerateRandomPassword.GenearteFourLengthPassword();
                 Session["UAR_PASS"] = PasswordName;
                 UA_PWD = PasswordName;
                 UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(UA_PWD);
                 UA_ACC = "0,500,76";
                 IDNO = Convert.ToInt32(Session["IDNO"]);
-                }
+            }
             else if (Convert.ToInt32(Session["OrgId"].ToString()) == 5)
-                {
+            {
 
                 IDNO = Convert.ToInt32(Session["IDNO"]);
                 string Username = string.Empty;
@@ -3650,29 +3654,29 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 UA_ACC = "0,500,76";
 
                 RRNO = Username.ToString();
-                }
+            }
             else
-                {
+            {
                 IDNO = Convert.ToInt32(Session["IDNO"]);
                 UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(IDNO.ToString());
                 UA_ACC = "0,500,76";
                 RRNO = IDNO.ToString();
-                }
+            }
 
             CustomStatus CS = (CustomStatus)feeController.CreateUser_JECRC(RRNO, UA_PWD, student_Name, Email, UA_ACC, IDNO);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
 
 
     protected void CreateUserRCPITPIPER(string USERNAME, string PASSWORD, string EMAIL, string student_Name)
-        {
+    {
         try
-            {
+        {
             string UA_PWD = string.Empty;
             string UA_ACC = string.Empty;
             string password = string.Empty;
@@ -3683,23 +3687,23 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             UA_ACC = "0,500,76";
             IDNO = Convert.ToInt32(Session["IDNO"]);
             CustomStatus CS = (CustomStatus)feeController.CreateUser(USERNAME, UA_PWD, student_Name, EMAIL, UA_ACC, IDNO);
-            }
+        }
         catch (Exception ex)
-            {
-            throw;
-            }
-        }
-    protected void ddlSchType_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            throw;
         }
+    }
+    protected void ddlSchType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
 
 
     protected void Whatsaapjecrc(string Message, string ToMobileNo)
-        {
+    {
         try
-            {
-            var client = new RestClient("http://cp.sendwpsms.com/api/sendwp");
+        {
+            var client = new RestClient("https://cp.sendwpsms.com/api/sendwp");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Cookie", "ci_session=ig64ncijtbeakcvklsa79bren5dobnn9");
@@ -3713,18 +3717,18 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             request.AddParameter("uuid", "b4bd3cdd-c959-4596-ad92-ce8a1cabd777");
             IRestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
-            }
+        }
         catch (WebException webEx)
-            {
+        {
             Console.WriteLine(((HttpWebResponse)webEx.Response).StatusCode);
             Stream stream = ((HttpWebResponse)webEx.Response).GetResponseStream();
             StreamReader reader = new StreamReader(stream);
             String body = reader.ReadToEnd();
             Console.WriteLine(body);
-            }
         }
+    }
     protected void lnkTempID_Click(object sender, EventArgs e)
-        {
+    {
         LinkButton lnk = sender as LinkButton;
         string url = string.Empty;
         if (Request.Url.ToString().IndexOf("&id=") > 0)
@@ -3738,16 +3742,16 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         txtIDNo.Text = ViewState["stuinfoidno"].ToString();
         ShowStudentbyTempIDNODetails();
         ScriptManager.RegisterStartupScript(this, this.GetType(), "HidePopup", "$('#myModal2').modal('hide')", true);
-        }
+    }
 
     bool ReturnValue()
-        {
+    {
         return false;
-        }
+    }
 
 
     public void savedata()
-        {
+    {
         string regNo = string.Empty;
         string IUEmail = string.Empty;
         StudentController objSC = new StudentController();
@@ -3762,10 +3766,10 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
         if (rdoMale.Checked == false && rdoFemale.Checked == false && rdoFemale.Checked == false)
-            {
+        {
             objCommon.DisplayMessage(this.Page, "Please Select Gender!", this.Page);
             return;
-            }
+        }
 
         //if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
         //{
@@ -3780,82 +3784,82 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
         ////********** End Change by Rahul Moraskar 2022-07-26
 
         if (ddlSpecialisation.SelectedIndex > 0)
-            {
+        {
             objS.Specialization = "1";
             objS.BranchNo = Convert.ToInt32(ddlSpecialisation.SelectedValue);
-            }
+        }
         else
-            {
+        {
             objS.Specialization = "0";
             objS.BranchNo = Convert.ToInt32(ddlBranch.SelectedValue);
-            }
+        }
 
         DataSet dsstandardfees = objSC.GetStandardFeesDetails(Convert.ToInt32(ddlSchool.SelectedValue), Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(objS.BranchNo), "TF", Convert.ToInt32(ddlBatch.SelectedValue), Convert.ToInt32(ddlPaymentType.SelectedValue), Convert.ToInt32(Session["OrgId"]));
         int Count = 520000;
         if (dsstandardfees.Tables[0].Rows.Count > 0)
-            {
+        {
             Count = Convert.ToInt32(dsstandardfees.Tables[0].Rows[0]["COUNT"].ToString());
-            }
+        }
         if (Count == 0)
-            {
+        {
             objCommon.DisplayMessage(this.Page, "Standard Fees is Not Defined Please Define Standard Fees First.", this.Page);
-            }
+        }
         else
-            {
+        {
             DateTime dtmin = new DateTime(1753, 1, 1);
             DateTime dtmax = new DateTime(9999, 12, 31);
             if (!string.IsNullOrEmpty(txtDateOfBirth.Text.Trim()))
-                {
+            {
                 if ((DateTime.Compare(Convert.ToDateTime(txtDateOfBirth.Text.Trim()), dtmin) <= 0) ||
                     (DateTime.Compare(Convert.ToDateTime(txtDateOfBirth.Text.Trim()), dtmax) >= 0))
-                    {
+                {
                     //1/1/1753 12:00:00 AM and 12/31/9999
                     objCommon.DisplayMessage(this.updStudent, "Please Enter Valid Date!!", this.Page);
                     return;
-                    }
                 }
+            }
 
             int lmobile = (txtStudMobile.Text).Length;
 
             if (lmobile < 10 && lmobile != 0)
-                {
+            {
                 objCommon.DisplayUserMessage(updStudent, "Please enter 10 digit mobile Number", this.Page);
                 return;
-                }
+            }
 
 
             int Pmobile = (txtParentmobno.Text).Length;
 
             if (Pmobile < 10 && Pmobile != 0)
-                {
+            {
                 objCommon.DisplayUserMessage(updStudent, "Please enter 10 digit Parent mobile Number", this.Page);
                 return;
-                }
+            }
 
             string exist1 = objCommon.LookUp("ACD_STUDENT", "COUNT(1)", "EMAILID='" + txtStudEmail.Text.Trim().ToString() + "'");
             string exist2 = objCommon.LookUp("ACD_STUDENT", "COUNT(1)", "STUDENTMOBILE='" + txtStudMobile.Text.Trim().ToString() + "'");
 
             if (Convert.ToInt32(exist1) > 0)
-                {
+            {
                 objCommon.DisplayMessage(this.updStudent, "Student record already saved with entered Email id or mobile no.", this.Page);
                 txtStudEmail.Text = string.Empty;
                 txtStudEmail.Focus();
                 return;
-                }
+            }
 
             if (Convert.ToInt32(exist2) > 0)
-                {
+            {
                 objCommon.DisplayMessage(this.updStudent, "Student record already saved with entered Email id or mobile no.", this.Page);
                 txtStudMobile.Text = string.Empty;
                 txtStudMobile.Focus();
                 return;
-                }
+            }
 
             if (ddlBranch.SelectedValue == "0")
-                {
+            {
                 objCommon.DisplayMessage(this.updStudent, "Please select branch!", this.Page);
                 return;
-                }
+            }
 
             if (!txtStudentfullName.Text.Trim().Equals(string.Empty))
                 objS.StudName = txtStudentfullName.Text.Trim();
@@ -3934,65 +3938,65 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             int HostelType = 0;
 
             if (Session["OrgId"].ToString().Equals("5"))
-                {
+            {
                 if (rdoHosteler.SelectedValue == "1")
-                    {
+                {
 
 
                     objS.HostelSts = 1;
                     HostelType = Convert.ToInt32(ddlHostel.SelectedValue.ToString());
-                    }
+                }
 
-                }
+            }
             else
-                {
+            {
                 if (rdoHosteler.SelectedValue == "1")
-                    {
+                {
                     objS.HostelSts = 1;
-                    }
+                }
                 else
-                    {
+                {
                     objS.HostelSts = 0;
-                    }
                 }
+            }
             if (rdbTransport.SelectedValue == "1")
-                {
+            {
                 objS.Transportation = 1;
-                }
+            }
             else
-                {
+            {
                 objS.Transportation = 0;
                 // HostelType = 0;
-                }
+            }
 
 
             if (rdoInstallment.SelectedValue == "1")
-                {
+            {
                 objS.Installment = 1;
-                }
+            }
             else
-                {
+            {
                 objS.Installment = 0;
-                }
+            }
 
             if (rdoscholarship.SelectedValue == "1")
-                {
+            {
                 objS.Scholorship = 1;
                 if (txtschAmt.Text == string.Empty)
-                    {
+                {
                     objS.SchAmtOrPercentage = 0;
-                    }
+                }
                 else
-                    {
+                {
                     objS.SchAmtOrPercentage = Convert.ToDouble(txtschAmt.Text);
-                    }
+                }
                 objS.SchMode = Convert.ToInt32(ddlSchMode.SelectedValue);
                 SchType = Convert.ToInt32(ddlSchType.SelectedValue);
-                }
+            }
             else
-                {
+            {
                 objS.Scholorship = 0;
-                }
+            }
 
             objS.Year = Convert.ToInt32(ddlYear.SelectedValue);
             objS.CountryDomicile = ddlstate.SelectedValue;
@@ -4005,22 +4009,22 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
 
             if (fuPhotoUpload.HasFile)
-                {
+            {
                 objSPhoto.Photo1 = this.ResizePhoto(fuPhotoUpload);
-                }
+            }
             else
-                {
+            {
                 objSPhoto.Photo1 = null;
-                }
+            }
 
             if (fuSignUpload.HasFile)
-                {
+            {
                 objSPhoto.SignPhoto = this.ResizePhotoSign(fuSignUpload);
-                }
+            }
             else
-                {
+            {
                 objSPhoto.SignPhoto = null;
-                }
+            }
 
             objS.PH = ddlPhyHandicap.SelectedValue;
             objS.ReligionNo = Convert.ToInt32(ddlReligion.SelectedValue);
@@ -4051,13 +4055,13 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             //ENTRANCE EXAM DETAILS..
             if (divotherentrance.Visible)
-                {
+            {
                 objS.QUALIFYNO = txtothetentrance.Text.ToString();
-                }
+            }
             else
-                {
+            {
                 objS.QUALIFYNO = ddlExamNo.SelectedValue.Trim();
-                }
+            }
             if (!txtJeeRankNo.Text.Trim().Equals(string.Empty))
                 objS.ALLINDIARANK = Convert.ToInt32(txtJeeRankNo.Text.Trim());
             if (!txtJeeRollNo.Text.Trim().Equals(string.Empty))
@@ -4076,13 +4080,13 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             //ADD THE CODE FOR ONLY M.TECH SPOT ADMISSION
             if (ddlExamNo.SelectedValue == "9")
-                {
+            {
                 objS.GetScholarship = Convert.ToInt32(ddlSpotOption.SelectedValue);
-                }
+            }
             else
-                {
+            {
                 objS.GetScholarship = 0;
-                }
+            }
 
             //ADD THE CONTAIN TO RELATED LOCAL ADDRESS
             if (!txtStudEmail.Text.Trim().Equals(string.Empty))
@@ -4116,15 +4120,15 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             objS.ApplicationID = txtREGNo.Text;
 
             if (txtAadhaarNo.Text != string.Empty)
-                {
+            {
                 int ladhar = (txtAadhaarNo.Text).Length;
 
                 if (ladhar < 12 && ladhar != 0)
-                    {
+                {
                     objCommon.DisplayUserMessage(updStudent, "Please Enter 12 digit Aadhar No.", this.Page);
                     return;
-                    }
                 }
+            }
 
             objS.AddharcardNo = (txtAadhaarNo.Text.Trim() != string.Empty) ? txtAadhaarNo.Text.Trim().ToString() : string.Empty; //Added by Irfan Shaikh on 09/04/2019
             ///---------------------------////
@@ -4135,34 +4139,34 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             pwd = GeneratePassword();
 
             if (pwd != null)
-                {
+            {
                 objUa.UA_Pwd = clsTripleLvlEncyrpt.ThreeLevelEncrypt(pwd);
                 //objUa.UA_Pwd = Common.EncryptPassword(ViewState["Otp"].ToString());
-                }
+            }
             int USERNO = 0;
             int ExistCount = 0;
             if (Convert.ToInt32(Session["OrgId"]) != 1 || Convert.ToInt32(Session["OrgId"]) != 2 || Convert.ToInt32(Session["OrgId"]) != 6)
-                {
+            {
                 USERNO = Convert.ToInt32(Session["USERNO_OA"]);
 
                 ExistCount = Convert.ToInt32(objCommon.LookUp("ACD_USER_REGISTRATION UR INNER JOIN ACD_STUDENT S ON (UR.USERNO=S.USERNO)", "COUNT(S.USERNO)", "S.USERNO=" + USERNO));
 
-                }
+            }
             else
-                {
+            {
                 USERNO = 0;
-                }
+            }
             if (Convert.ToInt32(Session["OrgId"]) != 1 || Convert.ToInt32(Session["OrgId"]) != 2 || Convert.ToInt32(Session["OrgId"]) != 6)
-                {
+            {
                 //if (txtREGNo.Text != string.Empty)
                 //{
                 if (ExistCount > 0)
-                    {
+                {
                     objCommon.DisplayMessage(this.Page, "Admission is Already done for Entered Application ID", this.Page);
                     return;
-                    }
-                //}
                 }
+                //}
+            }
 
             //int Branchno = Convert.ToInt32(ddlBranch.SelectedValue);
             //int Admbatch = Convert.ToInt32(ddlBatch.SelectedValue);
@@ -4170,9 +4174,9 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
 
             string output = objSC.AddNewStudent_JECRC(objS, objStud, IUEmail, objUa, USERNO, HostelType, SchType);
             if (output != "-99")
-                {
+            {
                 if (rdoInstallment.SelectedValue == "1")
-                    {
+                {
                     int InstallmentNO = Convert.ToInt32(ddlinstallmenttype.SelectedValue);
                     objS.SessionNo = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER", "MAX(SESSIONNO)", "SESSIONNO>0"));
                     objS.IdNo = Convert.ToInt32(output);
@@ -4184,27 +4188,27 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                     string Date_string = string.Empty;
 
                     if (count == 2)
-                        {
+                    {
                         Date_string = txtduedate1.Text.Trim() + ',' + txtduedate2.Text.Trim();
-                        }
+                    }
                     if (count == 3)
-                        {
+                    {
                         Date_string = txtduedate1.Text.Trim() + ',' + txtduedate2.Text.Trim() + ',' + txtduedate3.Text.Trim();
-                        }
+                    }
                     if (count == 4)
-                        {
+                    {
                         Date_string = txtduedate1.Text.Trim() + ',' + txtduedate2.Text.Trim() + ',' + txtduedate3.Text.Trim() + ',' + txtduedate4.Text.Trim();
-                        }
+                    }
                     if (count == 5)
-                        {
+                    {
 
                         Date_string = txtduedate1.Text.Trim() + ',' + txtduedate2.Text.Trim() + ',' + txtduedate3.Text.Trim() + ',' + txtduedate4.Text.Trim() + ',' + txtduedate5.Text.Trim();
-                        }
+                    }
 
 
 
                     string ret = objSC.AddInstallmentDetails_JECRC(objS, "TF", InstallmentNO, Date_string);
-                    }
+                }
                 GEC_Student objGecStud = new GEC_Student();
                 txtREGNo.Text = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + output);
                 Session["Regno"] = txtREGNo.Text.ToString();
@@ -4236,78 +4240,78 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
                 int sendmail = 0;
                 DataSet ds = getModuleConfig();
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
+                {
                     email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
                     Link = ds.Tables[0].Rows[0]["LINK"].ToString();
                     sendmail = Convert.ToInt32(ds.Tables[0].Rows[0]["NEW_STUD_EMAIL_SEND"].ToString());
-                    }
+                }
 
                 if (sendmail == 1)
-                    {
+                {
                     string message = "Thanks for showing interest in " + collegeCode + ". Your Account has been created successfully! Login with Username : " + srnno + " and Password : " + pwd + " Follow this link for further process " + Link + "";
                     string subject = "MIS Login Credentials";
 
                     //------------Code for sending email,It is optional---------------                       
 
                     if (email_type == "1" && email_type != "")
-                        {
+                    {
                         int reg = TransferToEmail(objS.EmailID, message, subject);
-                        }
-                    else if (email_type == "2" && email_type != "")
-                        {
-                        Task<int> task = Execute(message, objS.EmailID, subject);
-                        }
-                    if (email_type == "3" && email_type != "")
-                        {
-                        OutLook_Email(message, objS.EmailID, subject);
-                        }
                     }
+                    else if (email_type == "2" && email_type != "")
+                    {
+                        Task<int> task = Execute(message, objS.EmailID, subject);
+                    }
+                    if (email_type == "3" && email_type != "")
+                    {
+                        OutLook_Email(message, objS.EmailID, subject);
+                    }
+                }
 
                 string USERCREATIONCONFIG = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(NEW_STUD_USER_CREATION,0) NEW_STUD_USER_CREATION", "OrganizationId='" + Session["OrgId"].ToString() + "'");
 
                 string PARENTUSERCREATIONCONFIG = objCommon.LookUp("ACD_MODULE_CONFIG", "ISNULL(CREATE_PARENT_USER_NEWSTUD,0) NEW_STUD_USER_CREATION", "OrganizationId='" + Session["OrgId"].ToString() + "'");
 
                 if (Convert.ToInt32(Session["OrgId"]) == 1 || Convert.ToInt32(Session["OrgId"]) == 6)
-                    {
+                {
                     CreateUserRCPITPIPER(srnno, pwd, objS.EmailID, objS.StudName);
-                    }
+                }
                 else
-                    {
+                {
                     string StudName = txtStudentfullName.Text.Trim();
                     string REGNO = Session["Regno"].ToString();
 
                     string EMAIL = txtStudEmail.Text.Trim();
                     if (USERCREATIONCONFIG == "1")
-                        {
+                    {
                         CreateUser(StudName, REGNO, EMAIL);
-                        }
-                    if (PARENTUSERCREATIONCONFIG == "1")
-                        {
-                        CreateUserPARENT(txtParentmobno.Text,"", txtStudEmail.Text, objS.StudName);
-                        }
                     }
+                    if (PARENTUSERCREATIONCONFIG == "1")
+                    {
+                        CreateUserPARENT(txtParentmobno.Text, "", txtStudEmail.Text, objS.StudName);
+                    }
+                }
 
                 DisableControlsRecursive(Page);
                 string App_id = objCommon.LookUp("ACD_STUDENT", "APPLICATIONID", "IDNO=" + output);
                 ViewState["stuinfoidno"] = App_id;
 
                 if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
-                    {
+                {
                     this.ShowReport("Admission_Slip_Report", "rptStudAdmSlip_New.rpt", output);
-                    }
+                }
 
                 if (Session["OrgId"].ToString().Equals("1") || Session["OrgId"].ToString().Equals("6"))
-                    {
+                {
                     ClearAllFields();
-                    }
-                //Response.Redirect(Request.Url.ToString());
                 }
+                //Response.Redirect(Request.Url.ToString());
             }
         }
+    }
     protected void CreateUserPARENT(string USERNAME, string PASSWORD, string EMAIL, string student_Name)
-        {
+    {
         try
-            {
+        {
             string UA_PWD = string.Empty;
             string UA_ACC = string.Empty;
             string password = string.Empty;
@@ -4325,18 +4329,18 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             UA_ACC = "0,500,76";
             IDNO = Convert.ToInt32(Session["IDNO"]);
             CreateUser_PARENT(USERNAME, UA_PWD, student_Name, EMAIL, UA_ACC, IDNO, PARENT_USERNAME, PARENT_PASS);
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 
     public int CreateUser_PARENT(string UA_NAME, string UA_PWD, string UA_FULLNAME, string UA_EMAIL, string UA_ACC, int IDNO, string PARENT_USERNAME, string PARENT_PASS)
-        {
+    {
         int retStatus = 0;
         try
-            {
+        {
             SQLHelper objSQLHelper = new SQLHelper(_connectionString);
             SqlParameter[] objParams = null;
             objParams = new SqlParameter[9];
@@ -4355,19 +4359,19 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             if (Convert.ToInt32(ret) == 1)
                 retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
             else if (Convert.ToInt32(ret) == 1234)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.RecordExist);
-                }
+            }
             else
                 retStatus = Convert.ToInt32(CustomStatus.Error);
-            }
+        }
         catch (Exception ex)
-            {
+        {
             retStatus = Convert.ToInt32(CustomStatus.Error);
             throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.TPController.AddJobLoc-> " + ex.ToString());
-            }
-        return retStatus;
         }
-
-
+        return retStatus;
     }
+
+
+}

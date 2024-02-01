@@ -663,7 +663,7 @@
                                                     <asp:ListItem Value="31">Merit Number</asp:ListItem>
                                                     <asp:ListItem Value="32">Father Mobile Number</asp:ListItem>
                                                     <asp:ListItem Value="33">Mother Mobile Number</asp:ListItem>
-                                                     <asp:ListItem Value="34">ABCC ID</asp:ListItem>
+                                                     <asp:ListItem Value="34">ABC ID</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>

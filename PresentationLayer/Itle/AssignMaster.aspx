@@ -27,10 +27,10 @@
     <script src="../plugins/ckeditor/ckeditor.js"></script>
     <script src="../plugins/ckeditor/ckeditor_basic.js"></script>
 
-    
- <link href="../plugins/multiselect/bootstrap-multiselect.css" rel="stylesheet" />
- <link href='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>' rel="stylesheet" />
-  <script src='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.js") %>'></script>
+
+    <link href="../plugins/multiselect/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.css") %>' rel="stylesheet" />
+    <script src='<%=Page.ResolveUrl("~/plugins/multi-select/bootstrap-multiselect.js") %>'></script>
 
     <script type="text/javascript">
         window.onload = function () {
@@ -130,7 +130,7 @@
                                         </div>
                                     </div>
 
-                                     
+
                                 </div>
                             </div>
                             <div class="col-12 mt-3">
@@ -153,8 +153,8 @@
                                                 Mask="99/99/9999" MaskType="Date" MessageValidatorTip="true" OnInvalidCssClass="errordate"
                                                 TargetControlID="txtsubfromdate" />
                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator3" runat="server" ControlExtender="MaskedEditExtender3"
-                                                ControlToValidate="txtsubfromdate" Display="None" 
-                                                EmptyValueMessage="Submission From Date Required" 
+                                                ControlToValidate="txtsubfromdate" Display="None"
+                                                EmptyValueMessage="Submission From Date Required"
                                                 InvalidValueMessage="Please Enter Valid Date Format [dd/MM/yyyy]"
                                                 IsValidEmpty="False" ValidationGroup="submit" />
                                         </div>
@@ -288,10 +288,10 @@
                                             <sup>* </sup>
                                             <label>Assignment Marks</label>
                                         </div>
-                                        <asp:TextBox ID="txtAMarks" onkeyup="validateNumeric(this);" runat="server" 
+                                        <asp:TextBox ID="txtAMarks" onkeyup="validateNumeric(this);" runat="server"
                                             CssClass="form-control" TabIndex="9" ToolTip="Enter Assignment Marks"></asp:TextBox>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtAMarks"
-                                           Display="None"  ErrorMessage="Enter Assignment Marks" ValidationGroup="submit"></asp:RequiredFieldValidator>
+                                            Display="None" ErrorMessage="Enter Assignment Marks" ValidationGroup="submit"></asp:RequiredFieldValidator>
                                     </div>
 
 
@@ -307,14 +307,14 @@
                                             <asp:ListItem Value="2">Upload Based</asp:ListItem>
                                         </asp:DropDownList>
 
-                                          
+
 
                                     </div>
-                                      
+
                                 </div>
                             </div>
 
-                           
+
 
                             <div class="col-12">
                                 <div class="row">
@@ -322,27 +322,28 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12" id="divmaxnooffile" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <label>
-                                               file Types</label>
-                                           
+                                                file Types</label>
+
                                         </div>
-                                           <asp:ListBox ID="ddlextension" runat="server" AppendDataBoundItems="true"  TabIndex="11"  CssClass="form-control multi-select-demo" SelectionMode="Multiple"></asp:ListBox>  
-                                   
+                                        <asp:ListBox ID="ddlextension" runat="server" AppendDataBoundItems="true" TabIndex="11" CssClass="form-control multi-select-demo" SelectionMode="Multiple"></asp:ListBox>
+
 
                                     </div>
-                                      <div class="form-group col-lg-3 col-md-6 col-12" id="divfiletype" runat="server" visible="false">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="divfiletype" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <label>
-                                               Max No Of File </label>
-                                           <asp:TextBox ID="txtmaxnooffile" runat="server"  CssClass="form-control" ToolTip="Enter Max No Of File." MaxLength="1" TabIndex="12" ></asp:TextBox>
-                                                  <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" FilterType="Custom, Numbers" TargetControlID="txtmaxnooffile" ValidChars="123456789"></ajaxToolKit:FilteredTextBoxExtender>
+                                                Max No Of File
+                                            </label>
+                                            <asp:TextBox ID="txtmaxnooffile" runat="server" CssClass="form-control" ToolTip="Enter Max No Of File." MaxLength="1" TabIndex="12"></asp:TextBox>
+                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender7" runat="server" FilterType="Custom, Numbers" TargetControlID="txtmaxnooffile" ValidChars="123456789"></ajaxToolKit:FilteredTextBoxExtender>
 
                                         </div>
                                     </div>
-                                     
-                                  
-                                     <div class="form-group col-lg-3 col-md-6 col-12">
+
+
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                             <sup>* </sup>
+                                            <sup>* </sup>
                                             <label>Remind  Date</label>
                                         </div>
                                         <div class="input-group date">
@@ -357,18 +358,18 @@
                                                 Mask="99/99/9999" MaskType="Date" MessageValidatorTip="true" OnInvalidCssClass="errordate"
                                                 TargetControlID="txtRdate" />
                                             <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator6" runat="server" ControlExtender="meeResultDate1"
-                                                ControlToValidate="txtRdate" Display="None"  EmptyValueMessage="Remind  Date Is  Required"
+                                                ControlToValidate="txtRdate" Display="None" EmptyValueMessage="Remind  Date Is  Required"
                                                 InvalidValueMessage="Please Enter Valid Date Format [dd/MM/yyyy]" IsValidEmpty="false"
                                                 ValidationGroup="submit" />
-                                            
+
                                         </div>
                                         <asp:CheckBox ID="CheckBox1" runat="server" Text="Send SMS to Students" Font-Bold="true"
                                             Visible="false" TabIndex="7" ToolTip="Check If Send SMS to Students" />
-                                       
+
                                     </div>
-                                         <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                             <sup>* </sup>
+                                            <sup>* </sup>
                                             <label>Remind  Time <small style="color: red;">(24 hour format)</small></label>
                                         </div>
                                         <asp:TextBox ID="txtRtime" runat="server" CssClass="form-control" TabIndex="14"
@@ -383,21 +384,21 @@
                                             ControlExtender="MaskedEditExtender5"
                                             ControlToValidate="txtRtime" IsValidEmpty="false" EmptyValueMessage="Remind  Time Is  Required"
                                             InvalidValueMessage="Time is invalid" Display="None" TooltipMessage="Input a time in hh:mm:ss format"
-                                             InvalidValueBlurredMessage="24 Hour format" ValidationGroup="submit" />
-                                      
+                                            InvalidValueBlurredMessage="24 Hour format" ValidationGroup="submit" />
+
                                     </div>
-                                      <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12">
 
                                         <div class="label-dynamic">
                                             <label>Assignment Files <small style="color: red;">(Max.Size<asp:Label ID="lblFileSize" runat="server" Font-Bold="true"></asp:Label>)</small></label>
                                         </div>
-                                        <asp:FileUpload ID="fileUploader" runat="server"  ToolTip="Click here to Select File" />
+                                        <asp:FileUpload ID="fileUploader" runat="server" ToolTip="Click here to Select File" />
 
                                         <asp:Button ID="btnAttachFile" runat="server" Text="Attach File" ToolTip="Click here to Upload Files"
                                             OnClick="btnAttachFile_Click" CssClass="btn btn-primary mt-1" TabIndex="15" />
 
                                     </div>
-                            </div>
+                                </div>
                             </div>
 
 
@@ -415,16 +416,14 @@
                                                                 <tr>
                                                                     <th>Action
                                                                     </th>
-                                                                    <th id="divattach" runat="server">
-                                                                    Attachments  
-                                                                        </th>
-                                                                    <th id="divattachblob" runat="server" visible="false">
-                                                                        Attachments
+                                                                    <th id="divattach" runat="server">Attachments  
+                                                                    </th>
+                                                                    <th id="divattachblob" runat="server" visible="false">Attachments
                                                                     </th>
                                                                     <th id="divDownload" runat="server" visible="false">Download
-                                                        </th>
-                                                        <th id="divBlobDownload" runat="server" visible="false">Download
-                                                        </th>                                                                           
+                                                                    </th>
+                                                                    <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                    </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -442,45 +441,45 @@
                                                                     ConfirmText="Are you Sure, Want to Remove.?" TargetControlID="lnkRemoveAttach">
                                                                 </ajaxToolKit:ConfirmButtonExtender>
                                                             </td>
-                                                            <td id="attachfile" runat="server" >
-                                                                        <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
-                            --%>            
-                                                              
+                                                            <td id="attachfile" runat="server">
+                                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
+                                                                --%>
+
                                                                 <img alt="Attachment" src="../IMAGES/attachment.png" />
                                                                 <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
                                                                     <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
-                                                                </td>
-                                                              <td id="attachblob" runat="server" visible="false" >
-                                                                        <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
-                            --%>            
-                                                              
+                                                            </td>
+                                                            <td id="attachblob" runat="server" visible="false">
+                                                                <%--<asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("FILE_PATH"))%>'><%# Eval("FILE_NAME")%></asp:HyperLink>
+                                                                --%>
+
                                                                 <img alt="Attachment" src="../IMAGES/attachment.png" />
-                                                               <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
-                                                              --%>      <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
-                                                                </td>
+                                                                <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                                --%>      <%# Eval("FILE_PATH")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
+                                                            </td>
 
 
-                                                             <td id="tdDownloadLink" runat="server" visible="false">
-                                                  
-                                                              
+                                                            <td id="tdDownloadLink" runat="server" visible="false">
+
+
                                                                 <img alt="Attachment" src="../IMAGES/attachment.png" />
-                                                               <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
-                                                              --%>      <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
+                                                                <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                                --%>      <%# Eval("FILE_NAME")%></a>&nbsp;&nbsp;(<%# (Convert.ToInt32(Eval("SIZE")) / 1000).ToString() %>&nbsp;KB)
                                                             
-                                                                    </td>
+                                                            </td>
 
                                                             <td style="text-align: center" id="tdBlob" runat="server" visible="false">
-                                                    <asp:UpdatePanel ID="updPreview" runat="server">
-                                                        <ContentTemplate>
-                                                            <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
-                                                                data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
+                                                                <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                    <ContentTemplate>
+                                                                        <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
+                                                                            data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
 
-                                                        </ContentTemplate>
-                                                        <Triggers>
-                                                            <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
-                                                        </Triggers>
-                                                    </asp:UpdatePanel>
-                                                               
+                                                                    </ContentTemplate>
+                                                                    <Triggers>
+                                                                        <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                    </Triggers>
+                                                                </asp:UpdatePanel>
+
                                                             </td>
                                                         </tr>
                                                     </ItemTemplate>
@@ -491,23 +490,23 @@
                                 </div>
                             </div>
 
-                            
+
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <div class="label-dynamic">
                                     <label>Select Section</label>
                                 </div>
-                                <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true"  TabIndex="16"
+                                <asp:DropDownList ID="ddlSection" runat="server" AppendDataBoundItems="true" TabIndex="16"
                                     AutoPostBack="true" CssClass="form-control" data-select2-enable="true" ToolTip="Select Section" OnSelectedIndexChanged="ddlSection_SelectedIndexChanged">
                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
                                 </asp:DropDownList>
                             </div>
-                             <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
-                                            <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobCon" runat="server" />
-                                            <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
-                                            <asp:HiddenField ID="hdnBlobContainer" runat="server" />
-                                        </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
+                                <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
+                                <asp:HiddenField ID="hdnBlobCon" runat="server" />
+                                <asp:Label ID="lblBlobContainer" runat="server" Text=""></asp:Label>
+                                <asp:HiddenField ID="hdnBlobContainer" runat="server" />
+                            </div>
 
                             <div class="col-12" id="divServiceDateDetails">
                                 <div class="sub-heading">
@@ -538,7 +537,7 @@
                                         <ItemTemplate>
                                             <tr>
                                                 <td>
-                                                    <asp:CheckBox ID="chkStud" runat="server" ToolTip='<%# Eval("IDNO") %>'  />
+                                                    <asp:CheckBox ID="chkStud" runat="server" ToolTip='<%# Eval("IDNO") %>' />
                                                 </td>
                                                 <td>
                                                     <%# Eval("REGNO")%>                                                          
@@ -567,10 +566,10 @@
                                 <asp:UpdatePanel ID="UpdAssignment" runat="server">
                                     <ContentTemplate>
                                         <div class="col-12 btn-footer mt-4">
-                                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary"  TabIndex="18"
+                                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary" TabIndex="18"
                                                 OnClick="btnSubmit_Click" ValidationGroup="submit" ToolTip="Click here to Submit" />
                                             <asp:Button ID="btnViewAssignment" runat="server" Text="Assignment Report" CssClass="btn btn-info" TabIndex="19"
-                                                OnClick="btnViewAssignment_Click" ToolTip="Click here to Show Assignment Report"  />
+                                                OnClick="btnViewAssignment_Click" ToolTip="Click here to Show Assignment Report" />
                                             <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" TabIndex="20"
                                                 OnClick="btnCancel_Click" ToolTip="Click here to Reset" />
 
@@ -732,7 +731,7 @@
         }
 
     </script>
-   
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('.multi-select-demo').multiselect({
@@ -750,27 +749,35 @@
 
 
     </script>
-     <script>
-         function checkout() {
-             var checkBoxes = document.getElementsByClassName('ddlextension');
-             var nbChecked = 0;
-             for (var i = 0; i < checkBoxes.length; i++) {
-                 if (checkBoxes[i].checked) {
-                     nbChecked++;
-                 };
-             };
-             if (nbChecked > 3) {
-                 alert('Please Select Maximun 3 Group.');
-                 return false;
-             } else if (nbChecked == 0) {
-                 alert('Please, select at least one Group!');
-                 return false;
-             } else {
-                 //Do what you need for form submission, if needed...
-             }
-         }
+    <script>
+        function checkout() {
+            var checkBoxes = document.getElementsByClassName('ddlextension');
+            var nbChecked = 0;
+            for (var i = 0; i < checkBoxes.length; i++) {
+                if (checkBoxes[i].checked) {
+                    nbChecked++;
+                };
+            };
+            if (nbChecked > 3) {
+                alert('Please Select Maximun 3 Group.');
+                return false;
+            } else if (nbChecked == 0) {
+                alert('Please, select at least one Group!');
+                return false;
+            } else {
+                //Do what you need for form submission, if needed...
+            }
+        }
 
     </script>
+    <script type="text/javascript">
+        function CloseModal() {
+            $("#preview").modal("hide");
+        }
+        function ShowModal() {
+            $("#preview").modal("show");
+        }
+</script>
 
     <div class="modal fade" id="preview" role="dialog" style="display: none; margin-left: -100px;">
         <div class="modal-dialog text-center">
@@ -793,7 +800,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <%-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
+                            <asp:HiddenField ID="hdnfilename" runat="server" />
+                            <asp:Button ID="BTNCLOSE" runat="server" Text="CLOSE" OnClick="BTNCLOSE_Click" OnClientClick="CloseModal();return true;" CssClass="btn btn-outline-danger" />
                         </div>
                     </div>
                     </div>
