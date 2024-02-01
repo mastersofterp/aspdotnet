@@ -216,7 +216,7 @@ public partial class HOSTEL_GATEPASS_HostelGatePassRequest : System.Web.UI.Page
     {
         try
         {
-            Clear();
+            //Clear();  //Commented By Himanshu Tamrakar on date 01022024
             if (Session["usertype"].ToString().Equals("1"))
             {
                 pnlStudentHGPRequestDetails.Visible = false;
