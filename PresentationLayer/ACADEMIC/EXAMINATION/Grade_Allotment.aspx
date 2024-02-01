@@ -163,6 +163,8 @@
                                                     <asp:ListItem Value="2">Old Grade</asp:ListItem>
                                                     <asp:ListItem Value="3">Fixed New Grade</asp:ListItem>
                                                     <asp:ListItem Value="4">Fixed Old Grade</asp:ListItem>
+                                                    <asp:ListItem Value="5">AHS TILL 2021</asp:ListItem>
+                                                    <asp:ListItem Value="6">AHS 2022 ONWARDS</asp:ListItem>
                                                 </asp:DropDownList>
 
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlgradetype"

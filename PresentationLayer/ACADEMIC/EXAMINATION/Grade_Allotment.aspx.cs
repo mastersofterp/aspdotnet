@@ -460,7 +460,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 divpower.Visible = false;
                 btnmodifypowerfactor.Visible = false;
                 btnRangeLock.Visible = true;
-
             }
             else
             {
@@ -472,8 +471,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 btnRangeLock.Visible = true;
                 btnRangrlock.Visible = false;
                 btnRangrUnlock.Visible = false;
-
-
             }
         }
         else
@@ -565,7 +562,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             if (gradecount > 0)
             {
                 btnRangeLock.Enabled = false;
-
             }
             else
             {
@@ -587,7 +583,7 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 SP_Parameters = "@P_SESSIONID,@P_CCODE,@P_SCHEMENO,@P_SEMESTERNO,@P_OP";
                 Call_Values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + ddlCourse.SelectedValue + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "," + 0;
                 retStatus = objCommon.DynamicSPCall_IUD(SP_Name, SP_Parameters, Call_Values, true);
-            }
+             }
             else if (Convert.ToInt32(Session["OrgId"]) == 5)
             {
                 //PKG_ACAD_GRADE_CUTTOFF_CAL_RELATIVE
@@ -1261,10 +1257,6 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
             btnReRange.Visible = true;
             btnRangrlock.Visible = true;
             btnRangrUnlock.Visible = false;
-
-
-
-
 
         }
         else
