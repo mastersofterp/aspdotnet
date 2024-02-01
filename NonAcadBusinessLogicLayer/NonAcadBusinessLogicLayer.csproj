@@ -108,6 +108,7 @@
     <Compile Include="BusinessEntities\BioMetrics\BioMetrics.cs" />
     <Compile Include="BusinessEntities\Complaints\Complaint.cs" />
     <Compile Include="BusinessEntities\DCMNTSCN\Documentation.cs" />
+    <Compile Include="BusinessEntities\DCMNTSCN\DocumentType.cs" />
     <Compile Include="BusinessEntities\DISPATCH\CarrierMaster.cs" />
     <Compile Include="BusinessEntities\DISPATCH\DispatchPostType.cs" />
     <Compile Include="BusinessEntities\DISPATCH\IOTRAN.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="BusinessLogic\Complaints\ComplaintController.cs" />
     <Compile Include="BusinessLogic\Complaints\MailSender.cs" />
     <Compile Include="BusinessLogic\DCMNTSCN\DocumentController.cs" />
+    <Compile Include="BusinessLogic\DCMNTSCN\DocumentTypeController.cs" />
     <Compile Include="BusinessLogic\DISPATCH\CarrierController.cs" />
     <Compile Include="BusinessLogic\DISPATCH\DispatchPostTypeController.cs" />
     <Compile Include="BusinessLogic\DISPATCH\IOTranController.cs" />

@@ -7678,10 +7678,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //Updated by Sakshi Makwana Date :01112023
         public int CalculateAttendanceSubmit(Attendance objAttendanceEntity)
-            {
+        {
             int retstatus = 0;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                 SqlParameter[] objparams = null;
                 objparams = new SqlParameter[3];
@@ -7691,32 +7691,25 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objparams[2].Direction = ParameterDirection.Output;
                 object obj = objSQLHelper.ExecuteNonQuerySP("ACD_INS_ATTENDANCE_CALCULATE", objparams, true);
                 if (Convert.ToInt32(obj) == 12)
-                    {
-                    retstatus = 12;
-                    }
-                else if (Convert.ToInt32(obj) == 1)
-                    {
-                    retstatus = 1;
-                    }
-                else
-                    {
-                    retstatus = 0;
-                    }
-
-                }
-            catch (Exception ex)
                 {
-                retstatus = Convert.ToInt32(CustomStatus.Error);
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.CalculateAttendanceSubmit->" + ex.ToString());
+                    retstatus = 12;
                 }
-            return retstatus;
+                else if (Convert.ToInt32(obj) == 1)
+                {
+                    retstatus = 1;
+                }
+                else
+                {
+                    retstatus = 0;
+                }
+
             }
             catch (Exception ex)
             {
-
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AcdAttendanceController.Get_FacultyDiary_Data->" + ex.ToString());
+                retstatus = Convert.ToInt32(CustomStatus.Error);
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.AttendanceCalculation.CalculateAttendanceSubmit->" + ex.ToString());
             }
-            return ds;
+            return retstatus;
         }
 
 

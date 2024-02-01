@@ -244,6 +244,35 @@
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" SetFocusOnError="True"
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
+                                    <div class="form-group col-md-3">
+                                        <%--<sup>* </sup>--%>
+                                        <label>Exam Date </label>
+                                        <asp:DropDownList ID="ddlExamDate" runat="server" AppendDataBoundItems="true" 
+                                            CssClass="form-control" AutoPostBack="true" data-select2-enable="true" OnSelectedIndexChanged="ddlExamDate_SelectedIndexChanged"
+                                            TabIndex="1">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
+                                            ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />
+                                        <asp:RequiredFieldValidator ID="RfdV1" runat="server" ControlToValidate="ddlExamDate"
+                                            ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />--%>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Semester </label>
+                                        <asp:DropDownList ID="ddlSem" runat="server" AppendDataBoundItems="true"
+                                            CssClass="form-control" AutoPostBack="true" data-select2-enable="true"
+                                            TabIndex="1" OnSelectedIndexChanged="ddlSem_SelectedIndexChanged">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="ddlSem"
+                                            ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ControlToValidate="ddlSem"
+                                            ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
+                                            SetFocusOnError="true" InitialValue="0" />--%>
+                                    </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>*</sup>
@@ -300,7 +329,7 @@
                                             ValidationGroup="report"></asp:RequiredFieldValidator>
                                     </div>
 
-                                    <div class="form-group col-md-3 d-none">
+                                   <%-- <div class="form-group col-md-3 d-none">
                                         <sup>* </sup>
                                         <label>Exam Date </label>
                                         <asp:DropDownList ID="ddlExamDate" runat="server" AppendDataBoundItems="true"
@@ -308,13 +337,13 @@
                                             TabIndex="3">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <%--<asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
+                                        <asp:RequiredFieldValidator ID="rfvDate" runat="server" ControlToValidate="ddlExamDate"
                                                     ValidationGroup="report" Display="None" ErrorMessage="Please Select Exam Date"
                                                     SetFocusOnError="true" InitialValue="0" />
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="ddlExamDate"
                                                     ValidationGroup="Show" Display="None" ErrorMessage="Please Select Exam Date"
-                                                    SetFocusOnError="true" InitialValue="0" />--%>
-                                    </div>
+                                                    SetFocusOnError="true" InitialValue="0" />
+                                    </div>--%>
 
                                     <div class="form-group col-md-3 d-none">
                                         <sup>* </sup>
@@ -414,7 +443,6 @@
                                         </HeaderTemplate>
                                         <ItemTemplate>
                                             <tr>
-
                                                 <asp:HiddenField ID="hdf_IDNO" runat="server" Value='<%#Eval("IDNO")%>' />
                                                 <asp:HiddenField ID="hdf_SEM" runat="server" Value='<%#Eval("SEMESTERNO")%>' />
                                                 <asp:HiddenField ID="hdf_SEC" runat="server" Value='<%#Eval("SECTIONNO")%>' />

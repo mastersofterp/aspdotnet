@@ -279,6 +279,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 btnCancel.Visible = true;
                 divHostelTransport.Visible = false;
             }
+        }
 
             
         }
@@ -1571,7 +1572,7 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     string RequestUrl = ds1.Tables[0].Rows[0]["PGPAGE_URL"].ToString();
                     Session["AccessCode"] = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();
                     Response.Redirect(RequestUrl);
-                    //Response.Redirect("http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
+                    //Response.Redirect("https://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PayUOnlinePaymentRequest.aspx");
 
                 }
             }

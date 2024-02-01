@@ -609,12 +609,18 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
 
 
             }
+
+            objCommon.FillDropDownList(ddlExamDate, "ACD_EXAM_DATE AED INNER JOIN ACD_SESSION_MASTER ASM ON ASM.SESSIONNO=AED.SESSIONNO INNER JOIN ACD_EXAM_NAME EN ON AED.EXAM_TT_TYPE=EN.EXAMNO INNER JOIN ACD_SUBEXAM_NAME SE ON (SE.EXAMNO = EN.EXAMNO) INNER JOIN ACD_EXAM_TT_SLOT TT ON (TT.SLOTNO = AED.SLOTNO)", "DISTINCT CONVERT(NVARCHAR(30),AED.EXAMDATE,103)", "CONVERT(NVARCHAR(30),AED.EXAMDATE,103) ED", "AED.SESSIONNO=" + ddlsessionforabsent.SelectedValue + " AND AED.COLLEGE_ID =" + ddlcollege.SelectedValue, "");
         }
         else
         {
-            ddlSubexamnameabsentstudent.SelectedIndex = 0;
+            ddlsessionforabsent.SelectedIndex = 0;
+            ddlExamDate.SelectedIndex = 0;
+            ddlSem.SelectedIndex = 0;
             ddlexamnameabsentstudent.SelectedIndex = 0;
+            ddlSubexamnameabsentstudent.SelectedIndex = 0;
             ddlcourseforabset.SelectedIndex = 0;
+            ddlexam_type.SelectedIndex = 0;
             ddlsessionforabsent.Focus();
         }
 
@@ -631,6 +637,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
     {
         if (ddlExamDate.SelectedIndex > 0)
         {
+            objCommon.FillDropDownList(ddlSem, "ACD_EXAM_DATE AED INNER JOIN ACD_SESSION_MASTER ASM ON ASM.SESSIONNO=AED.SESSIONNO INNER JOIN ACD_EXAM_NAME EN ON AED.EXAM_TT_TYPE=EN.EXAMNO INNER JOIN ACD_SUBEXAM_NAME SE ON (SE.EXAMNO = EN.EXAMNO) INNER JOIN ACD_EXAM_TT_SLOT TT ON (TT.SLOTNO = AED.SLOTNO) INNER JOIN ACD_SEMESTER SEM ON (AED.SEMESTERNO = SEM.SEMESTERNO)", "DISTINCT SEM.SEMESTERNO", "SEM.SEMESTERNAME", "AED.SESSIONNO=" + ddlsessionforabsent.SelectedValue + " AND AED.COLLEGE_ID =" + ddlcollege.SelectedValue + " AND CONVERT(VARCHAR,AED.EXAMDATE,103)='" + Convert.ToString(ddlExamDate.SelectedItem.Text) + "'", "");
+            //objCommon.FillDropDownList(ddlcourseforabset, "ACD_EXAM_DATE ACD INNER JOIN ACD_COURSE ACO ON ACD.COURSENO=ACO.COURSENO", "DISTINCT CAST(ACO.COURSENO AS VARCHAR)+'-'+CAST(ACO.SUBID AS VARCHAR)", "ACO.CCODE+'-'+COURSE_NAME", "ACD.SESSIONNO=" + ddlsessionforabsent.SelectedValue + "AND ACD.EXAM_TT_TYPE='" + Convert.ToInt32(ddlExamDate.SelectedValue) + "'", "");
             objCommon.FillDropDownList(ddlcourseforabset, "ACD_EXAM_DATE ACD INNER JOIN ACD_COURSE ACO ON ACD.COURSENO=ACO.COURSENO", "DISTINCT CAST(ACO.COURSENO AS VARCHAR)+'-'+CAST(ACO.SUBID AS VARCHAR)", "ACO.CCODE+'-'+COURSE_NAME", "ACD.SESSIONNO=" + ddlsessionforabsent.SelectedValue + "AND CONVERT(VARCHAR,ACD.EXAMDATE,103)='" + Convert.ToString(ddlExamDate.SelectedItem.Text) + "'", "");
         }
         else
@@ -639,9 +647,16 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
             {
                 //objCommon.FillDropDownList(ddlcourseforabset, "ACD_EXAM_DATE ACD INNER JOIN ACD_COURSE ACO ON ACD.COURSENO=ACO.COURSENO", "DISTINCT CAST(ACO.COURSENO AS VARCHAR)+'-'+CAST(ACO.SUBID AS VARCHAR)", "ACO.CCODE+'-'+COURSE_NAME", "ACD.SESSIONNO=" + ddlsessionforabsent.SelectedValue + "AND CONVERT(VARCHAR,ACD.EXAMDATE,103)='" + Convert.ToString(ddlExamDate.SelectedItem.Text) + "'", "");
 
-        div_Result.Visible = false;
+                if (Convert.ToInt32(Session["usertype"].ToString()) == 1)
+                {
+                    objCommon.FillDropDownList(ddlcourseforabset, "ACD_STUDENT_RESULT R WITH (NOLOCK) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON (R.CCODE = C.CCODE AND R.SCHEMENO = C.SCHEMENO AND R.COURSENO=C.COURSENO)", "DISTINCT CAST(C.COURSENO AS VARCHAR)+'-'+CAST(C.SUBID AS VARCHAR)", "C.CCODE+'-'+COURSE_NAME", "R.SESSIONNO=" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + "AND ISNULL(EXAM_REGISTERED,0) = 1 AND ISNULL(CANCEL,0)= 0 AND ISNULL(REGISTERED,0)=1 AND ISNULL(ACCEPTED,0)=1 AND ISNULL(R.DETAIND,0)=0", "");
+                    ddlcourseforabset.Focus();
 
-        ddlExamDate.Focus();
+                }
+                else
+                {
+                    objCommon.FillDropDownList(ddlcourseforabset, "ACD_STUDENT_RESULT R WITH (NOLOCK) INNER JOIN ACD_COURSE C WITH (NOLOCK) ON (R.CCODE = C.CCODE AND R.SCHEMENO = C.SCHEMENO AND R.COURSENO=C.COURSENO)", "DISTINCT CAST(C.COURSENO AS VARCHAR)+'-'+CAST(C.SUBID AS VARCHAR)", "C.CCODE+'-'+COURSE_NAME", "R.SESSIONNO=" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + " AND ISNULL(EXAM_REGISTERED,0) = 1 AND ISNULL(CANCEL,0)= 0 AND ISNULL(REGISTERED,0)=1 AND ISNULL(ACCEPTED,0)=1 AND ISNULL(R.DETAIND,0)=0    AND (UA_NO =" + Convert.ToString(Session["userno"].ToString()) + " OR UA_NO_PRAC =" + Convert.ToString(Session["userno"].ToString()) + " OR UA_NO_TUTR=" + Convert.ToString(Session["userno"].ToString()) + ")", "");
+                    ddlcourseforabset.Focus();
 
 
                 }
@@ -752,6 +767,50 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
                 //ddlcourseforabset.Focus();
                 Clearlistview();
             }
+        }
+        else
+        {
+
+            DataSet ds = objCommon.FillDropDown(" SESSION_ACTIVITY SA INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO) INNER JOIN  ACTIVITY_MASTER AM ON(AM.ACTIVITY_NO=SA.ACTIVITY_NO)", "DISTINCT SA.ACTIVITY_NO", "SESSION_NAME", "SA.STARTED=1 AND SA.SESSION_NO=  (" + Convert.ToInt32(ddlsessionforabsent.SelectedValue) + ") AND ACTIVITY_CODE='ABS' AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + " AND UA_TYPE LIKE '%" + Session["usertype"] + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%'", "ACTIVITY_NO DESC");
+
+            if (ds.Tables[0].Rows.Count > 0 && ds.Tables[0] != null)
+            {
+                ViewState["ACTIVITY_NO"] = Convert.ToInt32(ds.Tables[0].Rows[0]["ACTIVITY_NO"]).ToString();
+                //            SELECT DISTINCT SA.ACTIVITY_NO,SESSION_NAME  FROM SESSION_ACTIVITY SA
+                //INNER JOIN ACD_SESSION_MASTER S ON(S.SESSIONNO=SA.SESSION_NO)  
+                //INNER JOIN  ACTIVITY_MASTER AM ON(AM.ACTIVITY_NO=SA.ACTIVITY_NO)
+                //WHERE SA.STARTED=1 AND SA.SESSION_NO=59 AND ACTIVITY_CODE='ABS' AND PAGE_LINK='1054' AND UA_TYPE LIKE '%2%'
+
+                //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + ViewState["college_id"].ToString(), "SESSIONNO desc");          
+
+
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "This activity may not be Started!!!, Please contact Admin", this.Page);
+                return;
+            }
+
+            if (ddlcourseforabset.SelectedIndex > 0)
+            {
+                objCommon.FillDropDownList(ddlexamnameabsentstudent, "ACD_EXAM_NAME E WITH (NOLOCK) INNER JOIN ACTIVITY_MASTER AM WITH (NOLOCK) ON (E.EXAMNO=AM.EXAMNO) INNER JOIN SESSION_ACTIVITY SA ON (SA.ACTIVITY_NO=AM.ACTIVITY_NO)", "DISTINCT E.EXAMNO", "CAST(E.EXAMNAME AS VARCHAR)", "E.EXAMNO > 0 AND ISNULL(E.EXAMNAME,'')<>'' AND ISNULL(E.ACTIVESTATUS,0)=1 and AM.ACTIVITY_NO IN (" + Convert.ToInt32(ViewState["ACTIVITY_NO"].ToString()) + ") and SA.SESSION_NO= " + Convert.ToInt32(ddlsessionforabsent.SelectedValue), "E.EXAMNO");
+                ddlexamnameabsentstudent.Focus();
+            }
+            else
+            {
+                div_Result.Visible = false;
+                ddlcourseforabset.Focus();
+                ddlexamnameabsentstudent.SelectedIndex = ddlSubexamnameabsentstudent.SelectedIndex = ddlcourseforabset.SelectedIndex = 0;
+            }
+            //if (ddlcourseforabset.SelectedIndex > 0)
+            //{
+            //    objCommon.FillDropDownList(ddlblock, "ACD_ROOM AR INNER JOIN ACD_SEATING_ARRANGEMENT ACS ON ACS.ROOMNO=AR.ROOMNO", "DISTINCT AR.ROOMNO", "(AR.ROOMNAME)", "ACS.COURSENO=" + ddlcourseforabset.SelectedValue.Split('-')[1], "");
+            //}
+
+            //div_Result.Visible = false;
+
+            //ddlcourseforabset.Focus();
+            Clearlistview();
         }
     }
 
@@ -867,7 +926,8 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
         if (ddlexamnameabsentstudent.SelectedIndex > 0)
         {
 
-            DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+            DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND AM.EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
+            //DataSet ds_CheckActivity = objCommon.FillDropDown("ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND SESSIONNO IN (SELECT DISTINCT SESSION_NO FROM SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (SA.ACTIVITY_NO = AM.ACTIVITY_NO) WHERE STARTED = 1 AND COLLEGE_ID IN (SELECT DISTINCT COLLEGE_ID FROM ACD_COURSE_TEACHER WHERE UA_NO=" + Session["userno"].ToString() + " AND ISNULL(CANCEL,0)=0) AND SHOW_STATUS =1 AND ISNULL(ACTIVESTATUS,0)=1 AND UA_TYPE LIKE '%" + Session["usertype"].ToString() + "%' AND PAGE_LINK LIKE '%" + Request.QueryString["pageno"].ToString() + "%' AND ACTIVITY_CODE='ABS' AND EXAMNO=" + Convert.ToInt32(ddlexamnameabsentstudent.SelectedValue) + ")", "SESSIONNO DESC");
             if (ds_CheckActivity.Tables[0].Rows.Count == 0)
             {
                 //btnShow.Enabled = false;
@@ -901,9 +961,11 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
         }
         else
         {
+
+
             ddlexamnameabsentstudent.SelectedIndex = 0;
             ddlSubexamnameabsentstudent.SelectedIndex = 0;
-            // ddlcourseforabset.SelectedIndex = 0;
+            ddlexam_type.SelectedIndex = 0;
             ddlexamnameabsentstudent.Focus();
         }
         Clearlistview();
@@ -952,16 +1014,19 @@ public partial class ACADEMIC_EXAMINATION_AbsentStudentEntry1 : System.Web.UI.Pa
     {
         if (ddlcollege.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_NAME", "SESSIONNO > 0 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
+            objCommon.FillDropDownList(ddlsessionforabsent, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1 AND COLLEGE_ID=" + Convert.ToInt32(ddlcollege.SelectedValue) + "", "SESSIONNO DESC"); //--AND FLOCK = 1
             ddlsessionforabsent.Focus();
         }
         else
         {
             ddlcollege.SelectedIndex = 0;
             ddlsessionforabsent.SelectedIndex = 0;
+            ddlExamDate.SelectedIndex = 0;
+            ddlSem.SelectedIndex = 0;
             ddlexamnameabsentstudent.SelectedIndex = 0;
             ddlSubexamnameabsentstudent.SelectedIndex = 0;
             ddlcourseforabset.SelectedIndex = 0;
+            ddlexam_type.SelectedIndex = 0;
 
         }
         Clearlistview();

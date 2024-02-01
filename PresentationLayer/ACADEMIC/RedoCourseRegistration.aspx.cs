@@ -1246,9 +1246,7 @@ public partial class ACADEMIC_RedoCourseRegistration : System.Web.UI.Page
                         btnPayment.Visible = (Convert.ToInt16(Session["OrgId"]) == 2) ? true : false;
                 }
 
-                #endregion
-
-                btnPrintRegSlip.Visible = (Convert.ToInt16(Session["OrgId"]) != 2) ? true : false;
+               
             }
         }
         catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteMasterPage.master" AutoEventWireup="true" CodeFile="Comprehensive_Stud_Report_MM.aspx.cs" Inherits="ACADEMIC_MentorMentee_Comprehensive_Stud_Report_MM" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <%-- <style>
         #ctl00_ContentPlaceHolder1_lvStudent_Panel2 .dataTables_scrollHeadInner {
@@ -44,6 +45,8 @@
         }
 
     </script>
+
+
 
     <style>
         .row {
@@ -165,7 +168,7 @@
                                                         <sup>* </sup>
                                                         <label>Search String</label>
                                                     </div>
-                                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" onkeypress="return Validate()"></asp:TextBox>
+                                                    <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" AutoComplete="off" onkeypress="return Validate()"></asp:TextBox>
                                                 </div>
                                             </asp:Panel>
 
@@ -218,13 +221,13 @@
                                                                         <th style="display: none">IdNo
                                                                         </th>
                                                                         <th>
-                                                                            Registration No
+                                                                            <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
                                                                         </th>
                                                                         <th>
-                                                                            Branch / Programme
+                                                                            <asp:Label ID="lblDYtxtBranch" runat="server" Font-Bold="true"></asp:Label>
                                                                         </th>
                                                                         <th>
-                                                                            Semester
+                                                                            <asp:Label ID="lblDYddlSemester" runat="server" Font-Bold="true"></asp:Label>
                                                                         </th>
                                                                         <th>Father Name
                                                                         </th>
@@ -307,39 +310,39 @@
                                                         <ul class="nav nav-tabs sidebar-menu" role="tablist">
 
                                                             <li class="nav-item">
-                                                                <a class="nav-link active" data-toggle="tab" href="#tab_1">Student Information</a>
+                                                                <a class="nav-link active" data-toggle="tab" href="#tab_1" onclick="return Checktabid(this)">Student Information</a>
                                                             </li>
                                                             <li class="nav-item" runat="server" id="divYearWiseFees" visible="false">
                                                                 <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_YearWiseFees" onclick="return Checktabid(this)">Year Wise Fee Details</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_2">Fees Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_2" onclick="return Checktabid(this)">Fees Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_3">Certificates Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_3" onclick="return Checktabid(this)">Certificates Details</a>
                                                             </li>
                                                             <li class="nav-item" runat="server" id="divOtherFees" visible="false">
                                                                  <%-- onclick added by Vipul Tichakule on dated 27-12-2023 --%>
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_OtherFees" onclick="return Checktabid(this)">Other Fee Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_4">Student Refund</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_4" onclick="return Checktabid(this)">Student Refund</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_5">Course Registered</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_5" onclick="return Checktabid(this)">Course Registered</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_6">Attendance Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_6" onclick="return Checktabid(this)">Attendance Details</a>
                                                             </li>
                                                             <li class="nav-item d-none">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_7">Internal Marks Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_7" onclick="return Checktabid(this)">Internal Marks Details</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_8">Result Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_8" onclick="return Checktabid(this)">Result Details</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-toggle="tab" href="#tab_9">Revaluation Result Details</a>
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_9" onclick="return Checktabid(this)" runat="server" id="navReval">Revaluation Result Details</a>
                                                             </li>
                                                             <li class="nav-item" id="divrealease" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_10">Intermediate Garde Realease</a>
@@ -349,6 +352,12 @@
                                                             </li>
                                                             <li class="nav-item" id="divMITExcel" runat="server" visible="false">
                                                                 <a class="nav-link" data-toggle="tab" href="#tab_12">Marks Details</a>
+                                                            </li>
+                                                            <li class="nav-item" id="divInternalMarks" runat="server" visible="false">
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_13" onclick="return Checktabid(this)">Internal Marks</a>
+                                                            </li>
+                                                            <li class="nav-item" id="divInternalMarks1" runat="server" visible="false">
+                                                                <a class="nav-link" data-toggle="tab" href="#tab_14" onclick="return Checktabid(this)">Internal Marks</a>
                                                             </li>
                                                         </ul>
                                                     </section>
@@ -597,6 +606,26 @@
                                                                                 <a class="sub-label">
                                                                                     <asp:Label ID="lblMotherMobile" runat="server" Font-Bold="True"></asp:Label></a>
                                                                             </li>
+
+                                                                            <li class="list-group-item"><b>Faculty Advisor Name(Mentor) :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblFacultyAdvname" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Name :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClassAdvisorName" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Email Address :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClsAdvEmailAddress" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
+
+                                                                            <li class="list-group-item"><b>Class Advisor Mobile No :</b>
+                                                                                <a class="sub-label">
+                                                                                    <asp:Label ID="lblClsAdvMobNo" runat="server" Font-Bold="True"></asp:Label></a>
+                                                                            </li>
                                                                         </ul>
                                                                     </div>
 
@@ -794,10 +823,10 @@
                                                                             <td><%--style="width:6%"--%>
                                                                                 <%# Eval("BRANCH") %>
                                                                             </td>
-
-                                                                            <td><%--style="width:10%"--%>
-                                                                                <%# Eval("ADMFEE") %>
                                                                             </td>
+                                                            <td><%--style="width:10%"--%>
+                                                                <%# Eval("ADMFEE") %>
+                                                            </td>
                                                                             <td><%--style="width: 10%"--%>
                                                                                 <%# Eval("PADMFEE") %>
                                                                             </td>
@@ -1385,133 +1414,9 @@
                                                                 </asp:ListView>
                                                             </div>
                                                         </div>
-
-                                                        <div id="divInternalMarks" runat="server" visible="false">
-                                                            <div class="col-12">
-                                                                <div class="sub-heading">
-                                                                    <h5>Internal Marks</h5>
-                                                                </div>
-                                                                <div id="divInternal">
-                                                                    <div class="col-12">
-                                                                        <asp:ListView ID="lvInternalData" runat="server" Style="display: block;">
-                                                                            <LayoutTemplate>
-                                                                                <div class="table-responsive">
-                                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
-                                                                                        <thead>
-                                                                                            <tr class="bg-light-blue">
-                                                                                                <%--<th colspan="3" style="text-align: center">SUBJECT </th>--%>
-                                                                                                <th id="tbl_Rule1" colspan="17" style="text-align: center">Internal Marks </th>
-                                                                                                <%-- <th id="tbl_Rule2" colspan="1" style="text-align: center; display: none;">RULE 2 </th>--%>
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <thead class="bg-light-blue">
-                                                                                            <tr>
-                                                                                                <th>CCODE</th>
-                                                                                                <th>SUBJECT NAME</th>
-                                                                                                <th id="th0" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th1" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th2" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th3" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th4" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th5" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th6" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th7" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th8" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th9" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th10" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th11" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th12" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th13" style="text-align: center; display: none;"></th>
-                                                                                                <th id="th14" style="text-align: center; display: none;"></th>
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <tbody>
-                                                                                            <tr id="itemPlaceholder" runat="server" />
-                                                                                        </tbody>
-                                                                                    </table>
-                                                                                </div>
-                                                                            </LayoutTemplate>
-                                                                            <EmptyDataTemplate>
-                                                                                <div style="text-align: center; font-size: medium">
-                                                                                    No Record Found
-                                                                                </div>
-                                                                            </EmptyDataTemplate>
-                                                                            <ItemTemplate>
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <%#Eval("CCODE") %>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <%#Eval("COURSE_NAME") %>
-                                                                                    </td>
-                                                                                    <td id="td0" runat="server" style="display: none;">
-                                                                                        <%-- <asp:TextBox ID="txtCat1" runat="server" CssClass="form-control NumVal" Enabled="false" MaxLength="5" ></asp:TextBox>--%>
-                                                                                        <asp:Label ID="Label5" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-                                                                                    </td>
-                                                                                    <td id="td1" runat="server" style="display: none;">
-                                                                                        <%-- <asp:TextBox ID="txtCat1asn"  runat="server" CssClass="form-control NumVal" Enabled="false"  MaxLength="5"></asp:TextBox>--%>
-                                                                                        <asp:Label ID="Label6" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-                                                                                    </td>
-                                                                                    <td id="td2" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label7" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td3" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label8" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td4" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label9" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td5" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label10" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td6" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label11" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td7" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label12" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td8" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label13" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td9" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label14" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-                                                                                    </td>
-                                                                                    <td id="td10" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label15" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td11" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label16" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td12" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label17" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td13" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label18" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-                                                                                    <td id="td14" runat="server" style="display: none;">
-                                                                                        <asp:Label ID="Label19" runat="server" Enabled="false" MaxLength="5"></asp:Label>
-
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            </ItemTemplate>
-                                                                        </asp:ListView>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
+
+
 
                                                     <div class="tab-pane fade" id="tab_8">
                                                         <div id="divPreviousResult">
@@ -1543,15 +1448,15 @@
                                                                                         <tr>
                                                                                             <th style="width: 10%;">Show
                                                                                             </th>
-                                                                                            <th style="width: 20%;">Session
+                                                                                            <th style="width: 12%;">Session
                                                                                             </th>
                                                                                             <th style="width: 10%;">Section
                                                                                             </th>
-                                                                                            <th style="width: 5%;">TotSub
+                                                                                            <th style="width: 7%;">Registered Courses
                                                                                             </th>
-                                                                                            <th style="width: 5%;">RegCr.
+                                                                                            <th style="width: 5%;">Registered Credits
                                                                                             </th>
-                                                                                            <th style="width: 5%;">EarnCr.
+                                                                                            <th style="width: 5%;">Earned Credits
                                                                                             </th>
                                                                                             <%--<th style="width:5%;">CumCr.
                                                                         </th>
@@ -1564,9 +1469,9 @@
                                                                         </th>--%>
                                                                                             <th style="width: 10%;">CGPA
                                                                                             </th>
-                                                                                            <th style="width: 10%;">Result Dt.
+                                                                                            <th style="width: 10%;">Result Date
                                                                                             </th>
-                                                                                            <th style="width: 10%;" id="printreport">Print.
+                                                                                            <th style="width: 10%;" id="printreport">Print
                                                                                             </th>
 
 
@@ -1582,63 +1487,63 @@
                                                                         <ItemTemplate>
 
                                                                             <table class="table table-hover table-bordered">
-                                                                                <tr id="MAIN" runat="server" class="col-md-12">
-                                                                                    <td>
-                                                                                        <tr>
-                                                                                            <td style="width: 10%;">
-                                                                                                <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
-                                                                                                    <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
-                                                                                                </asp:Panel>
-                                                                                                &nbsp;&nbsp;<asp:Label ID="lbIoNo" runat="server" Text='<%# Eval("SEMESTERNO") %>'
-                                                                                                    ToolTip='<%# Eval ("IDNO") %>' Visible="false"></asp:Label>
-                                                                                            </td>
-                                                                                            <td style="width: 20%;">
-                                                                                                <asp:Label ID="lblSession" runat="server" Text='<%# Eval("SESSION_NAME")%>' ToolTip='<%# Eval("SESSIONNO") %>'></asp:Label>
-                                                                                            </td>
+                                                                                <div id="MAIN" runat="server" class="col-md-12">
 
-                                                                                            <td style="width: 10%;">
-                                                                                                <asp:Label ID="lblsectionname" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
-                                                                                            </td>
-                                                                                            <td style="width: 5%;">
-                                                                                                <asp:Label ID="lbltotsubreg" runat="server" Text='<%# Eval("TOTAL_SUBJ_REGD")%>'></asp:Label>
-                                                                                            </td>
-                                                                                            <td style="width: 5%;">
-                                                                                                <asp:Label ID="lblRegCredits" runat="server" Text=' <%# Eval("REGD_CREDITS")%>'></asp:Label>
-                                                                                            </td>
-                                                                                            <td style="width: 5%;">
-                                                                                                <asp:Label ID="lblEarncredits" runat="server" Text=' <%# Eval("EARN_CREDITS")%>'></asp:Label>
-                                                                                            </td>
-                                                                                            <%-- <td style="width:5%;">
+                                                                                    <tr>
+                                                                                        <td style="width: 10%;">
+                                                                                            <asp:Panel ID="pnlDetails" runat="server" Style="cursor: pointer; vertical-align: top; float: left">
+                                                                                                <asp:Image ID="imgExp" runat="server" ImageUrl="~/Images/action_down.png" />
+                                                                                            </asp:Panel>
+                                                                                            &nbsp;&nbsp;<asp:Label ID="lbIoNo" runat="server" Text='<%# Eval("SEMESTERNO") %>'
+                                                                                                ToolTip='<%# Eval ("IDNO") %>' Visible="false"></asp:Label>
+                                                                                        </td>
+                                                                                        <td style="width: 12%;">
+                                                                                            <asp:Label ID="lblSession" runat="server" Text='<%# Eval("SESSION_NAME")%>' ToolTip='<%# Eval("SESSIONNO") %>'></asp:Label>
+                                                                                        </td>
+
+                                                                                        <td style="width: 10%;">
+                                                                                            <asp:Label ID="lblsectionname" runat="server" Text='<%# Eval("SECTIONNAME")%>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td style="width: 8%;">
+                                                                                            <asp:Label ID="lbltotsubreg" runat="server" Text='<%# Eval("TOTAL_SUBJ_REGD")%>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td style="width: 7%;">
+                                                                                            <asp:Label ID="lblRegCredits" runat="server" Text=' <%# Eval("REGD_CREDITS")%>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td style="width: 5%;">
+                                                                                            <asp:Label ID="lblEarncredits" runat="server" Text=' <%# Eval("EARN_CREDITS")%>'></asp:Label>
+                                                                                        </td>
+                                                                                        <%-- <td style="width:5%;">
                                                                                 <asp:Label ID="lblCumCredits" runat="server" Text='<%# Eval("CUMMULATIVE_CREDITS") %>'></asp:Label>
                                                                             </td>
                                                                             <td>
                                                                                 <asp:Label ID="lblResult" runat="server" Text='<%# Eval("PASSFAIL") %>'></asp:Label>
                                                                             </td>--%>
-                                                                                            <td style="width: 10%;">
-                                                                                                <asp:Label ID="lblSgpa" runat="server" Text='<%# Eval("SGPA") %>'></asp:Label>
-                                                                                            </td>
+                                                                                        <td style="width: 10%;">
+                                                                                            <asp:Label ID="lblSgpa" runat="server" Text='<%# Eval("SGPA") %>'></asp:Label>
+                                                                                        </td>
 
-                                                                                            <%--<td style="width:10%;">
+                                                                                        <%--<td style="width:10%;">
                                                                                 <asp:Label ID="lblCummegp" runat="server" Text='<%# Eval("CUMMULATIVE_CREDITS") %>'></asp:Label>
                                                                             </td>--%>
-                                                                                            <td style="width: 10%;">
-                                                                                                <asp:Label ID="lblCummegp" runat="server" Text='<%# Eval("CGPA") %>'></asp:Label>
-                                                                                            </td>
-                                                                                            <td style="width: 10%;">
-                                                                                                <%# Eval("RESULTDATE")%>
-                                                                                            </td>
-                                                                                            <td style="width: 10%;">
-                                                                                                <asp:ImageButton runat="server" ImageUrl="~/Images/print.png" ID="imgbtnpreview" OnClick="imgbtnpreview_Click" ToolTip='<%# Eval("SESSIONNO") %>' />
-                                                                                            </td>
+                                                                                        <td style="width: 10%;">
+                                                                                            <asp:Label ID="lblCummegp" runat="server" Text='<%# Eval("CGPA") %>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td style="width: 10%;">
+                                                                                            <%# Eval("RESULTDATE")%>
+                                                                                        </td>
+                                                                                        <td style="width: 10%;">
+                                                                                            <asp:ImageButton runat="server" ImageUrl="~/Images/print.png" ID="imgbtnpreview" OnClick="imgbtnpreview_Click" ToolTip='<%# Eval("SESSIONNO") %>' />
+                                                                                        </td>
 
-                                                                                            <ajaxToolKit:CollapsiblePanelExtender ID="cpeCourt2" runat="server" CollapseControlID="pnlDetails"
-                                                                                                Collapsed="true" CollapsedImage="~/Images/action_down.png" ExpandControlID="pnlDetails"
-                                                                                                ExpandedImage="~/Images/action_up.png" ImageControlID="imgExp" TargetControlID="pnlShowCDetails">
-                                                                                            </ajaxToolKit:CollapsiblePanelExtender>
+                                                                                        <ajaxToolKit:CollapsiblePanelExtender ID="cpeCourt2" runat="server" CollapseControlID="pnlDetails"
+                                                                                            Collapsed="true" CollapsedImage="~/Images/action_down.png" ExpandControlID="pnlDetails"
+                                                                                            ExpandedImage="~/Images/action_up.png" ImageControlID="imgExp" TargetControlID="pnlShowCDetails">
+                                                                                        </ajaxToolKit:CollapsiblePanelExtender>
 
-                                                                                        </tr>
-                                                                                    </td>
-                                                                                </tr>
+                                                                                    </tr>
+
+                                                                                </div>
                                                                             </table>
 
                                                                             <div class="col-12">
@@ -1648,7 +1553,7 @@
                                                                                         </h5>
                                                                                     </div>
 
-                                                                                    <asp:ListView ID="lvDetails" runat="server">
+                                                                                    <asp:ListView ID="lvDetails" runat="server" Visible="false">
                                                                                         <LayoutTemplate>
                                                                                             <div class="table-responsive">
                                                                                                 <table class="table table-hover table-bordered">
@@ -1662,22 +1567,11 @@
                                                                                                             </th>
                                                                                                             <th>Credits
                                                                                                             </th>
-                                                                                                            <%--<th>SeatNo
-                                                                                                                                                                </th>--%>
-                                                                                                            <%--<th>IA
-                                                                                        </th>--%>
-                                                                                                            <%--<th>MSE-I
-                                                                                                                                                                </th>
-                                                                                                                                                                <th>MSE-II
-                                                                                                                                                                </th>--%>
-                                                                                                            <%--<th>ESE
-                                                                                        </th>
-                                                                                        <th>MarkTot
-                                                                                        </th>--%>
-                                                                                                            <th>GDPoint
+                                                                                                            <th>Grade Point
                                                                                                             </th>
                                                                                                             <th>Grade
                                                                                                             </th>
+                                                                                                            <th>Earned Grade Points</th>
                                                                                                             <th>Result
                                                                                                             </th>
                                                                                                         </tr>
@@ -1705,43 +1599,116 @@
                                                                                                 <td>
                                                                                                     <asp:Label ID="lbltheory" runat="server" Text='<%# Eval("SUBTYPE") %>' ToolTip='<%# Eval("SUBID") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                <td style="text-align: center;">
                                                                                                     <asp:Label ID="lblcredits" runat="server" Text='<%# Eval("CREDITS") %>' ToolTip='<%# Eval("CREDITS") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <%--<td style="width: 5%;">
-                                                                                                                                                        <asp:Label ID="lblSeatNo" runat="server" Text='<%# Eval("SEATNO") %>' ToolTip='<%# Eval("SEATNO") %>'></asp:Label>
-                                                                                                                                                    </td>--%>
-                                                                                                <%--<td>
-                                                                                    <asp:Label ID="lblIA" runat="server" Text='<%# Eval("IA") %>' ToolTip='<%# Eval("IA") %>'></asp:Label>
-                                                                                </td>--%>
-                                                                                                <%--<td style="width: 5%;">
-                                                                                                                                                        <asp:Label ID="lblMse1" runat="server" Text='<%# Eval("MSE1") %>' ToolTip='<%# Eval("MSE1") %>'></asp:Label>
-                                                                                                                                                    </td>
-                                                                                                                                                    <td style="width: 5%;">
-                                                                                                                                                        <asp:Label ID="lblMse2" runat="server" Text='<%# Eval("MSE2") %>' ToolTip='<%# Eval("MSE2") %>'></asp:Label>
-                                                                                                                                                    </td>--%>
-                                                                                                <%--<td>
-                                                                                    <asp:Label ID="lblextermark" runat="server" Text='<%# Eval("EXTERMARK") %>' ToolTip='<%# Eval("EXTERMARK") %>'></asp:Label>
-                                                                                </td>--%>
-                                                                                                <%--<td>
-                                                                                    <asp:Label ID="lblmarkTot" runat="server" Text='<%# Eval("MARKTOT") %>' ToolTip='<%# Eval("MARKTOT") %>'></asp:Label>
-                                                                                </td>--%>
-                                                                                                <td>
+
+                                                                                                <td style="text-align: center;">
                                                                                                     <asp:Label ID="lblgdpoint" runat="server" Text='<%# Eval("GDPOINT") %>' ToolTip='<%# Eval("GDPOINT") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                <td style="text-align: center;">
                                                                                                     <asp:Label ID="lblGrade" runat="server" Text='<%# Eval("GRADE") %>' ToolTip='<%# Eval("GRADE") %>'></asp:Label>
                                                                                                 </td>
-                                                                                                <td>
+                                                                                                <td style="text-align: center;">
+                                                                                                    <asp:Label ID="lblEgp" runat="server" Text='<%# Eval("EGP") %>' ToolTip='<%# Eval("EGP") %>'></asp:Label>
+                                                                                                </td>
+
+                                                                                                <td style="text-align: center;">
                                                                                                     <asp:Label ID="Label1" runat="server" Text='<%# Eval("RESULT") %>' ToolTip='<%# Eval("RESULT") %>'></asp:Label>
                                                                                                 </td>
                                                                                             </tr>
                                                                                         </ItemTemplate>
                                                                                     </asp:ListView>
 
+                                                                                    <%--Added by lalit On dated 24-05-2023--%>
+                                                                                    <asp:ListView ID="lvMarksDetails" runat="server">
+                                                                                        <LayoutTemplate>
+                                                                                            <div class="table-responsive">
+                                                                                                <table class="table table-hover table-bordered">
+                                                                                                    <thead class="header bg-light-blue">
+                                                                                                        <tr>
+                                                                                                            <th>Sr.No
+                                                                                                            </th>
+                                                                                                            <th>Subject Name
+                                                                                                            </th>
+                                                                                                            <th>Max Marks
+                                                                                                            </th>
+                                                                                                            <th>Min Passing Marks
+                                                                                                            </th>
+                                                                                                            <th>Obtained Marks
+                                                                                                            </th>
+                                                                                                            <th>Remark
+                                                                                                            </th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+                                                                                                        <tr id="itemPlaceholder" runat="server">
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                    <tfoot>
+                                                                                                        <tr>
+                                                                                                            <td></td>
+                                                                                                            <td><strong>Total :</strong></td>
+
+                                                                                                            <td>
+                                                                                                                <strong>
+                                                                                                                    <asp:Label ID="lblTotalM" runat="server"></asp:Label>
+                                                                                                                </strong>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <strong>
+                                                                                                                    <asp:Label ID="Label20" runat="server"></asp:Label>
+                                                                                                                </strong>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <strong>
+                                                                                                                    <asp:Label ID="Label21" runat="server"></asp:Label>
+                                                                                                                </strong>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <strong>
+                                                                                                                    <asp:Label ID="Label22" runat="server"></asp:Label>
+                                                                                                                </strong>
+                                                                                                            </td>
+
+                                                                                                        </tr>
+                                                                                                    </tfoot>
+
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </LayoutTemplate>
+
+                                                                                        <ItemTemplate>
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <%# Container.DataItemIndex +1 %>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <%--  <asp:Label ID="Label20" runat="server" Text='<%# Eval("PREVSTATUS") %>' ToolTip='<%# Eval("PREV_STATUS") %>'></asp:Label>--%>
+                                                                                                    <asp:Label ID="lblstatus" runat="server" Text='<%# Eval("COURSENAME") %>'></asp:Label>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <asp:Label ID="lbltheory" runat="server" Text='<%# Eval("MAXMARKS_E") %>'></asp:Label>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <asp:Label ID="lblcredits" runat="server" Text='<%# Eval("MINMARKS") %>'></asp:Label>
+                                                                                                </td>
+
+                                                                                                <td>
+                                                                                                    <asp:Label ID="lblgdpoint" runat="server" Text='<%# Eval("EXTERMARK") %>'></asp:Label>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <asp:Label ID="lblGrade" runat="server" Text='<%# Eval("RESULT") %>'></asp:Label>
+                                                                                                    <%-- <asp:HiddenField ID="hdftotal" runat="server" Value='<%# Eval("MAXMarks") %>' />--%>
+                                                                                                </td>
+
+                                                                                            </tr>
+
+                                                                                        </ItemTemplate>
+                                                                                    </asp:ListView>
+
                                                                                 </asp:Panel>
                                                                             </div>
-
                                                                         </ItemTemplate>
                                                                     </asp:ListView>
                                                                     <div class="col-12">
@@ -1757,10 +1724,21 @@
                                                     </div>
 
                                                     <div class="tab-pane fade" id="tab_9">
-                                                        <div id="divrevalresult">
-                                                            <asp:Panel ID="pnlrevalresult" runat="server" Visible="false">
-                                                                <div id="divreval" runat="server" class="col-12">
+                                                        <div id="divrevalresult" runat="server">
 
+                                                            <div id="divreval1" runat="server" class="col-12">
+                                                                <div class="col-12">
+                                                                    <div class="sub-heading">
+                                                                        <h5>Revaluation Details</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <asp:RadioButtonList ID="RadioButtonList1" runat="server" GroupName="Exam" Style="cursor: default; margin-right: 50px; font-weight: bold; font-size: x-large" RepeatDirection="Horizontal"
+                                                                        OnClientClick="SetUniqueRadioButton(this)" OnSelectedIndexChanged="RadioButtonList1_SelectedIndexChanged"
+                                                                        AutoPostBack="True">
+                                                                    </asp:RadioButtonList>
+                                                                </div>
+                                                                <asp:Panel ID="pnlrevalresult" runat="server" Visible="false">
                                                                     <div class="col-12">
                                                                         <asp:ListView ID="lvRevalDetails" runat="server">
                                                                             <LayoutTemplate>
@@ -1857,15 +1835,16 @@
                                                                             </ItemTemplate>
                                                                         </asp:ListView>
                                                                     </div>
+                                                                </asp:Panel>
 
-                                                                    <div class="col-12">
-                                                                        <asp:Label ID="Label2" runat="server" Text="" Visible="false"></asp:Label>
-                                                                        <span style="color: red; font-style: italic">
-                                                                            <asp:Label ID="Label3" runat="server" Text=""></asp:Label></span>
-                                                                        <asp:Label ID="Label4" runat="server" Text="" Visible="false"></asp:Label>
-                                                                    </div>
+                                                                <div class="col-12">
+                                                                    <asp:Label ID="Label2" runat="server" Text="" Visible="false"></asp:Label>
+                                                                    <span style="color: red; font-style: italic">
+                                                                        <asp:Label ID="Label3" runat="server" Text=""></asp:Label></span>
+                                                                    <asp:Label ID="Label4" runat="server" Text="" Visible="false"></asp:Label>
                                                                 </div>
-                                                            </asp:Panel>
+                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -1994,7 +1973,7 @@
                                                                                         </th>
                                                                                         <th>YEAR     
                                                                                         </th>
-                                                                                        <th>REMARKS
+                                                                                        <th>PROVISIONAL REMARK
                                                                                         </th>
                                                                                     </tr>
                                                                                 </thead>
@@ -2045,6 +2024,301 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="tab-pane fade" id="tab_13">
+                                                        <div>
+                                                            <div class="col-12">
+                                                                <div class="sub-heading">
+                                                                    <h5>Internal Marks</h5>
+                                                                </div>
+                                                                <div id="divInternal">
+                                                                    <div class="col-12">
+                                                                        <asp:ListView ID="lvInternalData" runat="server" Style="display: block;">
+                                                                            <LayoutTemplate>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                                        <thead>
+                                                                                            <tr class="bg-light-blue">
+                                                                                                <%--<th colspan="3" style="text-align: center">SUBJECT </th>--%>
+                                                                                                <th id="tbl_Rule1" colspan="17" style="text-align: center">Internal Marks </th>
+                                                                                                <%-- <th id="tbl_Rule2" colspan="1" style="text-align: center; display: none;">RULE 2 </th>--%>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <thead class="bg-light-blue">
+                                                                                            <tr>
+                                                                                                <th>CCODE</th>
+                                                                                                <th>SUBJECT NAME</th>
+                                                                                                <th id="th0" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th1" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th2" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th3" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th4" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th5" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th6" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th7" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th8" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th9" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th10" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th11" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th12" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th13" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th14" style="text-align: center; display: none;"></th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr id="itemPlaceholder" runat="server" />
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </LayoutTemplate>
+                                                                            <EmptyDataTemplate>
+                                                                                <div style="text-align: center; font-size: medium">
+                                                                                    No Record Found
+                                                                                </div>
+                                                                            </EmptyDataTemplate>
+                                                                            <ItemTemplate>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <%#Eval("CCODE") %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%#Eval("COURSE_NAME") %>
+                                                                                    </td>
+                                                                                    <td id="td0" runat="server" style="display: none;">
+                                                                                        <%-- <asp:TextBox ID="txtCat1" runat="server" CssClass="form-control NumVal" Enabled="false" MaxLength="5" ></asp:TextBox>--%>
+                                                                                        <asp:Label ID="Label5" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td1" runat="server" style="display: none;">
+                                                                                        <%-- <asp:TextBox ID="txtCat1asn"  runat="server" CssClass="form-control NumVal" Enabled="false"  MaxLength="5"></asp:TextBox>--%>
+                                                                                        <asp:Label ID="Label6" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td2" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label7" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td3" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label8" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td4" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label9" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td5" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label10" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td6" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label11" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td7" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label12" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td8" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label13" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td9" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label14" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td10" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label15" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td11" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label16" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td12" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label17" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td13" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label18" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td14" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label19" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            </ItemTemplate>
+                                                                        </asp:ListView>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="tab-pane fade" id="tab_14">
+                                                        <div>
+                                                            <div class="col-12">
+                                                                <div class="sub-heading">
+                                                                    <h5>Internal Marks</h5>
+                                                                </div>
+                                                                <div id="div3">
+                                                                    <div class="col-12">
+                                                                        <asp:ListView ID="lvInter" runat="server" Style="display: block;">
+                                                                            <LayoutTemplate>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table table-striped table-bordered nowrap" style="width: 100%" id="">
+                                                                                        <thead>
+                                                                                            <tr class="bg-light-blue">
+                                                                                                <%--<th colspan="3" style="text-align: center">SUBJECT </th>--%>
+                                                                                                <th id="tbl_Rule1" colspan="17" style="text-align: center">Internal Marks </th>
+                                                                                                <%-- <th id="tbl_Rule2" colspan="1" style="text-align: center; display: none;">RULE 2 </th>--%>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <thead class="bg-light-blue">
+                                                                                            <tr>
+                                                                                                <th id="th0" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th1" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th2" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th3" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th4" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th5" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th6" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th7" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th8" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th9" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th10" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th11" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th12" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th13" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th14" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th15" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th16" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th17" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th18" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th19" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th20" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th21" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th22" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th23" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th24" style="text-align: center; display: none;"></th>
+                                                                                                <th id="th25" style="text-align: center; display: none;"></th>
+
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr id="itemPlaceholder" runat="server" />
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </LayoutTemplate>
+                                                                            <EmptyDataTemplate>
+                                                                                <div style="text-align: center; font-size: medium">
+                                                                                    No Record Found
+                                                                                </div>
+                                                                            </EmptyDataTemplate>
+                                                                            <ItemTemplate>
+                                                                                <tr>
+
+                                                                                    <td id="td0" runat="server" style="display: none;">
+                                                                                        <%-- <asp:TextBox ID="txtCat1" runat="server" CssClass="form-control NumVal" Enabled="false" MaxLength="5" ></asp:TextBox>--%>
+                                                                                        <asp:Label ID="Label5" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td1" runat="server" style="display: none;">
+                                                                                        <%-- <asp:TextBox ID="txtCat1asn"  runat="server" CssClass="form-control NumVal" Enabled="false"  MaxLength="5"></asp:TextBox>--%>
+                                                                                        <asp:Label ID="Label6" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td2" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label7" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td3" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label8" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td4" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label9" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td5" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label10" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td6" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label11" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td7" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label12" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td8" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label13" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td9" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label14" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td10" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label15" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td11" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label16" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td12" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label17" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+                                                                                    <td id="td13" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label18" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+
+                                                                                    </td>
+
+                                                                                    <td id="td14" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label19" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td15" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label20" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+
+                                                                                    <td id="td16" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label21" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td17" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label22" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td18" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label23" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td19" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label24" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td20" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label25" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td21" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label26" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td22" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label27" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td23" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label28" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td24" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label29" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+                                                                                    <td id="td25" runat="server" style="display: none;">
+                                                                                        <asp:Label ID="Label30" runat="server" Enabled="false" MaxLength="5"></asp:Label>
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            </ItemTemplate>
+                                                                        </asp:ListView>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2054,6 +2328,7 @@
                         </ContentTemplate>
                         <Triggers>
                             <asp:AsyncPostBackTrigger ControlID="rdolistSemester" />
+                            <asp:AsyncPostBackTrigger ControlID="RadioButtonList1" />
                             <asp:PostBackTrigger ControlID="btnInternalMarks" />
 
                         </Triggers>
@@ -2225,7 +2500,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
-
+                <asp:HiddenField ID="hdfDyanamicTabId" runat="server" />
             </div>
         </div>
     </div>
@@ -2471,12 +2746,18 @@
         });
     </script>
     <script>
-        function TabShow() {
-            var tabName = "tab_8";
+        function TabShow(tabName) {
+            //alert(tabName)
+            //var tabName = "tab_8";
             $('#ctl00_ContentPlaceHolder1_divtabs a[href="#' + tabName + '"]').tab('show');
             $("#ctl00_ContentPlaceHolder1_divtabs a").click(function () {
                 $("[id*=TabName]").val($(this).attr("href").replace("#", ""));
             });
+        }
+    </script>
+    <script>
+        function Checktabid(tabid) {
+            $("#ctl00_ContentPlaceHolder1_hdfDyanamicTabId").val($(tabid).attr("href").replace('#', ''));
         }
     </script>
     <%--Search Box Script End--%>
