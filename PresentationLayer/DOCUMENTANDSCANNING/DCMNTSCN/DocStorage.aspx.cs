@@ -1185,10 +1185,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 string count = objCommon.LookUp("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
                 if (count != "")
                 {
-                    int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                  //  int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
                 }
             }
-
+           
         }
         catch (Exception ex)
         {
