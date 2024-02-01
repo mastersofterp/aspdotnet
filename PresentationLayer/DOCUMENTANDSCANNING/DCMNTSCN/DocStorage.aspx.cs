@@ -1166,14 +1166,15 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 dt = ((DataTable)Session["Attachments"]);
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
-                if (dt.Rows.Count == 0)
+               // this.BindListView_Attachments(dt);
+                if (dt.Rows.Count > 0)
                 {
-                    lvCompAttach.DataSource = string.Empty;
-                    lvCompAttach.DataBind();
+                    this.BindListView_Attachments(dt);
                 }
                 else
                 {
-                    this.BindListView_Attachments(dt);
+                    lvCompAttach.DataSource = null;
+                    lvCompAttach.DataBind();
                 }
             }
 
