@@ -524,6 +524,18 @@
             <%--<asp:UpdatePanel ID="updatepanelid12" runat="server">
                 <ContentTemplate>--%>
 
+             <!--Recent Links-->
+            <%-- Added By Anurag Baghele on 30-01-2023--%>
+            <div class="RecentPageFix-menu">
+                <ul class="list-group">
+                    <li class="list-group-item" id="recLink" data-toggle="modal" data-target="#myModalz">
+                        <div class="icon">
+                            <i class="fa fa-link" aria-hidden="true" title="Recent Links"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
             <%-- Added By Anurag B. on 31-10-2023--%>
             <div class="modal right fade" id="MyModalInfo" role="dialog">
                 <div class="modal-dialog">

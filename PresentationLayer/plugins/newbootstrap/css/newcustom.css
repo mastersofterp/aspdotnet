@@ -1101,6 +1101,29 @@ input[type="search"]::-moz-search-cancel-button {
       cursor:pointer;
 }
 
+/**======== Recent Links (Added By Anurag Baghele on 30-01-2023) ========*/
+.RecentPageFix-menu{
+    position: fixed;
+    right: 0;
+    top: 54%;
+    z-index: 999;
+    transition: .2s ease-in-out;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+}
+.RecentPageFix-menu .list-group .list-group-item {
+    color: white;
+    background: #6777ef;
+    border: 1px solid #6777ef;
+    border-radius: 10px 0 0 10px;
+    margin: 0px;
+}
+.RecentPageFix-menu ul.list-group .list-group-item {
+    padding: 7px 10px;
+      cursor:pointer;
+}
+
 /* Rating css added by gaurav */
 .emojis {
     display: flex;
