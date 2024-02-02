@@ -178,7 +178,8 @@
                                                                                 <asp:Label ID="lblDYtxtCourseCode" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th>
                                                                                 <asp:Label ID="lblDYtxtCourseName" runat="server" Font-Bold="true"></asp:Label></th>
-                                                                            <th>Course Category</th>
+                                                                             <th>Course Type</th>
+                                                                            <th>Course Category</th>                                                                            
                                                                             <th>Elective Group</th>
                                                                             <th>Credits</th>
                                                                             <th>Course Semester</th>
@@ -203,7 +204,8 @@
                                                                     </td>
                                                                     <td><%# Eval("CCODE")%></td>
                                                                     <td><%# Eval("COURSE_NAME")%></td>
-                                                                    <td><%# Eval("ELECT_TYPE")%></td>
+                                                                    <td><%# Eval("SUBNAME")%></td>
+                                                                     <td><%# Eval("ELECT_TYPE")%></td>
                                                                     <td><%# Eval("GROUPNAME")%></td>
                                                                     <td><%# Eval("CREDITS") %></td>
                                                                     <td><%# Eval("SEMESTERNAME") %></td>
@@ -245,7 +247,8 @@
                                                                                 <asp:Label ID="lblDYtxtCourseCode" runat="server" Font-Bold="true"></asp:Label></th>
                                                                             <th>
                                                                                 <asp:Label ID="lblDYtxtCourseName" runat="server" Font-Bold="true"></asp:Label></th>
-                                                                            <th>Course Category</th>
+                                                                           <th>Course Type</th>
+                                                                             <th>Course Category</th>
                                                                             <th>Elective Group</th>
                                                                             <th>Credits</th>
 
@@ -269,6 +272,7 @@
                                                                     </td>
                                                                     <td><%# Eval("CCODE")%></td>
                                                                     <td><%# Eval("COURSE_NAME")%></td>
+                                                                    <td><%# Eval("SUBNAME")%></td>
                                                                     <td><%# Eval("ELECT_TYPE")%></td>
                                                                     <td><%# Eval("GROUPNAME")%></td>
                                                                     <td><%# Eval("CREDITS") %></td>
