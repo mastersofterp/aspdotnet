@@ -3478,7 +3478,7 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
     }
     protected void ddlSessionGlobal_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlSemesterGlobal.SelectedIndex = -1;
+        //ddlSemesterGlobal.SelectedIndex = -1;
         ddlUnitNoGlobal.SelectedIndex = -1;
         ddlLectureNoGlobal.SelectedIndex = -1;
         ddlTimeTableDateGlobal.SelectedIndex = -1;
@@ -3486,12 +3486,12 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         ddlLectureNoGlobal.SelectedIndex = -1;
         lvTeachingPlanGlobalElective.DataSource = null;
         lvTeachingPlanGlobalElective.DataBind();
+        ddlSemesterGlobal.Items.Clear();
+        ddlSemesterGlobal.Items.Add(new ListItem("Please Select", "0"));
 
         if (ddlSessionGlobal.SelectedIndex > 0)
         {
-
-
-            DataSet ds1 = objCC.GetGlobalOfferedCourseList(Convert.ToInt32(ddlSessionGlobal.SelectedValue), 0, Convert.ToInt32(Session["userno"]), 8);
+            DataSet ds1 = objCC.GetGlobalOfferedCourseList_Section(Convert.ToInt32(ddlSessionGlobal.SelectedValue), 0, Convert.ToInt32(Session["userno"]), 8,0);
             if (ds1.Tables[0].Rows.Count > 0)
             {
                 ddlSemesterGlobal.DataSource = ds1;
@@ -3499,6 +3499,10 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 ddlSemesterGlobal.DataTextField = ds1.Tables[0].Columns[1].ToString();
                 ddlSemesterGlobal.DataBind();
                 //ddlSession.SelectedIndex = 0;
+            }
+            else
+            { 
+                
             }
 
 
