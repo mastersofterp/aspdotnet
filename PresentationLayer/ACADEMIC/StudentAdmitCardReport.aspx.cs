@@ -496,10 +496,10 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                         ids = "0";
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
 
-                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+                        if (Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 1) //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         {
                             int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
-                            GenerateQrCode_RCPIPER(id);         //RCPIPER added by SHUBHAM ON 21/12/2023
+                            GenerateQrCode_RCPIPER(id);         //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         }
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
                         //int chkg = studCont.InsAdmitCardLog(Convert.ToInt32(ddlDegree.SelectedValue), Convert.ToInt32(ddlBranch.SelectedValue), studentIds + '.', ViewState["ipAddress"].ToString(), Convert.ToInt32(Session["userno"]), txtRemark.Text, Convert.ToInt32(ddlSession.SelectedValue), Convert.ToInt32(ddlSemester.SelectedValue), Convert.ToDateTime(txtDateofissue.Text), OrgID, Convert.ToInt32(ddlSection.SelectedValue));
@@ -522,10 +522,11 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                         // GenerateQrCode((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip), RegNo);
 
                         int OrgID = Convert.ToInt32(Session["OrgId"]);
-                        if (Convert.ToInt32(Session["OrgId"]) == 6) //RCPIPER added by SHUBHAM ON 21/12/2023
+
+                        if (Convert.ToInt32(Session["OrgId"]) == 6 || Convert.ToInt32(Session["OrgId"]) == 1) //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         {
                             int id = Convert.ToInt32((((lvItem.FindControl("chkReport")) as CheckBox).ToolTip));
-                            GenerateQrCode_RCPIPER(id);       //RCPIPER added by SHUBHAM ON 21/12/2023
+                            GenerateQrCode_RCPIPER(id);         //RCPIPER and RCPIT added by SHUBHAM ON 21/12/2023 (rcpit 29-01-24)
                         }
 
                         // int count=Convert.ToInt32( objCommon.LookUp("ACD_ADMITCARD_LOG", "couNt(1)","IDNO="+Convert.ToInt32(studentIds) + " AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND DEGREENO=" + Convert.ToInt32(ddlDegree.SelectedValue) + " AND BRANCHNO=" + Convert.ToInt32(ddlBranch.SelectedValue) + " AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
@@ -1023,6 +1024,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
                                     "; C_Year: " + ds1.Tables[0].Rows[0]["YEARNAME"] +
                                     "; Sem: " + ds1.Tables[0].Rows[0]["SEMESTERNAME"] +
                                     "; Scheme: " + ds1.Tables[0].Rows[0]["SCHEMENAME"] +
+                                    "; Exam Session: " + ds1.Tables[0].Rows[0]["SESSION_NAME"] +
                                      "";
 
                     Session["qr"] = Qrtext.ToString();
