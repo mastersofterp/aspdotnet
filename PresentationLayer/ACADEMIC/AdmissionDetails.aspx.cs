@@ -36,6 +36,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             ddlAdmCategory.Attributes.Add("disabled", "disabled");
             txtDTEAppId.Attributes.Add("disabled", "disabled");
             txtAbcId.Attributes.Add("disabled", "disabled");
+            ddlPhysicalHandicap.Attributes.Add("disabled", "disabled");
             //Check Session
             if (Session["userno"] == null || Session["username"] == null ||
                 Session["usertype"] == null || Session["userfullname"] == null)
@@ -300,6 +301,8 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
 
                 txtAbcId.Text = dtr["ABCC_ID"] == null ? string.Empty : dtr["ABCC_ID"].ToString();
 
+                ddlPhysicalHandicap.SelectedValue = dtr["PHYSICALLY_HANDICAPPED"] == null ? string.Empty : dtr["PHYSICALLY_HANDICAPPED"].ToString();
+    
                 if ((ddlDegree.SelectedValue) == "1")
                 {
                     if (Convert.ToInt32(ddlPaymentType.SelectedValue) == 3)
@@ -346,6 +349,7 @@ public partial class ACADEMIC_AdmissionDetails : System.Web.UI.Page
             objCommon.FillDropDownList(ddlAdmCentre, "ACD_ADMISSION_CENTRE", "ADM_CENTRENO", "ADM_CENTRENAME", "ADM_CENTRENO > 0 AND ISNULL(ACTIVESTATUS,0) = 1", "ADM_CENTRENO");
             objCommon.FillDropDownList(ddlAdmRound, "ACD_ADMISSION_ROUND", "ADMROUNDNO", "ROUNDNAME", "ADMROUNDNO > 0 AND ACTIVESTATUS=1", "ADMROUNDNO");
             objCommon.FillDropDownList(ddlAdmCategory, "ACD_CATEGORY", "CATEGORYNO", "CATEGORY", "CATEGORYNO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "CATEGORY");
+            objCommon.FillDropDownList(ddlPhysicalHandicap, "ACD_PHYSICAL_HANDICAPPED", "HANDICAP_NO", "HANDICAP_NAME", "HANDICAP_NO>0 AND ISNULL(ACTIVESTATUS,0) = 1", "HANDICAP_NO");
         }
         catch (Exception ex)
         {

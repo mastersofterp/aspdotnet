@@ -13,6 +13,7 @@ using IITMS.UAIMS.BusinessLogicLayer.BusinessEntities.Academic;
 using System.Collections.Generic;
 using IITMS.SQLServer.SQLDAL;
 using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
 
 public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
 {
@@ -234,6 +235,10 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         //HSC_12TH_QUALIFICATION();
 
     }
+
+    
+
+    
 
     #region FilterData
 
@@ -522,6 +527,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
         string errorStringSSC = ValidationAlertForDetailsByKeyword("ssc");
+
         string combinedErrors = string.Empty;
 
         if (!string.IsNullOrEmpty(errorStringSSC))
@@ -609,6 +615,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     if (!txtGradeSsc.Text.Trim().Equals(string.Empty)) objSQualExam.GradeSsc = txtGradeSsc.Text.Trim();
                     if (!txtAttemptSsc.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptSsc = txtAttemptSsc.Text.Trim();
                     if (!txtSSCSchoolColgAdd.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_SSC = txtSSCSchoolColgAdd.Text.Trim();
+                    objSQualExam.DivisionSsc = Convert.ToInt32(ddlDivisionSsc.SelectedValue);
+                    if (!txtMarksheetNoSsc.Text.Trim().Equals(string.Empty)) objSQualExam.MarksheetNoSsc = txtMarksheetNoSsc.Text.Trim();
 
                     //HSSC
                     if (!txtSchoolCollegeNameHssc.Text.Trim().Equals(string.Empty)) objSQualExam.SCHOOL_COLLEGE_NAME = txtSchoolCollegeNameHssc.Text.Trim();
@@ -643,7 +651,9 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     if (!txtGradeHssc.Text.Trim().Equals(string.Empty)) objSQualExam.GRADE = txtGradeHssc.Text.Trim();
                     if (!txtAttemptHssc.Text.Trim().Equals(string.Empty)) objSQualExam.ATTEMPT = txtAttemptHssc.Text.Trim();
                     if (!txtHSCColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_HSSC = txtHSCColgAddress.Text.Trim();
-
+                    objSQualExam.DivisionHsc = Convert.ToInt32(ddlDivisionHsc.SelectedValue);
+                    if (!txtMarksheetNoHsc.Text.Trim().Equals(string.Empty)) objSQualExam.MarksheetNoHsc = txtMarksheetNoHsc.Text.Trim();
+                    
                     //Subject Wise Marks
 
                     //if (!txtHscChe.Text.Trim().Equals(string.Empty)) objSQualExam.HSCCHE = Convert.ToInt32(txtHscChe.Text.Trim());
@@ -724,8 +734,9 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     if (!txtGradeDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.GradeDiploma = txtGradeDiploma.Text.Trim();
                     if (!txtAttemptDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.AttemptDiploma = txtAttemptDiploma.Text.Trim();
                     if (!txtDiplomaColgAddress.Text.Trim().Equals(string.Empty)) objSQualExam.colg_address_Diploma = txtDiplomaColgAddress.Text.Trim();
-
-
+                    objSQualExam.DivisionDiploma = Convert.ToInt32(ddlDivisionDiploma.SelectedValue);
+                    if (!txtMarksheetNoDiploma.Text.Trim().Equals(string.Empty)) objSQualExam.MarksheetNoDiploma = txtMarksheetNoDiploma.Text.Trim();
+                    
                     objS.PGQUALIFYNO = Convert.ToInt32(ddlpgentranceno.SelectedValue);
                     if (!txtpgrollno.Text.Trim().Equals(string.Empty)) objS.PGENTROLLNO = txtpgrollno.Text.Trim();
                     if (!txtpgexamyear.Text.Trim().Equals(string.Empty)) objS.pgyearOfExam = txtpgexamyear.Text.Trim();
@@ -1021,6 +1032,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         objEntrance.Columns.Add(new DataColumn("ALL_INDIA_RANK", typeof(int)));
         objEntrance.Columns.Add(new DataColumn("SCORE", typeof(decimal)));
         objEntrance.Columns.Add(new DataColumn("EXMROLLNO", typeof(string)));
+        objEntrance.Columns.Add(new DataColumn("LAST_SCHOOL_NAME", typeof(string)));
 
         return objEntrance;
     }
@@ -1056,6 +1068,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
         txtQExamRollNo.Text = string.Empty;
         txtPercentile.Text = string.Empty;
         txtScore.Text = string.Empty;
+        txtLastSchoolName.Text = string.Empty;
     }
     private void BindLastQualifiedExamData(ref QualifiedExam[] qualifiedExams)
     {
@@ -1346,6 +1359,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     txtGradeSsc.Text = dtr["GRADESSC"] == null ? string.Empty : dtr["GRADESSC"].ToString();
                     txtAttemptSsc.Text = dtr["ATTEMPTSSC"] == null ? string.Empty : dtr["ATTEMPTSSC"].ToString();
                     txtSSCSchoolColgAdd.Text = dtr["SSC_COLLEGE_ADDRESS"] == null ? string.Empty : dtr["SSC_COLLEGE_ADDRESS"].ToString();
+                    ddlDivisionSsc.SelectedValue = dtr["DIVISION_SSC"] == null ? "0" : dtr["DIVISION_SSC"].ToString();
+                    txtMarksheetNoSsc.Text = dtr["MARKSHEET_NO_SSC"] == null ? string.Empty : dtr["MARKSHEET_NO_SSC"].ToString();
 
                     //HSSC Marks
 
@@ -1373,7 +1388,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     txtGradeHssc.Text = dtr["GRADEHSSC"] == null ? string.Empty : dtr["GRADEHSSC"].ToString();
                     txtAttemptHssc.Text = dtr["ATTEMPTHSSC"] == null ? string.Empty : dtr["ATTEMPTHSSC"].ToString();
                     txtHSCColgAddress.Text = dtr["HSSC_COLLEGE_ADDRESS"] == null ? string.Empty : dtr["HSSC_COLLEGE_ADDRESS"].ToString();
-
+                    ddlDivisionHsc.SelectedValue = dtr["DIVISION_HSC"] == null ? "0" : dtr["DIVISION_HSC"].ToString();
+                    txtMarksheetNoHsc.Text = dtr["MARKSHEET_NO_HSC"] == null ? string.Empty : dtr["MARKSHEET_NO_HSC"].ToString();
                     //Subject Wise Marks
 
                     //txtHscChe.Text = dtr["HSC_CHE_GCET"] == null ? "0" : dtr["HSC_CHE_GCET"].ToString();
@@ -1452,6 +1468,8 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     txtGradeDiploma.Text = dtr["GRADEDIPLOMA"] == null ? string.Empty : dtr["GRADEDIPLOMA"].ToString();
                     txtAttemptDiploma.Text = dtr["ATTEMPTDIPLOMA"] == null ? string.Empty : dtr["ATTEMPTDIPLOMA"].ToString();
                     txtDiplomaColgAddress.Text = dtr["DIPLOMA_COLLEGE_ADDRESS"] == null ? string.Empty : dtr["DIPLOMA_COLLEGE_ADDRESS"].ToString();
+                    ddlDivisionDiploma.SelectedValue = dtr["DIVISION_DIPLOMA"] == null ? "0" : dtr["DIVISION_DIPLOMA"].ToString();
+                    txtMarksheetNoDiploma.Text = dtr["MARKSHEET_NO_DIPLOMA"] == null ? string.Empty : dtr["MARKSHEET_NO_DIPLOMA"].ToString();
 
                     //Entrance Exam Scores
                     //ddlExamNo.SelectedValue = dtr["QUALIFYNO"].ToString();
@@ -1682,7 +1700,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 }
 
 
-                if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty || txtQExamRollNo.Text != "") && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != ""))
+                if (ddlExamNo.SelectedIndex > 0 && (txtQExamRollNo.Text != string.Empty || txtQExamRollNo.Text != "") && (txtYearOfExam.Text != string.Empty || txtYearOfExam.Text != "") && (txtAllIndiaRank.Text != string.Empty || txtAllIndiaRank.Text != "") && (txtLastSchoolName.Text!=string.Empty || txtLastSchoolName.Text != ""))
                 {
                     dr["QUALIFYNO"] = Convert.ToInt32(ddlExamNo.SelectedValue);
                     dr["QUALIFYNAME"] = ddlExamNo.SelectedItem.Text;
@@ -1692,6 +1710,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
                     dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
                     dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
+                    dr["LAST_SCHOOL_NAME"] = txtLastSchoolName.Text.Trim();
                     dt.Rows.Add(dr);
                     Session["entranceTbl"] = dt;
                     lvEntranceExm.DataSource = dt;
@@ -1720,7 +1739,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                     dr["ALL_INDIA_RANK"] = txtAllIndiaRank.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtAllIndiaRank.Text.Trim());
                     dr["SCORE"] = txtScore.Text.Trim() == "" ? 0.0m : Convert.ToDecimal(txtScore.Text.Trim());
                     dr["EXMROLLNO"] = txtQExamRollNo.Text.Trim();
-
+                    dr["LAST_SCHOOL_NAME"] = txtLastSchoolName.Text.Trim();
                     dt.Rows.Add(dr);
                     Session["entranceTbl"] = dt;
                     lvEntranceExm.DataSource = dt;
@@ -1759,6 +1778,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 txtAllIndiaRank.Text = dr["ALL_INDIA_RANK"].ToString();
                 txtScore.Text = dr["SCORE"].ToString();
                 txtQExamRollNo.Text = dr["EXMROLLNO"].ToString();
+                txtLastSchoolName.Text = dr["LAST_SCHOOL_NAME"].ToString();
                 ////if (dt1.Rows.Count > 1)//*********
                 ////    dt1.Rows.Remove(dr);
                 dt.Rows.Remove(dr);
@@ -1868,6 +1888,7 @@ public partial class ACADEMIC_QualificationDetails : System.Web.UI.Page
                 objQualExam.Meritno = Convert.ToInt32(dr["ALL_INDIA_RANK"]);
                 objQualExam.Score = Convert.ToDecimal(dr["SCORE"]);
                 objQualExam.Qexmrollno = dr["EXMROLLNO"].ToString();
+                objQualExam.LastSchoolName = dr["LAST_SCHOOL_NAME"].ToString();
                 EntranceExams[index] = objQualExam;
                 index++;
             }

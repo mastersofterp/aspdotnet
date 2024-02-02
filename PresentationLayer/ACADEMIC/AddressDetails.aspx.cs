@@ -469,6 +469,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                 txtAnnualIncome.Text = dtr["ANNUAL_INCOME"] == null ? string.Empty : dtr["ANNUAL_INCOME"].ToString();
                 txtRelationWithGuardian.Text = dtr["RELATION_GUARDIAN"] == null ? string.Empty : dtr["RELATION_GUARDIAN"].ToString();
                 txtGDesignation.Text = dtr["GUARDIAN_DESIG"] == null ? string.Empty : dtr["GUARDIAN_DESIG"].ToString();
+                txtOtherInfo.Text = dtr["GUARDIAN_OTHER_INFO"] == null ? string.Empty : dtr["GUARDIAN_OTHER_INFO"].ToString();
             }
         }
     }
@@ -656,7 +657,7 @@ public partial class ACADEMIC_AddressDetails : System.Web.UI.Page
                     if (!txtRelationWithGuardian.Text.Trim().Equals(string.Empty)) objSAddress.RELATION_GUARDIAN = txtRelationWithGuardian.Text.Trim();
                     if (!txtGoccupationName.Text.Trim().Equals(string.Empty)) objSAddress.GOCCUPATIONNAME = txtGoccupationName.Text.Trim();
                     if (!txtGDesignation.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIANDESIGNATION = txtGDesignation.Text.Trim();
-
+                    if (!txtOtherInfo.Text.Trim().Equals(string.Empty)) objSAddress.GUARDIAN_OTHER_INFO = txtOtherInfo.Text.Trim();
 
 
                     CustomStatus cs = (CustomStatus)objSC.UpdateStudentAddressDetails(objS, objSAddress, Convert.ToInt32(Session["usertype"]));

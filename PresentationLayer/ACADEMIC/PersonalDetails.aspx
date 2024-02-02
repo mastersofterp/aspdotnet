@@ -619,6 +619,37 @@
                                                     <asp:DropDownList ID="ddladmthrough" CssClass="form-control" data-select2-enable="true" runat="server" AppendDataBoundItems="True"
                                                         ToolTip="Please Select Admission Type" TabIndex="30" />
                                                 </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divElection" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supElection" runat="server">* </sup>
+                                                        <label>Name Enrolled in Election List</label>
+                                                    </div>
+                                                    <asp:RadioButtonList ID="rdoElection" runat="server" TabIndex="1" RepeatDirection="Horizontal">                                                       
+                                                        <asp:ListItem Text="Yes&nbsp;" Value="Y"></asp:ListItem>
+                                                        <asp:ListItem Text="No&nbsp;" Value="N"></asp:ListItem>                         
+                                                    </asp:RadioButtonList>
+                                                    
+                                                </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divLicenseNo" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supLicenseNo" runat="server">* </sup>
+                                                        <label>Driving License Number</label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtDrivingLicenseNo" runat="server" CssClass="form-control" ToolTip="Please Enter Driving License Number" MaxLength="20"
+                                                        TabIndex="1" placeholder="Enter Driving License Number" onkeypress="allowAlphaNumericSpaceHyphen(event)"></asp:TextBox>
+                                                </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divStudPanNo" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supStudPanNo" runat="server">* </sup>
+                                                        <label>Student Permanent Account Number</label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtStudPanNo" runat="server" CssClass="form-control" ToolTip="Please Enter Student Permanent Account Number" MaxLength="25" TabIndex="1"
+                                                        placeholder="Enter Student Permanent Account Number" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
+                                                </div>
+
                                             </div>
 
                                             <div class="row">
@@ -895,6 +926,14 @@
                                                         TargetControlID="txtAnnualIncome">
                                                     </ajaxToolKit:FilteredTextBoxExtender>
                                                 </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divFatherPanNo" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supFatherPanNo" runat="server">* </sup>
+                                                        <label>Father Permanent Account Number</label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtFatherPanNo" CssClass="form-control" runat="server" TabIndex="1" MaxLength="25" ToolTip="Please Enter Father Permanent Account Number" placeholder="Enter Father Permanent Account Number" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
+                                                </div>
                                             </div>
 
                                             <div class="row" id="MotherSection" runat="server" visible="true">
@@ -997,6 +1036,14 @@
                                                     <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender10" runat="server" FilterType="Numbers"
                                                         TargetControlID="txtMAnnualIncome">
                                                     </ajaxToolKit:FilteredTextBoxExtender>
+                                                </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12" id="divMotherPanNo" runat="server">
+                                                    <div class="label-dynamic">
+                                                        <sup id="supMotherPanNo" runat="server">* </sup>
+                                                        <label>Mother Permanent Account Number</label>
+                                                    </div>
+                                                    <asp:TextBox ID="txtMotherPanNo" runat="server" CssClass="form-control" TabIndex="1" MaxLength="25" ToolTip="Please Enter Mother Permanent Account Number" placeholder="Enter Mother Permanent Account Number" onkeypress="allowAlphaNumericSpace(event)"></asp:TextBox>
                                                 </div>
 
                                             </div>
@@ -1285,6 +1332,23 @@
         }
 
     </script>
+
+    <script>
+        function allowAlphaNumericSpaceHyphen(e) {
+            var code = ('charCode' in e) ? e.charCode : e.keyCode;
+            if (!(code == 32) && // space
+              !(code == 45) && // hyphen
+              !(code > 47 && code < 58) && // numeric (0-9)
+              !(code > 64 && code < 91) && // upper alpha (A-Z)
+              !(code > 96 && code < 123)) { // lower alpha (a-z)
+                e.preventDefault();
+                // alert("Not Allowed Special Character..!");
+                return true;
+            } else {
+                return false;
+            }
+        }
+</script>
 
     <script>
         function allowNumeric(event) {  // Added By Shrikant W. on 16/12/2023

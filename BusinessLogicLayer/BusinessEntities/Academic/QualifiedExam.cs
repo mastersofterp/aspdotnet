@@ -43,7 +43,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
         string college_code = string.Empty;
         string college_address = string.Empty;
         string qual_medium = string.Empty;
-
+        string _last_school_name = string.Empty;
         private decimal _score = 0.0m;
         
        #endregion
@@ -232,6 +232,11 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessEntities
               set { _score = value; }
           }
 
+          public string LastSchoolName
+          {
+              get { return _last_school_name; }
+              set { _last_school_name = value; }
+          }
         #endregion
     }
 }
