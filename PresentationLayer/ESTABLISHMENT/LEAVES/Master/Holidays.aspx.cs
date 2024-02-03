@@ -419,7 +419,7 @@ public partial class ESTABLISHMENT_LEAVES_Master_Holidays : System.Web.UI.Page
             CustomStatus cs = (CustomStatus)objHoliday.DeleteHoliday(HNo);
             if (cs.Equals(CustomStatus.RecordDeleted))
             {
-                MessageBox("Record Deleted Succesfully.");
+                MessageBox("Record Deleted Successfully.");
                 //return;
             }
             ViewState["action"] = null;
