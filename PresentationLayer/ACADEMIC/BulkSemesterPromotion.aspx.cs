@@ -57,6 +57,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
                 this.PopulateDropDownList();
+                LVStudentDetails.Visible = false;
             }
             objCommon.SetLabelData("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]));//Set label -  
             objCommon.SetHeaderLabelData(Convert.ToString(Request.QueryString["pageno"]));  // Set Page Header  -
@@ -75,7 +76,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
                 objCommon.FillDropDownList(ddlClgname, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             objCommon.FillDropDownList(ddlColg, "ACD_COLLEGE_MASTER WITH (NOLOCK)", "COLLEGE_ID", "ISNULL(COLLEGE_NAME,'')+(CASE WHEN LOCATION IS NULL THEN '' ELSE ' - 'END) +ISNULL(LOCATION,'') COLLEGE_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "COLLEGE_ID");
             //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER WITH (NOLOCK)", "SESSIONNO", "SESSION_NAME", "SESSIONNO>0 AND ISNULL(IS_ACTIVE,0)=1 AND OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SESSIONNO desc");
-            
+
         }
         catch (Exception ex)
         {
@@ -170,7 +171,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
             btnSave.Visible = false;
             lvStudent.DataSource = null;
             lvStudent.DataBind();
-            
+
             objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
             if (ddlDegree.SelectedIndex > 0)
             {
@@ -257,17 +258,32 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
-                    lvStudent.DataSource = ds;
-                    lvStudent.DataBind();
-                    objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
-                    btnSave.Visible = true;
-                    btnSave.Enabled = true;
-                    hftot.Value = lvStudent.Items.Count.ToString();
+                    if (Convert.ToInt32(Session["OrgId"]) == 19 || Convert.ToInt32(Session["OrgId"]) == 20)
+                    {
+                        LVStudentDetails.DataSource = ds;
+                        LVStudentDetails.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), LVStudentDetails);//Set label -
+                        btnSave.Visible = true;
+                        btnSave.Enabled = true;
+                        hftot.Value = LVStudentDetails.Items.Count.ToString();
+                    }
+                    else
+                    {
+                        LVStudentDetails.Visible = false;
+                        lvStudent.DataSource = ds;
+                        lvStudent.DataBind();
+                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
+                        btnSave.Visible = true;
+                        btnSave.Enabled = true;
+                        hftot.Value = lvStudent.Items.Count.ToString();
+                    }
+
                 }
                 else
                 {
                     //btnSave.Visible = false;
                     btnSave.Enabled = false;
+                    LVStudentDetails.Visible = false;
                     lvStudent.DataSource = null;
                     lvStudent.DataBind();
                     objCommon.DisplayMessage("Record Not Found", this.Page);
@@ -284,7 +300,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
         objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label -
         objCommon.FillDropDownList(ddlAcdYear, "ACD_ACADEMIC_YEAR", "ACADEMIC_YEAR_ID", "ACADEMIC_YEAR_NAME", "ACADEMIC_YEAR_ID>0 AND ACTIVE_STATUS=1", "ACADEMIC_YEAR_ID DESC");
         objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM ", "DISTINCT (SM.SESSIONNO)", "SM.SESSION_NAME", "SM.SESSIONNO > 0 AND SM.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SM.SESSIONNO");
-              
+
     }
 
     protected void lvStudent_ItemDataBound(object sender, ListViewItemEventArgs e)
@@ -438,7 +454,7 @@ public partial class ACADEMIC_BulkSemesterPromotion : System.Web.UI.Page
                 ddlSemester.Focus();
                 objCommon.FillDropDownList(ddlSemester, "ACD_SEMESTER WITH (NOLOCK)", "SEMESTERNO", "SEMESTERNAME", "SEMESTERNO > 0", "SEMESTERNO");
                 //objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER SM INNER JOIN  ACD_STUDENT_RESULT SR ON SR.SESSIONNO= SM.SESSIONNO ", "DISTINCT (SR.SESSIONNO)", "SM.SESSION_NAME", "SR.SESSIONNO > 0 AND SM.COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + " AND SM.OrganizationId=" + Convert.ToInt32(Session["OrgId"]), "SR.SESSIONNO");
-                 
+
                 ddlSession.Focus();
             }
         }

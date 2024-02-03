@@ -118,8 +118,8 @@
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
                                                 <%--<label>Session</label>--%>
-                                               <%-- <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>--%>
-                                               <label>Session For Semester Promotion</label>   
+                                                <%-- <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>--%>
+                                                <label>Session For Semester Promotion</label>
                                             </div>
                                             <asp:DropDownList ID="ddlSession" runat="server" TabIndex="1" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -136,7 +136,7 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
-                                              <label>Academic Year For Semester Promotion</label>                                               
+                                                <label>Academic Year For Semester Promotion</label>
                                             </div>
                                             <asp:DropDownList ID="ddlAcdYear" runat="server" AutoPostBack="true" AppendDataBoundItems="true" TabIndex="6" ValidationGroup="teacherallot" CssClass="form-control" data-select2-enable="true">
                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -254,6 +254,92 @@
                                                 <td>
                                                     <asp:Label runat="server" ID="lblstatus" Text='<%# Eval("statusno") %>'></asp:Label>
                                                 </td>
+                                            </tr>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
+
+                                <div class="col-12" runat="server" visible="false">
+                                    <asp:Panel ID="Panel2" runat="server"></asp:Panel>
+                                    <asp:ListView ID="LVStudentDetails" runat="server" OnItemDataBound="lvStudent_ItemDataBound">
+                                        <LayoutTemplate>
+                                            <div class="sub-heading">
+                                                <h5>Select Student</h5>
+                                            </div>
+                                            <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+                                                        <th>
+                                                            <asp:CheckBox ID="cbHeadReg" runat="server" Text="Select" ToolTip="Register/Register all" onclick="SelectAll(this,1,'chkRegister');" />
+                                                        </th>
+                                                        <th><%--Reg. no.--%>
+                                                            <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
+                                                        </th>
+                                                        <th>Student Name
+                                                        </th>
+                                                        <th>Current sem.
+                                                        </th>
+                                                        <th>Promoted Sem.
+                                                        </th>
+                                                        <th>Eligible
+                                                        </th>
+                                                        <th>1ST YEAR
+                                                        </th>
+                                                        <th>2ND YEAR
+                                                        </th>
+                                                        <th>3RD YEAR
+                                                        </th>
+                                                        <th>4TH YEAR
+                                                        </th>
+                                                        <th>5TH YEAR
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="itemPlaceholder" runat="server" />
+                                                </tbody>
+                                            </table>
+                                        </LayoutTemplate>
+                                        <ItemTemplate>
+                                            <tr>
+                                                <td>
+                                                    <asp:CheckBox ID="chkRegister" runat="server" ToolTip="Click to select this student for semester promotion" Enabled='<%# (Convert.ToInt32((Eval("PROMOTED_SEM")) ) == 0 ? true :false) %>'
+                                                        Text='<%# (Convert.ToInt32((Eval("PROMOTED_SEM")) ) == 0 ?  " " : "PROMOTED" )%>'
+                                                        ForeColor="Green" Font-Bold="true"
+                                                        onClick="totSubjects(this);" />
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblregno" Text='<%# Eval("regno")%>' ToolTip='<%# Eval("idno")%>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblstudname" Text='<%# Eval("studname")%>' ToolTip='<%# Eval("sectionno")%>'></asp:Label>
+                                                </td>
+
+                                                <td>
+                                                    <%# Eval("semesterno") %>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("promoted_sem") %>
+                                                </td>
+                                                <td>
+                                                    <asp:Label runat="server" ID="lblstatus" Text='<%# Eval("statusno") %>'></asp:Label>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("1ST YEAR") %>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("2ND YEAR") %>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("3RD YEAR") %>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("4TH YEAR") %>
+                                                </td>
+                                                <td>
+                                                    <%# Eval("5TH YEAR") %>
+                                                </td>
+
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
