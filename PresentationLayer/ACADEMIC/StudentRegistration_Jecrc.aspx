@@ -1826,7 +1826,7 @@
 
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnSave" runat="server" Text="Submit" TabIndex="38" ToolTip="Submit Student Information"
-                                        ValidationGroup="academic" CssClass="btn btn-primary" OnClick="btnSave_Click" OnClientClick="confirmhostel()" CausesValidation="false" />
+                                        ValidationGroup="academic" CssClass="btn btn-primary" OnClick="btnSave_Click" />
                                     <asp:Button ID="btnpayment" runat="server" Text="Offline Fees" TabIndex="24" ToolTip="For Offline Fees Collection"
                                         CausesValidation="false" CssClass="btn btn-primary" OnClick="btnpayment_Click"
                                         Visible="false" />
@@ -2537,7 +2537,7 @@
                 }
                 else
                 {
-
+                    return false;
                    // alert('Else...');
                 }
             

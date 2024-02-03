@@ -2803,6 +2803,7 @@ public partial class ACADEMIC_StudentRegistration_Jecrc : System.Web.UI.Page
             ddlSchool.SelectedValue = ds.Tables[0].Rows[0]["COLLEGE_ID"] == null ? "0" : ds.Tables[0].Rows[0]["COLLEGE_ID"].ToString();
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE D INNER JOIN ACD_COLLEGE_DEGREE_BRANCH B ON (D.DEGREENO=B.DEGREENO)", "DISTINCT (D.DEGREENO)", "DEGREENAME", "D.DEGREENO > 0 AND B.COLLEGE_ID=" + ddlSchool.SelectedValue, "D.DEGREENO");
             ddlDegree.SelectedValue = ds.Tables[0].Rows[0]["DEGREENO"] == null ? "0" : ds.Tables[0].Rows[0]["DEGREENO"].ToString();
+            txtDateOfBirth.Text = Convert.ToDateTime(ds.Tables[0].Rows[0]["DOB"]).ToString();
             if (ds.Tables[0].Rows[0]["ISCORE"].ToString() == "1")
             {
                 divSpecialisation.Visible = true;
