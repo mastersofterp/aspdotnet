@@ -77,7 +77,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
-                                            <label>Leave Date</label>
+                                            <label>Leave Date From</label>
                                         </div>
                                         <div class="input-group date">
                                             <div class="input-group-addon">
@@ -109,17 +109,17 @@
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <div class="label-dynamic">
-                                            <sup>* </sup>
+                                            <%--<sup>* </sup>--%>
                                             <label>Employee</label>
                                         </div>
                                         <asp:DropDownList ID="ddlEmp" runat="server" TabIndex="5" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true"
                                             OnSelectedIndexChanged="ddlEmp_SelectedIndexChanged" AutoPostBack="true" ToolTip="Select Employee">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlEmp"
+                                        <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlEmp"
                                             Display="None" ErrorMessage="Please Select Employee" ValidationGroup="Leave"
                                             SetFocusOnError="true" InitialValue="0">
-                                        </asp:RequiredFieldValidator>
+                                        </asp:RequiredFieldValidator>--%>
                                     </div>
                                 </div>
                             </div>
@@ -128,8 +128,10 @@
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnRestore" runat="server" OnClick="btnRestore_Click" ValidationGroup="Leave" CssClass="btn btn-primary"
                             Text="Click To Restore Leave" ToolTip="Click To Cancel the Approved Leave" Enabled="true" TabIndex="6" />
+                        <asp:Button ID="btnShowRpt" runat="server" CssClass="btn btn-info" ToolTip="Click here to show Report"
+                            Text="Show Report" OnClick="btnShowRpt_Click" ValidationGroup="Leave" TabIndex="7" />
                         <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" ToolTip="Click here to Reset"
-                            Text="Cancel" OnClick="btnCancel_Click" TabIndex="7" />
+                            Text="Cancel" OnClick="btnCancel_Click" TabIndex="8" />
                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true"
                             ShowSummary="false" ValidationGroup="Leave" />
                     </div>
@@ -149,6 +151,8 @@
                                                 <th>
                                                     <asp:CheckBox ID="cbAl" runat="server" onclick="checkAllEmployees(this)" ToolTip="Check to Select All Leaves" Checked="false"/>
                                                     Select
+                                                </th>
+                                                <th>Employee Name
                                                 </th>
                                                 <th>Leave Name
                                                 </th>
@@ -175,6 +179,9 @@
                                         <td>
                                             <asp:CheckBox ID="chkSelect" runat="server" ToolTip='<%# Eval("LETRNO") %>' />
                                             <asp:HiddenField ID="hdnLeaveTrNo" runat="server" Value='<%# Eval("LETRNO") %>' />
+                                        </td>
+                                        <td>
+                                            <%# Eval("EMPFULLNAME")%>
                                         </td>
                                         <td>
                                             <%# Eval("LEAVENAME")%>
@@ -226,5 +233,6 @@
         }
 
             </script>
-
+<div id="divMsg" runat="server">
+</div>
 </asp:Content>
