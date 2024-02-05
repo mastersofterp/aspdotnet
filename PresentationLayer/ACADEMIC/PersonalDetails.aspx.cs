@@ -683,16 +683,23 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 txtDTEAppId.Text = dtr["DTE_APPLICATION_ID"] == null ? string.Empty : dtr["DTE_APPLICATION_ID"].ToString();
                 txtUEN.Text = dtr["ELIGIBILITY_NO"] == null ? string.Empty : dtr["ELIGIBILITY_NO"].ToString();
 
-                if(Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 0)
+                if (dtr["ENROLLED_IN_ELECTION"] != DBNull.Value)
+                {
+                    if (Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 0)
+                    {
+                        rdoElection.SelectedValue = "N";
+                    }
+                    else if (Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 1)
+                    {
+                        rdoElection.SelectedValue = "Y";
+                    }
+                }
+                else
                 {
                     rdoElection.SelectedValue = "N";
                 }
-                else if (Convert.ToInt32(dtr["ENROLLED_IN_ELECTION"]) == 1)
-                {
-                    rdoElection.SelectedValue = "Y";
-                }
 
-                txtDrivingLicenseNo.Text = dtr["DRIVING_LICENSE_NO"] == null ? string.Empty : dtr["DRIVING_LICENSE_NO"].ToString();
+                    txtDrivingLicenseNo.Text = dtr["DRIVING_LICENSE_NO"] == null ? string.Empty : dtr["DRIVING_LICENSE_NO"].ToString();
                 txtStudPanNo.Text = dtr["STUDENT_PANCARD_NO"] == null ? string.Empty : dtr["STUDENT_PANCARD_NO"].ToString();
                 txtFatherPanNo.Text = dtr["FATHER_PANCARD_NO"] == null ? string.Empty : dtr["FATHER_PANCARD_NO"].ToString();
                 txtMotherPanNo.Text = dtr["MOTHER_PANCARD_NO"] == null ? string.Empty : dtr["MOTHER_PANCARD_NO"].ToString();
