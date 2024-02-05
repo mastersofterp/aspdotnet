@@ -28,6 +28,7 @@ using System.Net;
 using System.Net.Mail;
 using BusinessLogicLayer.BusinessLogic;
 using Newtonsoft.Json;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 
 public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
@@ -41,6 +42,8 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
     FeeCollectionController feeController = new FeeCollectionController();
     SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
     ISGPayReturnParameter isgPayReturnParams = null;
+    OrganizationController objOrg = new OrganizationController();
+
     #endregion
 
     string hash_seq = string.Empty;
@@ -54,17 +57,39 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
         {
             try
             {
-                SqlDataReader dr = objCommon.GetCommonDetails();
-                if (dr != null)
+
+                DataSet Orgds = null;
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        Session["OrgId"] = dr["OrganizationId"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        Session["OrgId"] = dr["OrganizationId"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
                 string merchantID = string.Empty;
                 string secureSecret = string.Empty;  // secureSecret
@@ -76,7 +101,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                 //}
                 //else
                 //{
-                merchantID = objCommon.LookUp("ACD_PG_CONFIGURATION", "MERCHANT_ID", "ACTIVE_STATUS= 1 AND INSTANCE = 1");  //"101000000000781";
+                merchantID = objCommon.LookUp("ACD_PG_CONFIGURATION", "MERCHANT_ID", "ACTIVE_STATUS= 1");  //"101000000000781"; AND INSTANCE = 1
                 //}
 
                 DataSet pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY", "MERCHANT_ID= '" + merchantID + "' ", "CONFIG_ID DESC");   //Merchant_Id

@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using IITMS.UAIMS.BusinessLayer.BusinessEntities;
+using IITMS.UAIMS.BusinessLogicLayer.BusinessLogic.RFC_CONFIG;
 
 public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
 {
@@ -28,6 +29,8 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
     FeeCollectionController objFees = new FeeCollectionController();
     ISGPayReturnParameter isgPayReqParams = null;
     System.Collections.SortedList transactionData = null;
+    OrganizationController objOrg = new OrganizationController();
+
     string hash_seq = string.Empty;
     #endregion
 
@@ -49,18 +52,40 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
         {
             try
             {
-              
-                SqlDataReader dr = objCommon.GetCommonDetails();
 
-                if (dr != null)
+                DataSet Orgds = null;
+                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
+                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                byte[] imgData = null;
+                if (Orgds.Tables != null)
                 {
-                    if (dr.Read())
+                    if (Orgds.Tables[0].Rows.Count > 0)
                     {
-                        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                        lblAddress.Text = dr["College_Address"].ToString();
-                        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+
+                        if (Orgds.Tables[0].Rows[0]["Logo"] != DBNull.Value)
+                        {
+                            imgData = Orgds.Tables[0].Rows[0]["Logo"] as byte[];
+                            imgCollegeLogo.ImageUrl = "data:image/png;base64," + Convert.ToBase64String(imgData);
+                        }
+                        else
+                        {
+                            // hdnLogoOrg.Value = "0";
+                        }
+
                     }
                 }
+              
+                //SqlDataReader dr = objCommon.GetCommonDetails();
+
+                //if (dr != null)
+                //{
+                //    if (dr.Read())
+                //    {
+                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
+                //        lblAddress.Text = dr["College_Address"].ToString();
+                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
+                //    }
+                //}
 
                 lblRegNo.Text = Session["regno"].ToString();
                 lblstudentname.Text = Convert.ToString(Session["payStudName"]);
@@ -94,7 +119,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
                     Session["saltkey"] = saltkey;
                     Session["accesscode"] = accesscode;
                     Session["PassCode"] = hashsequence;
-                    //Session["Instance"] = ds1.Tables[0].Rows[0]["INSTANCE"].ToString();
+                    Session["Instance"] = ds1.Tables[0].Rows[0]["INSTANCE"].ToString();
 
                 }
 
@@ -193,15 +218,15 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
 
             if (Convert.ToInt32(Session["Instance"]) == 1)
             {
-                LINK = "https://sandbox.isgpay.com/ISGPay/request.action";     //UAT -https://sandbox.isgpay.com:8443/ISGPay/request.action";  
+                LINK = Session["Instance"].ToString();              //"https://sandbox.isgpay.com/ISGPay/request.action";     //UAT -https://sandbox.isgpay.com:8443/ISGPay/request.action";  
             }
             else if (Convert.ToInt32(Session["Instance"]) == 2)
             {
-                LINK = "https://sandbox.isgpay.com/ISGPay/request.action";
+                LINK = Session["Instance"].ToString(); 
             }
             else
             {
-                LINK = "https://sandbox.isgpay.com/ISGPay/request.action";
+                LINK = Session["Instance"].ToString(); 
             }
 
             /* For Page.Request.Form as parameter*/
