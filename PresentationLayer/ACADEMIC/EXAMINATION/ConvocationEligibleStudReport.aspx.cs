@@ -84,19 +84,19 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
                 btnPassStudList.Visible = true;
                 btnConvocationExcelReport.Visible = true;
-
                
-                string passoutflag = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(PASSOUT_RPT,0)", ""));
-                string convfeedback = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(FEEDBACK_RPT,0)", ""));
+                //string passoutflag = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(PASSOUT_RPT,0)", ""));
+                //string convfeedback = (objCommon.LookUp("ACD_CONVOCATION_CONFIGUARATION_LEVEL", "TOP 1 ISNULL(FEEDBACK_RPT,0)", ""));
+                objCommon.FillDropDownList(ddlConvocationNo, "ACD_CONVOCATION_MASTER", "CONV_NO", "CONVOCATION_NAME", "CONV_NO > 0", "");
 
-                if (passoutflag == "1")
-                {
-                    btnPassStudList.Visible = true;
-                }
-                if (convfeedback == "1")
-                {
-                    btnConvocationExcelReport.Visible = true;
-                }
+                //if (passoutflag == "1")
+                //{
+                //    btnPassStudList.Visible = true;
+                //}
+                //if (convfeedback == "1")
+                //{
+                //    btnConvocationExcelReport.Visible = true;
+                //}
                 
             }
         }
@@ -247,15 +247,18 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
 
     }
-     
-    protected void btnConvocationExcelReport_Click1(object sender, EventArgs e)     
+
+
+    protected void btnConvocationExcelReport_Click1(object sender, EventArgs e)
     {
         bool CompleteRequest = false;
         try
         {
             SQLHelper objsql = new SQLHelper(_nitprm_constr);
-            SqlParameter[] objParams = new SqlParameter[0];
-            DataSet ds = objsql.ExecuteDataSetSP("PKG_CONVOCATION_REPORT_NEW", objParams);
+            SqlParameter[] objParams = new SqlParameter[1];
+
+            objParams[0] = new SqlParameter("@P_CONV_NO", Convert.ToInt32(ddlConvocationNo.SelectedValue));
+            DataSet ds = objsql.ExecuteDataSetSP("PKG_CONVOCATION_REPORT_new", objParams);
 
             GridView GVStatus = new GridView();
             string ContentType = string.Empty;
@@ -265,7 +268,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 GVStatus.DataSource = ds;
                 GVStatus.DataBind();
 
-                string attachment = "attachment; filename= ConvocationExcelReport.xls";
+                string attachment = "attachment; filename= ConvocationExcelReport" + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
                 Response.ClearContent();
                 Response.AddHeader("content-disposition", attachment);
                 Response.ContentType = "application/vnd.MS-excel";
