@@ -2434,10 +2434,11 @@
                                                         <i class="fa fa-calendar text-blue"></i>
                                                     </div>
 
-                                                    <asp:TextBox ID="txtInvoiceDate" runat="server" ToolTip="Please Enter Bill/Invoice Date" CssClass="form-control"
+                                                   <%--pawan nikhare 01/01/2024--%>
+                                                     <asp:TextBox ID="txtInvoiceDate" runat="server" ToolTip="Please Enter Bill/Invoice Date" CssClass="form-control"
                                                         TabIndex="10" Style="width: 150px"></asp:TextBox>
                                                     <ajaxToolKit:CalendarExtender ID="CalendarExtender1" runat="server" Enabled="True" Format="dd/MM/yyyy"
-                                                        PopupButtonID="Image1" TargetControlID="txtInvoiceDate">
+                                                        PopupButtonID="Transaction DateImage1" TargetControlID="txtInvoiceDate">
                                                     </ajaxToolKit:CalendarExtender>
                                                     <ajaxToolKit:MaskedEditExtender ID="MaskedEditExtender1" runat="server" AcceptNegative="Left"
                                                         DisplayMoney="Left" ErrorTooltipEnabled="True" Mask="99/99/9999" MaskType="Date"
