@@ -9,6 +9,7 @@
     <script src="/jquery/bootstrap-datepicker.js"></script>
     <script src="/jquery/jquery.inputmask.bundle.js"></script>--%>
 
+
     <style>
         input.masked {
             font-size: 16px;
@@ -221,6 +222,7 @@
             visibility: visible;
         }
     </style>
+
     <style>
         .box-header p {
             position: initial;
@@ -251,6 +253,7 @@
             padding: 0.75rem;
         }
     </style>
+
 
     <%--    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -367,7 +370,10 @@
 
                                                     <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Course </p>
                                                 </li>
+                                                <li class="nav selectseventeen list-group-item-new " id="pre_seventeen" runat="server"><b><a href="#" class="card-link"><i class="fa fa-file"></i>Overall External Marks</a></b>
 
+                                                    <p class="nav2 mt-1">College & Scheme <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Session <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Semester <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>Section </p>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -926,9 +932,9 @@
 
                                     <asp:Button ID="btnIntEntRpt" Text="Internal Mark Entry Report" runat="server" TabIndex="1" ValidationGroup="CourseWiseExamRegistartion" CssClass="btn btn-info" OnClick="btnIntEntRpt_Click" Visible="false" />
                                     <asp:Button ID="btnsubtituteexamexcel" Text="Substitute Registration Excel" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnsubtituteexamexcel_Click" ValidationGroup="schemesession" />
-                                      <asp:Button ID="btnClassBranch" Text="Class Branchwise Name List" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnClassBranch_Click"  ValidationGroup="schemesession" Visible="false"/>
-                                     <asp:Button ID="btnSummaryReport" Text="Class / Branch wise Students Summary" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSummaryReport_Click"   ValidationGroup="schemesession" Visible="false" />
-                                    <asp:Button ID="btnExamSummaryOnePage" Text="Exam Summary Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnExamSummaryOnePage_Click"  ValidationGroup="schemesession" Visible="false"/>
+                                    <asp:Button ID="btnClassBranch" Text="Class Branchwise Name List" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnClassBranch_Click" ValidationGroup="schemesession" Visible="false" />
+                                    <asp:Button ID="btnSummaryReport" Text="Class / Branch wise Students Summary" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnSummaryReport_Click" ValidationGroup="schemesession" Visible="false" />
+                                    <asp:Button ID="btnExamSummaryOnePage" Text="Exam Summary Report" runat="server" TabIndex="1" CssClass="btn btn-info" OnClick="btnExamSummaryOnePage_Click" ValidationGroup="schemesession" Visible="false" />
                                     <asp:Button ID="btnCancel" runat="server" OnClick="btnCancel_Click" Text="Cancel" TabIndex="1" CssClass="btn btn-warning" CausesValidation="False" />
 
                                     <asp:ValidationSummary ID="ValidationSummary11" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="InternalmarkReport" CausesValidation="false" />
@@ -1195,7 +1201,6 @@
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSection").addClass("red-color");
 
-
                 });
                 $(".selectone").click(function () {
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").removeClass("red-color");
@@ -1321,6 +1326,13 @@
                     $("#ctl00_ContentPlaceHolder1_ddlcourse").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
                     $("#ctl00_ContentPlaceHolder1_ddlSection").removeClass("red-color");
+                });
+                $(".selectseventeen").click(function () {
+                    $("#ctl00_ContentPlaceHolder1_ddlClgname").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSession").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSem").addClass("red-color");
+                    $("#ctl00_ContentPlaceHolder1_ddlSection").addClass("red-color");
+
                 });
             });
         });
