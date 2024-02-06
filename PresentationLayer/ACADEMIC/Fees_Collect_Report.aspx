@@ -362,7 +362,23 @@
                             <div class="col-12">
                                 <div class="row">
 
-                                    <div class="form-group col-md-3 col-sm-3 col-3">
+
+                                     <div class="form-group col-lg-3 col-md-3 col-3">
+                                        <div id="aDIV" runat="server">
+                                            <div>
+                                                <label>Report</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlReport" runat="server" AppendDataBoundItems="True" AutoPostBack="true"
+                                                CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlReport_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group col-md-3 col-sm-3 col-3" id="acdyear" runat="server" visible="false">
+                                         <div  >
                                         <div class="label-dynamic">
                                             <sup></sup>
                                             <label>Academic Year</label>
@@ -370,13 +386,13 @@
                                         <asp:DropDownList ID="ddlAcdYear" runat="server" AutoPostBack="true" AppendDataBoundItems="true" TabIndex="2" ValidationGroup="show" CssClass="form-control" data-select2-enable="true">
                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
                                         </asp:DropDownList>
-
+                                             </div>
                                         <%-- <asp:RequiredFieldValidator ID="rfvAcademicYear" runat="server" ControlToValidate="ddlAcdYear"
                                                 Display="None" InitialValue="0" ErrorMessage="Please Select Academic Year" ValidationGroup="report">
                                             </asp:RequiredFieldValidator>--%>
                                     </div>
 
-                                    <div class="form-group col-md-3 col-sm-3 col-3" id="fromDSpan" runat="server" visible="true">
+                                    <div class="form-group col-md-3 col-sm-3 col-3" id="fromDSpan" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>From Date</label>
@@ -394,12 +410,12 @@
                                                 Mask="99/99/9999" MessageValidatorTip="true" MaskType="Date" DisplayMoney="Left"
                                                 AcceptNegative="none" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate" />
                                         </div>
-                                        <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meeFromDate" ControlToValidate="TextBox1"
+                                       <%-- <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator1" runat="server" ControlExtender="meeFromDate" ControlToValidate="TextBox1"
                                             IsValidEmpty="False" EmptyValueMessage="From date is required" InvalidValueMessage="From date is invalid" ForeColor="Red"
-                                            InvalidValueBlurredMessage="*" Display="None" ValidationGroup="Show" Enabled="true" />
+                                            InvalidValueBlurredMessage="*" Display="None" ValidationGroup="Show" Enabled="true" />--%>
                                     </div>
 
-                                    <div class="form-group col-md-3 col-sm-3 col-3">
+                                    <div class="form-group col-md-3 col-sm-3 col-3" id="toDSpan" runat="server" visible="false">
 
                                         <div class="label-dynamic">
                                             <sup>* </sup>
@@ -419,12 +435,12 @@
                                                 AcceptNegative="none" ErrorTooltipEnabled="true" OnInvalidCssClass="errordate" />
 
                                         </div>
-                                        <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="meeToDate" ControlToValidate="TextBox2"
+                                     <%--   <ajaxToolKit:MaskedEditValidator ID="MaskedEditValidator2" runat="server" ControlExtender="meeToDate" ControlToValidate="TextBox2"
                                             IsValidEmpty="False" EmptyValueMessage="To date is required" InvalidValueMessage="To date is invalid" ForeColor="Red"
-                                            InvalidValueBlurredMessage="*" Display="None" ValidationGroup="Show" />
+                                            InvalidValueBlurredMessage="*" Display="None" ValidationGroup="Show" />--%>
 
                                     </div>
-                                    <div class="form-group col-lg-3 col-md-3 col-3">
+                                    <div class="form-group col-lg-3 col-md-3 col-3" id="degreed" runat="server" visible="false">
                                         <div id="Div3" runat="server">
                                             <div class="label-dynamic">
                                                 <%--<label>Degree</label>--%>
@@ -439,7 +455,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-3 col-3">
+                                    <div class="form-group col-lg-3 col-md-3 col-3" id ="branchd" runat="server" visible="false">
                                         <div id="Div4" runat="server">
                                             <div class="label-dynamic">
                                                 <%--<label>Branch</label>--%>
@@ -454,7 +470,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
+                                    <div class="form-group col-lg-3 col-md-6 col-12" id="semesterd" runat="server" visible="false">
                                         <asp:Panel ID="PnlFeesCollection" runat="server">
 
                                             <div id="trSemester" runat="server">
@@ -473,7 +489,7 @@
                                         </asp:Panel>
                                     </div>
 
-                                    <div id="Div2" class="form-group col-lg-3 col-md-6 col-12" runat="server">
+                                    <div id="reciptd" class="form-group col-lg-3 col-md-6 col-12" runat="server" visible="false">
                                         <div class="label-dynamic">
                                             <sup>* </sup>
                                             <label>Receipt Type</label>
@@ -497,10 +513,8 @@
                                         </div>
                                     </div>
 
-
-
-                                    <div class="form-group col-lg-3 col-md-3 col-3">
-                                        <div id="Div5" runat="server">
+                                    <div class="form-group col-lg-3 col-md-3 col-3" id="yeard" runat="server" visible="false">
+                                        <div >
                                             <div class="label-dynamic">
                                                 <asp:Label ID="lblDYddlYear" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
@@ -512,8 +526,8 @@
                                     </div>
 
 
-                                    <div class="form-group col-lg-3 col-md-3 col-3">
-                                        <div id="Div6" runat="server">
+                                    <div class="form-group col-lg-3 col-md-3 col-3" id="Statusd" runat="server" visible="false">
+                                        <div >
                                             <div class="label-dynamic">
                                                 <label>Admission Status</label>
                                             </div>
@@ -531,7 +545,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-lg-3 col-md-3 col-3" runat="server" id="divPaymentMode">
+                                    <div class="form-group col-lg-3 col-md-3 col-3" runat="server" id="divPaymentMode" visible="false">
                                         <div id="Div7" runat="server">
                                             <div class="label-dynamic">
                                                 <label>Mode of Payment</label>
@@ -544,6 +558,10 @@
 
                                         </div>
                                     </div>
+
+                                
+
+                                    
 
                                 </div>
 
@@ -606,29 +624,29 @@
                                                     InvalidValueBlurredMessage="Invalid Date" ValidationGroup="Show" SetFocusOnError="True" />
                                             </div>
                                         </div>
+
                                     </div>
                                 </asp:Panel>
                             </div>
 
                             <div class="col-12 btn-footer" id="pnlDemand" runat="server" visible="false">
+                                <asp:Button ID="btnReport" runat="server" Text="Report" ValidationGroup="Show" Visible="false" TabIndex="13"  CssClass="btn btn-primary" OnClick="btnReport_Click1" />
                                 <asp:Button ID="btnShow" runat="Server" Text="Show Data" ValidationGroup="Show" OnClick="btnShow_Click" TabIndex="14"
-                                    CssClass="btn btn-primary" CommandName="btnShow" />
+                                    CssClass="btn btn-primary" CommandName="btnShow" Visible="false"/>
                                 <asp:Button ID="btnExcel" runat="Server" Text="DCR Excel Report" ValidationGroup="Show" TabIndex="15"
-                                    OnClick="btnExcel_Click" CssClass="btn btn-info" />
-
+                                    OnClick="btnExcel_Click" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnDcrExcelFormatII" runat="Server" Text="Student Wise DCR Format-II" TabIndex="16"
                                     OnClick="btnDcrExcelFormatII_Click" CssClass="btn btn-info" Visible="false" />
-
                                 <asp:Button ID="btnstudexcel" runat="Server" Text=" Student Wise DCR Report" ValidationGroup="Show" TabIndex="17"
-                                    OnClick="btnstudexcel_Click" CssClass="btn btn-info" />
+                                    OnClick="btnstudexcel_Click" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnstudLedgerReport" runat="server" OnClick="btnstudLedgerReport_Click" Text="Student Ledger Report" TabIndex="18"
                                     ValidationGroup="Show" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnStudentledgerExl" runat="server" OnClick="btnStudentledgerExl_Click" Text="Student Ledger Excel" TabIndex="19"
                                     ValidationGroup="Show" CssClass="btn btn-info" Visible="false" />
                                 <asp:Button ID="btnledgerExcelFormatII" runat="server" OnClick="btnledgerExcelFormatII_Click" Text="Student Ledger Excel Format II" TabIndex="20"
                                     ValidationGroup="Show" CssClass="btn btn-info" Visible="false" />
-                                <asp:Button ID="bntStudentArrears" runat="server" OnClick="bntStudentArrears_Click" Text="Student Arrears Report (Excel)" TabIndex="21"
-                                    CssClass="btn btn-info" ValidationGroup="Show" Visible="false" />
+                                <%--<asp:Button ID="bntStudentArreasrs" runat="server" OnClick="bntStudentArrears_Click" Text="Student Arrears Report (Excel)" TabIndex="21"
+                                    CssClass="btn btn-info" ValidationGroup="Show" Visible="false" />--%>
                                 <asp:Button ID="btnStudentArrearPdf" runat="server" OnClick="btnStudentArrearPdf_Click" Text="Student Arrears Report (PDF)" TabIndex="22"
                                     CssClass="btn btn-info" ValidationGroup="Show" Visible="false" />
                                 <asp:Button ID="btnStudentArrearsHeadwise" runat="server" OnClick="btnStudentArrearsHeadwise_Click" Text="Student Arrears Headwise Report  " TabIndex="23"
@@ -638,7 +656,7 @@
                                 <asp:Button ID="btnSummaryReport" runat="server" Text="Fee Collection Summery Report" OnClick="btnSummaryReport_Click" TabIndex="25"
                                     OnClientClick="return DateValidation();" Visible="false" CssClass="btn btn-info" />
                                 <asp:Button ID="btnstud" runat="Server" Text=" Excel Report" ValidationGroup="Show" TabIndex="26"
-                                    OnClick="btnstud_Click" CssClass="btn btn-info" />
+                                    OnClick="btnstud_Click" CssClass="btn btn-info" Visible="false"/>
                                 <asp:Button ID="btnExcelConsolidated" runat="Server" Text="Consolidated Excel Report" ValidationGroup="Show" TabIndex="27"
                                     OnClick="btnExcelConsolidated_Click" CssClass="btn btn-info" Visible="false" />
 
@@ -646,14 +664,14 @@
                                     OnClick="btnOverallOutstandingReport_Click" CssClass="btn btn-info" Visible="false" />
 
                                 <asp:Button ID="btnOnlineDcrReport" runat="Server" Text="Online DCR Excel Report" ValidationGroup="Show" TabIndex="29"
-                                    OnClick="btnOnlineDcrReport_Click" CssClass="btn btn-info" />
+                                    OnClick="btnOnlineDcrReport_Click" CssClass="btn btn-info" Visible="false"/>
                                 <asp:Button ID="btnexcelPaymentModification" runat="server" Text="Payment Modification Excel Report" TabIndex="30"
-                                    CssClass="btn btn-info" OnClick="btnexcelPaymentModification_Click" />
+                                    CssClass="btn btn-info" OnClick="btnexcelPaymentModification_Click" Visible="false"/>
                                 <asp:Button ID="btnTallyIntegration" runat="server" Text="Tally Integration Report" CssClass="btn btn-info" OnClick="btnTallyIntegration_Click" ValidationGroup="Show" TabIndex="31" Visible="false"/>
                                 <asp:Button ID="btnCancelrecieptsummary" runat="server" Visible="false" Text=" Canceled receipt summary report" CssClass="btn btn-info" ValidationGroup="Show" TabIndex="32" OnClick="btnCancelrecieptsummary_Click"/>
-                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="32"/>
-                                <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true"
-                                    ShowSummary="false" ValidationGroup="Show" />
+                                <asp:Button ID="btnCancel" runat="server" Visible="false" Text="Cancel" CssClass="btn btn-warning" OnClick="btnCancel_Click" TabIndex="32"/>
+                               <%-- <asp:ValidationSummary ID="ValidationSummary1" runat="server" DisplayMode="List" ShowMessageBox="true"
+                                    ShowSummary="false" ValidationGroup="Show" />--%>
                             </div>
 
                             <div class="col-12 btn-footer" id="pnlSem" runat="server" visible="false">
@@ -747,6 +765,7 @@
             </div> 
         </ContentTemplate>
         <Triggers>
+             <asp:PostBackTrigger ControlID="btnReport" />
             <asp:PostBackTrigger ControlID="btnstudexcel" />
             <asp:PostBackTrigger ControlID="btnstud" />
             <asp:PostBackTrigger ControlID="btnExcel" />
@@ -754,7 +773,7 @@
             <asp:PostBackTrigger ControlID="btnOSUptoSemReport" />
             <asp:PostBackTrigger ControlID="btnFutureOSReport" />
             <asp:PostBackTrigger ControlID="btnCancel" />
-            <asp:PostBackTrigger ControlID="bntStudentArrears" />
+<%--            <asp:PostBackTrigger ControlID="bntStudentArrears" />--%>
             <asp:PostBackTrigger ControlID="btnStudentledgerExl" />
             <asp:PostBackTrigger ControlID="btnStudentArrearsHeadwise" />
             <asp:PostBackTrigger ControlID="btnBalanceReport" />
