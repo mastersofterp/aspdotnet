@@ -101,24 +101,6 @@
         //};
     </script>
 
-    <script>
-        function allowAlphaNumericSpace(e) {
-            var code = ('charCode' in e) ? e.charCode : e.keyCode;
-            if (!(code == 32) && // space
-              !(code > 47 && code < 58) && // numeric (0-9)
-              !(code > 64 && code < 91) && // upper alpha (A-Z)
-              !(code > 96 && code < 123)) { // lower alpha (a-z)
-                e.preventDefault();
-                //    alert("Not Allowed Special Character..!");
-                return true;
-            }
-
-            else
-
-                return false;
-
-        }
-    </script>
    <%-- <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>--%>
 
@@ -547,10 +529,11 @@
                             </div>
 
                             <div class="box-body">
+                            
                                 <div class="col-12" id="divGeneralInfo" style="display: block;">
-                                    <div class="sub-heading">
-                                        <h5>Selection Criteria</h5>
-                                    </div>
+                                     <div class="sub-heading">
+                                                  <h5>Selection Criteria</h5>
+                                       </div>
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
@@ -567,7 +550,7 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divDept1" runat="server" visible="false">
                                             <div class="label-dynamic">
-                                                <sup>* </sup>
+                                                <sup>*</sup>
                                                 <%--<label>Department Name</label>--%>
                                                 <asp:Label ID="lblDYddlDeptName" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
@@ -620,12 +603,48 @@
                                             </asp:RequiredFieldValidator>
                                         </div>
 
+
+
+                                           <%-- Added by Sakshi On Date : 01-12-2023--%>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>*</sup>
+                                                <asp:Label ID="lblCat" runat="server" Font-Bold="true">Filter</asp:Label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlCat" runat="server" AppendDataBoundItems="true"  AutoPostBack="true" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlCat_SelectedIndexChanged">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                <asp:ListItem Value="1">Blood Group</asp:ListItem>
+                                                <asp:ListItem Value="2">DOB</asp:ListItem>
+                                                <asp:ListItem Value="3">Category</asp:ListItem>
+                                                <asp:ListItem Value="4">Caste</asp:ListItem>
+                                                <asp:ListItem Value="5">Adhaar Card No.</asp:ListItem>
+                                                <asp:ListItem Value="6">Gender</asp:ListItem>
+                                                <asp:ListItem Value="7">Mobile</asp:ListItem>
+                                                <asp:ListItem Value="8">Email</asp:ListItem>
+                                                <asp:ListItem Value="9">Student Name</asp:ListItem>
+                                                <asp:ListItem Value="10">Father Name</asp:ListItem>
+                                                <asp:ListItem Value="11">Mother Name</asp:ListItem>
+                                                <asp:ListItem Value="12">Part Time/Full Time</asp:ListItem>
+                                                <asp:ListItem Value="13">Address</asp:ListItem>
+                                                <asp:ListItem Value="14">Medium Of Instruction</asp:ListItem>
+                                                <asp:ListItem Value="15">Parents Email Id</asp:ListItem>
+                                                <asp:ListItem Value="16">Merit Number</asp:ListItem>
+                                                <asp:ListItem Value="17">Father Mobile Number</asp:ListItem>
+                                                <asp:ListItem Value="18">Mother Mobile Number</asp:ListItem>
+                                                <asp:ListItem Value="19">ABC ID</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" Display="None" ErrorMessage="please select Filter" ControlToValidate="ddlCat" ValidationGroup="teacherallot" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                        </div>
+
+
+
                                         <div class="form-group col-12" id="trFilter" runat="server" visible="false">
                                             <div class="label-dynamic" id="Div1" runat="server">
                                                 <sup>* </sup>
                                                 <label>Filter</label>
                                             </div>
-                                            <div id="Div2" runat="server" class="col-12">
+                                        <div id="Div2" runat="server" class="col-12">
                                                 <asp:RadioButtonList ID="rdbCat" runat="server" RepeatDirection="vertical" RepeatColumns="3"
                                                     OnSelectedIndexChanged="rdbCat_SelectedIndexChanged" AutoPostBack="true">
                                                     <%--<asp:ListItem Value="1">College Code</asp:ListItem>
@@ -663,19 +682,22 @@
                                                     <asp:ListItem Value="31">Merit Number</asp:ListItem>
                                                     <asp:ListItem Value="32">Father Mobile Number</asp:ListItem>
                                                     <asp:ListItem Value="33">Mother Mobile Number</asp:ListItem>
-                                                     <asp:ListItem Value="34">ABC ID</asp:ListItem>
                                                     <%-----------------------------------------------%>
                                                 </asp:RadioButtonList>
                                             </div>
+
+
                                             <div style="margin-top: 4px">
                                                 <asp:Label ID="lblAddressNote" runat="server" ForeColor="Red" Font-Bold="true" CssClass="mt-2" Text="Note - Use only Comma(,), Hyphen(-) and Backslash(/) characters during entering the Address/Permanent Address. Other special character's are not acceptable." Visible="false"></asp:Label>
                                             </div>
                                         </div>
+
                                     </div>
 
-                                    <div class="col-12 btn-footer">
-                                        <asp:Button ID="btnSubmit" runat="server" OnClientClick="return numeralsOnly(event)" OnClick="btnSubmit_Click" Text="Submit" CssClass="btn btn-primary" ValidationGroup="teacherallot" />
-                                        <asp:Button ID="btnClear" runat="server" Text="Clear" OnClick="btnClear_Click" CssClass="btn btn-warning" />
+                                    <div class="col-12 btn-footer" >
+                                        <asp:Button ID="btnSubmit" Visible="false" runat="server" OnClientClick="return numeralsOnly(event)" OnClick="btnSubmit_Click" Text="Submit" CssClass="btn btn-primary" ValidationGroup="teacherallot" />
+                                        <asp:Button ID="btnClear"  Visible="false" runat="server" Text="Clear" OnClick="btnClear_Click" CssClass="btn btn-warning" />
+                                     
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="true" ShowSummary="false" ValidationGroup="teacherallot" />
                                     </div>
 
@@ -717,9 +739,7 @@
                                                             <tr id="itemPlaceholder" runat="server" />
                                                         </tbody>
                                                     </table>
-
                                                 </LayoutTemplate>
-
                                                 <ItemTemplate>
                                                     <tr>
                                                         <td id="Td1" runat="server" visible="false">
@@ -734,7 +754,7 @@
                                                             <%# Eval("STUDNAME")%>
                                                         </td>
                                                         <td>
-                                                            <asp:DropDownList ID="ddlcat" runat="server" AppendDataBoundItems="true" ToolTip='<%# Eval("COLUMNID")%>' CssClass="form-control" data-select2-enable="true">
+                                                            <asp:DropDownList ID="ddlcat1" runat="server" AppendDataBoundItems="true" ToolTip='<%# Eval("COLUMNID")%>' CssClass="form-control" data-select2-enable="true">
                                                                 <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                                 <%--<asp:ListItem Value="1">Please Select1</asp:ListItem>--%>
                                                             </asp:DropDownList>
@@ -757,6 +777,7 @@
                                                                 InvalidValueMessage="Please Enter Valid Date In format" Display="None" ValidationGroup="Show"
                                                                 SetFocusOnError="true" />
                                                         </td>
+
                                                         <td id="tdDivPAddress" runat="server">
                                                             <asp:TextBox ID="txtpadd" runat="server" Text='<%#Eval("PCOLUMNNAME")%>' onkeyup="return checkAddress(this)"></asp:TextBox>
                                                         </td>
@@ -809,7 +830,6 @@
 >>>>>>> 568130c06637925b362696670cb66e2188674cd7
                                                                 </th>--%>
                                                                 <th>Sr.No.</th>
-                                                        
                                                                 <th><%--REGISTRATION NO.--%>
                                                                     <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
                                                                 </th>
@@ -948,17 +968,19 @@
                                         </asp:Panel>
                                     </div>
                                 </div>
-                            </div>
+                                          
+                                      
+                           </div>
+
+                              </div>
+
+                              </div>
+                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    
         </ContentTemplate>
-        <%--<Triggers>
-            <asp:PostBackTrigger ControlID="rdbCat" />
-            <asp:PostBackTrigger ControlID="btnSubmit" />
-        </Triggers>--%>
-    </asp:UpdatePanel>
+            
+            </asp:UpdatePanel>
 
     <script>
         // function toggleSearch(searchBar, table) {
@@ -1316,24 +1338,5 @@
 
         }
 
-    </script>
-
-        <script>
-            function allowAlphaNumericSpace(e, input) {
-                var charCode = ('charCode' in e) ? e.charCode : e.keyCode;
-                var charStr = String.fromCharCode(charCode);
-
-                var allowedChars = /^[A-Za-z0-9]*$/;
-
-                if (!allowedChars.test(charStr)) {
-                    alert("Only Alphanumeric Characters are Allowed.");
-                    setTimeout(function () {
-                        input.value = '';
-                    }, 0);
-                    return false;
-                }
-
-                return true;
-            }
     </script>
 </asp:Content>
