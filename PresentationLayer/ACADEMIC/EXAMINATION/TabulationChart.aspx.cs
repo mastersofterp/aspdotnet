@@ -106,7 +106,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btngraderange.Visible = true;
                 btnExcel.Visible = true;
                 btnExamFeesPaid.Visible = true;
-                btnConvocationExcelReport.Visible = true;
+                btnConvocationExcelReport.Visible = false; //Added as per open ticket 54493
 
                 btnResultStatistics.Visible = false;
                 pre_eight.Visible = false;
@@ -2882,6 +2882,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
                     }
+                    else if (Convert.ToInt32(Session["OrgId"]) == 19) //Added By Tejas Thakre for PCEN as on 05022024
+                    {
+                        url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
+                    }
                     else
                     {
                         url += "&param=@P_SESSIONNO=" + ddlSession.SelectedValue + ",@P_COLLEGEID=" + ViewState["college_id"] + ",@P_DEGREENO=" + ViewState["degreeno"] + ",@P_BRANCHNO=" + ViewState["branchno"] + ",@P_SEMESTERNO=" + ddlSemester.SelectedValue + ",@P_IDNO=" + GetIDNO() + ",@P_STUDENTTYPE=" + Convert.ToInt32(ddlStuType.SelectedValue) + ",@P_COLLEGE_CODE=" + ViewState["college_id"].ToString() + ",@P_PUBLISH_DATE=" + DateTime.Now.ToString("MM/dd/yyyy");
@@ -4126,6 +4130,10 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             else if (Convert.ToInt32(Session["OrgId"]) == 21) // Added by Tejas for TGPCET as on 01_02_2023
             {
                 ShowTR("ResultSheet", "rptTabulationPG_TGPCET.rpt", 2);
+            }
+            else if (Convert.ToInt32(Session["OrgId"]) == 19) // Added by Tejas Thakre PCEN as on 05_02_2024
+            {
+                ShowTR("ResultSheet", "rptTabulationPG_PCEN.rpt", 2);
             }
             else
             {
