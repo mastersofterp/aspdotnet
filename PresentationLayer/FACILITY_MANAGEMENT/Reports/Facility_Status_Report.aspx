@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    
+
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
@@ -20,92 +20,95 @@
                     <div class="box-body">
                         <div class="col-md-12">
                             <div class="panel panel-info">
-                                <div class="panel-heading">Facility Application Pending/Approved Status Report</div>
+                                <div class="panel-heading" style="font-weight: 600; font-size: 13px">Facility Application Pending/Approved Status Report</div>
                                 <div class="panel-body">
-                                    Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span><br />
+                                    <div class="form-group col-lg-8 col-md-12 col-12">
+                                        <div class=" note-div">
+                                            <h5 class="heading">Note</h5>
+                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
+                                        </div>
+                                    </div>
 
 
                                     <asp:UpdatePanel ID="updAdd" runat="server">
                                         <ContentTemplate>
                                             <asp:Panel ID="pnlAdd" runat="server">
-                                                  <div class="form-group col-md-12"> 
-                                                <div class="form-group col-md-4">
-                                                    <label>From Date :<span style="color: Red">*</span> </label>
-                                                    <div class="input-group">
-                                                        <asp:TextBox ID="txtFromdt" runat="server" AutoPostBack="true" onblur="return checkdate(this);"
-                                                            CssClass="form-control" Style="z-index: 0;" TabIndex="1" ToolTip="Enter From Date"></asp:TextBox>
-                                                        <div class="input-group-addon">
-                                                            <asp:Image ID="ImaCalStartDate" runat="server" ImageUrl="~/images/calendar.png"
-                                                                Style="cursor: pointer" />
+                                                <div class="row">
+                                                    <div class="form-group col-md-3">
+                                                        <label>From Date :<span style="color: Red">*</span> </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <%-- <asp:Image ID="imgCalJoindt" runat="server" ImageUrl="~/images/calendar.png"
+                                                                                            Style="cursor: pointer" />--%>
+                                                                <i id="ImaCalStartDate" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
+                                                            </div>
+                                                            <asp:TextBox ID="txtFromdt" runat="server" AutoPostBack="true" onblur="return checkdate(this);"
+                                                                CssClass="form-control" Style="z-index: 0;" TabIndex="1" ToolTip="Enter From Date"></asp:TextBox>
+                                                            <ajaxToolKit:CalendarExtender ID="cetxtStartDate" runat="server" Enabled="true" EnableViewState="true"
+                                                                Format="dd/MM/yyyy" PopupButtonID="ImaCalStartDate" TargetControlID="txtFromdt">
+                                                            </ajaxToolKit:CalendarExtender>
+                                                            <ajaxToolKit:MaskedEditExtender ID="mefrmdt" runat="server" AcceptNegative="Left"
+                                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                                MessageValidatorTip="true" TargetControlID="txtFromdt" />
+                                                            <asp:RequiredFieldValidator ID="rfvfdate" runat="server" ControlToValidate="txtFromdt"
+                                                                Display="None" ErrorMessage="Please Enter From Date" SetFocusOnError="True"
+                                                                ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
                                                         </div>
-                                                        <ajaxToolKit:CalendarExtender ID="cetxtStartDate" runat="server" Enabled="true" EnableViewState="true"
-                                                            Format="dd/MM/yyyy" PopupButtonID="ImaCalStartDate" TargetControlID="txtFromdt">
-                                                        </ajaxToolKit:CalendarExtender>
-                                                        <ajaxToolKit:MaskedEditExtender ID="mefrmdt" runat="server" AcceptNegative="Left"
-                                                            DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                            MessageValidatorTip="true" TargetControlID="txtFromdt" />
-                                                        <asp:RequiredFieldValidator ID="rfvfdate" runat="server" ControlToValidate="txtFromdt"
-                                                            Display="None" ErrorMessage="Please Enter From Date" SetFocusOnError="True"
-                                                            ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group col-md-4">
-                                                    <label>To Date :<span style="color: Red">*</span> </label>
-                                                    <div class="input-group">
-                                                        <asp:TextBox ID="txtTodt" runat="server" AutoPostBack="true" MaxLength="10"
-                                                            CssClass="form-control" Style="z-index: 0;" TabIndex="2" ToolTip="Enter To Date" />
-                                                        <div class="input-group-addon">
-                                                            <asp:Image ID="imgCalTodt" runat="server" ImageUrl="~/images/calendar.png" Style="cursor: pointer" />
+                                                    <div class="form-group col-md-3">
+                                                        <label>To Date :<span style="color: Red">*</span> </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <%-- <asp:Image ID="imgCalJoindt" runat="server" ImageUrl="~/images/calendar.png"
+                                                                                            Style="cursor: pointer" />--%>
+                                                                <i id="imgCalTodt" runat="server" class="fa fa-calendar text-blue" style="cursor: pointer"></i>
+                                                            </div>
+                                                            <asp:TextBox ID="txtTodt" runat="server" AutoPostBack="true" MaxLength="10"
+                                                                CssClass="form-control" Style="z-index: 0;" TabIndex="2" ToolTip="Enter To Date" />
+
+                                                            <asp:RequiredFieldValidator ID="rfvTodt" runat="server" ControlToValidate="txtTodt"
+                                                                Display="None" ErrorMessage="Please Enter To Date" SetFocusOnError="true" ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
+
+                                                            <ajaxToolKit:CalendarExtender ID="CeTodt" runat="server" Enabled="true" EnableViewState="true"
+                                                                Format="dd/MM/yyyy" PopupButtonID="imgCalTodt" TargetControlID="txtTodt">
+                                                            </ajaxToolKit:CalendarExtender>
+                                                            <ajaxToolKit:MaskedEditExtender ID="meeTodt" runat="server" AcceptNegative="Left"
+                                                                DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
+                                                                MessageValidatorTip="true" TargetControlID="txtTodt" />
                                                         </div>
-                                                        <asp:RequiredFieldValidator ID="rfvTodt" runat="server" ControlToValidate="txtTodt"
-                                                            Display="None" ErrorMessage="Please Enter To Date" SetFocusOnError="true" ValidationGroup="Leaveapp"></asp:RequiredFieldValidator>
-
-                                                        <ajaxToolKit:CalendarExtender ID="CeTodt" runat="server" Enabled="true" EnableViewState="true"
-                                                            Format="dd/MM/yyyy" PopupButtonID="imgCalTodt" TargetControlID="txtTodt">
-                                                        </ajaxToolKit:CalendarExtender>
-                                                        <ajaxToolKit:MaskedEditExtender ID="meeTodt" runat="server" AcceptNegative="Left"
-                                                            DisplayMoney="Left" ErrorTooltipEnabled="true" Mask="99/99/9999" MaskType="Date"
-                                                            MessageValidatorTip="true" TargetControlID="txtTodt" />
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                              
-                                                <div class="form-group col-md-4" id="trddldept" runat="server">
-                                                    <label> Department :</label>
+                                                    <div class="form-group col-md-3" id="trddldept" runat="server">
+                                                        <label>Department :</label>
 
-                                                    <asp:DropDownList ID="ddldept" runat="server" AppendDataBoundItems="true" TabIndex="4" ToolTip="Select Department"
-                                                        CssClass="form-control" >
-                                                        <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
-                                                    </asp:DropDownList>
+                                                        <asp:DropDownList ID="ddldept" runat="server" AppendDataBoundItems="true" TabIndex="4" data-select2-enable="true" ToolTip="Select Department"
+                                                            CssClass="form-control">
+                                                            <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
+                                                        </asp:DropDownList>
 
-                                                </div>      
-                                                <div class="form-group col-md-4" id="Div2" runat="server">
-                                                    <label>Centralize Facility Name :</label>
+                                                    </div>
+                                                    <div class="form-group col-md-3" id="Div2" runat="server">
+                                                        <label>Centralize Facility Name :</label>
 
-                                                    <asp:DropDownList ID="ddlFacility" runat="server" AppendDataBoundItems="true" TabIndex="4" ToolTip="Select Centralize Facility Name"
-                                                        CssClass="form-control">
-                                                        <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
-                                                    </asp:DropDownList>
+                                                        <asp:DropDownList ID="ddlFacility" runat="server" AppendDataBoundItems="true" TabIndex="4" data-select2-enable="true" ToolTip="Select Centralize Facility Name"
+                                                            CssClass="form-control">
+                                                            <asp:ListItem Text="Please Select" Value="0"></asp:ListItem>
+                                                        </asp:DropDownList>
 
-                                                </div>                                            
-                                              </div>                                             
-                                           
-                                            <div class="form-group col-md-12"> 
-                                                <div class="form-group col-md-4" id="tr1" runat="server">
-                                                    <label>Application Status :</label>
+                                                    </div>
+                                                    <div class="form-group col-md-4" id="tr1" runat="server">
+                                                        <label>Application Status :</label>
 
-                                                    <asp:RadioButtonList ID="rdbleavestatus" runat="server" TabIndex="9" ToolTip="Select Application Status"
-                                                        RepeatDirection="Horizontal"
-                                                        AutoPostBack="true">
-                                                        <asp:ListItem Enabled="true" Selected="True" Text="Approved" Value="A"></asp:ListItem>
-                                                        <asp:ListItem Enabled="true" Text="Pending" Value="P"></asp:ListItem>
-                                                         <asp:ListItem Enabled="true" Text="Rejected" Value="R"></asp:ListItem>
-                                                        <asp:ListItem Enabled="true" Text="Cancelled" Value="C"></asp:ListItem>
-                                                    </asp:RadioButtonList>
+                                                        <asp:RadioButtonList ID="rdbleavestatus" runat="server" TabIndex="9" ToolTip="Select Application Status"
+                                                            RepeatDirection="Horizontal"
+                                                            AutoPostBack="true">
+                                                            <asp:ListItem Enabled="true" Selected="True" Text="Approved" Value="A"></asp:ListItem>
+                                                            <asp:ListItem Enabled="true" Text="Pending" Value="P"></asp:ListItem>
+                                                            <asp:ListItem Enabled="true" Text="Rejected" Value="R"></asp:ListItem>
+                                                            <asp:ListItem Enabled="true" Text="Cancelled" Value="C"></asp:ListItem>
+                                                        </asp:RadioButtonList>
 
-                                                </div>
+                                                    </div>
                                                 </div>
 
                                                 <div class="form-group col-md-12">

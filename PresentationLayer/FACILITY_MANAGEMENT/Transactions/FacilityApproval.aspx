@@ -10,7 +10,7 @@
         RunThisAfterEachAsyncPostback();
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
     </script>
-  
+
     <asp:UpdatePanel ID="updPanel" runat="server">
         <ContentTemplate>
 
@@ -29,38 +29,46 @@
 
                                     <asp:Panel ID="pnlAdd" runat="server">
                                         <div class="panel panel-info">
-                                            <div class="panel-heading">Centralize Facility Approval</div>
+                                            <div class="panel-heading" style="font-weight: 600; font-size: 13px">Centralize Facility Approval</div>
                                             <div class="panel-body">
-                                                Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span><br />
+                                                <div class="form-group col-lg-8 col-md-12 col-12">
+                                                    <div class=" note-div">
+                                                        <h5 class="heading">Note</h5>
+                                                        <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
+                                                    </div>
+                                                </div>
                                                 <br />
                                                 <div class="col-md-12">
 
                                                     <asp:Panel ID="pnlEmpInfo" runat="server">
                                                         <div class="panel panel-info">
-                                                            <div class="panel-heading">User Details</div>
+                                                            <div class="panel-heading">
+                                                                <div class="sub-heading">
+                                                                    <h5>User Details</h5>
+                                                                </div>
+                                                            </div>
                                                             <div class="panel-body">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group col-md-6">
+                                                                <div class="row">
+                                                                    <div class="form-group col-md-3">
                                                                         <label>Employee Name :</label>
                                                                         <asp:TextBox ID="txtName" runat="server" ReadOnly="true" CssClass="form-control" />
 
                                                                     </div>
-                                                                    <div class="form-group col-md-6">
+                                                                    <div class="form-group col-md-3">
                                                                         <label>Department  :</label>
                                                                         <asp:TextBox ID="txtDept" runat="server" ReadOnly="true" CssClass="form-control" />
 
                                                                     </div>
-                                                                    <div class="form-group col-md-6">
+                                                                    <div class="form-group col-md-3">
                                                                         <label>Employee Code :</label>
                                                                         <asp:TextBox ID="txtCode" runat="server" ReadOnly="true" CssClass="form-control" />
 
                                                                     </div>
-                                                                    <div class="form-group col-md-6">
+                                                                    <div class="form-group col-md-3">
                                                                         <label>Designation  :</label>
                                                                         <asp:TextBox ID="txtDesignation" runat="server" ReadOnly="true" CssClass="form-control" />
 
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -70,68 +78,74 @@
 
                                                     <asp:Panel ID="Panel1" runat="server">
                                                         <div class="panel panel-info">
-                                                            <div class="panel-heading">Apply Centralize Facility Details</div>
+                                                            <div class="panel-heading">
+                                                                <div class="sub-heading">
+                                                                    <h5>Apply Centralize Facility Details</h5>
+                                                                </div>
+                                                            </div>
                                                             <div class="panel-body">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group col-md-6">
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Centralize Facility Name:</label>
-                                                                          
-                                                                            <asp:TextBox ID="txtFacilityDetailName" runat="server" ReadOnly="true" TabIndex="4"
-                                                                                 CssClass="textbox form-control" ToolTip="Centralize Facility Details" />
-                                                                        </div>
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Centralize Facility Details :</label>
+                                                                <div class="row">
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Centralize Facility Name:</label>
 
-                                                                            <asp:TextBox ID="txtDetail" runat="server" ReadOnly="true" TabIndex="4"
-                                                                                TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Centralize Facility Details" />
-                                                                        </div>     
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Application Date <span style="color: #FF0000">*</span>:</label>
-                                                                           <asp:TextBox ID="txtApplicationDate" runat="server" ReadOnly="true" CssClass="form-control" />
-
-                                                                        </div>
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Booking From:</label>
-
-                                                                            <label>From Date :</label>
-                                                                           <asp:TextBox ID="txtFromDt" runat="server" ReadOnly="true" CssClass="form-control" />
-                                                                        </div>
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>To Date :</label>
-                                                                            <asp:TextBox ID="txtToDt" runat="server" ReadOnly="true" CssClass="form-control" />
-                                                                        </div>
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Pririty Level:</label>
-                                                                           <asp:TextBox ID="txtLevel" runat="server" ReadOnly="true" CssClass="form-control" />
-
-                                                                        </div>
-                                                                        <div class="form-group col-md-12">
-                                                                            <label>Application Remark :</label>
-                                                                            <asp:TextBox ID="txtAppRemark" runat="server" ReadOnly="true" MaxLength="250" CssClass="form-control" />
-
-                                                                        </div>
-                                                                         <div class="form-group col-md-12">
-                                                                            <label>Status <span style="color: #FF0000">*</span>:</label>
-                                                                            <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control">
-                                                                                <asp:ListItem Selected="True" Text="Approved" Value="A"></asp:ListItem>
-                                                                                <asp:ListItem Text="Reject" Value="R"></asp:ListItem>                                                                               
-                                                                                <asp:ListItem Text="Cancelled" Value="C"></asp:ListItem>                                                                               
-                                                                            </asp:DropDownList>
-
-                                                                        </div>
-                                                                           <div class="form-group col-md-12">
-                                                                            <label>Approval Remark :</label>
-                                                                            <asp:TextBox ID="txtApprovalRemark" runat="server" MaxLength="250" CssClass="form-control" />
-
-                                                                        </div>
-                                                                                                                                         
+                                                                        <asp:TextBox ID="txtFacilityDetailName" runat="server" ReadOnly="true" TabIndex="4"
+                                                                            CssClass="textbox form-control" ToolTip="Centralize Facility Details" />
                                                                     </div>
-                                                                    <div class="col-md-6">
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Centralize Facility Details :</label>
+
+                                                                        <asp:TextBox ID="txtDetail" runat="server" ReadOnly="true" TabIndex="4"
+                                                                            TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Centralize Facility Details" />
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Application Date <span style="color: #FF0000">*</span>:</label>
+                                                                        <asp:TextBox ID="txtApplicationDate" runat="server" ReadOnly="true" CssClass="form-control" />
+
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Booking From:</label>
+
+                                                                        <label>From Date :</label>
+                                                                        <asp:TextBox ID="txtFromDt" runat="server" ReadOnly="true" CssClass="form-control" />
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>To Date :</label>
+                                                                        <asp:TextBox ID="txtToDt" runat="server" ReadOnly="true" CssClass="form-control" />
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Pririty Level:</label>
+                                                                        <asp:TextBox ID="txtLevel" runat="server" ReadOnly="true" CssClass="form-control" />
+
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Application Remark :</label>
+                                                                        <asp:TextBox ID="txtAppRemark" runat="server" ReadOnly="true" MaxLength="250" CssClass="form-control" />
+
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Status <span style="color: #FF0000">*</span>:</label>
+                                                                        <asp:DropDownList ID="ddlStatus" runat="server" CssClass="form-control" data-select2-enable="true">
+                                                                            <asp:ListItem Selected="True" Text="Approved" Value="A"></asp:ListItem>
+                                                                            <asp:ListItem Text="Reject" Value="R"></asp:ListItem>
+                                                                            <asp:ListItem Text="Cancelled" Value="C"></asp:ListItem>
+                                                                        </asp:DropDownList>
+
+                                                                    </div>
+                                                                    <div class="form-group col-md-3">
+                                                                        <label>Approval Remark :</label>
+                                                                        <asp:TextBox ID="txtApprovalRemark" runat="server" MaxLength="250" CssClass="form-control" />
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-6 col-12">
                                                                         <asp:Panel ID="Panel2" runat="server" ScrollBars="Vertical" Height="300px">
                                                                             <asp:Repeater ID="rptMinorFacilityList" runat="server" Visible="true">
                                                                                 <HeaderTemplate>
-                                                                                    <h4>Minor Facility List </h4>
+                                                                                    <div class="sub-heading">
+                                                                                        <h5>Minor Facility List</h5>
+                                                                                    </div>
                                                                                     <table class="table table-hover table-bordered" id="tbluser">
                                                                                         <thead>
                                                                                             <tr class="bg-light-blue">
@@ -163,10 +177,15 @@
                                                                                 </FooterTemplate>
                                                                             </asp:Repeater>
                                                                         </asp:Panel>
-                                                                         <asp:Panel ID="Panel4" runat="server" ScrollBars="Vertical" Height="300px">
+                                                                    </div>
+                                                                    <div class="col-lg-6 col-12">
+                                                                        <asp:Panel ID="Panel4" runat="server" ScrollBars="Vertical" Height="300px">
                                                                             <asp:Repeater ID="rptExtraMinorList" runat="server" Visible="true">
                                                                                 <HeaderTemplate>
-                                                                                    <h4>Extra Minor Facility List </h4>
+                                                                                    <div class="sub-heading">
+                                                                                        <h5>Extra Minor Facility List</h5>
+                                                                                    </div>
+
                                                                                     <table class="table table-hover table-bordered" id="tbluser">
                                                                                         <thead>
                                                                                             <tr class="bg-light-blue">
@@ -199,8 +218,8 @@
                                                                             </asp:Repeater>
                                                                         </asp:Panel>
                                                                     </div>
-
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                     </asp:Panel>
@@ -208,7 +227,7 @@
                                             </div>
                                         </div>
                                     </asp:Panel>
-                                  
+
                                 </div>
                             </div>
                             <div class="box-footer">
@@ -229,11 +248,13 @@
                                 <div class="col-md-12 table-responsive">
                                     <asp:Repeater ID="lvApplication" runat="server">
                                         <HeaderTemplate>
-                                            <h4>Pending Facility Application List </h4>
-                                            <table class="table table-hover table-bordered" id="tbluser">
-                                                <thead>
-                                                    <tr class="bg-light-blue">
-                                                       
+                                            <div class="sub-heading">
+                                                <h5>Pending Facility Application List</h5>
+                                            </div>
+                                            <table class="table table-hover table-bordered table-striped nowrap display" id="tblDetails">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+
                                                         <th>Employee Name
                                                         </th>
                                                         <th>Centralize Facility Name
@@ -242,13 +263,13 @@
                                                         </th>
                                                         <th>From Date
                                                         </th>
-                                                         <th>To Date
+                                                        <th>To Date
                                                         </th>
                                                         <th>Status
                                                         </th>
                                                         <th>Priority Level
                                                         </th>
-                                                         <th>Details(Approve/Reject)
+                                                        <th>Details(Approve/Reject)
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -257,20 +278,20 @@
                                         <ItemTemplate>
                                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                 <ContentTemplate>
-                                                    <tr>                                                       
+                                                    <tr>
                                                         <td>
                                                             <%# Eval("Name")%>
                                                         </td>
                                                         <td>
                                                             <%# Eval("CenFacilityName")%>
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <%#Eval("ApplicationDate")%>
                                                         </td>
                                                         <td>
                                                             <%#Eval("FromDate")%>
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <%#Eval("ToDate")%>
                                                         </td>
                                                         <td>
@@ -279,7 +300,7 @@
                                                         <td>
                                                             <%#Eval("PriorityLevel_Status") %>
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("ApplicationNo") %>'
                                                                 AlternateText='<%# Eval("App_Status") %>' ToolTip="View Detail To Approve/Reject" OnClick="btnEdit_Click" TabIndex="6" />
                                                         </td>
@@ -295,16 +316,19 @@
                                             </tbody>  </table>
                                         </FooterTemplate>
                                     </asp:Repeater>
-                                  
+
                                 </div>
+                                <br />
                                 <div class="col-md-12 table-responsive">
                                     <asp:Repeater ID="rptApplicationStatus" runat="server">
                                         <HeaderTemplate>
-                                            <h4>Facility Application Status </h4>
-                                            <table class="table table-hover table-bordered" id="tbluser">
-                                                <thead>
-                                                    <tr class="bg-light-blue">
-                                                       
+                                            <div class="sub-heading">
+                                                <h5>Facility Application Status</h5>
+                                            </div>
+                                            <table class="table table-hover table-bordered table-striped nowrap display" id="tbluser">
+                                                <thead class="bg-light-blue">
+                                                    <tr>
+
                                                         <th>Employee Name
                                                         </th>
                                                         <th>Centralize Facility Name
@@ -313,12 +337,12 @@
                                                         </th>
                                                         <th>From Date
                                                         </th>
-                                                         <th>To Date
+                                                        <th>To Date
                                                         </th>
                                                         <th>Status
                                                         </th>
                                                         <th>Priority Level
-                                                        </th>                                                        
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -326,20 +350,20 @@
                                         <ItemTemplate>
                                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                                 <ContentTemplate>
-                                                    <tr>                                                       
+                                                    <tr>
                                                         <td>
                                                             <%# Eval("Name")%>
                                                         </td>
                                                         <td>
                                                             <%# Eval("CenFacilityName")%>
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <%#Eval("ApplicationDate")%>
                                                         </td>
                                                         <td>
                                                             <%#Eval("FromDate")%>
                                                         </td>
-                                                         <td>
+                                                        <td>
                                                             <%#Eval("ToDate")%>
                                                         </td>
                                                         <td>
@@ -347,16 +371,16 @@
                                                         </td>
                                                         <td>
                                                             <%#Eval("PriorityLevel_Status") %>
-                                                        </td>                                                         
+                                                        </td>
                                                     </tr>
-                                                </ContentTemplate>    
+                                                </ContentTemplate>
                                             </asp:UpdatePanel>
                                         </ItemTemplate>
                                         <FooterTemplate>
                                             </tbody>  </table>
                                         </FooterTemplate>
                                     </asp:Repeater>
-                                  
+
                                 </div>
                             </div>
                     </div>

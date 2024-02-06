@@ -10,7 +10,7 @@
         RunThisAfterEachAsyncPostback();
         Sys.WebForms.PageRequestManager.getInstance().add_endRequest(RunThisAfterEachAsyncPostback);
     </script>
-     <%--<script type="text/javascript">
+    <%--<script type="text/javascript">
          function RunThisAfterEachAsyncPostback() {
              RepeaterDiv();
 
@@ -54,32 +54,36 @@
                                 <div class="col-md-12">
                                     <asp:Panel ID="pnlAdd" runat="server">
                                         <div class="panel panel-info">
-                                            <div class="panel-heading">Add/Edit Centralize Facility Details</div>
+                                            <div class="panel-heading" style="font-weight: 600; font-size: 13px">Add/Edit Centralize Facility Details</div>
                                             <div class="panel-body">
-                                                  Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span><br />
-                                                    <br />
+                                                <div class="form-group col-lg-8 col-md-12 col-12">
+                                                    <div class=" note-div">
+                                                        <h5 class="heading">Note</h5>
+                                                        <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
+                                                    </div>
+                                                </div>
+                                                <br />
                                                 <div class="col-md-12">
-                                                     <div class="col-md-8">
-                                                   
-                                                        <div class="form-group col-md-8">
-                                                            <label>Centralize Facility Name :<span style="color: #FF0000">*</span></label>
-                                                            <asp:TextBox ID="txtFacilityName" runat="server" TabIndex="1" MaxLength="50"  ToolTip="Enter Centralize Facility Name" CssClass="form-control" />
-                                                            <asp:RequiredFieldValidator ID="rfvHolyType" runat="server" ControlToValidate="txtFacilityName"
-                                                                Display="None" ErrorMessage="Please Enter Centralize Facility Name" ValidationGroup="Facility"
-                                                                SetFocusOnError="True">
-                                                            </asp:RequiredFieldValidator>
-                                                        </div>                                                         
-                                                   
-                                                  
-                                                        <div class="form-group col-md-8">
-                                                            <label>Facility Details :</label>
-                                                            <asp:TextBox ID="txtDetail" runat="server" MaxLength="500" TabIndex="2"
-                                                                TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Centralize Facility Details" />
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4">
+                                                                <label>Centralize Facility Name :<span style="color: #FF0000">*</span></label>
+                                                                <asp:TextBox ID="txtFacilityName" runat="server" TabIndex="1" MaxLength="50" ToolTip="Enter Centralize Facility Name" CssClass="form-control" />
+                                                                <asp:RequiredFieldValidator ID="rfvHolyType" runat="server" ControlToValidate="txtFacilityName"
+                                                                    Display="None" ErrorMessage="Please Enter Centralize Facility Name" ValidationGroup="Facility"
+                                                                    SetFocusOnError="True">
+                                                                </asp:RequiredFieldValidator>
+                                                            </div>
 
-                                                        </div>
-                                                    
-                                                   
-                                                       <%-- <div class="form-group col-md-8">
+                                                            <div class="form-group col-md-4">
+                                                                <label>Facility Details :</label>
+                                                                <asp:TextBox ID="txtDetail" runat="server" MaxLength="500" TabIndex="2"
+                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Centralize Facility Details" />
+
+                                                            </div>
+
+
+                                                            <%-- <div class="form-group col-md-8">
                                                             <label>Minor Facility:</label>
                                                             <asp:ListBox ID="lstMinorFacility" runat="server" SelectionMode="Multiple" AppendDataBoundItems="true" CssClass="form-control"
                                                                                      TabIndex="3" ></asp:ListBox>
@@ -88,54 +92,59 @@
                                                                           
                                                         </div>--%>
 
-                                                  
-                                                        <div class="form-group col-md-8">
-                                                            <label>Remark :</label>
-                                                            <asp:TextBox ID="txtRemark" runat="server" MaxLength="500" TabIndex="4"
-                                                                TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Facility Remark" />
+
+                                                            <div class="form-group col-md-4">
+                                                                <label>Remark :</label>
+                                                                <asp:TextBox ID="txtRemark" runat="server" MaxLength="500" TabIndex="4"
+                                                                    TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Facility Remark" />
+
+                                                            </div>
 
                                                         </div>
-                                                 
-                                                     </div>
-                                                    <div class="col-md-4">
-                                                    
-                                                      
-                                                                 <asp:Repeater ID="rptMinorList" runat="server" Visible="true">
-                                                                <HeaderTemplate> 
-                                                                    <h4>Minor Facility List </h4>                                               
-                                                                    <table class="table table-hover table-bordered" id="tbluser">
-                                                                        <thead>
-                                                                            <tr class="bg-light-blue">
-                                                                                <th>Select
-                                                                                </th>
-                                                                                <th>Minor Facility Name
-                                                                                </th>                                                                                                                                    
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                </HeaderTemplate>
-                                                                <ItemTemplate>
-                                                                    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                                                                        <ContentTemplate>
-                                                                            <tr>                                                         
-                                                                                <td>
-                                                                                   
-                                                                                     <asp:CheckBox ID="chkSelect" runat="server"  ToolTip='<%# Eval("MinFacilityNo")%>'></asp:CheckBox>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <%# Eval("MinFacilityName")%>
-                                                                                </td>                                                                               
-                                                                            </tr>
-                                                                        </ContentTemplate>  
-                                                                    </asp:UpdatePanel>
-                                                                </ItemTemplate>
-                                                                <FooterTemplate>
-                                                                    </tbody>  </table>
-                                                                </FooterTemplate>
-                                                            </asp:Repeater>
-                                                       
 
-                                                   
+
+                                                    </div>
+                                                    <div class="col-md-4">
+
+
+                                                        <asp:Repeater ID="rptMinorList" runat="server" Visible="true">
+                                                            <HeaderTemplate>
+                                                                <div class="sub-heading">
+                                                                    <h5>Minor Facility List</h5>
+                                                                </div>
+                                                                <table class="table table-hover table-bordered" id="tbluser">
+                                                                    <thead>
+                                                                        <tr class="bg-light-blue">
+                                                                            <th>Select
+                                                                            </th>
+                                                                            <th>Minor Facility Name
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                            </HeaderTemplate>
+                                                            <ItemTemplate>
+                                                                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                                                    <ContentTemplate>
+                                                                        <tr>
+                                                                            <td>
+
+                                                                                <asp:CheckBox ID="chkSelect" runat="server" ToolTip='<%# Eval("MinFacilityNo")%>'></asp:CheckBox>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%# Eval("MinFacilityName")%>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ContentTemplate>
+                                                                </asp:UpdatePanel>
+                                                            </ItemTemplate>
+                                                            <FooterTemplate>
+                                                                </tbody>  </table>
+                                                            </FooterTemplate>
+                                                        </asp:Repeater>
+
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -143,7 +152,7 @@
                                     <div class="col-md-12 text-center">
                                         <asp:Panel ID="pnlList" runat="server">
                                             <asp:LinkButton ID="btnAdd" runat="server" SkinID="LinkAddNew" OnClick="btnAdd_Click" ToolTip="Click Add New To Enter Centralize Facility" Text="Add New" CssClass="btn btn-primary"></asp:LinkButton>
-                                             <asp:Button ID="btnShowReport"   runat="server" Text=" Report" CausesValidation="false" OnClick="btnShowReport_Click"
+                                            <asp:Button ID="btnShowReport" runat="server" Text=" Report" CausesValidation="false" OnClick="btnShowReport_Click"
                                                 CssClass="btn btn-info" ToolTip="Click here to show the report" />
                                         </asp:Panel>
                                     </div>
@@ -165,54 +174,56 @@
                                     </p>
                                 </asp:Panel>
                                 <div class="col-md-12 table-responsive">
-                                     <asp:Repeater ID="lvFacilityDetail" runat="server">
-                                            <HeaderTemplate> 
-                                                <h4>Centralize Facility List </h4>                                               
-                                                <table class="table table-hover table-bordered" id="tbluser">
-                                                    <thead>
-                                                        <tr class="bg-light-blue">
-                                                            <th>Action
-                                                            </th>
-                                                            <th>Centralize Facility Name
-                                                            </th>
-                                                            <th>Facility Detail
-                                                            </th>                                                         
-                                                            <th>Remark
-                                                            </th>                                                        
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                            </HeaderTemplate>
-                                            <ItemTemplate>
-                                                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                                                    <ContentTemplate>
-                                                        <tr>                                                         
-                                                            <td>
-                                                                <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("CentralizeDetailNo") %>'
-                                                                    AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="6" />
-                                                            </td>
-                                                            <td>
-                                                                <%# Eval("CenFacilityName")%>
-                                                            </td>
-                                                            <td>
-                                                                <%#Eval("CenFacilityDetail")%>
-                                                            </td>
-                                                            <td>
-                                                                <%#Eval("Remark") %>
-                                                            </td>
-                                                        </tr>
-                                                    </ContentTemplate>
-                                                    <Triggers>
-                                                        <asp:PostBackTrigger ControlID="btnEdit" />
-                                                    </Triggers>
+                                    <asp:Repeater ID="lvFacilityDetail" runat="server">
+                                        <HeaderTemplate>
+                                            <div class="sub-heading">
+                                                <h5>Centralize Facility List</h5>
+                                            </div>
+                                            <table class="table table-hover table-bordered table-striped nowrap display" id="tbluser">
+                                                <thead>
+                                                    <tr class="bg-light-blue">
+                                                        <th>Action
+                                                        </th>
+                                                        <th>Centralize Facility Name
+                                                        </th>
+                                                        <th>Facility Detail
+                                                        </th>
+                                                        <th>Remark
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                        </HeaderTemplate>
+                                        <ItemTemplate>
+                                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                                                <ContentTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:ImageButton ID="btnEdit" runat="server" ImageUrl="~/images/edit.png" CommandArgument='<%# Eval("CentralizeDetailNo") %>'
+                                                                AlternateText="Edit Record" ToolTip="Edit Record" OnClick="btnEdit_Click" TabIndex="6" />
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("CenFacilityName")%>
+                                                        </td>
+                                                        <td>
+                                                            <%#Eval("CenFacilityDetail")%>
+                                                        </td>
+                                                        <td>
+                                                            <%#Eval("Remark") %>
+                                                        </td>
+                                                    </tr>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:PostBackTrigger ControlID="btnEdit" />
+                                                </Triggers>
 
-                                                </asp:UpdatePanel>
-                                            </ItemTemplate>
-                                            <FooterTemplate>
-                                                </tbody>  </table>
-                                            </FooterTemplate>
-                                        </asp:Repeater>
-                                   <%-- <asp:ListView ID="lvFacilityDetail" runat="server">
+                                            </asp:UpdatePanel>
+                                        </ItemTemplate>
+                                        <FooterTemplate>
+                                            </tbody>  </table>
+                                        </FooterTemplate>
+                                    </asp:Repeater>
+                                    <%-- <asp:ListView ID="lvFacilityDetail" runat="server">
                             <EmptyDataTemplate>
                                     <br />
                                     <asp:Label ID="lblerr" runat="server" SkinID="Errorlbl" 
@@ -282,8 +293,6 @@
                                     </div>--%>
                                 </div>
                             </div>
-
-                           
                     </div>
                     </fieldset>
                                         

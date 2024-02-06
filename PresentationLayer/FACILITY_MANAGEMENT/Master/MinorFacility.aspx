@@ -19,30 +19,36 @@
                                 <div class="col-md-12">
                                     <asp:Panel ID="pnlAdd" runat="server">
                                         <div class="panel panel-info">
-                                            <div class="panel-heading">Add/Edit Minor Facility Details</div>
+                                            <div class="panel-heading" style="font-weight: 600; font-size: 13px">Add/Edit Minor Facility Details</div>
+
                                             <div class="panel-body">
-                                                <div class="col-md-12">
-                                                    Note <b>:</b> <span style="color: #FF0000">* Marked Is Mandatory !</span><br />
+                                                 <div class="form-group col-lg-8 col-md-12 col-12">
+                                                        <div class=" note-div">
+                                                            <h5 class="heading">Note</h5>
+                                                            <p><i class="fa fa-star" aria-hidden="true"></i><span>* Marked Is Mandatory !</span></p>
+                                                        </div>
+                                                    </div>
                                                     <br />
-                                                    <div class="col-md-12">
-                                                        <div class="form-group col-md-6">
+                                                <div class="col-md-12">
+                                                   
+                                                    <div class="row">
+                                                        <div class="form-group col-md-4">
                                                             <label>Minor Facility Name :<span style="color: #FF0000">*</span></label>
-                                                            <asp:TextBox ID="txtFacilityName" runat="server" TabIndex="1" MaxLength="50"  ToolTip="Enter Minor facility Name" CssClass="form-control" />
+                                                            <asp:TextBox ID="txtFacilityName" runat="server" TabIndex="1" MaxLength="50" ToolTip="Enter Minor facility Name" CssClass="form-control" />
                                                             <%--onkeypress="return CheckAlphabet(event,this);"--%>
                                                             <asp:RequiredFieldValidator ID="rfvHolyType" runat="server" ControlToValidate="txtFacilityName"
                                                                 Display="None" ErrorMessage="Please Enter Minor Facility Name" ValidationGroup="Facility"
                                                                 SetFocusOnError="True">
                                                             </asp:RequiredFieldValidator>
-                                                        </div>                                                         
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div class="form-group col-md-6">
+                                                        </div>
+                                                         <div class="form-group col-md-4">
                                                             <label>Facility Details :</label>
                                                             <asp:TextBox ID="txtDetail" runat="server" MaxLength="500" TabIndex="2"
                                                                 TextMode="MultiLine" CssClass="textbox form-control" ToolTip="Enter Minor Facility Details" />
 
                                                         </div>
                                                     </div>
+                                                       
                                                 </div>
                                             </div>
                                     </asp:Panel>
@@ -63,7 +69,7 @@
                                             CssClass="btn btn-primary" OnClick="btnSave_Click" ToolTip="Click here to Submit" />
                                         <asp:Button ID="btnCancel" runat="server" Text="Cancel" CausesValidation="false"
                                             OnClick="btnCancel_Click" CssClass="btn btn-warning" TabIndex="4" ToolTip="Click here to Reset" />&nbsp;
-                                        <asp:Button ID="btnBack" runat="server"  TabIndex="5" Text="Back" CausesValidation="false" ToolTip="Click here to go back to previous" OnClick="btnBack_Click"
+                                        <asp:Button ID="btnBack" runat="server" TabIndex="5" Text="Back" CausesValidation="false" ToolTip="Click here to go back to previous" OnClick="btnBack_Click"
                                             CssClass="btn btn-info" />
                                         <asp:ValidationSummary ID="ValidationSummary1" runat="server" ValidationGroup="Facility"
                                             ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
@@ -74,10 +80,10 @@
                                     <asp:ListView ID="lvFacility" runat="server">
                                         <LayoutTemplate>
                                             <div id="demp_grid" class="vista-grid">
-                                                <div class="titlebar">
-                                                    <h4>Minor Facility List</h4>
+                                                <div class="sub-heading">
+                                                    <h5>Minor Facility List</h5>
                                                 </div>
-                                                <table class="table table-bordered table-hover">
+                                                <table class="table table-hover table-bordered table-striped nowrap display">
                                                     <thead>
                                                         <tr class="bg-light-blue">
                                                             <th style="width: 10px">Action
