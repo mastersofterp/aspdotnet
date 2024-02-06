@@ -439,11 +439,7 @@
                                                         <th id="thECNo" runat="server">
                                                       EC No.
                                                      </th>
-                                                  <th>
-                                                    Attachment
-                                                  </th>
-                                                    <th>Download
-                                                    </th>
+                                              
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -478,25 +474,6 @@
                                          <td id="tdECNo" runat="server"   >
                                          <%# Eval("ECNO") %>
                                        </td>
-                                        <td>
-                                            <%# Eval("FILE_PATH")%>
-                                        </td>
-                        
-                                             <td style="text-align: center" id="tdBlob1" runat="server" visible="false">
-                                                        <asp:UpdatePanel ID="updPreview" runat="server">
-                                                            <ContentTemplate>
-                                                                <asp:ImageButton ID="imgbtnPreview1" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILE_NAME") %>'
-                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILE_NAME") %>' Visible='<%# Convert.ToString(Eval("FILE_NAME"))==string.Empty?false:true %>'></asp:ImageButton>
-
-                                                            </ContentTemplate>
-                                                            <Triggers>
-                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview1" EventName="Click" />
-                                                            </Triggers>
-                                                        </asp:UpdatePanel>
-
-                                                    </td>
-                                                   
-                  
                                     </tr>
                                 </ItemTemplate>
                             </asp:ListView>

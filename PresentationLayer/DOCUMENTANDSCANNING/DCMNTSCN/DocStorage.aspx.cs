@@ -41,7 +41,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             }
             else
             {
-               // CheckPageAuthorization();
+                // CheckPageAuthorization();
                 //Set the Page Title
                 Page.Title = Session["coll_name"].ToString();
                 //Load Page Help
@@ -49,7 +49,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 {
                     //lblHelp.Text = objCommon.GetPageHelp(int.Parse(Request.QueryString["pageno"].ToString()));
                 }
-                
+
                 if (ViewState["action"] == null)
                     ViewState["action"] = "add";
 
@@ -147,8 +147,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             }
 
             //objDocType.DOCDATE = Convert.ToDateTime(txtDate.Text);
-           // objDocType.District = string.IsNullOrEmpty(txtdistrict.Text) ? null : txtdistrict.Text.Trim();
-           // objDocType.DOCNO = string.IsNullOrEmpty(txtdocnumber.Text) ? null : txtdocnumber.Text.Trim();
+            // objDocType.District = string.IsNullOrEmpty(txtdistrict.Text) ? null : txtdistrict.Text.Trim();
+            // objDocType.DOCNO = string.IsNullOrEmpty(txtdocnumber.Text) ? null : txtdocnumber.Text.Trim();
             //objDocType.PROP_ADDRESS = string.IsNullOrEmpty(txtpropAddress.Text) ? null : txtpropAddress.Text.Trim();
             //objDocType.SUBDIVINO = string.IsNullOrEmpty(txtsubdivnum.Text) ? null : txtsubdivnum.Text.Trim();
             //objDocType.SURVEYNO = string.IsNullOrEmpty(txtsurveyNumber.Text) ? null : txtsurveyNumber.Text.Trim();
@@ -194,23 +194,23 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             {
                 objDocType.District = string.Empty;
             }
-            
+
             if (txtdocnumber.Text != string.Empty)
             {
-                objDocType.DOCNO =txtdocnumber.Text.Trim();
+                objDocType.DOCNO = txtdocnumber.Text.Trim();
             }
             else
             {
                 objDocType.DOCNO = string.Empty;
-            } 
+            }
             if (txtDate.Text != string.Empty)
             {
                 objDocType.DOCDATE = Convert.ToDateTime(Convert.ToDateTime(txtDate.Text).ToString("dd/MM/yyyy"));
             }
-             else
-             {
-                 objDocType.DOCDATE = DateTime.MinValue;
-             } 
+            else
+            {
+                objDocType.DOCDATE = DateTime.MinValue;
+            }
 
             if (txtFromDate.Text != "")
             {
@@ -220,8 +220,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             else
             {
                 objDocType.FROM_DATE = DateTime.MinValue;
-            } 
-           
+            }
+
             if (txttodate.Text != "")
             {
                 objDocType.TO_DATE = Convert.ToDateTime(Convert.ToDateTime(txttodate.Text).ToString("dd/MM/yyyy"));
@@ -230,9 +230,9 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             else
             {
                 objDocType.TO_DATE = DateTime.MinValue;
-            } 
-            
-        
+            }
+
+
             if (txtEC.Text != string.Empty)
             {
                 objDocType.EC_NO = txtEC.Text.Trim();
@@ -241,51 +241,51 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             {
                 objDocType.EC_NO = string.Empty;
             }
-           
-         
-            if (txtWest.Text!=string.Empty)
+
+
+            if (txtWest.Text != string.Empty)
             {
                 objDocType.WEST = Convert.ToDecimal(txtWest.Text.Trim());
             }
             else
             {
-               
+
             }
 
-            if (txtSouth.Text!=string.Empty)
+            if (txtSouth.Text != string.Empty)
             {
                 objDocType.SOUTH = Convert.ToDecimal(txtSouth.Text.Trim());
             }
             else
             {
-               
+
             }
 
-            if (txtnorth.Text!=string.Empty)
+            if (txtnorth.Text != string.Empty)
             {
                 objDocType.NORTH = Convert.ToDecimal(txtnorth.Text.Trim());
             }
             else
             {
-               
+
             }
 
-            if (txtEast.Text!=string.Empty)
+            if (txtEast.Text != string.Empty)
             {
                 objDocType.EAST = Convert.ToDecimal(txtEast.Text.Trim());
             }
             else
             {
-               
+
             }
 
-            if (txtarea.Text!=string.Empty)
+            if (txtarea.Text != string.Empty)
             {
                 objDocType.TOTAREA = Convert.ToDecimal(txtarea.Text.Trim());
             }
             else
             {
-               
+
             }
 
             //if (txtdoctype.Text != string.Empty)
@@ -304,7 +304,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             //    Clear();
             //    return;
             //}
-
+            objDocType.UA_NO = Convert.ToInt32(Session["userno"]);
             if (ViewState["action"] != null)
             {
 
@@ -344,7 +344,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         {
             throw;
         }
-        
+
 
     }
     protected void btnCancel_Click(object sender, EventArgs e)
@@ -391,12 +391,17 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         txtFromDate.Text = null;
         txttodate.Text = null;
         lblFileName.Text = null;
-        //txtdoctype.Text = null;
+        //  txtdoctype.Text = null;
         txtarea.Text = null;
         lvCompAttach.DataSource = string.Empty;
         lvCompAttach.DataBind();
         Session["Attachments"] = null;
         ViewState["action"] = "add";
+
+    }
+
+
+    public void ClearData()
     {
              txtDate.Text = null;
         txtdistrict.Text = null;
@@ -404,7 +409,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         txtpropAddress.Text = null;
         txtsubdivnum.Text = null;
         txtsurveyNumber.Text = null;
-       // ddldoctype.SelectedIndex = 0;
+        // ddldoctype.SelectedIndex = 0;
         txtnorth.Text = null;
         txtSouth.Text = null;
         txtEast.Text = null;
@@ -413,7 +418,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         txtFromDate.Text = null;
         txttodate.Text = null;
         lblFileName.Text = null;
-        //txtdoctype.Text = null;
+        // txtdoctype.Text = null;
         txtarea.Text = null;
         lvCompAttach.DataSource = string.Empty;
         lvCompAttach.DataBind();
@@ -526,7 +531,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         }
 
     }
-  
+
 
 
     private void BlobDetails()
@@ -534,10 +539,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         try
         {
             string Commandtype = "DocumentandScanning";
-            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]),Commandtype);
+            DataSet ds = objBlob.GetBlobInfo(Convert.ToInt32(Session["OrgId"]), Commandtype);
             if (ds.Tables[0].Rows.Count > 0)
             {
-                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]),Commandtype);
+                DataSet dsConnection = objBlob.GetConnectionString(Convert.ToInt32(Session["OrgId"]), Commandtype);
                 string blob_ConStr = dsConnection.Tables[0].Rows[0]["BlobConnectionString"].ToString();
                 string blob_ContainerName = ds.Tables[0].Rows[0]["CONTAINERVALUE"].ToString();
                 hdnBlobCon.Value = blob_ConStr;
@@ -562,7 +567,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
 
 
-    protected void BindListView_Attachments(DataTable dt)    {
+    protected void BindListView_Attachments(DataTable dt)
+    {
         try
         {
             divAttch.Style["display"] = "block";
@@ -615,11 +621,11 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
 
     protected void txttodate_TextChanged(object sender, EventArgs e)
     {
-     
+
         DateTime frmdate, todate;
         if (txttodate.Text == null || txttodate.Text == "" || txtFromDate.Text == "" || txtFromDate.Text == null)
         {
-          
+
         }
         else
         {
@@ -756,7 +762,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divEcNo.Visible = false;
             divFDate.Visible = false;
             divTDate.Visible = false;
-           // divDoctypedatas.Visible = false;
+            // divDoctypedatas.Visible = false;
             ClearData();
             return;
         }
@@ -777,7 +783,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divEcNo.Visible = false;
             divFDate.Visible = false;
             divTDate.Visible = false;
-          //  divDoctypedatas.Visible = false;
+            // divDoctypedatas.Visible = false;
             divEast.Visible = false;
             divWest.Visible = false;
             divsouth.Visible = false;
@@ -798,7 +804,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             divDistrict.Visible = false;
             DivSurveyNo.Visible = false;
             divDivisionNo.Visible = false;
-           // divDoctypedatas.Visible = false;
+            // divDoctypedatas.Visible = false;
             divEast.Visible = false;
             divWest.Visible = false;
             divsouth.Visible = false;
@@ -829,7 +835,8 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         }
 
     }
-   
+
+
     protected void btnEditDoc_Click(object sender, ImageClickEventArgs e)
     {
         ViewState["FILE1"] = null;
@@ -837,7 +844,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
         ImageButton btnEdit = sender as ImageButton;
         ViewState["docid"] = int.Parse(btnEdit.CommandArgument);
         ViewState["action"] = "edit";
-         ShowDetails();
+        ShowDetails();
     }
     protected void btnAdd_Click(object sender, EventArgs e)
     {
@@ -1166,7 +1173,7 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 dt = ((DataTable)Session["Attachments"]);
                 dt.Rows.Remove(this.GetDeletableDataRow(dt, Convert.ToString(fileId)));
                 Session["Attachments"] = dt;
-               // this.BindListView_Attachments(dt);
+                // this.BindListView_Attachments(dt);
                 if (dt.Rows.Count > 0)
                 {
                     this.BindListView_Attachments(dt);
@@ -1185,10 +1192,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 string count = objCommon.LookUp("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID,ATTACH_ID", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
                 if (count != "")
                 {
-                  //  int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
+                    //  int cs = objCommon.DeleteClientTableRow("ADMN_DC_ASSEST_DOCUMENT_STORAGE", "DOCID =" + Convert.ToInt32(ViewState["docid"]) + "AND ATTACH_ID=" + fileId);
                 }
             }
-           
+
         }
         catch (Exception ex)
         {
@@ -1235,12 +1242,14 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             txtEast.Text = ds.Tables[0].Rows[0]["EAST_SQ_FT"].ToString();
             txtWest.Text = ds.Tables[0].Rows[0]["WEST_SQ_FT"].ToString();
             txtEC.Text = ds.Tables[0].Rows[0]["ECNO"].ToString();
-           // txtdoctype.Text = ds.Tables[0].Rows[0]["OTHERDOCTYPE"].ToString();
+            // txtdoctype.Text = ds.Tables[0].Rows[0]["OTHERDOCTYPE"].ToString();
             txtFromDate.Text = ds.Tables[0].Rows[0]["FROM_DATE"].ToString();
             txttodate.Text = ds.Tables[0].Rows[0]["TO_DATE"].ToString();
 
-                DataTable dt = new DataTable();
-
+            DataTable dt = new DataTable();
+            DataSet d = objDocC.RetriveDocData(objDocType);
+            if (d.Tables[0].Rows.Count > 0)
+            {
                 dt = this.GetAttachmentDataTable();
                 for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
                 {
@@ -1257,57 +1266,57 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
                 }
 
 
-                    int blob;
-                    blob = Convert.ToInt32(ds.Tables[0].Rows[0]["ISBLOB"]);
+                int blob;
+                blob = Convert.ToInt32(ds.Tables[0].Rows[0]["ISBLOB"]);
 
 
-                    if (blob == 1)
+                if (blob == 1)
+                {
+                    Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
+                    Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
+                    Control ctrhead2 = lvCompAttach.FindControl("divattach");
+                    ctrHeader.Visible = true;
+                    ctrHead1.Visible = true;
+                    ctrhead2.Visible = false;
+
+                    foreach (ListViewItem lvRow in lvCompAttach.Items)
                     {
-                        Control ctrHeader = lvCompAttach.FindControl("divBlobDownload");
-                        Control ctrHead1 = lvCompAttach.FindControl("divattachblob");
-                        Control ctrhead2 = lvCompAttach.FindControl("divattach");
-                        ctrHeader.Visible = true;
-                        ctrHead1.Visible = true;
-                        ctrhead2.Visible = false;
+                        Control ckBox = (Control)lvRow.FindControl("tdBlob");
+                        Control ckattach = (Control)lvRow.FindControl("attachfile");
+                        Control attachblob = (Control)lvRow.FindControl("attachblob");
+                        ckBox.Visible = true;
+                        attachblob.Visible = true;
+                        ckattach.Visible = false;
 
-                        foreach (ListViewItem lvRow in lvCompAttach.Items)
-                        {
-                            Control ckBox = (Control)lvRow.FindControl("tdBlob");
-                            Control ckattach = (Control)lvRow.FindControl("attachfile");
-                            Control attachblob = (Control)lvRow.FindControl("attachblob");
-                            ckBox.Visible = true;
-                            attachblob.Visible = true;
-                            ckattach.Visible = false;
-
-                        }
                     }
-                    else
-                    {
-
-
-
-                        Control ctrHeader = lvCompAttach.FindControl("divDownload");
-
-                        ctrHeader.Visible = false;
-
-
-                        foreach (ListViewItem lvRow in lvCompAttach.Items)
-                        {
-                            Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
-
-                            ckBox.Visible = false;
-
-                        }
-                    }
-
                 }
+                else
+                {
 
-            else
-            {
-                lvCompAttach.DataSource = null;
-                lvCompAttach.DataBind();
-            }  
-        
+
+
+                    Control ctrHeader = lvCompAttach.FindControl("divDownload");
+
+                    ctrHeader.Visible = false;
+
+
+                    foreach (ListViewItem lvRow in lvCompAttach.Items)
+                    {
+                        Control ckBox = (Control)lvRow.FindControl("tdDownloadLink");
+
+                        ckBox.Visible = false;
+
+                    }
+                }
+            }
+        }
+
+        else
+        {
+            lvCompAttach.DataSource = null;
+            lvCompAttach.DataBind();
+        }
+
     }
 
     protected void lvDocStorage_ItemDataBound(object sender, ListViewItemEventArgs e)
@@ -1327,6 +1336,10 @@ public partial class DOCUMENTANDSCANNING_DCMNTSCN_DocType : System.Web.UI.Page
             HtmlTableCell tdDocNo = (HtmlTableCell)e.Item.FindControl("tdDocNo");
             // Your condition to show or hide the EC No. column
             string selectedDocumentTypeName = ddldoctype.SelectedItem.Text;
+
+        }
+    }
+
 
         }
     }
