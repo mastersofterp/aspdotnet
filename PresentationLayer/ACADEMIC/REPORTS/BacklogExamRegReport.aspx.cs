@@ -77,6 +77,15 @@ public partial class ACADEMIC_REPORTS_BacklogExamRegReport : System.Web.UI.Page
                     btnsubjectArrearCount.Visible = false;
                     btnArrearReport.Visible = false;
                 }
+                if (Convert.ToInt32(Session["OrgId"]) == 3||Convert.ToInt32(Session["OrgId"]) == 4)
+                {
+                    btnResitReport.Visible = true;
+                    btnResitReport.Enabled = true;
+                    btnResitReport.Text = "RE - MAJOR REGISTRATION REPORT";
+                    rdopdf.Visible = false;
+                    rdopdf.Enabled = false;
+                    rdoexcel.Checked = true;
+                }
                 //else
                 //{
                 //    ReportType.Visible = true;
@@ -341,6 +350,7 @@ public partial class ACADEMIC_REPORTS_BacklogExamRegReport : System.Web.UI.Page
             ddlCourses.Items.Clear();
             ddlCourses.Items.Add(new ListItem("Please Select", "0"));
             objCommon.FillDropDownList(ddlCourses, "ACD_STUDENT_RESULT H INNER JOIN ACD_STUDENT S ON (S.IDNO = H.IDNO)", "DISTINCT H.COURSENO", "H.CCODE +'-'+ H.COURSENAME AS COURSENAME", "H.SEMESTERNO =" + ddlSemester.SelectedValue + " AND H.SESSIONNO =" + ddlSession.SelectedValue + " AND H.PREV_STATUS = 1", "H.COURSENO");
+          //  objCommon.FillDropDownList(ddlCourses, "ACD_STUDENT_RESULT H INNER JOIN ACD_STUDENT S ON (S.IDNO = H.IDNO)", "DISTINCT H.COURSENO", "H.CCODE +'-'+ H.COURSENAME AS COURSENAME", "H.SEMESTERNO =" + ddlSemester.SelectedValue + " AND H.SESSIONNO =" + ddlSession.SelectedValue + " AND H.PREV_STATUS = 1", "H.COURSENO");
 
             ddlCourses.Focus();
         }
@@ -804,40 +814,7 @@ public partial class ACADEMIC_REPORTS_BacklogExamRegReport : System.Web.UI.Page
 
         if (ddlClgname.SelectedIndex > 0)
         {
-            // if (rdopdf.Checked)
-            // {
-            // try
-            // {
-            //     string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            //     url += "Reports/CommonReport.aspx?";
-            //     url += "pagetitle=" + "Exam Registration List Report";
-            //     if (Convert.ToInt32(Session["OrgId"]) == 9)// added by gaurav 19_10_2022
-            //     {
-            //         int clg_id = Convert.ToInt32(objCommon.LookUp("ACD_SESSION_MASTER M INNER JOIN ACD_STUDENT_RESULT R ON(M.SESSIONNO=R.SESSIONNO) INNER JOIN ACD_COLLEGE_MASTER C ON (ISNULL(M.COLLEGE_ID,0)=ISNULL(C.COLLEGE_ID,0))", "C.COLLEGE_ID", "M.SESSIONNO >0 AND IS_ACTIVE=1 AND M.SESSIONNO=" + Convert.ToInt32(ddlClgname.SelectedValue)));
-            //         url += "&path=~,Reports,Academic," + "rptExamregistrationStatusReport_Atlas.rpt";
-            //         url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlClgname.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourses.SelectedValue) + ",@P_COLLEGE_CODE=" + clg_id;
-            //     }
-            //     else
-            //     {
-            //         url += "&path=~,Reports,Academic," + "rptExamregistrationStatusReport.rpt";
-            //         url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlClgname.SelectedValue) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + ",@P_COURSENO=" + Convert.ToInt32(ddlCourses.SelectedValue) + "";
-            //     }
-            //     System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            //     string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
-            //     sb.Append(@"window.open('" + url + "','','" + features + "');");
-            //     ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
-            // }
-            // catch (Exception ex)
-            // {
-            //     if (Convert.ToBoolean(Session["error"]) == true)
-            //         objUCommon.ShowError(Page, "ACADEMIC_CourseRegistration.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
-            //     else
-            //         objUCommon.ShowError(Page, "Server Unavailable.");
-            // }
-
-            // }
-            // else
-            // {
+           
 
             GridView GVStudData = new GridView();
 

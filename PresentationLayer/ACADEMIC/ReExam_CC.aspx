@@ -292,7 +292,7 @@
                 <%--<---------------------------------------------------------------------------------------------------------->--%>
 
                 <div class="box-body">
-                    <asp:UpdatePanel ID="updatepnl" runat="server">
+                     <asp:UpdatePanel ID="updatepnl" runat="server">
                         <ContentTemplate>
 
 
@@ -331,7 +331,7 @@
                                             </li>
                                              <li class="list-group-item"><b>Session Name :</b>
                                                     <a class="sub-label">
-                                                    <asp:Label ID="lblsessionno" runat="server" Font-Bold="true" /></a>
+                                                    <asp:Label ID="lblsessionname" runat="server" Font-Bold="true" /></a>
                                              </li>
                                         </ul>
                                     </div>
@@ -457,7 +457,22 @@
                                                         <tr class="bg-light-blue">
                                                             <th>Details 
                                                             </th>
-                                                            <th>Amount
+                                                            <th>COURSE CODE
+                                                            </th>
+                                                            <th>COURSE NAME
+                                                            </th>
+                                                            <th>CREDIT
+                                                            </th>
+                                                            <th>COURSE TYPE                                                                   
+                                                            </th>
+                                                            <th>SEMESTER NO                                                                  
+                                                            </th>
+                                                            <th>EXAM TYPE                                                                  
+                                                            </th>
+                                                             <th>GRADE                                                                
+                                                            </th>
+                                                            <th id="BatchTheory1">EXAM FEES
+                                                                   
                                                             </th>
                                                         </tr>
                                                         <tr style="display: none">
@@ -607,20 +622,27 @@
                                                             <%# Eval("GRADE") %>
                                                         </td>
 
-                                                        <td>
-                                                            <asp:Label ID="lblAmt" runat="server" Text=' <%# Eval("FEE") %>' ToolTip='<%# Eval("FEE")%>' />
-                                                            <%--  <%# Eval("FEE") %>--%>
-                                                         
-                                                        </td>
-                                                    </tr>
-                                                </ItemTemplate>
-                                                <%--<EmptyDataTemplate>
-                                            <span style="background-color: #00E171; font-size:large; font-style:normal; border:1px solid #000000;">
-                                                    No Backlog Courses.
-                                            </span>
-                                            </EmptyDataTemplate>--%>
-                                            </asp:ListView>
-                                        </asp:Panel>
+                                                 <td>
+
+                                                    <asp:Label ID="lblsemester" runat="server" Text='<%# Eval("SEMESTER") %>' ToolTip='<%# Eval("SEMESTER")%>' />
+                                                </td>
+                                                <td>
+
+                                                    <asp:Label ID="lblExamType" runat="server" Text='<%# Eval("EXAMTYPE") %>' ToolTip='<%# Eval("EXAMTYPENO")%>' />
+                                                </td>
+                                                <td>
+
+                                                    <asp:Label ID="Label2" runat="server" Text='<%# Eval("GRADENAME") %>' ToolTip='<%# Eval("GRADENAME")%>' />
+                                                </td>
+                                                <td>
+                                                    <asp:Label ID="lblAmt" runat="server" Text=' <%# Eval("FEE") %>' />
+
+                                                </td>
+                                            </tr>
+                                        </ItemTemplate>
+
+                                    </asp:ListView>
+                                </asp:Panel>
 
                                     </div>
                                     <div class="col-12 btn-footer">
@@ -639,17 +661,29 @@
                                     </div>
                                 </div>
                             </div>
-
                         </ContentTemplate>
-                        <Triggers>
-                            <asp:PostBackTrigger ControlID="btnPrintRegSlip" />
-                        </Triggers>
-                    </asp:UpdatePanel>
+                            <%--<Triggers>
+                                <asp:AsyncPostBackTrigger ControlID="btnPrintRegSlip" />
+                            </Triggers>--%>
+                     </asp:UpdatePanel>
+                       <div class="col-12 btn-footer" id="divbtn" runat="server">
+                        <asp:Button ID="btnPay" runat="server" Text="Submit & Pay Online" CausesValidation="false"
+                            Font-Bold="true" OnClick="btnPay_Click" CssClass="btn btn-primary" TabIndex="7" OnClientClick="return showConfirm();" />
+                        <asp:Button ID="btnSubmit_WithDemand" runat="server" OnClick="btnSubmit_WithDemand_Click" Text="Submit With Offline Fee" CausesValidation="false"
+                            Font-Bold="true" CssClass="btn btn-primary" TabIndex="9" OnClientClick="return showConfirm1();;" />
+                        <asp:Button ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Submit" CausesValidation="false"
+                            Font-Bold="true" CssClass="btn btn-primary" TabIndex="8" />
+                        <asp:Button ID="btnPrintRegSlip" runat="server" Text="Report" OnClick="btnPrintRegSlip_Click" CausesValidation="false"
+                           Font-Bold="true" CssClass="btn btn-info" TabIndex="9" Visible="true" />
+                    </div>
+                    <asp:HiddenField ID="hdfTotNoCourses" runat="server" Value="0" />
+                    <div id="divMsg" runat="server">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <%-- </ContentTemplate>
+<%--     </ContentTemplate>
           <Triggers>
             <asp:PostBackTrigger ControlID="btnPrintRegSlip" />
         </Triggers>
@@ -677,4 +711,10 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.history.replaceState('', '', window.location.href) // it prevent page refresh to firing the event again
+        })
+</script>
 </asp:Content>
