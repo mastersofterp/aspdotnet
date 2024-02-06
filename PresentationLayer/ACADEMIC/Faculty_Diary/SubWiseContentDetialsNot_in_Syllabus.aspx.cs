@@ -111,7 +111,7 @@ public partial class ACADEMIC_SubWiseContentDetialsNot_in_Syllabus : System.Web.
     {
         if (ddlSession.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlCourseName, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (CT.COURSENO=C.COURSENO)", "DISTINCT CT.COURSENO", "C.COURSE_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")", "CT.COURSENO");
+            objCommon.FillDropDownList(ddlCourseName, "ACD_COURSE_TEACHER CT INNER JOIN ACD_COURSE C ON (CT.COURSENO=C.COURSENO)", "DISTINCT CT.COURSENO", "C.COURSE_NAME", "(CT.UA_NO=" + Convert.ToInt32(Session["userno"]) + "OR CT.ADTEACHER = " + Convert.ToInt32(Session["userno"]) + ")" +"AND CT.SESSIONNO="+ ddlSession.SelectedValue, "CT.COURSENO");
         }
        
     }
