@@ -87,7 +87,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         }
         else
         {
-            objCommon.DisplayMessage(this.UpdProjectMs, "Record not found", this.Page);  
+            objCommon.DisplayMessage(this.UpdProjectMs, "Record Not Found", this.Page);  
         }
     }
 
@@ -113,7 +113,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
                 CustomStatus cs = (CustomStatus)objTeachingPlanController.InsertPeojectTitle(objSession, clgcode);
                 if (cs.Equals(CustomStatus.RecordSaved))
                 {
-                    objCommon.DisplayMessage(this.UpdProjectMs, "Record Inerted Successfully", this.Page);
+                    objCommon.DisplayMessage(this.UpdProjectMs, "Record Inserted Successfully", this.Page);
                     BindListView();
                     ClearControl();
                 }
@@ -123,7 +123,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
                 }
                 else
                 {
-                    objCommon.DisplayMessage(this.UpdProjectMs, "Record not inserted", this.Page);
+                    objCommon.DisplayMessage(this.UpdProjectMs, "Record Not Inserted", this.Page);
                 }
             }
             else
@@ -131,7 +131,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
                 CustomStatus cs = (CustomStatus)objTeachingPlanController.UpdateProjectTitle(objSession, Convert.ToInt32(ViewState["ID"]));
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
-                    objCommon.DisplayMessage(this.UpdProjectMs, "Record update Successfully", this.Page);
+                    objCommon.DisplayMessage(this.UpdProjectMs, "Record update successfully", this.Page);
                     btnSubmit.Text = "Submit";
                     ClearControl();
                     BindListView();
@@ -153,6 +153,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         
 
     }
+
     protected void btn_editt_Click(object sender, ImageClickEventArgs e)
     {
         try
@@ -162,7 +163,8 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             ViewState["ID"] = ID;
             ShowDetail(ID);
             ViewState["action"] = "edit";
-           btnSubmit.Text= "Update";
+            btnSubmit.Text= "Update";
+         
         }
         catch (Exception ex)
         {
@@ -202,7 +204,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
     }
 
     protected void ClearControl()
-    {
+    {       
         txtProject.Text = string.Empty;
         btnSubmit.Text = "Submit";
     }
@@ -270,7 +272,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         }
         else
         {
-            objCommon.DisplayMessage(this.updStudent, "Record not found ", this.Page);
+            objCommon.DisplayMessage(this.updStudent, "Record Not Found ", this.Page);
         }
     }
 
@@ -295,7 +297,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
            
             if (ddlProject.SelectedIndex == 0)
             {
-                objCommon.DisplayMessage(this.updStudent, "Please select project", this.Page);
+                objCommon.DisplayMessage(this.updStudent, "Please Select Project", this.Page);
                 return;
             }
             int Srno = 0;
@@ -356,13 +358,13 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             }
             if (check == true)
             {
-                objCommon.DisplayMessage(this.updStudent, "Please select checkbox", this.Page);
+                objCommon.DisplayMessage(this.updStudent, "Please Select Atleast One Checkbox", this.Page);
                 return;
             }
 
             if (msg == true)
             {
-                objCommon.DisplayMessage(this.updStudent, "Record inserted successfully", this.Page);             
+                objCommon.DisplayMessage(this.updStudent, "Record Inserted Successfully", this.Page);             
                 foreach (ListViewDataItem item in lvStudent.Items)
                 {
                     CheckBox chkstud = item.FindControl("ChkBox") as CheckBox;
@@ -382,7 +384,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(this.updStudent, "Record not inserted", this.Page);
+                objCommon.DisplayMessage(this.updStudent, "Record Not Inserted", this.Page);
             }
 
         }
@@ -459,7 +461,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         {
             if (ddlProejctNew.SelectedIndex == 0)
             {
-                objCommon.DisplayMessage(this.updEditAssignStudent, "Please select project", this.Page);
+                objCommon.DisplayMessage(this.updEditAssignStudent, "Please Select Project", this.Page);
                 return;
             }  
 
@@ -469,7 +471,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             if (cs.Equals(CustomStatus.RecordUpdated))
             {
 
-                objCommon.DisplayMessage(this.updEditAssignStudent, "Record update successfully", this.Page);
+                objCommon.DisplayMessage(this.updEditAssignStudent, "Record Update Successfully", this.Page);
                 BindProjectAssignStudentData();
             }
             else if (cs.Equals(CustomStatus.RecordExist))
@@ -478,7 +480,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
             }
             else
             {
-                objCommon.DisplayMessage(this.updEditAssignStudent, "Record not update", this.Page);
+                objCommon.DisplayMessage(this.updEditAssignStudent, "Record Not Update", this.Page);
             }
         }
 
@@ -503,7 +505,7 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         }
         else
         {
-            objCommon.DisplayMessage(this.updEditAssignStudent, "Record not found ", this.Page);
+            objCommon.DisplayMessage(this.updEditAssignStudent, "Record Not Found ", this.Page);
         }
     }
 
@@ -602,8 +604,9 @@ public partial class ACADEMIC_Major_minor_Project : System.Web.UI.Page
         }
         else
         {
-            objCommon.DisplayMessage(this.updEditAssignStudent, "Record not found ", this.Page);
+            objCommon.DisplayMessage(this.updEditAssignStudent, "Record Not Found ", this.Page);
         }
     }
 
+   
 }

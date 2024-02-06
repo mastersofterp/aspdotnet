@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
-        <asp:UpdateProgress ID="updProg" runat="server"
+        <asp:UpdateProgress ID="updProg" runat="server" 
             DynamicLayout="true" DisplayAfter="0">
             <ProgressTemplate>
                 <div id="preloader">
@@ -69,7 +69,7 @@
                                                             <asp:Label ID="lblDYProject" runat="server" Font-Bold="true"></asp:Label>
                                                         </div>
                                                         <asp:TextBox ID="txtProject" runat="server" MaxLength="50" TextMode="MultiLine" ViewStateMode="Enabled" AppendDataBoundItems="True"
-                                                            CssClass="form-control" ToolTip="Name Of Manjor/Minor Project" AutoPostBack="true" TabIndex="1" />
+                                                            CssClass="form-control" ToolTip="Name Of Manjor/Minor Project" TabIndex="1" />
                                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtProject"
                                                             Display="None" ErrorMessage="Please Enter Name Of Major/Minor Project" SetFocusOnError="True"
                                                             ValidationGroup="submit4" />
@@ -92,7 +92,9 @@
                                             <div class="col-12 btn-footer">
                                                 <asp:Button ID="btnSubmit" runat="server" Text="Submit" ToolTip="Submit" OnClick="btnSubmit_Click"
                                                     CssClass="btn btn-primary" TabIndex="2" OnClientClick="return  validate2();" ValidationGroup="submit4" />
+                                              
                                                 <asp:Button ID="btnCancell" runat="server" Text="Cancel" ToolTip="Cancel" CssClass="btn btn-warning" TabIndex="3" OnClick="btnCancell_Click" />
+                                                
                                                 <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="submit4"
                                                     ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
                                             </div>
@@ -142,6 +144,7 @@
                                         </div>
                                     </ContentTemplate>
                                     <Triggers>
+                                       <%-- <asp:PostBackTrigger ControlID="btnSubmit" />--%>                                   
                                         <asp:AsyncPostBackTrigger ControlID="btnSubmit" />
                                         <asp:AsyncPostBackTrigger ControlID="btnCancell" />
 
@@ -488,7 +491,8 @@
                                         </div>
                                     </ContentTemplate>
                                     <Triggers>
-                                            <asp:AsyncPostBackTrigger ControlID="btnSubmitNew" />
+                                     
+                                          <asp:AsyncPostBackTrigger ControlID="btnSubmitNew" />
                                             <asp:AsyncPostBackTrigger ControlID="btnCancelNew" />
                                             <asp:AsyncPostBackTrigger ControlID="btnReport" />
                                     </Triggers>
@@ -505,6 +509,8 @@
     </div>
     <asp:HiddenField ID="TabName" runat="server" />
        <%--  </ContentTemplate>   
+        <Triggers>        
+        </Triggers>
     </asp:UpdatePanel>--%>
     <script>
 
