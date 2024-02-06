@@ -651,37 +651,49 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
             ddlSem.Focus();
             return;
         }
-
-        try
+         string proc_ = "PKG_ACD_INTERNAL_MARK_STATIC_REGISTER";
+        string para_ = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO";
+        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue);
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+        if (ds.Tables[0].Rows.Count > 0)
         {
-            int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
-            int subType = 0;
-            if (rbtnOpenEle.Checked)
-                subType = 1;
 
-            string exporttype = "xls";
-            string rptFileName = "rptInternalMarkRegister_Excel.rpt";
+            try
+            {
+                int StudType = Convert.ToInt32(ddlStudType.SelectedValue) == -1 ? 0 : Convert.ToInt32(ddlStudType.SelectedValue);
+                int subType = 0;
+                if (rbtnOpenEle.Checked)
+                    subType = 1;
 
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "exporttype=" + exporttype;
-            url += "&filename=InternalMarkRegister_Excel.xls";
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
+                string exporttype = "xls";
+                string rptFileName = "rptInternalMarkRegister_Excel.rpt";
 
-            //",@P_SUB_TYPE=" + subType +
-            divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            divMsg.InnerHtml += " window.close();";
-            divMsg.InnerHtml += " </script>";
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "exporttype=" + exporttype;
+                url += "&filename=InternalMarkRegister_Excel.xls";
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Session["colcode"].ToString();
 
+                //",@P_SUB_TYPE=" + subType +
+                divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                divMsg.InnerHtml += " window.close();";
+                divMsg.InnerHtml += " </script>";
+
+            }
+            catch (Exception ex)
+            {
+                if (Convert.ToBoolean(Session["error"]) == true)
+                    objUCommon.ShowError(Page, "Academic_Generate_Rollno.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
+                else
+                    objUCommon.ShowError(Page, "Server Unavailable.");
+            }
         }
-        catch (Exception ex)
+        else
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "Academic_Generate_Rollno.ShowReport() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
         }
     }
 
@@ -3258,30 +3270,43 @@ public partial class ACADEMIC_REPORTS_StudentResultList : System.Web.UI.Page
         //    subType = 1;
         ////if (ddlStudType.SelectedValue == "-1")
         ////int StudType = 0;
-
-        string reportTitle = "External_Mark_Register";
-        string rptFileName = "rptExMarkRegister.rpt";//rptInternalMarkRegister rptExternalMarkRegister
-        try
+        string proc_ = "PKG_ACD_EXTERNAL_MARK_STATIC_REGISTER";
+        string para_ = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO,@P_SECTIONNO";
+        string value = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"]) + "," + Convert.ToInt32(ddlSem.SelectedValue) + "," + Convert.ToInt32(ddlSection.SelectedValue);
+        DataSet ds = null;
+        ds = objCommon.DynamicSPCall_Select(proc_, para_, value);
+        if (ds.Tables[0].Rows.Count > 0)
         {
-            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
-            url += "Reports/CommonReport.aspx?";
-            url += "pagetitle=" + reportTitle;
-            url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-            //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
-            //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
-            //divMsg.InnerHtml += " </script>";
-            string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+            string reportTitle = "External_Mark_Register";
+            string rptFileName = "rptExMarkRegister.rpt";//rptInternalMarkRegister rptExternalMarkRegister
+            try
+            {
+                string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                url += "Reports/CommonReport.aspx?";
+                url += "pagetitle=" + reportTitle;
+                url += "&path=~,Reports,Academic," + rptFileName;
+                url += "&param=@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + ViewState["schemeno"] + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSem.SelectedValue) + ",@P_SECTIONNO=" + Convert.ToInt32(ddlSection.SelectedValue) + ",@P_EXAMNO=1,@P_COLLEGE_CODE=" + Convert.ToInt32(ViewState["college_id"]);
 
-            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+                //divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
+                //divMsg.InnerHtml += " window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+                //divMsg.InnerHtml += " </script>";
+                string Print_Val = @"window.open('" + url + "','" + reportTitle + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
+
+                ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "key", Print_Val, true);
+            }
+            catch (Exception ex)
+            {
+                if (Convert.ToBoolean(Session["error"]) == true)
+                    objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
+                else
+                    objUCommon.ShowError(Page, "Server Unavailable.");
+            }
         }
-        catch (Exception ex)
+        else
         {
-            if (Convert.ToBoolean(Session["error"]) == true)
-                objUCommon.ShowError(Page, "ShowReportResultAnalysis_Examwise() --> " + ex.Message + " " + ex.StackTrace);
-            else
-                objUCommon.ShowError(Page, "Server Unavailable.");
+
+            objCommon.DisplayMessage(this.Page, "No Record Found", this.Page);
         }
     }
 
