@@ -1790,6 +1790,7 @@ public partial class ACADEMIC_Global_Offered_Courses : System.Web.UI.Page
         ListView lv = dataitem.FindControl("lvDetails") as ListView;
         try
         {
+            //Added By Rahul M. for lightweight performance.
             if (ViewState["dsTimeslot"].ToString() != null)
             {
                 DataSet dsFromViewState = ViewState["dsTimeslot"] as DataSet;
