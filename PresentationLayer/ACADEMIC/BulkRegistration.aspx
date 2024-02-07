@@ -696,7 +696,7 @@
                                                         <thead class="bg-light-blue">
                                                             <tr id="trRow">
                                                                 <th>
-                                                                    <asp:CheckBox ID="cbHead" Text="Select All" runat="server" onclick="return SelectAll(this)" ToolTip="Select/Select all" />
+                                                                    <asp:CheckBox ID="cbHead" Text="Select All" runat="server"  ToolTip="Select/Select all" />
                                                                 </th>
                                                                 <th>
                                                                     <asp:Label ID="lblDYtxtRegNo" runat="server" Font-Bold="true"></asp:Label>
@@ -717,7 +717,7 @@
                                                 <ItemTemplate>
                                                     <tr>
                                                         <td>
-                                                            <asp:CheckBox ID="cbRow" runat="server" ToolTip='<%# Eval("IDNO") %>' onClick="totStudents(this);" />
+                                                            <asp:CheckBox ID="cbRow" runat="server" ToolTip='<%# Eval("IDNO") %>'  Onclick="totStudents(this)"/>
                                                         </td>
                                                         <td>
                                                             <asp:Label ID="lblRollno" runat="server" Text='<%# Eval("REGNO") %>' ToolTip='<%# Eval("IDNO") %>' />
@@ -757,6 +757,7 @@
                                                     </tr>
                                                 </AlternatingItemTemplate>--%>
                                             </asp:ListView>
+                                           <asp:HiddenField ID="hdStudntCount" runat="server" />
                                         </asp:Panel>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -954,21 +955,34 @@
         function validateAssign() {
             var txtTot = document.getElementById('<%= txtTotStud.ClientID %>').value;
             if (txtTot == 0) {
-                alert('Please Check atleast one student ');
-                return false;
+             
+                        alert('Please Check atleast one student ');
+                        return false;         
             }
             else
                 return true;
         }
 
+   
         function totStudents(chk) {
+  
             var txtTot = document.getElementById('<%= txtTotStud.ClientID %>');
-
-            if (chk.checked == true)
-                txtTot.value = Number(txtTot.value) + 1;
-            else
-                txtTot.value = Number(txtTot.value) - 1;
+            var currentCount = Number(txtTot.value); // Added By Vipul T on date 17-02-2024 as per Tno:-
+          
+            if (chk.checked) {             
+                txtTot.value = currentCount + 1;
+            } else {                          
+                if (currentCount > 0) {
+                    txtTot.value = currentCount - 1;
+                }
+            }          
         }
+
+      
+  
+
+
+      
 
     </script>
 

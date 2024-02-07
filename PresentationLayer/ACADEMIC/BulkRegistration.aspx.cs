@@ -78,6 +78,30 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
 
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+       //  Added By Vipul Tichakule on date 07-02-2024 as per Tno:-
+        int count = 0;
+        foreach (ListViewDataItem itm in lvCourse.Items)
+        {
+            CheckBox chkbox = itm.FindControl("cbRow") as CheckBox;
+            if (chkbox.Checked == true)
+                count++;
+        }
+
+        if (count == 0)
+        {
+            objCommon.DisplayMessage("Please select atleast one course", this.Page);
+          
+                    foreach (ListViewDataItem item in lvStudent.Items)
+                    {
+                        CheckBox chkbox = item.FindControl("cbRow") as CheckBox;
+                        if (chkbox.Checked == true)
+                            chkbox.Checked = false;
+                    }
+                    txtTotStud.Text = "0";                  
+            return;
+        }
+       // end
+
         string roll = string.Empty;
         StudentRegistration objSRegist = new StudentRegistration();
         StudentRegist objSR = new StudentRegist();
@@ -140,7 +164,6 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
                     }
 
                     objSR.ACEEPTSUB = "1";
-
                     //Register Single Student
                     int prev_status = 0;    //Regular Courses
                     //int seatno = 0;
@@ -150,6 +173,8 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
                         objSR.COURSENOS = string.Empty;
                         objSR.ACEEPTSUB = string.Empty;
                     }
+
+                    
                 }
             }
             objCommon.DisplayMessage(updBulkReg, "Student(s) Registered Successfully!!", this.Page);
@@ -392,7 +417,8 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
             {
                 lvStudent.DataSource = ds.Tables[0];
                 lvStudent.DataBind();
-                objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label 
+                //(SetListViewLabel)Commented By Vipul Tichakule on date 07-02-2024 as per Tno;
+                //objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvStudent);//Set label 
                 pnlStudents.Visible = true;
                 btnSubmit.Enabled = true;
                 if (Convert.ToInt32(Session["usertype"]) == 1)
@@ -439,7 +465,8 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
                     {
                         lvCourse.DataSource = dsCourse;
                         lvCourse.DataBind();
-                        objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourse);//Set label 
+                        //(SetListViewLabel)Commented By Vipul Tichakule on date 07-02-2024 as per Tno;
+                        //objCommon.SetListViewLabel("0", Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), Convert.ToInt32(Session["userno"]), lvCourse);//Set label 
                         pnlCourses.Visible = true;
                     }
                     else
@@ -549,6 +576,8 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
     {
         try
         {
+           
+
             string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
             url += "Reports/CommonReport.aspx?";
             url += "pagetitle=" + reportTitle;
@@ -681,6 +710,16 @@ public partial class ACADEMIC_BulkRegistration : System.Web.UI.Page
             ShowReport("RegistrationSlip", "rptBulkCourseRegslipForCrescent.rpt");
         else
             ShowReport("RegistrationSlip", "rptBulkCourseRegSlip_01.rpt");
+
+        // Added By Vipul Tichakule on date 07-02-2024 as per Tno:-
+        foreach (ListViewDataItem item in lvStudent.Items)
+        {
+            CheckBox chkbox = item.FindControl("cbRow") as CheckBox;
+            if (chkbox.Checked == true)
+                chkbox.Checked = false;
+        }
+        txtTotStud.Text = "0";      
+       // end
     }
 
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
