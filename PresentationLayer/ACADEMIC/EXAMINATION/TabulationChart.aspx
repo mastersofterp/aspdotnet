@@ -452,7 +452,7 @@
                                             SetFocusOnError="True" Enabled="false"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="TRReport"
-                                            SetFocusOnError="True" Enabled="false"></asp:RequiredFieldValidator>
+                                            SetFocusOnError="True"></asp:RequiredFieldValidator>
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" ControlToValidate="ddlSession"
                                             Display="None" ErrorMessage="Please Select Session" InitialValue="0" ValidationGroup="ResultGazette"
                                             SetFocusOnError="True" Enabled="false"></asp:RequiredFieldValidator>

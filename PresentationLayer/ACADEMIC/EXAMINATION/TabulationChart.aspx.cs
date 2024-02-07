@@ -5981,4 +5981,82 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+
+
+    //added by Shubham for CPUK AND CPUH Degree  Certificate 
+    private void ShowReportDC(string param, string reportTitle, string rptFileName)
+    {
+        try
+        {
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,REPORTS,ACADEMIC," + rptFileName;
+            url += "&param=@P_IDNO=" + param;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.ShowReportDC() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
+
+    // added by shubham on 04-01-2024
+    protected void btnCIAExcel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string proc_name = "PKG_ACD_CIA_RESULT_ANALYSIS_REPORT_HITS";
+            string param = "@P_SCHEMENO,@P_SEMESTERNO";
+            string call_values = "" + ViewState["schemeno"].ToString() + "," + ddlSemester.SelectedValue + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
+            GridView dg = new GridView();
+           if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    dg.DataSource = ds.Tables[0];
+                    dg.DataBind();
+                    //AddReportHeader(dg);
+                    string attachment = "attachment; filename=" + "CIA_Result_Analysis " + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                    Response.ClearContent();
+                    Response.AddHeader("content-disposition", attachment);
+                    Response.ContentType = "application/" + "ms-excel";
+                    StringWriter sw = new StringWriter();
+                    HtmlTextWriter htw = new HtmlTextWriter(sw);
+                    dg.HeaderStyle.Font.Bold = true;
+                    dg.RenderControl(htw);
+                    Response.Write(sw.ToString());
+                    Response.End();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnCIAExcel_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
+
+    }
+
 }
