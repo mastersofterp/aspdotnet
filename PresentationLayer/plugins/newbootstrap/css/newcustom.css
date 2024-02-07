@@ -3512,7 +3512,7 @@ input[type=checkbox], input[type=radio] {
 
 .main-header .navbar-custom-menu > .navbar-nav > li > .dropdown-menu.options-menu-list {
     width: 375px;
-    height: 410px;
+    height: 310px;
     overflow-y: scroll;
     border-radius: 10px;
     box-shadow: rgb(0 0 0 / 25%) 0px 0.0625em 0.0625em, rgb(0 0 0 / 25%) 0px 0.125em 0.5em, rgb(255 255 255 / 10%) 0px 0px 0px 1px inset;

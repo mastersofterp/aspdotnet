@@ -276,7 +276,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="optionalMenu">
                                     <i class="fa fa-th" aria-hidden="true"></i>
                                 </a>
-                                <div class="dropdown-menu options-menu-list pullDown">
+                                <div class="dropdown-menu options-menu-list pullDown" >
                                     <!-- The user image in the menu -->
                                     <ul class="option-grid" id="columns">
                                         <!--drag id added by Gaurav k -->
@@ -310,17 +310,15 @@
                                                 
                                             </div>
                                         </li>
-                                        <!-- item 3-->
-                                        <li class="column" draggable="true">
+                                        <!-- item 3--> <!-- Commented by Anurag Baghele on 07-02-2024-->
+                                        <%--<li class="column" draggable="true">
                                             <div class="option" id="Fav_Model" draggable="true">
                                                 <div class="icon">
-                                                    <%--<i class="fas fa-star-half-alt stars" aria-hidden="true"></i>--%>
                                                     <asp:Image ID="imgFavouriteLink" runat="server" ImageUrl="~/Images/icons/star.png" />
                                                      <span class="text">Favourite Links</span>
                                                 </div>
-                                               
                                             </div>
-                                        </li>
+                                        </li>--%>
                                         <!-- item 4-->
                                         <li class="column" draggable="true">
                                             <div class="option" data-toggle="modal" id="recent-link" data-target="#myModalz" draggable="true">
