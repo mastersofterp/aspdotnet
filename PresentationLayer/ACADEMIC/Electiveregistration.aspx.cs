@@ -1048,6 +1048,7 @@ public partial class ACADEMIC_Electiveregistration : System.Web.UI.Page
             ds = objSC.GetStudentsBySchemeElectiveCourses(Convert.ToInt32(ddlAdmBatch.SelectedValue), Convert.ToInt32(ViewState["schemeno"]), Convert.ToInt32(ViewState["degreeno"]), Convert.ToInt32(ddlSchemeType.SelectedValue), Convert.ToInt16(ddlSemester.SelectedValue), Convert.ToInt32(ViewState["college_id"]), Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(ddlcourselist.SelectedValue), Convert.ToInt32(ddlSession.SelectedValue));
             lvStudent.DataSource = ds;
             lvStudent.DataBind();
+            hftot.Value = ds.Tables[0].Rows.Count.ToString();
             int count = 0;
             //for getting student list semester wise
             foreach (ListViewDataItem item in lvStudent.Items)
