@@ -3,11 +3,8 @@
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolKit" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css") %>"
-        rel="stylesheet" />
-
+    <link href="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.css") %>" rel="stylesheet" />
     <script src="<%=Page.ResolveClientUrl("~/plugins/multiselect/bootstrap-multiselect.js")%>"></script>
-
     <style>
         .dataTables_scrollHeadInner {
             width: max-content !important;
@@ -28,6 +25,11 @@
         #ctl00_ContentPlaceHolder1_lvtimetable_ctrl0_txtExamDate1 {
             width: 100px !important;
         }
+
+        #imgaddcourse {
+            mix-blend-mode: color-burn;
+        }
+
         @media (min-width: 1201px) {
             .tbl-panel3 {
                 width: 100%;
@@ -35,6 +37,7 @@
                 max-height: 400px;
             }
         }
+
         @media (max-width: 1200px) {
             .tbl-panel1 {
                 width: 100%;
@@ -86,9 +89,15 @@
                 <div class="box-body">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab_1" tabindex="1">Regular Time Table</a> </li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab_2" tabindex="1">Global Elective/Value Added Time Table</a> </li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab_3" tabindex="1">Common Course</a> </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tab_1" tabindex="1">Regular Time Table</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab_2" tabindex="1">Global Elective/Value Added Time Table</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab_3" tabindex="1">Common Course</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="my-tab-content">
                             <div class="tab-pane active" id="tab_1">
@@ -785,24 +794,6 @@
                                                         Display="None" ErrorMessage="Please Select Exam Pattern" SetFocusOnError="true"
                                                         InitialValue="0" ValidationGroup="submit2" />
                                                 </div>
-
-                                                <div class="form-group col-lg-3 col-md-6 col-12">
-                                                    <div class="label-dynamic">
-                                                        <sup>* </sup>
-                                                        <label>
-                                                            Subject Type</label>
-                                                    </div>
-                                                    <asp:DropDownList ID="ddlSubjecttype2" runat="server" AppendDataBoundItems="true"
-                                                        data-select2-enable="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlSubjecttype2_SelectedIndexChanged">
-                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                                    </asp:DropDownList>
-                                                    <asp:RequiredFieldValidator ID="rfv1ddlSubjecttype2" runat="server" ControlToValidate="ddlSubjecttype2"
-                                                        Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
-                                                        ValidationGroup="show2" />
-                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ControlToValidate="ddlSubjecttype2"
-                                                        Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
-                                                        ValidationGroup="submit2" />
-                                                </div>
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <sup>* </sup>
@@ -824,6 +815,25 @@
                                                         Display="None" ErrorMessage="Please Select Exam Name" SetFocusOnError="true"
                                                         InitialValue="0" ValidationGroup="submit2" />
                                                 </div>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <div class="label-dynamic">
+                                                        <sup>* </sup>
+                                                        <label>
+                                                            Subject Type</label>
+                                                    </div>
+                                                    <asp:DropDownList ID="ddlSubjecttype2" runat="server" AppendDataBoundItems="true"
+                                                        data-select2-enable="true" TabIndex="1" AutoPostBack="true" OnSelectedIndexChanged="ddlSubjecttype2_SelectedIndexChanged">
+                                                        <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                    <asp:RequiredFieldValidator ID="rfv1ddlSubjecttype2" runat="server" ControlToValidate="ddlSubjecttype2"
+                                                        Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
+                                                        ValidationGroup="show2" />
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ControlToValidate="ddlSubjecttype2"
+                                                        Display="None" ErrorMessage="Please Select Subject Type" InitialValue="0" SetFocusOnError="True"
+                                                        ValidationGroup="submit2" />
+                                                </div>
+
                                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                                     <div class="label-dynamic">
                                                         <label>
@@ -833,6 +843,16 @@
                                                         data-select2-enable="true" AutoPostBack="true" OnSelectedIndexChanged="ddlcoursecat_SelectedIndexChanged">
                                                         <asp:ListItem Value="0">Please Select</asp:ListItem>
                                                     </asp:DropDownList>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-12">
+                                                    <div class=" note-div" runat="server" id="divexcelnote" visible="false">
+                                                        <h5 class="heading"><i class="fa fa-star" aria-hidden="true"></i>Note</h5>
+                                                        <p>
+                                                            <span>1) As Per the Select Template will Download.</span><br />
+                                                            <span>2) For excel upload, 'EXAMDATE' column should be in dd/MM/yyyy format.</span><br />
+                                                            <span>3) Please note that incorrect date formats or invalid slot data will not be saved.</span><br />
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -844,6 +864,7 @@
                                                 ValidationGroup="submit2" />
                                             <asp:Button ID="btnviewstudlog2" runat="server" Text="View On Student Login" CssClass="btn btn-info"
                                                 TabIndex="1" Visible="false" OnClick="btnviewstudlog2_Click" />
+                                            <asp:Button ID="lnkExcekImport" runat="server" Visible="false" OnClick="lnkExcekImport_Click" Text="Import Time Table Excel" CssClass="btn btn-info"></asp:Button>
                                             <asp:Button ID="btncancel2" runat="server" Text="Cancel" CssClass="btn btn-warning"
                                                 TabIndex="1" OnClick="btncancel2_Click" />
                                             <asp:ValidationSummary ID="valsumcommon" runat="server" DisplayMode="List" ShowMessageBox="true"
@@ -859,7 +880,7 @@
                                                             <h5>Course List</h5>
                                                         </div>
                                                         <div class="tbl-panel2">
-                                                            <table class="table table-bordered table-striped" style="width: 100%">
+                                                            <table class="table table-bordered table-striped">
                                                                 <thead class="bg-light-blue">
                                                                     <tr>
                                                                         <th class="d-none">SrNo
@@ -890,8 +911,7 @@
                                                                 <%# Container.DataItemIndex + 1 %>
                                                             </td>
                                                             <td>
-                                                                <asp:DropDownList ID="ddlcommoncourse" runat="server" CssClass="form-control" data-select2-enable="true"
-                                                                    Style="width: 250px;" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlcommoncourse_SelectedIndexChanged">
+                                                                <asp:DropDownList ID="ddlcommoncourse" runat="server" CssClass="form-control" data-select2-enable="true" AppendDataBoundItems="True" AutoPostBack="true" OnSelectedIndexChanged="ddlcommoncourse_SelectedIndexChanged">
                                                                     <asp:ListItem Text="Please Select" Value="0"> </asp:ListItem>
                                                                 </asp:DropDownList>
                                                                 <asp:HiddenField ID="hdf_course" runat="server" Value='<%# Eval("CCODE")%>' />
@@ -900,16 +920,13 @@
                                                                     ValidationGroup="submit2" />
                                                             </td>
                                                             <td>
-                                                                <asp:ListBox ID="ddlschemelist" AppendDataBoundItems="True" SelectionMode="Multiple"
-                                                                    runat="server" CssClass="form-control multi-select-demo" Style="width: 250px;"
-                                                                    OnSelectedIndexChanged="ddlschemelist_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
+                                                                <asp:ListBox ID="ddlschemelist" AppendDataBoundItems="True" SelectionMode="Multiple" runat="server" CssClass="form-control multi-select-demo" OnSelectedIndexChanged="ddlschemelist_SelectedIndexChanged" AutoPostBack="true"></asp:ListBox>
                                                                 <asp:HiddenField ID="hdn_schemeno" runat="server" Value='<%# Eval("SCHEME")%>' />
                                                                 <asp:RequiredFieldValidator ID="rfvSchemelist" runat="server" ControlToValidate="ddlschemelist"
                                                                     Display="None" ErrorMessage="Please Select Scheme" SetFocusOnError="true" ValidationGroup="submit2" />
                                                             </td>
                                                             <td id="ddlsectionrecord">
-                                                                <asp:ListBox ID="ddlsectionlist" AppendDataBoundItems="True" SelectionMode="Multiple"
-                                                                    runat="server" CssClass="form-control multi-select-demo" Style="width: 250px;"></asp:ListBox>
+                                                                <asp:ListBox ID="ddlsectionlist" AppendDataBoundItems="True" SelectionMode="Multiple" runat="server" CssClass="form-control multi-select-demo"></asp:ListBox>
                                                                 <asp:HiddenField ID="hdn_section" runat="server" Value='<%# Eval("SECTIONNO")%>' />
                                                             </td>
                                                             <td>
@@ -918,13 +935,13 @@
                                                                         <i class="fa fa-calendar"></i>
                                                                     </div>
                                                                     <%-- <asp:TextBox ID="txtExamDate2" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" TabIndex="1" onblur="onTextBoxBlur(this)" AutoPostBack="true" OnTextChanged="txtExamDate2_TextChanged" />--%>
-                                                                    <asp:TextBox ID="txtExamDate2" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" TabIndex="1" />
-                                                                    <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate3" TargetControlID="txtExamDate2" Enabled="true" OnClientDateSelectionChanged="checkDate" />
+                                                                    <asp:TextBox ID="txtExamDate2" runat="server" Text='<%# Eval("EXAMDATE")%>' ValidationGroup="submit1" TabIndex="1" onblur="onTextBoxBlur1(this)" OnTextChanged="txtExamDate2_TextChanged" />
+                                                                    <ajaxToolKit:CalendarExtender ID="ceExamDate" runat="server" Format="dd/MM/yyyy" PopupButtonID="imgExamDate3" TargetControlID="txtExamDate2" Enabled="true" OnClientDateSelectionChanged="checkDate1" />
                                                                     <ajaxToolKit:MaskedEditExtender ID="meExamDate" runat="server" Mask="99/99/9999" MaskType="Date" OnFocusCssClass="MaskedEditFocus" OnInvalidCssClass="errordate" TargetControlID="txtExamDate2" />
                                                                     <ajaxToolKit:MaskedEditValidator ID="mvExamDate" runat="server" ControlExtender="meExamDate" ControlToValidate="txtExamDate2" Display="None" EmptyValueMessage="Please Enter Exam Date" ErrorMessage="Please Enter Exam Date" InvalidValueBlurredMessage="*" InvalidValueMessage="Exam Date is invalid" IsValidEmpty="false" SetFocusOnError="true" ValidationGroup="Submit1" />
                                                                 </div>
                                                             </td>
-                                                            <td style="width: 150px;">
+                                                            <td>
                                                                 <asp:DropDownList ID="ddlSlot1" runat="server" AppendDataBoundItems="true" CausesValidation="true"
                                                                     data-select2-enable="true" TabIndex="1">
                                                                     <asp:ListItem Value="0">Please Select</asp:ListItem>
@@ -934,9 +951,9 @@
                                                                     Display="None" ErrorMessage="Please Select Slot" InitialValue="0" SetFocusOnError="true"
                                                                     ValidationGroup="submit2" />
                                                             </td>
-                                                            <td style="text-align: center; width: 50px;">
+                                                            <td style="width: 50px;" class="mx-auto">
                                                                 <asp:ImageButton ID="imgaddcourse" runat="server" OnClick="imgaddcourse_Click" ImageUrl="~/Images/Addblue.png"
-                                                                    Style="height: 20px; width: 20px;" Visible="false" />
+                                                                    Style="height: 20px; width: 20px; mix-blend-mode: darken;" Visible="false" />
                                                                 <asp:ImageButton ID="imgbtnrowremove" runat="server" OnClick="imgbtnrowremove_Click"
                                                                     ImageUrl="~/Images/delete.png" Visible="false" />
                                                             </td>
@@ -1017,6 +1034,86 @@
                                                 </asp:ListView>
                                             </div>
                                         </asp:Panel>
+
+                                        <div class="col-12" visible="false" id="pnlexcelupload" runat="server">
+                                            <asp:UpdatePanel ID="updImport" runat="server">
+                                                <ContentTemplate>
+                                                    <div class="sub-heading">
+                                                        <h5>Import Exam Time Excel</h5>
+                                                    </div>
+                                                    <asp:Panel ID="Panel5" runat="server">
+                                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                                            <div class="label-dynamic">
+                                                                <label>Excel File</label>
+                                                            </div>
+                                                            <asp:FileUpload ID="FuBrowse" runat="server" ToolTip="Select file to Import" TabIndex="1" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <asp:LinkButton ID="btnBlankDownld" runat="server" OnClick="btnBlankDownld_Click" TabIndex="1" CssClass="btn btn-primary" Text="Blank" ToolTip="Click to download blank excel format file" CausesValidation="true" ValidationGroup="exceldownload">Download Excel Time Table Template</asp:LinkButton>
+                                                            <asp:Button ID="btnUpload" runat="server" CssClass="btn btn-primary" OnClick="btnUpload_Click" TabIndex="1" CausesValidation="true" ValidationGroup="excel" Text="Upload Excel" ToolTip="Click to Upload" Enabled="true" />
+                                                            <asp:Button ID="btnerrorlog" runat="server" CssClass="btn btn-primary" OnClick="btnerrorlog_Click" TabIndex="1" CausesValidation="false" Text="Excel Erros Export" ToolTip="Click to Upload" Visible="false" />
+                                                            <asp:Button ID="btnexcelcancel" runat="server" TabIndex="1" Text="Clear" ToolTip="Click To Clear" CssClass="btn btn-warning" OnClick="btnexcelcancel_Click" />
+                                                            <asp:ValidationSummary ID="ValidationSummary3" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" CausesValidation="true" ValidationGroup="excel" />
+                                                            <asp:ValidationSummary ID="ValidationSummary4" runat="server" DisplayMode="List" ShowMessageBox="true" ShowSummary="false" CausesValidation="true" ValidationGroup="exceldownload" />
+                                                        </div>
+                                                    </asp:Panel>
+                                                    <asp:Panel ID="Panel6" runat="server">
+                                                        <asp:ListView ID="lvexceluplodeddata" runat="server">
+                                                            <LayoutTemplate>
+                                                                <div class="sub-heading">
+                                                                    <h5>Time Table Submitted List</h5>
+                                                                </div>
+                                                                <table class="table table-striped table-bordered nowrap display" style="width: 100%">
+                                                                    <thead class="bg-light-blue">
+                                                                        <tr>
+                                                                            <th>Course Code
+                                                                            </th>
+                                                                            <th>Course Name
+                                                                            </th>
+                                                                            <th>Session Name
+                                                                            </th>
+                                                                            <th>Pattern Name
+                                                                            </th>
+                                                                            <th>Exam Date
+                                                                            </th>
+                                                                            <th>Exam Slot
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </LayoutTemplate>
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:Label ID="lblcoursecode" runat="server" Text='<%# Eval("COURSE_CODE")%>' />
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:Label ID="lblcoursename" runat="server" Text='<%# Eval("COURSE NAME")%>' /></td>
+                                                                    <td>
+                                                                        <asp:Label ID="lblsession" runat="server" Text='<%# Eval("SESSION")%>' /></td>
+                                                                    <td>
+                                                                        <asp:Label ID="lblpattern" runat="server" Text='<%# Eval("PATTERN")%>' /></td>
+                                                                    <td>
+                                                                        <asp:Label ID="lblexamdate" runat="server" Text='<%# (Eval("DATE").ToString() != string.Empty) ? (Eval("DATE", "{0:dd-MMM-yyyy}")) : Eval("DATE", "{0:dd-MMM-yyyy}")%>' /></td>
+                                                                    <td>
+                                                                        <asp:Label ID="lblslot" runat="server" Text='<%# Eval("SLOT")%>' /></td>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:ListView>
+                                                    </asp:Panel>
+                                                </ContentTemplate>
+                                                <Triggers>
+                                                    <asp:PostBackTrigger ControlID="btnBlankDownld" />
+                                                    <asp:PostBackTrigger ControlID="btnexcelcancel" />
+                                                    <asp:PostBackTrigger ControlID="btnUpload" />
+                                                    <asp:PostBackTrigger ControlID="btnerrorlog" />
+                                                </Triggers>
+                                            </asp:UpdatePanel>
+                                        </div>
+
                                         <div id="divMsg" runat="Server">
                                         </div>
                                     </ContentTemplate>
@@ -1028,6 +1125,7 @@
             </div>
         </div>
     </div>
+
 
     <script type="text/javascript" language="javascript">
         $(function () {
@@ -1173,6 +1271,7 @@
         }
     </script>
 
+
     <script>
         function checkDate(sender, args) {
             debugger;
@@ -1186,10 +1285,7 @@
         function checkDate1(sender, args) {
             debugger;
             if (sender._selectedDate < new Date()) {
-                var text = sender._element;
-                var textbox = document.getElementById(text);
                 alert("You cannot select a day earlier than today!")
-                textbox.value = "";
             }
         }
     </script>
@@ -1219,16 +1315,14 @@
     </script>
 
     <asp:HiddenField ID="hiddenTooltip" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hiddentxtdate" runat="server" ClientIDMode="Static" />
 
     <script type="text/javascript">
         function onTextBoxBlur(textBox) {
             debugger;
-            // Get the UniqueID of the TextBox within the ListView
             var textBoxUniqueID = textBox.id;
-            var tooltipValue = textBox.getAttribute('tooltip');
-            // Use tooltipValue as needed
-            console.log('Tooltip Value:', tooltipValue);
             console.log(textBox.value);
+            document.getElementById('hiddentxtdate').value = "false";
             if (document.getElementById('hiddenTooltip').value !== textBox.value) {
                 var tooltipValue = textBox.value;
                 // Set the value in the hidden field
@@ -1240,5 +1334,25 @@
             }
         }
     </script>
+    <asp:HiddenField ID="hiddenTooltip1" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="hiddentxtdate1" runat="server" ClientIDMode="Static" />
+    <script type="text/javascript">
+        function onTextBoxBlur1(textBox) {
+            debugger;
+            var textBoxUniqueID = textBox.id;
+            console.log(textBox.value);
+            document.getElementById('hiddentxtdate1').value = "false";
+            if (document.getElementById('hiddenTooltip1').value !== textBox.value) {
+                var tooltipValue = textBox.value;
+                // Set the value in the hidden field
+                document.getElementById('hiddenTooltip1').value = tooltipValue;
+                if (textBox.value !== "__/__/____") {
+                    // Call the __doPostBack function to initiate a postback
+                    __doPostBack(textBoxUniqueID, '');
+                }
+            }
+        }
 
+    </script>
 </asp:Content>
+

@@ -20,6 +20,12 @@ using IITMS.UAIMS.BusinessLayer.BusinessLogic;
 using System.Collections;
 using ClosedXML.Excel;
 using System.IO;
+using System.Data.OleDb;
+using System.Configuration;
+using System.Data;
+using System.Web;
+using System.Linq;
+using System.Collections.Generic;
 
 public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 {
@@ -85,6 +91,21 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     divsection.Visible = true;
                 }
 
+                int excelupload = 0;
+                string excel = objCommon.LookUp("ACD_EXAM_CONFIGURATION", "ISNULL(EXCELUPLOAD_TIMETABLE,0)", "");
+                if (string.IsNullOrEmpty(excel)) { } else { excelupload = Convert.ToInt32(excel); }
+                if (excelupload == 0)
+                {
+                    lnkExcekImport.Visible = false;
+                    divexcelnote.Visible = false;
+                }
+                else
+                {
+                    lnkExcekImport.Visible = true;
+                    divexcelnote.Visible = true;
+                }
+                hiddentxtdate.Value = "true"; //Added for issue of txtchanges event after first time page load
+                hiddentxtdate1.Value = "true";
                 btnSubmit.Visible = false;
                 divMsg.InnerHtml = string.Empty;
                 ViewState["ipAddress"] = Request.ServerVariables["REMOTE_ADDR"];
@@ -93,6 +114,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
 
 
         }
+        Page.Form.Attributes.Add("enctype", "multipart/form-data");  //// Added by Injamam for FileUpload to work properly // for fileupload.hasfile condition 
         #region commented to make common for all client
         //if ((Convert.ToInt32(Session["OrgId"]) == 7))// For Rajagiri Client
         //{
@@ -123,7 +145,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             btnClashExcel.Visible = true;
             btnCoveringPage.Visible = false;
         }
-        else if ((Convert.ToInt32(Session["OrgId"]) == 18))  //For HITS Client 
+        else if ((Convert.ToInt32(Session["OrgId"]) == 18)) //For HITS Client 
         {
             btnCoveringPage.Visible = true;
         }
@@ -792,7 +814,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             lvCourse.Visible = true;
             btnSubmit.Visible = true;
             //btnViewLogin.Visible = true;
-
+            int viewstudbutton = 0;
 
             foreach (ListViewDataItem lvHead in lvCourse.Items)
             {
@@ -829,6 +851,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 {
                     btnViewLogin.Visible = false;
                 }
+                if (txtDate.Text != "")
+                {
+                    viewstudbutton++;
+                }
             }
             int count1 = Convert.ToInt32(objCommon.LookUp("ACD_TRRESULT", "COUNT(IDNO)", "SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SCHEMENO= " + Convert.ToInt32(ViewState["schemeno"]) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue)));
             if (count1 > 0)
@@ -840,6 +866,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             {
                 btnSubmit.Visible = true;
                 lvCourse.Enabled = true;
+            }
+            if (viewstudbutton > 0)
+            {
+                btnViewLogin.Visible = true;
             }
         }
         else
@@ -1400,14 +1430,6 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         }
     }
 
-    //protected void lvCourse_ItemDataBound(object sender, ListViewItemEventArgs e)
-    //{
-    //    DropDownList ddlSlot = e.Item.FindControl("ddlSlot") as DropDownList;
-    //    if (ddlSlot.SelectedValue == "0")
-    //    {
-    //        ddlSlot.Enabled = false;
-    //    }
-    //}
 
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1528,6 +1550,10 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_MASTERS_ExamDate.btndelete_Click() -> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -1544,10 +1570,13 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             }
 
         }
-        catch (Exception EX)
+        catch (Exception ex)
         {
 
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_MASTERS_ExamDate.btnViewLogin_Click() -> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
 
     }
@@ -2014,7 +2043,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         DateTime date;
         string formattedDate = "";
         CheckBox chkBoxdate = currentItem.FindControl("chkAccept") as CheckBox;
-        if (chkBoxdate.Checked)
+        if (chkBoxdate.Checked && hiddentxtdate.Value == "false")
         {
             if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
             {
@@ -2208,10 +2237,13 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 objCommon.DisplayMessage("Record Not Found", this.Page);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
 
-            throw;
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_MASTERS_ExamDate.btnClashExcel_Click() -> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
     #endregion
@@ -2412,6 +2444,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             lvCourse1.DataSource = ds;
             lvCourse1.DataBind();
             lvCourse1.Visible = true;
+            int viwestudlogin = 0;
             foreach (ListViewDataItem lvHead in lvCourse1.Items)
             {
                 DropDownList ddlSlot = lvHead.FindControl("ddlSlot") as DropDownList;
@@ -2439,6 +2472,14 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     count--;
                 }
                 btnSubmit1.Enabled = true;
+                if (txtDate.Text != "")
+                {
+                    viwestudlogin++;
+                }
+            }
+            if (viwestudlogin > 0)
+            {
+                btnViewLogin1.Visible = true;
             }
         }
         else
@@ -2663,7 +2704,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         currentdate.Enabled = true;
         DateTime date;
         CheckBox chkBoxdate = currentItem.FindControl("chkAccept") as CheckBox;
-        if (chkBoxdate.Checked)
+        if (chkBoxdate.Checked && hiddentxtdate.Value == "false")
         {
             if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
             {
@@ -2791,9 +2832,13 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
             }
 
         }
-        catch (Exception EX)
+        catch (Exception ex)
         {
-            objCommon.DisplayMessage(UpdatePanel2, "Request Fail!", this.Page);
+
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objCommon.ShowError(Page, "ACADEMIC_MASTERS_ExamDate.btnViewLogin1_Click() -> " + ex.Message + "" + ex.StackTrace);
+            else
+                objCommon.ShowError(Page, "Server Unavailable");
         }
     }
 
@@ -2833,12 +2878,15 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         lvtimetable.DataBind();
         btnsubmit2.Enabled = false;
         btnviewstudlog2.Visible = false;
+        pnlexcelupload.Visible = false;
     }
 
     protected void btncourse2_Click(object sender, EventArgs e)
     {
         btnviewstudlog2.Visible = true;
         btnsubmit2.Enabled = true;
+        btnerrorlog.Visible = false;
+        pnlexcelupload.Visible = false;
         GetCommonCourses();
     }
 
@@ -2991,6 +3039,30 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         GetCommonCourses();
     }
 
+    protected void txtExamDate2_TextChanged(object sender, EventArgs e)
+    {
+        TextBox currentdate = (TextBox)sender;
+        ListViewItem currentItem = (ListViewItem)currentdate.NamingContainer;
+        int currentIndex = currentItem.DisplayIndex;
+        string selecteddate = currentdate.Text;
+        currentdate.Enabled = true;
+        DateTime date;
+        if (DateTime.TryParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date))
+        {
+            date = DateTime.ParseExact(selecteddate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        }
+        else
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "InvalidDate", "alert('Invalid Date : " + selecteddate + "');", true);
+            currentdate.Text = "";
+            return;
+        }
+        if (date < DateTime.Now)
+        {
+            currentdate.Text = "";
+            return;
+        }
+    }
     protected void btnviewstudlog2_Click(object sender, EventArgs e)
     {
         int stat = 0;
@@ -3056,15 +3128,17 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         {
             objCommon.FillDropDownList(ddlSubjecttype2, "ACD_SUBJECTTYPE S INNER JOIN ACD_STUDENT_RESULT R ON(R.SUBID=S.SUBID)  INNER JOIN ACD_SESSION_MASTER SM  ON (SM.SESSIONNO= R.SESSIONNO) INNER JOIN ACD_SCHEME SC ON (SC.SCHEMENO=R.SCHEMENO) INNER JOIN ACD_EXAM_PATTERN EP ON (EP.PATTERNNO=SC.PATTERNNO)", " DISTINCT R.SUBID", "S.SUBNAME", "sm.SESSIONID=" + Convert.ToInt32(ddlSession2.SelectedValue) + "AND EP.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue), "R.SUBID");
 
+            //objCommon.FillDropDownList(ddlExamName2, "ACD_COURSE C INNER JOIN ACD_SCHEME S ON (C.SCHEMENO=S.SCHEMENO) INNER JOIN ACD_EXAM_NAME ED ON(ED.PATTERNNO=S.PATTERNNO)", " DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND ISNULL(ACTIVESTATUS,0)=1 AND S.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue), "EXAMNAME");
+            objCommon.FillDropDownList(ddlExamName2, "ACD_SCHEME S INNER JOIN ACD_EXAM_NAME ED ON(ED.PATTERNNO=S.PATTERNNO)", " DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND ISNULL(ACTIVESTATUS,0)=1 AND S.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue), "EXAMNAME");
         }
     }
 
     protected void ddlSubjecttype2_SelectedIndexChanged(object sender, EventArgs e)
     {
-        ddlExamName2.Items.Clear();
-        ddlExamName2.Items.Add(new ListItem("Please Select", "0"));
-        ddlcoursecat.Items.Clear();
-        ddlcoursecat.Items.Add(new ListItem("Please Select", "0"));
+        //ddlExamName2.Items.Clear();
+        //ddlExamName2.Items.Add(new ListItem("Please Select", "0"));
+        //ddlcoursecat.Items.Clear();
+        //ddlcoursecat.Items.Add(new ListItem("Please Select", "0"));
         ddlcoursecat.SelectedValue = "0";
         btnsubmit2.Enabled = false;
         btnviewstudlog2.Visible = false;
@@ -3074,7 +3148,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         lvtimetable.DataBind();
         if (ddlSubjecttype2.SelectedIndex > 0)
         {
-            objCommon.FillDropDownList(ddlExamName2, "ACD_COURSE C INNER JOIN ACD_SCHEME S ON (C.SCHEMENO=S.SCHEMENO) INNER JOIN ACD_EXAM_NAME ED ON(ED.PATTERNNO=S.PATTERNNO)", " DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND ISNULL(ACTIVESTATUS,0)=1 AND SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND S.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue), "EXAMNAME");
+            //objCommon.FillDropDownList(ddlExamName2, "ACD_COURSE C INNER JOIN ACD_SCHEME S ON (C.SCHEMENO=S.SCHEMENO) INNER JOIN ACD_EXAM_NAME ED ON(ED.PATTERNNO=S.PATTERNNO)", " DISTINCT EXAMNO", "EXAMNAME", " EXAMNAME<>'' AND ISNULL(ACTIVESTATUS,0)=1 AND SUBID=" + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + "AND S.PATTERNNO=" + Convert.ToInt32(ddlpattern1.SelectedValue), "EXAMNAME");
         }
     }
 
@@ -3088,7 +3162,7 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         lvcommoncourse.DataBind();
         lvtimetable.DataSource = null;
         lvtimetable.DataBind();
-        //ddlSubjecttype2.SelectedValue = "0";
+        ddlSubjecttype2.SelectedValue = "0";
 
         if (ddlExamName2.SelectedIndex > 0)
         {
@@ -3151,7 +3225,6 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                         ListBox ddlsectionlist = (ListBox)lvcommoncourse.Items[rowIndex].FindControl("ddlsectionlist");
                         DropDownList ddlSlot1 = (DropDownList)lvcommoncourse.Items[rowIndex].FindControl("ddlSlot1");
                         TextBox txtExamDate1 = (TextBox)lvcommoncourse.Items[rowIndex].FindControl("txtExamDate2");
-
                         if (ddlcommoncourse.SelectedIndex == 0)
                         {
                             objCommon.DisplayMessage(updcommon, "Please Select Course", this.Page);
@@ -3234,9 +3307,12 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
         {
 
             ListBox ddlschemelist = item.FindControl("ddlschemelist") as ListBox;
+            ListBox ddlsectionlist = item.FindControl("ddlsectionlist") as ListBox;
             if (item.DisplayIndex == currentIndex)
             {
                 ddlschemelist.Items.Clear();
+                ddlsectionlist.Items.Clear();
+                ddlsectionlist.Items.Add(new ListItem("Please Select", "0"));
                 DataSet ds1 = objCommon.FillDropDown("ACD_SCHEME C WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON  (SR.SCHEMENO=C.SCHEMENO) INNER JOIN ACD_STUDENT ST WITH (NOLOCK) ON (ST.IDNO=SR.IDNO) INNER JOIN ACD_SESSION_MASTER SM WITH (NOLOCK) ON (SM.SESSIONNO=SR.SESSIONNO)", "DISTINCT SR.SCHEMENO", "C.SCHEMENAME", "ISNULL(ADMCAN,0)=0 AND ISNULL(CAN,0)=0 AND ISNULL(SR.CANCEL,0)=0 AND ISNULL(SR.REGISTERED,0)=1 AND SM.SESSIONID= " + Convert.ToInt32(ddlSession2.SelectedValue) + " AND SR.SUBID= " + Convert.ToInt32(ddlSubjecttype2.SelectedValue) + " AND CCODE='" + selectedCcode + "'", "SR.SCHEMENO");
                 if (ds1.Tables[0].Rows.Count > 0)
                 {
@@ -3697,5 +3773,533 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
     {
         ShowReportDailyAttendenceCresent("Exam_Covering_Page", "rptExamCoveringPage.rpt");
     }
+
+    #region Excel Upload Added By Injamam
+    protected void lnkExcekImport_Click(object sender, EventArgs e)
+    {
+        pnlexcelupload.Visible = true;
+        lvtimetable.DataSource = null;
+        lvtimetable.DataBind();
+        lvcommoncourse.DataSource = null;
+        lvcommoncourse.DataBind();
+        lvexceluplodeddata.DataSource = null;
+        lvexceluplodeddata.DataBind();
+        btnerrorlog.Visible = false;
+        btnsubmit2.Enabled = false;
+        btnviewstudlog2.Visible = false;
+        if (FuBrowse.HasFile) { };
+    }
+
+    protected void btnexcelcancel_Click(object sender, EventArgs e)
+    {
+        pnlexcelupload.Visible = false;
+        btnsubmit2.Enabled = false;
+        btnviewstudlog2.Visible = false;
+        settab_3();
+        lvcommoncourse.DataSource = null;
+        lvcommoncourse.DataBind();
+        lvtimetable.DataSource = null;
+        lvtimetable.DataBind();
+        lvexceluplodeddata.DataSource = null;
+        lvexceluplodeddata.DataBind();
+    }
+
+    protected void btnBlankDownld_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string excelname = string.Empty;
+            excelname = Session["username"].ToString() + '_' + ddlSession2.SelectedItem.Text + '_' + "Exam Time Table" + '_' + DateTime.Now.ToString("dd-MM-yyyy");
+            DataSet ds = null;
+            int patterno = ddlpattern1.SelectedValue == "0" ? 0 : Convert.ToInt32(ddlpattern1.SelectedValue);
+            int subid = ddlSubjecttype2.SelectedValue == "0" ? 0 : Convert.ToInt32(ddlSubjecttype2.SelectedValue);
+            string pro_ = "PKG_EXAM_TIMETABLE_EXCEL_DOWNLOAD";
+            string para_ = "@P_SESSIONID,@P_PATTERNNO,@P_SUBID";
+            string value = Convert.ToInt32(ddlSession2.SelectedValue) + "," + patterno + "," + subid;
+            ds = objCommon.DynamicSPCall_Select(pro_, para_, value);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                ds.Tables[0].TableName = "Exam Time Table";
+                ds.Tables[1].TableName = "Exam Time slot Master";
+                foreach (string columnName in new[] { "DATE", "SLOT" })
+                {
+                    ds.Tables[0].Columns.Add(columnName);
+                }
+
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    foreach (System.Data.DataTable dt1 in ds.Tables)
+                    {
+                        wb.Worksheets.Add(dt1);
+                    }
+                    Response.Clear();
+                    Response.Buffer = true;
+                    Response.Charset = "";
+                    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    Response.AddHeader("content-disposition", "attachment;filename=" + excelname + ".xlsx");
+                    using (MemoryStream MyMemoryStream = new MemoryStream())
+                    {
+                        wb.SaveAs(MyMemoryStream);
+                        MyMemoryStream.WriteTo(Response.OutputStream);
+                        Response.Flush();
+                        Response.End();
+                    }
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "No Courses Found", this);
+                pnlexcelupload.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTER_ExamDate.btnBlankDownld_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(ex.ToString(), this.Page);
+        }
+    }
+
+    protected void btnUpload_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (FuBrowse.HasFile)
+            {
+                string path = MapPath("~/ExcelData/");
+                ViewState["FileName"] = string.Empty;
+                string filename = FuBrowse.FileName.ToString();
+                string Extension = Path.GetExtension(filename);
+                string Filepath = Server.MapPath("~/ExcelData/" + filename);
+                if (filename.Contains(".xls") || filename.Contains(".xlsx"))
+                {
+                    ViewState["FileName"] = filename;
+                    FuBrowse.SaveAs(path + filename);// To save file in code folder to validate marks.
+                    if (!CheckFormatAndImport(Extension, Filepath, "yes"))
+                    {
+                        File.Delete(Filepath); // To delete file from code folder after saved file in blob storage
+                        objCommon.DisplayMessage(this.Page, "Please upload Correct Excel File!", this);
+                        settab_3();
+                    }
+                    settab_3();
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.Page, "Only Excel Sheet is Allowed!", this);
+                    settab_3();
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "Select File to Upload!!!", this);
+                settab_3();
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(this.Page, " ACADEMIC_MASTER_ExamDate.btnUpload_Click()->" + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
+        }
+        settab_3();
+        lvcommoncourse.DataSource = null;
+        lvcommoncourse.DataBind();
+        lvtimetable.DataSource = null;
+        lvtimetable.DataBind();
+        btnsubmit2.Enabled = false;
+        btnviewstudlog2.Visible = false;
+    }
+
+    private bool CheckFormatAndImport(string Extension, string FilePath, string isHDR)
+    {
+        string filename = ViewState["FileName"].ToString();
+        Exam objExam = new Exam();
+        string conStr = "";
+        switch (Extension)
+        {
+            case ".xls": //Excel 97-03
+                conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
+                break;
+            case ".xlsx": //Excel 07 Excel07ConString
+                conStr = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
+                break;
+        }
+        conStr = String.Format(conStr, FilePath);
+        string Message = string.Empty;
+        OleDbConnection connExcel = new OleDbConnection(conStr);
+        try
+        {
+            OleDbCommand cmdExcel = new OleDbCommand();
+            OleDbDataAdapter oda = new OleDbDataAdapter();
+            DataTable dt = new DataTable();
+            cmdExcel.Connection = connExcel;
+            //Get the name of First Sheet
+            connExcel.Open();
+            DataTable dtExcelSchema;
+            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+            string SheetName = dtExcelSchema.Rows[1]["TABLE_NAME"].ToString();
+            connExcel.Close();
+            //Read Data from First Sheet
+            connExcel.Open();
+            cmdExcel.CommandText = "SELECT * From [" + SheetName + "]";
+            oda.SelectCommand = cmdExcel;
+            oda.Fill(dt);
+            //Check for Date & Slot
+            if (CheckExceldatalist(dt) == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Please Check if the data is saved in sheet1 of the file you are uploading or the file is in correct format!! ACADEMIC_StudentFileUpload->" + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(this.Page, "Server UnAvailable");
+            return false;
+        }
+        finally
+        {
+            connExcel.Close();
+            connExcel.Dispose();
+        }
+    }
+
+    protected bool CheckExceldatalist(DataTable dtNew)
+    {
+        bool flag = true;
+        int i = 0;
+        DataTable dt1 = new DataTable();
+        DataTable dtable = new DataTable("FinalData");
+        dtable = dtNew.Clone();
+        DataRow dr = null;
+        dt1.Columns.Add(new DataColumn("RowId", typeof(string)));
+        dt1.Columns.Add(new DataColumn("Description", typeof(string)));
+        bool IsErrorInUpload = false;
+        string ErrorString = string.Empty;
+        string message = string.Empty;
+        int RowNum = 0;
+        int TotalRecordCount = 0;
+        int TotalRecordUploadCount = 0;
+        int TotalRecordErrorCount = 0;
+        string datacolumnerror = string.Empty;
+
+        TotalRecordCount = dtNew.Rows.Count;
+        string pro_ = "PKG_EXAM_TIMETABLE_EXCEL_DOWNLOAD";
+        string para_ = "@P_SESSIONID,@P_PATTERNNO,@P_SUBID";
+        string value = 1 + "," + 1 + "," + 1;
+        DataSet ds = objCommon.DynamicSPCall_Select(pro_, para_, value);
+        DataTable dataTable = ds.Tables[0]; // Accessing the first DataTable, modify the index as needed
+        // Retrieve column names
+        string requiredName = "";
+        string currentName = "";
+        foreach (DataColumn column in dataTable.Columns)
+        {
+            requiredName += column.ColumnName + ",";
+            // Now you can use columnName as needed
+        }
+        requiredName += "DATE,SLOT";
+        string[] requiredNames = requiredName.Split(',');
+        List<string> requiredNameslist = requiredNames.ToList();
+        foreach (DataColumn column in dtNew.Columns)
+        {
+            currentName += column.ColumnName + ",";
+            // Now you can use columnName as needed
+        }
+        currentName = currentName.TrimEnd(',');
+        string[] currentNames = currentName.Split(',');
+        if (currentNames.Length == requiredNames.Length)
+        {
+            for (int z = 0; z < currentNames.Length; z++)
+            {
+                if (!requiredNameslist.Contains(currentNames[z]))
+                {
+                    objCommon.DisplayMessage(this.Page, "Incorrect File is Uploaded Kindly Upload the Downloaded One !!", this.Page);
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            objCommon.DisplayMessage(this.Page, "Incorrect File is Uploaded Kindly Upload the Downloaded One !!", this.Page);
+            return false;
+        }
+        string slot1 = objCommon.LookUp("ACD_EXAM_TT_SLOT", "STRING_AGG(SLOTNAME,',') AS SLOTNAME", "ISNULL(ACTIVESTATUS,0)=0");
+        string[] slots = slot1.Split(',');
+        List<string> slotlist = slots.ToList();
+
+        for (i = 0; i < dtNew.Rows.Count; i++)
+        {
+            ErrorString = string.Empty;
+            datacolumnerror = string.Empty;
+            RowNum = RowNum + 1;
+            ErrorString = ErrorString + Environment.NewLine + "Row : " + RowNum.ToString() + " - ";
+
+            IsErrorInUpload = false;
+            DataRow row = dtNew.Rows[i];
+            object Regno = row[0];
+
+            datacolumnerror = RowNum.ToString() + "-SESSIONNAME";
+            if ((dtNew.Rows[i]["SESSION"]).ToString().Equals(string.Empty))
+            {
+                message = "Session is Blank";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            else if (ddlSession2.SelectedItem.Text != (dtNew.Rows[i]["SESSION"]).ToString())
+            {
+                message = "Selected Session not match with Excel Session";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            datacolumnerror = RowNum.ToString() + "-PATTERNNAME";
+            if ((dtNew.Rows[i]["PATTERN"]).ToString().Equals(string.Empty))
+            {
+                message = "Pattern is Blank";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            else if (ddlpattern1.SelectedItem.Text != (dtNew.Rows[i]["PATTERN"]).ToString())
+            {
+                message = "Selected Pattern not match with Excel Pattern";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+
+            if (ddlSubjecttype2.SelectedIndex > 0)
+            {
+                datacolumnerror = RowNum.ToString() + "-SUBJECTTYPE";
+                if ((dtNew.Rows[i]["SUBJECT_TYPE"]).ToString().Equals(string.Empty))
+                {
+                    message = "Subject Type is Blank";
+                    ErrorString = ErrorString + message + " | ";
+                    IsErrorInUpload = true;
+                }
+                else if (ddlSubjecttype2.SelectedItem.Text != (dtNew.Rows[i]["SUBJECT_TYPE"]).ToString())
+                {
+                    message = "Selected Subject Type not match with Excel Subject Type";
+                    ErrorString = ErrorString + message + " | ";
+                    IsErrorInUpload = true;
+                }
+            }
+            datacolumnerror = RowNum.ToString() + "-CCODE";
+            if ((dtNew.Rows[i]["COURSE_CODE"]).ToString().Equals(string.Empty))
+            {
+                message = "Ccode is Blank";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            datacolumnerror = RowNum.ToString() + "-DATE";
+            if ((dtNew.Rows[i]["DATE"]).ToString().Equals(string.Empty))
+            {
+                message = "Date is Blank || Invalid";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            else
+            {
+                string date = dtNew.Rows[i]["DATE"].ToString();
+                DateTime date1;
+                if (DateTime.TryParseExact(date, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date1))
+                {
+                    date1 = DateTime.ParseExact(date, "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                    if (Convert.ToDateTime(date) < DateTime.Now)
+                    {
+                        message = "Please Enter Future Date";
+                        ErrorString = ErrorString + message + " | ";
+                        IsErrorInUpload = true;
+                    }
+                }
+                else
+                {
+                    message = "Invalid Date Entered";
+                    ErrorString = ErrorString + message + " | ";
+                    IsErrorInUpload = true;
+                }
+            }
+            datacolumnerror = RowNum.ToString() + "-SLOT";
+            string slot = (dtNew.Rows[i]["SLOT"]).ToString();
+            if ((dtNew.Rows[i]["SLOT"]).ToString().Equals(string.Empty))
+            {
+                message = "Slot is Blank";
+                ErrorString = ErrorString + message + " | ";
+                IsErrorInUpload = true;
+            }
+            else
+            {
+                if (!slotlist.Contains(slot))
+                {
+                    message = "Slot not found in Slot Master";
+                    ErrorString = ErrorString + message + " | ";
+                    IsErrorInUpload = true;
+                }
+            }
+            if (IsErrorInUpload == false)
+            {
+                DataRow destinationRow = dtable.NewRow();
+                destinationRow.ItemArray = dtNew.Rows[i].ItemArray;
+                dtable.Rows.Add(destinationRow);
+                TotalRecordUploadCount++;
+            }
+            else
+            {
+                TotalRecordErrorCount++;
+                IsErrorInUpload = true;
+                dr = dt1.NewRow();
+                dr["RowId"] = (i + 1).ToString();
+                dr["Description"] = ErrorString;
+                dt1.Rows.Add(dr);
+            }
+            if (ErrorString.Trim().EndsWith("|"))
+            {
+                ErrorString = ErrorString.Remove(ErrorString.Length - 2, 1);
+            }
+        }
+        ViewState["ExcelDataerror"] = dt1;
+        ViewState["Inserttable"] = dtable;
+        if (TotalRecordUploadCount == TotalRecordCount)
+        {
+            if (SaveTimeTable(dtable) == true)
+            {
+                objCommon.DisplayMessage(this.Page, "Excel Sheet Imported Successfully!!", this.Page);
+                lvexceluplodeddata.DataSource = dtable;
+                lvexceluplodeddata.DataBind();
+                btnerrorlog.Visible = false;
+            }
+            else
+            {
+                flag = false;
+            }
+        }
+        else if (TotalRecordErrorCount == TotalRecordCount)
+        {
+            flag = false;
+            if (dt1.Rows.Count > 0)
+            {
+                btnerrorlog.Visible = true;
+            }
+            objCommon.DisplayMessage(this.Page, "Excel Data Not Match With Selection, Please check error log!!", this.Page);
+            lvexceluplodeddata.DataSource = null;
+            lvexceluplodeddata.DataBind();
+        }
+        else if (TotalRecordErrorCount > 0 && TotalRecordUploadCount > 0)
+        {
+            if (SaveTimeTable(dtable) == true)
+            {
+                objCommon.DisplayMessage(this.Page, "Excel Sheet Imported Successfully with Errors, Please check error log!!", this.Page);
+                lvexceluplodeddata.DataSource = dtable;
+                lvexceluplodeddata.DataBind();
+                if (dt1.Rows.Count > 0)
+                {
+                    btnerrorlog.Visible = true;
+                }
+            }
+            else
+            {
+                flag = false;
+                if (dt1.Rows.Count > 0)
+                {
+                    btnerrorlog.Visible = true;
+                }
+            }
+
+        }
+        else
+        {
+            flag = false;
+            objCommon.DisplayMessage(this.Page, "Excel Data Not Match With Selection!!", this.Page);
+        }
+
+        datacolumnerror = string.Empty;
+        return flag;
+    }
+
+    private bool SaveTimeTable(DataTable dt)
+    {
+        bool status = true;
+        try
+        {
+            int sessionid = Convert.ToInt32(ddlSession2.SelectedValue);
+            int patternno = Convert.ToInt32(ddlpattern1.SelectedValue);
+            int examno = Convert.ToInt32(ddlExamName2.SelectedValue);
+            int subid = Convert.ToInt32(ddlSubjecttype2.SelectedValue);
+            int ua_no = Convert.ToInt32(Session["userno"]);
+            string ipadress = ViewState["ipAddress"].ToString();
+            int output = objExamController.ExamTimeTableUploadByExcel(dt, sessionid, patternno, examno, subid, ua_no, ipadress);
+            if (output == 2)
+            {
+            }
+            else if (output == 5)
+            {
+                objCommon.DisplayMessage(this.Page, "Excel Data Not Match With Selection!!", this.Page);
+                status = false;
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.Page, "Failed to Save Excel Data!!", this.Page);
+                status = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTER_ExamDate.SaveTimeTable() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+        return status;
+    }
+
+    protected void settab_3()
+    {
+        ScriptManager.RegisterStartupScript(this, GetType(), "SetTab", "$('.nav-tabs a[href=\"#tab_3\"]').tab('show');", true);
+    }
+
+    protected void btnerrorlog_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string excelname = "Errors List in Exam Time Table" + '_' + DateTime.Now.ToString("dd-MM-yyyy");
+            DataTable dsexcel = (DataTable)ViewState["ExcelDataerror"];
+            GridView gv = new GridView();
+            if (dsexcel != null && dsexcel.Rows.Count > 0)
+            {
+                gv.DataSource = dsexcel;
+                gv.DataBind();
+                Response.ClearContent();
+                Response.AddHeader("content-disposition", "attachment;filename=" + excelname + ".xlsx");
+                Response.ContentType = "application/ms-excel";
+                StringWriter sw = new StringWriter();
+                HtmlTextWriter htw = new HtmlTextWriter(sw);
+                gv.RenderControl(htw);
+                Response.Write(sw.ToString());
+                Response.Flush();
+                Response.End();
+            }
+            else
+            {
+                gv.DataSource = null;
+                gv.DataBind();
+                objCommon.DisplayMessage("record not found", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_MASTER_ExamDate.btnerrorlog_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+            objCommon.DisplayMessage(ex.ToString(), this.Page);
+        }
+    }
+    #endregion
 
 }
