@@ -434,6 +434,8 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
 
         //sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS like '%" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + "%' AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
         sessionno = objCommon.LookUp("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO)", "SA.SESSION_NO", "SA.SEMESTER like '%" + Convert.ToInt32(ViewState["SEMESTERNO"]) + "%' AND am.PAGE_LINK like '%' +  CAST('" + Convert.ToInt32(Request.QueryString["pageno"].ToString()) + "' AS NVARCHAR(5))  +'%'  AND SA.STARTED = 1 AND COLLEGE_IDS =" + Convert.ToInt32(ViewState["COLLEGE_ID"]) + " AND SA.DEGREENO like '%" + Convert.ToInt32(ViewState["DEGREENO"]) + "%'  AND SA.BRANCH LIKE '%" + Convert.ToInt32(ViewState["BRANCHNO"]) + "%' UNION ALL SELECT 0 AS SESSION_NO");
+        //int a = 55;
+        //sessionno = a.ToString();
         ViewState["sessionnonew"] = sessionno;
         Session["sessionnonew"] = sessionno;
 
@@ -1544,7 +1546,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
             objSA.IpAddress = ViewState["ipAddress"].ToString();
             CreateStudentPayOrderId();
 
-            //CREATE DEMAND              
+            // CREATE DEMAND              
             ExamController objEC = new ExamController();
            // string Amt = FinalTotal.Text;
 
@@ -2093,14 +2095,14 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
         decimal calculatelatefee = 0;
         string totalsubfee = string.Empty;
 
-        string Latefee = objCommon.LookUp("ACD_LATE_FEE_EXAM", "top 1 (LATE_FEE_NO)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' and ISNULL(ISACTIVE,0)=0  and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]));
+        string Latefee = objCommon.LookUp("ACD_LATE_FEE_EXAM", "top 1 (LATE_FEE_NO)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' and ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='MSE'  and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]));
 
         if (Latefee != "")
         {
 
 
 
-            DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
+            DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='MSE' and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
             if (ds.Tables[0].Rows.Count > 0)
             {
                 date = Convert.ToString(ds.Tables[0].Rows[0]["DATE"]);
@@ -2185,7 +2187,7 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
 
        #region ChkProcessing Fee
 
-        bool CheckProcFee = Convert.ToBoolean(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "Top(1) ISNULL(IsProFeesApplicable,0)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND FEETYPE=6 AND FEESTRUCTURE_TYPE=" + Convert.ToInt32(ViewState["FEESTYPE"]) + " and ISNULL(CANCEL,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"])));
+        bool CheckProcFee = Convert.ToBoolean(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "Top(1) ISNULL(IsProFeesApplicable,0)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND FEETYPE=6 AND FEESTRUCTURE_TYPE=" + Convert.ToInt32(ViewState["FEESTYPE"]) + " and ISNULL(CANCEL,0)=0  and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"])));
         if (CheckProcFee == true)
         {
             ProFess = Convert.ToDecimal(objCommon.LookUp("ACD_EXAM_FEE_DEFINATION", "Top(1) ISNULL(APPLICABLEFEE,0)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNO LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND FEETYPE=6 AND  ISNULL(IsProFeesApplicable,0)=1 and FEESTRUCTURE_TYPE=" + Convert.ToInt32(ViewState["FEESTYPE"]) + " and ISNULL(CANCEL,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"])));
@@ -2289,14 +2291,14 @@ public partial class Academic_ExamRegistrationIMPROV_CC : System.Web.UI.Page
        decimal calculatelatefee = 0;
        string totalsubfee = string.Empty;
 
-       string Latefee = objCommon.LookUp("ACD_LATE_FEE_EXAM", "top 1 (LATE_FEE_NO)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' and ISNULL(ISACTIVE,0)=0  and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]));
+       string Latefee = objCommon.LookUp("ACD_LATE_FEE_EXAM", "top 1 (LATE_FEE_NO)", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' and ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='MSE'  and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]));
 
        if (Latefee != "")
        {
 
 
 
-           DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
+           DataSet ds = objCommon.FillDropDown("ACD_LATE_FEE_EXAM", "CAST(ISNULL(LAST_DATE,0) as date) AS DATE", "DEGREENO", "SESSIONNO= " + Convert.ToInt32(ViewState["sessionnonew"]) + " AND SEMESTERNOS LIKE '%" + lblSemester.ToolTip + "%' AND DEGREENO LIKE '%" + Convert.ToInt32(hdfDegreeno.Value) + "%' AND  ISNULL(ISACTIVE,0)=0 AND RECEIPT_TYPE='MSE' and COLLEGE_ID=" + Convert.ToInt32(ViewState["clg_id"]), "");
            if (ds.Tables[0].Rows.Count > 0)
            {
                date = Convert.ToString(ds.Tables[0].Rows[0]["DATE"]);
