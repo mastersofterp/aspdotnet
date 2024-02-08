@@ -483,6 +483,13 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                     int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='EXAM REG'"));
                     Session["payactivityno"] = activityno;
                 }
+                else if (ddlReceiptType.SelectedValue == "PTF")
+                {
+                    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                    Session["payactivityno"] = activityno;
+                }
                 else
                 {
                     college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
@@ -496,6 +503,20 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
             }
+            else if (Session["OrgId"].ToString() == "10")
+            {
+                if (ddlReceiptType.SelectedValue == "EF")
+                {
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Exam Registration'"));
+                    Session["payactivityno"] = activityno;
+                }
+                else 
+                {
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                    Session["payactivityno"] = activityno;
+                }
+            }
+
             else
             {
                 Session["payactivityno"] = 1;
@@ -1545,14 +1566,50 @@ public partial class ACADEMIC_OnlinePayment : System.Web.UI.Page
             }
             else if (Session["OrgId"].ToString() == "16")
             {
-                college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
-                int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
-                Session["payactivityno"] = activityno;
+                if (ddlReceiptType.SelectedValue == "EF")
+                {
+                    // college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='EXAM REG'"));
+                    Session["payactivityno"] = activityno;
+                }
+                else if (ddlReceiptType.SelectedValue == "AEF")
+                {
+                    //college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='EXAM REG'"));
+                    Session["payactivityno"] = activityno;
+                }
+                else if (ddlReceiptType.SelectedValue == "PTF")
+                {
+                    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                    Session["payactivityno"] = activityno;
+                }
+                else
+                {
+                    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(Session["idno"].ToString())));
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                    Session["payactivityno"] = activityno;
+                }
             }
+
             else if (Session["OrgId"].ToString() == "15")
             {
                 int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
                 Session["payactivityno"] = activityno;
+            }
+            else if (Session["OrgId"].ToString() == "10")
+            {
+                if (ddlReceiptType.SelectedValue == "EF")
+                {
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Exam Registration'"));
+                    Session["payactivityno"] = activityno;
+                }
+                else
+                {
+                    int activityno = Convert.ToInt32(objCommon.LookUp("ACD_Payment_ACTIVITY_MASTER", "ACTIVITYNO", "ACTIVITYNAME ='Online Payment'"));
+                    Session["payactivityno"] = activityno;
+                }
             }
             else
             {
