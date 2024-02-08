@@ -176,10 +176,20 @@
 
                                                 </div>
                                                 <%--//-----------------------------------------27/01/2023-------------//--%>
+
+                                                <div class="form-group col-lg-3 col-md-6 col-12">
+                                                    <label><span style="color: red"></span>Is Authority Show On Quot Entry:</label>
+                                                    <asp:RadioButtonList ID="rdbAuthoritynQuotation" runat="server" RepeatDirection="Horizontal">
+                                                        <asp:ListItem ID="rdyes" Value="Y">Yes&nbsp;&nbsp;</asp:ListItem>
+                                                        <asp:ListItem ID="rdNo" Selected="True" Value="N">No</asp:ListItem>
+                                                    </asp:RadioButtonList>
+
+                                                </div>
+
                                                 <%--<div class="form-group col-lg-3 col-md-6 col-12">
 
-                                                    <label>Is Available Qty Show:</label>
-                                                    <asp:RadioButtonList ID="rdblAvailableQty" runat="server" Repeatedirection="Horizontal">
+                                                    <label>Is Authority Show On Quot Entry:</label>
+                                                    <asp:RadioButtonList ID="rdbAuthoritynQuotation" runat="server" Repeatedirection="Horizontal">
                                                         <asp:ListItem Value="Y">Yes&nbsp;&nbsp;</asp:ListItem>
                                                         <asp:ListItem Selected="True" Value="N">No</asp:ListItem>
                                                     </asp:RadioButtonList>
