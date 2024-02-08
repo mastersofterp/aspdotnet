@@ -1573,6 +1573,8 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
 
     protected void btnUpload_Click(object sender, EventArgs e)
     {
+        string path = string.Empty;
+        string filename = string.Empty;
         try
         {
             if (ddlScheme.SelectedIndex > 0)
@@ -1588,10 +1590,10 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                                 objCommon.DisplayMessage(updTeach, "Please Select Batch.", this);
                                 return;
                             }
-                            string path = MapPath("~/ExcelData/");
+                             path = MapPath("~/ExcelData/");
                             if (btnBrowse.HasFile)
                             {
-                                string filename = btnBrowse.FileName.ToString();
+                                 filename = btnBrowse.FileName.ToString();
                                 string Extension = Path.GetExtension(filename);
                                 if (filename.Contains(".xls") || filename.Contains(".xlsx"))
                                 {
@@ -1617,13 +1619,11 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                                         }
                                     }
 
-
-
-
                                     ViewState["FileName"] = filename;
                                     //btnBrowse.SaveAs(path + filename + ".xls");
                                     btnBrowse.SaveAs(path + filename);
                                     string Filepath = Server.MapPath("~/ExcelData/" + filename);
+
                                     if (!CheckFormatAndImport(Extension, Filepath, "yes"))
                                     {
                                         if (Session["Count"] == "-101")
@@ -1632,7 +1632,19 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                                         }
                                         else
                                         {
+                                            //new code added - by gopalm
+                                            string[] array2 = Directory.GetFiles(path);
+                                            foreach (string str in array2)
+                                            {
+                                                if ((path + filename).Equals(str))
+                                                {
+                                                    File.Delete(str);
+                                                    break;
+                                                }
+                                            }
+
                                             objCommon.DisplayMessage(updTeach, "File is not in correct format!!Please check if the data is saved in SHEET1. Else check if  the column names have changed!", this.Page);
+
                                         }
                                     }
                                     else
@@ -1687,6 +1699,17 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
         }
         catch
         {
+            //new code added -by gopalm
+            string[] array1 = Directory.GetFiles(path);
+            foreach (string str in array1)
+            {
+                if ((path + filename).Equals(str))
+                {
+                    File.Delete(str);
+                    break;
+                }
+            }
+
             throw;
         }
     }
@@ -1800,6 +1823,8 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                 string NoDuplicateTopicCode = string.Empty;
                 int savedCount = 0;
                 string msg = string.Empty;
+
+                #region Loop start
                 for (i = 0; i < dt.Rows.Count; i++)
                 {
                     if (dt.Rows[i]["TOPIC_COVERED"].ToString() == string.Empty)  // Topic covered
@@ -1813,9 +1838,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         objExam.Topic_Covered = dt.Rows[i]["TOPIC_COVERED"].ToString().Trim();
                     }
 
-
-
-
                     if (dt.Rows[i]["UNIT_NO"].ToString() == string.Empty)  // Topic covered
                     {
                         objCommon.DisplayMessage(this.Page, "Please Enter Unit No at Row no. " + (i + 1), this.Page);
@@ -1826,9 +1848,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     {
                         objExam.UnitNo = Convert.ToInt16(dt.Rows[i]["UNIT_NO"] == DBNull.Value ? "0" : dt.Rows[i]["UNIT_NO"].ToString().Trim());
                     }
-
-
-
 
                     if (dt.Rows[i]["LECTURE_NO"].ToString() == string.Empty)  // Topic covered
                     {
@@ -1841,8 +1860,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         objExam.Lecture_No = Convert.ToInt16(dt.Rows[i]["LECTURE_NO"] == DBNull.Value ? "0" : dt.Rows[i]["LECTURE_NO"].ToString().Trim());
                     }
 
-
-
                     if (dt.Rows[i]["SESSION_REQUIRED"].ToString() == string.Empty)  // Topic covered
                     {
                         objCommon.DisplayMessage(this.Page, "Please Enter Session Required at Row no. " + (i + 1), this.Page);
@@ -1853,10 +1870,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     {
                         objExam.sessionPlan = Convert.ToInt16(dt.Rows[i]["SESSION_REQUIRED"] == DBNull.Value ? "0" : dt.Rows[i]["SESSION_REQUIRED"].ToString().Trim());
                     }
-
-
-
-
 
                     //if (dt.Rows[i]["SECTIONNAME"].ToString() == string.Empty)  // Topic covered
                     //{
@@ -1869,13 +1882,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     //    string section = objCommon.LookUp("ACD_SECTION", "SECTIONNO", "SECTIONNAME ='" + dt.Rows[i]["SECTIONNAME"].ToString().Trim() + "'");
                     //    objExam.Sectionno = Convert.ToInt16(section == "" ? "0" : section);
                     //}
-
-
-
-
-
-
-
 
                     try
                     {
@@ -1893,10 +1899,6 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                         objCommon.DisplayMessage(updTeach, "Teaching Plan Date Format is not Proper!", this.Page);
                         return false;
                     }
-
-
-
-
 
                     objExam.Remark = dt.Rows[i]["REMARK"].ToString().Trim();
 
@@ -2024,28 +2026,187 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
                     }
                     else
                     {
-                        CustomStatus cs = (CustomStatus)objTeachingPlanController.UploadTeachingPlan(objExam, Istutorial, OrgId);
-                        if (cs.Equals(CustomStatus.RecordSaved))
-                        {
-                            savedCount++;
+                        //CustomStatus cs = (CustomStatus)objTeachingPlanController.UploadTeachingPlan(objExam, Istutorial, OrgId);
+                        //if (cs.Equals(CustomStatus.RecordSaved))
+                        //{
+                        //    savedCount++;
 
+                        //}
+                        //else if (cs.Equals(CustomStatus.RecordNotFound))
+                        //{
+
+                        //    objCommon.DisplayMessage(this.updTeach, "Time Table is not Defined for Entered Slotname and Date at Row no." + (i + 1), this.Page);
+
+                        //    //objCommon.DisplayMessage(this.Page, "Slot Type Name not found in ERP Master at Row no. " + (i + 1), this.Page);
+
+                        //    //isDuplicateUnit = string.Empty;
+                        //    //isDuplicateTopicCode = string.Empty;
+                        //    Session["Count"] = "-101";
+                        //    return false;
+
+                        //}
+
+                        #region Temp table - save excel data
+                        try
+                        {
+                            TempTechingPlan(objExam, Istutorial, OrgId);  // Temp Dynamic Table
                         }
-                        else if (cs.Equals(CustomStatus.RecordNotFound))
+                        catch (Exception ex)
                         {
 
-                            objCommon.DisplayMessage(this.updTeach, "Time Table is not Defined for Entered Slotname and Date at Row no." + (i + 1), this.Page);
-
-                            //objCommon.DisplayMessage(this.Page, "Slot Type Name not found in ERP Master at Row no. " + (i + 1), this.Page);
-
-                            //isDuplicateUnit = string.Empty;
-                            //isDuplicateTopicCode = string.Empty;
-                            Session["Count"] = "-101";
+                            objCommon.DisplayMessage(this.Page, ex.Message, this.Page);
                             return false;
-
                         }
+
                     }
                     //}
                 }
+
+                #endregion loop end
+
+                #endregion loop end1
+
+
+
+                #region Check duplicate record in db table then save data -
+                try
+                {
+
+                    DataTable fnlist = new DataTable();
+                    DataTable saveData = new DataTable();
+                    saveData = (DataTable)ViewState["TempTPDB"];
+                    int xSessionNo = 0;
+                    if (ddlSession.SelectedIndex <= 0)
+                        xSessionNo = Convert.ToInt32(Session["currentsession"].ToString());
+                    else
+                        xSessionNo = Convert.ToInt32(ddlSession.SelectedValue);
+
+                    DataSet dsData = objTeachingPlanController.GetCheckExistsTeachingPlan(Convert.ToInt32(ViewState["courseno"].ToString()), xSessionNo, Convert.ToInt32(ddlSection.SelectedValue), Convert.ToInt32(Session["userno"].ToString()));
+
+                    if (dsData.Tables[0].Rows.Count > 0)
+                    {
+
+                        var list1 = (from rw in dsData.Tables[0].AsEnumerable() select rw).ToList();
+
+                        var list2 = (from rw in saveData.AsEnumerable() select rw).ToList();
+
+                        //Check ddlBatch wise practical teaching plan file upload, by - Gopal M. -21/08/2023
+                        if (ddlBatch.Visible == true && Convert.ToInt32(ddlBatch.SelectedValue) > 0)
+                        {
+                            int selectedBatch = Convert.ToInt32(ddlBatch.SelectedValue);
+                            var flist = list1.Where(item1 => list2.Any(item2 =>
+                                         item1.Field<int>("SESSIONNO") == item2.Field<int>("SESSIONNO")
+                                         && item1.Field<int>("SECTIONNO") == item2.Field<int>("SECTIONNO")
+                                         && item1.Field<int>("UNIT_NO") == item2.Field<int>("UNIT_NO")
+                                         && item1.Field<int>("LECTURE_NO") == item2.Field<int>("LECTURE_NO")
+                                         && item1.Field<int>("BATCHNO") == item2.Field<int>("BATCHNO")
+                                             //&& item1.Field<int>("SLOT") == item2.Field<int>("SLOT_NO")
+                                         && item1.Field<int>("UA_NO") == item2.Field<int>("UA_NO")
+                                         && item1.Field<int>("TUTORIAL") == item2.Field<int>("TUTORIAL")
+                                         && item1.Field<int>("TERM") == item2.Field<int>("TERM")
+                                         && item1.Field<int>("BATCHNO") == selectedBatch
+                                    )).ToList();
+
+                            if (flist.Any())
+                                fnlist = flist.CopyToDataTable();
+                            else
+                                fnlist = dsData.Tables[0].Clone();
+
+
+                        }
+                        else
+                        {
+                            var flist = list1.Where(item1 => list2.Any(item2 =>
+                                //item1.Field<string>("TOPIC_COVERED").Trim().ToLower().ToString() == item2.Field<string>("TOPIC_COVERED").Trim().ToLower().ToString()
+                                //&& item1.Field<int>("COURSENO") == item2.Field<int>("COURSENO")
+                                          item1.Field<int>("SESSIONNO") == item2.Field<int>("SESSIONNO")
+                                         && item1.Field<int>("SECTIONNO") == item2.Field<int>("SECTIONNO")
+                                         && item1.Field<int>("UNIT_NO") == item2.Field<int>("UNIT_NO")
+                                         && item1.Field<int>("LECTURE_NO") == item2.Field<int>("LECTURE_NO")
+                                         && item1.Field<int>("BATCHNO") == item2.Field<int>("BATCHNO")
+                                         && item1.Field<int>("SLOT") == item2.Field<int>("SLOT_NO")
+                                         && item1.Field<int>("UA_NO") == item2.Field<int>("UA_NO")
+                                         && item1.Field<int>("TUTORIAL") == item2.Field<int>("TUTORIAL")
+                                         && item1.Field<int>("TERM") == item2.Field<int>("TERM")
+                                    )).ToList();
+
+                            if (flist.Any())
+                                fnlist = flist.CopyToDataTable();
+                            else
+                                fnlist = dsData.Tables[0].Clone();
+                        }
+
+
+                    }
+
+
+                    if (fnlist.Rows.Count == 0)
+                    {
+                        // bulk data save
+                        objExam = new Exam();
+                        foreach (DataRow frw in saveData.Rows)
+                        {
+                            objExam.SessionNo = Convert.ToInt32(frw["SESSIONNO"]);
+                            objExam.Ua_No = Convert.ToInt32(frw["UA_NO"]);
+                            if (frw["DATE"].ToString() == "" || frw["DATE"].ToString() == null)
+                            {
+                                objExam.Date = Convert.ToDateTime("01/01/1753 00:00:00");
+                            }
+                            else
+                            {
+                                objExam.Date = Convert.ToDateTime(Convert.ToDateTime(frw["DATE"].ToString()).ToString("yyyy-MM-dd"));
+                            }
+                            //objExam.Date = Convert.ToDateTime(frw["DATE"]);
+                            objExam.Lecture_No = Convert.ToInt32(frw["LECTURE_NO"]);
+                            objExam.Courseno = Convert.ToInt32(frw["COURSENO"]);
+                            objExam.SchemeNo = Convert.ToInt32(frw["SCHEMENO"]);
+                            objExam.Sectionno = Convert.ToInt32(frw["SECTIONNO"]);
+                            objExam.Topic_Covered = frw["TOPIC_COVERED"].ToString();
+                            objExam.UnitNo = Convert.ToInt32(frw["UNIT_NO"]);
+                            objExam.BatchNo = Convert.ToInt32(frw["BATCHNO"]);
+                            // Exam.SlotTeaching;
+                            objExam.Slot = Convert.ToInt32(frw["SLOT_NO"]);
+                            objExam.SemesterNo = Convert.ToInt32(frw["TERM"]);
+                            objExam.collegeid = Convert.ToInt32(frw["COLLEGE_ID"]);
+                            objExam.sessionPlan = Convert.ToInt32(frw["SESSION_REQUIRED"]);
+                            int Istutorial = Convert.ToInt32(frw["TUTORIAL"]);
+                            int OrgID = Convert.ToInt32(frw["ORGANIZATIONID"]);
+
+                            CustomStatus cs = (CustomStatus)objTeachingPlanController.UploadTeachingPlan(objExam, Istutorial, OrgID);
+                            if (cs.Equals(CustomStatus.RecordSaved))
+                            {
+                                savedCount++;
+                            }
+                            else if (cs.Equals(CustomStatus.RecordNotFound))
+                            {
+                                objCommon.DisplayMessage(this.updTeach, "Time Table is not Defined for Entered Slotname and Date at Row no." + (i + 1), this.Page);
+                                Session["Count"] = "-101";
+                                return false;
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        ViewState["TempTPDB"] = null;
+                        var errMsg = string.Empty;
+                        foreach (DataRow frw in fnlist.Rows)
+                        {
+                            errMsg += "\\n" + "TOPIC - " + frw["TOPIC_COVERED"].ToString() + ", UNITNO - " + frw["UNIT_NO"].ToString() + ", LECTURENO - " + frw["LECTURE_NO"].ToString();
+                        }
+                        objCommon.DisplayMessage(this.updTeach, errMsg + " \\nAre Already Entered. Please Verify..", this.Page);
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewState["TempTPDB"] = null;
+                    throw;
+                }
+
+                #endregion
+
+
                 if (savedCount != 0 && msg != string.Empty)
                 {
                     objCommon.DisplayMessage(this.updTeach, "Teaching Plan Saved Successfully." + "\\nBut " + msg + " \\nAlready Entered. Please Verify.", this.Page);
@@ -4414,4 +4575,51 @@ public partial class ACADEMIC_TeachingPlan_modified : System.Web.UI.Page
             ddlLectureNoGlobal.Items.Add(new ListItem("Please Select", "0"));
         }
     }
+
+
+    #region Create Dynamic Temp TeachingPlan Table - by GopalM 15/07/2023
+    public DataTable TempTechingPlan(Exam objExam, int Istutorial, int OrgID)
+    {
+        DataTable dt = new DataTable();
+        try
+        {
+            if (ViewState["TempTPDB"] == null)
+            {
+                dt.Columns.AddRange(new DataColumn[17] { 
+                  new DataColumn("id",typeof(int)),
+                  new DataColumn("SESSIONNO",typeof(int)),
+                  new DataColumn("UA_NO",typeof(int)),
+                  new DataColumn("DATE",typeof(DateTime)),
+                  new DataColumn("LECTURE_NO",typeof(int)),
+                  new DataColumn("COURSENO",typeof(int)),
+                  new DataColumn("SCHEMENO",typeof(int)),
+                  new DataColumn("SECTIONNO",typeof(int)),
+                  new DataColumn("TOPIC_COVERED",typeof(string)),
+                  new DataColumn("UNIT_NO",typeof(int)),
+                  new DataColumn("BATCHNO",typeof(int)),
+                  new DataColumn("SLOT_NO",typeof(int)),
+                  new DataColumn("TUTORIAL",typeof(int)),
+                  new DataColumn("TERM",typeof(int)),
+                  new DataColumn("COLLEGE_ID",typeof(int)),
+                  new DataColumn("ORGANIZATIONID",typeof(int)),
+                  new DataColumn("SESSION_REQUIRED",typeof(int)),                
+              });
+
+                dt.Rows.Add(1, objExam.SessionNo, objExam.Ua_No, objExam.Date, objExam.Lecture_No, objExam.Courseno, objExam.SchemeNo, objExam.Sectionno, objExam.Topic_Covered, objExam.UnitNo, objExam.BatchNo, objExam.Slot, Istutorial, objExam.SemesterNo, objExam.collegeid, OrgID, objExam.sessionPlan);  //17 col
+                ViewState["TempTPDB"] = dt;
+            }
+            else
+            {
+                dt = (DataTable)ViewState["TempTPDB"];
+                int rno = dt.Rows.Count;
+                dt.Rows.Add(rno + 1, objExam.SessionNo, objExam.Ua_No, objExam.Date, objExam.Lecture_No, objExam.Courseno, objExam.SchemeNo, objExam.Sectionno, objExam.Topic_Covered, objExam.UnitNo, objExam.BatchNo, objExam.Slot, Istutorial, objExam.SemesterNo, objExam.collegeid, OrgID, objExam.sessionPlan);  //17 col
+                ViewState["TempTPDB"] = dt;
+            }
+        }
+        catch (Exception ex) { }
+        return dt;
+    }
+    #endregion
+
+
 }
