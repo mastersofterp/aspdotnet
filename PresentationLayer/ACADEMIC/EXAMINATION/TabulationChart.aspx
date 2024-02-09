@@ -901,6 +901,9 @@
 
                                  <asp:Button ID="btnConsolidtedMPHRAM" Text="Consolidated (M.PHARM)" runat="server" TabIndex="32" CssClass="btn btn-info" Visible="false"
                                       ValidationGroup="ConsoGradeCard" OnClick="btnConsolidtedMPHRAM_Click" />
+                                
+                                <asp:Button ID="BtnGazette" Text="Gazette Report" runat="server" TabIndex="32" CssClass="btn btn-info" Visible="false"
+                                      ValidationGroup="TRGradeReg" OnClick="BtnGazette_Click"  />
 
                                 <asp:ValidationSummary ID="ValidationSummary16" runat="server" DisplayMode="List"
                                     ShowMessageBox="True" ShowSummary="False" ValidationGroup="CPD" />

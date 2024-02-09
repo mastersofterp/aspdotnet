@@ -326,7 +326,17 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = false;
 
-
+            if (Convert.ToInt32(Session["OrgId"]) == 18) // added by Shubham for HITS ExceCIA report
+            {
+                btnCIAExcel.Visible = true;
+            }
+            if (Convert.ToInt32(Session["OrgId"]) == 19) // added by Shubham for PCEN Gazette report
+            {
+                BtnGazette.Visible = true;
+            }
+            if (Convert.ToInt32(Session["OrgId"]) == 4)
+            {
+                btnCertificate.Visible = true; // Added for degree certificate by shubham
             }
         }
 
@@ -6059,4 +6069,49 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
     }
 
+    protected void BtnGazette_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            string proc_name = "PKG_ACD_GAZZETTEE_REPORT_DATA";
+            string param = "@P_SESSIONNO,@P_SCHEMENO,@P_SEMESTERNO";
+            string call_values = "" + Convert.ToInt32(ddlSession.SelectedValue) + "," + Convert.ToInt32(ViewState["schemeno"].ToString()) + "," + Convert.ToInt32(ddlSemester.SelectedValue) + "";
+
+            DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    string rptFileName = "GazetteReport.rpt";
+                    string reportTitle = "GazetteReport";
+
+                    string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+                    url += "Reports/CommonReport.aspx?";
+                    url += "pagetitle=" + reportTitle;
+                    url += "&path=~,Reports,Academic," + rptFileName;
+                    url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + ",@P_SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"].ToString()) + ",@P_SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue);
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+                    sb.Append(@"window.open('" + url + "','','" + features + "');");
+
+                    ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+                }
+                else
+                {
+                    objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "No Data Found for this selection.", this.Page);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.BtnGazette_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+    }
 }
