@@ -889,8 +889,9 @@
                                                         <sup></sup>
                                                         <label>Signature Authority.</label>
                                                     </div>
-                                                    <asp:RadioButton runat="server" ID="rdDirector" Text="Vice Chancellor" GroupName="g1" Checked="True" />
-                                                    <asp:RadioButton runat="server" ID="rdforDirector" Text="For Vice Chancellor" GroupName="g1" />
+                                                    <asp:RadioButton runat="server" ID="rdDirector" Text="Chancellor" GroupName="g1" Checked="True" />
+                                                    <asp:RadioButton runat="server" ID="rdforDirector" Text="Pro Chancellor" GroupName="g1" />
+                                                     <asp:RadioButton runat="server" ID="rdspcloffcr" Text="Special Officer" GroupName="g1" />
                                                 </div>
 
                                             </asp:Panel>
