@@ -512,10 +512,10 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                             {
                                 lockcount++;
                             }
-                        }
+                        } 
                         for (int i = 0; i < dsCERT.Tables[0].Rows.Count; i++)
                         {
-                            if (dsCERT.Tables[0].Rows[0]["NEW_GRADE"].ToString() != string.Empty)
+                            if (dsCERT.Tables[0].Rows[i]["NEW_GRADE"].ToString() != string.Empty)
                             {
                                 gradecount++;
                             }
@@ -525,12 +525,13 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                         {
                             gvStudent.Columns[6].Visible = true;
                             gvStudent.Columns[5].Visible = true;
-                            btngrade.Visible = false;
+                            btngrade.Visible = true;
                             btnSave.Enabled = false;
                             btnLock.Enabled = false;
 
                             btnSave.Visible = false;
                             btnLock.Visible = false;
+                            btngrade.Text = "Re-Generate Grade";
                         }
                         else if (dsCERT.Tables[0].Rows.Count == Convert.ToInt32(lockcount))
                         {
@@ -542,7 +543,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
 
                             btnSave.Visible = false;
                             btnLock.Visible = false;
-                            // btngrade.Visible = false;
+                            btngrade.Text = "Generate Grade";
                         }
                         else
                         {
@@ -553,7 +554,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                             btngrade.Visible = false;
 
                             btnSave.Visible = true;
-                            btnLock.Visible = true;
+                            btnLock.Visible = true; 
                         }
                         #endregion
 
@@ -566,6 +567,7 @@ public partial class ACADEMIC_EXAMINATION_RevalMarkEntry : System.Web.UI.Page
                     gvStudent.DataBind();
                     pnlStudGrid.Visible = false;
                     btnReport.Visible = false;
+                    btngrade.Visible = false;
                 }
             }
         }
