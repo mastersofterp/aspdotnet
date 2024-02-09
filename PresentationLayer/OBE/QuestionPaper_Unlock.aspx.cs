@@ -60,7 +60,7 @@ public partial class OBE_QuestionPaper_Unlock : System.Web.UI.Page
     }
     private void Show()
     {
-        DataSet ds = objCommon.FillDropDown("tblexamquestionpaper teq inner join tblacdschemesubjectmapping tac on (teq.SchemeSubjectId=tac.SchemeSubjectId) inner join tblexampatternmapping M on (M.ExamPatternMappingId=teq.ExamPatternMappingId) inner join tblexamnamemaster tem on (tem.ExamNameId=M.ExamNameId) inner join USER_ACC UA on (UA.UA_NO=teq.CreatedBy)", "tem.ExamName", "QuestionPaperId,case when teq.ISlock=1 then 'Lock' else 'In-Progress' end as [Status],teq.TotalMaxMarks,tem.ExamName,tac.SchemeMappingName,UA.UA_NAME as CreatedBy", "teq.sessionid=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SchemeId=" + Convert.ToInt32(ddlscheme.SelectedValue), "tac.SchemeSubjectId,tem.ExamName desc");
+        DataSet ds = objCommon.FillDropDown("tblexamquestionpaper teq inner join tblacdschemesubjectmapping tac on (teq.SchemeSubjectId=tac.SchemeSubjectId) inner join tblexampatternmapping M on (M.ExamPatternMappingId=teq.ExamPatternMappingId) inner join tblexamnamemaster tem on (tem.ExamNameId=M.ExamNameId) inner join USER_ACC UA on (UA.UA_NO=teq.CreatedBy)", "tem.ExamName", "QuestionPaperId,case when teq.ISlock=1 then 'Lock' else 'In-Progress' end as [Status],teq.TotalMaxMarks,tem.ExamName,tac.SchemeMappingName,UA.UA_NAME as CreatedBy,teq.CCODE", "teq.sessionid=" + Convert.ToInt32(ddlSession.SelectedValue) + " AND SchemeId=" + Convert.ToInt32(ddlscheme.SelectedValue), "tac.SchemeSubjectId,tem.ExamName desc");
         if (ds.Tables[0] != null && ds.Tables[0].Rows.Count > 0)
         {
             lvStudent.DataSource = ds;
@@ -79,7 +79,9 @@ public partial class OBE_QuestionPaper_Unlock : System.Web.UI.Page
     }
     protected void ddlSession_SelectedIndexChanged(object sender, EventArgs e)
     {
-        objCommon.FillDropDownList(ddlscheme, "acd_student_result ASR inner join ACd_SCHEME AC on(AC.schemeno=ASR.schemeno)", "Distinct ASR.SCHEMENO", "ASR.CCODE +'-'+ AC.SCHEMENAME +'-'+ cast(ASR.SEMESTERNO as nvarchar(10))SEMESTERNO", "isnull(cancel,0)=0 and exam_registered=1 and sessionno=" + Convert.ToInt32(ddlSession.SelectedValue), "");
+        //objCommon.FillDropDownList(ddlscheme, "acd_student_result ASR inner join ACd_SCHEME AC on(AC.schemeno=ASR.schemeno)", "Distinct ASR.SCHEMENO", "ASR.CCODE +'-'+ AC.SCHEMENAME +'-'+ cast(ASR.SEMESTERNO as nvarchar(10))SEMESTERNO", "isnull(cancel,0)=0 and exam_registered=1 and sessionno=" + Convert.ToInt32(ddlSession.SelectedValue), "");
+
+        objCommon.FillDropDownList(ddlscheme, "acd_student_result ASR inner join ACd_SCHEME AC on(AC.schemeno=ASR.schemeno)", "Distinct ASR.SCHEMENO", "AC.SCHEMENAME +'-'+ cast(ASR.SEMESTERNO as nvarchar(10))SEMESTERNO", "isnull(cancel,0)=0 and exam_registered=1 and sessionno=" + Convert.ToInt32(ddlSession.SelectedValue), "");
         pnlPaper.Visible = false;
         btnUpdate.Visible = false;
     }
