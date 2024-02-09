@@ -523,7 +523,8 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                     if (txtESMarks.Text.Equals("902.00") || txtESMarks.Text.Equals("902") || txtESMarks.Text.Equals("903.00") || txtESMarks.Text.Equals("903") || txtESMarks.Text.Equals("904.00") || txtESMarks.Text.Equals("904") || txtESMarks.Text.Equals("905.00") || txtESMarks.Text.Equals("905"))
                     {
                         txtESMarks.Enabled = false;
-                        txtTotMarksAll.Text = Convert.ToString(txtTAMarks.Text);
+                        txtTotMarksAll.Text = txtTAMarks.Text.Trim() == string.Empty ? Convert.ToString("0") : Convert.ToString(txtTAMarks.Text);    //added on dt:19012024 tkno:53955 
+                       // txtTotMarksAll.Text =Convert.ToString(txtTAMarks.Text);               //commented on dt:19012024
                         double Totalmarks = Convert.ToDouble(txtTotMarksAll.Text);
                         double TotPer = Convert.ToDouble((Totalmarks * 100) / Convert.ToDouble(hdfCourseTotal.Value));
                         txtTotPer.Text = Convert.ToString(TotPer) + ".00";
@@ -538,7 +539,9 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                         {
                             //txtESMarks.ReadOnly = true;
                             txtESMarks.Enabled = false;
-                            txtTotMarksAll.Text = Convert.ToString(txtTAMarks.Text);
+                            txtTotMarksAll.Text = txtTAMarks.Text.Trim() == string.Empty ? Convert.ToString("0") : Convert.ToString(txtTAMarks.Text);   //added on dt:19012024 tkno:53955 
+                            // txtTotMarksAll.Text =Convert.ToString(txtTAMarks.Text);               //commented on dt:19012024
+                            
                             double Totalmarks = Convert.ToDouble(txtTotMarksAll.Text);
                             double TotPer = Convert.ToDouble((Totalmarks * 100) / Convert.ToDouble(hdfCourseTotal.Value));
                             txtTotPer.Text = Convert.ToString(TotPer) + ".00";
@@ -2121,10 +2124,10 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                                     gvStudent.Columns[3].Visible = true;
 
                                     gvStudent.Columns[5].Visible = false;
-                                //    gvStudent.Columns[6].Visible = true;
+                                    //    gvStudent.Columns[6].Visible = true;
                                     gvStudent.Columns[7].Visible = true;
-                              //      gvStudent.Columns[8].Visible = true;
-                              //      gvStudent.Columns[9].Visible = true;
+                                    //      gvStudent.Columns[8].Visible = true;
+                                    //      gvStudent.Columns[9].Visible = true;
                                     th_pr = "1";
 
                                     hdfMaxCourseMarks.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString();
@@ -2149,19 +2152,49 @@ public partial class Academic_MarkEntryAll : System.Web.UI.Page
                                     }
 
 
-
-                                    //commented by prafull on dt 10082022
-
-                                    //if (Convert.ToBoolean(ViewState["islock"]) == true)
-                                    //{
-                                    //    btnLastSave.Visible = false;
-
-                                    // }
-
-
-
                                 }
+                                else       // ADDED BY PRAFULL ON DT:06022024 AS PER TKNO:54192 FOR THE COURSES HAVING ONLY INTERNAL MARK
+                                {
 
+                                    gvStudent.Columns[3].HeaderText = "INTERNAL <br>" + "[Max : " + dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString() + "]";
+                                    //+" <br>" + "[Min : " + dsStudent.Tables[0].Rows[0]["MINMARKS_I"].ToString() + "]";
+                                    ViewState["MAXMARKS_I"] = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();
+                                    gvStudent.Columns[4].HeaderText = "END SEM MARKS <br>" + "[Max : " + dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString() + "]" + " <br>" + "[Min Pass : " + dsStudent.Tables[0].Rows[0]["MINMARKS"].ToString() + "]";
+                                    gvStudent.Columns[6].HeaderText = "TOTAL MARKS <br>" + "(" + dsStudent.Tables[0].Rows[0]["TOTAL_MARK"].ToString() + ")";
+                                    gvStudent.Columns[4].Visible = true;
+
+                                    gvStudent.Columns[2].Visible = true;
+                                    gvStudent.Columns[3].Visible = true;
+
+                                    gvStudent.Columns[5].Visible = false;
+                                    //    gvStudent.Columns[6].Visible = true;
+                                    gvStudent.Columns[7].Visible = true;
+                                    //      gvStudent.Columns[8].Visible = true;
+                                    //      gvStudent.Columns[9].Visible = true;
+                                    th_pr = "1";
+
+                                    hdfMaxCourseMarks.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_E"].ToString();
+                                    hdfMaxCourseMarks_I.Value = dsStudent.Tables[0].Rows[0]["MAXMARKS_I"].ToString();   // ADDED ON 11042022 FOR LAW
+
+                                    ViewState["islock"] = Convert.ToBoolean(dsStudent.Tables[0].Rows[0]["LOCKE"].ToString());
+
+
+                                    //added by prafull on dt 10082022 for issue releted to save button
+
+                                    for (int i = 0; i < dsStudent.Tables[0].Rows.Count; i++)
+                                    {
+                                        if (Convert.ToBoolean(dsStudent.Tables[0].Rows[i]["LOCKE"]) == true)
+                                        {
+                                            lockcount++;
+                                        }
+                                    }
+                                    if (dsStudent.Tables[0].Rows.Count == Convert.ToInt32(lockcount)) // Checking the Marks lock for All Students
+                                    {
+                                        btnLastSave.Visible = false;
+                                        btnLock.Visible = false;
+                                    }
+                                
+                                }
                             }
                             //if ((dtrExams["FLDNAME"].ToString() == "S4") && (ddlExam.SelectedValue == "S4" || ddlExam.SelectedValue == "0"))
                             //{
