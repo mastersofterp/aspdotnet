@@ -233,7 +233,7 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             ddlColg.Focus();
 
             Session["listIdCard"] = null;
-            //Response.Redirect(Request.Url.ToString());
+            Response.Redirect(Request.Url.ToString());
         }
         catch (Exception)
         {
@@ -1056,7 +1056,6 @@ public partial class ACADEMIC_StudentAdmitCardReport : System.Web.UI.Page
             {
 
             }
-
 
         }
         catch (Exception ex)
