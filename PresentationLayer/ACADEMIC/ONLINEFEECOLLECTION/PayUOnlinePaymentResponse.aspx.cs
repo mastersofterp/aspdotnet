@@ -28,6 +28,9 @@ using EASendMail;
 using System.Net;
 using System.Net.Mail;
 using BusinessLogicLayer.BusinessLogic;
+using System.IO;
+using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 
 
 public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
@@ -36,7 +39,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
     Common objCommon = new Common();
     UAIMS_Common objUaimsCommon = new UAIMS_Common();
     FeeCollectionController objFees = new FeeCollectionController();
-    StudentController objStu=new StudentController ();
+    StudentController objStu = new StudentController();
     SemesterRegistration objsem = new SemesterRegistration();
     string hash_seq = string.Empty;
     int degreeno = 0;
@@ -45,6 +48,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
     FeeCollectionController feeController = new FeeCollectionController();
     SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+    SendEmailCommonV2 objSendEmailV2 = new SendEmailCommonV2();
 
     string UserFirstPaymentStatus = string.Empty;
     protected void Page_Load(object sender, EventArgs e)
@@ -53,7 +57,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         {
             try
             {
-                
+
                 SqlDataReader dr = objCommon.GetCommonDetails();
 
                 if (dr != null)
@@ -80,7 +84,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                 int payid = 0;
                 int orgid = 0;
                 string hash_seq = string.Empty;
-               //hash_seq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+                //hash_seq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
                 firstname = Request.Form["firstname"];
                 emailId = Request.Form["email"];
                 order_id = Request.Form["txnid"];
@@ -104,11 +108,11 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                 }
                 //**********************************End by Nikhil L.********************************************//
                 DataSet ds1 = objFees.GetOnlinePaymentConfigurationDetails_WithDegree(orgid, payid, payactivityno, degreeno, college_id);
-                 if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
-                 {
-                     saltkey = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();
-                     hash_seq = ds1.Tables[0].Rows[0]["HASH_SEQUENCE"].ToString();
-                 }
+                if (ds1.Tables[0] != null && ds1.Tables[0].Rows.Count > 0)
+                {
+                    saltkey = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();
+                    hash_seq = ds1.Tables[0].Rows[0]["HASH_SEQUENCE"].ToString();
+                }
                 string Regno = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO=" + ViewState["IDNO"].ToString());
 
                 DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME", "UA_IDNO=" + Convert.ToInt32(Idno), string.Empty);
@@ -166,24 +170,24 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                     {
                         //lblTrasactionStatus.Text = "Success";
 
-                    if (Session["OrgId"].ToString() == "5")
+                        if (Session["OrgId"].ToString() == "5")
                         {
-                        string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
-                        string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
-                        if (UA_IDNO == UA_NAME)
+                            string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
+                            string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UA_IDNO = '" + Convert.ToInt32(UA_IDNO) + "'");
+                            if (UA_IDNO == UA_NAME)
                             {
-                            UserFirstPaymentStatus = "5151";
-                            ViewState["First_PaymentStatus"] = "5151";
+                                UserFirstPaymentStatus = "5151";
+                                ViewState["First_PaymentStatus"] = "5151";
 
                             }
-                        else
+                            else
                             {
-                            ViewState["First_PaymentStatus"] = "0";
+                                ViewState["First_PaymentStatus"] = "0";
                             }
                         }
-                    else
+                        else
                         {
-                        ViewState["First_PaymentStatus"] ="0";
+                            ViewState["First_PaymentStatus"] = "0";
                         }
 
                         divSuccess.Visible = true;
@@ -205,22 +209,46 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                         {
                             output = objFees.InsertInstallmentOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Convert.ToInt32(installmentno), "-");
                             if (output != 1)
+                            {
+                                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
                                 {
-
+                                    string pageNo = string.Empty;
+                                    string bccMails = string.Empty;
+                                    DataSet Ds_Email = null;
+                                    string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+                                    string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
+                                    string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
+                                    int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                                    string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+                                    MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
+                                    var bytesRpt = oAttachment1.ToArray();
+                                    var fileRpt = Convert.ToBase64String(bytesRpt);
+                                    byte[] test = (byte[])bytesRpt;
+                                    string type = string.Empty;
+                                    string attachmentfilename = " " + College + "Fees_Paid_Receipt";
+                                    string subject = " " + College + " || Fees Paid Receipt ";
+                                    string message = "<b>Dear Parent</b><br />";
+                                    message += "<br/>Greetings from " + CollegeName + " !<br/>";
+                                    message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
+                                    var status = objSendEmailV2.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
+                                }
                                 if (ViewState["First_PaymentStatus"] == "5151")
-                                    {
+                                {
                                     string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
 
                                     UPDATE_USER(UA_IDNO, 1);
 
                                     Sendmail();
 
-                                    }
+                                }
                                 else
-                                    {
+                                {
 
-                                    }
-                              }
+                                }
+                            }
                         }
                         else
                         {
@@ -228,25 +256,48 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                             output = objFees.InsertOnlinePayment_DCR(Idno, rec_code, order_id, mihpayid, "O", "1", amount, "Success", Regno, "-");
 
                             if (output != 1)
+                            {
+                                if (Session["OrgId"].ToString() == "1" || Session["OrgId"].ToString() == "6")
                                 {
+                                    string pageNo = string.Empty;
+                                    string bccMails = string.Empty;
+                                    DataSet Ds_Email = null;
+                                    string email = objCommon.LookUp("ACD_STUDENT", "CASE WHEN FATHER_EMAIL='' THEN MOTHER_EMAIL ELSE FATHER_EMAIL END Email_Father", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    string ccMails = objCommon.LookUp("ACD_STUDENT", "EMAILID as Email", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    string Name = objCommon.LookUp("ACD_STUDENT", "STUDNAME", "IDNO='" + ViewState["IDNO"].ToString() + "'");
+                                    DataSet dsconfig = objCommon.FillDropDown("REFF", "USER_PROFILE_SENDERNAME,CollegeName", "EMAILSVCPWD", "EMAILSVCID <> '' and EMAILSVCPWD<> ''", string.Empty);
+                                    string CollegeName = dsconfig.Tables[0].Rows[0]["CollegeName"].ToString();
+                                    string College = dsconfig.Tables[0].Rows[0]["USER_PROFILE_SENDERNAME"].ToString();
+                                    int IDNO = Convert.ToInt32(ViewState["IDNO"]);
+                                    string DcrNo = objCommon.LookUp("ACD_DCR", "DCR_NO", "IDNO='" + ViewState["IDNO"].ToString() + "' AND ORDER_ID ='" + Convert.ToString(ViewState["order_id"]) + "'");
+                                    MemoryStream oAttachment1 = ShowGeneralExportReportForMailForApplication("Reports,Academic,rptOnlineReceipt.rpt", "@P_COLLEGE_CODE=" + Convert.ToInt32(Session["colcode"]) + ",@P_IDNO=" + IDNO + ",@P_DCRNO=" + DcrNo);
+                                    var bytesRpt = oAttachment1.ToArray();
+                                    var fileRpt = Convert.ToBase64String(bytesRpt);
+                                    byte[] test = (byte[])bytesRpt;
+                                    string type = string.Empty;
+                                    string attachmentfilename = " " + College + "Fees_Paid_Receipt";
+                                    string subject = " " + College + " || Fees Paid Receipt ";
+                                    string message = "<b>Dear Parent</b><br />";
+                                    message += "<br/>Greetings from " + CollegeName + " !<br/>";
+                                    message += "<br /><br /> Your Ward " + Name + " fees have been submitted successfully and Please Find latest Fees paid Receipt <br />";
+                                    var status = objSendEmailV2.SendEmail_New(pageNo, email, message, subject, ccMails, bccMails, Ds_Email, attachmentfilename, test, type);
+                                }
                                 if (Session["OrgId"].ToString() == "5")
-                                    {
+                                {
                                     if (ViewState["First_PaymentStatus"].Equals("5151"))
-                                        {
+                                    {
                                         string UA_IDNO = objCommon.LookUp("USER_ACC", "UA_IDNO", "UA_No = '" + Session["userno"] + "'");
 
                                         UPDATE_USER(UA_IDNO, 1);
 
-                                        Sendmail();
-                                       // ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
-                                        //objCommon.DisplayMessage(this.Page,"Your USERNAME & Password send will be send on Your Registered Email address",this.Page);
-                                        }
+                                        Sendmail();                                    
+                                    }
                                     else
-                                        {
+                                    {
 
-                                        }
                                     }
                                 }
+                            }
 
                             //AddSemesterRegistration_Online
                         }
@@ -261,13 +312,13 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                     string PaymentFor = string.Empty, txnMessage = string.Empty, BankReferenceNo = string.Empty;
                     string rec_code = objCommon.LookUp("ACD_DCR_TEMP", "RECIEPT_CODE", "ORDER_ID = '" + order_id + "'");
                     objFees.InsertOnlinePaymentlog(Idno, rec_code, "O", amount, "Payment Fail", order_id);
-                    
+
                     //result = objFees.OnlineInstallmentFeesPayment(mihpayid, order_id, amount, "0000", "", PaymentFor, txnMessage, BankReferenceNo, PaymentFor, rec_code);
                     btnPrint.Visible = false;
                 }
-                
-                
-               
+
+
+
             }
             catch (Exception ex)
             {
@@ -370,10 +421,6 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
     }
     #endregion
 
-
-
-
-    
     protected void btnBack_Click(object sender, EventArgs e)
     {
         //string returnpageurl = Convert.ToString(Session["ReturnpageUrl"]);
@@ -433,17 +480,17 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
     protected void btnPrint_Click(object sender, EventArgs e)
     {
-    string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["idno"].ToString()));
-    if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
+        string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["idno"].ToString()));
+        if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
         {
-        //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
+            //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 
-        ShowReport("OnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt");
-        return;
+            ShowReport("OnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt");
+            return;
         }
-    else
+        else
         {
-        ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
+            ShowReport("OnlineFeePayment", "rptOnlineReceipt.rpt");
         }
     }
 
@@ -481,10 +528,10 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         }
     }
 
-    protected void UPDATE_USER(string UA_NO,int FirstTimePay)
-        {
+    protected void UPDATE_USER(string UA_NO, int FirstTimePay)
+    {
         try
-            {
+        {
             string UA_PWD = string.Empty;
             string password = string.Empty;
             //string student_Name = "ROHIT";
@@ -493,7 +540,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
             string Email = string.Empty;
             string UA_ACC = string.Empty;
             if (Convert.ToInt32(Session["OrgId"].ToString()) == 5)
-                {
+            {
                 IDNO = Convert.ToInt32(Session["IDNO"]);
                 //string UA_NAME = objCommon.LookUp("USER_ACC", "UA_NAME", "UANAME = '" + UA_IDNO + "'");
                 REGNO = objCommon.LookUp("ACD_STUDENT", "REGNO", "IDNO = '" + Session["IDNO"] + "'");
@@ -506,19 +553,20 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
                 //Password = objCommon.LookUp("ACD_USER_REGISTRATION", "User_Password", "USERNO=" + Userno);
                 //Username = Session["IDNO"].ToString();
                 UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(REGNO.ToString());
-               // UA_ACC = "0,500,76";
+                // UA_ACC = "0,500,76";
                 //REGNO = Username.ToString();
-                }
+            }
             else
-                {
+            {
                 IDNO = Convert.ToInt32(Session["IDNO"]);
                 UA_PWD = clsTripleLvlEncyrpt.ThreeLevelEncrypt(IDNO.ToString());
-               // UA_ACC = "0,500,76";
+                // UA_ACC = "0,500,76";
                 REGNO = IDNO.ToString();
-                }
+            }
 
             CustomStatus CS = (CustomStatus)feeController.UpdateUser(REGNO, UA_PWD, IDNO, FirstTimePay);
 
+            #region Commented 
             //string sp_Name = string.Empty;
             //string sp_Parameter = string.Empty;
             //string sp_Call = string.Empty;
@@ -534,19 +582,20 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
             //    ddlAdmbatch.DataValueField = "BATCH";
             //    ddlAdmbatch.DataBind();
             //    }
-            }
-        catch (Exception ex)
-            {
-            throw;
-            }
+            #endregion Commented
         }
-     private DataSet getModuleConfig()
+        catch (Exception ex)
         {
+            throw;
+        }
+    }
+    private DataSet getModuleConfig()
+    {
         DataSet ds = objCommon.GetModuleConfig(Convert.ToInt32(Session["OrgId"]));
         return ds;
-        }
+    }
     public void Sendmail()
-        {
+    {
         string email_type = string.Empty;
         string Link = string.Empty;
         int sendmail = 0;
@@ -556,7 +605,7 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         int status = 0;
         string IDNO = Session["IDNO"].ToString();
 
-       // int IDNOnew = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO='" + IDNO + "'"));
+        // int IDNOnew = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "IDNO", "IDNO='" + IDNO + "'"));
 
         //string DAmount = Convert.ToString(objCommon.LookUp("ACD_DEMAND", "ISNULL(TOTAL_AMT,0) TOTAL_AMT", "IDNO=" + IDNOnew));
 
@@ -574,30 +623,30 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
         // Username = objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
         //  Password = objCommon.LookUp("ACD_USER_REGISTRATION", "User_Password", "USERNO=" + Userno);
         Username = REGNO;
-       // objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
+        // objCommon.LookUp("ACD_USER_REGISTRATION", "USERNAME", "USERNO=" + Userno);
         Password = REGNO;
 
         Session["Enrollno"] = srnno;
         DataSet ds = getModuleConfig();
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-            {
+        {
             email_type = ds.Tables[0].Rows[0]["EMAIL_TYPE"].ToString();
             Link = ds.Tables[0].Rows[0]["LINK"].ToString();
             sendmail = Convert.ToInt32(ds.Tables[0].Rows[0]["THIRDPARTY_PAYLINK_MAIL_SEND"].ToString());
 
             if (sendmail == 1)
-                {
+            {
                 subject = "New MIS Login Credentials";
-             //string message = "<p>Dear :<b>" + Name + "</b> </p>";
-             //       message += "<p>Your New Login Credentials Are Below Please Use this Credentails to Login in ERP from Following Link.</P>";
-             //       message+="<p style=font-weight:bold;> " + MISLink + " </p>";
-             //       message+="<p>Username   : " + Username + " <br/>Password: " + Password + "</p>";
+                //string message = "<p>Dear :<b>" + Name + "</b> </p>";
+                //       message += "<p>Your New Login Credentials Are Below Please Use this Credentails to Login in ERP from Following Link.</P>";
+                //       message+="<p style=font-weight:bold;> " + MISLink + " </p>";
+                //       message+="<p>Username   : " + Username + " <br/>Password: " + Password + "</p>";
 
                 string message = "";
                 message += "<p>Dear :<b>" + Name + "</b> </p>";
                 message += "<p><b>" + Branchname + "</>b</p>";
                 message += "<p>Your fees have been submitted successfully and you have been registered for the program mentioned above.Your new Login credentials are as follows</p><p>" + MISLink + " </p><p>Username   : " + Username + " <br/>Password: " + Password + "</p>";
-                message+="<p>Note for Provisional Registration only:</p>";
+                message += "<p>Note for Provisional Registration only:</p>";
                 message += "<p>All the documents must be uploaded on URL: <b>" + MISLink + "</b>";
                 message += "<p>Process of fee payment: Login using above credentials in <b>" + MISLink + "</b> Academic Menu-->>Student Related-->>Online Payment.: ";
                 message += "<p>The fee payment should be made within 7 days of receiving this mail/letter, after which your claim for admission may be requested.</p>";
@@ -619,25 +668,87 @@ public partial class PayUOnlinePaymentResponse : System.Web.UI.Page
 
                 status = objSendEmail.SendEmail(EmailID, message, subject); //Calling Method
 
-                }
             }
+        }
 
         if (status == 1)
-            {
+        {
             //objCommon.DisplayMessage(this.Page, "Email Sent Successfully.", this.Page);
             ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
-            }
+        }
         else
-            {
+        {
             objCommon.DisplayMessage(this.Page, "Failed to send mail.", this.Page);
             //ScriptManager.RegisterStartupScript(this, this.GetType(), "functionConfirm", "confirmmsg();", true);
-            } 
-
         }
 
-    
+    }
+
     protected void btnredirect_Click(object sender, EventArgs e)
-        {
+    {
         //Response.Redirect("FeeCollectionOptions.aspx");
+    }
+
+    #region CrystalReportGenration
+    static private MemoryStream ShowGeneralExportReportForMailForApplication(string path, string paramString)
+    {
+        MemoryStream oStream;
+        ReportDocument customReport;
+        customReport = new ReportDocument();
+        string reportPath = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Academic/rptOnlineReceipt.rpt");
+        customReport.Load(reportPath);
+        char ch = ',';
+        string[] val = paramString.Split(ch);
+        if (customReport.ParameterFields.Count > 0)
+        {
+            for (int i = 0; i < val.Length; i++)
+            {
+
+                int indexOfEql = val[i].IndexOf('=');
+                int indexOfStar = val[i].IndexOf('*');
+                string paramName = string.Empty;
+                string value = string.Empty;
+                string reportName = "MainRpt";
+                paramName = val[i].Substring(0, indexOfEql);
+
+                if (indexOfStar > 0)
+                {
+                    value = val[i].Substring(indexOfEql + 1, ((indexOfStar - 1) - indexOfEql));
+                    reportName = val[i].Substring(indexOfStar + 1);
+                }
+                else
+                {
+                    value = val[i].Substring(indexOfEql + 1);
+                }
+
+                if (reportName == "MainRpt")
+                {
+                    if (value == "null")
+                    {
+                        customReport.SetParameterValue(paramName, null);
+                    }
+                    else
+                        customReport.SetParameterValue(paramName, value);
+                }
+                else
+                    customReport.SetParameterValue(paramName, value, reportName);
+            }
         }
+
+        ConfigureCrystalReports(customReport);
+        for (int i = 0; i < customReport.Subreports.Count; i++)
+        {
+            ConfigureCrystalReports(customReport.Subreports[i]);
+        }
+
+        oStream = (MemoryStream)customReport.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+        return oStream;
+    }
+
+    static private void ConfigureCrystalReports(ReportDocument customReport)
+    {
+        ConnectionInfo connectionInfo = Common.GetCrystalConnection();
+        Common.SetDBLogonForReport(connectionInfo, customReport);
+    }
+    #endregion CrystalReportGenration
 }
