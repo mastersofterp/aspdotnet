@@ -79,6 +79,13 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                         fuSignUpload.Enabled = false;
                         btnSignUpload.Visible = false;
                     }
+                    else if (orgID == 3)
+                    {
+                        fuPhotoUpload.Enabled = false;
+                        btnPhotoUpload.Visible = false;
+                        fuSignUpload.Enabled = false;
+                        btnSignUpload.Visible = false;
+                    }
 
                     //divPrintReport.Visible = true;
                     // btnGohome.Visible = false;
@@ -369,7 +376,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                     }
                 }
 
-                if (control is FileUpload)
+                if (ViewState["usertype"].ToString() == "2" && control is FileUpload)
                 {
                     FileUpload fileUploadControl = (FileUpload)control;
 
@@ -394,6 +401,7 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
         }
         return string.Empty;
     }
+
     #endregion Student Related Configuration     // Added By Shrikant W. on 05-09-2023
 
     private void CheckPageAuthorization()
@@ -765,7 +773,8 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             int mother_alive = 0;
             int parent_alive = 0;
             try
-            {
+            {               
+
                 if (Convert.ToDateTime(txtDateOfBirth.Text) > DateTime.Now.Date)
                 {
                     objCommon.DisplayMessage(this.Page, "Date of Birth Should not be greater than Current Date !", this.Page);
