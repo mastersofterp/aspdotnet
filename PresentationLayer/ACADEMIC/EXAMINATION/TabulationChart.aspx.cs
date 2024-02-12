@@ -235,6 +235,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 btnConsolidtedMPHRAM.Visible = false;
 
             }
+
+
             #region For RCPIPER Grade Card added on 25/07/2023 by shubham
             else if (Convert.ToInt32(Session["OrgId"]) == 6)
             {
@@ -262,6 +264,8 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 lblScrutinized.Visible = false;
                 btnufm.Visible = false;
                 btnConsolidtedMPHRAM.Visible = true;//added by tejas thakre as on 16-12-2023
+                btnpassingcrft.Visible = true;
+
             }
             #endregion
             #region For ADCET added on 22/01/2024 by Tejas as on 22-01-2024
@@ -770,8 +774,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
 
     #region  using datatable xml by Injamam Ansari
-
-
     private DataTable Add_Datatable_IDNO()
     {
         DataTable dt = CreateDatatable_IDNO();
@@ -893,8 +895,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
-
-
 
     //sending from mail aayushi gupta
     protected void btnSendEmail_Click1(object sender, EventArgs e)
@@ -2241,8 +2241,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
 
     }
-
-
 
     private void ShowGradeCardNew(string reportTitle, string rptFileName, string ids)
     {
@@ -5801,7 +5799,6 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
     }
 
-
     protected void btnElibilityReport_Click(object sender, EventArgs e)
     {
         try
@@ -5897,7 +5894,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
     }
     #endregion
 
-    #region For RCIPIPER Consolidated Grade Card M.PHARM 
+    #region For RCIPIPER Consolidated Grade Card M.PHARM
     protected void btnConsolidtedMPHRAM_Click(object sender, EventArgs e)
     {
         string ids = string.Empty;
@@ -5917,7 +5914,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
         }
         ids = ids.TrimEnd('.');
 
-   
+
         this.ShowconsolitedGradeCardNewRcipiperMPHARM("Consolidate Grade Card", "MarksGrade_C_MPHRAM_RCPIPER.rpt", ids);
     }
     #endregion
@@ -6029,7 +6026,7 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
             DataSet ds = objCommon.DynamicSPCall_Select(proc_name, param, call_values);
             GridView dg = new GridView();
-           if (ds.Tables.Count > 0)
+            if (ds.Tables.Count > 0)
             {
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -6113,5 +6110,70 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
             else
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
+    }
+
+    protected void btnpassingcrft_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            int schemeno = Convert.ToInt32(ViewState["schemeno"].ToString());
+            int ua_no = Convert.ToInt32(Session["userno"].ToString());
+            if (lvStudent.Visible == false)
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "Please get the Student List to Genarate Passing Certificate", this.Page);
+                return;
+            }
+            string retIDNO = string.Empty;
+            int cntlength = 0;
+            foreach (ListViewDataItem item in lvStudent.Items)
+            {
+                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                Label lblStudname = item.FindControl("lblStudname") as Label;
+                if (chk.Checked)
+                {
+                    if (retIDNO.Length == 0)
+                    {
+                        retIDNO = lblStudname.ToolTip.ToString();
+                    }
+                    else
+                    {
+                        retIDNO += "$" + lblStudname.ToolTip.ToString();
+                    }
+                    cntlength++;
+                }
+            }
+            int cntid = Convert.ToInt32(Session["studcnt"]) == null ? 0 : Convert.ToInt32(Session["studcnt"]);
+            if (cntid == cntlength)
+            {
+                retIDNO = "0";
+            }
+            if (cntlength == 0)
+            {
+                objCommon.DisplayMessage(this.updpnlExam, "Please Select atleast one Student to Genarate Passing Certificate", this.Page);
+                return;
+            }
+            string exists = objCommon.LookUp("ACD_EXAM_PASSING_CERTIFICATE", "DISTINCT 1", "SCHEMENO= " + schemeno + "AND IDNO IN (SELECT VALUE FROM DBO.SPLIT('" + retIDNO + "','$')) OR ('" + retIDNO + "' ='0')");
+            int curordup = string.IsNullOrEmpty(exists) ? 0 : 1;
+            string rptFileName = "rptPassingCertificate.rpt";
+            string reportTitle = "Passing Certificate";
+
+            string url = Request.Url.ToString().Substring(0, (Request.Url.ToString().ToLower().IndexOf("academic")));
+            url += "Reports/CommonReport.aspx?";
+            url += "pagetitle=" + reportTitle;
+            url += "&path=~,Reports,Academic," + rptFileName;
+            url += "&param=@P_COLLEGE_CODE=" + ViewState["college_id"] + ",@P_SCHEMENO=" + schemeno + ",@CUR_OR_DUP=" + curordup + ",@P_UA_NO=" + ua_no + ",@P_ADMBATCH=" + 0 + ",@P_IDNOS=" + retIDNO;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            string features = "addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes";
+            sb.Append(@"window.open('" + url + "','','" + features + "');");
+            ScriptManager.RegisterClientScriptBlock(this.updpnlExam, this.updpnlExam.GetType(), "controlJSScript", sb.ToString(), true);
+        }
+        catch (Exception ex)
+        {
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "ACADEMIC_EXAMINATION_TabulationChart.btnpassingcrft_Click() --> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server Unavailable.");
+        }
+
     }
 }
