@@ -10,11 +10,16 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
+using System.Data.SqlClient;
+using IITMS;
+using IITMS.SQLServer.SQLDAL;
 
 public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.UI.Page
 {
     Common objCommon = new Common();
     ADMPAdhocReportConfigController ARCC = new ADMPAdhocReportConfigController();
+
+    private string _UAIMS_constr = System.Configuration.ConfigurationManager.ConnectionStrings["UAIMS"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -26,7 +31,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
                 ViewState["action"] = "add";
                 ViewState["ADHOCID"] = 0;
                 PopulateDropDownList();
-                BindListView_ReportConfig();
+                BindListView_ReportConfig();              
             }
             else
                 FocusLost();
@@ -325,6 +330,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
                 string TabName = txtTabName.Text.Trim() == string.Empty ? null : txtTabName.Text.Trim();
                 int UserNo = Convert.ToInt32(Session["userno"]);
                 int activeStatus;
+                int displayStatus;
                 if (hfdActiveStatus.Value == "true")
                 {
                     activeStatus = 1;
@@ -332,6 +338,15 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
                 else
                 {
                     activeStatus = 0;
+                }
+
+                if (hfdDisplayStatus.Value == "true")
+                {
+                    displayStatus = 1;
+                }
+                else
+                {
+                    displayStatus = 0;
                 }
 
                 string ControlName = string.Empty;
@@ -363,14 +378,14 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
 
                 if (ViewState["action"].ToString().Equals("add"))
                 {
-                    ret = Convert.ToInt32(ARCC.InsertReportParamData(ReportName, ProcName, ControlName, TabName, xmlData, UserNo, activeStatus));
+                    ret = Convert.ToInt32(ARCC.InsertReportParamData(ReportName, ProcName, ControlName, TabName, xmlData, UserNo, activeStatus, displayStatus));
                     displaymsg = "Record added successfully.";
                 }
                 else if (ViewState["action"].ToString().Equals("edit"))
                 {
                     AdhocId = Convert.ToInt32(ViewState["ADHOCID"]);
 
-                    ret = Convert.ToInt32(ARCC.UpdateReportParamData(ReportName, ProcName, ControlName, TabName, xmlData, UserNo, AdhocId, activeStatus));
+                    ret = Convert.ToInt32(ARCC.UpdateReportParamData(ReportName, ProcName, ControlName, TabName, xmlData, UserNo, AdhocId, activeStatus, displayStatus));
                     displaymsg = "Record updated successfully.";
 
                 }
@@ -413,23 +428,6 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
                 pnlReportConfig.Visible = false;
                 lvReportConfig.DataSource = null;
                 lvReportConfig.DataBind();
-
-            }
-
-            foreach (ListViewDataItem dataitem in lvReportConfig.Items)
-            {
-                Label Status = dataitem.FindControl("lblActiveStatus") as Label;
-
-                string Statuss = (Status.Text);
-
-                if (Statuss.Equals("InActive"))
-                {
-                    Status.CssClass = "badge badge-danger";
-                }
-                else
-                {
-                    Status.CssClass = "badge badge-success";
-                }
 
             }
         }
@@ -484,14 +482,28 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
                     txtProcName.Text = ds.Tables[0].Rows[0]["PROCEDURENAME"].ToString();
                     txtTabName.Text = ds.Tables[0].Rows[0]["FORM_TABLIST"].ToString() == null ? string.Empty : ds.Tables[0].Rows[0]["FORM_TABLIST"].ToString();
                     string activeStatus = ds.Tables[0].Rows[0]["ACTIVE_STATUS"].ToString();
-                    if (ds.Tables[0].Rows[0]["ACTIVE_STATUS"].ToString() == "Active")
+                    if (ds.Tables[0].Rows[0]["ACTIVE_STATUS"].ToString() == "Active")      // Modified By Shrikant W. on 11022024
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src1", "Set_ActiveStatus(true);", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "SetActiveStatus", "$('#chkActiveStatus').prop('checked', true);", true);
                     }
                     else
                     {
-                        ScriptManager.RegisterStartupScript(this, GetType(), "Src1", "Set_ActiveStatus(false);", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "SetActiveStatus", "$('#chkActiveStatus').prop('checked', false);", true);
                     }
+
+
+                    if (ds.Tables[0].Rows[0]["DISPLAY_STATUS"].ToString() == "Active")   // Added By Shrikant W. on 11022024
+                    {
+                        // Set_DisplayStatus(true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "SetDisplayStatus", "$('#chkDisplayStatus').prop('checked', true);", true);
+                    }
+                    else
+                    {
+                        // Set_DisplayStatus(false);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "SetDisplayStatus", "$('#chkDisplayStatus').prop('checked', false);", true);
+                    }
+
+
                     if (txtProcName != null)
                     {
                         DataSet ds1 = ARCC.GetAllParamsList((txtProcName.Text.ToString().Trim()).ToString());
@@ -636,6 +648,7 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
        
        
     }
+
     protected void btnConnect_Click(object sender, EventArgs e)
     {
         DataSet ds = objCommon.FillDropDown("reff", "DEV_PASS", "", "", "");
@@ -649,5 +662,4 @@ public partial class ACADEMIC_POSTADMISSION_ADMPAdhocReportConfig : System.Web.U
             else
                 objCommon.DisplayMessage("Password does not match!", this.Page);
     }
-  
 }
