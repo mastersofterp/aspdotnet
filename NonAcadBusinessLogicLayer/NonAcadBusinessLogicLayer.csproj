@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NonAcadBusinessLogicLayer</RootNamespace>
     <AssemblyName>NonAcadBusinessLogicLayer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -213,6 +213,7 @@
     <Compile Include="BusinessEntities\Payroll\Str_DeptRequest.cs" />
     <Compile Include="BusinessEntities\Payroll\Vendor.cs" />
     <Compile Include="BusinessEntities\Payroll\WithheldWithDrawn.cs" />
+    <Compile Include="BusinessEntities\RECRUITMENT\Requisition.cs" />
     <Compile Include="BusinessEntities\Sms\Sms.cs" />
     <Compile Include="BusinessEntities\Sports\EventApprovalEnt.cs" />
     <Compile Include="BusinessEntities\Sports\EventKitEnt.cs" />
@@ -292,7 +293,6 @@
     <Compile Include="BusinessLogic\Account\TallyDataTransfer.cs" />
     <Compile Include="BusinessLogic\Account\TrialBalanceReportController.cs" />
     <Compile Include="BusinessLogic\BioMetrics\BioMetricsController.cs" />
-    <Compile Include="BusinessLogic\BlobStorage\BlobController.cs" />
     <Compile Include="BusinessLogic\Complaints\ComplaintController.cs" />
     <Compile Include="BusinessLogic\Complaints\MailSender.cs" />
     <Compile Include="BusinessLogic\DCMNTSCN\DocumentController.cs" />
@@ -414,6 +414,7 @@
     <Compile Include="BusinessLogic\Payroll\SalaryProcessController.cs" />
     <Compile Include="BusinessLogic\Payroll\ServiceBookController.cs" />
     <Compile Include="BusinessLogic\Payroll\WithheldWithdrawnController.cs" />
+    <Compile Include="BusinessLogic\RECRUITMENT\RequisitionController.cs" />
     <Compile Include="BusinessLogic\Sms\SmsController.cs" />
     <Compile Include="BusinessLogic\Sports\EventApprovalCon.cs" />
     <Compile Include="BusinessLogic\Sports\KitController.cs" />
@@ -463,6 +464,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessEntities\Payroll\GPFCPF\" />
+    <Folder Include="BusinessLogic\BlobStorage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
