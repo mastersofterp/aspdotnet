@@ -4048,10 +4048,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
         public int GenereateRollNo_TGPCET(int admbatch, int clg, int degree, int branch, int idtype, int semester, int section, int sort)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -4074,16 +4074,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddFailSubjects-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
         public int AddCourseDetendinfo(StudentRegist objSR, int orgid, int detain_type)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -4538,7 +4538,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             return ds;
         }
 
-        public DataSet Get_Student_Details_for_Course_Registration(int idno, int pageno, int ua_type,int crsActivityNo)
+        public DataSet Get_Student_Details_for_Course_Registration(int idno, int pageno, int ua_type, int crsActivityNo)
         {
             DataSet ds = null;
             try
@@ -5054,7 +5054,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
-        public int GetGlobalCoursesAvailableSeats(int sessionno, int semesterno, int schemeno, int COURSNO,int branchNo)
+        public int GetGlobalCoursesAvailableSeats(int sessionno, int semesterno, int schemeno, int COURSNO, int branchNo)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
@@ -6060,10 +6060,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //added by Prafull on 10-01-2023
         public int AddExamRegisteredSubjectsbackByAdmin(StudentRegist objSR, string SubIdS, decimal fees, string SEMESTERNO)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6088,22 +6088,22 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
-                }
-            return retStatus;
             }
+            return retStatus;
+        }
 
 
         //added by Prafull on 10-01-2023
         public int AddExamRegistrationDetails_Backlog(StudentRegist objSR, string Amt)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6135,16 +6135,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
 
         /// <summary>
@@ -6153,10 +6153,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
         /// <param name="objSR"></param>
         /// <returns></returns>
         public int AddAddlRegisteredSubjectsApprovalLogin(StudentRegist objSR)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6185,16 +6185,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddAddlRegisteredSubjects-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
         public int GenereateRRNo(int admbatch, int clg, int degree, int branch, int idtype, int semester, int section, int sort1, string sort2)
         {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
@@ -6242,7 +6242,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
-                objParams = new SqlParameter[13];
+                objParams = new SqlParameter[14];
                 objParams[0] = new SqlParameter("@P_SESSIONNOS", SESSIONNOS);
                 objParams[1] = new SqlParameter("@P_IDNO", objSR.IDNO);
                 objParams[2] = new SqlParameter("@P_REGNO", objSR.REGNO);
@@ -6255,9 +6255,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[9] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
                 objParams[10] = new SqlParameter("@P_COLLEGE_CODE", objSR.COLLEGE_CODE);
                 objParams[11] = new SqlParameter("@P_GRADES", objSR.GRADE);
+                objParams[12] = new SqlParameter("@P_SUB_EQUI", objSR.SubEquivalence);
 
-                objParams[12] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[12].Direction = ParameterDirection.Output;
+                objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[13].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_STUDENT_RESULT_DATA", objParams, true);
                 if (Convert.ToInt32(ret) == -99)
@@ -6275,14 +6276,14 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
 
         public int AddTransferedStudentRecord(string SESSIONNOS, StudentRegist objSR, string equigrade, DateTime date)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
-                objParams = new SqlParameter[14];
+                objParams = new SqlParameter[15];
                 objParams[0] = new SqlParameter("@P_IDNO", objSR.IDNO);
                 objParams[1] = new SqlParameter("@P_SESSIONNO", SESSIONNOS);
                 objParams[2] = new SqlParameter("@P_SCHEMENO", objSR.SCHEMENO);
@@ -6296,23 +6297,24 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[10] = new SqlParameter("@P_TRANSDATE", date);
                 objParams[11] = new SqlParameter("@P_IPADDRESS", objSR.IPADDRESS);
                 objParams[12] = new SqlParameter("@P_ExamType", objSR.ExamType);
+                objParams[13] = new SqlParameter("@P_SUB_EQUI", objSR.SubEquivalence);
 
-                objParams[13] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                objParams[13].Direction = ParameterDirection.Output;
+                objParams[14] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                objParams[14].Direction = ParameterDirection.Output;
 
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACAD_ADD_TRANSFERED_STUD_EQUI_RECORD", objParams, true);
                 if (Convert.ToInt32(ret) == -99)
                     retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddAddlRegisteredSubjects-> " + ex.ToString());
-                }
-            return retStatus;
             }
+            return retStatus;
+        }
 
 
         public DataTableReader GetStudentDetails_Crescent(int idno)
@@ -6337,10 +6339,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         // added by Ro-hit M on 23_05_2023
         public int GenereateRollNo_Rajagiri(int admbatch, int clg, int degree, int branch, int idtype, int semester, int section, int sort)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6363,23 +6365,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddFailSubjects-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         // added by Ro-hit M on 23_05_2023
         public int GenereateRRNoForRajagiri(int admbatch, int clg, int degree, int branch, int semester, int section, int sort, int idtype)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6401,23 +6403,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         // added by Ro-hit M on 23_05_2023
         public int GenereateRRNoForMaher(int admbatch, int clg, int degree, int branch, int semester, int section, int sort, int idtype)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6439,23 +6441,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
 
-        public int GenereateRRNoForTGPCET(int admbatch, int clg, int degree, int branch, int semester, int sort, int idtype,int Year)
-            {
+        public int GenereateRRNoForTGPCET(int admbatch, int clg, int degree, int branch, int semester, int sort, int idtype, int Year)
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6478,16 +6480,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         //Added by Nehal 09062023
         public int AddAddlRegisteredSubjectsAuditTypeCourse(StudentRegist objSR)
@@ -6534,7 +6536,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         }
 
-  //Changes made by Nehal N
+        //Changes made by Nehal N
         public DataSet GetStudentCourseRegistrationSubjectAudit_course_type(int SESSIONNO, int IDNO, int SEMESTERNO, int SCHEMENO, int COMMANDTYPE)
         {
             DataSet ds = null;
@@ -6557,7 +6559,7 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
             }
             return ds;
         }
-       
+
         // ADDED BY Sagar mankar on dated 21062023
         public int AddExamRegisteredBacklaog_CC_REMEDAL(StudentRegist objSR)
         {
@@ -6604,10 +6606,10 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //added by Rohit M on 13-07-2023
         public int GenereateRRNoForDaiict(int admbatch, int clg, int degree, int branch, int semester, int Year, int section, int sort, int idtype)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6631,23 +6633,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         //added by Rohit M on 01-08-2023
         public int GenereateRRNoForHITS(int admbatch, int clg, int degree, int branch, int semester, int Year, int section, int sort, int idtype)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6671,23 +6673,23 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         //added by Rohit M on 04-08-2023
         public int GenereateRRNoForPRMCEM(int admbatch, int clg, int degree, int branch, int semester, int Year, int section, int sort, int idtype)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6711,16 +6713,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GenereateRRNoForRcpiper-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         //added by nehal n on 31072023
         public int InsertSemesterconfig(int semesterno, string schemenos)
@@ -6751,28 +6753,28 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
 
         //added by nehal n on 31072023
         public DataSet GetAllSemConfig(int modeno)
-            {
+        {
             DataSet ds = null;
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = new SqlParameter[1];
                 objParams[0] = new SqlParameter("@P_MODE", modeno);
                 ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_SEMESTER_CONFIG_AUDIT_MODE_GET_ALL", objParams);
-                }
-            catch (Exception ex)
-                {
-                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetAllSemConfig() --> " + ex.Message + " " + ex.StackTrace);
-                }
-            return ds;
             }
+            catch (Exception ex)
+            {
+                throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.GetAllSemConfig() --> " + ex.Message + " " + ex.StackTrace);
+            }
+            return ds;
+        }
 
         //Added by Prafull on 07_08_2023
         public int AddReExamTransactionDetails(Exam objSR, int ua_type, string IPAddress, int semesterno)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = new SqlParameter[16];
 
@@ -6795,20 +6797,20 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 objParams[15].Direction = ParameterDirection.Output;
                 object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_UPDATE_RE_EXAM_TRANSACTION_DETAILS", objParams, true);
                 retStatus = (int)ret;
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = -99;
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentRegistration.AddRevalTransactionDetails-> " + ex.ToString());
-                }
-            return retStatus;
             }
+            return retStatus;
+        }
 
         public int AddExamRegisteredImprovementCourseReg(StudentRegist objSR)
-            {
+        {
             int retStatus = Convert.ToInt32(CustomStatus.Others);
             try
-                {
+            {
                 SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                 SqlParameter[] objParams = null;
 
@@ -6838,16 +6840,16 @@ namespace IITMS.UAIMS.BusinessLayer.BusinessLogic
                 else
                     retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
 
-                }
+            }
             catch (Exception ex)
-                {
+            {
                 retStatus = Convert.ToInt32(CustomStatus.Error);
                 throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.ExamRegistration-> " + ex.ToString());
-                }
+            }
 
             return retStatus;
 
-            }
+        }
 
         //added by nehal n on 23082023
         public int UpdateSemesterconfig(int semesterno, string schemenos, int id)
