@@ -25,7 +25,7 @@ stages:
             -liveMachineName "daiict-app,prmitra-app,hits-app,prmitra-app,prmitra-app,mserp-app,mserp-app,prmitra-app,prmitra-app,MSERPDEMOSERVER,cpu-app,cpu-app,crescent-app,mitaoe-app,RCPITAPPSERVER,RCPITAPPSERVER,jecrc-app,mserp-app,mserp-app"
             -uatBranchName $uatBranchName 
             -uatPublishProfile "$publishProfilesPath/FolderProfile_UAT_DAIICT.pubxml,$publishProfilesPath/FolderProfile_UAT_DCH.pubxml,$publishProfilesPath/FolderProfile_UAT_HITS.pubxml,$publishProfilesPath/FolderProfile_UAT_IPER.pubxml,$publishProfilesPath/FolderProfile_UAT_IPR.pubxml,$publishProfilesPath/FolderProfile_UAT_MAHER.pubxml,$publishProfilesPath/FolderProfile_UAT_PCEN.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMCEM.pubxml,$publishProfilesPath/FolderProfile_UAT_PRMITR.pubxml,$publishProfilesPath/FolderProfile_UAT_RCPIT.pubxml,$publishProfilesPath/FolderProfile_UAT_RCPIPER.pubxml,$publishProfilesPath/FolderProfile_UAT_CRESCENT.pubxml,$publishProfilesPath/FolderProfile_UAT_JECRC.pubxml,$publishProfilesPath/FolderProfile_UAT_CPUKOTA.pubxml,$publishProfilesPath/FolderProfile_UAT_CPUH.pubxml,$publishProfilesPath/FolderProfile_UAT_MITAOE.pubxml,$publishProfilesPath/FolderProfile_UAT_RFCDEV.pubxml,$publishProfilesPath/FolderProfile_UAT_PJLCE.pubxml,$publishProfilesPath/FolderProfile_UAT_ADCET.pubxml,$publishProfilesPath/FolderProfile_UAT_TGPCET.pubxml"
-            -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,mserp-app,mserp-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,crescent-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,mserp-app,mserp-app"
+            -uatMachineName "daiict-app,RFC-DEVAPP,hits-app,RFC-DEVAPP,RFC-DEVAPP,rfcccshared-app,rfcccshared-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,crescent-app,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,RFC-DEVAPP,rfcccshared-app,rfcccshared-app"
             -developmentBranchName $developmentBranchName 
             -devPublishProfile "$publishProfilesPath/FolderProfile_DEV_RFCDEV.pubxml"
             -devMachineName "RFC-DEVAPP" 
@@ -117,6 +117,12 @@ job_jecrc-app:
   stage: run_script
   tags: 
     - jecrc-app
+  <<: *deploy_template
+
+job_rfcccshared-app:
+  stage: run_script
+  tags: 
+    - rfcccshared-app
   <<: *deploy_template
 
 
