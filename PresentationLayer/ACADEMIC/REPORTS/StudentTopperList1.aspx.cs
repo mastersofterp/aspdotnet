@@ -102,9 +102,9 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     {
         try
         {
-            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "SESSIONNO", "SESSION_PNAME", "SESSIONNO > 0", "SESSIONNO DESC");
+            objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", "DISTINCT SESSIONNO", "SESSION_PNAME ", "SESSIONNO > 0 AND ISNULL(IS_ACTIVE,0)=1", "SESSIONNO DESC");
             objCommon.FillDropDownList(ddlDegree, "ACD_DEGREE", "DEGREENO", "DEGREENAME", "DEGREENO > 0", "DEGREENO");
-            objCommon.FillDropDownList(ddlAdmBatch,"ACD_ADMBATCH","BATCHNO","BATCHNAME","BATCHNO>0","BATCHNO DESC");
+            objCommon.FillDropDownList(ddlAdmBatch, "ACD_ADMBATCH", "BATCHNO", "BATCHNAME", "BATCHNO>0", "BATCHNO DESC");
         }
         catch (Exception ex)
         {
@@ -116,7 +116,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
     }
 
 
-      
+
     protected void ddlDegree_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (ddlDegree.SelectedIndex > 0)
@@ -126,7 +126,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             ddlScheme.Items.Clear();
             ddlScheme.Items.Add(new ListItem("Please Select", "0"));
             ddlSem.Items.Clear();
-            ddlSem.Items.Add(new ListItem("Please Select", "0"));         
+            ddlSem.Items.Add(new ListItem("Please Select", "0"));
         }
         else
         {
@@ -135,7 +135,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             ddlScheme.Items.Clear();
             ddlScheme.Items.Add(new ListItem("Please Select", "0"));
             ddlSem.Items.Clear();
-            ddlSem.Items.Add(new ListItem("Please Select", "0"));           
+            ddlSem.Items.Add(new ListItem("Please Select", "0"));
         }
     }
     protected void ddlBranch_SelectedIndexChanged(object sender, EventArgs e)
@@ -146,7 +146,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             ddlScheme.Focus();
             ddlSem.Items.Clear();
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
-           
+
         }
         else
         {
@@ -154,7 +154,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             ddlScheme.Items.Add(new ListItem("Please Select", "0"));
             ddlSem.Items.Clear();
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
-            
+
         }
     }
     protected void ddlScheme_SelectedIndexChanged(object sender, EventArgs e)
@@ -163,27 +163,27 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
         {
             objCommon.FillDropDownList(ddlSem, "ACD_SEMESTER A INNER JOIN ACD_STUDENT_RESULT B ON (A.SEMESTERNO = B.SEMESTERNO)", "DISTINCT B.SEMESTERNO", "A.SEMESTERNAME", "B.SEMESTERNO > 0 AND B.SESSIONNO=" + ddlSession.SelectedValue + " AND B.SCHEMENO=" + ddlScheme.SelectedValue + " AND PREV_STATUS=0", "B.SEMESTERNO");
             ddlSem.Focus();
-            
+
         }
         else
         {
             ddlSem.Items.Clear();
             ddlSem.Items.Add(new ListItem("Please Select", "0"));
-           
+
         }
     }
-   
+
     protected void btnReport_Click(object sender, EventArgs e)
     {
         try
         {
-            if(Convert.ToInt32(rdoPurpose.SelectedValue)==0)
+            if (Convert.ToInt32(rdoPurpose.SelectedValue) == 0)
             {
 
             }
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 1)
             {
- 
+
             }
             else if (Convert.ToInt32(rdoPurpose.SelectedValue) == 2)
             {
@@ -191,11 +191,11 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
             {
-                objUCommon.ShowError(Page, "ACADEMIC_REPORT_STUDENTTOPPERLIST.btnReport_Click->" +  ex.Message + " " + ex.Message);
+                objUCommon.ShowError(Page, "ACADEMIC_REPORT_STUDENTTOPPERLIST.btnReport_Click->" + ex.Message + " " + ex.Message);
             }
             else
             {
@@ -215,7 +215,7 @@ public partial class ACADEMIC_REPORTS_StudentTopperList : System.Web.UI.Page
             url += "exporttype=" + exporttype;
             url += "&filename=" + ddlDegree.SelectedItem.Text + "_" + ddlBranch.SelectedItem.Text + "_" + ddlSem.SelectedItem.Text + "." + rdoReportType.SelectedValue;
             url += "&path=~,Reports,Academic," + rptFileName;
-            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_SCHEMENO=" + ddlScheme.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSem.SelectedValue +",@P_ORDER_BY=" +ddlMeritList.SelectedValue+",@P_MERIT="+ddlMeritList.SelectedItem.Text;
+            url += "&param=@P_COLLEGE_CODE=" + Session["colcode"].ToString() + ",@P_ADMBATCH=" + ddlAdmBatch.SelectedValue + ",@P_DEGREENO=" + ddlDegree.SelectedValue + ",@P_SCHEMENO=" + ddlScheme.SelectedValue + ",@P_BRANCHNO=" + ddlBranch.SelectedValue + ",@P_SEMESTERNO=" + ddlSem.SelectedValue + ",@P_ORDER_BY=" + ddlMeritList.SelectedValue + ",@P_MERIT=" + ddlMeritList.SelectedItem.Text;
             divMsg.InnerHtml = " <script type='text/javascript' language='javascript'>";
             divMsg.InnerHtml += " window.open('" + url + "','addressbar=no,menubar=no,scrollbars=1,statusbar=no,resizable=yes');";
             divMsg.InnerHtml += " window.close();";

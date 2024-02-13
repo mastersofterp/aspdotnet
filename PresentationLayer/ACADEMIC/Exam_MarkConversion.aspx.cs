@@ -166,7 +166,7 @@ public partial class ACADEMIC_Exam_MarkConversion : System.Web.UI.Page
                     // FILL DROPDOWN  ddlSession_SelectedIndexChanged
                 }
 
-                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", " DISTINCT SESSIONNO ", "SESSION_PNAME", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ISNULL (IS_ACTIVE,0)= 1 AND SESSIONNO > 0", "SESSIONNO DESC");
+                objCommon.FillDropDownList(ddlSession, "ACD_SESSION_MASTER", " DISTINCT SESSIONNO ", "SESSION_PNAME ", "COLLEGE_ID=" + Convert.ToInt32(ViewState["college_id"]) + "AND ISNULL (IS_ACTIVE,0)= 1 AND SESSIONNO > 0", "SESSIONNO DESC");
                 ddlSession.SelectedIndex = 0;
                 ddlSession.Focus();
             }
