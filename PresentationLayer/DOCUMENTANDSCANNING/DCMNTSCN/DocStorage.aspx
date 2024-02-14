@@ -88,9 +88,9 @@
                                         ControlToValidate="txtdocnumber" Display="None"
                                         ErrorMessage="Please Enter Document Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
-                                    <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtdocnumber"
+                                  <%--  <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" TargetControlID="txtdocnumber"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divAddress" runat="server" visible="false">
@@ -134,9 +134,9 @@
                                         ControlToValidate="txtsurveyNumber" Display="None"
                                         ErrorMessage="Please Enter Survey Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtsurveyNumber"
+                                      <%--  <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" runat="server" TargetControlID="txtsurveyNumber"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divDivisionNo" runat="server" visible="false">
@@ -149,9 +149,9 @@
                                         ControlToValidate="txtsubdivnum" Display="None"
                                         ErrorMessage="Please Enter sub Division Number" SetFocusOnError="true"
                                         ValidationGroup="Submit"></asp:RequiredFieldValidator>--%>
-                                        <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtsubdivnum"
+                                       <%-- <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender6" runat="server" TargetControlID="txtsubdivnum"
                                        FilterMode="ValidChars" ValidChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/ ">
-                                      </ajaxToolKit:FilteredTextBoxExtender>
+                                      </ajaxToolKit:FilteredTextBoxExtender>--%>
                                 </div>
 
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divArea" runat="server" visible="false">
@@ -339,7 +339,7 @@
                                             <ItemTemplate>
                                                 <tr>
                                                     <td>
-                                                        <asp:LinkButton ID="lnkRemoveAttach" runat="server" CommandArgument='<%# Eval("ATTACH_ID")%>'
+                                                        <asp:LinkButton ID="lnkRemoveAttach" runat="server" CommandArgument='<%# Eval("SR_NO")%>'
                                                             OnClick="lnkRemoveAttach_Click" CssClass="mail_pg">Remove</asp:LinkButton>
 
                                                         <ajaxToolKit:ConfirmButtonExtender ID="CnfDrop" runat="server"
