@@ -1614,6 +1614,29 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
         }
     }
 
+    protected void btnPOReportFormat2_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (lstPO.SelectedValue == "")
+            {
+                DisplayMessage("Please Select Atleast One Purchase Order");
+            }
+            else
+            {
+                DataSet ds = objstrPO.GetSinglePONO(Convert.ToInt32(lstPO.SelectedValue));
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    ShowPOSvceReport("Purchase Order", "Str_PO_Report_SVCE_Format2.rpt");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Transaction Failed");
+        }
+    }
+
     //To Show Purchase Order report
     private void ShowPOSvceReport(string reportTitle, string rptFileName)
     {
@@ -2285,4 +2308,5 @@ public partial class STORES_Transactions_Quotation_StrPO : System.Web.UI.Page
 
     #endregion
 
+   
 }

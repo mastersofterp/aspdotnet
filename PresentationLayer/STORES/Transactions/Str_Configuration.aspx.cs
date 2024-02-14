@@ -94,6 +94,8 @@ public partial class STORES_Transactions_Str_Configuration : System.Web.UI.Page
         rdbAuthoritynQuotation.SelectedValue = ds.Tables[0].Rows[0]["IsAuthorityShowOnQuot"].ToString(); //08/02/2024
         ddlState.SelectedValue = ds.Tables[0].Rows[0]["STATENO"].ToString();
 
+        txtGSTNO.Text = ds.Tables[0].Rows[0]["GSTNO"].ToString() == null ? string.Empty : ds.Tables[0].Rows[0]["GSTNO"].ToString();
+
         if (Convert.ToInt32(ds.Tables[0].Rows[0]["IS_SEC_GP_ENTRY"].ToString()==""?"0":ds.Tables[0].Rows[0]["IS_SEC_GP_ENTRY"].ToString()) == 1)
         {
             chkIsSecGPEntry.Checked = true;
@@ -208,6 +210,7 @@ public partial class STORES_Transactions_Str_Configuration : System.Web.UI.Page
         ObjEnt.DEPT_WISE_ITEM = chkDeptwiseitem.Checked ? 1 : 0;
         ObjEnt.PHONE = txtPhone.Text;
         ObjEnt.EMAIL = txtEmail.Text;
+        ObjEnt.GSTNO = txtGSTNO.Text;
         ObjEnt.COLLEGE_NAME = ddlCollege.SelectedItem.Text;
         ObjEnt.CODE_STANDARD = txtCodeStandard.Text;
         ObjEnt.IS_COMPARATIVE_STAT_APPROVAL = chkCompSApproval.Checked ? 1 : 0;
