@@ -4573,14 +4573,16 @@ namespace IITMS
                     {
                         SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
                         SqlParameter[] objParams = null;
-                        objParams = new SqlParameter[3];
+                        objParams = new SqlParameter[5];
                         objParams[0] = new SqlParameter("@P_EMPNO", objleave.EMPNO);
                         objParams[1] = new SqlParameter("@P_DEPTNO", objleave.DEPTNO);
+                        objParams[2] = new SqlParameter("@P_STNO", objleave.STNO);
+                        objParams[3] = new SqlParameter("@P_COLLNO", objleave.COLLEGE_NO);
 
                         if (!objleave.FROMDT.Equals(DateTime.MinValue))
-                            objParams[2] = new SqlParameter("@P_FROM_DATE", objleave.FROMDT);
+                            objParams[4] = new SqlParameter("@P_FROM_DATE", objleave.FROMDT);
                         else
-                            objParams[2] = new SqlParameter("@P_FROM_DATE", DBNull.Value);
+                            objParams[4] = new SqlParameter("@P_FROM_DATE", DBNull.Value);
 
                         ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_LEAVE_PAY_GET_ALL_LEAVES_BY_EMP", objParams);
                     }

@@ -127,7 +127,8 @@ public partial class Leave_Cancel : System.Web.UI.Page
        // pnlEmpList.Visible = false;
         lvEmployees.Visible = false;
         txtFromdt.Text = string.Empty;
-       
+        btnRestore.Enabled = true;
+        btnShowRpt.Enabled = true;
     }
     protected void btnCancel_Click(object sender, EventArgs e)
     {
@@ -154,7 +155,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
         //function will call here
        // btnSave.Attributes.Add("onClick", "ReceiveServerData(0);");
         FillUser();
-
+        BindListView();
     }
 
     
@@ -223,12 +224,16 @@ public partial class Leave_Cancel : System.Web.UI.Page
 
     protected void BindListView()      
     {
-        if ( ddlEmp.SelectedIndex >= 0 && ddlStafftype.SelectedIndex > 0 && txtFromdt.Text != string.Empty)
+        if (ddlEmp.SelectedIndex >= 0 && ddlStafftype.SelectedIndex > 0 && txtFromdt.Text != string.Empty && ddlCollege.SelectedIndex > 0)
         {
             objLeaveMaster.EMPNO = Convert.ToInt32(ddlEmp.SelectedValue);
             objLeaveMaster.DEPTNO = Convert.ToInt32(ddldept.SelectedValue);
             
             objLeaveMaster.FROMDT = Convert.ToDateTime(txtFromdt.Text.ToString());
+
+            objLeaveMaster.COLLEGE_NO = Convert.ToInt32(ddlCollege.SelectedValue);
+
+            objLeaveMaster.STNO = Convert.ToInt32(ddlStafftype.SelectedValue);
 
             DataSet ds = objLeave.GetAllLeavesByEmp(objLeaveMaster);
 
@@ -273,6 +278,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
         FillUser();
+        BindListView();
     }
 
     protected void btnRestore_Click(object sender, EventArgs e)
