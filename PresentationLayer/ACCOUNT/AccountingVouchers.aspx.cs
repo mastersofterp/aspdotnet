@@ -17288,8 +17288,8 @@ public partial class AccountingVouchers : System.Web.UI.Page
             {
                 if(Convert.ToInt32(txtAcc.Text.ToString().Trim().Split('*')[1])==Convert.ToInt32(PartyNo.Value))
                 {
-                    totalCCAmount = totalCCAmount + Convert.ToInt32(lblAmount.Text) + Convert.ToDouble(txtccAmount.Text);
-                    if (Convert.ToInt32(totalCCAmount) > Convert.ToDouble(txtTranAmt.Text))
+                    totalCCAmount = totalCCAmount + Convert.ToDouble(lblAmount.Text) + Convert.ToDouble(txtccAmount.Text);
+                    if (Convert.ToDouble(totalCCAmount) > Convert.ToDouble(txtTranAmt.Text))
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('The Total Cost Center Amount Should be Less than or Equal to Transaction Amount.');", true);
                         return;
