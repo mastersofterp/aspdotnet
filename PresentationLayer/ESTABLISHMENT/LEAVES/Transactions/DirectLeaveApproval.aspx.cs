@@ -214,7 +214,19 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
                 lblAltrArng.Text = ds.Tables[0].Rows[0]["CHARGE_HANDED"].ToString();
                 int lno = Convert.ToInt32(ds.Tables[0].Rows[0]["LNO"]);
                 int idno = Convert.ToInt32(ds.Tables[0].Rows[0]["EMPNO"]);
-                int YR = DateTime.Now.Year;
+                int RNO = 0;
+                RNO = Convert.ToInt32(ds.Tables[0].Rows[0]["RNO"].ToString());
+
+                int YR = 0;// DateTime.Now.Year;
+                if (RNO == 0)
+                {
+                    YR = Convert.ToInt32(ds.Tables[0].Rows[0]["YEAR"].ToString());
+                }
+                else
+                {
+                    YR = Convert.ToInt32(objCommon.LookUp("Payroll_leavetran", "isnull(YEAR,0)", "st=2 and Rno=" + RNO));
+                }   
+
                 DataSet ds1 = objApp.GetLeavesStatus(idno, YR, lno);//Session["idno"]
                 if (ds1.Tables[0].Rows.Count > 0)
                 {
