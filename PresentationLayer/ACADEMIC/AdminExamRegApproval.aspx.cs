@@ -139,6 +139,23 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
             
             objCommon.FillDropDownList(ddlCollege, "ACD_COLLEGE_SCHEME_MAPPING", "COSCHNO", "COL_SCHEME_NAME", "COLLEGE_ID IN(" + Session["college_nos"] + ") AND COSCHNO>0 AND COLLEGE_ID > 0 AND OrganizationId=" + Convert.ToInt32(System.Web.HttpContext.Current.Session["OrgId"]), "COLLEGE_ID");
             //rdoDegree.SelectedIndex = 0;
+            //ddlStudetType.SelectedIndex = 0;
+            //ddlStudetType.DataSource = null;
+
+
+
+            //string itemName = "0";
+            //string itemValue = "1";
+
+
+
+            //ddlStudetType.Items.Clear();
+            //ddlStudetType.Items.Add(new ListItem("Please Select", "0"));
+            //ddlStudetType.Items.Add(new ListItem(itemName, itemValue));
+            
+           // ddlStudetType.Enabled = false;
+            //ddlSubExam.Visible = false;
+            //lblSubExamName.Visible = false;
           
             }
         
@@ -337,19 +354,8 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
     }
     protected void ddlSemester_SelectedIndexChanged(object sender, EventArgs e)
     {
-        //string Exam_Registered_count = objCommon.LookUp("ACD_STUDENT_RESULT", "COUNT(CCODE)", "IDNO=" + Session["idno"].ToString() + "AND SESSIONNO="+ddlSession.SelectedValue+" AND SEMESTERNO=" + ddlSemester.SelectedValue + " AND ISNULL(EXAM_REGISTERED,0)=1 AND ISNULL(REGISTERED,0)=1 AND ISNULL(CANCEL,0)=0");
-        //if (Convert.ToInt32(Exam_Registered_count) == 0)
-        //{
-        //    objCommon.DisplayMessage(this.updAdmit, "Your Exam Registration is yet not Done. Kindly connect With Examination Department.", this.Page);
-        //    lvStudentRecords.DataSource = null;
-        //    lvStudentRecords.DataBind();
-        //    pnlStudent.Visible = false;
-        //    btnPrint.Visible = false;
-        //}
-        //else
-        //{
-        //    BindListView();
-        //}
+        //objCommon.FillDropDownList(ddlStudetType, "ACD_SEMESTER S WITH (NOLOCK) INNER JOIN ACD_STUDENT_RESULT SR WITH (NOLOCK) ON (SR.SEMESTERNO = S.SEMESTERNO)", " DISTINCT S.SEMESTERNO", "S.SEMESTERNAME", "S.SEMESTERNO > 0 AND SR.SESSIONNO = " + ddlSession.SelectedValue + " AND SCHEMENO =" + Convert.ToInt32(ViewState["schemeno"]), "S.SEMESTERNO");
+        
     }
     protected void ddlCollege_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -421,7 +427,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
                 foreach (ListViewDataItem dataitem in lvStudentRecords.Items)
                 {
                     CheckBox chk = dataitem.FindControl("chkAccept") as CheckBox;
-                    if (chk.Checked == true)
+                    if (chk.Checked == true && chk.Enabled==true)
                         cntcourse++;
                 }
 
@@ -519,6 +525,7 @@ public partial class ACADEMIC_AdminExamRegApproval : System.Web.UI.Page
         rdoDegree.SelectedValue = null;
         btnsubmit.Enabled = false;
         lvStudentRecords.Visible = false;
+        ddlStudetType.SelectedIndex = 0;
     
     }
     protected void btncancle_Click(object sender, EventArgs e)
