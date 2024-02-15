@@ -10456,6 +10456,132 @@ namespace IITMS
                 //    return ret;
                 //}
                 //#endregion
+
+                #region Missing Biometric Punch Updation
+
+                public int AddMissPunchUpdation(Leaves objLeave, int MissPunchNo)
+                {
+
+                    int retstatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objparams = null;
+                        objparams = new SqlParameter[10];
+                        objparams[0] = new SqlParameter("@P_MPNO", MissPunchNo);
+                        objparams[1] = new SqlParameter("@P_IDNO", objLeave.IDNO);
+                        objparams[2] = new SqlParameter("@P_WRKDATE", objLeave.DATE);
+                        objparams[3] = new SqlParameter("@P_IN_TIME", objLeave.INTIME);
+                        objparams[4] = new SqlParameter("@P_OUT_TIME", objLeave.OUTTIME);
+                        objparams[5] = new SqlParameter("@P_REASON", objLeave.REASON);
+                        objparams[6] = new SqlParameter("@P_COLLEGE_CODE", objLeave.COLLEGE_CODE);
+                        objparams[7] = new SqlParameter("@P_CREATED_BY", objLeave.CreatedBy);
+                        objparams[8] = new SqlParameter("@P_MODIFIED_BY", objLeave.ModifiedBy);
+
+                        objparams[9] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objparams[9].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_MISS_PUNCH_UPDATION_INS_UPD", objparams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retstatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retstatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.AddMissPunchUpdation->" + ex.ToString());
+                    }
+                    return retstatus;
+                }
+
+                public DataSet GetPendListforMissPunchApproval(int UA_No)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_UA_NO", UA_No);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_MISS_PUNCH_GET_PENDINGLIST", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetPendListforMissPunchApproval->" + ex.ToString());
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public DataSet GetMissPunchDetail(int MPNO)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_MPNO", MPNO);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ESTB_MISS_PUNCH_GET_BY_NO", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.GetMissPunchDetail->" + ex.ToString());
+
+                    }
+                    finally
+                    {
+                        ds.Dispose();
+                    }
+                    return ds;
+                }
+
+                public int UpdateMissPunchApp(int RFIDNO, DateTime WorkDate, DateTime InTime, DateTime OutTime, string STATUS, string REMARKS, DateTime APRDT, int Userid)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objparams = null;
+                        objparams = new SqlParameter[9];
+                        objparams[0] = new SqlParameter("@P_RFIDNO", RFIDNO);
+                        objparams[1] = new SqlParameter("@P_WorkDate", WorkDate);
+                        objparams[2] = new SqlParameter("@P_InTime", InTime);
+                        objparams[3] = new SqlParameter("@P_OutTime", OutTime);
+                        objparams[4] = new SqlParameter("@P_STATUS", STATUS);
+                        objparams[5] = new SqlParameter("@P_REMARKS", REMARKS);
+                        objparams[6] = new SqlParameter("@P_APRDT", APRDT);
+                        objparams[7] = new SqlParameter("@P_Userid", Userid);
+                        objparams[8] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objparams[8].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_MIS_BIOMETRIC_INSERTION_UPDATION", objparams, true);
+
+                        if (Convert.ToInt32(ret) == -99)
+                            retStatus = Convert.ToInt32(CustomStatus.TransactionFailed);
+                        else
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                        //if (objSQLHelper.ExecuteNonQuerySP("PKG_ESTB_LEAVE_PAY_APP_PASS_ENTRY_UPDATE1", objparams, false) != null)
+                        //    retstatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.LeavesController.UpdateMissPunchApp->" + ex.ToString());
+                    }
+                    return retStatus;
+
+                }
+
+                #endregion
             }
         }
     }
