@@ -103,6 +103,7 @@
                                         <asp:RequiredFieldValidator ID="rfvformat" runat="server" ControlToValidate="rboStudent"
                                             Display="None" ErrorMessage="Please Select Photo or Signature Format" ValidationGroup="Acd"></asp:RequiredFieldValidator>
                                     </div>
+
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
@@ -123,12 +124,21 @@
                         <asp:ValidationSummary ID="vsSelection" runat="server" ShowMessageBox="true" ShowSummary="false"
                             DisplayMode="List" CssClass="btn btn-primary" ValidationGroup="Acd" />
                     </div>
+                    <div class="form-group col-lg-7 col-md-12 col-12">
+                        <div class=" note-div">
+                            <h5 class="heading">Note</h5>
+                            <p><i class="fa fa-star" aria-hidden="true"></i><span>Image types should be in .JPEG or .JPG format, with a maximum size limit of 150KB.</span></p>
+                        </div>
+                    </div>
+                   <%-- <div runat="server" id="divNote" visible="false">
+                        <span style="color: red; font-weight: bold">Note :- Image types should be in .JPEG or .JPG format, with a maximum size limit of 150KB</span>
 
-                    <div class="col-12">
+                    </div>--%>
+                   <div class="col-12">
                         <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                             <ContentTemplate>
                                 <asp:Panel ID="pnlUpdatePhoto" runat="server" Visible="false">
-                                    <asp:ListView ID="lvUpdatePhoto" runat="server">
+                                    <asp:ListView ID="lvUpdatePhoto" runat="server" OnItemDataBound="lvUpdatePhoto_ItemDataBound">
                                         <LayoutTemplate>
                                             <div class="sub-heading">
                                                 <h5>Student List</h5>
@@ -187,7 +197,7 @@
                         <asp:UpdatePanel runat="server" ID="UpdatePanel2">
                             <ContentTemplate>
                                 <asp:Panel ID="pnlUpdateSign" runat="server" Visible="false">
-                                    <asp:ListView ID="lvUpdateSign" runat="server">
+                                    <asp:ListView ID="lvUpdateSign" runat="server" OnItemDataBound="lvUpdateSign_ItemDataBound">
                                         <LayoutTemplate>
                                             <div class="sub-heading">
                                                 <h5>Student List</h5>
