@@ -281,6 +281,8 @@ public partial class ACADEMIC_StudentFileUpload : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(UpdatePanel1, "Data Saved Successfully!", this.Page);
+                    ddlConvoType.SelectedIndex = 0;
+                    ddlConvocationNo.SelectedIndex = 0;
                     return true;
                 }
             }
