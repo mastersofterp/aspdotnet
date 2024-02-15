@@ -3881,6 +3881,8 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                     {
                         File.Delete(Filepath); // To delete file from code folder after saved file in blob storage
                         objCommon.DisplayMessage(this.Page, "Please upload Correct Excel File!", this);
+                        lvexceluplodeddata.DataSource = null;
+                        lvexceluplodeddata.DataBind();
                         settab_3();
                     }
                     settab_3();
@@ -3888,12 +3890,16 @@ public partial class ACADEMIC_MASTERS_ExamDate : System.Web.UI.Page
                 else
                 {
                     objCommon.DisplayMessage(this.Page, "Only Excel Sheet is Allowed!", this);
+                    lvexceluplodeddata.DataSource = null;
+                    lvexceluplodeddata.DataBind();
                     settab_3();
                 }
             }
             else
             {
                 objCommon.DisplayMessage(this.Page, "Select File to Upload!!!", this);
+                lvexceluplodeddata.DataSource = null;
+                lvexceluplodeddata.DataBind();
                 settab_3();
             }
         }
