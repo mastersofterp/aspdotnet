@@ -408,6 +408,7 @@
                                                                     </div>
                                                                     <div class="form-group col-lg-6 col-md-6 col-12">
                                                                         <div class="label-dynamic">
+                                                                           <sup>* </sup>
                                                                             <label>Supervisor Designation </label>
                                                                         </div>
                                                                         <asp:DropDownList ID="ddlMember" runat="server" TabIndex="16" ToolTip="Please Select Member" AppendDataBoundItems="true"
