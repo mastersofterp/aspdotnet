@@ -186,7 +186,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12" id="divsouth" runat="server" visible="false">
                                     <div class="label-dynamic">
                                         <sup>* </sup>
-                                        <label>South-Sq. Ft.</label>
+                                        <label>South-Sq. Ft.</label>  
                                     </div>
                                     <asp:TextBox ID="txtSouth" runat="server" CssClass="form-control" ToolTip="Enter South-Sq. Ft." TabIndex="10" oninput="validateNumberInput(this)" MaxLength="15" ></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvsouth" runat="server"
