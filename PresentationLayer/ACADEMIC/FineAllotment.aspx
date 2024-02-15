@@ -37,6 +37,17 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
+                                                <label>Receipt Type</label>
+                                            </div>
+                                            <asp:DropDownList ID="ddlReceipt" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true" OnSelectedIndexChanged="ddlReceipt_SelectedIndexChanged" AutoPostBack="true" AppendDataBoundItems="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvReceipt" runat="server" ValidationGroup="search"
+                                                Display="None" ControlToValidate="ddlReceipt" ErrorMessage="Please Select Receipt Type." InitialValue="0"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
                                                 <label>Enter Reg. No</label>
                                             </div>
                                             <asp:TextBox ID="txtEnrollno" runat="server" CssClass="form-control" ToolTip="Enter text to search." TabIndex="1"></asp:TextBox>
@@ -61,14 +72,15 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <sup>* </sup>
-                                                <label>Receipt Type</label>
+                                                <%--<label>Semester</label>--%>
+                                                <asp:Label ID="lblDYddlSession" runat="server" Font-Bold="true"></asp:Label>
                                             </div>
-                                            <asp:DropDownList ID="ddlReceipt" runat="server" TabIndex="3" CssClass="form-control" data-select2-enable="true">
+                                            <asp:DropDownList ID="ddlsession" runat="server" TabIndex="2" AppendDataBoundItems="true" CssClass="form-control" data-select2-enable="true">
+                                                <asp:ListItem Value="0">Please Select</asp:ListItem>
                                             </asp:DropDownList>
-                                            <asp:RequiredFieldValidator ID="rfvReceipt" runat="server" ValidationGroup="search"
-                                                Display="None" ControlToValidate="ddlReceipt" ErrorMessage="Please Select Receipt Type." InitialValue="0"></asp:RequiredFieldValidator>
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
+                                                ControlToValidate="ddlsession" InitialValue="0" Display="None" ErrorMessage="Please Select Session." ValidationGroup="search"></asp:RequiredFieldValidator>
                                         </div>
-
                                         <div class="col-12 btn-footer">
                                             <asp:ValidationSummary ID="valSummery" runat="server" DisplayMode="List" ShowMessageBox="true"
                                                 ShowSummary="false" ValidationGroup="search" />
@@ -139,8 +151,7 @@
                                                         :
                                                         <a class="sub-label">
                                                             <asp:Label ID="lblSessionName" runat="server" Font-Bold="true"></asp:Label>
-                                                        </a>
-                                                    </li>
+                                                        </a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -186,8 +197,74 @@
 
                                             </div>
                                         </div>
+                                        <br/>
+                                        <div id="divfineallotment" class="col-12" runat="server" visible="false">
+                                            <asp:ListView ID="LVFineallotment" runat="server">
+                                                <LayoutTemplate>
+                                                    <div id="divlvFeeItems">
+                                                        <div class="sub-heading">
+                                                            <h5>Available Fee Items</h5>
+                                                        </div>
+                                                        <table class="table table-striped table-bordered nowrap display" style="width: 100%" id="tblFeeItems">
+                                                            <thead class="bg-light-blue">
+                                                                <tr>
+                                                                    <th>Sr.No.
+                                                                    </th>
+                                                                    <th>Fee Heads
+                                                                    </th>
+                                                                    <th>Currency
+                                                                    </th>
+                                                                    <th>Amount
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr id="itemPlaceholder" runat="server" />
+                                                            </tbody>
+                                                            <tfoot style="display:none">
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td>TOTAL:</td>
+                                                                    <td>
+                                                                        <asp:TextBox ID="txtTotalAmount" onkeydown="javascript:return false;" runat="server"
+                                                                            AutoCompleteType="Disabled" CssClass="form-control" Font-Bold="true" />
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
 
-                                        <div class="col-12">
+                                                    </div>
+                                                </LayoutTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:Label ID="lblFeeHeadSrNoFine" runat="server" Text='<%# Eval("SRNO") %>' Visible="false" />
+                                                            <%# Container.DataItemIndex + 1%>
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("FEE_LONGNAME")%>
+                                                            <asp:HiddenField ID="hdnfld_FEE_LONGNAME" runat="server" Value='<%# Eval("FEE_LONGNAME")%>' />
+                                                        </td>
+                                                        <td>
+                                                            <%# Eval("CURRENCY")%>
+                                                        </td>
+                                                        <td>
+                                                            <asp:TextBox ID="txtFeeItemAmountFine" onblur="UpdateTotalAmounts();" onkeyup="IsNumeric(this);"
+                                                                Text='<%# Eval("AMOUNT")%>' Style="text-align: right" runat="server" CssClass="data_label"
+                                                                TabIndex="14" />
+                                                            <ajaxToolKit:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" runat="server" ValidChars="0123456789."
+                                                                FilterMode="ValidChars" TargetControlID="txtFeeItemAmountFine">
+                                                            </ajaxToolKit:FilteredTextBoxExtender>
+                                                            <asp:HiddenField ID="hidFeeItemAmount" runat="server" Value='<%# Eval("AMOUNT") %>' />
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:ListView>
+
+                                        </div>
+                                        <br>
+                                        <div class="col-12" id="lvfeehead" runat="server" visible="false">
                                             <asp:ListView ID="lvFeeItems" runat="server">
                                                 <LayoutTemplate>
                                                     <div id="divlvFeeItems">
@@ -238,23 +315,27 @@
                                                     </tr>
                                                 </ItemTemplate>
                                             </asp:ListView>
-                                        </div>
-
-                                        <div class="col-12 btn-footer">
-                                            <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="backsem"
-                                                ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
-                                            <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="SingleSubmit" />
-                                            <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" OnClick="btnCancel_Click" Text="Cancel" />
 
                                         </div>
+                                        <div id="divMsg" runat="server">
+                                        </div>
+
                                     </div>
 
-                                </div>
-                            </asp:Panel>
-                        </div>
+                                    <div class="col-12 btn-footer">
+                                        <asp:ValidationSummary ID="ValidationSummary2" runat="server" ValidationGroup="backsem"
+                                            ShowMessageBox="true" ShowSummary="false" DisplayMode="List" />
+                                        <asp:Button ID="btnSubmit" runat="server" CssClass="btn btn-primary" OnClick="btnSubmit_Click" Text="Submit" ValidationGroup="SingleSubmit" />
+                                        <asp:Button ID="btnCancel" runat="server" CssClass="btn btn-warning" OnClick="btnCancel_Click" Text="Cancel" />
 
+                                    </div>
+                                </div>
+                        </div>
+                        </asp:Panel>
                     </div>
+
                 </div>
+            </div>
             </div>
         </ContentTemplate>
         <Triggers>
@@ -276,6 +357,45 @@
                 return false;
         }
     </script>
+    <script>
+        function UpdateTotalAmounts() {
+            debugger;
+            try {
+                var totalFeeAmt = 0.00;
+                var dataRows = null;
+                if (document.getElementById('tblFeeItems') != null)
+                    dataRows = document.getElementById('tblFeeItems').getElementsByTagName('tr');
+                //alert(dataRows.length)
+                if (dataRows != null) {
 
+                    for (sem = 2; sem < 5; sem++) {
+                        //alert("sem "+sem)
+                        totalFeeAmt = 0.00;
+                        for (i = 1; i < (dataRows.length - 1) ; i++) {
+
+                            var dataCellCollection = dataRows.item(i).getElementsByTagName('td');
+
+                            var dataCell = dataCellCollection.item(sem);
+
+                            var controls = dataCell.getElementsByTagName('input');
+
+                            var txtAmt = controls.item(0).value;
+                            //alert("txtAmt "+txtAmt)
+                            if (txtAmt != '')
+                                totalFeeAmt += parseFloat(txtAmt);
+                            //alert("totalFeeAmt"+totalFeeAmt)
+                            //if ((i + 2) == dataRows.length) {
+                            var semcnt = sem - 1;
+                            document.getElementById('ctl00_ContentPlaceHolder1_LVFineallotment_txtTotalAmount').value = totalFeeAmt.toString();
+                            //}
+                        }
+                    }
+                }
+            }
+            catch (e) {
+                //alert("Error: " + e.description);
+            }
+        }
+    </script>
 </asp:Content>
 
