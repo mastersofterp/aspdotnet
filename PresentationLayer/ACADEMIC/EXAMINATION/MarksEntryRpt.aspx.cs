@@ -388,7 +388,11 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
 
     protected void BtnExcelReport_Click(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         try
+=======
+        try 
+>>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
         {
             GridView dg = new GridView();
             string SP_Name = "PKG_GET_INTERNAL_MARK_DETAILS_NOT_DONE_DATA";
@@ -418,12 +422,20 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                     objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
                 }
             }
+<<<<<<< HEAD
             else
             {
                 objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
             }
         }
         catch (Exception ex)
+=======
+            else 
+            {
+                objCommon.DisplayMessage(updpnl, "No Data Found for this selection.", this.Page);
+            }
+        }catch(Exception ex)
+>>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
         {
             if (Convert.ToBoolean(Session["error"]) == true)
                 objUCommon.ShowError(Page, "BtnExcelReport_Click() --> " + ex.Message + " " + ex.StackTrace);
@@ -431,6 +443,7 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+<<<<<<< HEAD
 
 
     // added by shubham for excel data on 20-02-2024
@@ -658,4 +671,6 @@ public partial class ACADEMIC_EXAMINATION_MarksEntryRpt : System.Web.UI.Page
                 objUCommon.ShowError(Page, "Server Unavailable.");
         }
     }
+=======
+>>>>>>> 466c108a ( [ENHANCEMENT] [53943] Add excel button on page)
 }
