@@ -35,6 +35,26 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
             else
             {
                 this.FillDropDown();
+
+                DataSet dsAntiRagging;
+
+                dsAntiRagging = objCommon.FillDropDown("ACD_PARAMETER", "DISTINCT PARAM_NAME", "PARAM_VALUE", "PARAM_NAME='ALLOW_ANTI_RAGGING_DECLARATION_PDF_DISPLAY'", "PARAM_NAME DESC");
+
+                if (dsAntiRagging != null && dsAntiRagging.Tables[0].Rows.Count > 0)
+                {
+                    string declarationToShow = dsAntiRagging.Tables[0].Rows[0]["PARAM_VALUE"].ToString();
+
+                    if (declarationToShow == "1")
+                    {
+                        btnModalPopup.Visible = false;
+                        btnDownloadAntiRaggingDeclaration.Visible = true;
+                    }
+                    else
+                    {
+                        btnModalPopup.Visible = true;
+                        btnDownloadAntiRaggingDeclaration.Visible = false;
+                    }
+                }
                 //ViewState["usertype"] = Session["usertype"];
                 ViewState["usertype"] = SessionHelper.Users.UserType;
 
@@ -613,32 +633,32 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
 
                 }
 
-                DataSet ds = null;
-                ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["idno"]), string.Empty);
+                //DataSet ds = null;
+                //ds = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(Session["stuinfoidno"]), string.Empty);
 
-                if (ds != null && ds.Tables[0].Rows.Count > 0)
-                {
-                    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
-                    string sign = ds.Tables[0].Rows[0]["SIGN"].ToString();
+                //if (ds != null && ds.Tables[0].Rows.Count > 0)
+                //{
+                //    string photo = ds.Tables[0].Rows[0]["PHOTO"].ToString();
+                //    string sign = ds.Tables[0].Rows[0]["STUD_SIGN"].ToString();
 
-                    if (photo == string.Empty && sign == string.Empty)
-                    {
-                        objCommon.DisplayMessage("Please Upload Photo and Signature", this.Page);
-                        return;
-                    }
+                //    if (photo == string.Empty && sign == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage("Please Upload Photo and Signature in the Personal Details Page!", this.Page);
+                //        return;
+                //    }
 
-                    if (photo == string.Empty)
-                    {
-                        objCommon.DisplayMessage("Please Upload Photo", this.Page);
-                        return;
-                    }
+                //    if (photo == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage("Please Upload Photo in the Personal Details Page!", this.Page);
+                //        return;
+                //    }
 
-                    if (sign == string.Empty)
-                    {
-                        objCommon.DisplayMessage("Please Upload Signature", this.Page);
-                        return;
-                    }
-                }
+                //    if (sign == string.Empty)
+                //    {
+                //        objCommon.DisplayMessage("Please Upload Signature in the Personal Details Page!", this.Page);
+                //        return;
+                //    }
+                //}
 
                 DataSet dscheckdocuments = null;
                 if (ViewState["usertype"].ToString() == "2")
@@ -1370,4 +1390,10 @@ public partial class ACADEMIC_OtherInformation : System.Web.UI.Page
         }
 
     }
+
+    protected string GetPdfFileName()
+    {
+        return objCommon.LookUp("ACD_ANTI_RAGGING_DECLARATION", "AR_DOCUMENT_NAME", string.Empty);
+    }
+
 }
