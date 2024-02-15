@@ -126,7 +126,7 @@ public partial class ACADEMIC_ONLINEFEECOLLECTION_OmniwareOnlinePaymentRequest_S
 
                 lblstate.Text = objCommon.LookUp("ACD_STU_ADDRESS A INNER JOIN ACD_STATE B ON (A.PSTATE = B.STATENO)", "B.STATENAME", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()));
                 lblzipcode.Text = "440001";
-                    //objCommon.LookUp("ACD_STU_ADDRESS", "PPINCODE", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()));
+               //objCommon.LookUp("ACD_STU_ADDRESS", "PPINCODE", "IDNO=" + Convert.ToInt32(Session["idno"].ToString()));
             }
             catch (Exception ex)
             {
