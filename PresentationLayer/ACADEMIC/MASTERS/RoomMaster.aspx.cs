@@ -649,7 +649,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
 
     protected void ddlDept_SelectedIndexChanged(object sender, EventArgs e)
     {
-        int collegecode = Convert.ToInt32(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
+        int dept = Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue);
+        int collegecode = (Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + dept)));
         ViewState["CollegeCode"] = collegecode;
         objCommon.FillDropDownList(ddlFloorNo, "ACD_FLOOR ", "FLOORNO", "FLOORNAME", "FLOORNO > 0 AND ACTIVESTATUS=1 ", "FLOORNO ASC");
         this.BindRooms();
@@ -665,7 +666,8 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
     }
     protected void ddlFloorNo_SelectedIndexChanged(object sender, EventArgs e)
     {
-        int collegecode = Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + Convert.ToInt32(ddlDept.SelectedValue)));
+        int dept = Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlCollege.SelectedValue);
+        int collegecode = (Convert.ToInt32(ddlCollege.SelectedValue) == 0 ? 0 : Convert.ToInt16(objCommon.LookUp("ACD_DEPARTMENT", "DISTINCT COLLEGE_CODE", "DEPTNO = " + dept)));
         objCommon.FillDropDownList(ddlBlockNo, "ACD_BLOCK ", "BLOCKNO", "BLOCKNAME", "BLOCKNO > 0 AND ACTIVESTATUS=1", "BLOCKNAME ASC");
         this.BindRooms();
         ddlBlockNo.Focus();
@@ -874,7 +876,9 @@ public partial class ACADEMIC_MASTERS_RoomMaster : System.Web.UI.Page
                     box2.Text = dt.Rows[i]["txtRoomCapacity"].ToString();
 
                     //Have to change this for delete operations
-                    if (dt.Rows[i]["chkStatus"] == null)
+                    if (dt.Rows[i]["chkStatus"] == "")
+                        box3.Checked = false;
+                    else if (dt.Rows[i]["chkStatus"] ==null)
                         box3.Checked = false;
                     else
                         box3.Checked = Convert.ToBoolean(dt.Rows[i]["chkStatus"]);
