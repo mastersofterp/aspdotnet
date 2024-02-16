@@ -21172,6 +21172,84 @@ namespace IITMS
                     }
                     return status;
                 }
+
+                public int InsertUpdateAntiRaggingDeclaration(string FileName, int UaNo)
+                {
+                    int status = 0;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[3];
+                        objParams[0] = new SqlParameter("@P_FILENAME", FileName);
+                        objParams[1] = new SqlParameter("@P_UANO", UaNo);
+                        objParams[2] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[2].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_ACD_INS_UPD_ANTI_RAGGING_DECLARATION", objParams, true);
+
+                        if (ret.ToString() == "1")
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordSaved);
+                        }
+                        else
+                        {
+                            status = Convert.ToInt32(CustomStatus.RecordUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        status = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.InsertUpdateAntiRaggingDeclaration-> " + ex.ToString());
+                    }
+                    return status;
+                }
+
+                #region Send Bulk email/SMS/Whatsaap  //Added by sakshi.M  on date 14122023
+                //Added by sakshi.M  on date 14122023
+                public DataSet GetSmsDeatil(int sms, int service)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParams = new SqlParameter[2];
+                        objParams[0] = new SqlParameter("@P_SMS", sms);
+                        objParams[1] = new SqlParameter("@P_SERVICENO", service);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_ACD_GET_SERVICE_PROVIDER", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.GetGlobalCourseTeacherAllotment-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                #endregion
+
+                //ADDED BY VIPUL TICHAKULE ON DATED 16-02-2024
+                public DataSet GetBulkCourseRegSlipData(int sessionno, int degreeno, int semesterno, int admbatch, int schemeno, int collegeid)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSH = new SQLHelper(_UAIMS_constr);
+                        SqlParameter[] objParam = new SqlParameter[6];
+                        objParam[0] = new SqlParameter("@P_ADMBATCH", admbatch);
+                        objParam[1] = new SqlParameter("@P_SESSIONNO", sessionno);
+                        objParam[2] = new SqlParameter("@P_DEGREENO", degreeno);
+                        objParam[3] = new SqlParameter("@P_SEMESTERNO", semesterno);
+                        objParam[4] = new SqlParameter("@P_SCHEMENO", schemeno);
+                        objParam[5] = new SqlParameter("@P_COLLEGE_ID", collegeid);
+                        ds = objSH.ExecuteDataSetSP("PKG_REGIST_SP_REPORT_REGISTSLIP_BULK", objParam);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.BindActivity-> " + ex.ToString());
+                    }
+                    return ds;
+                }//end
             }
 
 
