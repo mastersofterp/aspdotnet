@@ -2147,24 +2147,50 @@ public partial class ACADEMIC_EXAMINATION_TabulationChart : System.Web.UI.Page
 
         else if (Convert.ToInt32(Session["OrgId"]) == 16)
         {
-            string ids = string.Empty;
-
-            foreach (ListViewDataItem item in lvStudent.Items)
+            if (Convert.ToInt32(ViewState["schemeno"]) == 106)  // Post B.sc grdae card added by Tejas Thakre As On 16_02_2024
             {
-                CheckBox chk = item.FindControl("chkStudent") as CheckBox;
-                Label lblStudname = item.FindControl("lblStudname") as Label;
+                string ids = string.Empty;
 
-                string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
-                if (chk.Checked)
+                foreach (ListViewDataItem item in lvStudent.Items)
                 {
-                    ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                    Label lblStudname = item.FindControl("lblStudname") as Label;
 
-                    //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                    if (chk.Checked)
+                    {
+                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    }
                 }
-            }
 
-            ids = ids.TrimEnd('.');
-            this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_MAHER.rpt", ids);
+                ids = ids.TrimEnd('.');
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_MAHER_PBBSC.rpt", ids);
+            }
+            else
+            {
+                string ids = string.Empty;
+
+                foreach (ListViewDataItem item in lvStudent.Items)
+                {
+                    CheckBox chk = item.FindControl("chkStudent") as CheckBox;
+                    Label lblStudname = item.FindControl("lblStudname") as Label;
+
+                    string RegNo = objCommon.LookUp("ACD_STUDENT WITH (NOLOCK)", "REGNO", "IDNO=" + Convert.ToInt16((((item.FindControl("lblStudname")) as Label).ToolTip) + ""));
+                    if (chk.Checked)
+                    {
+                        ids += ((item.FindControl("lblStudname")) as Label).ToolTip + ".";
+
+                        //GenerateQrCode((((item.FindControl("lblStudname")) as Label).ToolTip), RegNo, (((item.FindControl("lblStudname")) as Label).Text));
+                    }
+                }
+
+                ids = ids.TrimEnd('.');
+                this.ShowGradeCardNew("Grade Card", "rptGradeCardReport_MAHER.rpt", ids);
+
+            }
+           
         }
 
         #endregion
