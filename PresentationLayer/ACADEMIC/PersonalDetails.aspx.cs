@@ -336,10 +336,10 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
             idno = (Session["stuinfoidno"]).ToString();
         }
 
-        DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
+        //DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
 
-        string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
-        string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+        //string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
+        //string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
 
         foreach (DataRow row in ds.Tables[0].Rows)
         {
@@ -380,14 +380,22 @@ public partial class ACADEMIC_PersonalDetails : System.Web.UI.Page
                 {
                     FileUpload fileUploadControl = (FileUpload)control;
 
-                    if (captionName == "Photo" && string.IsNullOrEmpty(photo))
-                    {
-                        validationErrors.Add("Please Upload a File for " + captionName);
-                    }
+                    DataSet dsConfig = objCommon.FillDropDown("ACD_STUD_PHOTO", "PHOTO", "STUD_SIGN", "IDNO=" + Convert.ToInt32(idno), "");
 
-                    if (captionName == "Signature" && string.IsNullOrEmpty(sign))
+                    if (dsConfig != null && dsConfig.Tables[0].Rows.Count > 0)
                     {
-                        validationErrors.Add("Please Upload a File for " + captionName);
+                        string photo = dsConfig.Tables[0].Rows[0]["PHOTO"].ToString();
+                        string sign = dsConfig.Tables[0].Rows[0]["STUD_SIGN"].ToString();
+
+                        if (captionName == "Photo" && string.IsNullOrEmpty(photo))
+                        {
+                            validationErrors.Add("Please Upload a File for " + captionName);
+                        }
+
+                        if (captionName == "Signature" && string.IsNullOrEmpty(sign))
+                        {
+                            validationErrors.Add("Please Upload a File for " + captionName);
+                        }
                     }
                 }
             }
