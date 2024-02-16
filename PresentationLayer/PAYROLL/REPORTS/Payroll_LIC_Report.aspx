@@ -7,7 +7,7 @@
         <div class="col-md-12 col-sm-12 col-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">EMPLOYEE LIC REPORT</h3>
+                    <h3 class="box-title">EMPLOYEE DEDUCTION REPORT</h3>
                 </div>
                 <div class="box-body">
                     <asp:Panel ID="pnl" runat="server">
@@ -54,9 +54,9 @@
                     <div class="col-12 btn-footer">
                         <asp:Button ID="btnLICReport" runat="server" Text="LIC"
                             CssClass="btn btn-info" TabIndex="4" OnClick="btnLICReport_Click" ValidationGroup="ADD" />
-
+                         <asp:Button ID="btnPTExcel" runat="server" Text="PT Excel" CssClass="btn btn-info" TabIndex="5" OnClick="btnPTExcel_Click" ValidationGroup="ADD" />
                         <asp:Button ID="btnLICExcel" runat="server" Text="LIC Excel" CssClass="btn btn-info" TabIndex="5" OnClick="btnLICExcel_Click" ValidationGroup="ADD" />
-
+                         
                         <asp:Button ID="btnPTReport" runat="server" Text="PT Report" ValidationGroup="ADD" TabIndex="5" CssClass="btn btn-info" OnClick="btnPTReport_Click" />
                         <asp:Button ID="btnEPFReport" runat="server" Text="EPF Report" ValidationGroup="ADD" CssClass="btn btn-info" TabIndex="6" OnClick="btnEPFReport_Click" />
 
