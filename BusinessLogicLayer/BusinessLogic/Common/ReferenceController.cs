@@ -205,7 +205,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
 
                         //UpdateFaculty Reference
-                        objParams = new SqlParameter[44];
+                        objParams = new SqlParameter[45];
                         objParams[0] = new SqlParameter("@P_ERRORS", objRef.Errors);
                         objParams[1] = new SqlParameter("@P_COLLEGENAME", objRef.CollegeName);
                         objParams[2] = new SqlParameter("@P_COLL_ADDRESS", objRef.CollegeAddress);
@@ -259,12 +259,13 @@ namespace IITMS
                         objParams[41] = new SqlParameter("@P_MAINTENANCE_END_TIME", maintenanceEndTime);
                         objParams[42] = new SqlParameter("@P_ALERT_FREQUENCY", AlertFreq);
                         //******************************************************************************//
+                        objParams[43] = new SqlParameter("@P_ERROR_LOG_EMAIL", objRef.Error_Log_Email); //Added by Anurag Baghele on 15-02-2024
                         if (objRef.CollegeBanner == null)
-                            objParams[43] = new SqlParameter("@P_COLL_Banner", DBNull.Value);
+                            objParams[44] = new SqlParameter("@P_COLL_Banner", DBNull.Value);
                         else
-                            objParams[43] = new SqlParameter("@P_COLL_Banner", objRef.CollegeBanner);
+                            objParams[44] = new SqlParameter("@P_COLL_Banner", objRef.CollegeBanner);
 
-                        objParams[43].SqlDbType = SqlDbType.Image;
+                        objParams[44].SqlDbType = SqlDbType.Image;
 
 
                         //  objParams[38] = new SqlParameter("@P_COLL_Banner", objRef.CollegeBanner);//Added tanu  on 08/12/2022

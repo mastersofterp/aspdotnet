@@ -508,6 +508,13 @@
                                 </asp:DropDownList>
                             </div>
 
+                            <%--Added by Anurag Baghele on 15-02-2024--%>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <b>
+                                    <asp:Label ID="lblErroLogEmail" Text="Error Log Email" runat="server"></asp:Label></b><br />
+                                <asp:TextBox ID="txtErrorLogEmail" MaxLength="100" runat="server" CssClass="form-control" />
+                            </div>
+
                         </div>
                     </div>
 
@@ -577,7 +584,7 @@
                                         </div>
                                         <%-- <asp:TextBox ID="txtMaintananceDateTime" runat="server" TabIndex="6" CssClass="form-control" Width="100%"
                                             ToolTip="Please Enter Exam Time" />--%>
-                                        <input type="text" id="txtMaintananceDateTime" class="form-control" disabled/>
+                                        <input type="text" id="txtMaintananceDateTime" class="form-control" disabled />
                                         <asp:HiddenField ID="hdfStartTIme" runat="server" />
                                     </div>
                                     <div class="form-group col-lg-3 col-md-6 col-12">
@@ -585,24 +592,24 @@
                                             <sup></sup>
                                             <label>Maintenance Time Span</label>
                                         </div>
-                                         <asp:DropDownList ID="ddlMainTimeSpan" runat="server" CssClass="form-control" data-select2-enable="true" >
-                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                             <asp:ListItem Value="15">15 minutes</asp:ListItem>
-                                             <asp:ListItem Value="30">30 minutes</asp:ListItem>
-                                             <asp:ListItem Value="45">45 minutes</asp:ListItem>
-                                             <asp:ListItem Value="60">1 hour 00 min</asp:ListItem>
-                                             <asp:ListItem Value="75">1 hour 15 min</asp:ListItem>
-                                             <asp:ListItem Value="90">1 hour 30 min</asp:ListItem>
-                                             <asp:ListItem Value="105">1 hour 45 min</asp:ListItem>
-                                             <asp:ListItem Value="120">2 hour 00 min</asp:ListItem>
-                                             <asp:ListItem Value="135">2 hour 15 min</asp:ListItem>
-                                              <asp:ListItem Value="150">2 hour 30 min</asp:ListItem>
-                                              <asp:ListItem Value="165">2 hour 45 min</asp:ListItem>
-                                             <asp:ListItem Value="180">3 hour 00 min</asp:ListItem>
-                                             <asp:ListItem Value="210">3 hour 30 min</asp:ListItem>
-                                             <asp:ListItem Value="240">4 hour 00 min</asp:ListItem>
-                                </asp:DropDownList>
-                                        
+                                        <asp:DropDownList ID="ddlMainTimeSpan" runat="server" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="15">15 minutes</asp:ListItem>
+                                            <asp:ListItem Value="30">30 minutes</asp:ListItem>
+                                            <asp:ListItem Value="45">45 minutes</asp:ListItem>
+                                            <asp:ListItem Value="60">1 hour 00 min</asp:ListItem>
+                                            <asp:ListItem Value="75">1 hour 15 min</asp:ListItem>
+                                            <asp:ListItem Value="90">1 hour 30 min</asp:ListItem>
+                                            <asp:ListItem Value="105">1 hour 45 min</asp:ListItem>
+                                            <asp:ListItem Value="120">2 hour 00 min</asp:ListItem>
+                                            <asp:ListItem Value="135">2 hour 15 min</asp:ListItem>
+                                            <asp:ListItem Value="150">2 hour 30 min</asp:ListItem>
+                                            <asp:ListItem Value="165">2 hour 45 min</asp:ListItem>
+                                            <asp:ListItem Value="180">3 hour 00 min</asp:ListItem>
+                                            <asp:ListItem Value="210">3 hour 30 min</asp:ListItem>
+                                            <asp:ListItem Value="240">4 hour 00 min</asp:ListItem>
+                                        </asp:DropDownList>
+
                                         <%--<asp:TextBox ID="txtMainTimeSpan"  runat="server" CssClass="form-control" MaxLength="3" Visible="false" placeholder="Maintenance Time In Minutes" ToolTip="Time Duration for Maintenance In Minutes From Start Date Time (default:60 min if not set)"></asp:TextBox>--%>
                                         <%--<ajaxToolKit:FilteredTextBoxExtender ID="fltTimeSpan" FilterType="Numbers, Custom" ValidChars="." runat="server" TargetControlID="txtMainTimeSpan"></ajaxToolKit:FilteredTextBoxExtender>--%>
                                     </div>
@@ -613,16 +620,16 @@
                                             <sup></sup>
                                             <label>Alert Time Difference</label>
                                         </div>
-                                         <asp:DropDownList ID="ddlTimeDiff" runat="server" CssClass="form-control" data-select2-enable="true" >
-                                             <asp:ListItem Value="0">Please Select</asp:ListItem>
-                                             <asp:ListItem Value="5">5 minutes</asp:ListItem>
-                                             <asp:ListItem Value="10">10 minutes</asp:ListItem>
-                                             <asp:ListItem Value="15">15 minutes</asp:ListItem>
-                                              <asp:ListItem Value="20">20 minutes</asp:ListItem>
-                                              <asp:ListItem Value="25">25 minutes</asp:ListItem>
-                                              <asp:ListItem Value="30">30 minutes</asp:ListItem>
-                                </asp:DropDownList>
-                                       <%-- <asp:TextBox ID="txtTimeDiff" runat="server" Visible="false" CssClass="form-control" MaxLength="2" placeholder="Alert Time Difference In Minutes" ToolTip="Time Difference between Alert Message(Default is 15 min if not set)"></asp:TextBox>
+                                        <asp:DropDownList ID="ddlTimeDiff" runat="server" CssClass="form-control" data-select2-enable="true">
+                                            <asp:ListItem Value="0">Please Select</asp:ListItem>
+                                            <asp:ListItem Value="5">5 minutes</asp:ListItem>
+                                            <asp:ListItem Value="10">10 minutes</asp:ListItem>
+                                            <asp:ListItem Value="15">15 minutes</asp:ListItem>
+                                            <asp:ListItem Value="20">20 minutes</asp:ListItem>
+                                            <asp:ListItem Value="25">25 minutes</asp:ListItem>
+                                            <asp:ListItem Value="30">30 minutes</asp:ListItem>
+                                        </asp:DropDownList>
+                                        <%-- <asp:TextBox ID="txtTimeDiff" runat="server" Visible="false" CssClass="form-control" MaxLength="2" placeholder="Alert Time Difference In Minutes" ToolTip="Time Difference between Alert Message(Default is 15 min if not set)"></asp:TextBox>
                                         <ajaxToolKit:FilteredTextBoxExtender ID="flttxtTimeDiff" FilterType="Numbers" runat="server" TargetControlID="txtTimeDiff"></ajaxToolKit:FilteredTextBoxExtender>--%>
                                     </div>
                                 </div>
@@ -689,8 +696,8 @@
         });
 
     </script>
-    
-   <%-- <script>
+
+    <%-- <script>
         $(document).ready(function () {
             // add an event listener for when the user changes the textbox value
             $('#ctl00_ContentPlaceHolder1_txtMainTimeSpan').on('keypress', function (event) {
@@ -936,15 +943,15 @@
     <script>
         function previewCollegeLogo() {
             var preview = document.querySelector('#<%= imgCollegeLogo.ClientID %>');
-        var file = document.querySelector('#<%= fuCollegeLogo.ClientID %>').files[0];
+            var file = document.querySelector('#<%= fuCollegeLogo.ClientID %>').files[0];
 
-        if (file) {
-            var objectURL = URL.createObjectURL(file);
-            preview.src = objectURL;
-        } else {
-            preview.src = '~/images/nophoto.jpg';
+            if (file) {
+                var objectURL = URL.createObjectURL(file);
+                preview.src = objectURL;
+            } else {
+                preview.src = '~/images/nophoto.jpg';
+            }
         }
-    }
     </script>
 
     <script>

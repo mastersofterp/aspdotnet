@@ -43,7 +43,7 @@ public partial class error : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       
+
         if (!Page.IsPostBack)
         {
             //Check Session
@@ -97,7 +97,7 @@ public partial class error : System.Web.UI.Page
             GetAdminTypeUser(); //Addded Mahesh on Dated 23/06/2021
             objCommon.FillDropDownList(ddlCancelLateFineAuthorityPerson, "User_acc", "UA_NO", "UA_NAME", "UA_TYPE IN(1,5) AND UA_STATUS=0 AND UA_FIRSTLOG=1", "UA_NO");
             ShowDetails();
-         
+
             //Comment by Mahesh on Dated 23/06/2021
 
             //txtEmailsvcpwd.Attributes.Add("onfocus", "enterTextBox();");
@@ -108,11 +108,11 @@ public partial class error : System.Web.UI.Page
             txtSMSsvcpwd.Attributes.Add("onmousedown", "return noCopyMouse(event);");
             txtSMSsvcpwd.Attributes.Add("onkeydown", "return noCopyKey(event);");
             txtEmailsvcpwd.Attributes.Add("onmousedown", "return noCopyMouse(event);");
-            txtEmailsvcpwd.Attributes.Add("onkeydown", "return noCopyKey(event);");            
+            txtEmailsvcpwd.Attributes.Add("onkeydown", "return noCopyKey(event);");
         }
         string script = string.Empty;
         if (rdbMaintenance.SelectedValue == "0")
-            script = "$('#txtMaintananceDateTime').prop('disabled', false);";  
+            script = "$('#txtMaintananceDateTime').prop('disabled', false);";
         else
             script = "$('#txtMaintananceDateTime').prop('disabled', true);";
 
@@ -147,7 +147,7 @@ public partial class error : System.Web.UI.Page
                     txtName.Text = dr["COLLEGENAME"].ToString();
                     txtCollegeAddress.Text = dr["College_Address"].ToString();
 
-                   
+
                     imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
 
                     txtCollegeCode.Text = dr["COLLEGE_CODE"].ToString();
@@ -159,7 +159,7 @@ public partial class error : System.Web.UI.Page
                     if (dr["Feedback_Status"].ToString().Equals("False"))
                     {
                         ScriptManager.RegisterStartupScript(this, GetType(), "Src1", "SetFeedback(false);", true);
-                        
+
                     }
                     else
                     {
@@ -287,8 +287,8 @@ public partial class error : System.Web.UI.Page
                         //chkMaintenance.Checked = false;
                         rdbMaintenance.SelectedValue = "1";
                         //txtMaintananceDateTime.Enabled = false;
-                       // txtTimeDiff.Enabled = false;
-                       // txtMainTimeSpan.Enabled = false;
+                        // txtTimeDiff.Enabled = false;
+                        // txtMainTimeSpan.Enabled = false;
                         ddlTimeDiff.Enabled = false;
                         ddlMainTimeSpan.Enabled = false;
                         Session["maintenanceFlag"] = "1";
@@ -314,7 +314,8 @@ public partial class error : System.Web.UI.Page
                         ddlTimeDiff.SelectedValue = Convert.ToString(tempAlertFreq / 60000);
                     //***********************************************************//
 
-                  
+                    txtErrorLogEmail.Text = dr["ERROR_LOG_EMAIL"].ToString(); //Added by Anurag Baghele on 15-02-2024
+
                 }
             }
 
@@ -489,7 +490,7 @@ public partial class error : System.Web.UI.Page
             objRef.MarkSaveLock_Email = Convert.ToInt32(rdomarkentrysaveLockemail.SelectedValue);
             objRef.MarkSaveLock_SMS = Convert.ToInt32(rdomarkentrysaveLockSMS.SelectedValue);
             objRef.AttendanceBackDays = Convert.ToInt32(txtNumBckAttensAllow.Text);
-            int IA_Marks =Convert.ToInt32(txtIAMarks.Text.Trim());   //Added by Nikhil on 01/04/2021
+            int IA_Marks = Convert.ToInt32(txtIAMarks.Text.Trim());   //Added by Nikhil on 01/04/2021
             int PCA_Marks = Convert.ToInt32(txtPCAMarks.Text.Trim());//Added by Nikhil on 01/04/2021
             if (chkDecodeNumOrEnrollNo.Checked == true)
             {
@@ -507,7 +508,7 @@ public partial class error : System.Web.UI.Page
                 string Fileext = System.IO.Path.GetExtension(fuCollegeBanner.FileName);
                 if (Fileext.ToLower() == ".jpg" || Fileext.ToLower() == ".jpeg" || Fileext.ToLower() == ".png")
                 {
-                    if (FileSize.ContentLength <= 512 * 1024) 
+                    if (FileSize.ContentLength <= 512 * 1024)
                     {
                         objRef.CollegeBanner = objCommon.GetImageData(fuCollegeBanner);
                     }
@@ -544,11 +545,15 @@ public partial class error : System.Web.UI.Page
                 objRef.Late_Fine_Cancel_Authority_Fac_ID = Convert.ToInt32(ddlCancelLateFineAuthorityPerson.SelectedValue);
             }
             else
+            {
                 objRef.Late_Fine_Cancel_Authority_Fac_ID = 0;
+            }
+
+            objRef.Error_Log_Email = txtErrorLogEmail.Text.Trim(); //Added by Anurag Baghele on 15-02-2024
 
             //*********************START FOR MAINTENANCE ADDED BY SHAHBAZ AHMAD 14-02-2023***********************//
-            int maintenanceFlag=1;
-            if ( rdbMaintenance.SelectedValue=="0") //&&chkMaintenance.Checked)
+            int maintenanceFlag = 1;
+            if (rdbMaintenance.SelectedValue == "0") //&&chkMaintenance.Checked)
                 maintenanceFlag = 0;
             else
                 maintenanceFlag = 1;
@@ -558,7 +563,7 @@ public partial class error : System.Web.UI.Page
             //string endTime = txtMainTimeSpan.Text;
 
             DateTime maintenanceStartTime = DateTime.Parse(startTime);
-       
+
             int? maintenanceEndTime = null;
 
             //if (txtMainTimeSpan.Text == null || txtMainTimeSpan.Text == string.Empty || txtMainTimeSpan.Text == "")
@@ -605,14 +610,14 @@ public partial class error : System.Web.UI.Page
             if (ViewState["action"] != null)
             {
                 //Edit Reference
-                CustomStatus cs = (CustomStatus)objEc.Update(objRef, IA_Marks, PCA_Marks, maintenanceFlag, maintenanceStartTime,maintenanceEndTime,alertFreqInMiliSec);
+                CustomStatus cs = (CustomStatus)objEc.Update(objRef, IA_Marks, PCA_Marks, maintenanceFlag, maintenanceStartTime, maintenanceEndTime, alertFreqInMiliSec);
                 if (cs.Equals(CustomStatus.RecordUpdated))
                 {
                     objCommon.DisplayMessage("Configuration Details Updated Successfully!!", this.Page);
-                  //  Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "Msg", "<Script language='javascript' type='text/javascript'> alert('Configuration Details Updated Successfully!!'); if (!window._isReloaded) { window._isReloaded = true; location.reload(); }</Script>");
-                   ShowDetails();   
+                    //  Page.ClientScript.RegisterClientScriptBlock(this.GetType(), "Msg", "<Script language='javascript' type='text/javascript'> alert('Configuration Details Updated Successfully!!'); if (!window._isReloaded) { window._isReloaded = true; location.reload(); }</Script>");
+                    ShowDetails();
                     //Response.Redirect(Request.RawUrl);
-                   // ScriptManager.RegisterStartupScript(this, this.GetType(), "reload", "if (!window._isReloaded) { window._isReloaded = true; location.reload(); }", true);
+                    // ScriptManager.RegisterStartupScript(this, this.GetType(), "reload", "if (!window._isReloaded) { window._isReloaded = true; location.reload(); }", true);
                     string script = "$(document).ready(function(){__doPostBack('rdbMaintenance',\"\");});";
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "reload", script, true);
                     //Page.Response.Redirect(Page.Request.Url.ToString(), false);
@@ -620,7 +625,7 @@ public partial class error : System.Web.UI.Page
                 else
                     objCommon.DisplayMessage("Error!!", this.Page);
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -705,21 +710,21 @@ public partial class error : System.Web.UI.Page
         string script = string.Empty;
         if (rdbMaintenance.SelectedValue == "0")
         {
-           // txtTimeDiff.Enabled = true;
+            // txtTimeDiff.Enabled = true;
             //txtMaintananceDateTime.Enabled = true;
             ddlTimeDiff.Enabled = true;
             ddlMainTimeSpan.Enabled = true;
-           // txtMainTimeSpan.Enabled = true;
+            // txtMainTimeSpan.Enabled = true;
             script = "$('#txtMaintananceDateTime').prop('disabled', false);";
-          //  ScriptManager.RegisterStartupScript(this, this.GetType(), "txtTime", "$('#txtMaintananceDateTime').prop('disabled', true);", true);
+            //  ScriptManager.RegisterStartupScript(this, this.GetType(), "txtTime", "$('#txtMaintananceDateTime').prop('disabled', true);", true);
         }
         else
         {
             //txtTimeDiff.Enabled = false;
             ddlTimeDiff.Enabled = false;
             ddlMainTimeSpan.Enabled = false;
-           // txtMaintananceDateTime.Enabled = false;
-           // txtMainTimeSpan.Enabled = false;
+            // txtMaintananceDateTime.Enabled = false;
+            // txtMainTimeSpan.Enabled = false;
             script = "$('#txtMaintananceDateTime').prop('disabled', true);";
         }
         ScriptManager.RegisterStartupScript(this, this.GetType(), "txtTime", script, true);
