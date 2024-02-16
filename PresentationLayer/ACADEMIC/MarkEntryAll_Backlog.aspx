@@ -1225,6 +1225,8 @@
                         }
 
                         //   var ans = ((obtMark / maxMark) * 100).toFixed(2);
+
+
                         var sum = Number(Conversion) + Number(INT);
                         //  alert(sum);
                         sum.toFixed(2);
