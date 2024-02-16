@@ -420,6 +420,12 @@
                                     </div>
                                 </div>
                             </div>
+
+                         <%--   <div class="col-12 mt-6">
+
+                                <asp:Label ID ="lblnote" runat="server" Visible="false" ForeColor="Red" Font-Size="Medium"></asp:Label>
+                            </div>--%>
+
                             <div class="col-12 mt-3" id="divgradedetails" runat="server">
                                 <asp:ListView ID="lvStudentDetails" runat="server">
                                     <LayoutTemplate>
@@ -433,12 +439,15 @@
                                                     <th>SRNO</th>
                                                     <th>REGNO</th>
                                                      <th>STUDENT NAME</th>
+                                                     <th>INTERNAL MARK</th>
+                                                     <th>EXTERNAL MARK</th>
                                                     <th>MARKTOT</th>
                                                     <th>SCALEUP_PERCENT
                                                         <%--<asp:Label ID="lblscale" runat="server" Text='<%# Session["OrgId"].ToString()=="5"? "SCALEDN_PERCENT":"SCALEDN_PERCENT" %>'--%>
                                                     </th>
                                                     <th>GENERATED GRADE</th>
                                                     <th>FINAL GRADE</th>
+                                                    <th>REMARK</th>
 
                                                 </tr>
                                             </thead>
@@ -462,7 +471,14 @@
 
                                             </td>
                                              <td>
-                                                <asp:Label ID="Label1" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                                <asp:Label ID="lblstudname" runat="server" Text='<%# Eval("STUDNAME") %>' />
+                                            </td>
+
+                                             <td>
+                                                <asp:Label ID="lblintermark" runat="server" Text='<%# Eval("INTERMARK") %>' />
+                                            </td>
+                                             <td>
+                                                <asp:Label ID="lblextermark" runat="server" Text='<%# Eval("EXTERMARK") %>' />
                                             </td>
                                             <td>
                                                 <asp:Label ID="lblMARKTOT" runat="server" Text='<%# Eval("MARKTOT") %>' />
@@ -480,6 +496,10 @@
                                                 <asp:Label ID="lblfinalGrade" runat="server" Text='<%# Eval("GRADE") %>'/>
                                                <%-- Text='<%# Session["OrgId"].ToString()=="8"? DataBinder.Eval(Container.DataItem,"DECODENO"):DataBinder.Eval(Container.DataItem,"REGNO") %>'--%>
                                             </td>
+                                             <td>
+                                                <asp:Label ID="lblremark" runat="server" Text='<%# Eval("REMARK") %>'/>
+                                            </td>
+
 
                                         </tr>
                                     </ItemTemplate>

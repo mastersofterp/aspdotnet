@@ -923,6 +923,9 @@ public partial class ACADEMIC_EXAMINATION_Grade_Allotment : System.Web.UI.Page
                 lvStudentDetails.DataBind();
                 lvStudentDetails.Visible = true;
 
+                //lblnote.Visible = true;
+                //lblnote.Text = "Note:Remark Field is Only For Absent,UFM,Detaind,etc Students.";
+
 
                 if (Convert.ToInt32(Session["OrgId"]) == 3 || Convert.ToInt32(Session["OrgId"]) == 4)
                 {
