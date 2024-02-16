@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NonAcadBusinessLogicLayer</RootNamespace>
     <AssemblyName>NonAcadBusinessLogicLayer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxControlToolkit">
@@ -293,6 +295,7 @@
     <Compile Include="BusinessLogic\Account\TallyDataTransfer.cs" />
     <Compile Include="BusinessLogic\Account\TrialBalanceReportController.cs" />
     <Compile Include="BusinessLogic\BioMetrics\BioMetricsController.cs" />
+    <Compile Include="BusinessLogic\BlobStorage\BlobController.cs" />
     <Compile Include="BusinessLogic\Complaints\ComplaintController.cs" />
     <Compile Include="BusinessLogic\Complaints\MailSender.cs" />
     <Compile Include="BusinessLogic\DCMNTSCN\DocumentController.cs" />
@@ -464,7 +467,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessEntities\Payroll\GPFCPF\" />
-    <Folder Include="BusinessLogic\BlobStorage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
