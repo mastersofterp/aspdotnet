@@ -96,8 +96,8 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -116,19 +116,6 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
                     }
                 }
-
-
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        //lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        //lblAddress.Text = dr["College_Address"].ToString();
-                //        Session["OrgId"] = dr["OrganizationId"].ToString();
-                //        //imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
 
                 // get fetch paytm response
                 FetchPaytmResponse();
@@ -157,11 +144,9 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
             if (parameters.ContainsKey("CHECKSUMHASH"))
             {
-                Order_ID = parameters["ORDERID"];
                 paytmChecksum = parameters["CHECKSUMHASH"];
                 parameters.Remove("CHECKSUMHASH");
             }
-
             if (parameters.ContainsKey("ORDERID"))
             {
                 Order_ID = parameters["ORDERID"];
@@ -171,9 +156,10 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
 
             if (CheckSum.verifyCheckSum(merchantKey, parameters, paytmChecksum))
             {
+
                 lblOrderid.Text = parameters["ORDERID"].ToString();
                 lblAmount.Text = parameters["TXNAMOUNT"].ToString();
-               // lblPStatus.Text = parameters["STATUS"].ToString();
+                // lblPStatus.Text = parameters["STATUS"].ToString();
                 //lblTxntype.Text = "Online";
                 //lblGateway.Text = parameters["GATEWAYNAME"].ToString();
                 //lblResCode.Text = parameters["RESPCODE"].ToString();
@@ -210,7 +196,6 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
                 DataSet ds = objCommon.FillDropDown("USER_ACC U INNER JOIN ACD_STUDENT S ON(S.IDNO = U.UA_IDNO) INNER JOIN ACD_BRANCH B ON(B.BRANCHNO = S.BRANCHNO)", "UA_NAME", "UA_NO,UA_TYPE,UA_FULLNAME,UA_IDNO,UA_FIRSTLOG,B.LONGNAME", "UA_IDNO=" + Convert.ToInt32(Idno), string.Empty);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
-
                     Session["username"] = ds.Tables[0].Rows[0]["UA_NAME"].ToString();
                     Session["usertype"] = ds.Tables[0].Rows[0]["UA_TYPE"].ToString();
                     Session["userfullname"] = ds.Tables[0].Rows[0]["UA_FULLNAME"].ToString();
@@ -297,7 +282,8 @@ public partial class PaytmOnlinePaymentResponse : System.Web.UI.Page
     {
     
         string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["idno"].ToString()));
-        if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
+        var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+        if (ptype == "Provisional" && OrgId.ToString() == "5")
         {
             //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 

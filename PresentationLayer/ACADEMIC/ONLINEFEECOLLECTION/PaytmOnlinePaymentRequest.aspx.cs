@@ -61,8 +61,8 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -81,18 +81,7 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
 
                     }
                 }
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
-
-
+               
                 #region PGConfig Details
 
                 lblRegNo.Text = Session["regno"].ToString();
@@ -112,7 +101,7 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
                 {
                     string ResponseUrl = ds1.Tables[0].Rows[0]["RESPONSE_URL"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["REQUEST_URL"].ToString();
-                    string MerchentID = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();            //MERCHANT_ID;
+                    string MerchentID = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();            
                     string hashsequence = ds1.Tables[0].Rows[0]["HASH_SEQUENCE"].ToString();      // PASS_CODE
                     string saltkey = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();                   //ENCYPTION_KEY
                     string accesscode = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();               //SECURE_SECRET
@@ -222,26 +211,27 @@ public partial class PaytmOnlinePaymentRequest : System.Web.UI.Page
 
             if (Convert.ToInt32(Session["Instance"]) == 1)
             {
-                LINK = Session["RequestUrl"].ToString();   //"https://securegw-stage.paytm.in/order/process?";   
+                LINK = Session["RequestUrl"].ToString();   //"--https://securegw-stage.paytm.in/order/process?";   
             }
             else if (Convert.ToInt32(Session["Instance"]) == 2)
             {
-                LINK = Session["RequestUrl"].ToString();  //"https://secure.paytm.in/order/process?";
+                LINK = Session["RequestUrl"].ToString();  //"--https://secure.paytm.in/order/process?";
             }
           
             #region client details bind
-            String merchantKey = Session["saltkey"].ToString();    //"w&dAbczGowoxu4eX";
+            String merchantKey = Session["saltkey"].ToString();   
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.Add("MID", Session["MerchentId"].ToString());
             parameters.Add("CHANNEL_ID", CHANNEL_ID);                     // "WEB"
             parameters.Add("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID);  // "Retail"
             parameters.Add("WEBSITE", WEBSITE);                                 // "WEBSTAGING"
-            parameters.Add("EMAIL", Session["studEmail"].ToString());              
-            parameters.Add("MOBILE_NO", Session["studPhone"].ToString());            
-            parameters.Add("CUST_ID", Session["idno"].ToString());   
+            parameters.Add("EMAIL", "gmjain11@gmail.com");                 //Session["studEmail"].ToString()
+            parameters.Add("MOBILE_NO", "8552960810");                      //Session["studPhone"].ToString()
+            parameters.Add("CUST_ID", Session["idno"].ToString());
+            parameters.Add("ORDER_ID", orderId);
             parameters.Add("TXN_AMOUNT", Session["studAmt"].ToString());
-            parameters.Add("CALLBACK_URL", Session["ResponseUrl"].ToString());  //http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PaytmOnlinePaymentResponse.aspx
+            parameters.Add("CALLBACK_URL", Session["ResponseUrl"].ToString());  //--http://localhost:55403/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/PaytmOnlinePaymentResponse.aspx
 
             string paytmURL = "https://securegw-stage.paytm.in/order/process?";
             #endregion
