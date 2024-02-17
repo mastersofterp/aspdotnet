@@ -54,8 +54,8 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -75,18 +75,6 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
                     }
                 }
               
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
-
                 lblRegNo.Text = Session["regno"].ToString();
                 lblstudentname.Text = Convert.ToString(Session["payStudName"]);
                 lblBranch.Text = Convert.ToString(Session["Branchname"]);
@@ -105,7 +93,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
                 {
                     string ResponseUrl = ds1.Tables[0].Rows[0]["RESPONSE_URL"].ToString();
                     string RequestUrl = ds1.Tables[0].Rows[0]["REQUEST_URL"].ToString();
-                    string merchentkey = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();            //MERCHANT_ID;
+                    string merchentkey = ds1.Tables[0].Rows[0]["MERCHANT_ID"].ToString();            
                     string hashsequence = ds1.Tables[0].Rows[0]["HASH_SEQUENCE"].ToString();      // PASS_CODE
                     string saltkey = ds1.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();                   //ENCYPTION_KEY
                     string accesscode = ds1.Tables[0].Rows[0]["ACCESS_CODE"].ToString();               //SECURE_SECRET
@@ -124,8 +112,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
                 }
 
                 BindAndCheckPayDetails();
-                //FetchISGPay_Details();
-               
+              
             }
             catch (Exception ex)
             {
@@ -199,9 +186,9 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
     public string FetchISGPay_Details(string orderId)
     {
         string returnVal = string.Empty;
-        string SECURE_SECRET = Session["accesscode"].ToString();  //"E59CD2BF6F4D86B5FB3897A680E0DD3E";
-        string ENCYPTION_KEY = Session["saltkey"].ToString();         //"5EC4A697141C8CE45509EF485EE7D4B1";
-        string MCC_BANKID = Session["BankFee_Type"].ToString();    //4112_000004
+        string SECURE_SECRET = Session["accesscode"].ToString();  
+        string ENCYPTION_KEY = Session["saltkey"].ToString();        
+        string MCC_BANKID = Session["BankFee_Type"].ToString();  
         Panel_Debug.Visible = false;
         Panel_StackTrace.Visible = false;
 
@@ -234,12 +221,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
 
             /* For SortedList as parameter*/
             transactionData = new System.Collections.SortedList(new ISGPayHashGeneration());
-            //Random rnd = new Random();
-            //int ordNO = rnd.Next(1111111, 9999999);
-            //var TxnRefNo = "TEST-" + ordNO;
-
-            // SVPL4257&000004&10100781&4112
-
+       
             if (MCC_BANKID.ToString() != null && MCC_BANKID.ToString() != "")
             {
                 var splt = MCC_BANKID.ToString().Split('_');
@@ -265,7 +247,7 @@ public partial class ISGPayOnlinePaymentRequest : System.Web.UI.Page
             transactionData.Add("Currency", "356");  //na
 
             transactionData.Add("TxnType", "Pay");
-            transactionData.Add("ReturnURL", Session["ResponseUrl"].ToString());    // "http://localhost:50472/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/ISGPayOnlinePaymentResponse.aspx");   //Session["ResponseUrl"].ToString();
+            transactionData.Add("ReturnURL", Session["ResponseUrl"].ToString());    // "http://localhost:50472/PresentationLayer/ACADEMIC/ONLINEFEECOLLECTION/ISGPayOnlinePaymentResponse.aspx");   
             //transactionData.Add("UDF01", Session["idno"].ToString());
 
             transactionData.Add("OrderInfo", Session["idno"].ToString()); //optinal passing student -Idno values

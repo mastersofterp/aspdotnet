@@ -59,8 +59,8 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
             {
 
                 DataSet Orgds = null;
-                int Ord_Id = Convert.ToInt32(Session["OrgId"]);
-                Orgds = objOrg.GetOrganizationById(Ord_Id);
+                var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+                Orgds = objOrg.GetOrganizationById(Convert.ToInt32(OrgId));
                 byte[] imgData = null;
                 if (Orgds.Tables != null)
                 {
@@ -79,18 +79,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
 
                     }
                 }
-                //SqlDataReader dr = objCommon.GetCommonDetails();
-                //if (dr != null)
-                //{
-                //    if (dr.Read())
-                //    {
-                //        lblCollege.Text = dr["COLLEGENAME"].ToString();
-                //        lblAddress.Text = dr["College_Address"].ToString();
-                //        Session["OrgId"] = dr["OrganizationId"].ToString();
-                //        imgCollegeLogo.ImageUrl = "~/showimage.aspx?id=0&type=college";
-                //    }
-                //}
-
+                
                 string merchantID = string.Empty;
                 string secureSecret = string.Empty;  // secureSecret
                 string encryptionKey = string.Empty;
@@ -107,7 +96,7 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                 DataSet pg_ds = objCommon.FillDropDown("ACD_PG_CONFIGURATION", "ACCESS_CODE", "CHECKSUM_KEY", "MERCHANT_ID= '" + merchantID + "' ", "CONFIG_ID DESC");   //Merchant_Id
                 if (pg_ds != null && pg_ds.Tables[0].Rows.Count > 0)
                 {
-                    secureSecret = pg_ds.Tables[0].Rows[0]["ACCESS_CODE"].ToString();      //ADD SECURE_SECRET  HERE
+                    secureSecret = pg_ds.Tables[0].Rows[0]["ACCESS_CODE"].ToString();           //ADD SECURE_SECRET  HERE
                     encryptionKey = pg_ds.Tables[0].Rows[0]["CHECKSUM_KEY"].ToString();     //ADD EncryptionKey HERE
                 }
 
@@ -218,14 +207,14 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
                 }
                 ViewState["IDNO"] = Idno;
 
-                if (Session["OrgId"].ToString() == "6")
-                {
-                    degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
-                }
-                if (Session["OrgId"].ToString() == "8")
-                {
-                    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
-                }
+                //if (Session["OrgId"].ToString() == "6")
+                //{
+                //    degreeno = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "DEGREENO", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
+                //}
+                //if (Session["OrgId"].ToString() == "8")
+                //{
+                //    college_id = Convert.ToInt32(objCommon.LookUp("ACD_STUDENT", "COLLEGE_ID", "IDNO=" + Convert.ToInt32(ViewState["IDNO"].ToString())));
+                //}
 
 
                 #region Fetch student details
@@ -371,7 +360,8 @@ public partial class ISGPayOnlinePaymentResponse : System.Web.UI.Page
     protected void btnPrint_Click(object sender, EventArgs e)
     {
         string ptype = (objCommon.LookUp("ACD_STUDENT A INNER JOIN ACD_PAYMENTTYPE P ON (A.PTYPE=P.PAYTYPENO) ", "PAYTYPENAME", "IDNO=" + Session["Stud_IDNO"].ToString()));
-        if (ptype == "Provisional" && Session["OrgId"].ToString() == "5")
+        var OrgId = objCommon.LookUp("REFF", "OrganizationId", "");
+        if (ptype == "Provisional" && OrgId.ToString() == "5")
         {
             //ShowReport("InstallmentOnlineFeePayment", "rptOnlineReceiptforprovisionaladm.rpt", Convert.ToInt32(DcrNo), Convert.ToInt32(Session["stuinfoidno"]));
 
