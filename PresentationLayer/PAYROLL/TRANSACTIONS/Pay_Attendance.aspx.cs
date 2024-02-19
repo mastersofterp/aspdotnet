@@ -393,7 +393,7 @@ public partial class PayRoll_Pay_Attendance : System.Web.UI.Page
 
                 // Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.ContentType = "application/vnd.ms-excel";
-                Response.AddHeader("content-disposition", "attachment;filename=AttendanceEntry" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls");
+                Response.AddHeader("content-disposition", "attachment;filename=AttendanceEntry" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xlsx");
                 StringWriter sw = new StringWriter();
                 HtmlTextWriter htw = new HtmlTextWriter(sw);
                 grdSelectFieldReport.RenderControl(htw);
@@ -425,100 +425,139 @@ public partial class PayRoll_Pay_Attendance : System.Web.UI.Page
 
     protected void imgExportCSV_Click(object sender, ImageClickEventArgs e)
     {
-        ExcelReport();
+        try
+        {
+            Response.ContentType = "application/vnd.ms-excel";
+            string path = Server.MapPath("~/IMAGES/PayrollAttendance.xls");
+            Response.AddHeader("Content-Disposition", "attachment;filename=\"PayrollAttendance.xls\"");
+            Response.TransmitFile(path);
+            Response.End();
+        }
+        catch (Exception ex)
+        {
+            objCommon.DisplayMessage("Download Fail!", this);
+        }
+        
     }
-
 
     protected void imgbutExporttoexcel_Click(object sender, ImageClickEventArgs e)
     {
-        string folderPath = string.Empty;
-        string Path = string.Empty;
-        DataSet ds = new DataSet();
+
         try
         {
-            if (FileUpload2.HasFile)
-            {
-                string FileName = FileUpload2.FileName;
-                string ext = System.IO.Path.GetExtension(FileUpload2.FileName);
-                if (ext == ".xls" || ext == ".xlsx")
-                {
-                    CustomStatus cs = new CustomStatus();
+            Uploaddata();
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
 
-                    folderPath = Server.MapPath("~/Other Rem/");
-                    Path = "~/Other Rem/";
-                    if (!System.IO.Directory.Exists(folderPath))
-                    {
-                        System.IO.Directory.CreateDirectory(folderPath);
-                    }
-
-                    string path = string.Concat(Server.MapPath(Path + FileUpload2.FileName));
-
-
-                    FileUpload2.PostedFile.SaveAs(path);
-                    string fileName = FileUpload2.FileName;
-
-                    //  OleDbConnection OleDbcon = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;");
-
-                    OleDbConnection OleDbcon = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties='Excel 8.0;HDR={1}'");
-
-                    //OleDbCommand cmd = new OleDbCommand("SELECT * FROM ["+ddlSubPayhead.SelectedItem.Text+"$]", OleDbcon);
-
-                    OleDbCommand cmd = new OleDbCommand("SELECT * FROM [AttendanceEntry$]", OleDbcon);//Sheet1
-
-                    OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-
-                    objAdapter1.Fill(ds);
-
-                    dt = ds.Tables[0];
-                    int i = 0;
-
-
-                    Payroll objPayroll = new Payroll();
-                    objPayroll.PAYHEAD = "PAYDAYS";
-
-
-                    for (i = 0; i < ds.Tables[0].Rows.Count; i++)
-                    {
-                        //  objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString() == "" || ds.Tables[0].Rows[i]["PFILENO"].ToString() == null ? "0" : ds.Tables[0].Rows[i]["PFILENO"].ToString();
-                        // objPayroll.PFILENO = ds.Tables[0].Rows[i]["Employee Code"].ToString();
-
-                        if (ds.Tables[0].Rows[i]["Employee Code"].ToString() != "" || ds.Tables[0].Rows[i]["Employee Code"].ToString() != string.Empty)
-                        {
-                            objPayroll.PFILENO = ds.Tables[0].Rows[i]["Employee Code"].ToString();
-                            objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Absent Days"] == "0.0" || ds.Tables[0].Rows[i]["Absent Days"] == DBNull.Value ? Convert.ToDecimal("0") : Convert.ToDecimal(ds.Tables[0].Rows[i]["Absent Days"]);
-
-                            cs = (CustomStatus)objEPIC.UpdatePayHeadsByExcel(objPayroll);
-                        }
-                    }
-                    if (cs.Equals(CustomStatus.RecordUpdated))
-                    {
-                        objCommon.DisplayMessage("Data Updated Successfully!!", this);
-                        //ddlPayhead.SelectedIndex = 0;
-                        return;
-                    }
-                }
-                else
-                {
-                    objCommon.DisplayMessage("Upload Only Excel Format!!", this);
-                    //ddlPayhead.SelectedIndex = 0;
-                    return;
-                }
-            }
-            else
-            {
-                objCommon.DisplayMessage("Please Select Excel File!!", this);
-                // ddlPayhead.SelectedIndex = 0;
-                return;
-            }
         }
-
         catch (Exception ex)
         {
-            //objCommon.DisplayMessage("Exception Occured,Contact To Administrator!!", this);
-            objCommon.DisplayMessage("Data is not in correct format!!", this);
+            if (Convert.ToBoolean(Session["error"]) == true)
+                objUCommon.ShowError(Page, "Academic_AttendanceReportByFaculty.btnSubjectwise_Click()-> " + ex.Message + " " + ex.StackTrace);
+            else
+                objUCommon.ShowError(Page, "Server UnAvailable");
         }
     }
+    
+
+
+    //protected void imgbutExporttoexcel_Click(object sender, ImageClickEventArgs e)
+    //{
+    //    string folderPath = string.Empty;
+    //    string Path = string.Empty;
+    //    DataSet ds = new DataSet();
+    //    try
+    //    {
+    //        if (FileUpload2.HasFile)
+    //        {
+    //            string FileName = FileUpload2.FileName;
+    //            string ext = System.IO.Path.GetExtension(FileUpload2.FileName);
+    //            if (ext == ".xls" || ext == ".xlsx")
+    //            {
+    //                CustomStatus cs = new CustomStatus();
+
+    //                folderPath = Server.MapPath("~/Other Rem/");
+    //                Path = "~/Other Rem/";
+    //                if (!System.IO.Directory.Exists(folderPath))
+    //                {
+    //                    System.IO.Directory.CreateDirectory(folderPath);
+    //                }
+
+    //                string path = string.Concat(Server.MapPath(Path + FileUpload2.FileName));
+
+
+    //                FileUpload2.PostedFile.SaveAs(path);
+    //                string fileName = FileUpload2.FileName;
+
+    //                //  OleDbConnection OleDbcon = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;");
+
+    //                OleDbConnection OleDbcon = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties='Excel 8.0;HDR={1}'");
+
+    //                //OleDbCommand cmd = new OleDbCommand("SELECT * FROM ["+ddlSubPayhead.SelectedItem.Text+"$]", OleDbcon);
+
+    //                OleDbCommand cmd = new OleDbCommand("SELECT * FROM [AttendanceEntry$]", OleDbcon);//Sheet1
+
+    //                OleDbDataAdapter objAdapter1 = new OleDbDataAdapter(cmd);
+    //                DataTable dt = new DataTable();
+
+    //                objAdapter1.Fill(ds);
+
+    //                dt = ds.Tables[0];
+    //                int i = 0;
+
+
+    //                Payroll objPayroll = new Payroll();
+    //                objPayroll.PAYHEAD = "PAYDAYS";
+
+
+    //                for (i = 0; i < ds.Tables[0].Rows.Count; i++)
+    //                {
+    //                    //  objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString() == "" || ds.Tables[0].Rows[i]["PFILENO"].ToString() == null ? "0" : ds.Tables[0].Rows[i]["PFILENO"].ToString();
+    //                    // objPayroll.PFILENO = ds.Tables[0].Rows[i]["Employee Code"].ToString();
+
+    //                    if (ds.Tables[0].Rows[i]["Employee Code"].ToString() != "" || ds.Tables[0].Rows[i]["Employee Code"].ToString() != string.Empty)
+    //                    {
+    //                        objPayroll.PFILENO = ds.Tables[0].Rows[i]["Employee Code"].ToString();
+    //                        objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Absent Days"] == "0.0" || ds.Tables[0].Rows[i]["Absent Days"] == DBNull.Value ? Convert.ToDecimal("0") : Convert.ToDecimal(ds.Tables[0].Rows[i]["Absent Days"]);
+
+    //                        cs = (CustomStatus)objEPIC.UpdatePayHeadsByExcel(objPayroll);
+    //                    }
+    //                }
+    //                if (cs.Equals(CustomStatus.RecordUpdated))
+    //                {
+    //                    objCommon.DisplayMessage("Data Updated Successfully!!", this);
+    //                    //ddlPayhead.SelectedIndex = 0;
+    //                    return;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                objCommon.DisplayMessage("Upload Only Excel Format!!", this);
+    //                //ddlPayhead.SelectedIndex = 0;
+    //                return;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            objCommon.DisplayMessage("Please Select Excel File!!", this);
+    //            // ddlPayhead.SelectedIndex = 0;
+    //            return;
+    //        }
+    //    }
+
+    //    catch (Exception ex)
+    //    {
+    //        //objCommon.DisplayMessage("Exception Occured,Contact To Administrator!!", this);
+    //        objCommon.DisplayMessage("Data is not in correct format!!", this);
+    //    }
+    //}
+
+
+
+
+
+
+
+
 
     protected void btnImport_Click(object sender, EventArgs e)
     {
@@ -609,6 +648,154 @@ public partial class PayRoll_Pay_Attendance : System.Web.UI.Page
             //objCommon.DisplayMessage("Exception Occured,Contact To Administrator!!", this);
             objCommon.DisplayMessage("Data is not in correct format!!", this);
         }
+    }
+
+
+    private void Uploaddata()
+    {
+        try
+        {
+            if (FileUpload2.HasFile)
+            {
+                string FileName = Path.GetFileName(FileUpload2.PostedFile.FileName);
+                string Extension = Path.GetExtension(FileUpload2.PostedFile.FileName);
+                if (Extension.Equals(".xls") || Extension.Equals(".xlsx"))
+                {
+                    //string FolderPath = ConfigurationManager.AppSettings["FolderPath"];
+                    string FilePath = Server.MapPath("~/Other Rem/"+FileName);
+                    FileUpload2.SaveAs(FilePath);
+                    ExcelToDatabase(FilePath, Extension, "yes");
+                    divCount.Visible = true;
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+                }
+                else
+                {
+                    objCommon.DisplayMessage("Only .xls or .xlsx extention is allowed", this);
+                  
+                    ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+                    return;
+                }
+            }
+            else
+            {
+                objCommon.DisplayMessage("Please select the Excel File to Upload", this.Page);
+                ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            
+            objCommon.DisplayMessage( "Cannot access the file. Please try again.", this.Page);
+            ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "tmp", "<script type='text/javascript'> TabShow('tab_3');</script>", false);
+            return;
+        }
+    }
+
+    private void ExcelToDatabase(string FilePath, string Extension, string isHDR)
+    {
+
+
+        CustomStatus cs = new CustomStatus();
+        string conStr = "";
+
+        switch (Extension)
+        {
+
+
+            case ".xls": //Excel 97-03
+                conStr = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+                break;
+            case ".xlsx": //Excel 07
+                conStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + FilePath + ";Extended Properties='Excel 8.0'";
+                break;
+
+        }
+
+        conStr = String.Format(conStr, FilePath, isHDR);
+
+        OleDbConnection connExcel = new OleDbConnection(conStr);
+        OleDbCommand cmdExcel = new OleDbCommand();
+        OleDbDataAdapter oda = new OleDbDataAdapter();
+
+        try
+        {
+
+            System.Data.DataTable dt = new System.Data.DataTable();
+            cmdExcel.Connection = connExcel;
+            //Get the name of First Sheet
+
+            connExcel.Open();
+            System.Data.DataTable dtExcelSchema;
+            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+
+
+            string SheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+            connExcel.Close();
+
+            //Read Data from First Sheet
+            connExcel.Open();
+            cmdExcel.CommandText = "SELECT * From [" + SheetName + "] ";
+            oda.SelectCommand = cmdExcel;
+            oda.Fill(dt);
+
+            //Bind Excel to GridView
+            DataSet ds = new DataSet();
+            oda.Fill(ds);
+
+            DataView dv1 = dt.DefaultView;
+
+
+
+            System.Data.DataTable dtNew = ds.Tables[0];
+            dtNew = dt.Rows
+             .Cast<DataRow>()
+             .Where(row => !row.ItemArray.All(f => f is DBNull ||
+                              string.IsNullOrEmpty(f as string ?? f.ToString())))
+             .CopyToDataTable();
+
+            int i = 0;
+            Payroll objPayroll = new Payroll();
+
+            objPayroll.PAYHEAD = "PAYDAYS";
+
+            for (i = 0; i < dtNew.Rows.Count; i++)
+            {
+                objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString() == "" || ds.Tables[0].Rows[i]["PFILENO"].ToString() == null ? "0" : ds.Tables[0].Rows[i]["PFILENO"].ToString();
+                // objPayroll.PFILENO = ds.Tables[0].Rows[i]["PFILENO"].ToString();
+                objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Absent Days"] == "0.0" || ds.Tables[0].Rows[i]["Absent Days"] == DBNull.Value || ds.Tables[0].Rows[i]["Absent Days"] == "" ? Convert.ToDecimal("0") : Convert.ToDecimal(ds.Tables[0].Rows[i]["Absent Days"]);
+                //objPayroll.TOTAMT = ds.Tables[0].Rows[i]["Amount"] == "" || ds.Tables[0].Rows[i]["Amount"] == null ? 0 : Convert.ToDecimal(ds.Tables[0].Rows[i]["Amount"]);
+                if (objPayroll.PFILENO != "0" && objPayroll.TOTAMT != 0)
+                {
+                    cs = (CustomStatus)objEPIC.UpdatePayHeadsByExcel(objPayroll);
+                }
+            }
+            if (cs.Equals(CustomStatus.RecordUpdated))
+            {
+                objCommon.DisplayMessage("Data Updated Successfully!!", this);
+                
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+            //objCommon.DisplayMessage("Exception Occured,Contact To Administrator!!", this);
+            objCommon.DisplayMessage("Data is not in correct format!!", this);
+        }
+        finally
+        {
+            connExcel.Close();
+        }
+
+    }
+
+
+    protected void btnDownlaod_Click(object sender, EventArgs e)
+    {
+
+        ExcelReport();
     }
 
 

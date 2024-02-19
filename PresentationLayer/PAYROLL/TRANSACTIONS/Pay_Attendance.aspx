@@ -107,13 +107,21 @@
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
+
+                                              <asp:ImageButton ID="imgExportCSV" runat="server" ToolTip="Export to excel"
+                                                ImageUrl="~/Images/ExportCsv.jpg" Height="45px" Width="45px"
+                                                OnClick="imgExportCSV_Click" />
+
                                             <asp:ImageButton ID="imgbutExporttoexcel" runat="server" ToolTip="Import from excel"
                                                 ImageUrl="~/Images/importcsv.png" Height="45px" Width="45px"
                                                 OnClick="imgbutExporttoexcel_Click" />
 
-                                            <asp:ImageButton ID="imgExportCSV" runat="server" ToolTip="Export to excel"
-                                                ImageUrl="~/Images/ExportCsv.jpg" Height="45px" Width="45px"
-                                                OnClick="imgExportCSV_Click" />
+                                            <div class="label-dynamic">
+                                                <sup>* </sup>
+                                                <label>Import only exported sheet</label>
+                                            </div>
+
+                                            <asp:Button ID="btnDownlaod" runat="server" Text="Download Attendance Data of Grid" CssClass="btn btn-primary" OnClick="btnDownlaod_Click" TabIndex="3"/>
                                         </div>
 
 
@@ -385,6 +393,8 @@
             <asp:PostBackTrigger ControlID="btnUpload" />
             <asp:PostBackTrigger ControlID="imgbutExporttoexcel" />
             <asp:PostBackTrigger ControlID="imgExportCSV" />
+              <asp:PostBackTrigger ControlID="btnDownlaod" />
+            
 
         </Triggers>
     </asp:UpdatePanel>
