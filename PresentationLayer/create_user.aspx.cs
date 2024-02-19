@@ -195,11 +195,8 @@ public partial class create_user : System.Web.UI.Page
                 User_AccController objUC = new User_AccController();
                 UserAcc objUA = new UserAcc();
                 if (Convert.ToBoolean(ViewState["ExistUser"]) == true)
-                {                    
-                    //objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString()));
-                    int uaNo = Convert.ToInt32(string.IsNullOrEmpty(txtUsername.ToolTip) ? "0" : txtUsername.ToolTip);
-                    objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + uaNo);
-
+                {
+                    objUA.UA_Acc = objCommon.LookUp("USER_ACC", "UA_ACC", "UA_NO=" + Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString()));
                     if (objUA.UA_Acc == "")
                     {
                         objUA.UA_Acc = "0,500";
@@ -244,6 +241,8 @@ public partial class create_user : System.Web.UI.Page
                 //}
                 //else
                 //{
+                //added by rutuja 12/02/24
+                string loginurl = System.Configuration.ConfigurationManager.AppSettings["WebServer"].ToString();
                     foreach (ListItem item in chkCollegeName.Items)
                     {
                         if (item.Selected == true)
@@ -268,10 +267,7 @@ public partial class create_user : System.Web.UI.Page
                     }
                 //}
 
-                //objUA.UA_No = Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString());
-                int ua_No = Convert.ToInt32(string.IsNullOrEmpty(txtUsername.ToolTip) ? "0" : txtUsername.ToolTip);
-                objUA.UA_No = ua_No;
-
+                objUA.UA_No = Convert.ToInt32(txtUsername.ToolTip.ToString() == "" ? "0" : txtUsername.ToolTip.ToString());
                 objUA.UA_Name = txtUsername.Text.Replace("'", "`").Trim();
                
                 //if (txtPassword.Text.Replace("'", "`").Trim() == string.Empty)
@@ -362,16 +358,45 @@ public partial class create_user : System.Web.UI.Page
                                 PStaffController staff = new PStaffController();
                                 staff.AddNewInternalStaff(ret);
                             }
-                            // Send autogenerate password to email id and molile no.
-                            string useremail = objCommon.LookUp("USER_ACC", "UA_EMAIL", "UA_NAME='" + txtUsername.Text.Replace("'", "`").Trim() + "' and UA_NAME IS NOT NULL");
-
-                            string message = "Your MIS  Account has been Created Successfully! Login with Username : " + objUA.UA_Name + ", Password : " + "" + pwd + "";
-                            string ss = ViewState["SUBJECT_OTP"] == null ? "" : ViewState["SUBJECT_OTP"].ToString();
-                            string subject = ss + "-MIS Login Credentials";
-                            int reg = 0;
-                            //------------Code for sending email,It is optional---------------
                             
-                            SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+                            // Send autogenerate password to email id and molile no.
+                            //string useremail = objCommon.LookUp("USER_ACC", "UA_EMAIL", "UA_NAME='" + txtUsername.Text.Replace("'", "`").Trim() + "' and UA_NAME IS NOT NULL");
+                           //// string message = "Your MIS  Account has been Created Successfully! Login with Username : " + objUA.UA_Name + ", Password : " + "" + pwd + "";
+                           // string message = "Dear " + objUA.UA_FullName + "<br />";
+                           // message = message + "Your MIS  Account has been Created Successfully! <br />";
+                           // message = message + "Please Login using following details <br />";
+                           // message = message + " Username : " + objUA.UA_Name + "<br />";
+                           // message = message + " Password : " + "" + pwd + "<br />";
+                           // message = message + "click  " + loginurl + " here to Login";
+                           // string ss = ViewState["SUBJECT_OTP"] == null ? "" : ViewState["SUBJECT_OTP"].ToString();
+                            //string subject = ss + "-MIS Login Credentials";
+                            //added by rutuja 12/02/24
+                            string useremail = objCommon.LookUp("USER_ACC", "UA_EMAIL", "UA_NAME='" + txtUsername.Text.Replace("'", "`").Trim() + "' and UA_NAME IS NOT NULL");
+                            int reg = 0;
+                            string ss = "";
+                            //------------Code for sending email,It is optional---------------
+                           DataSet dsconfig1 = objCommon.FillDropDown("REFF", "SENDGRID_STATUS", "SUBJECT_OTP,USER_PROFILE_SENDERNAME", "OrganizationId=" + Convert.ToInt32(Session["OrgId"]), string.Empty);
+                            if (dsconfig1 != null && dsconfig1.Tables[0].Rows.Count > 0)
+                            {
+                                 ss = dsconfig1.Tables[0].Rows[0]["SUBJECT_OTP"].ToString();
+                            }
+                            
+                            int TemplateTypeId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATETYPE", "TEMPTYPEID", "TEMPLATETYPE='User Login'"));
+                            int TemplateId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATE", "TOP 1 TEMPLATEID", "TEMPTYPEID=" + TemplateTypeId + " AND TEMPLATENAME = 'Login Credentials'"));
+
+                            string message = "";
+                            DataSet ds_mstQry1 = objCommon.FillDropDown("ACD_ADMP_EMAILTEMPLATE AEM", "TOP 1 TEMPLATETEXT", "", "TEMPLATEID=" + TemplateId + "", "AEM.TEMPTYPEID ");
+
+                            if (ds_mstQry1 != null)
+                            {
+                                message = ds_mstQry1.Tables[0].Rows[0]["TEMPLATETEXT"].ToString();
+                                message = message.Replace("[FIRST NAME]", objUA.UA_FullName);
+                                message = message.Replace("[LOGIN NAME]", objUA.UA_Name);
+                                message = message.Replace("[USERPASSWORD]", pwd);
+                                message = message.Replace("[CLICKHERELOGIN]", loginurl);
+                                }
+                            string subject = ss + "-MIS Login Credentials";
+                            SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation 
                             reg = objSendEmail.SendEmail(useremail, message, subject); //Calling Method
                            
                             if (reg == 1)

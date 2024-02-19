@@ -1838,72 +1838,58 @@ public partial class ADMINISTRATION_BulkStudentLogin : System.Web.UI.Page
             User_AccController objUC = new User_AccController();
             UserAcc objUA = new UserAcc();
 
-            string CodeStandard = objCommon.LookUp("Reff", "CODE_STANDARD", "");
-            string issendgrid = objCommon.LookUp("Reff", "SENDGRID_STATUS", "");
-            string loginurl = System.Configuration.ConfigurationManager.AppSettings["WebServer"].ToString();
-
-            int countstud = 0;
-            int countstudcheck = 0;
-            foreach (ListViewDataItem item in lvStudents.Items)
+           if (chk.Checked == true)
+           {
+               countstudcheck++;
+           }
+           //added by rutuja 12/02/24
+           if (chk.Checked == true && (chk.Text == "CREATED") && lblEmailId.Text != "" && lblLogin.Text == "")
+              // if (chk.Checked == true && (chk.Text == "CREATED") && lblLogin.Text == "" && lblEmailId.Text != "")
             {
                 System.Web.UI.WebControls.CheckBox chk = item.FindControl("chkRow") as System.Web.UI.WebControls.CheckBox;
                 System.Web.UI.WebControls.Label lblLogin = item.FindControl("lblLogin") as System.Web.UI.WebControls.Label;
                 System.Web.UI.WebControls.Label lblEmailId = item.FindControl("lblEmailId") as System.Web.UI.WebControls.Label;
 
-                if (chk.Checked == true)
+                //string useremail = objCommon.LookUp("acd_student a inner join user_acc b on (a.idno=b.UA_IDNO)", "a.EMAILID", "UA_NAME='" + lblreg.Text.Replace("'", "`").Trim() + "' and UA_NAME IS NOT NULL");
+                string email = lblEmailId.Text;
+                string getpwd = objCommon.LookUp("User_Acc", "UA_PWD", "UA_NAME='" + lblreg.Text + "'");
+                string strPwd = clsTripleLvlEncyrpt.ThreeLevelDecrypt(getpwd);
+                int TemplateTypeId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATETYPE", "TEMPTYPEID", "TEMPLATETYPE='User Login'"));
+                int TemplateId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATE", "TOP 1 TEMPLATEID", "TEMPTYPEID=" + TemplateTypeId + " AND TEMPLATENAME = 'Login Credentials'"));
+
+                string message = "";
+                DataSet ds_mstQry1 = objCommon.FillDropDown("ACD_ADMP_EMAILTEMPLATE AEM", "TOP 1 TEMPLATETEXT", "", "TEMPLATEID=" + TemplateId + "", "AEM.TEMPTYPEID ");
+
+
+                if (ds_mstQry1 != null)
                 {
-                    countstudcheck++;
+                    message = ds_mstQry1.Tables[0].Rows[0]["TEMPLATETEXT"].ToString();
+                    message = message.Replace("[FIRST NAME]", lblStudName.Text);
+                    message = message.Replace("[LOGIN NAME]", lblreg.Text);
+                    message = message.Replace("[USERPASSWORD]", strPwd);
+                    message = message.Replace("[CLICKHERELOGIN]", loginurl);
                 }
-                // <1.0.1>  
-                //added by rutuja 12/02/24
-                if (chk.Checked == true && (chk.Text == "CREATED") && lblLogin.Text == "" && lblEmailId.Text != "")
-                {
-                    countstud++;
-                    System.Web.UI.WebControls.Label lblreg = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
-                    System.Web.UI.WebControls.Label lblStudName = item.FindControl("lblstud") as System.Web.UI.WebControls.Label;
-                    System.Web.UI.WebControls.Label lblPwd = item.FindControl("lblreg") as System.Web.UI.WebControls.Label;
-                    string email = lblEmailId.Text;
-                    string getpwd = objCommon.LookUp("User_Acc", "UA_PWD", "UA_NAME='" + lblreg.Text + "'");
-                    string strPwd = clsTripleLvlEncyrpt.ThreeLevelDecrypt(getpwd);
-                    int TemplateTypeId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATETYPE", "TEMPTYPEID", "TEMPLATETYPE='User Login'"));
-                    int TemplateId = Convert.ToInt32(objCommon.LookUp("ACD_ADMP_EMAILTEMPLATE", "TOP 1 TEMPLATEID", "TEMPTYPEID=" + TemplateTypeId + " AND TEMPLATENAME = 'Login Credentials'"));
+                string Subject = CodeStandard + " ERP || Login Credentials";// "MIS Login Credentials";
 
-                    string message = "";
-                    DataSet ds_mstQry1 = objCommon.FillDropDown("ACD_ADMP_EMAILTEMPLATE AEM", "TOP 1 TEMPLATETEXT", "", "TEMPLATEID=" + TemplateId + "", "AEM.TEMPTYPEID ");
+                ////string message = "Your MIS Student Account has been create successfully! Login with Username : " + lblreg.Text + " Password : " + "" + lblPwd.Text + "" + "</b>";
+                //string message = "Dear " + lblStudName.Text + "<br />";
+                //message = message + "Your ERP Student Account has been created successfully! <br />";
+                //message = message + "Please Login using following details <br />";
+                //message = message + "Login Name : " + lblreg.Text + "<br />";
+                ////message = message + "Passwod : " + lblreg.Text + "<br />";
+                //message = message + "Password : " + strPwd + "<br />";
+                //message = message + "click  " + loginurl + " here to Login";
+                ////message += "<br /><br />Thank You<br />";
+                //string Subject = CodeStandard + " ERP || Login Credentials";// "MIS Login Credentials";
 
 
-                    if (ds_mstQry1 != null)
-                    {
-                        message = ds_mstQry1.Tables[0].Rows[0]["TEMPLATETEXT"].ToString();
-                        message = message.Replace("[FIRST NAME]", lblStudName.Text);
-                        message = message.Replace("[LOGIN NAME]", lblreg.Text);
-                        message = message.Replace("[USERPASSWORD]", strPwd);
-                        message = message.Replace("[CLICKHERELOGIN]", loginurl);
-                    }
-                    string Subject = CodeStandard + " ERP || Login Credentials";  // "MIS Login Credentials";
-                    int status = 0;
-                    SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
-                    status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
-                    // </1.0.1>  
-                }
-            }
 
-            // added by kajal jaiswal on 16-02-2023 for validating send email button 
-            if (countstud != 0)
-            {
-                objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
-            }
-            else if (lvStudents.Items.Count == 0)
-            {
-                objCommon.DisplayMessage(updpnl, "No Record Found!", this.Page);
-            }
-            else if (lvStudents.Items.Count != 0 && countstudcheck == 0)
-            {
-                objCommon.DisplayMessage(updpnl, "Please select at least one Student !", this.Page);
-            }
-            else
-            {
-                objCommon.DisplayMessage(updpnl, "Email send successfully to the Student having Proper EmailId !", this.Page);
+                //------------Code for sending email---------------
+               //added by kajal jaiswal on 03-06-2023
+                int status = 0;
+                SendEmailCommon objSendEmail = new SendEmailCommon(); //Object Creation
+                status = objSendEmail.SendEmail(email, message, Subject); //Calling Method
+               
             }
         }
         catch (Exception ex)
