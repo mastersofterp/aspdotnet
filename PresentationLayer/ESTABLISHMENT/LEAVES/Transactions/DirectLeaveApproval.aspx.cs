@@ -324,6 +324,7 @@ public partial class ESTABLISHMENT_LEAVES_Transactions_RegistrarLeaveApproval : 
     {
         txtRemarks.Text = string.Empty;
         ddlSelect.SelectedIndex = 0;
+        lblbal.Text = string.Empty;
     }
     protected void btnBack_Click(object sender, EventArgs e)
     {
