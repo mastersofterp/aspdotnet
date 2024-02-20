@@ -2853,6 +2853,207 @@ namespace IITMS
                     return dtr;
                 }
 
+                   #region Employee Transfer
+                public int SaveEmployeeTransfertoCollege(EmpMaster objEM)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[8];
+
+                        objParams[0] = new SqlParameter("@EmployeeTransferEntryId", objEM.EMPLOYEETRANSFERID);
+                        objParams[1] = new SqlParameter("@EmployeeOldCollegeID", objEM.OLDEMPCOLLEGENO);
+                        objParams[2] = new SqlParameter("@EmployeeNewCollegeId", objEM.NEWEMPCOLLEGENO);
+                        objParams[3] = new SqlParameter("@EmployeeTransferDate", objEM.EMPTRANSFERDATE);
+                        objParams[4] = new SqlParameter("@Transfer_Remark", objEM.EMPTRANSFERRESASON);
+                        objParams[5] = new SqlParameter("@CreatedBy", objEM.UA_NO);
+                        objParams[6] = new SqlParameter("@Employee_IDNO", objEM.EMPTRANSFERIDNO);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EMP_INS_EMP_TRANSFER_TOCOLLEGE", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+                        if (retStatus == 1)
+                        {
+                            retStatus = 1;
+                        }
+                        else if (retStatus == 2627)
+                        {
+                            retStatus = 2627;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.EmpCreateController.SaveEmployeeResignation->" + ex.ToString());
+                    }
+                    return retStatus;
+
+                }
+
+                public int UpdateEmployeeTransfertoCollege(EmpMaster objEM)
+                {
+                    int retStatus = 0;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[8];
+
+                        objParams[0] = new SqlParameter("@EmployeeTransferEntryId", objEM.EMPLOYEETRANSFERID);
+                        objParams[1] = new SqlParameter("@EmployeeOldCollegeID", objEM.OLDEMPCOLLEGENO);
+                        objParams[2] = new SqlParameter("@EmployeeNewCollegeId", objEM.NEWEMPCOLLEGENO);
+                        objParams[3] = new SqlParameter("@EmployeeTransferDate", objEM.EMPTRANSFERDATE);
+                        objParams[4] = new SqlParameter("@Transfer_Remark", objEM.EMPTRANSFERRESASON);
+                        objParams[5] = new SqlParameter("@CreatedBy", objEM.UA_NO);
+                        objParams[6] = new SqlParameter("@Employee_IDNO", objEM.EMPTRANSFERIDNO);
+                        objParams[7] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[7].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_EMP_UPD_EMP_TRANSFER_TOCOLLEGE", objParams, true);
+                        retStatus = Convert.ToInt32(ret);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.EmpCreateController.SaveEmployeeResignation->" + ex.ToString());
+                    }
+                    return retStatus;
+                }
+
+                public DataSet GetAllEmpTransferDetail(int idno)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        objParams = new SqlParameter[1];
+
+                        objParams[0] = new SqlParameter("@P_IDNO", idno);
+
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_ALL_EMP_TRANSFERTOCOLLEGE", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.NITPRM.BusinessLayer.BusinessLogic.EmpCreateController.GetAllEmpResignationDetail-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+
+                public DataSet GetAllEmpTransferDetailByID(int EmpTransferID)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[1];
+                        objParams[0] = new SqlParameter("@P_EMPTRANSFERD", EmpTransferID);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_GET_EMP_TRANSFERID_WISE_DETAILS", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.EmpCreateController.GetAllEmpResignationIDWISE-> " + ex.ToString());
+                    }
+                    return ds;
+                }
+                   #endregion
+
+
+
+
+                #region daily wages staff
+                public DataSet GetDailyWagesEmployeesNew(int collegeNo, int staffNo, string month, int DeptID)
+                {
+                    DataSet ds = null;
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = new SqlParameter[4];
+                        objParams[0] = new SqlParameter("@P_COLLEGENO ", collegeNo);
+                        objParams[1] = new SqlParameter("@P_STAFFNO ", staffNo);
+                        objParams[2] = new SqlParameter("@P_MONTH", month);
+                        objParams[3] = new SqlParameter("@P_DEPTID", DeptID);
+                        ds = objSQLHelper.ExecuteDataSetSP("PKG_PAY_RET_DAILY_WAGES_EMPLOYEES", objParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        return ds;
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.PayController.GetIncrementEmployees-> " + ex.ToString());
+                    }
+
+                    return ds;
+                }
+                public string CheckMonYearExists(string MonYear)
+                {
+                    string retun_status = string.Empty;
+
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+
+                        //Update Student
+                        objParams = new SqlParameter[2];
+                        //First Add Student Parameter
+                        objParams[0] = new SqlParameter("@MONYEAR", MonYear);
+                        objParams[1] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[1].Direction = ParameterDirection.Output;
+                        object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_CHECK_SALARY_MONYEAR", objParams, true);
+
+                        retun_status = ret.ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        retun_status = "0";
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.StudentController.UpdateNoDuesEntry-> " + ex.ToString());
+                    }
+
+                    return retun_status;
+                }
+                //  private int UpdateDailyWagesBasicNew(int collegeNo, double idNo, double Basic, double dailyDays, double dailyamt, int StaffId, DateTime MONTHYEAR, double TotalDaysinMonth, double TotalPayabledays,double FixedRemuneration,double NewBasic,bool Status,double AdmissibleWorkingDays,double PayableHolidays,double TotalDays,double TotalPayableDays,int DeptId)
+                public int UpdateDailyWagesBasicNew(int collegeNo, double idNo, int StaffId, DateTime MONTHYEAR, double TotalDaysinMonth, double Payabledays, double FixedRemuneration, double NewBasic, bool Status, double AdmissibleWorkingDays, double PayableHolidays, double TotalDays, double TotalPayableDays, int DeptId)
+                {
+                    int retStatus = Convert.ToInt32(CustomStatus.Others);
+                    try
+                    {
+                        SQLHelper objSQLHelper = new SQLHelper(_nitprm_constr);
+                        SqlParameter[] objParams = null;
+                        objParams = new SqlParameter[18];
+                        objParams[0] = new SqlParameter("@P_COLLEGENO", collegeNo);
+                        objParams[1] = new SqlParameter("@P_IDNO", idNo);
+                        objParams[2] = new SqlParameter("@P_BASIC ", NewBasic);
+                        objParams[3] = new SqlParameter("@P_DAILYAMT", FixedRemuneration);
+                        objParams[4] = new SqlParameter("@P_DAILYDAYS", TotalDaysinMonth);
+                        objParams[5] = new SqlParameter("@P_STAFFID", StaffId);
+                        objParams[6] = new SqlParameter("@P_MONTHYEAR", MONTHYEAR);
+                        objParams[7] = new SqlParameter("@P_TotalDaysinMonth", TotalDaysinMonth);
+                        objParams[8] = new SqlParameter("@P_Payabledays", Payabledays);
+                        objParams[9] = new SqlParameter("@P_FixedRemuneration", FixedRemuneration);
+                        objParams[10] = new SqlParameter("@P_NewBasic", NewBasic);
+                        objParams[11] = new SqlParameter("@P_Attedence_Lock", Status);
+                        objParams[12] = new SqlParameter("@P_Admissible_Weekly_Off", AdmissibleWorkingDays);
+                        objParams[13] = new SqlParameter("@P_Payable_Holiday", PayableHolidays);
+                        objParams[14] = new SqlParameter("@P_Total_Payable_Days", TotalPayableDays);
+                        objParams[15] = new SqlParameter("@P_Total_Days", TotalDays);
+                        objParams[16] = new SqlParameter("@P_DEPTID", DeptId);
+                        objParams[17] = new SqlParameter("@P_OUTPUT", SqlDbType.Int);
+                        objParams[17].Direction = ParameterDirection.Output;
+                        if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_DAILY_WAGES_BASIC", objParams, false) != null)
+                            retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
+                    }
+                    catch (Exception ex)
+                    {
+                        retStatus = Convert.ToInt32(CustomStatus.Error);
+                        throw new IITMSException("IITMS.UAIMS.BusinessLayer.BusinessLogic.PayController.UpdateIncerment-> " + ex.ToString());
+                    }
+                    return retStatus;
+                }
+                #endregion
 
             }
         }
