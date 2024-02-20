@@ -68,7 +68,8 @@
                                                     <sup>* </sup>
                                                     <label>Staff : </label>
                                                 </div>
-                                                    <asp:DropDownList ID="ddlStaff" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true" > 
+                                                    <asp:DropDownList ID="ddlStaff" AppendDataBoundItems="true" runat="server" CssClass="form-control" data-select2-enable="true"
+                                                        AutoPostBack="true" OnSelectedIndexChanged="ddlStaff_SelectedIndexChanged"> 
                                                     </asp:DropDownList>
                                                      <asp:RequiredFieldValidator ID="rfvstaff" runat="server" ControlToValidate="ddlStaff" InitialValue="0"
                                                         Display="None" ErrorMessage="Please Select Staff" SetFocusOnError="true" ValidationGroup="Payroll" />
@@ -256,21 +257,6 @@
           <asp:PostBackTrigger ControlID="btnreport" />
      </Triggers>
    </asp:UpdatePanel>
-     <script type="text/javascript" language="javascript">
-         function totalAppointment(chkcomplaint) {
-             var frm = document.forms[0];
-             for (i = 0; i < document.forms[0].elements.length; i++) {
-                 var e = frm.elements[i];
-                 if (e.type == 'checkbox') {
-                     if (chkcomplaint.checked == true)
-                         e.checked = true;
-                     else
-                         e.checked = false;
-                 }
-             }
-         }
-    </script>
-
     <script type="text/javascript">
         function validatedays(vall) {
             debugger
