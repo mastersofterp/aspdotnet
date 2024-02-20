@@ -61,6 +61,14 @@
                                                 <sup>* </sup>
                                                 <label>Relation</label>
                                             </div>
+                                           <%-- <asp:DropDownList ID="ddlrelationship" AppendDataBoundItems="true" runat="server" AutoPostBack="true" TabIndex="1" data-select2-enable="true"
+                                                CssClass="form-control" ToolTip="Select Relation">
+                                                <asp:ListItem Value="0" Selected="True">Please Select</asp:ListItem>
+                                            </asp:DropDownList>
+                                            <asp:RequiredFieldValidator ID="rfvRelationShip" runat="server" ControlToValidate="ddlrelationship" InitialValue="0"
+                                                Display="None" ErrorMessage="Please Select Relation" ValidationGroup="ServiceBook"
+                                                SetFocusOnError="True">
+                                            </asp:RequiredFieldValidator>--%>
                                             <asp:TextBox ID="txtRelation" runat="server" CssClass="form-control" ToolTip="Enter Relation"
                                                 onkeyup="validateAlphabet(this);" TabIndex="3" MaxLength="25"></asp:TextBox>
                                             <asp:RequiredFieldValidator ID="rvfRelation" runat="server" ControlToValidate="txtRelation"
@@ -74,11 +82,11 @@
                                                 <%--<sup>* </sup>--%>
                                                 <label>Percentage</label>
                                             </div>
-                                            <asp:TextBox ID="txtPercentage" runat="server" CssClass="form-control" ToolTip="Enter Percentage"
-                                                MaxLength="3" onkeyup="validateNumeric(this);" TabIndex="4"></asp:TextBox>
-                                            <ajaxToolKit:MaskedEditExtender ID="mePercent" runat="server" TargetControlID="txtPercentage"
+                                            <asp:TextBox ID="txtPercentage" runat="server" CssClass="form-control" ToolTip="Enter Percentage" AutoPostBack="true"
+                                                MaxLength="5" onkeyup="validateNumeric(this);" TabIndex="4" OnTextChanged="txtPercentage_TextChanged"></asp:TextBox>
+                                            <%--<ajaxToolKit:MaskedEditExtender ID="mePercent" runat="server" TargetControlID="txtPercentage"
                                                 Mask="99.99" MaskType="Number" InputDirection="LeftToRight" MessageValidatorTip="true" ErrorTooltipEnabled="true">
-                                            </ajaxToolKit:MaskedEditExtender>
+                                            </ajaxToolKit:MaskedEditExtender>--%>
                                             <%-- <asp:RequiredFieldValidator ID="rfvPercentage" runat="server" ControlToValidate="txtPercentage"
                                                 Display="None" ErrorMessage="Please Enter Percentage" ValidationGroup="ServiceBook"
                                                 SetFocusOnError="True">
@@ -246,13 +254,13 @@
                                             <asp:CheckBox ID="chkLastNominee" runat="server" TabIndex="17" ToolTip="Check if Last Nominee" />
                                         </div>
 
-                                        <div class="form-group col-lg-3 col-md-6 col-12">
+                                       <%-- <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
                                                 <label>Upload Document</label>
                                             </div>
                                             <asp:FileUpload ID="flupld" runat="server" TabIndex="18" ToolTip="Upload Document" />
-                                            <span style="color: red">Upload Document Maximum Size 10 Mb</span>
-                                        </div>
+                                            <span style="color: red">Upload Document Maximum Size 10 Mb (eg.Upload Aadhar Card,Pan Card,Bank Passbook,Passport size photo)</span>
+                                        </div>--%>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12" id="divBlob" runat="server" visible="false">
                                             <asp:Label ID="lblBlobConnectiontring" runat="server" Text=""></asp:Label>
@@ -261,7 +269,83 @@
                                             <asp:HiddenField ID="hdnBlobContainer" runat="server" />
                                         </div>
                                     </div>
+                                      <div class="form-group col-lg-3 col-md-6 col-12">
+                                                <div class="label-dynamic">
+                                                    <label>Upload Files</label>
+                                                    <label>(eg.Aadhar Card,Pan Card,Bank Passbook,Passport size photo) :</label>
+                                                </div>
+                                                <asp:FileUpload ID="flupld" runat="server" TabIndex="21" ToolTip="Upload Multiple Files Here"/>
+                                                <asp:Label ID="Label2" runat="server" Text=" Please Select valid Document file(e.g. .pdf,.jpg) upto 5MB" ForeColor="Red"></asp:Label>
+                                                <asp:Button ID="btnAdd" runat="server" Text="Add" TabIndex="22" class="btn btn-primary" OnClick="btnAdd_Click"
+                                                    ToolTip="Click here to uplaod multiple files" />
+                                        </div>
                                 </div>
+                                <div id="divAttch" runat="server" style="display: none">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <asp:Panel ID="pnlAttachmentList" runat="server" ScrollBars="Auto">
+                                                        <asp:ListView ID="lvCompAttach" runat="server">
+                                                            <LayoutTemplate>
+                                                                <table class="table table-striped table-bordered nowrap" style="width: 100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Delete</th>
+                                                                            <th id="divattach" runat="server">Attachments  
+                                                                            </th>
+                                                                            <th id="divattachblob" runat="server" visible="false">Attachments
+                                                                            </th>
+                                                                            <th id="divDownload" runat="server" visible="false">Download
+                                                                            </th>
+                                                                            <th id="divBlobDownload" runat="server" visible="false">Download
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr id="itemPlaceholder" runat="server" />
+                                                                    </tbody>
+                                                                </table>
+                                                            </LayoutTemplate>
+                                                            <ItemTemplate>
+                                                                <tr>
+                                                                    <td>
+                                                                        <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/Images/delete.png"
+                                                                            CommandArgument=' <%#Eval("GETFILE") %>' AlternateText=' <%#Eval("APPID") %>' ToolTip="Delete Record"
+                                                                            OnClientClick="javascript:return confirm('Are you sure you want to delete this file?')" OnClick="btnDelFile_Click" />
+                                                                    </td>
+                                                                    <td id="attachfile" runat="server">
+                                                                        <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("DisplayFileName") %>&filename=<%# Eval("DisplayFileName")%>">
+                                                                            <%# Eval("DisplayFileName")%></a>
+                                                                    </td>
+                                                                    <td id="attachblob" runat="server" visible="false">
+                                                                        <%# Eval("DisplayFileName")%></a>
+                                                                    </td>
+
+                                                                    <td id="tdDownloadLink" runat="server" visible="false">
+                                                                        <img alt="Attachment" src="../IMAGES/attachment.png" />
+                                                                        <%-- <a target="_blank" class="mail_pg" href="DownloadAttachment.aspx?file=<%#Eval("FILE_PATH") %>&filename=<%# Eval("FILE_NAME")%>">
+                                                                        --%>      <%# Eval("DisplayFileName")%></a>&nbsp;&nbsp;
+                                                            
+                                                                    </td>
+                                                                    <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                                        <asp:UpdatePanel ID="updPreview" runat="server">
+                                                                            <ContentTemplate>
+                                                                                <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("FILENAME") %>'
+                                                                                    data-toggle="modal" data-target="#preview" CommandArgument='<%# Eval("FILENAME") %>' Visible='<%# Convert.ToString(Eval("FILENAME"))==string.Empty?false:true %>'></asp:ImageButton>
+
+                                                                            </ContentTemplate>
+                                                                            <Triggers>
+                                                                                <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
+                                                                            </Triggers>
+                                                                        </asp:UpdatePanel>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </ItemTemplate>
+                                                        </asp:ListView>
+                                                    </asp:Panel>
+                                                </div>
+                                            </div>
+                                        </div>
                                 <div class="col-12 btn-footer">
                                     <asp:Button ID="btnSubmit" runat="server" Text="Submit" ValidationGroup="ServiceBook" TabIndex="18"
                                         OnClick="btnSubmit_Click" CssClass="btn btn-primary" ToolTip="Click here to Submit" />
@@ -301,10 +385,10 @@
                                                         </th>
                                                         <th>Age
                                                         </th>
-                                                        <th id="divFolder" runat="server">Attachment
+                                                       <%-- <th id="divFolder" runat="server">Attachment
                                                         </th>
                                                         <th id="divBlob" runat="server">Attachment
-                                                        </th>
+                                                        </th>--%>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -339,10 +423,10 @@
                                                 <td>
                                                     <%# Eval("Age")%>
                                                 </td>
-                                                <td id="tdFolder" runat="server">
+                                                <%--<td id="tdFolder" runat="server">
                                                     <asp:HyperLink ID="lnkDownload" runat="server" Target="_blank" NavigateUrl='<%# GetFileNamePath(Eval("ATTACHMENT"),Eval("NFNO"),Eval("IDNO"))%>'><%# Eval("ATTACHMENT")%></asp:HyperLink>
-                                                </td>
-                                                <td style="text-align: center" id="tdBlob" runat="server" visible="false">
+                                                </td>--%>
+                                                <%--<td style="text-align: center" id="tdBlob" runat="server" visible="false">
                                                     <asp:UpdatePanel ID="updPreview" runat="server">
                                                         <ContentTemplate>
                                                             <asp:ImageButton ID="imgbtnPreview" runat="server" OnClick="imgbtnPreview_Click" Text="Preview" ImageUrl="~/Images/action_down.png" ToolTip='<%# Eval("ATTACHMENT") %>'
@@ -353,7 +437,7 @@
                                                             <asp:AsyncPostBackTrigger ControlID="imgbtnPreview" EventName="Click" />
                                                         </Triggers>
                                                     </asp:UpdatePanel>
-                                                </td>
+                                                </td>--%>
                                             </tr>
                                         </ItemTemplate>
                                     </asp:ListView>
@@ -489,6 +573,7 @@
         </ContentTemplate>
         <Triggers>
             <asp:PostBackTrigger ControlID="btnSubmit" />
+            <asp:PostBackTrigger ControlID="btnAdd" />
         </Triggers>
     </asp:UpdatePanel>
 </asp:Content>

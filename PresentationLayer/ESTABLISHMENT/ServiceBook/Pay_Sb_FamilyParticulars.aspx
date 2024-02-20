@@ -290,9 +290,9 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <div class="label-dynamic">
-                                                <label>Upload Document</label>
+                                                <label>Upload Aadhar Card</label>
                                             </div>
-                                            <asp:FileUpload ID="flupld" runat="server" TabIndex="24" ToolTip="Click to  Upload Document" />
+                                            <asp:FileUpload ID="flupld" runat="server" TabIndex="24" ToolTip="Click to  Upload Aadhar Card" />
                                             <span style="color: red">Upload Document Maximum Size 10 Mb</span>
                                         </div>
 

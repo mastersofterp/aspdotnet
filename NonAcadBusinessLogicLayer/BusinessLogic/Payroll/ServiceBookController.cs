@@ -1101,7 +1101,7 @@ namespace IITMS
                 #endregion
 
                 #region Payroll_Sb_NominiFor
-                public int AddNominiFor(ServiceBook objNominiFor)
+                public int AddNominiFor(ServiceBook objNominiFor, DataTable dt)
                 {
                     int retStatus = 0;
 
@@ -1112,7 +1112,7 @@ namespace IITMS
                         SqlParameter[] objParams = null;
                         //Add New File
 
-                        objParams = new SqlParameter[24];
+                        objParams = new SqlParameter[25];
                         objParams[0] = new SqlParameter("@P_IDNO", objNominiFor.IDNO);
                         objParams[1] = new SqlParameter("@P_NTNO", objNominiFor.NTNO);
                         objParams[2] = new SqlParameter("@P_NAME", objNominiFor.NAME);
@@ -1136,8 +1136,9 @@ namespace IITMS
                         objParams[20] = new SqlParameter("@P_COUNTRY", objNominiFor.COUNTRY);
                         objParams[21] = new SqlParameter("@P_ISBLOB", objNominiFor.ISBLOB);
                         objParams[22] = new SqlParameter("@P_FILEPATH", objNominiFor.FILEPATH);
-                        objParams[23] = new SqlParameter("@P_NFNO", SqlDbType.Int);
-                        objParams[23].Direction = ParameterDirection.Output;
+                        objParams[23] = new SqlParameter("@P_PAYROLL_SB_NOMINATION_DOCUMENT_UPLOAD", dt);
+                        objParams[24] = new SqlParameter("@P_NFNO", SqlDbType.Int);
+                        objParams[24].Direction = ParameterDirection.Output;
 
                         //if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_INS_SB_NOMINIFOR", objParams, false) != null)
                         //    retStatus = Convert.ToInt32(CustomStatus.RecordSaved);
@@ -1165,7 +1166,7 @@ namespace IITMS
                     return retStatus;
                 }
 
-                public int UpdateNominiFor(ServiceBook objNominiFor)
+                public int UpdateNominiFor(ServiceBook objNominiFor, DataTable dt)
                 {
                     int retStatus = 0;
 
@@ -1175,7 +1176,7 @@ namespace IITMS
                         SQLHelper objSQLHelper = new SQLHelper(_UAIMS_constr);
                         SqlParameter[] objParams = null;
                         //Add New File
-                        objParams = new SqlParameter[23];
+                        objParams = new SqlParameter[22];
                         objParams[0] = new SqlParameter("@P_IDNO", objNominiFor.IDNO);
                         objParams[1] = new SqlParameter("@P_NTNO", objNominiFor.NTNO);
                         objParams[2] = new SqlParameter("@P_NAME", objNominiFor.NAME);
@@ -1188,20 +1189,21 @@ namespace IITMS
                         objParams[9] = new SqlParameter("@P_CONTING", objNominiFor.CONTING);
                         objParams[10] = new SqlParameter("@P_REMARK", objNominiFor.REMARK);
                         objParams[11] = new SqlParameter("@P_NFNO", objNominiFor.NFNO);
-                        objParams[12] = new SqlParameter("@P_ATTACHMENT", objNominiFor.ATTACHMENTS);
-                        objParams[13] = new SqlParameter("@P_ADDRESS_FLAG", objNominiFor.ADDRESS_FLAG);
-                        objParams[14] = new SqlParameter("@P_TALUKA", objNominiFor.TALUKA);
-                        objParams[15] = new SqlParameter("@P_DISTRICT", objNominiFor.DISTRICT);
-                        objParams[16] = new SqlParameter("@P_PINCODE", objNominiFor.PINCODE);
-                        objParams[17] = new SqlParameter("@P_CITY", objNominiFor.CITY);
-                        objParams[18] = new SqlParameter("@P_STATE", objNominiFor.STATE);
-                        objParams[19] = new SqlParameter("@P_COUNTRY", objNominiFor.COUNTRY);
-                        objParams[20] = new SqlParameter("@P_ISBLOB", objNominiFor.ISBLOB);
-                        objParams[21] = new SqlParameter("@P_FILEPATH", objNominiFor.FILEPATH);
+                        //objParams[12] = new SqlParameter("@P_ATTACHMENT", objNominiFor.ATTACHMENTS);
+                        objParams[12] = new SqlParameter("@P_ADDRESS_FLAG", objNominiFor.ADDRESS_FLAG);
+                        objParams[13] = new SqlParameter("@P_TALUKA", objNominiFor.TALUKA);
+                        objParams[14] = new SqlParameter("@P_DISTRICT", objNominiFor.DISTRICT);
+                        objParams[15] = new SqlParameter("@P_PINCODE", objNominiFor.PINCODE);
+                        objParams[16] = new SqlParameter("@P_CITY", objNominiFor.CITY);
+                        objParams[17] = new SqlParameter("@P_STATE", objNominiFor.STATE);
+                        objParams[18] = new SqlParameter("@P_COUNTRY", objNominiFor.COUNTRY);
+                        objParams[19] = new SqlParameter("@P_ISBLOB", objNominiFor.ISBLOB);
+                        //objParams[21] = new SqlParameter("@P_FILEPATH", objNominiFor.FILEPATH);
+                        objParams[20] = new SqlParameter("@P_PAYROLL_SB_NOMINATION_DOCUMENT_UPLOAD", dt);
                         #region Editeed on 15-11-2019
 
-                        objParams[22] = new SqlParameter("@P_OUT", SqlDbType.Int);
-                        objParams[22].Direction = ParameterDirection.Output;
+                        objParams[21] = new SqlParameter("@P_OUT", SqlDbType.Int);
+                        objParams[21].Direction = ParameterDirection.Output;
                         // if (objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_NOMINIFOR", objParams, false) != null)
                         //     retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                         object ret = objSQLHelper.ExecuteNonQuerySP("PKG_PAY_UPD_SB_NOMINIFOR", objParams, false);
@@ -1211,7 +1213,7 @@ namespace IITMS
                             {
                                 retStatus = Convert.ToInt32(CustomStatus.RecordExist);
                             }
-                            if (ret.ToString().Equals("1"))
+                            if (Convert.ToInt32(ret) > 0)
                             {
                                 retStatus = Convert.ToInt32(CustomStatus.RecordUpdated);
                             }

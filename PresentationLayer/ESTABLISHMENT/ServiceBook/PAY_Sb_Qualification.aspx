@@ -220,10 +220,10 @@
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label>Percentage Of Mark :</label>
-                                            <asp:TextBox ID="txtpercent" runat="server" CssClass="form-control" ToolTip="Enter Percentage" MaxLength="5" TabIndex="13"></asp:TextBox>
-                                            <ajaxToolKit:MaskedEditExtender ID="mePercent" runat="server" TargetControlID="txtpercent"
+                                            <asp:TextBox ID="txtpercent" runat="server" CssClass="form-control" ToolTip="Enter Percentage" MaxLength="5" TabIndex="13" AutoPostBack="true" OnTextChanged="txtpercent_TextChanged"></asp:TextBox>
+                                            <%--<ajaxToolKit:MaskedEditExtender ID="mePercent" runat="server" TargetControlID="txtpercent"
                                                 Mask="99.99" MaskType="Number" InputDirection="LeftToRight" MessageValidatorTip="true" ErrorTooltipEnabled="true">
-                                            </ajaxToolKit:MaskedEditExtender>
+                                            </ajaxToolKit:MaskedEditExtender>--%>
                                         </div>
 
                                         <div class="form-group col-lg-3 col-md-6 col-12">

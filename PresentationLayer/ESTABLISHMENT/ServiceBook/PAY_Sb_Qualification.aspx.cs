@@ -567,6 +567,7 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
         txtRegName.Text = txtDate.Text = string.Empty;
         ViewState["action"] = "add";
         txtCGPA.Text = string.Empty;
+        btnSubmit.Enabled = true;
     }
 
     public string GetFileNamePath(object filename, object QNO, object idno)
@@ -657,4 +658,17 @@ public partial class ESTABLISHMENT_ServiceBook_PAY_Sb_Qualification : System.Web
         }
     }
     #endregion
+    protected void txtpercent_TextChanged(object sender, EventArgs e)
+    {
+        if (Convert.ToDouble(txtpercent.Text) > 100.00)
+        {
+            MessageBox("Please enter valid percentage!");
+            btnSubmit.Enabled = false;
+            return;
+        }
+        else
+        {
+            btnSubmit.Enabled = true;
+        }
+    }
 }
