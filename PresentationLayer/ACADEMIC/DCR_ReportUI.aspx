@@ -392,7 +392,7 @@ return  cDate.getFullYear();
                                 <asp:Button ID="btnReport" runat="server" Text="Report" OnClick="btnReport_Click"
                                     TabIndex="13" ValidationGroup="report" CssClass="btn btn-info" />
                                 <asp:Button ID="btnExcel" runat="server" Text="OutStanding Report(Excel)" OnClick="btnExcel_Click"
-                                    CssClass="btn btn-info" Enabled="false" />
+                                    CssClass="btn btn-info" Enabled="false"  Visible="false"/>
                                 <asp:Button ID="btnExcelFormat2" runat="server" Text="O/S Report(Excel) Format - I" OnClick="btnExcelFormat2_Click" Enabled="false"
                                     CssClass="btn btn-info" Visible="false" />
 
