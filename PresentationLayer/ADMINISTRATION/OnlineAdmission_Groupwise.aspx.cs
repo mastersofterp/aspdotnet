@@ -254,6 +254,8 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
             }
         }
         this.BindListView();
+        divphd.Visible = false;
+        ddlphd.SelectedValue = "0";
        // rdobtnnri.Enabled = false;
     }
 
@@ -370,6 +372,7 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
                     txtDetails.Text = dr["DETAILS"] == null ? string.Empty : dr["DETAILS"].ToString();
                     txtApplicationFee.Text = dr["FEES"] == null ? "0" : dr["FEES"].ToString();
                     txtAge.Text = dr["AGE"] == null ? "0" : dr["AGE"].ToString();
+                    ddlAdmType.SelectedValue = dr["ADM_TYPE"] == null ? "0" : dr["ADM_TYPE"].ToString();
                     if (dr["ACTIVE_STATUS"].ToString().Equals("1"))
                     {
                         chkStatus.Checked = true;
@@ -379,12 +382,12 @@ public partial class ADMINISTRATION_OnlineAdmission_Groupwise : System.Web.UI.Pa
                         chkStatus.Checked = false;
 
                     }
-                    if (dr["UGPGOT"].ToString() == "3")
+                    if ((dr["UGPGOT"].ToString() == "3") && (dr["ADM_TYPE"].ToString() == "1"))
                     {
                         divphd.Visible = true;
                         ddlphd.SelectedValue = dr["ADMISSION_SESSION"] == null ? "0" : dr["ADMISSION_SESSION"].ToString();
                     }
-                    ddlAdmType.SelectedValue = dr["ADM_TYPE"] == null ? "0" : dr["ADM_TYPE"].ToString();
+                   
                     rdobtnnri.SelectedValue = dr["IS_NRI"] == null ? "0" : dr["IS_NRI"].ToString();
                     txteqvinr.Text = dr["NRI_FEES"] == null ? "0" : dr["NRI_FEES"].ToString();
                 }
