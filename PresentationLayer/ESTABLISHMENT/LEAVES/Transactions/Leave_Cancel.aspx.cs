@@ -243,7 +243,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
                 lvEmployees.DataBind();
                 lvEmployees.Visible = true;
                 btnRestore.Enabled = true;
-                btnShowRpt.Enabled = true;
+                //btnShowRpt.Enabled = true;
             }
             else
             {
@@ -251,7 +251,7 @@ public partial class Leave_Cancel : System.Web.UI.Page
                 lvEmployees.DataSource = null;
                 lvEmployees.DataBind();
                 btnRestore.Enabled = false;
-                btnShowRpt.Enabled = false;
+                //btnShowRpt.Enabled = false;
                 ViewState["StatusReport"] = "NoRecords";
                 return;
             }
