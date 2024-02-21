@@ -338,6 +338,9 @@
                                                         </td>
                                                         <td>
                                                             <%# Eval("REGNO")%>
+                                                          <%--  <asp:Label ID="lblStudname" runat="server" Visible="false" ToolTip='<%# Eval("UA_NO")%>'></asp:Label>--%>
+
+                                                            <asp:HiddenField ID="hidIdNo" runat="server" Value='<%# Eval("UA_NO") %>' />
                                                         </td>
 
                                                         <td>
