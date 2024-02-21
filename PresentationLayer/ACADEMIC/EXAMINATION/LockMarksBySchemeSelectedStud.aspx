@@ -165,6 +165,28 @@
                                         </div>
 
                                     </div>
+                                     
+                                          
+                                       <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="activityname" visible="false">
+                                        <div class="label-dynamic">
+                                         <label>Activity Name </label>
+                                        </div>
+                                        <asp:Label ID="lblActivity" ForeColor="red" Font-Bold="true"  runat="server"  textFont-Bold="true"></asp:Label>
+                                     </div>
+                                     <div class="form-group col-lg-3 col-md-6 col-12" runat="server" id="activitystart" visible="false">
+                                        <div class="label-dynamic">
+                                         <label>Start Date </label>
+                                        </div>
+                                        <asp:Label ID="lblstart" ForeColor="red" Font-Bold="true"  runat="server" textFont-Bold="true"></asp:Label>
+                                    </div>
+                                    <div class="form-group col-lg-3 col-md-6 col-12"  runat="server" id="activityend" visible="false">
+                                        <div class="label-dynamic">
+                                         <label>End Date </label>
+                                        </div>
+                                        <asp:Label ID="lblEnd" ForeColor="red" Font-Bold="true" runat="server" textFont-Bold="true"></asp:Label>
+                                    </div>
+                                      
+                                    
 
                                 </div>
                             </div>

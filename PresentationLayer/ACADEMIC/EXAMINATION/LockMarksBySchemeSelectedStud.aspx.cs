@@ -342,6 +342,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
 
             ddlSubExam1.Focus();
         }
+       GETSTATUSDATE();
         //btnSave.Visible = false;
         //spnNote.Visible = false;
         //lvStudList.DataSource = null;
@@ -422,7 +423,7 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         if (ddlsub.SelectedIndex > 0)
         {
             objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
-
+           // DataSet ds = objCommon.FillDropDown("", "", "", "", "");
             ddlExamType.Focus();
 
         }
@@ -975,7 +976,53 @@ public partial class ACADEMIC_LockMarksBySchemeSelectedStud : System.Web.UI.Page
         {
             objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT", "DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue) + " AND SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]) + " AND ISNULL(SUBID,0)=" + Convert.ToInt32(ddlsub.SelectedValue), "COURSENAME ASC");
         }
+        GETSTATUSDATE();
         //objCommon.FillDropDownList(ddlCourse, "ACD_STUDENT_RESULT","DISTINCT COURSENO", "COURSENAME", "COURSENO > 0 AND ISNULL(CANCEL,0)=0 AND SESSIONNO=" + Convert.ToInt32(ddlSession.SelectedValue) + "AND SEMESTERNO=" + Convert.ToInt32(ddlSemester.SelectedValue), "COURSENAME ASC");
+
+    }
+    public void GETSTATUSDATE()
+    {
+       // objCommon.FillDropDownList(ddlExamType, "ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
+       // ViewState["schemeno"]
+        string patternno = objCommon.LookUp("acd_scheme", "patternno", "SCHEMENO=" + Convert.ToInt32(ViewState["schemeno"]));
+       // int Examno = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.Examno", "EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue));
+        //DataSet ds = objCommon.FillDropDown("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.FLDNAME", "EXAMNAME", " EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND  SUBEXAM_SUBID=" + ddlsub.SelectedValue, "EXAMNAME ASC");
+        //if (ds.Tables[0].Rows.Count > 0)
+        //{
+        //    ViewState["FLDNAME"] = ds.Tables[0].Rows[0]["FLDNAME"].ToString();
+        //}
+        //"
+       // B.FLDNAME LIKE
+       int sub= Convert.ToInt32(ddlsub.SelectedValue) == 0 ? 0 : Convert.ToInt32(ddlsub.SelectedValue);
+       int Examno = Convert.ToInt32(objCommon.LookUp("ACD_EXAM_NAME E INNER JOIN ACD_SUBEXAM_NAME SN ON(E.EXAMNO=SN.EXAMNO)", "DISTINCT E.Examno", "EXAMNAME IS NOT NULL AND EXAMNAME !='' AND E.PATTERNNO=" + patternno + " AND ISNULL(E.ACTIVESTATUS,0)=1 AND E.FLDNAME like  '%" + ddlExamType.SelectedValue + "%' AND  SUBEXAM_SUBID=" + sub));
+
+        DataSet DateSessionDs = objCommon.FillDropDown("SESSION_ACTIVITY SA INNER JOIN ACTIVITY_MASTER AM ON (AM.ACTIVITY_NO = SA.ACTIVITY_NO) INNER JOIN ACCESS_LINK l ON(L.al_no IN (SELECT VALUE FROM DBO.SPLIT(page_link,',') WHERE VALUE <>''))", "SA.SESSION_NO", "substring(cast(SA.START_DATE as varchar),1,12)START_DATE,substring(cast(SA.END_DATE as varchar),1,12)END_DATE,ACTIVITY_NAME as ACTIVITYNAME", "COLLEGE_IDS in (" + ViewState["college_id"] + ") AND SESSION_NO like '%" + Convert.ToInt32(ddlSession.SelectedValue) + "%' AND EXAMNO=" + Examno + " AND AL_LINK LIKE '%MARK%' AND SEMESTER like '%'  + CAST('" + Convert.ToInt32(ddlSemester.SelectedValue) + "' AS NVARCHAR(5))  +'%'", "");
+        //sessionno = Session["currentsession"].ToString();
+        if (DateSessionDs.Tables.Count > 0)
+        {
+            if (DateSessionDs.Tables[0].Rows.Count > 0)
+            {
+                string sessionno = DateSessionDs.Tables[0].Rows[0]["SESSION_NO"].ToString();
+                lblActivity.Text = DateSessionDs.Tables[0].Rows[0]["ACTIVITYNAME"].ToString();
+                lblstart.Text = DateSessionDs.Tables[0].Rows[0]["START_DATE"].ToString();
+                lblEnd.Text = DateSessionDs.Tables[0].Rows[0]["END_DATE"].ToString();
+                ViewState["sessionno"] = sessionno;
+                activityname.Visible = true;
+                activitystart.Visible = true;
+                activityend.Visible = true;
+            }
+            else
+            {
+                activityname.Visible = false;
+                activitystart.Visible = false;
+                activityend.Visible = false;
+               // objCommon.DisplayMessage(this.Page, "Activity Not Created.", this.Page);
+                //return false;
+            }
+
+        }
+       
+        
 
     }
 }
